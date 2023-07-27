@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-25 00:43+0000\n"
+"POT-Creation-Date: 2023-07-27 02:25+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -796,7 +796,7 @@ msgstr "b) 5-ös alapméret, alapértelmezett"
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Lines-Dry.kpp"
 msgid "j) WaterC Basic Lines-Dry"
-msgstr "j) Vízfesték alapvonalak – száraz"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -13193,7 +13193,7 @@ msgstr "&Súgó"
 msgid "File"
 msgstr "Fájl"
 
-#: krita/krita5.xmlgui:419
+#: krita/krita5.xmlgui:420
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Ecsetek és anyagok"
@@ -13862,11 +13862,11 @@ msgstr "Beillesztés referenciaképként"
 #. i18n: context: iconText @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:433 krita/kritamenu.action:436
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Paste Shapes"
+#| msgctxt "action"
+#| msgid "Paste Shape Style"
 msgctxt "action"
 msgid "Paste Layer Style"
-msgstr "Alakzatok beillesztése"
+msgstr "Alakzatstílus beillesztése"
 
 #. i18n: context: toolTip @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:435
@@ -14265,6 +14265,8 @@ msgstr "Nézet tükrözése"
 #: krita/kritamenu.action:742 krita/kritamenu.action:744
 #: krita/kritamenu.action:745
 #, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Mirror View"
 msgctxt "action"
 msgid "Mirror View Around Cursor"
 msgstr "Nézet tükrözése"
@@ -14278,6 +14280,8 @@ msgstr "Nézet tükrözése"
 #: krita/kritamenu.action:752 krita/kritamenu.action:754
 #: krita/kritamenu.action:755
 #, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Mirror View"
 msgctxt "action"
 msgid "Mirror View Around Canvas"
 msgstr "Nézet tükrözése"
@@ -16026,37 +16030,43 @@ msgstr "Szín"
 
 #. i18n: context: text @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1971
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Foreground Color"
 msgctxt "action"
 msgid "&Choose Foreground Color"
-msgstr "Előtérszín &kiválasztása"
+msgstr "Előtérszín"
 
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1973 krita/kritamenu.action:1974
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Foreground Color"
 msgctxt "action"
 msgid "Choose Foreground Color"
-msgstr "Előtérszín kiválasztása"
+msgstr "Előtérszín"
 
 #. i18n: context: text @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1981
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Set Background Color"
 msgctxt "action"
 msgid "&Choose Background Color"
-msgstr "Háttérszín &kiválasztása"
+msgstr "Háttérszín beállítása"
 
 #. i18n: context: toolTip @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1983 krita/kritamenu.action:1984
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Set Background Color"
 msgctxt "action"
 msgid "Choose Background Color"
-msgstr "Háttérszín kiválasztása"
+msgstr "Háttérszín beállítása"
 
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -16150,13 +16160,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Munkaterületek"
 
-#: krita/main.cc:521
+#: krita/main.cc:527
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Végzetes hiba"
 
-#: krita/main.cc:522
+#: krita/main.cc:528
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -16165,14 +16175,14 @@ msgstr ""
 "A Krita nem támogatja a Wayland platformot, használja az XWaylandot, ha azon "
 "szeretné futtatni. A Krita kilép."
 
-#: krita/main.cc:632 libs/ui/KisApplication.cpp:409
-#: libs/ui/KisApplication.cpp:680
+#: krita/main.cc:646 libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Figyelmeztetés"
 
-#: krita/main.cc:633
+#: krita/main.cc:647
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16183,12 +16193,12 @@ msgstr ""
 "Ez nem ajánlott, ha hibát talál, ne jelentse be.\n"
 "Frissítsen egy támogatott verzióra: Windows 7, 8, 8.1 vagy 10."
 
-#: krita/main.cc:655 krita/main.cc:660
+#: krita/main.cc:669 krita/main.cc:674
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita rajztábla támogatás"
 
-#: krita/main.cc:656
+#: krita/main.cc:670
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16196,7 +16206,7 @@ msgid ""
 "installed."
 msgstr ""
 
-#: krita/main.cc:661
+#: krita/main.cc:675
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16645,28 +16655,28 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3744
+#: libs/flake/text/KoSvgTextShape.cpp:3751
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Szöveg"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3746
-#: libs/flake/text/KoSvgTextShape.cpp:3754
+#: libs/flake/text/KoSvgTextShape.cpp:3753
+#: libs/flake/text/KoSvgTextShape.cpp:3761
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "Szöveg alakzat"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3752
+#: libs/flake/text/KoSvgTextShape.cpp:3759
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " Szöveg:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3766
-#: libs/flake/text/KoSvgTextShape.cpp:3781
+#: libs/flake/text/KoSvgTextShape.cpp:3773
+#: libs/flake/text/KoSvgTextShape.cpp:3788
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17432,7 +17442,7 @@ msgstr "Kép importálása"
 msgid "Selection Mask"
 msgstr "&kijelölési maszkká"
 
-#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2554
+#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2577
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -17552,7 +17562,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profil meghatározása"
 
-#: libs/image/kis_image.cc:2486
+#: libs/image/kis_image.cc:2487
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -17696,9 +17706,7 @@ msgstr "Körvonal beállítása"
 msgid "Show Coloring"
 msgstr "Színek előzményei"
 
-#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
 #: libs/image/kis_layer_properties_icons.cpp:32
-#: libs/ui/forms/KisWelcomePage.ui:1572
 #, kde-format
 msgid "Open File"
 msgstr "Fájl megnyitása"
@@ -17787,8 +17795,8 @@ msgid "Processing"
 msgstr "Feldolgozás"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1420
-#: libs/ui/KisMainWindow.cpp:1700 libs/ui/KisMainWindow.cpp:1713
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1750 libs/ui/KisMainWindow.cpp:1763
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18277,7 +18285,7 @@ msgstr "Átalakítás"
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
-#: plugins/impex/tiff/kis_tiff_import.cc:562
+#: plugins/impex/tiff/kis_tiff_import.cc:566
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
 msgid "Transparency Mask"
@@ -18556,8 +18564,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Dokumentum"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2064
-#: libs/ui/KisMainWindow.cpp:2147
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2121
+#: libs/ui/KisMainWindow.cpp:2204
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Kép importálása"
@@ -19929,7 +19937,7 @@ msgstr "Ki"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:498 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:504 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19965,9 +19973,9 @@ msgstr "Erőforráscsomagok kezelése…"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19983,24 +19991,24 @@ msgstr "Erőforráscsomagok kezelése…"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:979
-#: libs/ui/KisApplication.cpp:982 libs/ui/KisApplication.cpp:998
-#: libs/ui/KisApplication.cpp:1030 libs/ui/KisApplication.cpp:1044
-#: libs/ui/KisApplication.cpp:1072 libs/ui/KisDocument.cpp:946
-#: libs/ui/KisDocument.cpp:953 libs/ui/KisDocument.cpp:973
-#: libs/ui/KisDocument.cpp:1881 libs/ui/KisDocument.cpp:1925
-#: libs/ui/KisDocument.cpp:1931 libs/ui/KisDocument.cpp:1944
-#: libs/ui/KisDocument.cpp:1948 libs/ui/KisMainWindow.cpp:979
-#: libs/ui/KisMainWindow.cpp:1095 libs/ui/KisMainWindow.cpp:1221
-#: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1924
-#: libs/ui/KisMainWindow.cpp:1933 libs/ui/KisMainWindow.cpp:2072
-#: libs/ui/KisMainWindow.cpp:2133 libs/ui/KisMainWindow.cpp:2154
-#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:588
-#: libs/ui/KisPart.cpp:591 libs/ui/KisReferenceImage.cpp:175
-#: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
-#: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:985
+#: libs/ui/KisApplication.cpp:988 libs/ui/KisApplication.cpp:1004
+#: libs/ui/KisApplication.cpp:1036 libs/ui/KisApplication.cpp:1050
+#: libs/ui/KisApplication.cpp:1078 libs/ui/KisDocument.cpp:969
+#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
+#: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
+#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:981
+#: libs/ui/KisMainWindow.cpp:1097 libs/ui/KisMainWindow.cpp:1223
+#: libs/ui/KisMainWindow.cpp:1320 libs/ui/KisMainWindow.cpp:1981
+#: libs/ui/KisMainWindow.cpp:1990 libs/ui/KisMainWindow.cpp:2129
+#: libs/ui/KisMainWindow.cpp:2190 libs/ui/KisMainWindow.cpp:2211
+#: libs/ui/KisMainWindow.cpp:2826 libs/ui/KisPart.cpp:578
+#: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
+#: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
-#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:738
 #: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20482,10 +20490,10 @@ msgid "Tag File Name"
 msgstr "Fájlnév"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:110
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
-msgstr "erőforrásmappa"
+msgstr "Erőforrásmappa megnyitása"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:123
 #, fuzzy, kde-format
@@ -20510,8 +20518,8 @@ msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Erőforrás törlése"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:334
-#: libs/ui/KisMainWindow.cpp:2569
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:335
+#: libs/ui/KisMainWindow.cpp:2626
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20584,10 +20592,11 @@ msgstr ""
 "átnevezve)."
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:97
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Failed to create an action."
 msgctxt "@title:window"
 msgid "Failed to rename the resource"
-msgstr "Nem sikerült átnevezni az erőforrást"
+msgstr "Egy művelet létrehozása sikertelen."
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:97
 #, kde-format
@@ -20978,7 +20987,7 @@ msgstr ""
 "Az animációs képkocka renderelése sikertelen. A kimeneti fájlok hiányosak."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2174
+#: libs/ui/KisMainWindow.cpp:2231
 #, kde-format
 msgid "Render Animation"
 msgstr "Animáció renderelése"
@@ -21019,18 +21028,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:392
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:472
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
 #, fuzzy, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -21038,28 +21047,28 @@ msgid ""
 "will be reduced to 50 frames per second"
 msgstr "<html><head/><body><p>Művelet leírás</p></body></html>"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:479
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Warning(s):"
 msgstr "Figyelem"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Adja meg a fájlnevet, amibe renderelni kell."
@@ -21306,7 +21315,7 @@ msgstr "Nem sikerült letölteni a távoli fájlt"
 msgid "FFMpeg Crashed"
 msgstr "Az FFMpeg összeomlott"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:614
+#: libs/ui/animation/KisFFMpegWrapper.cpp:620
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -23014,7 +23023,7 @@ msgid "Numerical"
 msgstr "Függőleges"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, kde-format
 msgid "Import Images"
 msgstr "Képek importálása"
@@ -23060,7 +23069,7 @@ msgstr "Réteg tulajdonságai"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -23161,7 +23170,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Adja meg az új stílus nevét"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2580
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2637
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -24143,38 +24152,117 @@ msgstr "Mindig ezt a sablont kell használni az alkalmazás indításakor"
 msgid "Always use this template"
 msgstr "Mindig ezt a sablont kell használni"
 
+#. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
+#: libs/ui/forms/KisWelcomePage.ui:48
+#, fuzzy, kde-format
+#| msgid "Support Krita"
+msgid "Support Krita!"
+msgstr "A Krita támogatása"
+
+#. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
+#: libs/ui/forms/KisWelcomePage.ui:79
+#, fuzzy, kde-format
+#| msgid "Rename Image"
+msgid "Recent Images"
+msgstr "A kép átnevezése"
+
+#. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
+#: libs/ui/forms/KisWelcomePage.ui:103
+#, kde-format
+msgctxt "Welcome Screen Recent Document List's Clear link Label"
+msgid "Clear"
+msgstr "Törlés"
+
+#. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
+#: libs/ui/forms/KisWelcomePage.ui:154
+#, kde-format
+msgid ""
+"You don't seem to have any\n"
+"recently opened documents"
+msgstr ""
+"Nincsenek nemrég\n"
+"megnyitott dokumentumok"
+
+#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:322
+#, kde-format
+msgid "Community"
+msgstr "Közösség"
+
+#. i18n: ectx: property (text), widget (QLabel, manualLink)
+#: libs/ui/forms/KisWelcomePage.ui:391 libs/ui/KisWelcomePageWidget.cpp:391
+#, kde-format
+msgid "User Manual"
+msgstr "Felhasználói kézikönyv"
+
+#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
+#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:394
+#, kde-format
+msgid "Support Krita"
+msgstr "A Krita támogatása"
+
+#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
+#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:403
+#, kde-format
+msgid "Powered by KDE"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
+#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:400
+#, kde-format
+msgid "Source Code"
+msgstr "Forráskód"
+
+#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
+#: libs/ui/forms/KisWelcomePage.ui:748 libs/ui/KisWelcomePageWidget.cpp:388
+#, kde-format
+msgid "Getting Started"
+msgstr "Első lépések"
+
+#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
+#: libs/ui/forms/KisWelcomePage.ui:835 libs/ui/KisWelcomePageWidget.cpp:385
+#, kde-format
+msgid "User Community"
+msgstr "Felhasználói közösség"
+
+#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
+#: libs/ui/forms/KisWelcomePage.ui:922 libs/ui/KisWelcomePageWidget.cpp:397
+#, kde-format
+msgid "Krita Website"
+msgstr "A Krita weboldala"
+
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:168
+#: libs/ui/forms/KisWelcomePage.ui:1066
 #, kde-format
 msgid "News"
 msgstr "Hírek"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:191
+#: libs/ui/forms/KisWelcomePage.ui:1089
 #, kde-format
 msgid "News options"
 msgstr "Hírbeállítások"
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:314
+#: libs/ui/forms/KisWelcomePage.ui:1212
 #, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr "A Krita X.X.X verziója elérhető"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:365
+#: libs/ui/forms/KisWelcomePage.ui:1263
 #, kde-format
 msgid "Update now!"
 msgstr "Frissítsen most!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:372
+#: libs/ui/forms/KisWelcomePage.ui:1270
 #, kde-format
 msgid "Show details"
 msgstr "Részletek megjelenítése"
 
-#. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:455 libs/ui/KisWelcomePageWidget.cpp:398
+#. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
+#: libs/ui/forms/KisWelcomePage.ui:1353 libs/ui/KisWelcomePageWidget.cpp:405
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -24185,103 +24273,38 @@ msgstr ""
 "decoration: underline;\">híreinek megjelenítését</a> különböző nyelveken a "
 "fenti menüben engedélyezheti."
 
-#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:562
-#, kde-format
-msgid "Community"
-msgstr "Közösség"
-
-#. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:647 libs/ui/KisWelcomePageWidget.cpp:384
-#, kde-format
-msgid "User Manual"
-msgstr "Felhasználói kézikönyv"
-
-#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:737 libs/ui/KisWelcomePageWidget.cpp:381
-#, kde-format
-msgid "Getting Started"
-msgstr "Első lépések"
-
-#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:824 libs/ui/KisWelcomePageWidget.cpp:378
-#, kde-format
-msgid "User Community"
-msgstr "Felhasználói közösség"
-
-#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:911 libs/ui/KisWelcomePageWidget.cpp:390
-#, kde-format
-msgid "Krita Website"
-msgstr "A Krita weboldala"
-
-#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:1001 libs/ui/KisWelcomePageWidget.cpp:393
-#, kde-format
-msgid "Source Code"
-msgstr "Forráskód"
-
-#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:1088 libs/ui/KisWelcomePageWidget.cpp:387
-#, kde-format
-msgid "Support Krita"
-msgstr "A Krita támogatása"
-
-#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:1178 libs/ui/KisWelcomePageWidget.cpp:396
-#, kde-format
-msgid "Powered by KDE"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, dragImageHereLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1261
-#, kde-format
-msgid "Drag an image into the window to open"
-msgstr "Ejtsen egy képet az ablakra a megnyitásához"
-
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1361
+#: libs/ui/forms/KisWelcomePage.ui:1417
 #, kde-format
 msgid "Start"
 msgstr "Start"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1428 libs/ui/KisWelcomePageWidget.cpp:625
+#: libs/ui/forms/KisWelcomePage.ui:1484 libs/ui/KisWelcomePageWidget.cpp:632
 #, kde-format
 msgid "DEV BUILD"
 msgstr "DEV BUILD"
 
 #. i18n: ectx: property (text), widget (QPushButton, newFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:1504
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
+#: libs/ui/forms/KisWelcomePage.ui:1560 libs/ui/forms/wdgimageproperties.ui:18
+#: libs/ui/forms/wdgnewimage.ui:18
+#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
 #, kde-format
-msgid "New File"
-msgstr "Új fájl"
+msgid "New Image"
+msgstr "Új kép"
 
-#. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1655
-#, kde-format
-msgid "Recent Documents"
-msgstr "Legutóbbi dokumentumok"
-
-#. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:1713
-#, kde-format
-msgctxt "Welcome Screen Recent Document List's Clear link Label"
-msgid "Clear"
-msgstr "Törlés"
-
-#. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:1766
-#, kde-format
-msgid ""
-"You don't seem to have any\n"
-"recently opened documents"
-msgstr ""
-"Nincsenek nemrég\n"
-"megnyitott dokumentumok"
+#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
+#: libs/ui/forms/KisWelcomePage.ui:1628
+#, fuzzy, kde-format
+#| msgid "Open Images"
+msgid "Open Image"
+msgstr "Képek megnyitása"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1874
+#: libs/ui/forms/KisWelcomePage.ui:1712
 #, fuzzy, kde-format
 #| msgid ""
 #| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -25167,10 +25190,9 @@ msgstr "Rajzterület dekorációk"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpOpenGL)
 #: libs/ui/forms/wdgdisplaysettings.ui:58
-#, fuzzy, kde-format
-#| msgid "Canvas decorations"
+#, kde-format
 msgid "Canvas &Graphics Acceleration"
-msgstr "Rajzterület dekorációk"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:73
@@ -25274,10 +25296,9 @@ msgstr "Jelenlegi előre beállított"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdgdisplaysettings.ui:255
-#, fuzzy, kde-format
-#| msgid "Current preset"
+#, kde-format
 msgid "Preferred Output Format:"
-msgstr "Jelenlegi előre beállított"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:283
@@ -25370,8 +25391,9 @@ msgstr "Kijelölés"
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
 #, fuzzy, kde-format
+#| msgid "Layer Opacity"
 msgid "Outline opacity:"
-msgstr "Kijelölés"
+msgstr "Réteg átlátszatlansága"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:440
@@ -25701,10 +25723,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: libs/ui/forms/wdggeneralsettings.ui:182
-#, fuzzy, kde-format
-#| msgid "Eraser"
+#, kde-format
 msgid "Eraser Cursor Icon:"
-msgstr "Radír"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #: libs/ui/forms/wdggeneralsettings.ui:195
@@ -26445,15 +26466,6 @@ msgstr "Forgatás:"
 msgid "Scale:"
 msgstr "Méretezés:"
 
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:18
-#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
-#, kde-format
-msgid "New Image"
-msgstr "Új kép"
-
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
@@ -27090,7 +27102,7 @@ msgstr "Jelenlegi előre beállított"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1076
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -27667,8 +27679,10 @@ msgstr "<html><head/><body><p>Művelet leírás</p></body></html>"
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransformToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:576
 #, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Transform Tool"
 msgid "in Transform Tool"
-msgstr "Átalakítás"
+msgstr "Átalakító eszköz"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoveToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:583
@@ -28017,7 +28031,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:351
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:352
 #, kde-format
 msgid "Sessions"
 msgstr "Munkamenetek"
@@ -29518,7 +29532,7 @@ msgstr "A kijelölt rész nagyítása"
 msgid "&Open Background color selector"
 msgstr "Háttérszín"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:347
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -29531,8 +29545,8 @@ msgstr "Minták"
 msgid "Custom Pattern"
 msgstr "Egyéni minta"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:332
-#: libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
+#: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, kde-format
@@ -30312,65 +30326,65 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Nagyítás: %1 %"
 
-#: libs/ui/KisApplication.cpp:324
+#: libs/ui/KisApplication.cpp:325
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, fuzzy, kde-format
 #| msgid "Brush Presets"
 msgid "Brush presets"
 msgstr "Előre beállított ecsetek"
 
-#: libs/ui/KisApplication.cpp:327 libs/ui/KisApplication.cpp:328
-#: libs/ui/KisApplication.cpp:329 libs/ui/KisApplication.cpp:330
+#: libs/ui/KisApplication.cpp:328 libs/ui/KisApplication.cpp:329
+#: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
 #, fuzzy, kde-format
 #| msgid "Brush tip"
 msgid "Brush tips"
 msgstr "Ecset hegye"
 
-#: libs/ui/KisApplication.cpp:335
+#: libs/ui/KisApplication.cpp:336
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
 #, kde-format
 msgid "Palettes"
 msgstr "Paletták"
 
-#: libs/ui/KisApplication.cpp:348 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
 msgid "Workspaces"
 msgstr "Munkaterületek"
 
-#: libs/ui/KisApplication.cpp:349
+#: libs/ui/KisApplication.cpp:350
 #, fuzzy, kde-format
 #| msgid "Vector Layer"
 msgid "SVG symbol libraries"
 msgstr "Vektor réteg"
 
-#: libs/ui/KisApplication.cpp:350 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr "Ablakelrendezések"
 
-#: libs/ui/KisApplication.cpp:352
+#: libs/ui/KisApplication.cpp:353
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
 #, fuzzy, kde-format
 msgid "Gamut masks"
 msgstr "Kráterek"
 
-#: libs/ui/KisApplication.cpp:354
+#: libs/ui/KisApplication.cpp:355
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgid "SeExpr Scripts"
 msgstr "Alsó index"
 
-#: libs/ui/KisApplication.cpp:359
+#: libs/ui/KisApplication.cpp:360
 #, fuzzy, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Rétegméret"
 
-#: libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:373
 #, kde-format
 msgid ""
 "%1\n"
@@ -30381,13 +30395,13 @@ msgstr ""
 "\n"
 "A Krita kilép."
 
-#: libs/ui/KisApplication.cpp:372 libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:373 libs/ui/KisApplication.cpp:379
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Végzetes hiba"
 
-#: libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:379
 #, kde-format
 msgid ""
 "\n"
@@ -30398,7 +30412,7 @@ msgstr ""
 "\n"
 "A Krita kilép."
 
-#: libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:411
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -30409,67 +30423,67 @@ msgstr ""
 "Ez nem javasolt.\n"
 "Kérjük töltse le és telepítse helyette az x64-es verziót."
 
-#: libs/ui/KisApplication.cpp:427
+#: libs/ui/KisApplication.cpp:428
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "Erőforrások kezelése"
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:459
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "Erőforrások hozzáadása"
 
-#: libs/ui/KisApplication.cpp:462
+#: libs/ui/KisApplication.cpp:463
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "Előre definiált ecsetek"
 
-#: libs/ui/KisApplication.cpp:468
+#: libs/ui/KisApplication.cpp:469
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "Erőforráscsomagok kezelése…"
 
-#: libs/ui/KisApplication.cpp:477
+#: libs/ui/KisApplication.cpp:478
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "Követési beállítások módosítása"
 
-#: libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:510
 #, fuzzy, kde-format
 msgid "Launching..."
 msgstr "A ké&p nyírása..."
 
-#: libs/ui/KisApplication.cpp:578
+#: libs/ui/KisApplication.cpp:579
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:634
+#: libs/ui/KisApplication.cpp:635
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to render animation frames!"
 msgstr "Egy művelet létrehozása sikertelen."
 
-#: libs/ui/KisApplication.cpp:661 libs/ui/KisApplication.cpp:851
+#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:857
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "&Fájlréteg…"
 
-#: libs/ui/KisApplication.cpp:669 libs/ui/KisApplication.cpp:674
-#: libs/ui/KisApplication.cpp:845 libs/ui/KisApplication.cpp:859
-#: libs/ui/KisApplication.cpp:864
+#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:851 libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:870
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Figyelmeztetés"
 
-#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:866
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Nem vehető fel szín, ha az aktív réteg nem látható."
 
-#: libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30482,7 +30496,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:681
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30490,32 +30504,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:846
+#: libs/ui/KisApplication.cpp:852
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Nem sikerült megnyitni a fájlt: %1"
 
-#: libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:871
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:980
+#: libs/ui/KisApplication.cpp:986
 #, fuzzy, kde-format
 msgid "No template found for: %1"
 msgstr "%1 tulajdonságai"
 
-#: libs/ui/KisApplication.cpp:983
+#: libs/ui/KisApplication.cpp:989
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Túl sok sablon található ehhez: %1"
 
-#: libs/ui/KisApplication.cpp:999
+#: libs/ui/KisApplication.cpp:1005
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "LUT fájl kiválasztása"
 
-#: libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:1037
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30525,7 +30539,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1045
+#: libs/ui/KisApplication.cpp:1051
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30533,7 +30547,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1073
+#: libs/ui/KisApplication.cpp:1079
 #, fuzzy, kde-format
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to clear the settings file?"
@@ -30667,55 +30681,55 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Dokumentum megnyitása"
 
-#: libs/ui/KisDocument.cpp:722
+#: libs/ui/KisDocument.cpp:733
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:760
+#: libs/ui/KisDocument.cpp:783
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Egy művelet létrehozása sikertelen."
 
-#: libs/ui/KisDocument.cpp:777
+#: libs/ui/KisDocument.cpp:800
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Egy művelet létrehozása sikertelen."
 
-#: libs/ui/KisDocument.cpp:799
+#: libs/ui/KisDocument.cpp:822
 #, fuzzy, kde-format
 msgid "Exporting Document..."
 msgstr "Dokumentum megnyitása"
 
-#: libs/ui/KisDocument.cpp:800
+#: libs/ui/KisDocument.cpp:823
 #, fuzzy, kde-format
 msgid "Saving Document..."
 msgstr "Dokumentum mentése"
 
-#: libs/ui/KisDocument.cpp:810
+#: libs/ui/KisDocument.cpp:833
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:939
+#: libs/ui/KisDocument.cpp:962
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Hiba történt automatikus mentés közben. Lehet, hogy betelt a partíció."
 
-#: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:954
+#: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
 #, fuzzy, kde-format
 msgid "Could not save %1."
 msgstr "Nem sikerült hozzáadni a réteget a képhez."
 
-#: libs/ui/KisDocument.cpp:976
+#: libs/ui/KisDocument.cpp:999
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30723,47 +30737,47 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:982
+#: libs/ui/KisDocument.cpp:1005
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1022
 #, fuzzy, kde-format
 msgid "Finished saving %1"
 msgstr "Sokszögvonal"
 
-#: libs/ui/KisDocument.cpp:1402
+#: libs/ui/KisDocument.cpp:1425
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosaving... %1"
 msgstr "Automatikus mentés..."
 
-#: libs/ui/KisDocument.cpp:1410
+#: libs/ui/KisDocument.cpp:1433
 #, kde-format
 msgid "Autosaving..."
 msgstr "Automatikus mentés..."
 
-#: libs/ui/KisDocument.cpp:1416
+#: libs/ui/KisDocument.cpp:1439
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1559
+#: libs/ui/KisDocument.cpp:1582
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Hiba történt automatikus mentés közben. Lehet, hogy betelt a partíció."
 
-#: libs/ui/KisDocument.cpp:1573
+#: libs/ui/KisDocument.cpp:1596
 #, fuzzy, kde-format
 msgid "Finished autosaving %1"
 msgstr "Sokszögvonal"
 
-#: libs/ui/KisDocument.cpp:1815
+#: libs/ui/KisDocument.cpp:1838
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -30775,41 +30789,41 @@ msgstr ""
 "Hibás URL:\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1881
+#: libs/ui/KisDocument.cpp:1904
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "File %1 does not exist."
 msgstr "Nem létezik %1 nevű fájl."
 
-#: libs/ui/KisDocument.cpp:1910
+#: libs/ui/KisDocument.cpp:1933
 #, fuzzy, kde-format
 msgid "Opening document"
 msgstr "Dokumentum megnyitása"
 
-#: libs/ui/KisDocument.cpp:1926 libs/ui/KisDocument.cpp:1932
+#: libs/ui/KisDocument.cpp:1949 libs/ui/KisDocument.cpp:1955
 #, fuzzy, kde-format
 msgid "Could not open %1."
 msgstr "Nem sikerült hozzáadni a réteget a képhez."
 
-#: libs/ui/KisDocument.cpp:1945 libs/ui/KisDocument.cpp:1949
+#: libs/ui/KisDocument.cpp:1968 libs/ui/KisDocument.cpp:1972
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2080
+#: libs/ui/KisDocument.cpp:2103
 #, fuzzy, kde-format
 #| msgid "Not Filled"
 msgid "Not Saved"
 msgstr "Nincs kitöltve"
 
-#: libs/ui/KisDocument.cpp:2561
+#: libs/ui/KisDocument.cpp:2584
 #, fuzzy, kde-format
 #| msgid "Background"
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Háttér"
 
-#: libs/ui/KisDocument.cpp:2613
+#: libs/ui/KisDocument.cpp:2636
 #, fuzzy, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -31228,47 +31242,47 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Mun&katerület"
 
-#: libs/ui/KisMainWindow.cpp:585
+#: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Alapréteg megjelenítése"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:589
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Gördítősávok elrejtése"
 
-#: libs/ui/KisMainWindow.cpp:1037
+#: libs/ui/KisMainWindow.cpp:1039
 #, fuzzy, kde-format
 #| msgid "(write protected)"
 msgid "Write Protected"
 msgstr "(írásvédett)"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1043
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Recover Files"
 msgid "Recovered"
 msgstr "Fájlok helyreállítása"
 
-#: libs/ui/KisMainWindow.cpp:1071
+#: libs/ui/KisMainWindow.cpp:1073
 #, kde-format
 msgid "Save as %1"
 msgstr "Mentés mint %1"
 
-#: libs/ui/KisMainWindow.cpp:1095
+#: libs/ui/KisMainWindow.cpp:1097
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Nem létezik %1 nevű fájl."
 
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, kde-format
 msgid "Open Images"
 msgstr "Képek megnyitása"
 
-#: libs/ui/KisMainWindow.cpp:1319
+#: libs/ui/KisMainWindow.cpp:1321
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -31277,46 +31291,46 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, kde-format
 msgid "Exporting"
 msgstr "Exportálás"
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, fuzzy, kde-format
 #| msgid "Saving Format"
 msgid "Saving As"
 msgstr "Mentés formátuma"
 
-#: libs/ui/KisMainWindow.cpp:1679
+#: libs/ui/KisMainWindow.cpp:1729
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "Nemrég használt dokumentumok"
 
-#: libs/ui/KisMainWindow.cpp:1703
+#: libs/ui/KisMainWindow.cpp:1753
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "Egyéni színátmenet"
 
-#: libs/ui/KisMainWindow.cpp:1715
+#: libs/ui/KisMainWindow.cpp:1765
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Létrehozás a vágólapról"
 
-#: libs/ui/KisMainWindow.cpp:1893
+#: libs/ui/KisMainWindow.cpp:1950
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Réteg/maszk mentése…"
 
-#: libs/ui/KisMainWindow.cpp:1919
+#: libs/ui/KisMainWindow.cpp:1976
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Az új csomag létrehozása nem sikerült."
 
-#: libs/ui/KisMainWindow.cpp:1923
+#: libs/ui/KisMainWindow.cpp:1980
 #, kde-format
 msgid ""
 "\n"
@@ -31324,7 +31338,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1933
+#: libs/ui/KisMainWindow.cpp:1990
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -31333,7 +31347,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2072 libs/ui/KisMainWindow.cpp:2154
+#: libs/ui/KisMainWindow.cpp:2129 libs/ui/KisMainWindow.cpp:2211
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31342,43 +31356,43 @@ msgstr ""
 "Nem sikerült befejezni az animáció importálását:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2133
+#: libs/ui/KisMainWindow.cpp:2190
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Egy művelet létrehozása sikertelen."
 
-#: libs/ui/KisMainWindow.cpp:2560
+#: libs/ui/KisMainWindow.cpp:2617
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "Munkaterület &importálása…"
 
-#: libs/ui/KisMainWindow.cpp:2575
+#: libs/ui/KisMainWindow.cpp:2632
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Ú&j munkaterület…"
 
-#: libs/ui/KisMainWindow.cpp:2579
+#: libs/ui/KisMainWindow.cpp:2636
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Új munkaterület…"
 
-#: libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/KisMainWindow.cpp:2680
 #, fuzzy, kde-format
 #| msgid "&%1 %2"
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2626
+#: libs/ui/KisMainWindow.cpp:2683
 #, fuzzy, kde-format
 #| msgid "%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2792
+#: libs/ui/KisMainWindow.cpp:2849
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -31387,19 +31401,19 @@ msgstr ""
 "A Krita LittleCMS színkezelő bővítmény nincs telepítve. A Krita most ki fog "
 "lépni."
 
-#: libs/ui/KisMainWindow.cpp:2808
+#: libs/ui/KisMainWindow.cpp:2865
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Telepítési hiba"
 
-#: libs/ui/KisMainWindow.cpp:2917
+#: libs/ui/KisMainWindow.cpp:2974
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2975
+#: libs/ui/KisMainWindow.cpp:3032
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -31545,14 +31559,14 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Normál"
 
-#: libs/ui/KisPart.cpp:588
+#: libs/ui/KisPart.cpp:578
 #, fuzzy, kde-format
 msgid ""
 "Could not create document from template\n"
 "%1"
 msgstr "Az új csomag létrehozása nem sikerült."
 
-#: libs/ui/KisPart.cpp:591
+#: libs/ui/KisPart.cpp:581
 #, fuzzy, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -31572,7 +31586,7 @@ msgstr "Telítettség"
 msgid "Could not load %1."
 msgstr "Nem sikerült hozzáadni a réteget a képhez."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:39
+#: libs/ui/KisRemoteFileFetcher.cpp:41
 #, kde-format
 msgctxt "Fetching remote image"
 msgid ""
@@ -31580,19 +31594,19 @@ msgid ""
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:61
+#: libs/ui/KisRemoteFileFetcher.cpp:63
 #, fuzzy, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "Nem sikerült hozzáadni a réteget a képhez."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:75
+#: libs/ui/KisRemoteFileFetcher.cpp:77
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:92
+#: libs/ui/KisRemoteFileFetcher.cpp:94
 #, fuzzy, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."
@@ -31871,52 +31885,52 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Anonimizálás"
 
-#: libs/ui/KisWelcomePageWidget.cpp:148
+#: libs/ui/KisWelcomePageWidget.cpp:157
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:150
+#: libs/ui/KisWelcomePageWidget.cpp:159
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
 "krita.org website"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:153
+#: libs/ui/KisWelcomePageWidget.cpp:162
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, fuzzy, kde-format
 #| msgid "Language:"
 msgid "Language"
 msgstr "Nyelv:"
 
-#: libs/ui/KisWelcomePageWidget.cpp:154
+#: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:420
+#: libs/ui/KisWelcomePageWidget.cpp:427
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:648
+#: libs/ui/KisWelcomePageWidget.cpp:655
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, fuzzy, kde-format
 msgid "Forget \"%1\""
 msgstr "Exportálás"
 
-#: libs/ui/KisWelcomePageWidget.cpp:745
+#: libs/ui/KisWelcomePageWidget.cpp:757
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:774
+#: libs/ui/KisWelcomePageWidget.cpp:786
 #, fuzzy, kde-format
 msgid "An error occurred during the update"
 msgstr "Az új csomag létrehozása nem sikerült."
 
-#: libs/ui/KisWelcomePageWidget.cpp:780
+#: libs/ui/KisWelcomePageWidget.cpp:792
 #, kde-format
 msgid "Restart is required."
 msgstr "Újraindítás szükséges."
@@ -32904,12 +32918,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:654
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:656
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32917,14 +32931,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1070
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1072
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -34725,10 +34739,10 @@ msgstr "Véletlenszerű eltolás:"
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:107
 #, fuzzy, kde-format
-#| msgid "Shadows 3"
+#| msgid "Stop color."
 msgctxt "Output color used for the shadows in auto levels"
 msgid "Shadows color:"
-msgstr "Árnyékok 3"
+msgstr "Befejező szín:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:114
@@ -34754,10 +34768,10 @@ msgstr "Módszer"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:171
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Do not perform midtones enhancement in auto levels"
 msgid "Don't adjust the midtones"
-msgstr "Nem sikerült hozzáadni a réteget a képhez."
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:176
@@ -34783,7 +34797,8 @@ msgstr "Szín:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:202
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Amount:"
 msgctxt ""
 "How much the midtone point used in auto levels is close to the center of the "
 "histogram (0%) or to the point selected in the method (100%)"
@@ -36333,12 +36348,12 @@ msgstr "%1 mp"
 msgid "Toggle Preview"
 msgstr "Előnézet"
 
-#: libs/widgetutils/KoFileDialog.cpp:243
+#: libs/widgetutils/KoFileDialog.cpp:260
 #, kde-format
 msgid "Save As:"
 msgstr "Mentés másként:"
 
-#: libs/widgetutils/KoFileDialog.cpp:326
+#: libs/widgetutils/KoFileDialog.cpp:343
 #, kde-format
 msgid ""
 "The selected file name does not have a file extension that Krita "
@@ -36346,7 +36361,7 @@ msgid ""
 "Make sure the file name ends in '.%1' for example."
 msgstr ""
 
-#: libs/widgetutils/KoFileDialog.cpp:511
+#: libs/widgetutils/KoFileDialog.cpp:533
 #, kde-format
 msgid "All supported formats"
 msgstr "Minden támogatott formátum"
@@ -38252,7 +38267,7 @@ msgid "Val:"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:127
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
 #, fuzzy, kde-format
 msgid "Onion skins menu"
 msgstr "Arányok kényszerítése"
@@ -38264,26 +38279,26 @@ msgid "Audio menu"
 msgstr "ISO stúdió izzólámpa"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:180
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation settings menu"
 msgstr "Animált"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:192
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
 #, fuzzy, kde-format
 msgid "Clip Start: "
 msgstr "Kezdés"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
 #, kde-format
 msgid "Clip End: "
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
 #, fuzzy, kde-format
 msgid "Frame Rate: "
 msgstr "Tóth Csanád,Kiszel Kristóf,Úr Balázs"
@@ -38310,39 +38325,39 @@ msgstr "Téglalap"
 msgid "Reset All Channels"
 msgstr "Minden csatorna"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:486
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:481
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:493
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:488
 #, fuzzy, kde-format
 #| msgid "Bilinear interpolation"
 msgid "Linear interpolation."
 msgstr "Bilineáris interpoláció"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:500
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:495
 #, fuzzy, kde-format
 #| msgid "Bilinear interpolation"
 msgid "Bezier curve interpolation."
 msgstr "Bilineáris interpoláció"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:507
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:502
 #, fuzzy, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "Bilineáris interpoláció"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:514
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:509
 #, fuzzy, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "Bilineáris interpoláció"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:521
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:516
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:528
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:523
 #, fuzzy, kde-format
 #| msgid "Zoom to All"
 msgid "Zoom view to fit curve."
@@ -38390,73 +38405,73 @@ msgstr[0] "Név beszúrása"
 msgstr[1] "Név beszúrása"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:290
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation Timeline"
 msgstr "Animált"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "Animated"
-msgid "Animation audio menu"
-msgstr "Animált"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Erőforrások vagy csomagok importálása…"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, fuzzy, kde-format
 #| msgid "Remove Note"
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Jegyzet eltávolítása"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, fuzzy, kde-format
 #| msgid "Muted"
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Néma"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #, fuzzy, kde-format
 #| msgid "Volume:"
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "Kötet:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#, fuzzy, kde-format
+#| msgid "Animated"
+msgid "Animation audio menu"
+msgstr "Animált"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, fuzzy, kde-format
 #| msgid "Copy Black"
 msgid "AutoKey Blank"
 msgstr "Fekete másolása"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
 #, fuzzy, kde-format
 #| msgid "Duplicate"
 msgid "AutoKey Duplicate"
 msgstr "Duplikálás"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:509
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:522
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:517
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:523
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:518
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:519
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""
@@ -39337,10 +39352,9 @@ msgstr "Részletek"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:394
 #, fuzzy, kde-format
-#| msgid "Layer Opacity"
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "Réteg átlátszatlansága"
+msgstr "Új oldal hozzáadása"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:412
 #, fuzzy, kde-format
@@ -39756,10 +39770,10 @@ msgstr ""
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
 #, fuzzy
-#| msgid "Clear Thumbnail"
+#| msgid "Update preview"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Bélyegkép törlése"
+msgstr "Előnézet frissítése"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, fuzzy, kde-format
@@ -39793,9 +39807,9 @@ msgstr "Jelenlegi réteg törlése"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:125
 #, fuzzy, kde-format
-#| msgid "Add New Palette"
+#| msgid "Edit Palette"
 msgid "Load a palette"
-msgstr "Új paletta hozzáadása"
+msgstr "Paletta szerkesztése"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:226
 #, fuzzy, kde-format
@@ -40988,13 +41002,13 @@ msgstr "Oszlopok"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:145
 #, fuzzy, kde-format
 msgid "SVG Template"
-msgstr "&Létrehozás"
+msgstr "Kezdés"
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
 #, fuzzy, kde-format
 msgid "SVG Template Path:"
-msgstr "&Létrehozás"
+msgstr "Kezdés"
 
 #. i18n: ectx: property (text), widget (QLabel, fontSizeLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:237
@@ -47056,10 +47070,11 @@ msgstr ""
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:451
 #, fuzzy, kde-format
-#| msgid "Use outline"
+#| msgctxt "./krita/data/patterns/Maze_lines.png"
+#| msgid "Maze lines"
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
-msgstr "Vázlat használata"
+msgstr "Labirintusvonalak"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScreentoneType)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:49
@@ -48256,27 +48271,24 @@ msgstr "Nincs méretezés"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:21
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
-#, fuzzy, kde-format
-#| msgid "No Scaling"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "2x2 downsampling"
-msgstr "Nincs méretezés"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:22
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:28
-#, fuzzy, kde-format
-#| msgid "No Scaling"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "4x4 downsampling"
-msgstr "Nincs méretezés"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:23
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
-#, fuzzy, kde-format
-#| msgid "No Scaling"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "8x8 downsampling"
-msgstr "Nincs méretezés"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
@@ -48363,11 +48375,10 @@ msgid "Center-first order"
 msgstr "középre"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:89
-#, fuzzy, kde-format
-#| msgid "X resolution:"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
-msgstr "X irányú felbontás:"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
 #, kde-format
@@ -48794,10 +48805,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:492
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gaborish filter"
-msgstr ""
+msgstr "Gmic szűrő"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:499
@@ -48836,9 +48847,10 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:537
 #, fuzzy, kde-format
+#| msgid "No Border"
 msgctxt "JPEG-XL encoder options"
 msgid "Group order"
-msgstr "Réteg &csoportosítása"
+msgstr "Nincs szegély"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:544
@@ -48934,10 +48946,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:676
-#, fuzzy, kde-format
-#| msgid "Add New Palette"
+#, kde-format
 msgid "Local channel palette range"
-msgstr "Új paletta hozzáadása"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:687
@@ -49358,7 +49369,7 @@ msgstr "Az új csomag létrehozása nem sikerült."
 #, fuzzy, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
-msgstr "Átalakítás vektor kijelöléssé"
+msgstr "Nem sikerült hozzáadni a réteget a képhez."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:222
 #, kde-format
@@ -50674,7 +50685,7 @@ msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
 msgstr "Lebegőpont vízszintes különbség"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1040
+#: plugins/impex/tiff/kis_tiff_import.cc:1044
 #, kde-format
 msgctxt "TIFF errors"
 msgid ""
@@ -50683,11 +50694,25 @@ msgid ""
 "version of libjpeg-turbo and try again."
 msgstr ""
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1143
-#: plugins/impex/tiff/kis_tiff_import.cc:1326
+#: plugins/impex/tiff/kis_tiff_import.cc:1147
+#: plugins/impex/tiff/kis_tiff_import.cc:1330
 #, kde-format
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1577
+#, kde-format
+msgctxt "@title:window"
+msgid "TIFF image with PSD data"
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1579
+#, kde-format
+msgctxt "the choice for the user on loading a TIFF file"
+msgid ""
+"The TIFF image contains valid PSD data embedded. Would you like to use PSD "
+"data instead of normal TIFF data?"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
@@ -51005,10 +51030,9 @@ msgstr "Cél:"
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, segments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:260
 #: plugins/impex/webp/kis_wdg_options_webp.ui:276
-#, fuzzy, kde-format
-#| msgid "Number of characters:"
+#, kde-format
 msgid "Maximum number of segments (1 to 4)."
-msgstr "Karakterek száma:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSegments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:263
@@ -54065,9 +54089,9 @@ msgstr "Maszatolás arány"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
 #, fuzzy, kde-format
-#| msgid "Transparent"
+#| msgid "Burning Transparency"
 msgid "Smudge Transparency"
-msgstr "Átlátszó"
+msgstr "Égő fólia"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, fuzzy, kde-format
@@ -54490,9 +54514,6 @@ msgstr "Részecskék"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/spray/wdgsprayoptions.ui:194
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "How much the midtone point used in auto levels is close to the center of "
-#| "the histogram (0%) or to the point selected in the method (100%)"
 #| msgid "Amount:"
 msgctxt "Label for the amount of particles in the spray engine"
 msgid "Amount:"
@@ -57004,9 +57025,12 @@ msgid "{input} has been exported to {output}."
 msgstr ""
 
 #: plugins/python/photobash_images/photobash_images_docker.py:73
+#, fuzzy
+#| msgctxt "description of a file type"
+#| msgid "Photoshop Image (Large)"
 msgctxt "@title:window"
 msgid "Photobash Images"
-msgstr "Photobash képek"
+msgstr "Photoshop kép (nagy)"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:141
 #: plugins/python/photobash_images/photobash_images_docker.py:471
@@ -57781,11 +57805,10 @@ msgid "Threshold: "
 msgstr "Küszöbérték: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:552
-#, fuzzy, kde-format
-#| msgid "Opacity: "
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in fill tool options"
 msgid "Spread: "
-msgstr "Átlátszatlanság: "
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:558
 #, fuzzy, kde-format
@@ -57935,10 +57958,10 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:633
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
-msgstr "Kitöltés háttérszínnel"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
 #, fuzzy, kde-format
@@ -59079,11 +59102,10 @@ msgid "Threshold: "
 msgstr "Küszöbérték: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:374
-#, fuzzy, kde-format
-#| msgid "Opacity: "
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in contiguous selection tool options"
 msgid "Spread: "
-msgstr "Átlátszatlanság: "
+msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:380
 #, fuzzy, kde-format
@@ -59114,9 +59136,9 @@ msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select all regions until a specific boundary color"
-msgstr "Kitöltés háttérszínnel"
+msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
@@ -59142,11 +59164,11 @@ msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
 #, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#| msgid "Selection Mode"
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
 msgid "Selection extent"
-msgstr "Renderelési szándék"
+msgstr "Kijelölési mód"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:95
 #, fuzzy, kde-format
@@ -59260,11 +59282,11 @@ msgstr "Küszöbérték: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:472
 #, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#| msgid "Selection Mode"
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
-msgstr "Renderelési szándék"
+msgstr "Kijelölési mód"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:57
 #, fuzzy, kde-format
@@ -60387,11 +60409,10 @@ msgid "Threshold: "
 msgstr "Küszöbérték: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
-#, fuzzy, kde-format
-#| msgid "Opacity: "
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
 msgid "Spread: "
-msgstr "Átlátszatlanság: "
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
 #, fuzzy, kde-format
@@ -60521,10 +60542,10 @@ msgid "Specific color or transparency"
 msgstr "Különleges színválasztó"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
-msgstr "Kitöltés háttérszínnel"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, fuzzy, kde-format
@@ -60540,10 +60561,10 @@ msgid "All, excluding a specific color or transparency"
 msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
-msgstr "Kitöltés háttérszínnel"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
 #, fuzzy, kde-format
@@ -61635,28 +61656,21 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referenciaképek eszköz"
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "Nyírás X"
+#~ msgid "&Canvas"
+#~ msgstr "&Vászon"
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "Nyírás Y"
+#~ msgctxt "action"
+#~ msgid "&Reset zoom"
+#~ msgstr "Nagyítás vi&sszaállítása"
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "Skálázás"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "Transzformációk alaphelyzetbe állítása"
+#~ msgctxt "action"
+#~ msgid "Reset zoom"
+#~ msgstr "Nagyítás visszaállítása"
 
 #, fuzzy
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
-#~ "Animated exports are <span style=\" font-weight:600;\">always</span> "
-#~ "flattened regardless of this setting.</p></body></html>"
-#~ msgstr "<html><head/><body><p>Művelet leírás</p></body></html>"
+#~| msgid "Please enter a name for the filter effect"
+#~ msgid "Please extract ffmpeg from the archive first."
+#~ msgstr "Adja meg a szűrőeffekt nevét"
 
 #, fuzzy
 #~| msgid "Difference"
@@ -61667,35 +61681,6 @@ msgstr "Referenciaképek eszköz"
 #~ msgctxt "paleteuse dither option name"
 #~ msgid "none"
 #~ msgstr "nincs"
-
-#, fuzzy
-#~| msgid "&Filter:"
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "&Szűrő:"
-
-#, fuzzy
-#~| msgid "Edition:"
-#~ msgid "Edit Audio:"
-#~ msgstr "Kiadás:"
-
-#, fuzzy
-#~| msgid "Volume:"
-#~ msgctxt "@item:inmenu, slider"
-#~ msgid "Volume:"
-#~ msgstr "Kötet:"
-
-#, fuzzy
-#~| msgid "Open and edit..."
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "Megnyitás és szerkesztés…"
-
-#, fuzzy
-#~| msgid "Save..."
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "Mentés…"
 
 #, fuzzy
 #~| msgid "Choose workspace"
@@ -61771,10 +61756,6 @@ msgstr "Referenciaképek eszköz"
 #~ msgstr "Forgatás:"
 
 #, fuzzy
-#~ msgid "FFMpeg Version: None"
-#~ msgstr "Verzió"
-
-#, fuzzy
 #~ msgid ""
 #~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
 #~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
@@ -61785,11 +61766,104 @@ msgstr "Referenciaképek eszköz"
 #~ msgid "Image Sequence Options"
 #~ msgstr "középre"
 
+#~ msgid "Drag an image into the window to open"
+#~ msgstr "Ejtsen egy képet az ablakra a megnyitásához"
+
+#~ msgid "New File"
+#~ msgstr "Új fájl"
+
+#~ msgid "Recent Documents"
+#~ msgstr "Legutóbbi dokumentumok"
+
+#~ msgid "Grid Settings"
+#~ msgstr "Rácsbeállítások"
+
 #, fuzzy
-#~| msgctxt "suffix for \"seconds\""
-#~| msgid " sec"
-#~ msgid " sec"
-#~ msgstr " s"
+#~ msgid "Enable Smooth Zooming"
+#~ msgstr "OpenGL engedélyezése"
+
+#~ msgid "&Description:"
+#~ msgstr "Leí&rás:"
+
+#, fuzzy
+#~| msgid "&Filter:"
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "&Filter:"
+#~ msgstr "&Szűrő:"
+
+#~ msgid "Duplicate current profile"
+#~ msgstr "Jelenlegi profil kettőzése"
+
+#, fuzzy
+#~ msgid "Select Layer Mode"
+#~ msgstr "Réteg kijelölése mód váltása"
+
+#, fuzzy
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Réteg kijelölése mód váltása"
+
+#~ msgid "Reset Zoom to 100%"
+#~ msgstr "Nagyítás visszaállítása 100%-ra"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not save %1.\n"
+#~ "Reason: %2"
+#~ msgstr "Átalakítás vektor kijelöléssé"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not open %2.\n"
+#~ "Reason: %1"
+#~ msgstr "Nem sikerült hozzáadni a réteget a képhez."
+
+#, fuzzy
+#~| msgid "Do you really want to overwrite the existing '%1' template?"
+#~ msgctxt "Fetching remote image"
+#~ msgid "Do you want to download the image at %1?"
+#~ msgstr "Biztosan felül akarja írni a már létező '%1' sablont?"
+
+#, fuzzy
+#~ msgid ""
+#~ "Make the selection using a merged copy of the selected color-labeled "
+#~ "layers"
+#~ msgstr "A réteg színkeverési módjának kiválasztása."
+
+#~ msgid "Fit Page"
+#~ msgstr "Igazítás az oldalhoz"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgid "Colu&mns:"
+#~ msgstr "Oszlopok:"
+
+#, fuzzy
+#~| msgid "Rows:"
+#~ msgid "&Rows:"
+#~ msgstr "Sorok:"
+
+#, fuzzy
+#~| msgid "Edition:"
+#~ msgid "Edit Audio:"
+#~ msgstr "Kiadás:"
+
+#, fuzzy
+#~| msgid "Volume:"
+#~ msgctxt "@item:inmenu, slider"
+#~ msgid "Volume:"
+#~ msgstr "Kötet:"
+
+#, fuzzy
+#~| msgid "Open and edit..."
+#~ msgctxt "@item:inmenu"
+#~ msgid "Open audio..."
+#~ msgstr "Megnyitás és szerkesztés…"
+
+#, fuzzy
+#~| msgid "Save..."
+#~ msgctxt "@item:inmenu"
+#~ msgid "Change audio (%1)..."
+#~ msgstr "Mentés…"
 
 #, fuzzy
 #~| msgid "Start recording macro"
@@ -61805,6 +61879,41 @@ msgstr "Referenciaképek eszköz"
 #~| msgid "Set stroke"
 #~ msgid "Split Strokes"
 #~ msgstr "Körvonal beállítása"
+
+#, fuzzy
+#~| msgid "Compression"
+#~ msgid "Lossless compression"
+#~ msgstr "Tömörítés"
+
+#, fuzzy
+#~| msgid "Tool information"
+#~ msgid "Information"
+#~ msgstr "Eszköz információk"
+
+#, fuzzy
+#~| msgid "Sobel vertically"
+#~ msgid "Flip vertically"
+#~ msgstr "Sobel (függőleges)"
+
+#, fuzzy
+#~| msgid "Bilinear Filtering"
+#~ msgid "Bypass filtering"
+#~ msgstr "Bilineáris szűrés"
+
+#, fuzzy
+#~| msgid "Multiline"
+#~ msgid "Use multithreaded decoding"
+#~ msgstr "Többsoros"
+
+#, fuzzy
+#~| msgid "Color space:"
+#~ msgid "Color planes: "
+#~ msgstr "Színtér:"
+
+#, fuzzy
+#~| msgid "Alpha darken"
+#~ msgid "Alpha plane: "
+#~ msgstr "Alfa-sötétítés"
 
 #, fuzzy
 #~| msgid "Color Rate"
@@ -61869,143 +61978,6 @@ msgstr "Referenciaképek eszköz"
 #~ msgstr "0 mp"
 
 #, fuzzy
-#~ msgid "Select Layer Mode"
-#~ msgstr "Réteg kijelölése mód váltása"
-
-#, fuzzy
-#~ msgid "Select Multiple Layer Mode"
-#~ msgstr "Réteg kijelölése mód váltása"
-
-#, fuzzy
-#~| msgid "Please enter a name for the filter effect"
-#~ msgid "Please extract ffmpeg from the archive first."
-#~ msgstr "Adja meg a szűrőeffekt nevét"
-
-#, fuzzy
-#~| msgid "Columns:"
-#~ msgid "Colu&mns:"
-#~ msgstr "Oszlopok:"
-
-#, fuzzy
-#~| msgid "Rows:"
-#~ msgid "&Rows:"
-#~ msgstr "Sorok:"
-
-#, fuzzy
-#~| msgid "Do you really want to overwrite the existing '%1' template?"
-#~ msgctxt "Fetching remote image"
-#~ msgid "Do you want to download the image at %1?"
-#~ msgstr "Biztosan felül akarja írni a már létező '%1' sablont?"
-
-#~ msgid "&Description:"
-#~ msgstr "Leí&rás:"
-
-#, fuzzy
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr "Átalakítás vektor kijelöléssé"
-
-#, fuzzy
-#~ msgid ""
-#~ "Could not open %2.\n"
-#~ "Reason: %1"
-#~ msgstr "Nem sikerült hozzáadni a réteget a képhez."
-
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "&Festőeszközök"
-
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "Festőeszközök"
-
-#~ msgctxt "action"
-#~ msgid "Brush composite"
-#~ msgstr "Összetett ecset"
-
-#, fuzzy
-#~| msgid "Layer Opacity"
-#~ msgctxt "@item:inmenu Layers Docker settings, combobox"
-#~ msgid "Subtitle Style"
-#~ msgstr "Réteg átlátszatlansága"
-
-#, fuzzy
-#~| msgid "None"
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "None"
-#~ msgstr "Nincs"
-
-#, fuzzy
-#~| msgid "simple"
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "Simple"
-#~ msgstr "egyszerű"
-
-#~ msgid "&Canvas"
-#~ msgstr "&Vászon"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "&Reset zoom"
-#~ msgctxt "action"
-#~ msgid "&Reset Zoom"
-#~ msgstr "Nagyítás vi&sszaállítása"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Reset zoom"
-#~ msgctxt "action"
-#~ msgid "Reset Zoom"
-#~ msgstr "Nagyítás visszaállítása"
-
-#, fuzzy
-#~| msgid "Fit to Page"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page"
-#~ msgstr "Illesztés az oldalhoz"
-
-#, fuzzy
-#~| msgid "Fit to Width"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Width"
-#~ msgstr "Illesztés a szélességhez"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Width"
-#~ msgstr "Igazítás az oldal szélességéhez"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Height"
-#~ msgstr "Igazítás az oldal szélességéhez"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Height"
-#~ msgstr "Igazítás az oldal szélességéhez"
-
-#~ msgid "Duplicate current profile"
-#~ msgstr "Jelenlegi profil kettőzése"
-
-#~ msgid "Reset Zoom to 100%"
-#~ msgstr "Nagyítás visszaállítása 100%-ra"
-
-#~ msgid "Fit Page"
-#~ msgstr "Igazítás az oldalhoz"
-
-#, fuzzy
-#~ msgid "Make the selection using a merged copy of all layers"
-#~ msgstr "A réteg színkeverési módjának kiválasztása."
-
-#, fuzzy
-#~ msgid ""
-#~ "Make the selection using a merged copy of the selected color-labeled "
-#~ "layers"
-#~ msgstr "A réteg színkeverési módjának kiválasztása."
-
-#, fuzzy
 #~| msgid "&Add to current selection"
 #~ msgid "Current selection"
 #~ msgstr "&Hozzáadás a jelenlegi kijelöléshez"
@@ -62039,6 +62011,22 @@ msgstr "Referenciaképek eszköz"
 #~ msgid "Multiple fill"
 #~ msgstr "Többsoros"
 
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "Nyírás X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "Nyírás Y"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "Skálázás"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "Transzformációk alaphelyzetbe állítása"
+
 #, fuzzy
 #~| msgid "Save to file"
 #~ msgctxt "The 'what to fill' section label in enclose and fill tool options"
@@ -62058,65 +62046,26 @@ msgstr "Referenciaképek eszköz"
 #~ msgstr "Renderelési szándék"
 
 #, fuzzy
+#~| msgid "Small Tiles"
 #~ msgctxt "Region selection method in enclose and fill tool"
 #~ msgid "All regions"
-#~ msgstr "A kijelölt rész nagyítása"
+#~ msgstr "Kicsi lapkák"
 
-#~ msgid "Grid Settings"
-#~ msgstr "Rácsbeállítások"
+#~ msgctxt "action"
+#~ msgid "&Painter's Tools"
+#~ msgstr "&Festőeszközök"
 
-#, fuzzy
-#~ msgid "Enable Smooth Zooming"
-#~ msgstr "OpenGL engedélyezése"
+#~ msgctxt "action"
+#~ msgid "Painter's Tools"
+#~ msgstr "Festőeszközök"
 
-#, fuzzy
-#~| msgid "Compression"
-#~ msgid "Lossless compression"
-#~ msgstr "Tömörítés"
-
-#, fuzzy
-#~| msgid "Tool information"
-#~ msgid "Information"
-#~ msgstr "Eszköz információk"
-
-#, fuzzy
-#~| msgid "Sobel vertically"
-#~ msgid "Flip vertically"
-#~ msgstr "Sobel (függőleges)"
-
-#, fuzzy
-#~| msgid "Bilinear Filtering"
-#~ msgid "Bypass filtering"
-#~ msgstr "Bilineáris szűrés"
-
-#, fuzzy
-#~| msgid "Multiline"
-#~ msgid "Use multithreaded decoding"
-#~ msgstr "Többsoros"
-
-#, fuzzy
-#~| msgid "Color space:"
-#~ msgid "Color planes: "
-#~ msgstr "Színtér:"
-
-#, fuzzy
-#~| msgid "Alpha darken"
-#~ msgid "Alpha plane: "
-#~ msgstr "Alfa-sötétítés"
+#~ msgctxt "action"
+#~ msgid "Brush composite"
+#~ msgstr "Összetett ecset"
 
 #, fuzzy
 #~ msgid "Cache Location:"
 #~ msgstr "Alakzat létrehozás:"
-
-#, fuzzy
-#~ msgctxt "@item:inmenu Layers Docker settings, checkbox"
-#~ msgid "Display Subtitles"
-#~ msgstr "Kijelölés megjelenítése"
-
-#, fuzzy
-#~ msgctxt "@item:tooltip"
-#~ msgid "Layer opacity and blending mode"
-#~ msgstr "Színkeverési mód"
 
 #, fuzzy
 #~| msgid "Cannot pick a color as no layer is active."
@@ -62138,20 +62087,66 @@ msgstr "Referenciaképek eszköz"
 #~ msgstr "Sűrűség"
 
 #, fuzzy
+#~ msgid "Disable vsync (needs restart)"
+#~ msgstr "Eszközbeállítások"
+
+#, fuzzy
 #~ msgctxt ""
 #~ "The 'include surrounding regions' checkbox in enclose and fill tool"
 #~ msgid "Include surrounding regions"
 #~ msgstr "Megnyitás és szerkesztés…"
-
-#, fuzzy
-#~ msgid "Disable vsync (needs restart)"
-#~ msgstr "Eszközbeállítások"
 
 #~ msgid "Angle snapping delta:"
 #~ msgstr "Szögigazítási különbség:"
 
 #~ msgid "Angle Constraints"
 #~ msgstr "Szög korlátozások"
+
+#~ msgid "Open Color Profile"
+#~ msgstr "Színprofil megnyitása"
+
+#, fuzzy
+#~ msgctxt "@title:window"
+#~ msgid "Select a swap directory"
+#~ msgstr "Válasszon egy könyvtárat"
+
+#~ msgid "Add new color profile:"
+#~ msgstr "Új színprofil hozzáadása:"
+
+#~ msgctxt "Color model"
+#~ msgid "&Model:"
+#~ msgstr "&Modell:"
+
+#~ msgid "Profi&le:"
+#~ msgstr "Profi&l:"
+
+#~ msgid "Cursor Shape:"
+#~ msgstr "A kurzor alakja:"
+
+#~ msgid "Cursor Color:"
+#~ msgstr "Kurzorszín:"
+
+#~ msgid "General:"
+#~ msgstr "Általános:"
+
+#, fuzzy
+#~ msgid "Enable Touch Rotation"
+#~ msgstr "Rajztábla beállítások"
+
+#~ msgid "Animation:"
+#~ msgstr "Animáció:"
+
+#, fuzzy
+#~ msgid "Swap File Location:"
+#~ msgstr "Alakzat létrehozás:"
+
+#, fuzzy
+#~ msgid "Force Instant Preview in Move Tool"
+#~ msgstr "Előnézeti kép"
+
+#, fuzzy
+#~ msgid "Force Instant Preview in Filters"
+#~ msgstr "Előnézeti kép"
 
 #, fuzzy
 #~ msgid "Intersect"
@@ -62167,6 +62162,19 @@ msgstr "Referenciaképek eszköz"
 #, fuzzy
 #~ msgid "Symmetric Difference"
 #~ msgstr "Szimmetria"
+
+#, fuzzy
+#~ msgid "Loading Plugins Exiv/IO..."
+#~ msgstr "&Minta…"
+
+#, fuzzy
+#~| msgid "%1 %"
+#~ msgid "%1 %2 px"
+#~ msgstr "%1 %"
+
+#~ msgctxt "About <Profilename>"
+#~ msgid "About "
+#~ msgstr "Névjegy: "
 
 #, fuzzy
 #~| msgid "Current Layer"
@@ -62191,101 +62199,50 @@ msgstr "Referenciaképek eszköz"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Színarány"
 
+#~ msgid "Change the color of the line/border"
+#~ msgstr "A vonal/szegély színének módosítása"
+
 #~ msgctxt "@info:tooltip %2 is shortcut"
 #~ msgid "%1 (%2)"
 #~ msgstr "%1 (%2)"
 
-#~ msgid "Fuzziness: "
-#~ msgstr "Homályosság: "
+#~ msgid "Use same aspect as pixels"
+#~ msgstr "Megegyező arány használata képpontként"
 
 #, fuzzy
-#~| msgid "Opacity: "
-#~ msgid "Opacity Spread: "
-#~ msgstr "Átlátszatlanság: "
-
-#~ msgid "Feathering radius: "
-#~ msgstr "Lágyítás sugara:"
-
-#, fuzzy
-#~| msgid "Border selection by"
-#~ msgid "Use selection as boundary: "
-#~ msgstr "Szegély kijelölés"
-
-#, fuzzy
-#~| msgid "Threshold: "
-#~ msgctxt "Threshold label in Magnetic Selection's Tool options"
-#~ msgid "Threshold: "
-#~ msgstr "Küszöbérték: "
-
-#, fuzzy
-#~| msgid "0 s"
-#~ msgid " kB"
-#~ msgstr "0 mp"
+#~ msgid "Hold Last Frame for:"
+#~ msgstr "Legutóbb használt"
 
 #, fuzzy
 #~| msgid "Vector Layer"
 #~ msgid "Vector Libraries"
 #~ msgstr "Vektor réteg"
 
-#, fuzzy
-#~| msgid "Default printer color model:"
-#~ msgid "Default (encoder chooses)"
-#~ msgstr "Alapértelmezett nyomtató színmodell:"
-
-#~ msgid "Cursor Shape:"
-#~ msgstr "A kurzor alakja:"
-
-#~ msgid "Cursor Color:"
-#~ msgstr "Kurzorszín:"
-
-#~ msgid "Paste"
-#~ msgstr "Beillesztés"
+#~ msgid "Colorspace"
+#~ msgstr "Színtér"
 
 #, fuzzy
-#~| msgctxt "Shortcut type"
-#~| msgid "Gesture"
-#~ msgid "Max Gesture"
-#~ msgstr "Gesztus"
+#~| msgid "Value"
+#~ msgctxt "Label of Brightness value in brush settings"
+#~ msgid "Value"
+#~ msgstr "Érték"
 
 #~ msgid "Gaussian distribution"
 #~ msgstr "Gauss eloszlás"
 
-#~ msgid "Use same aspect as pixels"
-#~ msgstr "Megegyező arány használata képpontként"
-
 #, fuzzy
-#~ msgid "Enable Touch Rotation"
-#~ msgstr "Rajztábla beállítások"
+#~| msgid "Add Group"
+#~ msgctxt "Group as Swatch Group in a Palette"
+#~ msgid "Add Group"
+#~ msgstr "Csoport hozzáadása"
 
-#, fuzzy
-#~ msgid "Hold last frame for:"
-#~ msgstr "Legutóbb használt"
-
-#, fuzzy
-#~| msgid "Fast mode: "
-#~ msgid "Fast mode:"
+#~ msgid "Fast mode: "
 #~ msgstr "Fax mód: "
 
-#, fuzzy
-#~| msgid "Threshold:"
-#~ msgctxt "The Threshold label in Fill tool options"
-#~ msgid "Threshold:"
-#~ msgstr "Küszöbérték: "
-
-#, fuzzy
-#~| msgid "Opacity decrease"
-#~ msgctxt "The Opacity Spread label in Fill tool options"
-#~ msgid "Opacity Spread:"
-#~ msgstr "Átlátszatlanság csökkentése"
-
-#, fuzzy
-#~| msgid "Grow selection: "
-#~ msgid "Grow selection:"
+#~ msgid "Grow selection: "
 #~ msgstr "Kijelölés növelése: "
 
-#, fuzzy
-#~| msgid "Feathering radius: "
-#~ msgid "Feathering radius:"
+#~ msgid "Feathering radius: "
 #~ msgstr "Lágyítás sugara:"
 
 #~ msgid "Use pattern:"
@@ -62320,12 +62277,6 @@ msgstr "Referenciaképek eszköz"
 #~ "hagyásával a teljes kijelölt terület kitöltése"
 
 #, fuzzy
-#~| msgid "Continue"
-#~ msgctxt "The 'continuous fill' label in Fill tool options"
-#~ msgid "Continuous Fill:"
-#~ msgstr "Folytatás"
-
-#, fuzzy
 #~| msgid "Current Layer"
 #~ msgctxt ""
 #~ "Option in fill tool: take only the current layer into account when "
@@ -62348,101 +62299,32 @@ msgstr "Referenciaképek eszköz"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Színarány"
 
-#, fuzzy
-#~| msgid "%1 %2"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %2"
+#~ msgid "Paste"
+#~ msgstr "Beillesztés"
+
+#~ msgid "Fuzziness: "
+#~ msgstr "Homályosság: "
 
 #, fuzzy
-#~| msgid "%1 %2"
-#~ msgctxt "Brush Option Flow"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %2"
+#~| msgid "Border selection by"
+#~ msgid "Use selection as boundary: "
+#~ msgstr "Szegély kijelölés"
 
 #, fuzzy
-#~| msgid "%1 %2"
-#~ msgctxt "Edge softness, Brush Option Fade"
-#~ msgid "%1 %2"
-#~ msgstr "%1 %2"
+#~| msgid "Threshold: "
+#~ msgctxt "Threshold label in Magnetic Selection's Tool options"
+#~ msgid "Threshold: "
+#~ msgstr "Küszöbérték: "
 
 #, fuzzy
-#~| msgid "%1 %2"
-#~ msgctxt "Brush Option Scatter"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %2"
-
-#, fuzzy
-#~| msgid "%1 %"
-#~ msgid "%1 %2 px"
-#~ msgstr "%1 %"
-
-#~ msgid "General:"
-#~ msgstr "Általános:"
-
-#~ msgid "Animation:"
-#~ msgstr "Animáció:"
-
-#, fuzzy
-#~ msgid "Swap File Location:"
-#~ msgstr "Alakzat létrehozás:"
-
-#, fuzzy
-#~ msgid "Force Instant Preview in Move Tool"
-#~ msgstr "Előnézeti kép"
-
-#, fuzzy
-#~ msgid "Force Instant Preview in Filters"
-#~ msgstr "Előnézeti kép"
-
-#~ msgid "Open Color Profile"
-#~ msgstr "Színprofil megnyitása"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Select a swap directory"
-#~ msgstr "Válasszon egy könyvtárat"
-
-#~ msgid "Add new color profile:"
-#~ msgstr "Új színprofil hozzáadása:"
-
-#~ msgid "Colorspace"
-#~ msgstr "Színtér"
-
-#~ msgctxt "Color model"
-#~ msgid "&Model:"
-#~ msgstr "&Modell:"
-
-#~ msgid "Profi&le:"
-#~ msgstr "Profi&l:"
-
-#~ msgctxt "About <Profilename>"
-#~ msgid "About "
-#~ msgstr "Névjegy: "
-
-#, fuzzy
-#~| msgid "Softness"
-#~ msgctxt "The Softness label in Fill tool options"
-#~ msgid "Softness:"
-#~ msgstr "Finomság"
-
-#, fuzzy
-#~| msgid "Softness"
-#~ msgid "Softness: "
-#~ msgstr "Finomság"
+#~| msgid "0 s"
+#~ msgid " kB"
+#~ msgstr "0 mp"
 
 #, fuzzy
 #~| msgid "0.0"
 #~ msgid "0/0"
 #~ msgstr "0.0"
-
-#~ msgid "Change the color of the line/border"
-#~ msgstr "A vonal/szegély színének módosítása"
-
-#, fuzzy
-#~| msgid "Value"
-#~ msgctxt "Label of Brightness value in brush settings"
-#~ msgid "Value"
-#~ msgstr "Érték"
 
 #~ msgid ""
 #~ "The mixing option mixes the paint on the brush with that on the canvas."
@@ -62457,12 +62339,6 @@ msgstr "Referenciaképek eszköz"
 #~ msgctxt "action"
 #~ msgid "Brightness/Contrast curve"
 #~ msgstr "&Fényerő/kontraszt görbe…"
-
-#, fuzzy
-#~| msgid "Threshold: "
-#~ msgctxt "The Threshold label in Fill tool options"
-#~ msgid "Threshold: "
-#~ msgstr "Küszöbérték: "
 
 #, fuzzy
 #~| msgid "The file %1 does not exist."
@@ -62550,14 +62426,7 @@ msgstr "Referenciaképek eszköz"
 #, fuzzy
 #~ msgctxt "Error message when saving a .kra file"
 #~ msgid "Could not save resource %1 to the kra file."
-#~ msgstr "Átalakítás vektor kijelöléssé"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Add shapes to group"
-#~ msgctxt "action"
-#~ msgid "Add a new &Group Layer"
-#~ msgstr "Alakzatok hozzáadása a csoporthoz"
+#~ msgstr "Nem sikerült hozzáadni a réteget a képhez."
 
 #, fuzzy
 #~| msgctxt "(qtundo-format)"
@@ -62741,33 +62610,16 @@ msgstr "Referenciaképek eszköz"
 
 #, fuzzy
 #~ msgid "Could not save preset under name %1, it already exists."
-#~ msgstr "Átalakítás vektor kijelöléssé"
-
-#, fuzzy
-#~ msgid "Could not update preset %1."
-#~ msgstr "Átalakítás vektor kijelöléssé"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Couldn't add the session"
 #~ msgstr "Nem sikerült hozzáadni a réteget a képhez."
 
 #, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Rename Section"
-#~ msgctxt "Warning about not being able to rename a session"
-#~ msgid "Renaming the session failed."
-#~ msgstr "Szakasz átnevezése"
+#~ msgid "Could not update preset %1."
+#~ msgstr "Nem sikerült hozzáadni a réteget a képhez."
 
 #, fuzzy
 #~| msgid "Cerulean Blue"
 #~ msgid "Clean Up"
 #~ msgstr "Égszínkék"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Filters"
-#~ msgstr "Szűrők"
 
 #, fuzzy
 #~| msgid "Select a Directory"
@@ -62795,22 +62647,9 @@ msgstr "Referenciaképek eszköz"
 #~ msgstr "Oldal"
 
 #, fuzzy
-#~| msgid "Sobel horizontally"
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cells horizontally"
-#~ msgstr "Sobel (vízszintes)"
-
-#, fuzzy
-#~| msgid "Sobel vertically"
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cell vertically"
-#~ msgstr "Sobel (függőleges)"
-
-#, fuzzy
-#~| msgid "Sobel vertically"
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cells vertically"
-#~ msgstr "Sobel (függőleges)"
+#~ msgctxt "action"
+#~ msgid "Filters"
+#~ msgstr "Szűrők"
 
 #, fuzzy
 #~| msgid "Auto"
@@ -62819,53 +62658,23 @@ msgstr "Referenciaképek eszköz"
 #~ msgstr "Automatikus"
 
 #, fuzzy
-#~ msgid "Loading Plugins Exiv/IO..."
-#~ msgstr "&Minta…"
-
-#, fuzzy
 #~| msgid "Exif"
 #~ msgctxt "metadata editor page"
 #~ msgid "Exif"
 #~ msgstr "Exif"
-
-#~ msgid "No store backend"
-#~ msgstr "Nincs tárolási háttérendszer"
 
 #, fuzzy
 #~| msgid "Thumbnails"
 #~ msgid "lblThumbnail"
 #~ msgstr "Bélyegképek"
 
+#~ msgid "No store backend"
+#~ msgstr "Nincs tárolási háttérendszer"
+
 #, fuzzy
 #~| msgid "TextLabel"
 #~ msgid "KSqueezedTextLabel"
 #~ msgstr "Szövegcímke"
-
-#, fuzzy
-#~| msgid ""
-#~| "<p>Adjust the compression time. Better compression takes longer.\n"
-#~| "<br>Note: the compression level does not change the quality of the "
-#~| "result.</p>"
-#~ msgid ""
-#~ "<p>Adjust the compression time. Better compression takes longer.\n"
-#~ "                <br>Note: the compression level does not change the "
-#~ "quality of the result.</p>"
-#~ msgstr ""
-#~ "<p>Beállítja a tömörítés idejét. A jobb tömörítés tovább tart.\n"
-#~ "<br>Figyelem: a tömörítési szint nem módosítja az eredmény minőségét.</p>"
-
-#, fuzzy
-#~| msgid ""
-#~| "<p>Adjust the compression time. Better compression takes longer.\n"
-#~| "<br>Note: the compression level does not change the quality of the "
-#~| "result.</p>"
-#~ msgid ""
-#~ "<p>Adjust the compression time. Better compression takes longer. "
-#~ "<br>Note: the compression level does not change the quality of the result."
-#~ "</p>"
-#~ msgstr ""
-#~ "<p>Beállítja a tömörítés idejét. A jobb tömörítés tovább tart.\n"
-#~ "<br>Figyelem: a tömörítési szint nem módosítja az eredmény minőségét.</p>"
 
 #, fuzzy
 #~ msgctxt "Error message when saving a .kra file"
@@ -63796,6 +63605,10 @@ msgstr "Referenciaképek eszköz"
 #~ msgstr "Kijelölési mód"
 
 #, fuzzy
+#~ msgid "Select Behind Blending Mode"
+#~ msgstr "Színkeverési mód"
+
+#, fuzzy
 #~ msgid "Select Clear Blending Mode"
 #~ msgstr "Színkeverési mód"
 
@@ -64037,9 +63850,6 @@ msgstr "Referenciaképek eszköz"
 
 #~ msgid "1 : 1"
 #~ msgstr "1 : 1"
-
-#~ msgid "Update preview"
-#~ msgstr "Előnézet frissítése"
 
 #~ msgid "Automatically update the preview whenever the filter settings change"
 #~ msgstr ""
@@ -64980,9 +64790,6 @@ msgstr "Referenciaképek eszköz"
 #~ msgctxt "No border - has to fit in 48pixels"
 #~ msgid "None"
 #~ msgstr "Nincs"
-
-#~ msgid "No Border"
-#~ msgstr "Nincs szegély"
 
 #~ msgid "Create a new style inheriting the current style"
 #~ msgstr "A jelenlegi stílusból leszármazó új stílus létrehozása"
@@ -67393,11 +67200,6 @@ msgstr "Referenciaképek eszköz"
 #~ msgid "Change Vector Data"
 #~ msgstr "Vektorgrafikus adatok módosítása"
 
-#, fuzzy
-#~| msgid "Rename Image"
-#~ msgid "Replace Image"
-#~ msgstr "A kép átnevezése"
-
 #~ msgid "Vector image"
 #~ msgstr "Vektorgrafikus kép"
 
@@ -67546,6 +67348,9 @@ msgstr "Referenciaképek eszköz"
 #, fuzzy
 #~ msgid "Brush Radius:"
 #~ msgstr "Elmosási sugár:"
+
+#~ msgid "Opacity decrease"
+#~ msgstr "Átlátszatlanság csökkentése"
 
 #~ msgid "Saturation decrease"
 #~ msgstr "Telítettség csökkentése"
@@ -71165,6 +70970,12 @@ msgstr "Referenciaképek eszköz"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "s"
 #~ msgstr "mp"
+
+#, fuzzy
+#~| msgid "Dynamics settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dynamics settings"
+#~ msgstr "Dinamikus beállítások"
 
 #, fuzzy
 #~| msgid "Fixed angle"
@@ -79459,6 +79270,11 @@ msgstr "Referenciaképek eszköz"
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Activate previous layer"
 #~ msgstr "Előző réteg aktiválása"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) action"
+#~ msgid "&Group Layer"
+#~ msgstr "Réteg &csoportosítása"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
@@ -96326,6 +96142,9 @@ msgstr "Referenciaképek eszköz"
 #~ msgid "Rounded edge"
 #~ msgstr "Kerekített szél"
 
+#~ msgid "Shadows 3"
+#~ msgstr "Árnyékok 3"
+
 #~ msgid "Skyline"
 #~ msgstr "Égvonal"
 
@@ -97676,6 +97495,10 @@ msgstr "Referenciaképek eszköz"
 #, fuzzy
 #~ msgid "Select a polygonal area"
 #~ msgstr "Kiválasztás színtartomány szerint"
+
+#, fuzzy
+#~ msgid "&Similar Selection"
+#~ msgstr "A kijelölt rész nagyítása"
 
 #, fuzzy
 #~ msgid "&Polygon"

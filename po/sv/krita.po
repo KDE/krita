@@ -52,8 +52,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-25 00:43+0000\n"
-"PO-Revision-Date: 2022-10-01 11:35+0200\n"
+"POT-Creation-Date: 2023-07-27 02:25+0000\n"
+"PO-Revision-Date: 2022-11-27 11:37+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -4358,7 +4358,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "j)_Waterpaint_Hard_Edges.kpp"
 msgid "j) Waterpaint Hard Edges"
-msgstr "j) Vattenfärg skarpa kanter"
+msgstr "j) Vattenfärg hårda kanter"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -8294,7 +8294,7 @@ msgstr "Visa kraschlogg för felrapporter."
 #, kde-format
 msgctxt "action"
 msgid "Search Actions"
-msgstr "Sök åtgärder"
+msgstr "Sökåtgärder"
 
 #. i18n: context: toolTip @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:199
@@ -11389,7 +11389,7 @@ msgstr "Lägg till &transformeringsmask"
 #, kde-format
 msgctxt "action"
 msgid "Add a new Transform Mask"
-msgstr "Lägg till en transformeringsmask"
+msgstr "Lägg till en ny transformeringsmask"
 
 #. i18n: context: iconText @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2587
@@ -12731,9 +12731,11 @@ msgid "&View"
 msgstr "&Visa"
 
 #: krita/krita5.xmlgui:89
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Wrap Around Mode"
 msgid "Wrap Around Mode Direction"
-msgstr "Riktning för rundgångsläge"
+msgstr "Rundgångsläge"
 
 #: krita/krita5.xmlgui:99
 #, kde-format
@@ -12864,7 +12866,7 @@ msgstr "&Hjälp"
 msgid "File"
 msgstr "Fil"
 
-#: krita/krita5.xmlgui:419
+#: krita/krita5.xmlgui:420
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Penslar med mera"
@@ -12895,7 +12897,7 @@ msgstr "Skapa nytt dokument"
 #, kde-format
 msgctxt "action"
 msgid "New"
-msgstr "Nytt"
+msgstr "Ny"
 
 #. i18n: context: text @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:19
@@ -13802,10 +13804,12 @@ msgstr "Rundgångsläge"
 #. i18n: context: iconText @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:664 krita/kritamenu.action:666
 #: krita/kritamenu.action:667
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Wrap Around Mode"
 msgctxt "action"
 msgid "Wrap Around Both Directions"
-msgstr "Rundgångsläge i båda riktningarna"
+msgstr "Rundgångsläge"
 
 #. i18n: context: text @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
@@ -13815,10 +13819,12 @@ msgstr "Rundgångsläge i båda riktningarna"
 #. i18n: context: iconText @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:676 krita/kritamenu.action:678
 #: krita/kritamenu.action:679
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "action"
 msgid "Wrap Around Horizontally"
-msgstr "Rundgångsläge horisontellt"
+msgstr "Spegla horisontellt"
 
 #. i18n: context: text @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
@@ -13828,10 +13834,12 @@ msgstr "Rundgångsläge horisontellt"
 #. i18n: context: iconText @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:688 krita/kritamenu.action:690
 #: krita/kritamenu.action:691
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "action"
 msgid "Wrap Around Vertically"
-msgstr "Rundgångsläge vertikalt"
+msgstr "Spegla vertikalt"
 
 #. i18n: context: text @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:700
@@ -13922,10 +13930,12 @@ msgstr "Spegla visning omkring markören"
 #. i18n: context: iconText @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:752 krita/kritamenu.action:754
 #: krita/kritamenu.action:755
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Mirror View Around Cursor"
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr "Spegla visning omkring duken"
+msgstr "Spegla visning omkring markören"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
@@ -15790,13 +15800,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Arbetsytor"
 
-#: krita/main.cc:521
+#: krita/main.cc:527
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Kritiskt fel"
 
-#: krita/main.cc:522
+#: krita/main.cc:528
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15805,14 +15815,14 @@ msgstr ""
 "Krita stöder inte Wayland-plattformen. Använd XWayland för att köra Krita på "
 "Wayland. Krita kommer nu att avslutas."
 
-#: krita/main.cc:632 libs/ui/KisApplication.cpp:409
-#: libs/ui/KisApplication.cpp:680
+#: krita/main.cc:646 libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Varning"
 
-#: krita/main.cc:633
+#: krita/main.cc:647
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15823,12 +15833,12 @@ msgstr ""
 "Det rekommenderas inte. Rapportera inte några fel.\n"
 "Uppdatera till en version av Windows som stöds: Windows 7, 8, 8.1 eller 10."
 
-#: krita/main.cc:655 krita/main.cc:660
+#: krita/main.cc:669 krita/main.cc:674
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita stöd för ritplatta"
 
-#: krita/main.cc:656
+#: krita/main.cc:670
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15839,7 +15849,7 @@ msgstr ""
 "hittades. Om du har en ritplatta, försäkra dig om att ritplattans drivrutin "
 "är riktigt installerad."
 
-#: krita/main.cc:661
+#: krita/main.cc:675
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -15933,9 +15943,11 @@ msgstr "Mellanrum > 0,5, överväg att inaktivera omedelbar förhandsgranskning"
 
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:28
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:35
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Error message when saving a .kra file"
+#| msgid "Could not save animation meta data."
 msgid "Could not access brush tip metadata"
-msgstr "Kunde inte komma åt metadata för penselspets"
+msgstr "kunde inte spara metadata för animering."
 
 #: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
 #, kde-format
@@ -16284,25 +16296,25 @@ msgstr ""
 "kommer textobjektet att konverteras till formatet i Krita 5, som inte längre "
 "är kompatibelt med Krita 4.x."
 
-#: libs/flake/text/KoSvgTextShape.cpp:3744
+#: libs/flake/text/KoSvgTextShape.cpp:3751
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3746
-#: libs/flake/text/KoSvgTextShape.cpp:3754
+#: libs/flake/text/KoSvgTextShape.cpp:3753
+#: libs/flake/text/KoSvgTextShape.cpp:3761
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG-textform"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3752
+#: libs/flake/text/KoSvgTextShape.cpp:3759
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3766
-#: libs/flake/text/KoSvgTextShape.cpp:3781
+#: libs/flake/text/KoSvgTextShape.cpp:3773
+#: libs/flake/text/KoSvgTextShape.cpp:3788
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17058,9 +17070,10 @@ msgstr "Importerad bild"
 msgid "Selection Mask"
 msgstr "Markeringsmask"
 
-#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2554
+#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2577
 #: plugins/impex/psd/psd_loader.cpp:193
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Background"
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Bakgrund"
@@ -17155,7 +17168,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Tilldela profil"
 
-#: libs/image/kis_image.cc:2486
+#: libs/image/kis_image.cc:2487
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Beskär markeringar"
@@ -17288,9 +17301,7 @@ msgstr "Redigera nyckeldrag"
 msgid "Show Coloring"
 msgstr "Visa färgläggning"
 
-#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
 #: libs/image/kis_layer_properties_icons.cpp:32
-#: libs/ui/forms/KisWelcomePage.ui:1572
 #, kde-format
 msgid "Open File"
 msgstr "Öppna fil"
@@ -17368,8 +17379,8 @@ msgid "Processing"
 msgstr "Behandlar"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1420
-#: libs/ui/KisMainWindow.cpp:1700 libs/ui/KisMainWindow.cpp:1713
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1750 libs/ui/KisMainWindow.cpp:1763
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -17428,7 +17439,7 @@ msgstr "Kantutjämna markering"
 #: libs/image/kis_selection_filters.cpp:1195
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
-msgstr "Öka markering till mörkaste bildpunkt"
+msgstr ""
 
 #: libs/image/kis_switch_time_stroke_strategy.cpp:32
 msgctxt "(qtundo-format)"
@@ -17775,9 +17786,6 @@ msgid ""
 "millisecond</b>. The format cannot represent this, and the frame duration "
 "will be rounded to the nearest millisecond."
 msgstr ""
-"Bilden animeras med en bildlängd i <b>bråkdelar av en millisekund</b>. "
-"Formatet kan inte representera det, och bildlängden avrundas till närmaste "
-"millisekund."
 
 #: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:652
 #, kde-format
@@ -17832,7 +17840,7 @@ msgstr "Transformeringsmask"
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
-#: plugins/impex/tiff/kis_tiff_import.cc:562
+#: plugins/impex/tiff/kis_tiff_import.cc:566
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
 msgid "Transparency Mask"
@@ -18113,14 +18121,13 @@ msgid "JPEG-XL Image"
 msgstr "JPEG-XL-bild"
 
 #: libs/koplugin/KisMimeDatabase.cpp:349
-#, fuzzy, kde-format
-#| msgid "Document"
+#, kde-format
 msgctxt "description of a file type"
 msgid "CSV Document"
-msgstr "Dokument"
+msgstr "CSV-dokument"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2064
-#: libs/ui/KisMainWindow.cpp:2147
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2121
+#: libs/ui/KisMainWindow.cpp:2204
 #, kde-format
 msgid "Import frames"
 msgstr "Importera bildrutor"
@@ -18939,13 +18946,13 @@ msgstr "Överlagra"
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Linear)"
 msgid "Lambert Lighting (Linear)"
-msgstr "Lambert-ljussättning (linjär)"
+msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:114
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Gamma 2.2)"
 msgid "Lambert Lighting (Gamma 2.2)"
-msgstr "Lambert-ljussättning (gamma 2.2)"
+msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:115
 #, kde-format
@@ -19370,7 +19377,7 @@ msgstr "Ut"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:498 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:504 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19406,9 +19413,9 @@ msgstr "Lokala resurser"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19424,24 +19431,24 @@ msgstr "Lokala resurser"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:979
-#: libs/ui/KisApplication.cpp:982 libs/ui/KisApplication.cpp:998
-#: libs/ui/KisApplication.cpp:1030 libs/ui/KisApplication.cpp:1044
-#: libs/ui/KisApplication.cpp:1072 libs/ui/KisDocument.cpp:946
-#: libs/ui/KisDocument.cpp:953 libs/ui/KisDocument.cpp:973
-#: libs/ui/KisDocument.cpp:1881 libs/ui/KisDocument.cpp:1925
-#: libs/ui/KisDocument.cpp:1931 libs/ui/KisDocument.cpp:1944
-#: libs/ui/KisDocument.cpp:1948 libs/ui/KisMainWindow.cpp:979
-#: libs/ui/KisMainWindow.cpp:1095 libs/ui/KisMainWindow.cpp:1221
-#: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1924
-#: libs/ui/KisMainWindow.cpp:1933 libs/ui/KisMainWindow.cpp:2072
-#: libs/ui/KisMainWindow.cpp:2133 libs/ui/KisMainWindow.cpp:2154
-#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:588
-#: libs/ui/KisPart.cpp:591 libs/ui/KisReferenceImage.cpp:175
-#: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
-#: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:985
+#: libs/ui/KisApplication.cpp:988 libs/ui/KisApplication.cpp:1004
+#: libs/ui/KisApplication.cpp:1036 libs/ui/KisApplication.cpp:1050
+#: libs/ui/KisApplication.cpp:1078 libs/ui/KisDocument.cpp:969
+#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
+#: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
+#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:981
+#: libs/ui/KisMainWindow.cpp:1097 libs/ui/KisMainWindow.cpp:1223
+#: libs/ui/KisMainWindow.cpp:1320 libs/ui/KisMainWindow.cpp:1981
+#: libs/ui/KisMainWindow.cpp:1990 libs/ui/KisMainWindow.cpp:2129
+#: libs/ui/KisMainWindow.cpp:2190 libs/ui/KisMainWindow.cpp:2211
+#: libs/ui/KisMainWindow.cpp:2826 libs/ui/KisPart.cpp:578
+#: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
+#: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
-#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:738
 #: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -19926,7 +19933,6 @@ msgstr "resurskatalog"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:123
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
 #| msgid "Dynamics settings"
 msgid "Display settings"
 msgstr "Dynamikinställningar"
@@ -19948,8 +19954,8 @@ msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Ta bort resurs"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:334
-#: libs/ui/KisMainWindow.cpp:2569
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:335
+#: libs/ui/KisMainWindow.cpp:2626
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20070,7 +20076,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to add resource"
-msgstr "Misslyckades lägga till resurs"
+msgstr "Misslyckades lägga till resursen"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:150
 #, kde-format
@@ -20406,7 +20412,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Misslyckades återge animeringsbildrutor. Utdatafiler är ofullständiga."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2174
+#: libs/ui/KisMainWindow.cpp:2231
 #, kde-format
 msgid "Render Animation"
 msgstr "Återge animering"
@@ -20427,7 +20433,7 @@ msgstr "bilinjär"
 #, kde-format
 msgctxt "lanczos3 filtering"
 msgid "lanczos3"
-msgstr "lanczos 3"
+msgstr "lanczos3"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:98
 #, kde-format
@@ -20450,18 +20456,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "Inte tillgänglig"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:392
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:472
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
@@ -20477,20 +20483,20 @@ msgstr ""
 "Bildfrekvensen kommer att minskas till 50 bilder per sekund.</p></body></"
 "html>"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:479
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgid "Warning(s):"
 msgstr "Varning(ar):"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #, fuzzy, kde-format
 #| msgid ""
 #| "The location of FFmpeg is invalid. Please select the correct location of "
@@ -20502,7 +20508,7 @@ msgstr ""
 "Platsen för FFMpeg är okänd. Installera först FFMpeg. Välj rätt plats för "
 "det körbara FFMpeg-programmet på systemet."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Ange ett filnamn att återge i."
@@ -20757,7 +20763,7 @@ msgstr "Misslyckades läsa in videoinformation"
 msgid "FFMpeg Crashed"
 msgstr "FFMpeg kraschade"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:614
+#: libs/ui/animation/KisFFMpegWrapper.cpp:620
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -21678,7 +21684,7 @@ msgid ""
 msgstr ""
 "Hur känsligt ska filtret för duplicerade bildrutor när det bestämmer\n"
 "vilka bildrutor läggs till i Krita.\n"
-"Ju högre känslighet, desto fler bildrutor läggs till i Krita."
+"Ju högre känslighet, desto fler bildrutor läggs till i Krita.."
 
 #. i18n: ectx: property (text), widget (QLabel, importDocumentLabel)
 #: libs/ui/animation/VideoImportDialog.ui:325
@@ -22507,7 +22513,7 @@ msgid "Numerical"
 msgstr "Numerisk"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, kde-format
 msgid "Import Images"
 msgstr "Importera bilder"
@@ -22553,7 +22559,7 @@ msgstr "Lageregenskaper"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -22653,7 +22659,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Ange nytt stilnamn"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2580
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2637
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -22852,7 +22858,7 @@ msgstr "Lutningskontur"
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, kde-format
 msgid "Eraser"
-msgstr "Radergummi"
+msgstr "Radering"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:323
 #, kde-format
@@ -22952,10 +22958,10 @@ msgstr "%1 är inte en giltig bildfil."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:925
 #, fuzzy, kde-format
-#| msgid "Warning: this location is not writable."
+#| msgid "2. The resource location at %1 is not writable."
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
-msgstr "Varning: platsen är inte skrivbar."
+msgstr "2. Resursplatsen i %1 är inte skrivbar."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1027
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1136
@@ -23480,7 +23486,7 @@ msgstr "Lägg till en färgrutegrupp"
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
 msgid "Remove selected group"
-msgstr "Ta bort markerad grupp"
+msgstr "Ta bort vald grupp"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
@@ -23651,38 +23657,117 @@ msgstr "Använd alltid denna mall vid programstart"
 msgid "Always use this template"
 msgstr "Använd alltid denna mall"
 
+#. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
+#: libs/ui/forms/KisWelcomePage.ui:48
+#, fuzzy, kde-format
+#| msgid "Support Krita"
+msgid "Support Krita!"
+msgstr "Stöd Krita"
+
+#. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
+#: libs/ui/forms/KisWelcomePage.ui:79
+#, fuzzy, kde-format
+#| msgid "Replace Image"
+msgid "Recent Images"
+msgstr "Ersätt bild"
+
+#. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
+#: libs/ui/forms/KisWelcomePage.ui:103
+#, kde-format
+msgctxt "Welcome Screen Recent Document List's Clear link Label"
+msgid "Clear"
+msgstr "Rensa"
+
+#. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
+#: libs/ui/forms/KisWelcomePage.ui:154
+#, kde-format
+msgid ""
+"You don't seem to have any\n"
+"recently opened documents"
+msgstr ""
+"Du verkar inte ha några\n"
+"senast öppnade dokument"
+
+#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:322
+#, kde-format
+msgid "Community"
+msgstr "Gemenskap"
+
+#. i18n: ectx: property (text), widget (QLabel, manualLink)
+#: libs/ui/forms/KisWelcomePage.ui:391 libs/ui/KisWelcomePageWidget.cpp:391
+#, kde-format
+msgid "User Manual"
+msgstr "Användarhandbok"
+
+#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
+#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:394
+#, kde-format
+msgid "Support Krita"
+msgstr "Stöd Krita"
+
+#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
+#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:403
+#, kde-format
+msgid "Powered by KDE"
+msgstr "Drivs av KDE"
+
+#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
+#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:400
+#, kde-format
+msgid "Source Code"
+msgstr "Källkod"
+
+#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
+#: libs/ui/forms/KisWelcomePage.ui:748 libs/ui/KisWelcomePageWidget.cpp:388
+#, kde-format
+msgid "Getting Started"
+msgstr "Komma igång"
+
+#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
+#: libs/ui/forms/KisWelcomePage.ui:835 libs/ui/KisWelcomePageWidget.cpp:385
+#, kde-format
+msgid "User Community"
+msgstr "Användargemenskap"
+
+#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
+#: libs/ui/forms/KisWelcomePage.ui:922 libs/ui/KisWelcomePageWidget.cpp:397
+#, kde-format
+msgid "Krita Website"
+msgstr "Kritas webbsida"
+
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:168
+#: libs/ui/forms/KisWelcomePage.ui:1066
 #, kde-format
 msgid "News"
 msgstr "Nyheter"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:191
+#: libs/ui/forms/KisWelcomePage.ui:1089
 #, kde-format
 msgid "News options"
 msgstr "Nyhetsalternativ"
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:314
+#: libs/ui/forms/KisWelcomePage.ui:1212
 #, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr "Krita version X.X.X tillgänglig"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:365
+#: libs/ui/forms/KisWelcomePage.ui:1263
 #, kde-format
 msgid "Update now!"
 msgstr "Uppdatera nu."
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:372
+#: libs/ui/forms/KisWelcomePage.ui:1270
 #, kde-format
 msgid "Show details"
 msgstr "Visa detaljinformation"
 
-#. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:455 libs/ui/KisWelcomePageWidget.cpp:398
+#. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
+#: libs/ui/forms/KisWelcomePage.ui:1353 libs/ui/KisWelcomePageWidget.cpp:405
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -23693,103 +23778,38 @@ msgstr ""
 "decoration: underline;\">aktivera nyheter</a> från krita.org på olika språk "
 "med menyn ovan"
 
-#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:562
-#, kde-format
-msgid "Community"
-msgstr "Gemenskap"
-
-#. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:647 libs/ui/KisWelcomePageWidget.cpp:384
-#, kde-format
-msgid "User Manual"
-msgstr "Användarhandbok"
-
-#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:737 libs/ui/KisWelcomePageWidget.cpp:381
-#, kde-format
-msgid "Getting Started"
-msgstr "Komma igång"
-
-#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:824 libs/ui/KisWelcomePageWidget.cpp:378
-#, kde-format
-msgid "User Community"
-msgstr "Användargemenskap"
-
-#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:911 libs/ui/KisWelcomePageWidget.cpp:390
-#, kde-format
-msgid "Krita Website"
-msgstr "Kritas webbsida"
-
-#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:1001 libs/ui/KisWelcomePageWidget.cpp:393
-#, kde-format
-msgid "Source Code"
-msgstr "Källkod"
-
-#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:1088 libs/ui/KisWelcomePageWidget.cpp:387
-#, kde-format
-msgid "Support Krita"
-msgstr "Stöd Krita"
-
-#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:1178 libs/ui/KisWelcomePageWidget.cpp:396
-#, kde-format
-msgid "Powered by KDE"
-msgstr "Drivs av KDE"
-
-#. i18n: ectx: property (text), widget (QLabel, dragImageHereLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1261
-#, kde-format
-msgid "Drag an image into the window to open"
-msgstr "Dra en bild till fönstret för att öppna den"
-
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1361
+#: libs/ui/forms/KisWelcomePage.ui:1417
 #, kde-format
 msgid "Start"
 msgstr "Starta"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1428 libs/ui/KisWelcomePageWidget.cpp:625
+#: libs/ui/forms/KisWelcomePage.ui:1484 libs/ui/KisWelcomePageWidget.cpp:632
 #, kde-format
 msgid "DEV BUILD"
 msgstr "Utvecklingsbygge"
 
 #. i18n: ectx: property (text), widget (QPushButton, newFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:1504
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
+#: libs/ui/forms/KisWelcomePage.ui:1560 libs/ui/forms/wdgimageproperties.ui:18
+#: libs/ui/forms/wdgnewimage.ui:18
+#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
 #, kde-format
-msgid "New File"
-msgstr "Ny fil"
+msgid "New Image"
+msgstr "Ny bild"
 
-#. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1655
-#, kde-format
-msgid "Recent Documents"
-msgstr "Senaste dokument"
-
-#. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:1713
-#, kde-format
-msgctxt "Welcome Screen Recent Document List's Clear link Label"
-msgid "Clear"
-msgstr "Rensa"
-
-#. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:1766
-#, kde-format
-msgid ""
-"You don't seem to have any\n"
-"recently opened documents"
-msgstr ""
-"Du verkar inte ha några\n"
-"senast öppnade dokument"
+#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
+#: libs/ui/forms/KisWelcomePage.ui:1628
+#, fuzzy, kde-format
+#| msgid "Open Images"
+msgid "Open Image"
+msgstr "Öppna bilder"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1874
+#: libs/ui/forms/KisWelcomePage.ui:1712
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -24701,22 +24721,19 @@ msgstr "Nuvarande återgivning:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLargePixmapCache)
 #: libs/ui/forms/wdgdisplaysettings.ui:201
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>This should be enabled if you see any artifacts while "
 "using assistants.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Använd ritplattans lutning för att bestämma "
-"normalvektorer.</p></body></html>"
+"<html><head/><body><p>Detta bör aktiveras om du ser några förvrängningar vid "
+"användning av guider.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLargePixmapCache)
 #: libs/ui/forms/wdgdisplaysettings.ui:204
 #, kde-format
 msgid "Use large pixmap cache"
-msgstr ""
+msgstr "Använd stor punktavbildningscache"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
 #: libs/ui/forms/wdgdisplaysettings.ui:218
@@ -24843,9 +24860,9 @@ msgstr "Överlagring av markering:"
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
 #, fuzzy, kde-format
-#| msgid "Selection Overlay:"
+#| msgid "Line Opacity"
 msgid "Outline opacity:"
-msgstr "Överlagring av markering:"
+msgstr "Linjeogenomskinlighet"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:440
@@ -25377,7 +25394,7 @@ msgstr "Aktivera transformeringsverktyg efter inklistring"
 #: libs/ui/forms/wdggeneralsettings.ui:724
 #, kde-format
 msgid "Zoom steps between powers of 2"
-msgstr "Zooma i steg mellan tvåpotenser"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:741
@@ -25783,21 +25800,23 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1453
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@option:check"
+#| msgid "Automatic color axis adjustments"
 msgid "Automatic layer suffixes"
-msgstr "Automatiska lagersuffix"
+msgstr "Automatiska justeringar av färgaxlar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1459
 #, kde-format
 msgid "Add \"Merged\" to merged group layers"
-msgstr "Lägg till \"Sammanfogade\" för sammanfogade grupplager"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1466
 #, kde-format
 msgid "Add \"(pasted)\" to pasted layers"
-msgstr "Lägg till \"(inklistrade)\" för inklistrade lager"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1491
@@ -25935,15 +25954,6 @@ msgstr "Rotera:"
 #, kde-format
 msgid "Scale:"
 msgstr "Skalning:"
-
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:18
-#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
-#, kde-format
-msgid "New Image"
-msgstr "Ny bild"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
@@ -26597,7 +26607,7 @@ msgstr "Nuvarande penselförinställningar"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1076
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -27547,7 +27557,7 @@ msgid "HSV CCW"
 msgstr "HSV moturs"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:351
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:352
 #, kde-format
 msgid "Sessions"
 msgstr "Sessioner"
@@ -29013,7 +29023,7 @@ msgstr "Fyllmönster"
 #: libs/ui/kis_control_frame.cpp:66
 #, kde-format
 msgid "Fill Gradients"
-msgstr "Fyllnadstoningar"
+msgstr "Ifyllnadstoning"
 
 #: libs/ui/kis_control_frame.cpp:76
 #, kde-format
@@ -29045,7 +29055,7 @@ msgstr "Ö&ppna förgrundsfärgväljare"
 msgid "&Open Background color selector"
 msgstr "Ö&ppna bakgrundsfärgväljare"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:347
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -29058,8 +29068,8 @@ msgstr "Mönster"
 msgid "Custom Pattern"
 msgstr "Egna mönster"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:332
-#: libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
+#: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, kde-format
@@ -29292,9 +29302,10 @@ msgid "Mirror View Around Cursor"
 msgstr "Spegla visning omkring markören"
 
 #: libs/ui/kis_mirror_manager.cpp:48
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Mirror View Around Cursor"
 msgid "Mirror View Around Canvas"
-msgstr "Spegla visning omkring duken"
+msgstr "Spegla visning omkring markören"
 
 #: libs/ui/kis_node_manager.cpp:453
 #, kde-format
@@ -29815,61 +29826,61 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Zoom: %1 %"
 
-#: libs/ui/KisApplication.cpp:324
+#: libs/ui/KisApplication.cpp:325
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, kde-format
 msgid "Brush presets"
 msgstr "Penselförinställningar"
 
-#: libs/ui/KisApplication.cpp:327 libs/ui/KisApplication.cpp:328
-#: libs/ui/KisApplication.cpp:329 libs/ui/KisApplication.cpp:330
+#: libs/ui/KisApplication.cpp:328 libs/ui/KisApplication.cpp:329
+#: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
 #, kde-format
 msgid "Brush tips"
 msgstr "Penselspetsar"
 
-#: libs/ui/KisApplication.cpp:335
+#: libs/ui/KisApplication.cpp:336
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
 #, kde-format
 msgid "Palettes"
 msgstr "Paletter"
 
-#: libs/ui/KisApplication.cpp:348 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
 msgid "Workspaces"
 msgstr "Arbetsytor"
 
-#: libs/ui/KisApplication.cpp:349
+#: libs/ui/KisApplication.cpp:350
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "SVG-symbolbibliotek"
 
-#: libs/ui/KisApplication.cpp:350 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr "Fönsterlayouter"
 
-#: libs/ui/KisApplication.cpp:352
+#: libs/ui/KisApplication.cpp:353
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
 #, kde-format
 msgid "Gamut masks"
 msgstr "Färgomfångsmasker"
 
-#: libs/ui/KisApplication.cpp:354
+#: libs/ui/KisApplication.cpp:355
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExpr-skript"
 
-#: libs/ui/KisApplication.cpp:359
+#: libs/ui/KisApplication.cpp:360
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Lagerstilar"
 
-#: libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:373
 #, kde-format
 msgid ""
 "%1\n"
@@ -29880,13 +29891,13 @@ msgstr ""
 "\n"
 "Krita avslutas nu."
 
-#: libs/ui/KisApplication.cpp:372 libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:373 libs/ui/KisApplication.cpp:379
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Allvarligt fel"
 
-#: libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:379
 #, kde-format
 msgid ""
 "\n"
@@ -29897,7 +29908,7 @@ msgstr ""
 "\n"
 "Krita avslutas nu."
 
-#: libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:411
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -29908,69 +29919,69 @@ msgstr ""
 "Det rekommenderas inte.\n"
 "Ladda ner och installera x64-programmet istället."
 
-#: libs/ui/KisApplication.cpp:427
+#: libs/ui/KisApplication.cpp:428
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Initierar globala värden..."
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:459
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Lägger till resurstyper..."
 
-#: libs/ui/KisApplication.cpp:462
+#: libs/ui/KisApplication.cpp:463
 #, fuzzy, kde-format
 #| msgid "Loading Bundles..."
 msgid "Loading plugins..."
 msgstr "Läser in packar..."
 
-#: libs/ui/KisApplication.cpp:468
+#: libs/ui/KisApplication.cpp:469
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Loading Resource Bundles..."
 msgid "Loading resources..."
 msgstr "Läser in resurspackar..."
 
-#: libs/ui/KisApplication.cpp:477
+#: libs/ui/KisApplication.cpp:478
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Laddar huvudfönster..."
 
-#: libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:510
 #, fuzzy, kde-format
 #| msgid "Scanning..."
 msgid "Launching..."
 msgstr "Söker..."
 
-#: libs/ui/KisApplication.cpp:578
+#: libs/ui/KisApplication.cpp:579
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Mime-typ hittades inte, försök använda väljaren -mimetyp"
 
-#: libs/ui/KisApplication.cpp:634
+#: libs/ui/KisApplication.cpp:635
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Misslyckades återge animeringsbildrutor."
 
-#: libs/ui/KisApplication.cpp:661 libs/ui/KisApplication.cpp:851
+#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:857
 #, kde-format
 msgid "File layer"
 msgstr "Arkivlager"
 
-#: libs/ui/KisApplication.cpp:669 libs/ui/KisApplication.cpp:674
-#: libs/ui/KisApplication.cpp:845 libs/ui/KisApplication.cpp:859
-#: libs/ui/KisApplication.cpp:864
+#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:851 libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:870
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Varning"
 
-#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:866
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Kan inte lägga till %1 som ett arkivlager: filen finns inte."
 
-#: libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29991,7 +30002,7 @@ msgstr ""
 "instans av Krita som redan kör, markera kryssrutan \"Tillåt bara en instans "
 "av Krita\" i inställningarna (Inställningar -> Allmänt -> Fönster)."
 
-#: libs/ui/KisApplication.cpp:681
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30002,32 +30013,32 @@ msgstr ""
 "Du kan antingen skapa en ny fil genom att använda väljaren --new-image, "
 "eller öppna en befintlig fil."
 
-#: libs/ui/KisApplication.cpp:846
+#: libs/ui/KisApplication.cpp:852
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Kunde inte öppna filen %1"
 
-#: libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:871
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Kan inte lägga till arkivlagret: inget dokument är öppet."
 
-#: libs/ui/KisApplication.cpp:980
+#: libs/ui/KisApplication.cpp:986
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Ingen mall hittades för: %1"
 
-#: libs/ui/KisApplication.cpp:983
+#: libs/ui/KisApplication.cpp:989
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "För många mallar hittades för: %1"
 
-#: libs/ui/KisApplication.cpp:999
+#: libs/ui/KisApplication.cpp:1005
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Mallen %1 kunde inte läsas in."
 
-#: libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:1037
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30042,7 +30053,7 @@ msgstr ""
 "\n"
 "Starta om Krita för att ändringarna ska få effekt."
 
-#: libs/ui/KisApplication.cpp:1045
+#: libs/ui/KisApplication.cpp:1051
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30053,7 +30064,7 @@ msgstr ""
 "\n"
 "Försäkra dig om att inget annat program använder filen och försök igen."
 
-#: libs/ui/KisApplication.cpp:1073
+#: libs/ui/KisApplication.cpp:1079
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Vill du verkligen tömma inställningsfilen?"
@@ -30196,12 +30207,12 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Duplicera dokument"
 
-#: libs/ui/KisDocument.cpp:722
+#: libs/ui/KisDocument.cpp:733
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "Det går inte att skriva till %1. Spara med ett annat namn."
 
-#: libs/ui/KisDocument.cpp:760
+#: libs/ui/KisDocument.cpp:783
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Failed to create an action."
@@ -30209,7 +30220,7 @@ msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Misslyckades skapa en åtgärd."
 
-#: libs/ui/KisDocument.cpp:777
+#: libs/ui/KisDocument.cpp:800
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Failed to create an action."
@@ -30217,17 +30228,17 @@ msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Misslyckades skapa en åtgärd."
 
-#: libs/ui/KisDocument.cpp:799
+#: libs/ui/KisDocument.cpp:822
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Exporterar dokument..."
 
-#: libs/ui/KisDocument.cpp:800
+#: libs/ui/KisDocument.cpp:823
 #, kde-format
 msgid "Saving Document..."
 msgstr "Sparar dokument..."
 
-#: libs/ui/KisDocument.cpp:810
+#: libs/ui/KisDocument.cpp:833
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30236,18 +30247,18 @@ msgstr ""
 "Kunde inte börja spara %1. Vänta tills den pågående åtgärden för att spara "
 "är färdig."
 
-#: libs/ui/KisDocument.cpp:939
+#: libs/ui/KisDocument.cpp:962
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Fel när %1 skulle sparas: %2"
 
-#: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:954
+#: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
 #, kde-format
 msgid "Could not save %1."
 msgstr "Kunde inte spara %1."
 
-#: libs/ui/KisDocument.cpp:976
+#: libs/ui/KisDocument.cpp:999
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30255,7 +30266,7 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:982
+#: libs/ui/KisDocument.cpp:1005
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "dialog box shown to the user if there were warnings while saving the "
@@ -30270,38 +30281,38 @@ msgstr ""
 "%1 har sparats men är ofullständigt.\n"
 "Följande problem inträffade när det sparades:"
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1022
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Spara %1 färdigt"
 
-#: libs/ui/KisDocument.cpp:1402
+#: libs/ui/KisDocument.cpp:1425
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Sparar automatiskt... %1"
 
-#: libs/ui/KisDocument.cpp:1410
+#: libs/ui/KisDocument.cpp:1433
 #, kde-format
 msgid "Autosaving..."
 msgstr "Sparar automatiskt..."
 
-#: libs/ui/KisDocument.cpp:1416
+#: libs/ui/KisDocument.cpp:1439
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Spara automatiskt fördröjt: dokumentet är upptaget ..."
 
-#: libs/ui/KisDocument.cpp:1559
+#: libs/ui/KisDocument.cpp:1582
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Fel vid spara automatiskt av %1: %2"
 
-#: libs/ui/KisDocument.cpp:1573
+#: libs/ui/KisDocument.cpp:1596
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Spara %1 automatiskt färdigt"
 
-#: libs/ui/KisDocument.cpp:1815
+#: libs/ui/KisDocument.cpp:1838
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30310,40 +30321,40 @@ msgstr ""
 "Felaktig sökväg\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1881
+#: libs/ui/KisDocument.cpp:1904
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Filen %1 finns inte."
 
-#: libs/ui/KisDocument.cpp:1910
+#: libs/ui/KisDocument.cpp:1933
 #, kde-format
 msgid "Opening document"
 msgstr "Öppnar dokument"
 
-#: libs/ui/KisDocument.cpp:1926 libs/ui/KisDocument.cpp:1932
+#: libs/ui/KisDocument.cpp:1949 libs/ui/KisDocument.cpp:1955
 #, fuzzy, kde-format
 #| msgid "Could not open '%1'."
 msgid "Could not open %1."
 msgstr "Kunde inte öppna '%1'."
 
-#: libs/ui/KisDocument.cpp:1945 libs/ui/KisDocument.cpp:1949
+#: libs/ui/KisDocument.cpp:1968 libs/ui/KisDocument.cpp:1972
 #, fuzzy, kde-format
 #| msgid "There were problems opening %1"
 msgid "There were problems opening %1."
 msgstr "Problem uppstod när %1 skulle öppnas"
 
-#: libs/ui/KisDocument.cpp:2080
+#: libs/ui/KisDocument.cpp:2103
 #, kde-format
 msgid "Not Saved"
 msgstr "Inte sparad"
 
-#: libs/ui/KisDocument.cpp:2561
+#: libs/ui/KisDocument.cpp:2584
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Bakgrundsfyllnad"
 
-#: libs/ui/KisDocument.cpp:2613
+#: libs/ui/KisDocument.cpp:2636
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30761,44 +30772,44 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Ar&betsyta"
 
-#: libs/ui/KisMainWindow.cpp:585
+#: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Visa verktygsrad %1"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:589
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Dölj verktygsrad %1"
 
-#: libs/ui/KisMainWindow.cpp:1037
+#: libs/ui/KisMainWindow.cpp:1039
 #, kde-format
 msgid "Write Protected"
 msgstr "Skrivskyddad"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1043
 #, kde-format
 msgid "Recovered"
 msgstr "Återställd"
 
-#: libs/ui/KisMainWindow.cpp:1071
+#: libs/ui/KisMainWindow.cpp:1073
 #, kde-format
 msgid "Save as %1"
 msgstr "Spara som %1"
 
-#: libs/ui/KisMainWindow.cpp:1095
+#: libs/ui/KisMainWindow.cpp:1097
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Filen %1 finns inte."
 
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, kde-format
 msgid "Open Images"
 msgstr "Öppna bilder"
 
-#: libs/ui/KisMainWindow.cpp:1319
+#: libs/ui/KisMainWindow.cpp:1321
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30811,45 +30822,45 @@ msgstr ""
 "\n"
 "Välj en plats där originalfilen inte överskrids."
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, kde-format
 msgid "Exporting"
 msgstr "Exporterar"
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, kde-format
 msgid "Saving As"
 msgstr "Sparar som"
 
-#: libs/ui/KisMainWindow.cpp:1679
+#: libs/ui/KisMainWindow.cpp:1729
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Skapa nytt dokument"
 
-#: libs/ui/KisMainWindow.cpp:1703
+#: libs/ui/KisMainWindow.cpp:1753
 #, kde-format
 msgid "Custom Document"
 msgstr "Eget dokument"
 
-#: libs/ui/KisMainWindow.cpp:1715
+#: libs/ui/KisMainWindow.cpp:1765
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Skapa från klippbord"
 
-#: libs/ui/KisMainWindow.cpp:1893
+#: libs/ui/KisMainWindow.cpp:1950
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Lager och masker"
 
-#: libs/ui/KisMainWindow.cpp:1919
+#: libs/ui/KisMainWindow.cpp:1976
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Du har inga resurspackar aktiverade."
 
-#: libs/ui/KisMainWindow.cpp:1923
+#: libs/ui/KisMainWindow.cpp:1980
 #, kde-format
 msgid ""
 "\n"
@@ -30860,7 +30871,7 @@ msgstr ""
 "Det finns inga tillgängliga penselförinställningar. Aktivera en packe som "
 "har penselförinställningar innan du fortsätter.\n"
 
-#: libs/ui/KisMainWindow.cpp:1933
+#: libs/ui/KisMainWindow.cpp:1990
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -30871,7 +30882,7 @@ msgstr ""
 "\n"
 "Bara dina lokala resurser är tillgängliga."
 
-#: libs/ui/KisMainWindow.cpp:2072 libs/ui/KisMainWindow.cpp:2154
+#: libs/ui/KisMainWindow.cpp:2129 libs/ui/KisMainWindow.cpp:2211
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30880,40 +30891,40 @@ msgstr ""
 "Kunde inte slutföra import av animering:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2133
+#: libs/ui/KisMainWindow.cpp:2190
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Misslyckades skapa nytt dokument. Import av animering avbruten."
 
-#: libs/ui/KisMainWindow.cpp:2560
+#: libs/ui/KisMainWindow.cpp:2617
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importera arbetsyta..."
 
-#: libs/ui/KisMainWindow.cpp:2575
+#: libs/ui/KisMainWindow.cpp:2632
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Ny arbetsyta..."
 
-#: libs/ui/KisMainWindow.cpp:2579
+#: libs/ui/KisMainWindow.cpp:2636
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Ny arbetsyta..."
 
-#: libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/KisMainWindow.cpp:2680
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2626
+#: libs/ui/KisMainWindow.cpp:2683
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2792
+#: libs/ui/KisMainWindow.cpp:2849
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -30922,19 +30933,19 @@ msgstr ""
 "Kritas insticksprogram för LittleCMS-färghantering är inte installerat. "
 "Krita avslutas nu."
 
-#: libs/ui/KisMainWindow.cpp:2808
+#: libs/ui/KisMainWindow.cpp:2865
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Installationsfel"
 
-#: libs/ui/KisMainWindow.cpp:2917
+#: libs/ui/KisMainWindow.cpp:2974
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Teman"
 
-#: libs/ui/KisMainWindow.cpp:2975
+#: libs/ui/KisMainWindow.cpp:3032
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Expanderande mellanrum"
@@ -31068,7 +31079,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Ny grupp %1"
 
-#: libs/ui/KisPart.cpp:588
+#: libs/ui/KisPart.cpp:578
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -31077,7 +31088,7 @@ msgstr ""
 "Kunde inte skapa dokument från mall\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:591
+#: libs/ui/KisPart.cpp:581
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -31098,7 +31109,7 @@ msgstr "Ställ in färgmättnad"
 msgid "Could not load %1."
 msgstr "Kunde inte läsa in %1."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:39
+#: libs/ui/KisRemoteFileFetcher.cpp:41
 #, kde-format
 msgctxt "Fetching remote image"
 msgid ""
@@ -31106,19 +31117,19 @@ msgid ""
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:61
+#: libs/ui/KisRemoteFileFetcher.cpp:63
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "Laddar ner bild från %1..."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:75
+#: libs/ui/KisRemoteFileFetcher.cpp:77
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr "Laddar ner bild från %1... (%2 / %3)"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:92
+#: libs/ui/KisRemoteFileFetcher.cpp:94
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."
@@ -31397,12 +31408,12 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Anonym"
 
-#: libs/ui/KisWelcomePageWidget.cpp:148
+#: libs/ui/KisWelcomePageWidget.cpp:157
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr "Aktivera nyheter och sök efter nya utgåvor"
 
-#: libs/ui/KisWelcomePageWidget.cpp:150
+#: libs/ui/KisWelcomePageWidget.cpp:159
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
@@ -31411,39 +31422,39 @@ msgstr ""
 "Visa nyheter om Krita: Behöver Internet för att hämta information från "
 "webbplatsen krita.org"
 
-#: libs/ui/KisWelcomePageWidget.cpp:153
+#: libs/ui/KisWelcomePageWidget.cpp:162
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, kde-format
 msgid "Language"
 msgstr "Språk"
 
-#: libs/ui/KisWelcomePageWidget.cpp:154
+#: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid "English news is always up to date."
 msgstr "Nyheter på engelska är alltid aktuella."
 
-#: libs/ui/KisWelcomePageWidget.cpp:420
+#: libs/ui/KisWelcomePageWidget.cpp:427
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
 msgstr "Skaffa ditt eget Krita supportermärke här!"
 
-#: libs/ui/KisWelcomePageWidget.cpp:648
+#: libs/ui/KisWelcomePageWidget.cpp:655
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Glöm \"%1\""
 
-#: libs/ui/KisWelcomePageWidget.cpp:745
+#: libs/ui/KisWelcomePageWidget.cpp:757
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Ny version av Krita är tillgänglig."
 
-#: libs/ui/KisWelcomePageWidget.cpp:774
+#: libs/ui/KisWelcomePageWidget.cpp:786
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Ett fel uppstod vid uppdatering"
 
-#: libs/ui/KisWelcomePageWidget.cpp:780
+#: libs/ui/KisWelcomePageWidget.cpp:792
 #, kde-format
 msgid "Restart is required."
 msgstr "Omstart krävs."
@@ -32425,12 +32436,12 @@ msgstr ""
 "Strukturbuffrar är explicit inaktiverade med ANGLE återgivning på grund av "
 "prestandaproblem."
 
-#: libs/ui/opengl/kis_opengl.cpp:654
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "Intels grafikdrivrutin som används har kända problem med OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:656
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32441,7 +32452,7 @@ msgstr ""
 "istället. Du kan byta manuellt till OpenGL, men det finns inga garantier att "
 "att det fungerar riktigt."
 
-#: libs/ui/opengl/kis_opengl.cpp:1070
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32450,7 +32461,7 @@ msgstr ""
 "Föredragen återgivning stöder inte begärt ytformat. En annan återgivning har "
 "valts."
 
-#: libs/ui/opengl/kis_opengl.cpp:1072
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "Föredraget utmatningsformat stöds inte av tillgängliga återgivningar."
@@ -32734,7 +32745,7 @@ msgstr "Lägg till aktuell toning i förinställningarna"
 #, kde-format
 msgctxt "Show the gradient preset chooser as a pop-up in a button or inline"
 msgid "Use a pop-up gradient preset chooser"
-msgstr "Använd fönster för väljare av toningsförinställning"
+msgstr "Använd meddelanderuta för väljare av toningsförinställning"
 
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:182
 #, kde-format
@@ -33932,10 +33943,9 @@ msgid "No configuration options"
 msgstr "Inga inställningsalternativ"
 
 #: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
-#, fuzzy, kde-format
-#| msgid "The layer does not have an image associated with it."
+#, kde-format
 msgid "The clipboard is empty or does not have an image in it."
-msgstr "Lagret har inte någon tillhörande bild."
+msgstr "Klippbordet är tomt eller har inte någon bild."
 
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:42
 #, kde-format
@@ -34174,22 +34184,24 @@ msgid "Symmetric Difference"
 msgstr "Symmetrisk differens"
 
 #: libs/ui/widgets/kis_selection_options.cc:233
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set line width of actual selection"
 msgid "Smooths the edges of the selection"
-msgstr "Jämnar ut markeringens kanter"
+msgstr "Ställ in linjebredd för själva markeringen"
 
 #: libs/ui/widgets/kis_selection_options.cc:235
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Blur the selection by the set amount"
 msgid "Grow or shrink the selection by the set amount"
-msgstr "Öka eller minska markeringen med angivet värde"
+msgstr "Gör markeringen suddig med angivet värde"
 
 #: libs/ui/widgets/kis_selection_options.cc:237
 #: plugins/tools/basictools/kis_tool_fill.cc:628
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
-msgstr "Sluta växa vid de mörkaste och/eller mest ogenomskinliga bildpunkterna"
+msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:239
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
@@ -34198,22 +34210,23 @@ msgid "Blur the selection by the set amount"
 msgstr "Gör markeringen suddig med angivet värde"
 
 #: libs/ui/widgets/kis_selection_options.cc:242
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Obtain the region using the active layer"
 msgid "Select regions found from the active layer"
-msgstr "Markera områden som hittas från det aktiva lagret"
+msgstr "Skaffa området med användning av det aktiva lagret"
 
 #: libs/ui/widgets/kis_selection_options.cc:244
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format) action"
+#| msgid "Select a color from the image or current layer"
 msgid "Select regions found from the merging of all layers"
-msgstr "Markera områden som hittas från sammanfogning av alla lager"
+msgstr "Välj en färg från bilden eller nuvarande lager"
 
 #: libs/ui/widgets/kis_selection_options.cc:246
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
-"Markera områden som hittas från sammanfogning av lager med specifika "
-"färgbeteckningar"
 
 #: libs/ui/widgets/kis_selection_options.cc:254
 #, kde-format
@@ -35980,12 +35993,12 @@ msgstr "sekunder (s)"
 msgid "Toggle Preview"
 msgstr "Ändra förhandsgranskning"
 
-#: libs/widgetutils/KoFileDialog.cpp:243
+#: libs/widgetutils/KoFileDialog.cpp:260
 #, kde-format
 msgid "Save As:"
 msgstr "Spara som:"
 
-#: libs/widgetutils/KoFileDialog.cpp:326
+#: libs/widgetutils/KoFileDialog.cpp:343
 #, kde-format
 msgid ""
 "The selected file name does not have a file extension that Krita "
@@ -35995,7 +36008,7 @@ msgstr ""
 "Det valda filnamnet har inte en filändelse som Krita förstår.\n"
 "Säkerställ att filnamnet slutar på exempelvis '.%1'."
 
-#: libs/widgetutils/KoFileDialog.cpp:511
+#: libs/widgetutils/KoFileDialog.cpp:533
 #, kde-format
 msgid "All supported formats"
 msgstr "Alla format som stöds"
@@ -37903,7 +37916,7 @@ msgid "Val:"
 msgstr "Värde:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:127
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
 #, kde-format
 msgid "Onion skins menu"
 msgstr "Rispappersmeny"
@@ -37914,25 +37927,25 @@ msgid "Audio menu"
 msgstr "Ljudmeny"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:180
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
 #, kde-format
 msgid "Animation settings menu"
 msgstr "Animeringsinställningsmeny"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:192
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
 #, kde-format
 msgid "Clip Start: "
 msgstr "Klippstart:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
 #, kde-format
 msgid "Clip End: "
 msgstr "Klippslut:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
 #, kde-format
 msgid "Frame Rate: "
 msgstr "Bildfrekvens:"
@@ -37957,37 +37970,37 @@ msgstr "Återställ kanal"
 msgid "Reset All Channels"
 msgstr "Återställ alla kanaler"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:486
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:481
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr "Behåll konstant värde. Ingen interpolation."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:493
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:488
 #, kde-format
 msgid "Linear interpolation."
 msgstr "Linjär interpolation."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:500
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:495
 #, kde-format
 msgid "Bezier curve interpolation."
 msgstr "Bezier-kurvinterpolation."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:507
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:502
 #, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "Skarp interpolationstangent."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:514
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:509
 #, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "Jämn interpolationstangent."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:521
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:516
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr "Zooma vy för att passa kanalintervall."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:528
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:523
 #, kde-format
 msgid "Zoom view to fit curve."
 msgstr "Zooma vy för att passa kurva."
@@ -38028,31 +38041,25 @@ msgstr[0] "Justera nyckelbild"
 msgstr[1] "Justera %1 nyckelbilder"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:290
 #, kde-format
 msgid "Animation Timeline"
 msgstr "Animeringstidslinje"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "Animation settings menu"
-msgid "Animation audio menu"
-msgstr "Animeringsinställningsmeny"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
 #, fuzzy, kde-format
 #| msgid "Import Bundles..."
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Importera packar..."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Ta bort ljud"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu"
 #| msgid "Mute"
@@ -38060,39 +38067,45 @@ msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Tyst"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #, fuzzy, kde-format
 #| msgid "Volume:"
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "Volym:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#, fuzzy, kde-format
+#| msgid "Animation settings menu"
+msgid "Animation audio menu"
+msgstr "Animeringsinställningsmeny"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
 msgid "AutoKey Blank"
 msgstr "Töm nyckelbild automatiskt"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
 #, kde-format
 msgid "AutoKey Duplicate"
 msgstr "Duplicera nyckelbild automatiskt"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:509
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Kan bevara uppspelningstid."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:522
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:517
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Gällande antal bilder/s:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:523
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:518
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Verkligt antal bilder/s:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:519
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Överhoppade bildrutor:\t%1 %"
@@ -38104,12 +38117,14 @@ msgstr ""
 "Överhoppade bildrutor är inte tillgängliga i den här instansen av Krita"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:876
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Add blank frame"
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
 msgstr[0] "Lägg till tom bildruta"
-msgstr[1] "Lägg till %1 tomma bildrutor"
+msgstr[1] "Lägg till tom bildruta"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
@@ -38555,14 +38570,16 @@ msgid "Select a Directory"
 msgstr "Välj en katalog"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Export Composition"
 msgid "Exporting Compositions..."
-msgstr "Exporterar kompositioner..."
+msgstr "Exportera komposition"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Export Composition"
 msgid "Exporting composition: %1..."
-msgstr "Exporterar komposition: %1..."
+msgstr "Exportera komposition"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
 #, kde-format
@@ -38898,12 +38915,6 @@ msgid ""
 "Balanced: Show both opacity and blending mode if either are changed.\n"
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
-"Ingen: Visa ingenting\n"
-"Enkel: Visa ändrad ogenomskinlighet eller blandningsläge.\n"
-"Balanserad: Visa både ogenomskinlighet och blandningsläge om endera har "
-"ändrats.\n"
-"Detaljerad: Visa både ogenomskinlighet och blandningsläge även om de inte "
-"har ändrats."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, fuzzy, kde-format
@@ -38921,47 +38932,40 @@ msgstr "Enkel"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:380
 #, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Layer Docker subtitle style"
-#| msgid "Balanced"
+#| msgid "Color Balance"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
-msgstr "Balanserad"
+msgstr "Färgbalans"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:381
 #, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Layer Docker subtitle style"
-#| msgid "Detailed"
+#| msgid "Details"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
-msgstr "Detaljerad"
+msgstr "Detaljinformation"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:394
 #, fuzzy, kde-format
-#| msgctxt "@item:tooltip"
-#| msgid "Subtitle text opacity"
+#| msgid "Opening next page"
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "Textningens ogenomskinlighet"
+msgstr "Öppnar nästa sida"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:412
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "spline filtering"
+#| msgid "spline"
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
-msgstr "På plats"
+msgstr "spline"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:414
-#, fuzzy, kde-format
-#| msgctxt "@item:tooltip"
-#| msgid ""
-#| "If enabled, show subtitles beside layer names.\n"
-#| "If disabled, show below layer names (when enough space)."
+#, kde-format
 msgctxt "@item:tooltip"
 msgid ""
 "If enabled, show blending info beside layer names.\n"
 "If disabled, show below layer names (when enough space)."
 msgstr ""
-"Om aktiverad, visar textning intill lagernamn.\n"
-"Om inaktiverad, visar den under lagernamn (vid tillräckligt utrymme)."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:426
 #, fuzzy, kde-format
@@ -39353,10 +39357,10 @@ msgstr "Fäst upp navigeringsreglage"
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
 #, fuzzy
-#| msgid "Hide layer thumbnail popup"
+#| msgid "Update preview"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Dölj lagrets miniatyrbildsruta"
+msgstr "Uppdatera förhandsgranskning"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -44551,9 +44555,10 @@ msgid "Height to Normal Map"
 msgstr "Höjd till normalavbildning"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:21
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Color sampler does not work on this layer."
 msgid "Height to Normal Map does not work on this colorspace."
-msgstr "Höjd till normalavbildning fungerar inte med den här färgrymden."
+msgstr "Färghämtaren fungerar inte på det här lagret"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:28
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:20
@@ -44582,7 +44587,7 @@ msgstr "XYZ"
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:48
 #, kde-format
 msgid "&Sharpen"
-msgstr "Gör &skarpare"
+msgstr "&Skärpa"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:62
 #, kde-format
@@ -44626,7 +44631,7 @@ msgstr "Överkantdetektering"
 #: plugins/filters/convolutionfilters/convolutionfilters.h:22
 #, kde-format
 msgid "Sharpen"
-msgstr "Gör skarpare"
+msgstr "Skärpa"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.h:33
 #, kde-format
@@ -44939,12 +44944,12 @@ msgstr "Läge:"
 #: plugins/filters/halftone/KisHalftoneFilter.cpp:43
 #, kde-format
 msgid "&Halftone..."
-msgstr "&Rastrering..."
+msgstr "&Halvton..."
 
 #: plugins/filters/halftone/KisHalftoneFilter.h:37
 #, kde-format
 msgid "Halftone"
-msgstr "Rastrering"
+msgstr "Halvton"
 
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.cpp:30
 #, kde-format
@@ -47785,7 +47790,7 @@ msgstr "Överst till vänster"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Left left"
-msgstr "Vänster om vänster"
+msgstr "Vänster vänster"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:119
 #, kde-format
@@ -47824,11 +47829,10 @@ msgid "Use all predictors"
 msgstr "Använd alla prediktorer"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:172
-#, fuzzy, kde-format
-#| msgid "Save as %1"
+#, kde-format
 msgctxt "Color space option"
 msgid "Save as is"
-msgstr "Spara som %1"
+msgstr "Spara som den är"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:174
 #, kde-format
@@ -47837,6 +47841,8 @@ msgid ""
 "The image will be stored without conversion, the ICC profile will be "
 "converted to CICP or embedded if it was not possible."
 msgstr ""
+"Bilden sparas utan konvertering, ICC-profilen konverteras till CICP eller "
+"bäddas in om det inte var möjligt."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:37
@@ -48004,6 +48010,8 @@ msgid ""
 "Applications like Google Chrome expect HDR images to store their color "
 "profile as CICP values. You can adjust the ICC profile conversion below."
 msgstr ""
+"Program som Google Chrome förväntar sig att HDR-bilder sparas sin färgprofil "
+"som CICP-värden. Du kan justera konvertering av ICC-profilen nedan."
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:345
@@ -48553,8 +48561,6 @@ msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
 "\"%2\" is deactivated"
 msgstr ""
-"Fann två globala markeringsmasker i aktivt tillstånd. \"%1\" behålls aktiv, "
-"\"%2\" inaktiverades"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:898
 #, kde-format
@@ -50184,7 +50190,7 @@ msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
 msgstr "Horisontell skillnad med flyttal"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1040
+#: plugins/impex/tiff/kis_tiff_import.cc:1044
 #, kde-format
 msgctxt "TIFF errors"
 msgid ""
@@ -50196,12 +50202,26 @@ msgstr ""
 "dess tabeller över koefficientkvantisering och/eller Huffman-kodning. "
 "Uppgradera version av libjpeg-turbo och försök igen."
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1143
-#: plugins/impex/tiff/kis_tiff_import.cc:1326
+#: plugins/impex/tiff/kis_tiff_import.cc:1147
+#: plugins/impex/tiff/kis_tiff_import.cc:1330
 #, kde-format
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
 msgstr "Delsamplade YCbCr TIFF-filer komprimerade med JPEG kan inte läsas in."
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1577
+#, kde-format
+msgctxt "@title:window"
+msgid "TIFF image with PSD data"
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1579
+#, kde-format
+msgctxt "the choice for the user on loading a TIFF file"
+msgid ""
+"The TIFF image contains valid PSD data embedded. Would you like to use PSD "
+"data instead of normal TIFF data?"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
 #. i18n: ectx: property (title), widget (QGroupBox, tiffOptions)
@@ -50419,9 +50439,10 @@ msgstr "Pseudoslumpmässigt gitter"
 
 #. i18n: ectx: property (text), widget (QCheckBox, haveAnimation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:37
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Save as animated JPEG-XL"
 msgid "Save as animated WebP"
-msgstr "Spara som animerad WebP"
+msgstr "Spara som animerad JPEG-XL"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreset)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:50
@@ -50867,7 +50888,9 @@ msgstr "Maximal kvalitet"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:829
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "JPEG metadata filter"
+#| msgid "Filters:"
 msgctxt "WebP metadata options"
 msgid "Filters:"
 msgstr "Filter:"
@@ -53056,13 +53079,15 @@ msgid "Hard"
 msgstr "Hård"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:74
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Background"
 msgctxt "Background painting color"
 msgid "Background"
 msgstr "Bakgrund"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:75
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Foreground"
 msgctxt "Foreground painting color"
 msgid "Foreground"
 msgstr "Förgrund"
@@ -53528,10 +53553,9 @@ msgstr "Smetning kratta"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
 #, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparency"
+#| msgid "Burning Transparency"
 msgid "Smudge Transparency"
-msgstr "Genomskinlighet"
+msgstr "Brinnande genomskinligt"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
@@ -53754,7 +53778,8 @@ msgstr "x"
 msgid ""
 "Set how many times should the curve repeat from 0 degrees to 360 degrees."
 msgstr ""
-"Ange hur många gånger kurvan ska upprepas från 0 grader till 360 grader."
+"Ställ in hur många gånger kurvan ska upprepas från centrum till "
+"sprejområdets gräns."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:78
 #, kde-format
@@ -53903,7 +53928,7 @@ msgstr "Vinkelvikt:"
 msgctxt ""
 "Name of the group of options related to the spay area in the spray engine"
 msgid "Area"
-msgstr "Område"
+msgstr "Area"
 
 #. i18n: ectx: property (text), widget (QLabel, diameterLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:48
@@ -56149,7 +56174,7 @@ msgstr "Bildskala: {0} %"
 #: plugins/python/photobash_images/photobash_images_docker.py:321
 #, python-brace-format
 msgid "Page: {0}/{1}"
-msgstr "Sida: {0}/{1}"
+msgstr "Sida {0}/{1}"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:460
 msgid "Change Directory for Images"
@@ -56877,19 +56902,23 @@ msgid "Reset"
 msgstr "Återställ"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:606
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Blur the selection by the set amount"
 msgid "Fill the active selection, or the entire canvas"
-msgstr "Fyll i den aktiva markeringen, eller hela duken"
+msgstr "Gör markeringen suddig med angivet värde"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:607
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "The 'include contour regions' checkbox in enclose and fill tool"
+#| msgid "Include contour regions"
 msgid "Fill a contiguous region"
-msgstr "Fyll i ett sammanhängande område"
+msgstr "Inkludera konturområden"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:608
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fill regions of any color"
 msgid "Fill all regions of a similar color"
-msgstr "Fyll i alla områden med liknande färg"
+msgstr "Fyll områden med godtycklig färg"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:613
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
@@ -56924,20 +56953,24 @@ msgid "Set a custom blend mode for the fill"
 msgstr "Ställ in lagrets blandningsläge"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:619
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fill only regions similar in color to the initial region"
 msgid "Fill regions similar in color to the clicked region"
-msgstr "Fyll i områden med en färg som liknar det klickade området"
+msgstr "Fyll bara områden som har en färg som liknar det ursprungliga området"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:620
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Regions of a specific color"
 msgid "Fill all regions until a specific boundary color"
-msgstr "Markera alla områden till en specifik kantfärg"
+msgstr "Områden med en viss färg"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:621
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Background color"
 msgid "Boundary color"
-msgstr "Kantfärg"
+msgstr "Bakgrundsfärg"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:622
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
@@ -56946,8 +56979,6 @@ msgid ""
 "Set the color similarity tolerance of the fill. Increasing threshold "
 "increases the range of similar colors to be filled."
 msgstr ""
-"Ange ifyllnadens tolerans för färglikhet Att öka tröskeln ökar omfattningen "
-"av liknande färger som fylls i."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:623
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
@@ -56956,71 +56987,77 @@ msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
 "decreases opacity of fill areas depending on color similarity."
 msgstr ""
-"Ange utsträckning av ifyllnadens ogenomskinliga del Att minska spridning "
-"minskar ogenomskinligheten hos ifyllda områden beroende på färglikhet."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:624
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Set if the contour of the current selection should be treated as a "
+#| "boundary when obtaining the region"
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when filling the region"
 msgstr ""
-"Aktivera om den aktuella markeringens kontur ska behandlas som en gräns när "
-"området fylls i"
+"Ange om den aktuella markeringens kontur ska behandlas som en gräns när "
+"området skaffas"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:626
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Smooth the jagged edges"
 msgid "Smooths the edges of the fill"
-msgstr "Jämnar ut ifyllnadens kanter"
+msgstr "Jämna ut hackiga kanter"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:627
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Blur the region by the set amount"
 msgid "Grow or shrink the fill by the set amount"
-msgstr "Öka eller minska ifyllnad med angivet värde"
+msgstr "Gör området suddigt med angivet värde"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:629
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Blur the region by the set amount"
 msgid "Blur the fill by the set amount"
-msgstr "Gör ifyllnad suddigt med angivet värde"
+msgstr "Gör området suddigt med angivet värde"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:631
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Obtain the region using the active layer"
 msgid "Fill regions found from the active layer"
-msgstr "Fyll i området hittade från det aktiva lagret"
+msgstr "Skaffa området med användning av det aktiva lagret"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:632
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Obtain the region using a merged copy of all layers"
 msgid "Fill regions found from the merging of all layers"
-msgstr "Fyll i områden som hittas från sammanfogning av alla lager"
+msgstr "Skaffa området genom att använda en sammanfogad kopia av alla lager"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:633
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "All regions except those of a specific color"
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
-msgstr ""
-"Fyll i områden som hittas från sammanfogning av lager med specifika "
-"färgbeteckningar"
+msgstr "Alla områden utom de med en viss färg"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fill regions of any color"
 msgid "Dragging will fill regions of any color"
-msgstr "Att dra fyller i områden med vilken färg som helst"
+msgstr "Fyll områden med godtycklig färg"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:636
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fill only regions similar in color to the initial region"
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
 "(useful for filling line-art)"
-msgstr ""
-"Att dra fyller bara i områden med en färg som liknar det ursprungliga "
-"området (användbart för att fylla i teckningar)"
+msgstr "Fyll bara områden som har en färg som liknar det ursprungliga området"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:638
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
@@ -57029,16 +57066,18 @@ msgid "Reset the options to their default values"
 msgstr "Återställ alternativen till sina standardvärden"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:647
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Simple mode"
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
-msgstr "Ifyllnadsläge"
+msgstr "Enkelt läge"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:654
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "All Resources"
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
-msgstr "Ifyllnadskälla"
+msgstr "Alla resurser"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:668
 #, kde-format
@@ -57047,10 +57086,11 @@ msgid "Reference"
 msgstr "Referens"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:677
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "File extension:"
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
-msgstr "Ifyllnadsutsträckning"
+msgstr "Filändelse:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:689
 #, kde-format
@@ -57062,7 +57102,7 @@ msgstr "Justeringar"
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
-msgstr "Drag och fyll"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.h:234
 #, kde-format
@@ -57166,7 +57206,7 @@ msgstr "Markerat område har inga bildpunkter"
 #: plugins/tools/basictools/kis_tool_move.h:183
 #, kde-format
 msgid "Move Tool"
-msgstr "Förflyttningsverktyg"
+msgstr "Flyttningsverktyg"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:53
 msgctxt "(qtundo-format)"
@@ -57287,7 +57327,7 @@ msgstr "Färghämtare"
 #, kde-format
 msgctxt "The color rate of sampled color setting slider"
 msgid "Blend: "
-msgstr "Blandning:"
+msgstr "Blandning: "
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, blend)
 #: plugins/tools/basictools/wdgcolorsampler.ui:48
@@ -58124,14 +58164,17 @@ msgid "Feather: "
 msgstr "Vävning: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fill only regions similar in color to the initial region"
 msgid "Select regions similar in color to the clicked region"
-msgstr "Markera områden med en färg som liknar det klickade området"
+msgstr "Fyll bara områden som har en färg som liknar det ursprungliga området"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Regions of a specific color"
 msgid "Select all regions until a specific boundary color"
-msgstr "Markera alla områden till en specifik kantfärg"
+msgstr "Områden med en viss färg"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
@@ -58140,8 +58183,6 @@ msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
-"Ange markeringens tolerans för färglikhet. Att öka tröskeln ökar "
-"omfattningen av liknande färger som markeras."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
 #, kde-format
@@ -58149,17 +58190,18 @@ msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
-"Ange utsträckning av markeringens ogenomskinliga del. Att minska spridning "
-"minskar ogenomskinligheten hos markerade områden beroende på färglikhet."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:410
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Set if the contour of the current selection should be treated as a "
+#| "boundary when obtaining the new one"
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
-"Aktivera om den aktiva markeringens kontur ska behandlas som en gräns när en "
-"ny markering görs"
+"Ange om den aktuella markeringens kontur ska behandlas som en gräns när "
+"markeringen görs"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
 #, kde-format
@@ -59425,14 +59467,18 @@ msgstr "Lasso"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:511
 #, kde-format
 msgid "Enable to fill opposite regions instead"
-msgstr "Aktivera för att fylla i motsatta områden istället"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:512
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Check this option to also fill the shapes that touch the contour of the "
+#| "enclosing region"
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
-"Aktivera för att också fylla former som rör det omgivande områdets kontur"
+"Markera alternativet för att också fylla former som rör det omgivande "
+"områdets kontur"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:544
 #, kde-format
@@ -59447,22 +59493,26 @@ msgid "Reference"
 msgstr "Referens"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:561
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Transparent regions"
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
-msgstr "Målområden"
+msgstr "Genomskinliga områden"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:571
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "All Resources"
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
-msgstr "Ifyllnadskälla"
+msgstr "Alla resurser"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:585
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "File extension:"
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
-msgstr "Ifyllnadsutsträckning"
+msgstr "Filändelse:"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:594
 #, kde-format
@@ -59471,64 +59521,80 @@ msgid "Adjustments"
 msgstr "Justeringar"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:848
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "All"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Alla"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:851
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Specific Color Selector"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
-msgstr "Specifik färg"
+msgstr "Specifik färgväljare"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
-msgstr "Genomskinlighet"
+msgstr "Genomskinlig"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Regions of a specific color or transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
-msgstr "Specifik färg eller genomskinlighet"
+msgstr "Områden med en specifik färg eller genomskinlighet"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Regions of a specific color"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
-msgstr "Alla, med undantag för en specifik färg"
+msgstr "Områden med en viss färg"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Burning Transparency"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
-msgstr "Alla, med undantag för genomskinlighet"
+msgstr "Brinnande genomskinligt"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Regions of a specific color or transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
-msgstr "Alla, med undantag för en specifik färg eller genomskinlighet"
+msgstr "Områden med en specifik färg eller genomskinlighet"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Regions surrounded by a specific color"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
-msgstr "Alla omgivna av en specifik färg"
+msgstr "Områden omgivna av en specifik färg"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Regions surrounded by transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
-msgstr "Alla omgivna av genomskinlighet"
+msgstr "Områden omgivna av genomskinlighet"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:875
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Regions surrounded by a specific color or transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
-msgstr "Alla omgivna av en specifik färg eller genomskinlighet"
+msgstr "Områden omgivna av en specifik färg eller genomskinlighet"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
 #, kde-format
@@ -60538,7 +60604,7 @@ msgstr "Mät avståndet mellan två punkter"
 #, kde-format
 msgctxt "action"
 msgid "Move Tool"
-msgstr "Förflyttningsverktyg"
+msgstr "Flyttningsverktyg"
 
 #. i18n: context: toolTip @ Action (KritaTransform/KisToolMove), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:146
@@ -60599,41 +60665,48 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referensbildverktyg"
 
+#~ msgid "&Canvas"
+#~ msgstr "&Duk"
+
+#~ msgctxt "action"
+#~ msgid "&Reset zoom"
+#~ msgstr "Åte&rställ zoomning"
+
+#~ msgctxt "action"
+#~ msgid "Reset zoom"
+#~ msgstr "Återställ zoomning"
+
 #~ msgid ""
-#~ "⚠ Unsupported color space.\n"
-#~ "Only \"RGB/Alpha 8-bit\" is supported."
+#~ "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on "
+#~ "another free program called FFmpeg to turn frame-by-frame animations into "
+#~ "video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
+#~ "i><br><br>            To learn more about setting up Krita for rendering "
+#~ "animations, <a href=\"https://docs.krita.org/en/reference_manual/"
+#~ "render_animation.html#setting-up-krita-for-exporting-animations\">please "
+#~ "visit this section of our User Manual.</a>"
 #~ msgstr ""
-#~ "⚠ Färgrymd stöds inte.\n"
-#~ "Bara \"RGB/alfa 8-bitar\" stöds."
+#~ "<b>Krita kan inte hitta FFmpeg.</b><br>             <i>Krita beror på ett "
+#~ "annat fritt program vid namn ffmpeg för att omvandla "
+#~ "bildföljdsanimeringar till videofiler (<a href=\"https://www.ffmpeg.org"
+#~ "\">www.ffmpeg.org</a>).</i><br><br>            För att ta reda på mer om "
+#~ "hur man ställer in Krita för att återge animeringar, <a href=\"https://"
+#~ "docs.krita.org/en/reference_manual/render_animation.html#setting-up-krita-"
+#~ "for-exporting-animations\">titta i det här avsnittet av "
+#~ "användarhandboken</a>."
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "Skjuva x"
+#~ msgid "Please extract ffmpeg from the archive first."
+#~ msgstr "Extrahera först ffmpeg från arkivet."
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "Skjuva y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "Skala"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "Återställ transformeringar"
-
-#, fuzzy
-#~| msgid ""
-#~| "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> you "
-#~| "need to restart Krita to enable or disable plugins.</p></body></html>"
 #~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
-#~ "Animated exports are <span style=\" font-weight:600;\">always</span> "
-#~ "flattened regardless of this setting.</p></body></html>"
+#~ "This is a source code archive. Please download the application archive "
+#~ "('Windows Builds'), unpack it and then provide the path to the extracted "
+#~ "ffmpeg file."
 #~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Observera:</span> "
-#~ "du måste starta om Krita för att aktivera eller inaktivera "
-#~ "insticksprogram.</p></body></html>"
+#~ "Det här är ett källkodsarkiv. Ladda ner programarkivet (Windows Builds'), "
+#~ "packa upp det och ange sedan sökvägen till den extraherade ffmpeg-filen."
+
+#~ msgid "This is a source code archive. Please install ffmpeg instead."
+#~ msgstr "Det här är ett källkodsarkiv. Installera istället ffmpeg."
 
 #~ msgctxt "paletegen status mode option name"
 #~ msgid "Difference"
@@ -60646,44 +60719,6 @@ msgstr "Referensbildverktyg"
 #~ msgctxt "paleteuse diff mode option name"
 #~ msgid "none"
 #~ msgstr "inget"
-
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "&Filter:"
-
-#~ msgctxt "JPEG-XL errors"
-#~ msgid ""
-#~ "JPEG-XL image is animated, but cannot retrieve animation frame header."
-#~ msgstr ""
-#~ "JPEG-XL-bilden är animerad, men det går inte att hämta animeringens "
-#~ "bildhuvud."
-
-#~ msgctxt "floating on-canvas message"
-#~ msgid ""
-#~ "Cannot open audio: \"%1\"\n"
-#~ "Error: %2"
-#~ msgstr ""
-#~ "Kan inte öppna ljud: \"%1\"\n"
-#~ "Fel: %2"
-
-#~ msgid "Edit Audio:"
-#~ msgstr "Redigera ljud:"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Audio playback is not supported in this build!"
-#~ msgstr "Ljuduppspelning stöds inte i det här bygget."
-
-#~ msgctxt "@item:inmenu, slider"
-#~ msgid "Volume:"
-#~ msgstr "Volym:"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "Öppna ljud..."
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "Ändra ljud (%1)..."
 
 #~ msgid "Choose a video file"
 #~ msgstr "Välj en videofil"
@@ -60746,9 +60781,6 @@ msgstr "Referensbildverktyg"
 #~ msgid "Video Location:"
 #~ msgstr "Videoplats:"
 
-#~ msgid "FFMpeg Version: None"
-#~ msgstr "FFMpeg-version: Ingen"
-
 #~ msgid ""
 #~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
 #~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
@@ -60761,11 +60793,137 @@ msgstr "Referensbildverktyg"
 #~ msgid "Image Sequence Options"
 #~ msgstr "Alternativ för bildsekvens"
 
-#, fuzzy
-#~| msgctxt "suffix for \"seconds\""
-#~| msgid " sec"
-#~ msgid " sec"
-#~ msgstr " sek"
+#~ msgctxt "floating on-canvas message"
+#~ msgid ""
+#~ "Cannot open audio: \"%1\"\n"
+#~ "Error: %2"
+#~ msgstr ""
+#~ "Kan inte öppna ljud: \"%1\"\n"
+#~ "Fel: %2"
+
+#~ msgid "Drag an image into the window to open"
+#~ msgstr "Dra en bild till fönstret för att öppna den"
+
+#~ msgid "New File"
+#~ msgstr "Ny fil"
+
+#~ msgid "Recent Documents"
+#~ msgstr "Senaste dokument"
+
+#~ msgid "HDR Warning.................................."
+#~ msgstr "HDR-varning.................................."
+
+#~ msgid "Grid Settings"
+#~ msgstr "Rutnätsinställningar"
+
+#~ msgid ""
+#~ "<b>Note: Krita will need to be restarted for changes to take effect</b>"
+#~ msgstr ""
+#~ "<b>Observera: Krita måste startas om för att ändringarna ska få effekt</b>"
+
+#~ msgid "Enable Smooth Zooming"
+#~ msgstr "Aktivera jämn zoomning"
+
+#~ msgid "&Description:"
+#~ msgstr "&Beskrivning:"
+
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "&Filter:"
+#~ msgstr "&Filter:"
+
+#~ msgid "Duplicate current profile"
+#~ msgstr "Duplicera aktuell profil"
+
+#~ msgid "Select Layer Mode"
+#~ msgstr "Markeringsmetod för lager"
+
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Markera flera lager"
+
+#~ msgid "Reset Zoom to 100%"
+#~ msgstr "Återställ zoomning till 100 %"
+
+#~ msgid ""
+#~ "Could not save %1.\n"
+#~ "Reason: %2"
+#~ msgstr ""
+#~ "Kunde inte spara %1.\n"
+#~ "Orsak: %2"
+
+#~ msgid ""
+#~ "Could not open %2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Kunde inte öppna %2.\n"
+#~ "Orsak: %1"
+
+#~ msgid "Unexpected error. Please contact developers."
+#~ msgstr "Oväntat fel. Kontakta gärna utvecklarna."
+
+#~ msgctxt "Fetching remote image"
+#~ msgid "Do you want to download the image at %1?"
+#~ msgstr "Vill du ladda ner bilden från %1?"
+
+#~ msgid ""
+#~ "Grow (positive values) or shrink (negative values) the selection by the "
+#~ "set amount"
+#~ msgstr ""
+#~ "Öka (positiva värden) eller minska (negativa värden) markeringen med "
+#~ "angivet värde"
+
+#~ msgid "Make the selection using the active layer"
+#~ msgstr "Gör markeringen med användning av det aktiva lagret"
+
+#~ msgid "Make the selection using a merged copy of all layers"
+#~ msgstr ""
+#~ "Gör markeringen genom att använda en sammanfogad kopia av alla lager"
+
+#~ msgid ""
+#~ "Make the selection using a merged copy of the selected color-labeled "
+#~ "layers"
+#~ msgstr ""
+#~ "Gör markeringen genom att använda en sammanfogad kopia av markerade "
+#~ "färgbetecknade lager"
+
+#~ msgid "Fit Page"
+#~ msgstr "Anpassa till sida"
+
+#~ msgid "Colu&mns:"
+#~ msgstr "Kolu&mner:"
+
+#~ msgid "&Rows:"
+#~ msgstr "&Rader:"
+
+#~ msgid "HSV Sliders to Show"
+#~ msgstr "HSV skjutreglage att visa"
+
+#~ msgid "HSL Sliders to Show"
+#~ msgstr "HSL skjutreglage att visa"
+
+#~ msgid "HSI Sliders to Show"
+#~ msgstr "HSI skjutreglage att visa"
+
+#~ msgid "HSY' Sliders to Show"
+#~ msgstr "HSY' skjutreglage att visa"
+
+#~ msgid "Edit Audio:"
+#~ msgstr "Redigera ljud:"
+
+#~ msgctxt "@item:inmenu"
+#~ msgid "Audio playback is not supported in this build!"
+#~ msgstr "Ljuduppspelning stöds inte i det här bygget."
+
+#~ msgctxt "@item:inmenu, slider"
+#~ msgid "Volume:"
+#~ msgstr "Volym:"
+
+#~ msgctxt "@item:inmenu"
+#~ msgid "Open audio..."
+#~ msgstr "Öppna ljud..."
+
+#~ msgctxt "@item:inmenu"
+#~ msgid "Change audio (%1)..."
+#~ msgstr "Ändra ljud (%1)..."
 
 #~ msgid "Enable Cumulative Undo"
 #~ msgstr "Aktivera ackumulerad ångring"
@@ -60790,6 +60948,47 @@ msgstr "Referensbildverktyg"
 
 #~ msgid "Split Strokes"
 #~ msgstr "Dela drag"
+
+#~ msgid "The added duration for showing the last frame."
+#~ msgstr "Tillagd tid för att visa sista bildrutan."
+
+#~ msgid ""
+#~ "⚠ Unsupported color space.\n"
+#~ "Only \"RGB/Alpha 8-bit\" is supported."
+#~ msgstr ""
+#~ "⚠ Färgrymd stöds inte.\n"
+#~ "Bara \"RGB/alfa 8-bitar\" stöds."
+
+#~ msgctxt "JPEG-XL errors"
+#~ msgid ""
+#~ "JPEG-XL image is animated, but cannot retrieve animation frame header."
+#~ msgstr ""
+#~ "JPEG-XL-bilden är animerad, men det går inte att hämta animeringens "
+#~ "bildhuvud."
+
+#~ msgid "Lossless compression"
+#~ msgstr "Förlustfri komprimering"
+
+#~ msgid "Information"
+#~ msgstr "Information"
+
+#~ msgid "Flip vertically"
+#~ msgstr "Vänd vertikalt"
+
+#~ msgid "Bypass filtering"
+#~ msgstr "Förbigå filtrering"
+
+#~ msgid "Use faster pointwise upsampling"
+#~ msgstr "Använd snabbare punktvis uppsampling"
+
+#~ msgid "Use multithreaded decoding"
+#~ msgstr "Använd parallellbearbetning för avkodning"
+
+#~ msgid "Color planes: "
+#~ msgstr "Färgplan: "
+
+#~ msgid "Alpha plane: "
+#~ msgstr "Alfaplan: "
 
 #~ msgid "Color Rate"
 #~ msgstr "Färghastighet"
@@ -60891,214 +61090,11 @@ msgstr "Referensbildverktyg"
 #~ msgid " s"
 #~ msgstr " s"
 
-#~ msgid "Select Layer Mode"
-#~ msgstr "Markeringsmetod för lager"
-
-#~ msgid "Select Multiple Layer Mode"
-#~ msgstr "Markera flera lager"
-
-#~ msgid "HDR Warning.................................."
-#~ msgstr "HDR-varning.................................."
-
-#~ msgid ""
-#~ "<b>Note: Krita will need to be restarted for changes to take effect</b>"
-#~ msgstr ""
-#~ "<b>Observera: Krita måste startas om för att ändringarna ska få effekt</b>"
-
-#~ msgid ""
-#~ "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on "
-#~ "another free program called FFmpeg to turn frame-by-frame animations into "
-#~ "video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-#~ "i><br><br>            To learn more about setting up Krita for rendering "
-#~ "animations, <a href=\"https://docs.krita.org/en/reference_manual/"
-#~ "render_animation.html#setting-up-krita-for-exporting-animations\">please "
-#~ "visit this section of our User Manual.</a>"
-#~ msgstr ""
-#~ "<b>Krita kan inte hitta FFmpeg.</b><br>             <i>Krita beror på ett "
-#~ "annat fritt program vid namn ffmpeg för att omvandla "
-#~ "bildföljdsanimeringar till videofiler (<a href=\"https://www.ffmpeg.org"
-#~ "\">www.ffmpeg.org</a>).</i><br><br>            För att ta reda på mer om "
-#~ "hur man ställer in Krita för att återge animeringar, <a href=\"https://"
-#~ "docs.krita.org/en/reference_manual/render_animation.html#setting-up-krita-"
-#~ "for-exporting-animations\">titta i det här avsnittet av "
-#~ "användarhandboken</a>."
-
-#~ msgid "Please extract ffmpeg from the archive first."
-#~ msgstr "Extrahera först ffmpeg från arkivet."
-
-#~ msgid ""
-#~ "This is a source code archive. Please download the application archive "
-#~ "('Windows Builds'), unpack it and then provide the path to the extracted "
-#~ "ffmpeg file."
-#~ msgstr ""
-#~ "Det här är ett källkodsarkiv. Ladda ner programarkivet (Windows Builds'), "
-#~ "packa upp det och ange sedan sökvägen till den extraherade ffmpeg-filen."
-
-#~ msgid "This is a source code archive. Please install ffmpeg instead."
-#~ msgstr "Det här är ett källkodsarkiv. Installera istället ffmpeg."
-
-#~ msgid "Colu&mns:"
-#~ msgstr "Kolu&mner:"
-
-#~ msgid "&Rows:"
-#~ msgstr "&Rader:"
-
-#~ msgid "HSV Sliders to Show"
-#~ msgstr "HSV skjutreglage att visa"
-
-#~ msgid "HSL Sliders to Show"
-#~ msgstr "HSL skjutreglage att visa"
-
-#~ msgid "HSI Sliders to Show"
-#~ msgstr "HSI skjutreglage att visa"
-
-#~ msgid "HSY' Sliders to Show"
-#~ msgstr "HSY' skjutreglage att visa"
-
-#~ msgctxt "Fetching remote image"
-#~ msgid "Do you want to download the image at %1?"
-#~ msgstr "Vill du ladda ner bilden från %1?"
-
-#~ msgid "Unexpected error. Please contact developers."
-#~ msgstr "Oväntat fel. Kontakta gärna utvecklarna."
-
-#~ msgid "&Description:"
-#~ msgstr "&Beskrivning:"
-
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr ""
-#~ "Kunde inte spara %1.\n"
-#~ "Orsak: %2"
-
-#~ msgid ""
-#~ "Could not open %2.\n"
-#~ "Reason: %1"
-#~ msgstr ""
-#~ "Kunde inte öppna %2.\n"
-#~ "Orsak: %1"
-
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "&Målarverktyg"
-
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "Målarverktyg"
-
-#~ msgctxt "action"
-#~ msgid "Brush composite"
-#~ msgstr "Penselsammansättning"
-
-#~ msgctxt "@item:inmenu Layers Docker settings, combobox"
-#~ msgid "Subtitle Style"
-#~ msgstr "Textningsstil"
-
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "None"
-#~ msgstr "Ingen"
-
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "Simple"
-#~ msgstr "Enkel"
-
-#~ msgid "&Canvas"
-#~ msgstr "&Duk"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "&Reset zoom"
-#~ msgctxt "action"
-#~ msgid "&Reset Zoom"
-#~ msgstr "Åte&rställ zoomning"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Reset zoom"
-#~ msgctxt "action"
-#~ msgid "Reset Zoom"
-#~ msgstr "Återställ zoomning"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Toggle Zoom Fit to Page"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page"
-#~ msgstr "Sätt på eller stäng av zoomning för anpassa till sida"
-
-#, fuzzy
-#~| msgid "Fit to Width"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Width"
-#~ msgstr "Anpassa till bredd"
-
-#, fuzzy
-#~| msgid "Fit to Page &Width"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Width"
-#~ msgstr "Anpassa till sid&bredd"
-
-#, fuzzy
-#~| msgid "Fit to Height"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Height"
-#~ msgstr "Anpassa till höjd"
-
-#, fuzzy
-#~| msgid "Fit to Page &Height"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Height"
-#~ msgstr "Anpassa till sid&höjd"
-
-#~ msgid "Duplicate current profile"
-#~ msgstr "Duplicera aktuell profil"
-
-#~ msgid "Reset Zoom to 100%"
-#~ msgstr "Återställ zoomning till 100 %"
-
-#~ msgid "Fit Page"
-#~ msgstr "Anpassa till sida"
-
-#~ msgctxt "JPEG-XL errors"
-#~ msgid "JPEG-XL encoded profile not implemented"
-#~ msgstr "JPEG-XL-kodad profil inte implementerad"
-
-#~ msgid "The added duration for showing the last frame."
-#~ msgstr "Tillagd tid för att visa sista bildrutan."
-
-#~ msgid ""
-#~ "Grow (positive values) or shrink (negative values) the selection by the "
-#~ "set amount"
-#~ msgstr ""
-#~ "Öka (positiva värden) eller minska (negativa värden) markeringen med "
-#~ "angivet värde"
-
-#~ msgid "Make the selection using the active layer"
-#~ msgstr "Gör markeringen med användning av det aktiva lagret"
-
-#~ msgid "Make the selection using a merged copy of all layers"
-#~ msgstr ""
-#~ "Gör markeringen genom att använda en sammanfogad kopia av alla lager"
-
-#~ msgid ""
-#~ "Make the selection using a merged copy of the selected color-labeled "
-#~ "layers"
-#~ msgstr ""
-#~ "Gör markeringen genom att använda en sammanfogad kopia av markerade "
-#~ "färgbetecknade lager"
-
 #~ msgid "Current selection"
 #~ msgstr "Aktuell markering"
 
 #~ msgid "Contiguous region obtained from the layers"
 #~ msgstr "Sammanhängande område erhållet från lagren"
-
-#~ msgid "All the regions similar to the pixel you clicked on"
-#~ msgstr "Alla områden som liknar bildpunkten som klickades"
-
-#~ msgid "Select pixels similar to the one you clicked on"
-#~ msgstr "Markera bildpunkter som liknar den som klickades"
 
 #~ msgid ""
 #~ "Set how far the region should extend from the selected pixel in terms of "
@@ -61146,6 +61142,22 @@ msgstr "Referensbildverktyg"
 #~ msgctxt "The 'multiple fill' section label in fill tool options"
 #~ msgid "Multiple fill"
 #~ msgstr "Fyll flera"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "Skjuva x"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "Skjuva y"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "Skala"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "Återställ transformeringar"
 
 #~ msgid ""
 #~ "Set how far the selection should extend from the selected pixel in terms "
@@ -61197,50 +61209,24 @@ msgstr "Referensbildverktyg"
 #~ msgid "All regions except those of a specific color or transparent"
 #~ msgstr "Alla områden utom de med en specifik färg eller genomskinlighet"
 
-#~ msgid "Grid Settings"
-#~ msgstr "Rutnätsinställningar"
+#~ msgctxt "action"
+#~ msgid "&Painter's Tools"
+#~ msgstr "&Målarverktyg"
 
-#~ msgid "Enable Smooth Zooming"
-#~ msgstr "Aktivera jämn zoomning"
+#~ msgctxt "action"
+#~ msgid "Painter's Tools"
+#~ msgstr "Målarverktyg"
 
-#~ msgid "Lossless compression"
-#~ msgstr "Förlustfri komprimering"
+#~ msgctxt "action"
+#~ msgid "Brush composite"
+#~ msgstr "Penselsammansättning"
 
-#~ msgid "Information"
-#~ msgstr "Information"
-
-#~ msgid "Flip vertically"
-#~ msgstr "Vänd vertikalt"
-
-#~ msgid "Bypass filtering"
-#~ msgstr "Förbigå filtrering"
-
-#~ msgid "Use faster pointwise upsampling"
-#~ msgstr "Använd snabbare punktvis uppsampling"
-
-#~ msgid "Use multithreaded decoding"
-#~ msgstr "Använd parallellbearbetning för avkodning"
-
-#~ msgid "Color planes: "
-#~ msgstr "Färgplan: "
-
-#~ msgid "Alpha plane: "
-#~ msgstr "Alfaplan: "
+#~ msgctxt "JPEG-XL errors"
+#~ msgid "JPEG-XL encoded profile not implemented"
+#~ msgstr "JPEG-XL-kodad profil inte implementerad"
 
 #~ msgid "Cache Location:"
 #~ msgstr "Cacheplats:"
-
-#~ msgctxt "@item:inmenu Layers Docker settings, checkbox"
-#~ msgid "Display Subtitles"
-#~ msgstr "Visa textning"
-
-#~ msgctxt "@item:tooltip"
-#~ msgid "Layer opacity and blending mode"
-#~ msgstr "Lagerogenomskinlighet och blandningsläge"
-
-#~ msgctxt "@item:inmenu Layers Docker settings, checkbox"
-#~ msgid "Inline Subtitles"
-#~ msgstr "Textning på plats"
 
 #~ msgid "Cannot sample a color as no layer is active."
 #~ msgstr "Kan inte hämta färg eftersom inget lager är aktivt."
@@ -61258,14 +61244,6 @@ msgstr "Referensbildverktyg"
 #~ msgid "Intensity"
 #~ msgstr "Intensitet"
 
-#~ msgctxt ""
-#~ "The 'include surrounding regions' checkbox in enclose and fill tool"
-#~ msgid "Include surrounding regions"
-#~ msgstr "Inkludera omgivande områden"
-
-#~ msgid "Check this option to also fill the surrounding regions"
-#~ msgstr "Markera alternativet för att också fylla omgivande områden"
-
 #~ msgid ""
 #~ "<html><head/><body><p>Try to disable vsync for Krita. This makes painting "
 #~ "more responsive. Uncheck only when experiencing crashes with some GPU/"
@@ -61279,11 +61257,74 @@ msgstr "Referensbildverktyg"
 #~ msgid "Disable vsync (needs restart)"
 #~ msgstr "Inaktivera vertikal synkronisering (kräver omstart)"
 
+#~ msgctxt ""
+#~ "The 'include surrounding regions' checkbox in enclose and fill tool"
+#~ msgid "Include surrounding regions"
+#~ msgstr "Inkludera omgivande områden"
+
+#~ msgid "Check this option to also fill the surrounding regions"
+#~ msgstr "Markera alternativet för att också fylla omgivande områden"
+
 #~ msgid "Angle snapping delta:"
 #~ msgstr "Vinkellåsningsdelta:"
 
 #~ msgid "Angle Constraints"
 #~ msgstr "Vinkelbegränsningar"
+
+#~ msgctxt "floating message when cannot copy from a node"
+#~ msgid "Cannot copy pixels from this type of layer "
+#~ msgstr "Kan inte kopiera bildpunkter från den här typen av lager "
+
+#~ msgctxt "floating message when copying empty selection"
+#~ msgid "Selection is empty: no pixels were copied "
+#~ msgstr "Markeringen är tom: Inga bildpunkter kopierades "
+
+#~ msgid "Open Color Profile"
+#~ msgstr "Öppna färgprofil"
+
+#~ msgctxt "@title:window"
+#~ msgid "Select a swap directory"
+#~ msgstr "Välj en växlingskatalog"
+
+#~ msgid "Add new color profile:"
+#~ msgstr "Lägg till ny färgprofil:"
+
+#~ msgctxt "Color model"
+#~ msgid "&Model:"
+#~ msgstr "&Modell:"
+
+#~ msgid "Profi&le:"
+#~ msgstr "Profi&l:"
+
+#~ msgid "Cursor Shape:"
+#~ msgstr "Markörform:"
+
+#~ msgid "Cursor Color:"
+#~ msgstr "Markörfärg:"
+
+#~ msgid "General:"
+#~ msgstr "Allmänt:"
+
+#~ msgid "Enable Touch Rotation"
+#~ msgstr "Aktivera pekrotation"
+
+#~ msgid "Animation:"
+#~ msgstr "Animering:"
+
+#~ msgid "Swap File Location:"
+#~ msgstr "Växlingsfilens plats:"
+
+#~ msgid "Select the location where Krita writes its swap files."
+#~ msgstr "Välj platsen där Krita skriver sina växlingsfiler."
+
+#~ msgid "Force Instant Preview in Transform Tool"
+#~ msgstr "Använd direkt förhandsgranskning i transformeringsverktyget"
+
+#~ msgid "Force Instant Preview in Move Tool"
+#~ msgstr "Använd direkt förhandsgranskning i förflyttningsverktyget"
+
+#~ msgid "Force Instant Preview in Filters"
+#~ msgstr "Använd direkt förhandsgranskning i filter"
 
 #~ msgid "Intersect"
 #~ msgstr "Snitt"
@@ -61296,6 +61337,37 @@ msgstr "Referensbildverktyg"
 
 #~ msgid "Symmetric Difference"
 #~ msgstr "Symmetrisk differens"
+
+#~ msgid ""
+#~ "The image data you are trying to paste has no color profile information. "
+#~ "How do you want to interpret these data? \n"
+#~ "\n"
+#~ " As Web (sRGB) -  Use standard colors that are displayed from computer "
+#~ "monitors.  This is the most common way that images are stored. \n"
+#~ "\n"
+#~ "As on Monitor - If you know a bit about color management and want to use "
+#~ "your monitor to determine the color profile.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Bilddata som du försöker klistra in har ingen färgprofilinformation. Hur "
+#~ "vill du att data ska tolkas?\n"
+#~ "\n"
+#~ "Som webb (sRGB): Använd standardfärger som visas på datorskärmar. Det är "
+#~ "det vanligaste sättet som bilder lagras.\n"
+#~ "\n"
+#~ "Som på bildskärmen: Om du kan en del om färghantering och vill använda "
+#~ "bildskärmen för att bestämma färgprofilen.\n"
+#~ "\n"
+
+#~ msgid "Loading Plugins Exiv/IO..."
+#~ msgstr "Läser in insticksprogram för Exiv/IO..."
+
+#~ msgid "%1 %2 px"
+#~ msgstr "%1 %2 bildpunkter"
+
+#~ msgctxt "About <Profilename>"
+#~ msgid "About "
+#~ msgstr "Om "
 
 #~ msgctxt ""
 #~ "Option in selection tool: take only the current layer into account when "
@@ -61316,47 +61388,21 @@ msgstr "Referensbildverktyg"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Lager med färgbeteckningar"
 
+#~ msgid "Change the color of the line/border"
+#~ msgstr "Ändra linjens eller kantens färg"
+
 #~ msgctxt "@info:tooltip %2 is shortcut"
 #~ msgid "%1 (%2)"
 #~ msgstr "%1 (%2)"
 
-#~ msgid "Fuzziness: "
-#~ msgstr "Suddighet: "
+#~ msgid "Use same aspect as pixels"
+#~ msgstr "Använd samma proportion som bildpunkter"
 
-#~ msgid "Opacity Spread: "
-#~ msgstr "Utspridning av ogenomskinlighet: "
-
-#~ msgid "Grow/shrink selection: "
-#~ msgstr "Öka eller minska markering: "
-
-#~ msgid "Feathering radius: "
-#~ msgstr "Vävningsradie: "
-
-#~ msgid "Use selection as boundary: "
-#~ msgstr "Använd markering som gräns: "
-
-#~ msgctxt "Threshold label in Magnetic Selection's Tool options"
-#~ msgid "Threshold: "
-#~ msgstr "Tröskel: "
-
-#~ msgid " kB"
-#~ msgstr " kB"
+#~ msgid "Hold Last Frame for:"
+#~ msgstr "Håll sista bildruta:"
 
 #~ msgid "Vector Libraries"
 #~ msgstr "Vektorbibliotek"
-
-#~| msgid "Default printer color model:"
-#~ msgid "Default (encoder chooses)"
-#~ msgstr "Standard (kodaren väljer)"
-
-#~ msgid "Cursor Shape:"
-#~ msgstr "Markörform:"
-
-#~ msgid "Cursor Color:"
-#~ msgstr "Markörfärg:"
-
-#~ msgid "Paste"
-#~ msgstr "Klistra in"
 
 #~ msgid "Sorry, this output mode is not implemented yet."
 #~ msgstr "Tyvärr är det här utdataläget ännu inte implementerat."
@@ -61364,26 +61410,22 @@ msgstr "Referensbildverktyg"
 #~ msgid "G'Mic failed, reason:"
 #~ msgstr "G'Mic misslyckades. Orsak:"
 
-#~ msgid "Max Gesture"
-#~ msgstr "Maximeringsgest"
+#~ msgid "Colorspace"
+#~ msgstr "Färgrymd"
+
+#~ msgctxt "Label of Brightness value in brush settings"
+#~ msgid "Value"
+#~ msgstr "Värde"
 
 #~ msgid "Gaussian distribution"
 #~ msgstr "Normalfördelning"
 
-#~ msgid "Use same aspect as pixels"
-#~ msgstr "Använd samma proportion som bildpunkter"
+#~ msgctxt "Group as Swatch Group in a Palette"
+#~ msgid "Add Group"
+#~ msgstr "Lägg till grupp"
 
-#~ msgid "Enable Touch Rotation"
-#~ msgstr "Aktivera pekrotation"
-
-#~ msgid "Hold last frame for:"
-#~ msgstr "Håll sista bildruta:"
-
-#~ msgid "Show result on first frame for:"
-#~ msgstr "Visa resultat för första bildrutan under:"
-
-#~ msgid "Fast mode:"
-#~ msgstr "Snabbläge:"
+#~ msgid "Fast mode: "
+#~ msgstr "Snabbläge: "
 
 #~ msgid ""
 #~ "Fills area faster, but does not take composition mode into account. "
@@ -61392,19 +61434,11 @@ msgstr "Referensbildverktyg"
 #~ "Fyller i området snabbare, men tar inte hänsyn till sammansättningsläge. "
 #~ "Markeringar och andra utökade funktioner är också inaktiverade."
 
-#~ msgctxt "The Threshold label in Fill tool options"
-#~ msgid "Threshold:"
-#~ msgstr "Tröskel:"
+#~ msgid "Grow selection: "
+#~ msgstr "Öka markering: "
 
-#~ msgctxt "The Opacity Spread label in Fill tool options"
-#~ msgid "Opacity Spread:"
-#~ msgstr "Utspridning av ogenomskinlighet:"
-
-#~ msgid "Grow selection:"
-#~ msgstr "Öka markering:"
-
-#~ msgid "Feathering radius:"
-#~ msgstr "Vävningsradie:"
+#~ msgid "Feathering radius: "
+#~ msgstr "Vävningsradie: "
 
 #~ msgid "Use pattern:"
 #~ msgstr "Använd mönster:"
@@ -61446,14 +61480,6 @@ msgstr "Referensbildverktyg"
 #~ msgid "When checked, use selection borders as boundary when filling"
 #~ msgstr "Om markerat, använd markeringens gränser som gräns vid ifyllnad"
 
-#~ msgctxt "The 'continuous fill' label in Fill tool options"
-#~ msgid "Continuous Fill:"
-#~ msgstr "Kontinuerlig ifyllnad:"
-
-#~ msgctxt "Continuous fill mode in fill tool options"
-#~ msgid "Similar regions"
-#~ msgstr "Liknande områden"
-
 #~ msgctxt ""
 #~ "Option in fill tool: take only the current layer into account when "
 #~ "calculating the area to fill"
@@ -61473,116 +61499,29 @@ msgstr "Referensbildverktyg"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Lager med färgbeteckningar"
 
-#~| msgid "%1 %2"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %2 %"
+#~ msgid "Paste"
+#~ msgstr "Klistra in"
 
-#~| msgid "%1 %2"
-#~ msgctxt "Brush Option Flow"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %2 %"
+#~ msgid "Fuzziness: "
+#~ msgstr "Suddighet: "
 
-#~| msgid "%1 %2"
-#~ msgctxt "Edge softness, Brush Option Fade"
-#~ msgid "%1 %2"
-#~ msgstr "%1 %2"
+#~ msgid "Grow/shrink selection: "
+#~ msgstr "Öka eller minska markering: "
 
-#~| msgid "%1 %2"
-#~ msgctxt "Brush Option Scatter"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %2 %"
+#~ msgid "Use selection as boundary: "
+#~ msgstr "Använd markering som gräns: "
 
-#~ msgid "%1 %2 px"
-#~ msgstr "%1 %2 bildpunkter"
+#~ msgctxt "Threshold label in Magnetic Selection's Tool options"
+#~ msgid "Threshold: "
+#~ msgstr "Tröskel: "
 
-#~ msgid "General:"
-#~ msgstr "Allmänt:"
+#~ msgid " kB"
+#~ msgstr " kB"
 
-#~ msgid "Animation:"
-#~ msgstr "Animering:"
-
-#~ msgid "Swap File Location:"
-#~ msgstr "Växlingsfilens plats:"
-
-#~ msgid "Force Instant Preview in Transform Tool"
-#~ msgstr "Använd direkt förhandsgranskning i transformeringsverktyget"
-
-#~ msgid "Force Instant Preview in Move Tool"
-#~ msgstr "Använd direkt förhandsgranskning i förflyttningsverktyget"
-
-#~ msgid "Force Instant Preview in Filters"
-#~ msgstr "Använd direkt förhandsgranskning i filter"
-
-#~ msgid "Open Color Profile"
-#~ msgstr "Öppna färgprofil"
-
-#~ msgctxt "@title:window"
-#~ msgid "Select a swap directory"
-#~ msgstr "Välj en växlingskatalog"
-
-#~ msgid "Add new color profile:"
-#~ msgstr "Lägg till ny färgprofil:"
-
-#~ msgid "Select the location where Krita writes its swap files."
-#~ msgstr "Välj platsen där Krita skriver sina växlingsfiler."
-
-#~ msgid "Colorspace"
-#~ msgstr "Färgrymd"
-
-#~ msgctxt "Color model"
-#~ msgid "&Model:"
-#~ msgstr "&Modell:"
-
-#~ msgid "Profi&le:"
-#~ msgstr "Profi&l:"
-
-#~ msgctxt "About <Profilename>"
-#~ msgid "About "
-#~ msgstr "Om "
-
-#~ msgctxt "The Softness label in Fill tool options"
-#~ msgid "Softness:"
-#~ msgstr "Mjukhet:"
-
-#~ msgid "Softness: "
-#~ msgstr "Mjukhet:"
-
-#~ msgid ""
-#~ "The image data you are trying to paste has no color profile information. "
-#~ "How do you want to interpret these data? \n"
-#~ "\n"
-#~ " As Web (sRGB) -  Use standard colors that are displayed from computer "
-#~ "monitors.  This is the most common way that images are stored. \n"
-#~ "\n"
-#~ "As on Monitor - If you know a bit about color management and want to use "
-#~ "your monitor to determine the color profile.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Bilddata som du försöker klistra in har ingen färgprofilinformation. Hur "
-#~ "vill du att data ska tolkas?\n"
-#~ "\n"
-#~ "Som webb (sRGB): Använd standardfärger som visas på datorskärmar. Det är "
-#~ "det vanligaste sättet som bilder lagras.\n"
-#~ "\n"
-#~ "Som på bildskärmen: Om du kan en del om färghantering och vill använda "
-#~ "bildskärmen för att bestämma färgprofilen.\n"
-#~ "\n"
-
+#, fuzzy
+#~| msgid "0.0"
 #~ msgid "0/0"
-#~ msgstr "0/0"
-
-#~ msgid ""
-#~ "\"Mirror View Around Cursor\" only works while hovering over the viewport."
-#~ msgstr ""
-#~ "\"Spegla visning omkring markören\" fungerar bara när musen hålls över "
-#~ "visningsrutan."
-
-#~ msgid "Change the color of the line/border"
-#~ msgstr "Ändra linjens eller kantens färg"
-
-#~ msgctxt "Label of Brightness value in brush settings"
-#~ msgid "Value"
-#~ msgstr "Värde"
+#~ msgstr "0,0"
 
 #~ msgid ""
 #~ "The mixing option mixes the paint on the brush with that on the canvas."
@@ -61595,10 +61534,6 @@ msgstr "Referensbildverktyg"
 #~ msgctxt "action"
 #~ msgid "Brightness/Contrast curve"
 #~ msgstr "Ljusstyrka- och kontrastkurva"
-
-#~ msgctxt "The Threshold label in Fill tool options"
-#~ msgid "Threshold: "
-#~ msgstr "Tröskel: "
 
 #~ msgid "New name for ASL storage"
 #~ msgstr "Nytt namn på ASL-lagringsplats"
@@ -61677,10 +61612,6 @@ msgstr "Referensbildverktyg"
 #~ msgctxt "@info mouse position (x, y)"
 #~ msgid "%1, %2"
 #~ msgstr "%1, %2"
-
-#~ msgctxt "action"
-#~ msgid "Add a new &Group Layer"
-#~ msgstr "Lägg till ett nytt &grupplager"
 
 #~ msgctxt "action"
 #~ msgid "Add a new &Clone Layer"
@@ -61762,6 +61693,14 @@ msgstr "Referensbildverktyg"
 #~ msgid "&Transform Mask"
 #~ msgstr "&Transformera mask"
 
+#~ msgctxt "Question in a dialog/messagebox"
+#~ msgid ""
+#~ "This name is already used for another resource. Do you want to use the "
+#~ "same name for multiple resources?"
+#~ msgstr ""
+#~ "Namnet används redan för en annan resurs. Vill du använda samma namn på "
+#~ "flera resurser?"
+
 #~ msgid "Add a group"
 #~ msgstr "Lägg till en grupp"
 
@@ -61822,49 +61761,14 @@ msgstr "Referensbildverktyg"
 #~ msgid "Save this palette"
 #~ msgstr "Spara paletten"
 
-#~ msgctxt "Question in a dialog/messagebox"
-#~ msgid ""
-#~ "This name is already used for another resource. Do you want to use the "
-#~ "same name for multiple resources?"
-#~ msgstr ""
-#~ "Namnet används redan för en annan resurs. Vill du använda samma namn på "
-#~ "flera resurser?"
-
 #~ msgid "Could not save preset under name %1, it already exists."
-#~ msgstr "kunde inte spara förinställning med namnet %1, det finns redan."
+#~ msgstr "Kunde inte spara förinställning med namnet %1, det finns redan."
 
 #~ msgid "Could not update preset %1."
-#~ msgstr "kunde inte uppdatera förinställning %1."
-
-#~ msgctxt "Warning message"
-#~ msgid "Adding the session to the database failed."
-#~ msgstr "Tillägg av sessionen i databasen misslyckades."
-
-#~ msgctxt "@title:window"
-#~ msgid "Couldn't add the session"
-#~ msgstr "Kunde inte lägga till sessionen"
-
-#~ msgctxt "Warning about not being able to rename a session"
-#~ msgid "Renaming the session failed."
-#~ msgstr "Misslyckades byta namn på sessionen."
+#~ msgstr "Kunde inte uppdatera förinställning %1."
 
 #~ msgid "Clean Up"
 #~ msgstr "Rensa"
-
-#~ msgctxt "floating message when cannot copy from a node"
-#~ msgid "Cannot copy pixels from this type of layer "
-#~ msgstr "Kan inte kopiera bildpunkter från den här typen av lager "
-
-#~ msgctxt "floating message when copying empty selection"
-#~ msgid "Selection is empty: no pixels were copied "
-#~ msgstr "Markeringen är tom: Inga bildpunkter kopierades "
-
-#~ msgctxt "action"
-#~ msgid "Filters"
-#~ msgstr "Filter"
-
-#~ msgid "Cutoff"
-#~ msgstr "Bryt"
 
 #~ msgid "Export Directory: "
 #~ msgstr "Exportkatalog: "
@@ -61900,32 +61804,20 @@ msgstr "Referensbildverktyg"
 #~ msgid "SVG file base name : "
 #~ msgstr "SVG-filens basnamn: "
 
-#~ msgctxt "Prefix. Part of 'Every # cell/s horizontally"
-#~ msgid "Every "
-#~ msgstr "Med"
+#~ msgctxt "action"
+#~ msgid "Filters"
+#~ msgstr "Filter"
 
-#~ msgctxt "Prefix. Part of 'Every # cell/s vertically"
-#~ msgid "Every "
-#~ msgstr "Med"
-
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cells horizontally"
-#~ msgstr " cellers mellanrum horisontellt"
-
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cell vertically"
-#~ msgstr " cells mellanrum vertikalt"
-
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cells vertically"
-#~ msgstr " cellers mellanrum vertikalt"
+#~ msgid "Cutoff"
+#~ msgstr "Bryt"
 
 #~ msgctxt "Autobrush Label"
 #~ msgid "Auto"
 #~ msgstr "Automatisk"
 
-#~ msgid "Loading Plugins Exiv/IO..."
-#~ msgstr "Läser in insticksprogram för Exiv/IO..."
+#~ msgctxt "metadata editor page"
+#~ msgid "Exif"
+#~ msgstr "EXIF"
 
 #~ msgctxt "action"
 #~ msgid "Database Explorer"
@@ -61951,15 +61843,17 @@ msgstr "Referensbildverktyg"
 #~ "<p>Genom att trycka på returtangenten eller klicka på knappen <b>Spara</"
 #~ "b> sparas ändringarna.</p>"
 
-#~ msgid "dd/MM/yyyy"
-#~ msgstr "yyyy-MM-dd"
-
-#~ msgctxt "metadata editor page"
-#~ msgid "Exif"
-#~ msgstr "EXIF"
+#~ msgid "lblThumbnail"
+#~ msgstr "Miniatyrbildsbeteckning"
 
 #~ msgid "No store backend"
 #~ msgstr "Inget lagringsgränssnitt"
+
+#~ msgid "xyz"
+#~ msgstr "XYZ"
+
+#~ msgid "Disable all vector optimizations (for AMD CPUs)"
+#~ msgstr "Inaktivera alla vektoroptimeringar (för AMD processorer)"
 
 #~ msgid ""
 #~ "<html><head/><body><p><span style=\" color:%1;\"><b>Links</b></span></"
@@ -61990,33 +61884,8 @@ msgstr "Referensbildverktyg"
 #~ "org/source/krita/\"><span style=\" text-decoration: underline; color:%1;"
 #~ "\">Källkod</span></a></p></body></html>"
 
-#~ msgid "Disable all vector optimizations (for AMD CPUs)"
-#~ msgstr "Inaktivera alla vektoroptimeringar (för AMD processorer)"
-
-#~ msgid "lblThumbnail"
-#~ msgstr "Miniatyrbildsbeteckning"
-
-#~ msgid "xyz"
-#~ msgstr "XYZ"
-
 #~ msgid "KSqueezedTextLabel"
 #~ msgstr "Hopdragen textetikett"
-
-#~ msgid ""
-#~ "<p>Adjust the compression time. Better compression takes longer.\n"
-#~ "                <br>Note: the compression level does not change the "
-#~ "quality of the result.</p>"
-#~ msgstr ""
-#~ "<p>Justera komprimeringstiden. Bättre komprimering tar längre tid.\n"
-#~ "<br>Observera: komprimeringsnivån påverkar inte resultatets kvalitet.</p>"
-
-#~ msgid ""
-#~ "<p>Adjust the compression time. Better compression takes longer. "
-#~ "<br>Note: the compression level does not change the quality of the result."
-#~ "</p>"
-#~ msgstr ""
-#~ "<p>Justera komprimeringstiden. Bättre komprimering tar längre tid."
-#~ "<br>Observera: komprimeringsnivån påverkar inte resultatets kvalitet.</p>"
 
 #~ msgctxt "Error message when saving a .kra file"
 #~ msgid "Could not save palettes."
@@ -62904,6 +62773,9 @@ msgstr "Referensbildverktyg"
 #~ msgid "Select Dissolve Blending Mode"
 #~ msgstr "Välj blandningsläge upplös"
 
+#~ msgid "Select Behind Blending Mode"
+#~ msgstr "Välj blandningsläge bakom"
+
 #~ msgid "Select Clear Blending Mode"
 #~ msgstr "Välj blandningsläge klar"
 
@@ -63094,9 +62966,6 @@ msgstr "Referensbildverktyg"
 
 #~ msgid "1 : 1"
 #~ msgstr "1 : 1"
-
-#~ msgid "Update preview"
-#~ msgstr "Uppdatera förhandsgranskning"
 
 #~ msgid "Automatically update the preview whenever the filter settings change"
 #~ msgstr ""
@@ -63989,9 +63858,6 @@ msgstr "Referensbildverktyg"
 #~ msgctxt "No border - has to fit in 48pixels"
 #~ msgid "None"
 #~ msgstr "Ingen"
-
-#~ msgid "No Border"
-#~ msgstr "Utan kant"
 
 #~ msgid "Create a new style inheriting the current style"
 #~ msgstr "Skapa en ny stil som ärver nuvarande stil"
@@ -66644,9 +66510,6 @@ msgstr "Referensbildverktyg"
 #~ msgid "Change Vector Data"
 #~ msgstr "Ändra vektordata"
 
-#~ msgid "Replace Image"
-#~ msgstr "Ersätt bild"
-
 #~ msgid "Vector image"
 #~ msgstr "Vektorbild"
 
@@ -66810,6 +66673,9 @@ msgstr "Referensbildverktyg"
 
 #~ msgid "Brush Radius:"
 #~ msgstr "Penselradie:"
+
+#~ msgid "Opacity decrease"
+#~ msgstr "Minskning av ogenomskinlighet"
 
 #~ msgid "Saturation decrease"
 #~ msgstr "Minskning av färgmättnad"
@@ -70141,6 +70007,10 @@ msgstr "Referensbildverktyg"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "s"
 #~ msgstr "s"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dynamics settings"
+#~ msgstr "Dynamikinställningar"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fixed angle"
@@ -76673,6 +76543,10 @@ msgstr "Referensbildverktyg"
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Activate previous layer"
 #~ msgstr "Aktivera föregående lager"
+
+#~ msgctxt "(qtundo-format) action"
+#~ msgid "&Group Layer"
+#~ msgstr "&Gruppera lager"
 
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "&Clone Layer"

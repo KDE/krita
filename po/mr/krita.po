@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-25 00:43+0000\n"
+"POT-Creation-Date: 2023-07-27 02:25+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -13167,7 +13167,7 @@ msgstr ""
 msgid "File"
 msgstr "फाईल (&F)"
 
-#: krita/krita5.xmlgui:419
+#: krita/krita5.xmlgui:420
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "कुंचले व तत्सम"
@@ -16118,27 +16118,27 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "कार्यक्षेत्रे"
 
-#: krita/main.cc:521
+#: krita/main.cc:527
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "उभी किनार :"
 
-#: krita/main.cc:522
+#: krita/main.cc:528
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:632 libs/ui/KisApplication.cpp:409
-#: libs/ui/KisApplication.cpp:680
+#: krita/main.cc:646 libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:681
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "इशारा"
 
-#: krita/main.cc:633
+#: krita/main.cc:647
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16146,12 +16146,12 @@ msgid ""
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
 msgstr ""
 
-#: krita/main.cc:655 krita/main.cc:660
+#: krita/main.cc:669 krita/main.cc:674
 #, fuzzy, kde-format
 msgid "Krita Tablet Support"
 msgstr "क्रिता PNG निर्यात"
 
-#: krita/main.cc:656
+#: krita/main.cc:670
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16159,7 +16159,7 @@ msgid ""
 "installed."
 msgstr ""
 
-#: krita/main.cc:661
+#: krita/main.cc:675
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16660,28 +16660,28 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3744
+#: libs/flake/text/KoSvgTextShape.cpp:3751
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "मजकूर"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3746
-#: libs/flake/text/KoSvgTextShape.cpp:3754
+#: libs/flake/text/KoSvgTextShape.cpp:3753
+#: libs/flake/text/KoSvgTextShape.cpp:3761
 #, fuzzy, kde-format
 #| msgid "Type and Shape"
 msgid "SVG Text Shape"
 msgstr "प्रकार व आकार"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3752
+#: libs/flake/text/KoSvgTextShape.cpp:3759
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " मजकूर :"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3766
-#: libs/flake/text/KoSvgTextShape.cpp:3781
+#: libs/flake/text/KoSvgTextShape.cpp:3773
+#: libs/flake/text/KoSvgTextShape.cpp:3788
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17455,7 +17455,7 @@ msgstr "प्रतिमा आयात करा"
 msgid "Selection Mask"
 msgstr "निवड नाही"
 
-#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2554
+#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2577
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -17575,7 +17575,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "खुली रंग रूपरेषा"
 
-#: libs/image/kis_image.cc:2486
+#: libs/image/kis_image.cc:2487
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -17715,9 +17715,7 @@ msgstr "रंगाचा स्तर (&P)"
 msgid "Show Coloring"
 msgstr "रंगाचा इतिहास"
 
-#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
 #: libs/image/kis_layer_properties_icons.cpp:32
-#: libs/ui/forms/KisWelcomePage.ui:1572
 #, fuzzy, kde-format
 #| msgid "Open palette"
 msgid "Open File"
@@ -17808,8 +17806,8 @@ msgid "Processing"
 msgstr "पोस्ट प्रोसेसिंग"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1420
-#: libs/ui/KisMainWindow.cpp:1700 libs/ui/KisMainWindow.cpp:1713
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1750 libs/ui/KisMainWindow.cpp:1763
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18289,7 +18287,7 @@ msgstr "रूपांतरित करा"
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
-#: plugins/impex/tiff/kis_tiff_import.cc:562
+#: plugins/impex/tiff/kis_tiff_import.cc:566
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
 msgid "Transparency Mask"
@@ -18565,8 +18563,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "नवीन दस्तऐवजात उघडा"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2064
-#: libs/ui/KisMainWindow.cpp:2147
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2121
+#: libs/ui/KisMainWindow.cpp:2204
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "प्रतिमा आयात करा"
@@ -19899,7 +19897,7 @@ msgstr "आउटपुट"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:498 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:504 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -19936,9 +19934,9 @@ msgstr "संसाधन फाईल्स साफ करा"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19954,24 +19952,24 @@ msgstr "संसाधन फाईल्स साफ करा"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:979
-#: libs/ui/KisApplication.cpp:982 libs/ui/KisApplication.cpp:998
-#: libs/ui/KisApplication.cpp:1030 libs/ui/KisApplication.cpp:1044
-#: libs/ui/KisApplication.cpp:1072 libs/ui/KisDocument.cpp:946
-#: libs/ui/KisDocument.cpp:953 libs/ui/KisDocument.cpp:973
-#: libs/ui/KisDocument.cpp:1881 libs/ui/KisDocument.cpp:1925
-#: libs/ui/KisDocument.cpp:1931 libs/ui/KisDocument.cpp:1944
-#: libs/ui/KisDocument.cpp:1948 libs/ui/KisMainWindow.cpp:979
-#: libs/ui/KisMainWindow.cpp:1095 libs/ui/KisMainWindow.cpp:1221
-#: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1924
-#: libs/ui/KisMainWindow.cpp:1933 libs/ui/KisMainWindow.cpp:2072
-#: libs/ui/KisMainWindow.cpp:2133 libs/ui/KisMainWindow.cpp:2154
-#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:588
-#: libs/ui/KisPart.cpp:591 libs/ui/KisReferenceImage.cpp:175
-#: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
-#: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:985
+#: libs/ui/KisApplication.cpp:988 libs/ui/KisApplication.cpp:1004
+#: libs/ui/KisApplication.cpp:1036 libs/ui/KisApplication.cpp:1050
+#: libs/ui/KisApplication.cpp:1078 libs/ui/KisDocument.cpp:969
+#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
+#: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
+#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:981
+#: libs/ui/KisMainWindow.cpp:1097 libs/ui/KisMainWindow.cpp:1223
+#: libs/ui/KisMainWindow.cpp:1320 libs/ui/KisMainWindow.cpp:1981
+#: libs/ui/KisMainWindow.cpp:1990 libs/ui/KisMainWindow.cpp:2129
+#: libs/ui/KisMainWindow.cpp:2190 libs/ui/KisMainWindow.cpp:2211
+#: libs/ui/KisMainWindow.cpp:2826 libs/ui/KisPart.cpp:578
+#: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
+#: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
-#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:738
 #: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20490,8 +20488,8 @@ msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "संसाधन काढून टाका"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:334
-#: libs/ui/KisMainWindow.cpp:2569
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:335
+#: libs/ui/KisMainWindow.cpp:2626
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -20567,19 +20565,17 @@ msgstr ""
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:97
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Create shape"
+#| msgid "Failed to create an action."
 msgctxt "@title:window"
 msgid "Failed to rename the resource"
-msgstr "आकार तयार करा"
+msgstr "कार्य तयार करण्यात अपयश"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:97
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Create shape"
+#| msgid "Failed to create an action."
 msgctxt "Warning message"
 msgid "Failed to rename the resource."
-msgstr "आकार तयार करा"
+msgstr "कार्य तयार करण्यात अपयश"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:119
 #, fuzzy, kde-format
@@ -20972,7 +20968,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "कार्य तयार करण्यात अपयश"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2174
+#: libs/ui/KisMainWindow.cpp:2231
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "कल"
@@ -21017,18 +21013,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:392
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:472
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
 #, fuzzy, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -21037,28 +21033,28 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>पार्श्वभूमीचा रंग पारदर्शी पिक्सेलना बदलेल.</p></body></html>"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:479
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Warning(s):"
 msgstr "इशारा"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #, fuzzy, kde-format
 #| msgid "Please enter a name for the filter effect"
 msgid "Please enter a file name to render to."
@@ -21298,7 +21294,7 @@ msgstr "कार्य तयार करण्यात अपयश"
 msgid "FFMpeg Crashed"
 msgstr ""
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:614
+#: libs/ui/animation/KisFFMpegWrapper.cpp:620
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -23009,7 +23005,7 @@ msgid "Numerical"
 msgstr "शंक्वाकृती"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "प्रतिमा आयात करा"
@@ -23055,7 +23051,7 @@ msgstr "स्तराचे  गुणधर्म"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -23157,7 +23153,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "पूर्वनिश्चीत उतरणी"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2580
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2637
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -24144,134 +24140,21 @@ msgstr ""
 msgid "Always use this template"
 msgstr "निर्माण करा (&C)"
 
-#. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:168
-#, kde-format
-msgid "News"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:191
+#. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
+#: libs/ui/forms/KisWelcomePage.ui:48
 #, fuzzy, kde-format
-#| msgid "No options"
-msgid "News options"
-msgstr "पर्याय नाहीत"
-
-#. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:314
-#, fuzzy, kde-format
-msgid "Krita Version X.X.X Available"
-msgstr "क्रिटा %1"
-
-#. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:365
-#, fuzzy, kde-format
-#| msgid "Update"
-msgid "Update now!"
-msgstr "अद्ययावत करा"
-
-#. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:372
-#, fuzzy, kde-format
-#| msgid "Show all"
-msgid "Show details"
-msgstr "सर्व दर्शवा"
-
-#. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:455 libs/ui/KisWelcomePageWidget.cpp:398
-#, kde-format
-msgid ""
-"You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
-"decoration: underline;\">enable news</a> from krita.org in various languages "
-"with the menu above"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:562
-#, fuzzy, kde-format
-#| msgid "Comments"
-msgid "Community"
-msgstr "टिपण्णी"
-
-#. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:647 libs/ui/KisWelcomePageWidget.cpp:384
-#, fuzzy, kde-format
-#| msgid "Manual"
-msgid "User Manual"
-msgstr "स्वहस्ते"
-
-#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:737 libs/ui/KisWelcomePageWidget.cpp:381
-#, fuzzy, kde-format
-msgid "Getting Started"
-msgstr "टीप :"
-
-#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:824 libs/ui/KisWelcomePageWidget.cpp:378
-#, fuzzy, kde-format
-msgid "User Community"
-msgstr "नाव घाला"
-
-#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:911 libs/ui/KisWelcomePageWidget.cpp:390
-#, fuzzy, kde-format
-msgid "Krita Website"
-msgstr "शुभ्र समतोल :"
-
-#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:1001 libs/ui/KisWelcomePageWidget.cpp:393
-#, fuzzy, kde-format
-#| msgid "Source"
-msgid "Source Code"
-msgstr "स्रोत"
-
-#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:1088 libs/ui/KisWelcomePageWidget.cpp:387
-#, fuzzy, kde-format
-msgid "Support Krita"
+msgid "Support Krita!"
 msgstr "क्रिटा"
 
-#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:1178 libs/ui/KisWelcomePageWidget.cpp:396
-#, kde-format
-msgid "Powered by KDE"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, dragImageHereLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1261
-#, fuzzy, kde-format
-#| msgid "Image Split "
-msgid "Drag an image into the window to open"
-msgstr "प्रतिमा दुभंग "
-
-#. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1361
-#, fuzzy, kde-format
-#| msgid "Start at:"
-msgid "Start"
-msgstr "येथे सुरु करा :"
-
-#. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1428 libs/ui/KisWelcomePageWidget.cpp:625
-#, kde-format
-msgid "DEV BUILD"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, newFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:1504
-#, fuzzy, kde-format
-msgid "New File"
-msgstr "प्रतिमेचा आकार"
-
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1655
+#: libs/ui/forms/KisWelcomePage.ui:79
 #, fuzzy, kde-format
-#| msgid "Open in New Documents"
-msgid "Recent Documents"
-msgstr "नवीन दस्तऐवजात उघडा"
+#| msgid "Separate Image"
+msgid "Recent Images"
+msgstr "वेगळी प्रतिमा"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:1713
+#: libs/ui/forms/KisWelcomePage.ui:103
 #, fuzzy, kde-format
 #| msgid "Clear"
 msgctxt "Welcome Screen Recent Document List's Clear link Label"
@@ -24279,15 +24162,138 @@ msgid "Clear"
 msgstr "पुसून टाका"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:1766
+#: libs/ui/forms/KisWelcomePage.ui:154
 #, fuzzy, kde-format
 msgid ""
 "You don't seem to have any\n"
 "recently opened documents"
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
+#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:322
+#, fuzzy, kde-format
+#| msgid "Comments"
+msgid "Community"
+msgstr "टिपण्णी"
+
+#. i18n: ectx: property (text), widget (QLabel, manualLink)
+#: libs/ui/forms/KisWelcomePage.ui:391 libs/ui/KisWelcomePageWidget.cpp:391
+#, fuzzy, kde-format
+#| msgid "Manual"
+msgid "User Manual"
+msgstr "स्वहस्ते"
+
+#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
+#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:394
+#, fuzzy, kde-format
+msgid "Support Krita"
+msgstr "क्रिटा"
+
+#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
+#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:403
+#, kde-format
+msgid "Powered by KDE"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
+#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:400
+#, fuzzy, kde-format
+#| msgid "Source"
+msgid "Source Code"
+msgstr "स्रोत"
+
+#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
+#: libs/ui/forms/KisWelcomePage.ui:748 libs/ui/KisWelcomePageWidget.cpp:388
+#, fuzzy, kde-format
+msgid "Getting Started"
+msgstr "टीप :"
+
+#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
+#: libs/ui/forms/KisWelcomePage.ui:835 libs/ui/KisWelcomePageWidget.cpp:385
+#, fuzzy, kde-format
+msgid "User Community"
+msgstr "नाव घाला"
+
+#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
+#: libs/ui/forms/KisWelcomePage.ui:922 libs/ui/KisWelcomePageWidget.cpp:397
+#, fuzzy, kde-format
+msgid "Krita Website"
+msgstr "शुभ्र समतोल :"
+
+#. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1066
+#, kde-format
+msgid "News"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
+#: libs/ui/forms/KisWelcomePage.ui:1089
+#, fuzzy, kde-format
+#| msgid "No options"
+msgid "News options"
+msgstr "पर्याय नाहीत"
+
+#. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1212
+#, fuzzy, kde-format
+msgid "Krita Version X.X.X Available"
+msgstr "क्रिटा %1"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
+#: libs/ui/forms/KisWelcomePage.ui:1263
+#, fuzzy, kde-format
+#| msgid "Update"
+msgid "Update now!"
+msgstr "अद्ययावत करा"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
+#: libs/ui/forms/KisWelcomePage.ui:1270
+#, fuzzy, kde-format
+#| msgid "Show all"
+msgid "Show details"
+msgstr "सर्व दर्शवा"
+
+#. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
+#: libs/ui/forms/KisWelcomePage.ui:1353 libs/ui/KisWelcomePageWidget.cpp:405
+#, kde-format
+msgid ""
+"You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
+"decoration: underline;\">enable news</a> from krita.org in various languages "
+"with the menu above"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1417
+#, fuzzy, kde-format
+#| msgid "Start at:"
+msgid "Start"
+msgstr "येथे सुरु करा :"
+
+#. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1484 libs/ui/KisWelcomePageWidget.cpp:632
+#, kde-format
+msgid "DEV BUILD"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, newFileLink)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
+#: libs/ui/forms/KisWelcomePage.ui:1560 libs/ui/forms/wdgimageproperties.ui:18
+#: libs/ui/forms/wdgnewimage.ui:18
+#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
+#, kde-format
+msgid "New Image"
+msgstr "नवी प्रतिमा"
+
+#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
+#: libs/ui/forms/KisWelcomePage.ui:1628
+#, fuzzy, kde-format
+msgid "Open Image"
+msgstr "प्रतिमा"
+
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1874
+#: libs/ui/forms/KisWelcomePage.ui:1712
 #, fuzzy, kde-format
 #| msgid ""
 #| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -25164,10 +25170,9 @@ msgstr "पूर्वलक्षी पॅटर्नप्रमाणे �
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdgdisplaysettings.ui:46
-#, fuzzy, kde-format
-#| msgid "Operation"
+#, kde-format
 msgid "Canvas Acceleration"
-msgstr "क्रिया"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpOpenGL)
 #: libs/ui/forms/wdgdisplaysettings.ui:58
@@ -25278,10 +25283,9 @@ msgstr "वर्तमान प्रीसेट"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdgdisplaysettings.ui:255
-#, fuzzy, kde-format
-#| msgid "Current preset"
+#, kde-format
 msgid "Preferred Output Format:"
-msgstr "वर्तमान प्रीसेट"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:283
@@ -25373,8 +25377,9 @@ msgstr "निवड पद्धत"
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
 #, fuzzy, kde-format
+#| msgid "Layer Opacity"
 msgid "Outline opacity:"
-msgstr "निवड पद्धत"
+msgstr "स्तराची अपारदर्शकता"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:440
@@ -25698,10 +25703,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: libs/ui/forms/wdggeneralsettings.ui:182
-#, fuzzy, kde-format
-#| msgid "Eraser"
+#, kde-format
 msgid "Eraser Cursor Icon:"
-msgstr "खोडणारा"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #: libs/ui/forms/wdggeneralsettings.ui:195
@@ -26442,15 +26446,6 @@ msgstr "फिरवा (&R)"
 msgid "Scale:"
 msgstr "प्रमाण :"
 
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:18
-#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
-#, kde-format
-msgid "New Image"
-msgstr "नवी प्रतिमा"
-
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
@@ -27095,7 +27090,7 @@ msgstr "वर्तमान प्रीसेट"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1076
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -28028,7 +28023,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:351
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:352
 #, fuzzy, kde-format
 #| msgid "Dimensions"
 msgid "Sessions"
@@ -29520,7 +29515,7 @@ msgstr "पृष्ठभूमी रंग"
 msgid "&Open Background color selector"
 msgstr "पार्श्वभागाचा रंग"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:347
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -29533,8 +29528,8 @@ msgstr "रचना"
 msgid "Custom Pattern"
 msgstr "ऐच्छिक पॅटर्न"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:332
-#: libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
+#: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, kde-format
@@ -30298,67 +30293,67 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "झूम 100% वर पुन्हा निश्चित करा"
 
-#: libs/ui/KisApplication.cpp:324
+#: libs/ui/KisApplication.cpp:325
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, fuzzy, kde-format
 #| msgid "Brush Presets"
 msgid "Brush presets"
 msgstr "कुंचला पूर्व संयोजना"
 
-#: libs/ui/KisApplication.cpp:327 libs/ui/KisApplication.cpp:328
-#: libs/ui/KisApplication.cpp:329 libs/ui/KisApplication.cpp:330
+#: libs/ui/KisApplication.cpp:328 libs/ui/KisApplication.cpp:329
+#: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
 #, fuzzy, kde-format
 #| msgid "Brush tip"
 msgid "Brush tips"
 msgstr "कुंचल्याचे टोक"
 
-#: libs/ui/KisApplication.cpp:335
+#: libs/ui/KisApplication.cpp:336
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
 #, kde-format
 msgid "Palettes"
 msgstr "पटलस्"
 
-#: libs/ui/KisApplication.cpp:348 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
 msgid "Workspaces"
 msgstr "कार्यक्षेत्रे"
 
-#: libs/ui/KisApplication.cpp:349
+#: libs/ui/KisApplication.cpp:350
 #, fuzzy, kde-format
 #| msgid "Vector Layer"
 msgid "SVG symbol libraries"
 msgstr "व्हेक्टर स्तर"
 
-#: libs/ui/KisApplication.cpp:350 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, fuzzy, kde-format
 #| msgid "Window size"
 msgid "Window layouts"
 msgstr "खिडकीचा आकार"
 
-#: libs/ui/KisApplication.cpp:352
+#: libs/ui/KisApplication.cpp:353
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
 #, fuzzy, kde-format
 #| msgid "Rotate Canvas"
 msgid "Gamut masks"
 msgstr "कॅनव्हास फिरवा"
 
-#: libs/ui/KisApplication.cpp:354
+#: libs/ui/KisApplication.cpp:355
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgid "SeExpr Scripts"
 msgstr "सबस्क्रिप्ट"
 
-#: libs/ui/KisApplication.cpp:359
+#: libs/ui/KisApplication.cpp:360
 #, fuzzy, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "स्तराचा आकार"
 
-#: libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:373
 #, kde-format
 msgid ""
 "%1\n"
@@ -30366,13 +30361,13 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:372 libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:373 libs/ui/KisApplication.cpp:379
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "इंटरलेसिंग"
 
-#: libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:379
 #, kde-format
 msgid ""
 "\n"
@@ -30380,7 +30375,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:411
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -30388,67 +30383,67 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:427
+#: libs/ui/KisApplication.cpp:428
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "संसाधने (&R)"
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:459
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "संसाधने (&R)"
 
-#: libs/ui/KisApplication.cpp:462
+#: libs/ui/KisApplication.cpp:463
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "पूर्वलक्षित कुंचले"
 
-#: libs/ui/KisApplication.cpp:468
+#: libs/ui/KisApplication.cpp:469
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "संसाधन फाईल्स साफ करा"
 
-#: libs/ui/KisApplication.cpp:477
+#: libs/ui/KisApplication.cpp:478
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "ग्रेडियंट"
 
-#: libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:510
 #, fuzzy, kde-format
 msgid "Launching..."
 msgstr "संयोजना"
 
-#: libs/ui/KisApplication.cpp:578
+#: libs/ui/KisApplication.cpp:579
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:634
+#: libs/ui/KisApplication.cpp:635
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to render animation frames!"
 msgstr "कार्य तयार करण्यात अपयश"
 
-#: libs/ui/KisApplication.cpp:661 libs/ui/KisApplication.cpp:851
+#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:857
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "गाळणी स्तर (&F)..."
 
-#: libs/ui/KisApplication.cpp:669 libs/ui/KisApplication.cpp:674
-#: libs/ui/KisApplication.cpp:845 libs/ui/KisApplication.cpp:859
-#: libs/ui/KisApplication.cpp:864
+#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:851 libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:870
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "इशारा"
 
-#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:866
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "सक्रिय स्तर  दिसत नसल्यानेकोणताही रंग घेता येत नाही."
 
-#: libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30461,7 +30456,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:681
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30469,34 +30464,34 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:846
+#: libs/ui/KisApplication.cpp:852
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:871
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:980
+#: libs/ui/KisApplication.cpp:986
 #, fuzzy, kde-format
 #| msgid "No shapes found in file: %1"
 msgid "No template found for: %1"
 msgstr "%1 या फाईल मध्ये आकार आढळला नाही"
 
-#: libs/ui/KisApplication.cpp:983
+#: libs/ui/KisApplication.cpp:989
 #, fuzzy, kde-format
 #| msgid "No shapes found in file: %1"
 msgid "Too many templates found for: %1"
 msgstr "%1 या फाईल मध्ये आकार आढळला नाही"
 
-#: libs/ui/KisApplication.cpp:999
+#: libs/ui/KisApplication.cpp:1005
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "लुट फाईल निवडा"
 
-#: libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:1037
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30506,7 +30501,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1045
+#: libs/ui/KisApplication.cpp:1051
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30514,7 +30509,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1073
+#: libs/ui/KisApplication.cpp:1079
 #, fuzzy, kde-format
 #| msgid "Move and rotate your canvas"
 msgid "Do you want to clear the settings file?"
@@ -30648,54 +30643,53 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "नवीन दस्तऐवजात उघडा"
 
-#: libs/ui/KisDocument.cpp:722
+#: libs/ui/KisDocument.cpp:733
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:760
+#: libs/ui/KisDocument.cpp:783
 #, fuzzy, kde-format
-#| msgid "Failed to create an action."
+#| msgid "Create backup file "
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr "कार्य तयार करण्यात अपयश"
+msgstr "बॅक अप फाईल तयार करा "
 
-#: libs/ui/KisDocument.cpp:777
-#, fuzzy, kde-format
-#| msgid "Failed to create an action."
+#: libs/ui/KisDocument.cpp:800
+#, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr "कार्य तयार करण्यात अपयश"
+msgstr ""
 
-#: libs/ui/KisDocument.cpp:799
+#: libs/ui/KisDocument.cpp:822
 #, fuzzy, kde-format
 msgid "Exporting Document..."
 msgstr "नवीन दस्तऐवजात उघडा"
 
-#: libs/ui/KisDocument.cpp:800
+#: libs/ui/KisDocument.cpp:823
 #, fuzzy, kde-format
 msgid "Saving Document..."
 msgstr "दस्तऐवज साठवा"
 
-#: libs/ui/KisDocument.cpp:810
+#: libs/ui/KisDocument.cpp:833
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:939
+#: libs/ui/KisDocument.cpp:962
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:954
+#: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
 #, fuzzy, kde-format
 msgid "Could not save %1."
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: libs/ui/KisDocument.cpp:976
+#: libs/ui/KisDocument.cpp:999
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30703,86 +30697,86 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:982
+#: libs/ui/KisDocument.cpp:1005
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1022
 #, fuzzy, kde-format
 msgid "Finished saving %1"
 msgstr "पहिले पान (&F)"
 
-#: libs/ui/KisDocument.cpp:1402
+#: libs/ui/KisDocument.cpp:1425
 #, fuzzy, kde-format
 msgid "Autosaving... %1"
 msgstr "अंतर"
 
-#: libs/ui/KisDocument.cpp:1410
+#: libs/ui/KisDocument.cpp:1433
 #, fuzzy, kde-format
 msgid "Autosaving..."
 msgstr "अंतर"
 
-#: libs/ui/KisDocument.cpp:1416
+#: libs/ui/KisDocument.cpp:1439
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1559
+#: libs/ui/KisDocument.cpp:1582
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1573
+#: libs/ui/KisDocument.cpp:1596
 #, fuzzy, kde-format
 msgid "Finished autosaving %1"
 msgstr "अंतर"
 
-#: libs/ui/KisDocument.cpp:1815
+#: libs/ui/KisDocument.cpp:1838
 #, kde-format
 msgid ""
 "Malformed Path\n"
 "%1"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1881
+#: libs/ui/KisDocument.cpp:1904
 #, fuzzy, kde-format
 #| msgid "Bookmark current"
 msgid "File %1 does not exist."
 msgstr "वर्तमानास ओळखचिन्ह करा"
 
-#: libs/ui/KisDocument.cpp:1910
+#: libs/ui/KisDocument.cpp:1933
 #, fuzzy, kde-format
 msgid "Opening document"
 msgstr "नवीन दस्तऐवजात उघडा"
 
-#: libs/ui/KisDocument.cpp:1926 libs/ui/KisDocument.cpp:1932
+#: libs/ui/KisDocument.cpp:1949 libs/ui/KisDocument.cpp:1955
 #, fuzzy, kde-format
 msgid "Could not open %1."
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: libs/ui/KisDocument.cpp:1945 libs/ui/KisDocument.cpp:1949
+#: libs/ui/KisDocument.cpp:1968 libs/ui/KisDocument.cpp:1972
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2080
+#: libs/ui/KisDocument.cpp:2103
 #, fuzzy, kde-format
 #| msgid "Not Filled"
 msgid "Not Saved"
 msgstr "भरले नाही"
 
-#: libs/ui/KisDocument.cpp:2561
+#: libs/ui/KisDocument.cpp:2584
 #, fuzzy, kde-format
 #| msgid "Background"
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "पार्श्वभूमी"
 
-#: libs/ui/KisDocument.cpp:2613
+#: libs/ui/KisDocument.cpp:2636
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -31179,45 +31173,45 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "कार्यक्षेत्र"
 
-#: libs/ui/KisMainWindow.cpp:585
+#: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "मूळ स्तर दर्शवा"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:589
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "स्क्रोलबार्स"
 
-#: libs/ui/KisMainWindow.cpp:1037
+#: libs/ui/KisMainWindow.cpp:1039
 #, fuzzy, kde-format
 msgid "Write Protected"
 msgstr "गाळणी स्तराचे गुणधर्म"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1043
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgid "Recovered"
 msgstr "रेकॉर्डिंग"
 
-#: libs/ui/KisMainWindow.cpp:1071
+#: libs/ui/KisMainWindow.cpp:1073
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "मॅक्रो साठवा"
 
-#: libs/ui/KisMainWindow.cpp:1095
+#: libs/ui/KisMainWindow.cpp:1097
 #, fuzzy, kde-format
 msgid "The file %1 does not exist."
 msgstr "स्तर चढवा"
 
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, fuzzy, kde-format
 msgid "Open Images"
 msgstr "प्रतिमा"
 
-#: libs/ui/KisMainWindow.cpp:1319
+#: libs/ui/KisMainWindow.cpp:1321
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -31226,45 +31220,45 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "एक्सपोजर"
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, fuzzy, kde-format
 msgid "Saving As"
 msgstr "दस्तऐवज साठवा"
 
-#: libs/ui/KisMainWindow.cpp:1679
+#: libs/ui/KisMainWindow.cpp:1729
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "अलिकडील दस्तऐवज"
 
-#: libs/ui/KisMainWindow.cpp:1703
+#: libs/ui/KisMainWindow.cpp:1753
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "ऐच्छिक ग्रेडियंट"
 
-#: libs/ui/KisMainWindow.cpp:1715
+#: libs/ui/KisMainWindow.cpp:1765
 #, fuzzy, kde-format
 msgid "Create from Clipboard"
 msgstr "चिकटपट्टीवरील पहिला स्तर (&F)"
 
-#: libs/ui/KisMainWindow.cpp:1893
+#: libs/ui/KisMainWindow.cpp:1950
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "स्तर/मुखवटा साठवा..."
 
-#: libs/ui/KisMainWindow.cpp:1919
+#: libs/ui/KisMainWindow.cpp:1976
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: libs/ui/KisMainWindow.cpp:1923
+#: libs/ui/KisMainWindow.cpp:1980
 #, kde-format
 msgid ""
 "\n"
@@ -31272,7 +31266,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1933
+#: libs/ui/KisMainWindow.cpp:1990
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -31281,48 +31275,48 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2072 libs/ui/KisMainWindow.cpp:2154
+#: libs/ui/KisMainWindow.cpp:2129 libs/ui/KisMainWindow.cpp:2211
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
 "%1"
 msgstr "नवीन संयोजना %1"
 
-#: libs/ui/KisMainWindow.cpp:2133
+#: libs/ui/KisMainWindow.cpp:2190
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to create new document. Animation import aborted."
 msgstr "कार्य तयार करण्यात अपयश"
 
-#: libs/ui/KisMainWindow.cpp:2560
+#: libs/ui/KisMainWindow.cpp:2617
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "आरेखन आयात करा (&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2575
+#: libs/ui/KisMainWindow.cpp:2632
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "आरेखन आयात करा (&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2579
+#: libs/ui/KisMainWindow.cpp:2636
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "आरेखन आयात करा (&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/KisMainWindow.cpp:2680
 #, kde-format
 msgid "&%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2626
+#: libs/ui/KisMainWindow.cpp:2683
 #, kde-format
 msgid "%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2792
+#: libs/ui/KisMainWindow.cpp:2849
 #, fuzzy, kde-format
 #| msgid ""
 #| "The Calligra LittleCMS color management plugin is not installed. Krita "
@@ -31334,19 +31328,19 @@ msgstr ""
 "The Calligra LittleCMS color management plugin स्थापित केलेली नाही. क्रिटा आता "
 "बंद होईल."
 
-#: libs/ui/KisMainWindow.cpp:2808
+#: libs/ui/KisMainWindow.cpp:2865
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "प्रतिष्ठापना त्रुटी"
 
-#: libs/ui/KisMainWindow.cpp:2917
+#: libs/ui/KisMainWindow.cpp:2974
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2975
+#: libs/ui/KisMainWindow.cpp:3032
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -31486,14 +31480,14 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "समूह विभाग"
 
-#: libs/ui/KisPart.cpp:588
+#: libs/ui/KisPart.cpp:578
 #, fuzzy, kde-format
 msgid ""
 "Could not create document from template\n"
 "%1"
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: libs/ui/KisPart.cpp:591
+#: libs/ui/KisPart.cpp:581
 #, fuzzy, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -31513,7 +31507,7 @@ msgstr "गडदपणा"
 msgid "Could not load %1."
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:39
+#: libs/ui/KisRemoteFileFetcher.cpp:41
 #, kde-format
 msgctxt "Fetching remote image"
 msgid ""
@@ -31521,19 +31515,19 @@ msgid ""
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:61
+#: libs/ui/KisRemoteFileFetcher.cpp:63
 #, fuzzy, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:75
+#: libs/ui/KisRemoteFileFetcher.cpp:77
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:92
+#: libs/ui/KisRemoteFileFetcher.cpp:94
 #, fuzzy, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."
@@ -31808,51 +31802,51 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "निनावीकर"
 
-#: libs/ui/KisWelcomePageWidget.cpp:148
+#: libs/ui/KisWelcomePageWidget.cpp:157
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:150
+#: libs/ui/KisWelcomePageWidget.cpp:159
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
 "krita.org website"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:153
+#: libs/ui/KisWelcomePageWidget.cpp:162
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, fuzzy, kde-format
 msgid "Language"
 msgstr "शेवटचे पान :"
 
-#: libs/ui/KisWelcomePageWidget.cpp:154
+#: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:420
+#: libs/ui/KisWelcomePageWidget.cpp:427
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:648
+#: libs/ui/KisWelcomePageWidget.cpp:655
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, fuzzy, kde-format
 msgid "Forget \"%1\""
 msgstr "एक्सपोजर"
 
-#: libs/ui/KisWelcomePageWidget.cpp:745
+#: libs/ui/KisWelcomePageWidget.cpp:757
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:774
+#: libs/ui/KisWelcomePageWidget.cpp:786
 #, fuzzy, kde-format
 msgid "An error occurred during the update"
 msgstr "स्तरासाठी ब्लेंडिंग पद्धत निवडा."
 
-#: libs/ui/KisWelcomePageWidget.cpp:780
+#: libs/ui/KisWelcomePageWidget.cpp:792
 #, kde-format
 msgid "Restart is required."
 msgstr ""
@@ -32838,12 +32832,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:654
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:656
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32851,14 +32845,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1070
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1072
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -34618,10 +34612,11 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:83
 #, fuzzy, kde-format
+#| msgid "Stop color."
 msgctxt ""
 "Percentage of the histogram to clip in the shadows side in auto levels"
 msgid "Shadows clipping:"
-msgstr "रंगाचा इतिहास"
+msgstr "रंग थांबवा."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:90
@@ -34644,9 +34639,10 @@ msgstr "विनाक्रम ऑफसेट :"
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:107
 #, fuzzy, kde-format
+#| msgid "Stop color."
 msgctxt "Output color used for the shadows in auto levels"
 msgid "Shadows color:"
-msgstr "रंगाचा इतिहास"
+msgstr "रंग थांबवा."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:114
@@ -34672,10 +34668,10 @@ msgstr "पध्दत"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:171
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Do not perform midtones enhancement in auto levels"
 msgid "Don't adjust the midtones"
-msgstr "प्रतिमेत स्तर जोडता आला नाही"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:176
@@ -36244,12 +36240,12 @@ msgstr "%1 s"
 msgid "Toggle Preview"
 msgstr "पूर्वावलोकन"
 
-#: libs/widgetutils/KoFileDialog.cpp:243
+#: libs/widgetutils/KoFileDialog.cpp:260
 #, fuzzy, kde-format
 msgid "Save As:"
 msgstr "मॅक्रो साठवा"
 
-#: libs/widgetutils/KoFileDialog.cpp:326
+#: libs/widgetutils/KoFileDialog.cpp:343
 #, kde-format
 msgid ""
 "The selected file name does not have a file extension that Krita "
@@ -36257,7 +36253,7 @@ msgid ""
 "Make sure the file name ends in '.%1' for example."
 msgstr ""
 
-#: libs/widgetutils/KoFileDialog.cpp:511
+#: libs/widgetutils/KoFileDialog.cpp:533
 #, kde-format
 msgid "All supported formats"
 msgstr ""
@@ -38134,7 +38130,7 @@ msgid "Val:"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:127
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
 #, fuzzy, kde-format
 msgid "Onion skins menu"
 msgstr "गुणोत्तर निसाधनण (&C)"
@@ -38146,27 +38142,27 @@ msgid "Audio menu"
 msgstr "आयसो स्टुडिओ टंगस्टन"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:180
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation settings menu"
 msgstr "चलित"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:192
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
 #, fuzzy, kde-format
 #| msgid "Start at:"
 msgid "Clip Start: "
 msgstr "येथे सुरु करा :"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
 #, kde-format
 msgid "Clip End: "
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
 #, fuzzy, kde-format
 msgid "Frame Rate: "
 msgstr "चेतन खोना"
@@ -38195,39 +38191,39 @@ msgstr "चौकोन"
 msgid "Reset All Channels"
 msgstr "सर्व माध्यमे"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:486
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:481
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:493
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:488
 #, fuzzy, kde-format
 #| msgid "Bilinear interpolation"
 msgid "Linear interpolation."
 msgstr "द्विरेषीय प्रतिस्थापन"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:500
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:495
 #, fuzzy, kde-format
 #| msgid "Bilinear interpolation"
 msgid "Bezier curve interpolation."
 msgstr "द्विरेषीय प्रतिस्थापन"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:507
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:502
 #, fuzzy, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "द्विरेषीय प्रतिस्थापन"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:514
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:509
 #, fuzzy, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "द्विरेषीय प्रतिस्थापन"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:521
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:516
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:528
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:523
 #, fuzzy, kde-format
 #| msgid "zoom to size"
 msgid "Zoom view to fit curve."
@@ -38274,69 +38270,69 @@ msgstr[0] "नाव घाला"
 msgstr[1] "नाव घाला"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:290
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation Timeline"
 msgstr "चलित"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "Animated"
-msgid "Animation audio menu"
-msgstr "चलित"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "संसाधन फाईल्स साफ करा"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "<<काढून टाका"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #, fuzzy, kde-format
 #| msgid "Volume:"
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "आवाज :"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#, fuzzy, kde-format
+#| msgid "Animated"
+msgid "Animation audio menu"
+msgstr "चलित"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
 msgid "AutoKey Blank"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
 #, fuzzy, kde-format
 msgid "AutoKey Duplicate"
 msgstr "प्रतिकृती"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:509
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:522
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:517
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:523
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:518
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:519
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""
@@ -39210,10 +39206,9 @@ msgstr "तपशील"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:394
 #, fuzzy, kde-format
-#| msgid "Layer Opacity"
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "स्तराची अपारदर्शकता"
+msgstr "पान अंतर्भूत करा"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:412
 #, fuzzy, kde-format
@@ -39628,10 +39623,10 @@ msgstr ""
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
 #, fuzzy
-#| msgid "Thumbnails"
+#| msgid "Update preview"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "लघुप्रतिमा"
+msgstr "पूर्वावलोकन अद्ययावत करा"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, fuzzy, kde-format
@@ -39663,9 +39658,9 @@ msgstr "वर्तमान स्तर रद्द करा"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:125
 #, fuzzy, kde-format
-#| msgid "Add New Palette"
+#| msgid "Ella palette"
 msgid "Load a palette"
-msgstr "नवीन पटल जोडा"
+msgstr "एला पॅलेट"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:226
 #, fuzzy, kde-format
@@ -40850,13 +40845,13 @@ msgstr "आवाज :"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:145
 #, fuzzy, kde-format
 msgid "SVG Template"
-msgstr "निर्माण करा (&C)"
+msgstr "पासून शोध सुरू करा"
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
 #, fuzzy, kde-format
 msgid "SVG Template Path:"
-msgstr "निर्माण करा (&C)"
+msgstr "पासून शोध सुरू करा"
 
 #. i18n: ectx: property (text), widget (QLabel, fontSizeLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:237
@@ -48099,24 +48094,24 @@ msgstr "मृदू करू नका"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:21
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "2x2 downsampling"
-msgstr "मृदू करू नका"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:22
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "4x4 downsampling"
-msgstr "मृदू करू नका"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:23
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "8x8 downsampling"
-msgstr "मृदू करू नका"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
@@ -48203,11 +48198,10 @@ msgid "Center-first order"
 msgstr "प्रतिशत"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:89
-#, fuzzy, kde-format
-#| msgid "X resolution:"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
-msgstr "X रेझोल्युशन :"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
 #, kde-format
@@ -48630,10 +48624,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:492
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gaborish filter"
-msgstr ""
+msgstr "दिशा गाळणी"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:499
@@ -48671,9 +48665,10 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:537
 #, fuzzy, kde-format
+#| msgid "No Border"
 msgctxt "JPEG-XL encoder options"
 msgid "Group order"
-msgstr "समूह स्तर (&G)"
+msgstr "किनार नाही"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:544
@@ -48767,10 +48762,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:676
-#, fuzzy, kde-format
-#| msgid "Add New Palette"
+#, kde-format
 msgid "Local channel palette range"
-msgstr "नवीन पटल जोडा"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:687
@@ -49187,7 +49181,7 @@ msgstr "स्तरासाठी ब्लेंडिंग पद्धत 
 #, fuzzy, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
-msgstr "व्हेक्टर निवड"
+msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:222
 #, kde-format
@@ -50489,7 +50483,7 @@ msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
 msgstr "तरंगता बिंदू आडवे डिफरन्सिंग"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1040
+#: plugins/impex/tiff/kis_tiff_import.cc:1044
 #, kde-format
 msgctxt "TIFF errors"
 msgid ""
@@ -50498,11 +50492,25 @@ msgid ""
 "version of libjpeg-turbo and try again."
 msgstr ""
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1143
-#: plugins/impex/tiff/kis_tiff_import.cc:1326
+#: plugins/impex/tiff/kis_tiff_import.cc:1147
+#: plugins/impex/tiff/kis_tiff_import.cc:1330
 #, kde-format
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1577
+#, kde-format
+msgctxt "@title:window"
+msgid "TIFF image with PSD data"
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1579
+#, kde-format
+msgctxt "the choice for the user on loading a TIFF file"
+msgid ""
+"The TIFF image contains valid PSD data embedded. Would you like to use PSD "
+"data instead of normal TIFF data?"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
@@ -50815,10 +50823,9 @@ msgstr "लक्ष्य :"
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, segments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:260
 #: plugins/impex/webp/kis_wdg_options_webp.ui:276
-#, fuzzy, kde-format
-#| msgid "Number of tiles"
+#, kde-format
 msgid "Maximum number of segments (1 to 4)."
-msgstr "फरशांची संख्या"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSegments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:263
@@ -53898,9 +53905,9 @@ msgstr "स्मज दर"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
 #, fuzzy, kde-format
-#| msgid "Transparent"
+#| msgid "Preserve alpha"
 msgid "Smudge Transparency"
-msgstr "पारदर्शक"
+msgstr "अल्फाचे जतन"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, fuzzy, kde-format
@@ -57570,11 +57577,10 @@ msgid "Threshold: "
 msgstr "मर्यादा : "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:552
-#, fuzzy, kde-format
-#| msgid "Opacity:"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in fill tool options"
 msgid "Spread: "
-msgstr "अपारदर्शकता :"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:558
 #, fuzzy, kde-format
@@ -57723,10 +57729,10 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:633
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
-msgstr "पार्श्वभूमीच्या रंगाने भरा"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
 #, fuzzy, kde-format
@@ -58854,11 +58860,10 @@ msgid "Threshold: "
 msgstr "मर्यादा : "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:374
-#, fuzzy, kde-format
-#| msgid "Opacity:"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in contiguous selection tool options"
 msgid "Spread: "
-msgstr "अपारदर्शकता :"
+msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:380
 #, fuzzy, kde-format
@@ -58888,9 +58893,9 @@ msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select all regions until a specific boundary color"
-msgstr "पार्श्वभूमीच्या रंगाने भरा"
+msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
@@ -58916,11 +58921,11 @@ msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
 #, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#| msgid "Selection Mode"
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
 msgid "Selection extent"
-msgstr "रेंडरिंग इंटेंट"
+msgstr "निवड पद्धत"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:95
 #, fuzzy, kde-format
@@ -59034,11 +59039,11 @@ msgstr "मर्यादा : "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:472
 #, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#| msgid "Selection Mode"
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
-msgstr "रेंडरिंग इंटेंट"
+msgstr "निवड पद्धत"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:57
 #, fuzzy, kde-format
@@ -60176,11 +60181,10 @@ msgid "Threshold: "
 msgstr "मर्यादा : "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
-#, fuzzy, kde-format
-#| msgid "Opacity:"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
 msgid "Spread: "
-msgstr "अपारदर्शकता :"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
 #, fuzzy, kde-format
@@ -60307,10 +60311,10 @@ msgid "Specific color or transparency"
 msgstr "विशिष्ट रंग निवडणारा"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
-msgstr "पार्श्वभूमीच्या रंगाने भरा"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, kde-format
@@ -60325,10 +60329,10 @@ msgid "All, excluding a specific color or transparency"
 msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
-msgstr "पार्श्वभूमीच्या रंगाने भरा"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
 #, fuzzy, kde-format
@@ -61429,68 +61433,29 @@ msgid "Reference Images Tool"
 msgstr "25%"
 
 #, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "शीयर :"
+#~ msgid "&Canvas"
+#~ msgstr "कॅनव्हास  01"
 
 #, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "शीयर :"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "प्रमाण"
+#~ msgctxt "action"
+#~ msgid "&Reset zoom"
+#~ msgstr "झूम पुन्हस्थापित करा"
 
 #, fuzzy
-#~| msgid "Reset Canvas Transformations"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "कॅनव्हासमधील बदल पुन्हा निश्चित करा"
+#~ msgctxt "action"
+#~ msgid "Reset zoom"
+#~ msgstr "झूम पुन्हस्थापित करा"
 
 #, fuzzy
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
-#~ "Animated exports are <span style=\" font-weight:600;\">always</span> "
-#~ "flattened regardless of this setting.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>पार्श्वभूमीचा रंग पारदर्शी पिक्सेलना बदलेल.</p></body></"
-#~ "html>"
+#~| msgid "Please enter a name for the filter effect"
+#~ msgid "Please extract ffmpeg from the archive first."
+#~ msgstr "गाळणी परिणामाकरिता नाव दाखल करा"
 
 #, fuzzy
 #~| msgid "Difference"
 #~ msgctxt "paletegen status mode option name"
 #~ msgid "Difference"
 #~ msgstr "फरक"
-
-#, fuzzy
-#~| msgid "Filter:"
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "गाळणी :"
-
-#, fuzzy
-#~| msgid "Edition:"
-#~ msgid "Edit Audio:"
-#~ msgstr "आवृत्ती :"
-
-#, fuzzy
-#~| msgid "Volume:"
-#~ msgctxt "@item:inmenu, slider"
-#~ msgid "Volume:"
-#~ msgstr "आवाज :"
-
-#, fuzzy
-#~| msgid "Open and edit..."
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "उघडा व संपादन करा..."
-
-#, fuzzy
-#~| msgid "Save..."
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "साठवा..."
 
 #, fuzzy
 #~| msgid "Choose workspace"
@@ -61564,10 +61529,6 @@ msgstr "25%"
 #~ msgstr "फिरवणे :"
 
 #, fuzzy
-#~ msgid "FFMpeg Version: None"
-#~ msgstr "आवृत्ती"
-
-#, fuzzy
 #~ msgid ""
 #~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
 #~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
@@ -61581,9 +61542,106 @@ msgstr "25%"
 #~ msgstr "प्रतिशत"
 
 #, fuzzy
-#~| msgid "%1 s"
-#~ msgid " sec"
-#~ msgstr "%1 s"
+#~| msgid "Image Split "
+#~ msgid "Drag an image into the window to open"
+#~ msgstr "प्रतिमा दुभंग "
+
+#, fuzzy
+#~ msgid "New File"
+#~ msgstr "प्रतिमेचा आकार"
+
+#, fuzzy
+#~| msgid "Open in New Documents"
+#~ msgid "Recent Documents"
+#~ msgstr "नवीन दस्तऐवजात उघडा"
+
+#, fuzzy
+#~| msgid "Color Settings"
+#~ msgid "Grid Settings"
+#~ msgstr "रंगाची संयोजना"
+
+#, fuzzy
+#~ msgid "Enable Smooth Zooming"
+#~ msgstr "OpenGL कार्यान्वित करा"
+
+#~ msgid "&Description:"
+#~ msgstr "वर्णन (&D):"
+
+#, fuzzy
+#~| msgid "Filter:"
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "&Filter:"
+#~ msgstr "गाळणी :"
+
+#, fuzzy
+#~ msgid "Duplicate current profile"
+#~ msgstr "वर्तमान स्तराची प्रतिकृती करा"
+
+#, fuzzy
+#~ msgid "Select Layer Mode"
+#~ msgstr "द्वितिय पद्धत चालू/बंद करा"
+
+#, fuzzy
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "द्वितिय पद्धत चालू/बंद करा"
+
+#~ msgid "Reset Zoom to 100%"
+#~ msgstr "झूम 100% वर पुन्हा निश्चित करा"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not save %1.\n"
+#~ "Reason: %2"
+#~ msgstr "व्हेक्टर निवड"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not open %2.\n"
+#~ "Reason: %1"
+#~ msgstr "प्रतिमेत स्तर जोडता आला नाही"
+
+#, fuzzy
+#~| msgid "Move and rotate your canvas"
+#~ msgctxt "Fetching remote image"
+#~ msgid "Do you want to download the image at %1?"
+#~ msgstr "तुमचा कॅनव्हास हलवा व फिरवा"
+
+#, fuzzy
+#~ msgid ""
+#~ "Make the selection using a merged copy of the selected color-labeled "
+#~ "layers"
+#~ msgstr "स्तरासाठी ब्लेंडिंग पद्धत निवडा."
+
+#~ msgid "Fit Page"
+#~ msgstr "पानाप्रमाणे समर्पक बसवा"
+
+#, fuzzy
+#~| msgid "Volume:"
+#~ msgid "Colu&mns:"
+#~ msgstr "आवाज :"
+
+#, fuzzy
+#~| msgid "Edition:"
+#~ msgid "Edit Audio:"
+#~ msgstr "आवृत्ती :"
+
+#, fuzzy
+#~| msgid "Volume:"
+#~ msgctxt "@item:inmenu, slider"
+#~ msgid "Volume:"
+#~ msgstr "आवाज :"
+
+#, fuzzy
+#~| msgid "Open and edit..."
+#~ msgctxt "@item:inmenu"
+#~ msgid "Open audio..."
+#~ msgstr "उघडा व संपादन करा..."
+
+#, fuzzy
+#~| msgid "Save..."
+#~ msgctxt "@item:inmenu"
+#~ msgid "Change audio (%1)..."
+#~ msgstr "साठवा..."
 
 #, fuzzy
 #~| msgid "Start recording macro"
@@ -61597,6 +61655,39 @@ msgstr "25%"
 #, fuzzy
 #~ msgid "Split Strokes"
 #~ msgstr "रंगाचा स्तर (&P)"
+
+#, fuzzy
+#~ msgid "Lossless compression"
+#~ msgstr "संक्षिप्त करा :"
+
+#, fuzzy
+#~| msgid "Tool information"
+#~ msgid "Information"
+#~ msgstr "साधनांची माहिती"
+
+#, fuzzy
+#~| msgid "Sobel vertically"
+#~ msgid "Flip vertically"
+#~ msgstr "सोबेल उभे"
+
+#, fuzzy
+#~ msgid "Bypass filtering"
+#~ msgstr "द्विरेषीय प्रतिस्थापन"
+
+#, fuzzy
+#~| msgid "Multiline"
+#~ msgid "Use multithreaded decoding"
+#~ msgstr "बहुलरेषा"
+
+#, fuzzy
+#~| msgid "Color space:"
+#~ msgid "Color planes: "
+#~ msgstr "रंगांतील अंतर :"
+
+#, fuzzy
+#~| msgid "Alpha darken"
+#~ msgid "Alpha plane: "
+#~ msgstr "अल्फा गडद"
 
 #, fuzzy
 #~| msgid "Color Rate"
@@ -61656,139 +61747,6 @@ msgstr "25%"
 #~ msgstr "0 s"
 
 #, fuzzy
-#~ msgid "Select Layer Mode"
-#~ msgstr "द्वितिय पद्धत चालू/बंद करा"
-
-#, fuzzy
-#~ msgid "Select Multiple Layer Mode"
-#~ msgstr "द्वितिय पद्धत चालू/बंद करा"
-
-#, fuzzy
-#~| msgid "Please enter a name for the filter effect"
-#~ msgid "Please extract ffmpeg from the archive first."
-#~ msgstr "गाळणी परिणामाकरिता नाव दाखल करा"
-
-#, fuzzy
-#~| msgid "Volume:"
-#~ msgid "Colu&mns:"
-#~ msgstr "आवाज :"
-
-#, fuzzy
-#~| msgid "Move and rotate your canvas"
-#~ msgctxt "Fetching remote image"
-#~ msgid "Do you want to download the image at %1?"
-#~ msgstr "तुमचा कॅनव्हास हलवा व फिरवा"
-
-#~ msgid "&Description:"
-#~ msgstr "वर्णन (&D):"
-
-#, fuzzy
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr "व्हेक्टर निवड"
-
-#, fuzzy
-#~ msgid ""
-#~ "Could not open %2.\n"
-#~ "Reason: %1"
-#~ msgstr "प्रतिमेत स्तर जोडता आला नाही"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "पेंटरची साधने (&P)"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "पेंटरची साधने (&P)"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Brush composite"
-#~ msgstr "एकत्रित कुंचला"
-
-#, fuzzy
-#~| msgid "Layer Opacity"
-#~ msgctxt "@item:inmenu Layers Docker settings, combobox"
-#~ msgid "Subtitle Style"
-#~ msgstr "स्तराची अपारदर्शकता"
-
-#, fuzzy
-#~| msgid "None"
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "None"
-#~ msgstr "काही नाही"
-
-#, fuzzy
-#~| msgid "Simple mode"
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "Simple"
-#~ msgstr "साधा पद्धत"
-
-#, fuzzy
-#~ msgid "&Canvas"
-#~ msgstr "कॅनव्हास  01"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "&Reset Zoom"
-#~ msgstr "झूम पुन्हस्थापित करा"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Reset Zoom"
-#~ msgstr "झूम पुन्हस्थापित करा"
-
-#, fuzzy
-#~| msgid "Fit to Page"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page"
-#~ msgstr "पानाप्रमाणे समर्पक बसवा"
-
-#, fuzzy
-#~| msgid "Fit to Width"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Width"
-#~ msgstr "रुंदीप्रमाणे समर्पक बसवा"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Width"
-#~ msgstr "पानाच्या रूंदी प्रमाणे समर्पक बसवा"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Height"
-#~ msgstr "पानाच्या रूंदी प्रमाणे समर्पक बसवा"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Height"
-#~ msgstr "पानाच्या रूंदी प्रमाणे समर्पक बसवा"
-
-#, fuzzy
-#~ msgid "Duplicate current profile"
-#~ msgstr "वर्तमान स्तराची प्रतिकृती करा"
-
-#~ msgid "Reset Zoom to 100%"
-#~ msgstr "झूम 100% वर पुन्हा निश्चित करा"
-
-#~ msgid "Fit Page"
-#~ msgstr "पानाप्रमाणे समर्पक बसवा"
-
-#, fuzzy
-#~ msgid "Make the selection using a merged copy of all layers"
-#~ msgstr "स्तरासाठी ब्लेंडिंग पद्धत निवडा."
-
-#, fuzzy
-#~ msgid ""
-#~ "Make the selection using a merged copy of the selected color-labeled "
-#~ "layers"
-#~ msgstr "स्तरासाठी ब्लेंडिंग पद्धत निवडा."
-
-#, fuzzy
 #~| msgid "&Add to current selection"
 #~ msgid "Current selection"
 #~ msgstr "वर्तमान निवडीत जोडा (&A)"
@@ -61823,6 +61781,26 @@ msgstr "25%"
 #~ msgstr "बहुलरेषा"
 
 #, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "शीयर :"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "शीयर :"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "प्रमाण"
+
+#, fuzzy
+#~| msgid "Reset Canvas Transformations"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "कॅनव्हासमधील बदल पुन्हा निश्चित करा"
+
+#, fuzzy
 #~| msgid "Save to Palette"
 #~ msgctxt "The 'what to fill' section label in enclose and fill tool options"
 #~ msgid "What to fill"
@@ -61841,65 +61819,29 @@ msgstr "25%"
 #~ msgstr "रेंडरिंग इंटेंट"
 
 #, fuzzy
+#~| msgid "Small Tiles"
 #~ msgctxt "Region selection method in enclose and fill tool"
 #~ msgid "All regions"
-#~ msgstr "समान निवड"
+#~ msgstr "लहान फरशा"
 
 #, fuzzy
-#~| msgid "Color Settings"
-#~ msgid "Grid Settings"
-#~ msgstr "रंगाची संयोजना"
+#~ msgctxt "action"
+#~ msgid "&Painter's Tools"
+#~ msgstr "पेंटरची साधने (&P)"
 
 #, fuzzy
-#~ msgid "Enable Smooth Zooming"
-#~ msgstr "OpenGL कार्यान्वित करा"
+#~ msgctxt "action"
+#~ msgid "Painter's Tools"
+#~ msgstr "पेंटरची साधने (&P)"
 
 #, fuzzy
-#~ msgid "Lossless compression"
-#~ msgstr "संक्षिप्त करा :"
-
-#, fuzzy
-#~| msgid "Tool information"
-#~ msgid "Information"
-#~ msgstr "साधनांची माहिती"
-
-#, fuzzy
-#~| msgid "Sobel vertically"
-#~ msgid "Flip vertically"
-#~ msgstr "सोबेल उभे"
-
-#, fuzzy
-#~ msgid "Bypass filtering"
-#~ msgstr "द्विरेषीय प्रतिस्थापन"
-
-#, fuzzy
-#~| msgid "Multiline"
-#~ msgid "Use multithreaded decoding"
-#~ msgstr "बहुलरेषा"
-
-#, fuzzy
-#~| msgid "Color space:"
-#~ msgid "Color planes: "
-#~ msgstr "रंगांतील अंतर :"
-
-#, fuzzy
-#~| msgid "Alpha darken"
-#~ msgid "Alpha plane: "
-#~ msgstr "अल्फा गडद"
+#~ msgctxt "action"
+#~ msgid "Brush composite"
+#~ msgstr "एकत्रित कुंचला"
 
 #, fuzzy
 #~ msgid "Cache Location:"
 #~ msgstr "आकार निर्मिती :"
-
-#, fuzzy
-#~ msgctxt "@item:inmenu Layers Docker settings, checkbox"
-#~ msgid "Display Subtitles"
-#~ msgstr "निवड दर्शवा"
-
-#, fuzzy
-#~ msgctxt "@item:tooltip"
-#~ msgid "Layer opacity and blending mode"
-#~ msgstr "ब्लेंडिंग पद्धत"
 
 #, fuzzy
 #~| msgid "Cannot pick a color as no layer is active."
@@ -61921,19 +61863,74 @@ msgstr "25%"
 #~ msgstr "घनता"
 
 #, fuzzy
+#~ msgid "Disable vsync (needs restart)"
+#~ msgstr "क्रिटा"
+
+#, fuzzy
 #~ msgctxt ""
 #~ "The 'include surrounding regions' checkbox in enclose and fill tool"
 #~ msgid "Include surrounding regions"
 #~ msgstr "उघडा व संपादन करा..."
 
 #, fuzzy
-#~ msgid "Disable vsync (needs restart)"
-#~ msgstr "क्रिटा"
-
-#, fuzzy
 #~| msgid "Constant"
 #~ msgid "Angle Constraints"
 #~ msgstr "स्थिर"
+
+#~ msgid "Open Color Profile"
+#~ msgstr "खुली रंग रूपरेषा"
+
+#, fuzzy
+#~ msgctxt "@title:window"
+#~ msgid "Select a swap directory"
+#~ msgstr "चौकोनी भाग निवडा"
+
+#, fuzzy
+#~ msgid "Add new color profile:"
+#~ msgstr "खुली रंग रूपरेषा"
+
+#, fuzzy
+#~ msgctxt "Color model"
+#~ msgid "&Model:"
+#~ msgstr "मॉडेल :"
+
+#, fuzzy
+#~ msgid "Profi&le:"
+#~ msgstr "रूपरेषा :"
+
+#, fuzzy
+#~ msgid "Cursor Shape:"
+#~ msgstr "कर्सरचा आकार :"
+
+#, fuzzy
+#~| msgid "Stop color."
+#~ msgid "Cursor Color:"
+#~ msgstr "रंग थांबवा."
+
+#, fuzzy
+#~| msgid "General"
+#~ msgid "General:"
+#~ msgstr "सामान्य"
+
+#, fuzzy
+#~ msgid "Enable Touch Rotation"
+#~ msgstr "टॅब्लेट संयोजना"
+
+#, fuzzy
+#~ msgid "Animation:"
+#~ msgstr "चलित"
+
+#, fuzzy
+#~ msgid "Swap File Location:"
+#~ msgstr "आकार निर्मिती :"
+
+#, fuzzy
+#~ msgid "Force Instant Preview in Move Tool"
+#~ msgstr "प्रतिमा पूर्वावलोकन"
+
+#, fuzzy
+#~ msgid "Force Instant Preview in Filters"
+#~ msgstr "प्रतिमा पूर्वावलोकन"
 
 #, fuzzy
 #~ msgid "Intersect"
@@ -61949,6 +61946,15 @@ msgstr "25%"
 #, fuzzy
 #~ msgid "Symmetric Difference"
 #~ msgstr "समानता"
+
+#, fuzzy
+#~ msgid "Loading Plugins Exiv/IO..."
+#~ msgstr "पॅटर्न्स (&P)"
+
+#, fuzzy
+#~ msgctxt "About <Profilename>"
+#~ msgid "About "
+#~ msgstr "क्रिटा"
 
 #, fuzzy
 #~| msgid "Current Layer"
@@ -61974,36 +61980,17 @@ msgstr "25%"
 #~ msgstr "रंगाचा दर"
 
 #, fuzzy
+#~ msgid "Change the color of the line/border"
+#~ msgstr "पार्श्वभूमीच्या रंगातील बदल"
+
+#, fuzzy
 #~ msgctxt "@info:tooltip %2 is shortcut"
 #~ msgid "%1 (%2)"
 #~ msgstr "प्रत बनवा"
 
-#~ msgid "Fuzziness: "
-#~ msgstr "फझीनेस : "
-
 #, fuzzy
-#~| msgid "Opacity:"
-#~ msgid "Opacity Spread: "
-#~ msgstr "अपारदर्शकता :"
-
-#~ msgid "Feathering radius: "
-#~ msgstr "फेदरिंग त्रिज्या"
-
-#, fuzzy
-#~| msgid "Border selection by"
-#~ msgid "Use selection as boundary: "
-#~ msgstr "कडेची निवड द्वारा"
-
-#, fuzzy
-#~| msgid "Threshold: "
-#~ msgctxt "Threshold label in Magnetic Selection's Tool options"
-#~ msgid "Threshold: "
-#~ msgstr "मर्यादा : "
-
-#, fuzzy
-#~| msgid "0 s"
-#~ msgid " kB"
-#~ msgstr "0 s"
+#~ msgid "Hold Last Frame for:"
+#~ msgstr "शेवटी वापरलेले"
 
 #, fuzzy
 #~| msgid "Vector Layer"
@@ -62011,63 +61998,33 @@ msgstr "25%"
 #~ msgstr "व्हेक्टर स्तर"
 
 #, fuzzy
-#~| msgid "Default printer color model:"
-#~ msgid "Default (encoder chooses)"
-#~ msgstr "प्राथमिक छपाई रंग मॉडेल :"
+#~| msgid "Color space:"
+#~ msgid "Colorspace"
+#~ msgstr "रंगांतील अंतर :"
 
 #, fuzzy
-#~ msgid "Cursor Shape:"
-#~ msgstr "कर्सरचा आकार :"
-
-#, fuzzy
-#~| msgid "Stop color."
-#~ msgid "Cursor Color:"
-#~ msgstr "रंग थांबवा."
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Paste"
-#~ msgid "Paste"
-#~ msgstr "चिटकवा"
-
-#, fuzzy
-#~ msgid "Max Gesture"
-#~ msgstr "टेक्शर"
+#~| msgid "Value"
+#~ msgctxt "Label of Brightness value in brush settings"
+#~ msgid "Value"
+#~ msgstr "मूल्य"
 
 #~ msgid "Gaussian distribution"
 #~ msgstr "गॉसियन वितरण"
 
 #, fuzzy
-#~ msgid "Enable Touch Rotation"
-#~ msgstr "टॅब्लेट संयोजना"
+#~ msgctxt "Group as Swatch Group in a Palette"
+#~ msgid "Add Group"
+#~ msgstr "ड्रॉप शॅडो आणा..."
 
 #, fuzzy
-#~ msgid "Hold last frame for:"
-#~ msgstr "शेवटी वापरलेले"
-
-#, fuzzy
-#~ msgid "Fast mode:"
+#~ msgid "Fast mode: "
 #~ msgstr "फॅक्स पद्धत :"
 
 #, fuzzy
-#~| msgid "Threshold:"
-#~ msgctxt "The Threshold label in Fill tool options"
-#~ msgid "Threshold:"
-#~ msgstr "मर्यादा :"
-
-#, fuzzy
-#~| msgid "Opacity decrease"
-#~ msgctxt "The Opacity Spread label in Fill tool options"
-#~ msgid "Opacity Spread:"
-#~ msgstr "अपारदर्शकता घट"
-
-#, fuzzy
-#~ msgid "Grow selection:"
+#~ msgid "Grow selection: "
 #~ msgstr "निवड वाढवा द्वारा"
 
-#, fuzzy
-#~| msgid "Feathering radius: "
-#~ msgid "Feathering radius:"
+#~ msgid "Feathering radius: "
 #~ msgstr "फेदरिंग त्रिज्या"
 
 #, fuzzy
@@ -62106,12 +62063,6 @@ msgstr "25%"
 #~ "हे चेक केल्यावर वर्तमान स्तराच्या रंकगांडे पाहू नका, पण सर्व \"सिलेक्टेड एरिया \"भरून काढा"
 
 #, fuzzy
-#~| msgid "Painting Mode"
-#~ msgctxt "The 'continuous fill' label in Fill tool options"
-#~ msgid "Continuous Fill:"
-#~ msgstr "पेंटिंग पद्धत"
-
-#, fuzzy
 #~| msgid "Current Layer"
 #~ msgctxt ""
 #~ "Option in fill tool: take only the current layer into account when "
@@ -62135,82 +62086,34 @@ msgstr "25%"
 #~ msgstr "रंगाचा दर"
 
 #, fuzzy
-#~| msgid "General"
-#~ msgid "General:"
-#~ msgstr "सामान्य"
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Paste"
+#~ msgid "Paste"
+#~ msgstr "चिटकवा"
+
+#~ msgid "Fuzziness: "
+#~ msgstr "फझीनेस : "
 
 #, fuzzy
-#~ msgid "Animation:"
-#~ msgstr "चलित"
+#~| msgid "Border selection by"
+#~ msgid "Use selection as boundary: "
+#~ msgstr "कडेची निवड द्वारा"
 
 #, fuzzy
-#~ msgid "Swap File Location:"
-#~ msgstr "आकार निर्मिती :"
+#~| msgid "Threshold: "
+#~ msgctxt "Threshold label in Magnetic Selection's Tool options"
+#~ msgid "Threshold: "
+#~ msgstr "मर्यादा : "
 
 #, fuzzy
-#~ msgid "Force Instant Preview in Move Tool"
-#~ msgstr "प्रतिमा पूर्वावलोकन"
-
-#, fuzzy
-#~ msgid "Force Instant Preview in Filters"
-#~ msgstr "प्रतिमा पूर्वावलोकन"
-
-#~ msgid "Open Color Profile"
-#~ msgstr "खुली रंग रूपरेषा"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Select a swap directory"
-#~ msgstr "चौकोनी भाग निवडा"
-
-#, fuzzy
-#~ msgid "Add new color profile:"
-#~ msgstr "खुली रंग रूपरेषा"
-
-#, fuzzy
-#~| msgid "Color space:"
-#~ msgid "Colorspace"
-#~ msgstr "रंगांतील अंतर :"
-
-#, fuzzy
-#~ msgctxt "Color model"
-#~ msgid "&Model:"
-#~ msgstr "मॉडेल :"
-
-#, fuzzy
-#~ msgid "Profi&le:"
-#~ msgstr "रूपरेषा :"
-
-#, fuzzy
-#~ msgctxt "About <Profilename>"
-#~ msgid "About "
-#~ msgstr "क्रिटा"
-
-#, fuzzy
-#~| msgid "Softness"
-#~ msgctxt "The Softness label in Fill tool options"
-#~ msgid "Softness:"
-#~ msgstr "सौम्यता"
-
-#, fuzzy
-#~| msgid "Softness"
-#~ msgid "Softness: "
-#~ msgstr "सौम्यता"
+#~| msgid "0 s"
+#~ msgid " kB"
+#~ msgstr "0 s"
 
 #, fuzzy
 #~| msgid "0.0"
 #~ msgid "0/0"
 #~ msgstr "0.0"
-
-#, fuzzy
-#~ msgid "Change the color of the line/border"
-#~ msgstr "पार्श्वभूमीच्या रंगातील बदल"
-
-#, fuzzy
-#~| msgid "Value"
-#~ msgctxt "Label of Brightness value in brush settings"
-#~ msgid "Value"
-#~ msgstr "मूल्य"
 
 #~ msgid ""
 #~ "The mixing option mixes the paint on the brush with that on the canvas."
@@ -62225,12 +62128,6 @@ msgstr "25%"
 #~ msgctxt "action"
 #~ msgid "Brightness/Contrast curve"
 #~ msgstr "प्रखरता/विरोधाभास वलय (&B)..."
-
-#, fuzzy
-#~| msgid "Threshold: "
-#~ msgctxt "The Threshold label in Fill tool options"
-#~ msgid "Threshold: "
-#~ msgstr "मर्यादा : "
 
 #, fuzzy
 #~ msgctxt "New layer style"
@@ -62314,12 +62211,7 @@ msgstr "25%"
 #, fuzzy
 #~ msgctxt "Error message when saving a .kra file"
 #~ msgid "Could not save resource %1 to the kra file."
-#~ msgstr "व्हेक्टर निवड"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Add a new &Group Layer"
-#~ msgstr "ड्रॉप शॅडो आणा..."
+#~ msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
 #, fuzzy
 #~| msgctxt "(qtundo-format)"
@@ -62493,36 +62385,16 @@ msgstr "25%"
 
 #, fuzzy
 #~ msgid "Could not save preset under name %1, it already exists."
-#~ msgstr "व्हेक्टर निवड"
-
-#, fuzzy
-#~ msgid "Could not update preset %1."
-#~ msgstr "व्हेक्टर निवड"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Couldn't add the session"
 #~ msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
 #, fuzzy
-#~ msgctxt "Warning about not being able to rename a session"
-#~ msgid "Renaming the session failed."
-#~ msgstr "पानाचे नाव बदला"
+#~ msgid "Could not update preset %1."
+#~ msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
 #, fuzzy
 #~| msgid "Facing pages"
 #~ msgid "Clean Up"
 #~ msgstr "समोरील पाने"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Filters"
-#~ msgstr "गाळणी :"
-
-#, fuzzy
-#~| msgid "Cutoff:"
-#~ msgid "Cutoff"
-#~ msgstr "कट ऑफ :"
 
 #, fuzzy
 #~ msgid "Export Directory: "
@@ -62549,22 +62421,14 @@ msgstr "25%"
 #~ msgstr "पान"
 
 #, fuzzy
-#~| msgid "Sobel horizontally"
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cells horizontally"
-#~ msgstr "सोबेल आडवे"
+#~ msgctxt "action"
+#~ msgid "Filters"
+#~ msgstr "गाळणी :"
 
 #, fuzzy
-#~| msgid "Sobel vertically"
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cell vertically"
-#~ msgstr "सोबेल उभे"
-
-#, fuzzy
-#~| msgid "Sobel vertically"
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cells vertically"
-#~ msgstr "सोबेल उभे"
+#~| msgid "Cutoff:"
+#~ msgid "Cutoff"
+#~ msgstr "कट ऑफ :"
 
 #, fuzzy
 #~| msgid "Auto"
@@ -62573,19 +62437,10 @@ msgstr "25%"
 #~ msgstr "स्वयंचलित"
 
 #, fuzzy
-#~ msgid "Loading Plugins Exiv/IO..."
-#~ msgstr "पॅटर्न्स (&P)"
-
-#, fuzzy
 #~| msgid "Exif"
 #~ msgctxt "metadata editor page"
 #~ msgid "Exif"
 #~ msgstr "Exif"
-
-#, fuzzy
-#~| msgid "Color background"
-#~ msgid "No store backend"
-#~ msgstr "रंगीत पार्श्वभूमी"
 
 #, fuzzy
 #~| msgid "Thumbnails"
@@ -62593,35 +62448,14 @@ msgstr "25%"
 #~ msgstr "लघुप्रतिमा"
 
 #, fuzzy
+#~| msgid "Color background"
+#~ msgid "No store backend"
+#~ msgstr "रंगीत पार्श्वभूमी"
+
+#, fuzzy
 #~| msgid "TextLabel"
 #~ msgid "KSqueezedTextLabel"
 #~ msgstr "पाठ्य-लेबल"
-
-#, fuzzy
-#~| msgid ""
-#~| "<p>Adjust the compression time. Better compression takes longer.\n"
-#~| "<br>Note: the compression level does not change the quality of the "
-#~| "result.</p>"
-#~ msgid ""
-#~ "<p>Adjust the compression time. Better compression takes longer.\n"
-#~ "                <br>Note: the compression level does not change the "
-#~ "quality of the result.</p>"
-#~ msgstr ""
-#~ "<p>संक्षिप्त करण्याचा कालावधी सुस्थित करा. चांगल्या दाबासाठी जास्त वेळ लागतो.\n"
-#~ "<br> टीपः संक्षिप्त करण्याची पातळी परिणामांची गुणवत्ता बदलत नाही</p>"
-
-#, fuzzy
-#~| msgid ""
-#~| "<p>Adjust the compression time. Better compression takes longer.\n"
-#~| "<br>Note: the compression level does not change the quality of the "
-#~| "result.</p>"
-#~ msgid ""
-#~ "<p>Adjust the compression time. Better compression takes longer. "
-#~ "<br>Note: the compression level does not change the quality of the result."
-#~ "</p>"
-#~ msgstr ""
-#~ "<p>संक्षिप्त करण्याचा कालावधी सुस्थित करा. चांगल्या दाबासाठी जास्त वेळ लागतो.\n"
-#~ "<br> टीपः संक्षिप्त करण्याची पातळी परिणामांची गुणवत्ता बदलत नाही</p>"
 
 #, fuzzy
 #~ msgctxt "Error message when saving a .kra file"
@@ -63485,6 +63319,10 @@ msgstr "25%"
 #~ msgstr "निवड पद्धत"
 
 #, fuzzy
+#~ msgid "Select Behind Blending Mode"
+#~ msgstr "ब्लेंडिंग पद्धत"
+
+#, fuzzy
 #~ msgid "Select Clear Blending Mode"
 #~ msgstr "ब्लेंडिंग पद्धत"
 
@@ -63725,9 +63563,6 @@ msgstr "25%"
 
 #~ msgid "1 : 1"
 #~ msgstr "1 : 1"
-
-#~ msgid "Update preview"
-#~ msgstr "पूर्वावलोकन अद्ययावत करा"
 
 #~ msgid "Automatically update the preview whenever the filter settings change"
 #~ msgstr "जेव्हा गाळणीची संयोजना बदलतील तेव्हा आपोआप पूर्वावलोकन अद्ययावत होईल"
@@ -64634,9 +64469,6 @@ msgstr "25%"
 #~ msgctxt "No border - has to fit in 48pixels"
 #~ msgid "None"
 #~ msgstr "काही नाही"
-
-#~ msgid "No Border"
-#~ msgstr "किनार नाही"
 
 #, fuzzy
 #~| msgid "Draw a straight line with the current brush"
@@ -65930,6 +65762,10 @@ msgstr "25%"
 #~ msgstr "निर्यात स्तर"
 
 #, fuzzy
+#~ msgid "Show color blip"
+#~ msgstr "रंगाचा इतिहास"
+
+#, fuzzy
 #~ msgid "Show preview while editing a mask"
 #~ msgstr "पेंटिंग करताना रूपरेषा दर्शवा"
 
@@ -67001,11 +66837,6 @@ msgstr "25%"
 #~ msgid "Change Vector Data"
 #~ msgstr "व्हेक्टर डेटा बदला"
 
-#, fuzzy
-#~| msgid "Separate Image"
-#~ msgid "Replace Image"
-#~ msgstr "वेगळी प्रतिमा"
-
 #~ msgid "Vector image"
 #~ msgstr "व्हेक्टर प्रतिमा"
 
@@ -67145,6 +66976,9 @@ msgstr "25%"
 #, fuzzy
 #~ msgid "Brush Radius:"
 #~ msgstr "अंधुक त्रिज्या"
+
+#~ msgid "Opacity decrease"
+#~ msgstr "अपारदर्शकता घट"
 
 #~ msgid "Saturation decrease"
 #~ msgstr "गडदपणात घट"
@@ -68065,12 +67899,6 @@ msgstr "25%"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Undo stack size:"
 #~ msgstr "स्टॅकचा आकार पूर्ववत करा :"
-
-#, fuzzy
-#~| msgid "Create backup file "
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Create backup file "
-#~ msgstr "बॅक अप फाईल तयार करा "
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
@@ -70531,6 +70359,12 @@ msgstr "25%"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "s"
 #~ msgstr "s"
+
+#, fuzzy
+#~| msgid "Dynamics settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dynamics settings"
+#~ msgstr "डायनॅमिक्स जुळणी"
 
 #, fuzzy
 #~| msgid "Fixed angle"
@@ -77581,6 +77415,11 @@ msgstr "25%"
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Activate previous layer"
 #~ msgstr "पूर्वीचा स्तर सक्रिय करा"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) action"
+#~ msgid "&Group Layer"
+#~ msgstr "समूह स्तर (&G)"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-25 00:43+0000\n"
+"POT-Creation-Date: 2023-07-27 02:25+0000\n"
 "PO-Revision-Date: 2023-06-06 00:31-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -12997,7 +12997,7 @@ msgstr "ヘルプ(&H)"
 msgid "File"
 msgstr "ファイル"
 
-#: krita/krita5.xmlgui:419
+#: krita/krita5.xmlgui:420
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "ブラシなど"
@@ -14061,10 +14061,12 @@ msgstr "カーソル周辺を上下/左右対称表示"
 #. i18n: context: iconText @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:752 krita/kritamenu.action:754
 #: krita/kritamenu.action:755
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Mirror View Around Cursor"
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr "キャンバス周辺を左右反転表示"
+msgstr "カーソル周辺を上下/左右対称表示"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
@@ -14245,11 +14247,10 @@ msgstr "表示:"
 #. i18n: context: toolTip @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:876
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reset to default value"
+#| msgid "Reset the options to their default values"
 msgctxt "action"
 msgid "Reset zoom, rotation, and mirroring to their default states."
-msgstr "デフォルトの値に戻す"
+msgstr "設定項目をデフォルトの値に戻す"
 
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
@@ -15931,13 +15932,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "ワークスペース"
 
-#: krita/main.cc:521
+#: krita/main.cc:527
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "致命的エラー"
 
-#: krita/main.cc:522
+#: krita/main.cc:528
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15946,14 +15947,14 @@ msgstr ""
 "Krita は Wayland プラットフォームをサポートしていません。Wayland で Krita を"
 "起動する場合は XWayland を使用してください。Krita を終了します。"
 
-#: krita/main.cc:632 libs/ui/KisApplication.cpp:409
-#: libs/ui/KisApplication.cpp:680
+#: krita/main.cc:646 libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: 警告"
 
-#: krita/main.cc:633
+#: krita/main.cc:647
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15965,12 +15966,12 @@ msgstr ""
 "サポートされているバージョンの Windows に更新してください: Windows 7、8、"
 "8.1、10"
 
-#: krita/main.cc:655 krita/main.cc:660
+#: krita/main.cc:669 krita/main.cc:674
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita タブレットサポート"
 
-#: krita/main.cc:656
+#: krita/main.cc:670
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15981,7 +15982,7 @@ msgstr ""
 "タブレットを使用している場合は、タブレットドライバが正しくインストールされて"
 "いることを確認してください。"
 
-#: krita/main.cc:661
+#: krita/main.cc:675
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16076,9 +16077,10 @@ msgstr ""
 
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:28
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:35
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "could not save palettes"
 msgid "Could not access brush tip metadata"
-msgstr "ブラシ形状のメタデータにアクセスできませんでした"
+msgstr "パレットを保存できませんでした"
 
 #: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
 #, kde-format
@@ -16423,25 +16425,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3744
+#: libs/flake/text/KoSvgTextShape.cpp:3751
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "テキスト"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3746
-#: libs/flake/text/KoSvgTextShape.cpp:3754
+#: libs/flake/text/KoSvgTextShape.cpp:3753
+#: libs/flake/text/KoSvgTextShape.cpp:3761
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG テキストシェイプ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3752
+#: libs/flake/text/KoSvgTextShape.cpp:3759
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG テキスト"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3766
-#: libs/flake/text/KoSvgTextShape.cpp:3781
+#: libs/flake/text/KoSvgTextShape.cpp:3773
+#: libs/flake/text/KoSvgTextShape.cpp:3788
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17202,9 +17204,10 @@ msgstr "画像をインポート"
 msgid "Selection Mask"
 msgstr "選択マスク"
 
-#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2554
+#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2577
 #: plugins/impex/psd/psd_loader.cpp:193
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Background"
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "背景"
@@ -17299,7 +17302,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "プロファイルを適用"
 
-#: libs/image/kis_image.cc:2486
+#: libs/image/kis_image.cc:2487
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "選択範囲を切り取り"
@@ -17432,9 +17435,7 @@ msgstr "制御描線の編集"
 msgid "Show Coloring"
 msgstr "塗り分けを表示"
 
-#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
 #: libs/image/kis_layer_properties_icons.cpp:32
-#: libs/ui/forms/KisWelcomePage.ui:1572
 #, kde-format
 msgid "Open File"
 msgstr "ファイルを開く"
@@ -17512,8 +17513,8 @@ msgid "Processing"
 msgstr "処理中"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1420
-#: libs/ui/KisMainWindow.cpp:1700 libs/ui/KisMainWindow.cpp:1713
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1750 libs/ui/KisMainWindow.cpp:1763
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -17984,7 +17985,7 @@ msgstr "変形マスク"
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
-#: plugins/impex/tiff/kis_tiff_import.cc:562
+#: plugins/impex/tiff/kis_tiff_import.cc:566
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
 msgid "Transparency Mask"
@@ -18272,8 +18273,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "ドキュメント"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2064
-#: libs/ui/KisMainWindow.cpp:2147
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2121
+#: libs/ui/KisMainWindow.cpp:2204
 #, kde-format
 msgid "Import frames"
 msgstr "フレームをインポート"
@@ -19534,7 +19535,7 @@ msgstr "アウト"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:498 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:504 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19570,9 +19571,9 @@ msgstr "ローカルリソース"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19588,24 +19589,24 @@ msgstr "ローカルリソース"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:979
-#: libs/ui/KisApplication.cpp:982 libs/ui/KisApplication.cpp:998
-#: libs/ui/KisApplication.cpp:1030 libs/ui/KisApplication.cpp:1044
-#: libs/ui/KisApplication.cpp:1072 libs/ui/KisDocument.cpp:946
-#: libs/ui/KisDocument.cpp:953 libs/ui/KisDocument.cpp:973
-#: libs/ui/KisDocument.cpp:1881 libs/ui/KisDocument.cpp:1925
-#: libs/ui/KisDocument.cpp:1931 libs/ui/KisDocument.cpp:1944
-#: libs/ui/KisDocument.cpp:1948 libs/ui/KisMainWindow.cpp:979
-#: libs/ui/KisMainWindow.cpp:1095 libs/ui/KisMainWindow.cpp:1221
-#: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1924
-#: libs/ui/KisMainWindow.cpp:1933 libs/ui/KisMainWindow.cpp:2072
-#: libs/ui/KisMainWindow.cpp:2133 libs/ui/KisMainWindow.cpp:2154
-#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:588
-#: libs/ui/KisPart.cpp:591 libs/ui/KisReferenceImage.cpp:175
-#: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
-#: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:985
+#: libs/ui/KisApplication.cpp:988 libs/ui/KisApplication.cpp:1004
+#: libs/ui/KisApplication.cpp:1036 libs/ui/KisApplication.cpp:1050
+#: libs/ui/KisApplication.cpp:1078 libs/ui/KisDocument.cpp:969
+#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
+#: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
+#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:981
+#: libs/ui/KisMainWindow.cpp:1097 libs/ui/KisMainWindow.cpp:1223
+#: libs/ui/KisMainWindow.cpp:1320 libs/ui/KisMainWindow.cpp:1981
+#: libs/ui/KisMainWindow.cpp:1990 libs/ui/KisMainWindow.cpp:2129
+#: libs/ui/KisMainWindow.cpp:2190 libs/ui/KisMainWindow.cpp:2211
+#: libs/ui/KisMainWindow.cpp:2826 libs/ui/KisPart.cpp:578
+#: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
+#: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
-#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:738
 #: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20053,7 +20054,8 @@ msgid "Tag Url"
 msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:670
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resources"
 msgid "Resource"
 msgstr "リソース"
 
@@ -20111,8 +20113,8 @@ msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "リソースを削除"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:334
-#: libs/ui/KisMainWindow.cpp:2569
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:335
+#: libs/ui/KisMainWindow.cpp:2626
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20558,7 +20560,7 @@ msgstr ""
 "す。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2174
+#: libs/ui/KisMainWindow.cpp:2231
 #, kde-format
 msgid "Render Animation"
 msgstr "アニメーションを出力"
@@ -20602,18 +20604,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "該当なし"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:392
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:472
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
@@ -20628,20 +20630,20 @@ msgstr ""
 "ション GIF 画像のフレームレートは50が上限です。フレームレートは50フレーム/秒"
 "に削減されます。</p></body></html>"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:479
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgid "Warning(s):"
 msgstr "警告:"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #, fuzzy, kde-format
 #| msgid ""
 #| "The location of FFmpeg is invalid. Please select the correct location of "
@@ -20651,7 +20653,7 @@ msgid ""
 "correct location of an FFmpeg executable on your system."
 msgstr "FFmpeg の位置が不正です。"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "出力結果となるファイル名を入力してください"
@@ -20885,7 +20887,7 @@ msgstr "動画情報の読み込みに失敗しました"
 msgid "FFMpeg Crashed"
 msgstr "FFMpeg が停止しました"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:614
+#: libs/ui/animation/KisFFMpegWrapper.cpp:620
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -22633,7 +22635,7 @@ msgid "Numerical"
 msgstr "数字順"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, kde-format
 msgid "Import Images"
 msgstr "画像をインポート"
@@ -22679,7 +22681,7 @@ msgstr "レイヤーのプロパティ"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -22779,7 +22781,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "新しいスタイル名を入力"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2580
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2637
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -23068,10 +23070,10 @@ msgstr "%1 は有効な画像ファイルではありません!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:925
 #, fuzzy, kde-format
-#| msgid "Warning: this location is not writable."
+#| msgid "2. The resource location at %1 is not writable."
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
-msgstr "警告:その場所へは書き込みできません。"
+msgstr "2. リソースの場所は書き込みできません。%1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1027
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1136
@@ -23763,38 +23765,116 @@ msgstr "アプリケーションの起動時に常にこのテンプレートを
 msgid "Always use this template"
 msgstr "常にこのテンプレートを使用する"
 
+#. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
+#: libs/ui/forms/KisWelcomePage.ui:48
+#, fuzzy, kde-format
+#| msgid "Support Krita"
+msgid "Support Krita!"
+msgstr "Krita を支援"
+
+#. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
+#: libs/ui/forms/KisWelcomePage.ui:79
+#, fuzzy, kde-format
+#| msgid "Open Images"
+msgid "Recent Images"
+msgstr "画像を開く"
+
+#. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
+#: libs/ui/forms/KisWelcomePage.ui:103
+#, kde-format
+msgctxt "Welcome Screen Recent Document List's Clear link Label"
+msgid "Clear"
+msgstr "クリア"
+
+#. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
+#: libs/ui/forms/KisWelcomePage.ui:154
+#, kde-format
+msgid ""
+"You don't seem to have any\n"
+"recently opened documents"
+msgstr "最近開いたドキュメントが見つかりません"
+
+#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:322
+#, kde-format
+msgid "Community"
+msgstr "コミュニティ"
+
+#. i18n: ectx: property (text), widget (QLabel, manualLink)
+#: libs/ui/forms/KisWelcomePage.ui:391 libs/ui/KisWelcomePageWidget.cpp:391
+#, kde-format
+msgid "User Manual"
+msgstr "ユーザ マニュアル"
+
+#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
+#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:394
+#, kde-format
+msgid "Support Krita"
+msgstr "Krita を支援"
+
+#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
+#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:403
+#, kde-format
+msgid "Powered by KDE"
+msgstr "Powered by KDE"
+
+#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
+#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:400
+#, kde-format
+msgid "Source Code"
+msgstr "ソースコード"
+
+# normal distance + absolute value
+#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
+#: libs/ui/forms/KisWelcomePage.ui:748 libs/ui/KisWelcomePageWidget.cpp:388
+#, kde-format
+msgid "Getting Started"
+msgstr "はじめる"
+
+#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
+#: libs/ui/forms/KisWelcomePage.ui:835 libs/ui/KisWelcomePageWidget.cpp:385
+#, kde-format
+msgid "User Community"
+msgstr "ユーザ コミュニティ"
+
+#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
+#: libs/ui/forms/KisWelcomePage.ui:922 libs/ui/KisWelcomePageWidget.cpp:397
+#, kde-format
+msgid "Krita Website"
+msgstr "Krita のウェブサイト"
+
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:168
+#: libs/ui/forms/KisWelcomePage.ui:1066
 #, kde-format
 msgid "News"
 msgstr "ニュース"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:191
+#: libs/ui/forms/KisWelcomePage.ui:1089
 #, kde-format
 msgid "News options"
 msgstr "ニュースオプション"
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:314
+#: libs/ui/forms/KisWelcomePage.ui:1212
 #, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr "Krita バージョン X.X.X が利用可能です"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:365
+#: libs/ui/forms/KisWelcomePage.ui:1263
 #, kde-format
 msgid "Update now!"
 msgstr "今すぐ更新する!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:372
+#: libs/ui/forms/KisWelcomePage.ui:1270
 #, kde-format
 msgid "Show details"
 msgstr "詳細を表示"
 
-#. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:455 libs/ui/KisWelcomePageWidget.cpp:398
+#. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
+#: libs/ui/forms/KisWelcomePage.ui:1353 libs/ui/KisWelcomePageWidget.cpp:405
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -23805,102 +23885,38 @@ msgstr ""
 "COLOR_PLACEHOLDER; text-decoration: underline;\">お知らせを有効化</a> するこ"
 "とが可能です"
 
-#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:562
-#, kde-format
-msgid "Community"
-msgstr "コミュニティ"
-
-#. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:647 libs/ui/KisWelcomePageWidget.cpp:384
-#, kde-format
-msgid "User Manual"
-msgstr "ユーザ マニュアル"
-
-# normal distance + absolute value
-#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:737 libs/ui/KisWelcomePageWidget.cpp:381
-#, kde-format
-msgid "Getting Started"
-msgstr "はじめる"
-
-#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:824 libs/ui/KisWelcomePageWidget.cpp:378
-#, kde-format
-msgid "User Community"
-msgstr "ユーザ コミュニティ"
-
-#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:911 libs/ui/KisWelcomePageWidget.cpp:390
-#, kde-format
-msgid "Krita Website"
-msgstr "Krita のウェブサイト"
-
-#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:1001 libs/ui/KisWelcomePageWidget.cpp:393
-#, kde-format
-msgid "Source Code"
-msgstr "ソースコード"
-
-#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:1088 libs/ui/KisWelcomePageWidget.cpp:387
-#, kde-format
-msgid "Support Krita"
-msgstr "Krita を支援"
-
-#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:1178 libs/ui/KisWelcomePageWidget.cpp:396
-#, kde-format
-msgid "Powered by KDE"
-msgstr "Powered by KDE"
-
-#. i18n: ectx: property (text), widget (QLabel, dragImageHereLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1261
-#, kde-format
-msgid "Drag an image into the window to open"
-msgstr "ウィンドウに画像をドラッグして開く"
-
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1361
+#: libs/ui/forms/KisWelcomePage.ui:1417
 #, kde-format
 msgid "Start"
 msgstr "開始"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1428 libs/ui/KisWelcomePageWidget.cpp:625
+#: libs/ui/forms/KisWelcomePage.ui:1484 libs/ui/KisWelcomePageWidget.cpp:632
 #, kde-format
 msgid "DEV BUILD"
 msgstr "開発ビルド"
 
 #. i18n: ectx: property (text), widget (QPushButton, newFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:1504
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
+#: libs/ui/forms/KisWelcomePage.ui:1560 libs/ui/forms/wdgimageproperties.ui:18
+#: libs/ui/forms/wdgnewimage.ui:18
+#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
 #, kde-format
-msgid "New File"
-msgstr "新しいファイル"
+msgid "New Image"
+msgstr "新しい画像"
 
-#. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1655
-#, kde-format
-msgid "Recent Documents"
-msgstr "最近開いたドキュメント"
-
-#. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:1713
-#, kde-format
-msgctxt "Welcome Screen Recent Document List's Clear link Label"
-msgid "Clear"
-msgstr "クリア"
-
-#. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:1766
-#, kde-format
-msgid ""
-"You don't seem to have any\n"
-"recently opened documents"
-msgstr "最近開いたドキュメントが見つかりません"
+#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
+#: libs/ui/forms/KisWelcomePage.ui:1628
+#, fuzzy, kde-format
+#| msgid "Open Images"
+msgid "Open Image"
+msgstr "画像を開く"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1874
+#: libs/ui/forms/KisWelcomePage.ui:1712
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -24883,9 +24899,9 @@ msgstr "優先出力形式:"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:283
 #, fuzzy, kde-format
-#| msgid "Decoration:"
+#| msgid "Canvas Acceleration"
 msgid "Canvas Decorations"
-msgstr "装飾:"
+msgstr "キャンバスのアクセラレーション"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgdisplaysettings.ui:289
@@ -24969,9 +24985,9 @@ msgstr "選択範囲オーバーレイ:"
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
 #, fuzzy, kde-format
-#| msgid "Selection Overlay:"
+#| msgid "Line Opacity"
 msgid "Outline opacity:"
-msgstr "選択範囲オーバーレイ:"
+msgstr "カーブ線の不透明度"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:440
@@ -25920,7 +25936,9 @@ msgstr "累積で元に戻すを有効化"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1511
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Tablet mapping settings"
+#| msgid "Advanced..."
 msgid "Advanced..."
 msgstr "詳細..."
 
@@ -26045,15 +26063,6 @@ msgstr "回転:"
 #, kde-format
 msgid "Scale:"
 msgstr "倍率:"
-
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:18
-#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
-#, kde-format
-msgid "New Image"
-msgstr "新しい画像"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
@@ -26702,7 +26711,7 @@ msgstr "現在のブラシプリセット"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1076
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -27660,7 +27669,7 @@ msgid "HSV CCW"
 msgstr "HSV (反時計回り)"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:351
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:352
 #, kde-format
 msgid "Sessions"
 msgstr "セッション"
@@ -29153,7 +29162,7 @@ msgstr "描画色セレクターを開く(&O)"
 msgid "&Open Background color selector"
 msgstr "背景色セレクターを開く(&O)"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:347
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -29166,8 +29175,8 @@ msgstr "パターン"
 msgid "Custom Pattern"
 msgstr "カスタムパターン"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:332
-#: libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
+#: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, kde-format
@@ -29399,9 +29408,10 @@ msgid "Mirror View Around Cursor"
 msgstr "カーソル周辺を左右反転表示"
 
 #: libs/ui/kis_mirror_manager.cpp:48
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Mirror View Around Cursor"
 msgid "Mirror View Around Canvas"
-msgstr "キャンバス周辺を左右反転表示"
+msgstr "カーソル周辺を左右反転表示"
 
 #: libs/ui/kis_node_manager.cpp:453
 #, kde-format
@@ -29922,62 +29932,62 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "倍率: %1 %"
 
-#: libs/ui/KisApplication.cpp:324
+#: libs/ui/KisApplication.cpp:325
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, kde-format
 msgid "Brush presets"
 msgstr "ブラシプリセット"
 
 # tip は筆記具の先端 (Krita では描線のセグメントとなる画像データ) を指します
-#: libs/ui/KisApplication.cpp:327 libs/ui/KisApplication.cpp:328
-#: libs/ui/KisApplication.cpp:329 libs/ui/KisApplication.cpp:330
+#: libs/ui/KisApplication.cpp:328 libs/ui/KisApplication.cpp:329
+#: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
 #, kde-format
 msgid "Brush tips"
 msgstr "ブラシ形状"
 
-#: libs/ui/KisApplication.cpp:335
+#: libs/ui/KisApplication.cpp:336
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
 #, kde-format
 msgid "Palettes"
 msgstr "パレット"
 
-#: libs/ui/KisApplication.cpp:348 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
 msgid "Workspaces"
 msgstr "ワークスペース"
 
-#: libs/ui/KisApplication.cpp:349
+#: libs/ui/KisApplication.cpp:350
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "SVG シンボルライブラリ"
 
-#: libs/ui/KisApplication.cpp:350 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr "画面レイアウト"
 
-#: libs/ui/KisApplication.cpp:352
+#: libs/ui/KisApplication.cpp:353
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
 #, kde-format
 msgid "Gamut masks"
 msgstr "色域マスク"
 
-#: libs/ui/KisApplication.cpp:354
+#: libs/ui/KisApplication.cpp:355
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExp スクリプト"
 
-#: libs/ui/KisApplication.cpp:359
+#: libs/ui/KisApplication.cpp:360
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "レイヤースタイル"
 
-#: libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:373
 #, kde-format
 msgid ""
 "%1\n"
@@ -29988,13 +29998,13 @@ msgstr ""
 "\n"
 "Krita はすぐに終了します。"
 
-#: libs/ui/KisApplication.cpp:372 libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:373 libs/ui/KisApplication.cpp:379
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: 重大なエラー"
 
-#: libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:379
 #, kde-format
 msgid ""
 "\n"
@@ -30005,7 +30015,7 @@ msgstr ""
 "\n"
 "Krita はすぐに終了します。"
 
-#: libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:411
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -30016,69 +30026,69 @@ msgstr ""
 "これは推奨されません。\n"
 "代わりに 64 ビット版をダウンロード・インストールしてください。"
 
-#: libs/ui/KisApplication.cpp:427
+#: libs/ui/KisApplication.cpp:428
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "グローバルを初期化..."
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:459
 #, kde-format
 msgid "Adding resource types..."
 msgstr "リソースの種類を追加..."
 
-#: libs/ui/KisApplication.cpp:462
+#: libs/ui/KisApplication.cpp:463
 #, fuzzy, kde-format
 #| msgid "Loading Pages..."
 msgid "Loading plugins..."
 msgstr "ページを読み込み中..."
 
-#: libs/ui/KisApplication.cpp:468
+#: libs/ui/KisApplication.cpp:469
 #, fuzzy, kde-format
 #| msgid "Adding resource types..."
 msgid "Loading resources..."
 msgstr "リソースの種類を追加..."
 
-#: libs/ui/KisApplication.cpp:477
+#: libs/ui/KisApplication.cpp:478
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "メインウィンドウを読み込み中..."
 
-#: libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:510
 #, fuzzy, kde-format
 #| msgid "Scanning..."
 msgid "Launching..."
 msgstr "読み込み中..."
 
-#: libs/ui/KisApplication.cpp:578
+#: libs/ui/KisApplication.cpp:579
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "MIME タイプが見つかりません、-mimetype オプションを試してください"
 
-#: libs/ui/KisApplication.cpp:634
+#: libs/ui/KisApplication.cpp:635
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "アニメーションフレームのレンダリングに失敗しました!"
 
-#: libs/ui/KisApplication.cpp:661 libs/ui/KisApplication.cpp:851
+#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:857
 #, kde-format
 msgid "File layer"
 msgstr "ファイル参照レイヤー"
 
-#: libs/ui/KisApplication.cpp:669 libs/ui/KisApplication.cpp:674
-#: libs/ui/KisApplication.cpp:845 libs/ui/KisApplication.cpp:859
-#: libs/ui/KisApplication.cpp:864
+#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:851 libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:870
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: 警告"
 
-#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:866
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 "%1 をファイル参照レイヤーとして追加できません: ファイルが存在しません。"
 
-#: libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30099,7 +30109,7 @@ msgstr ""
 "場合は、設定 ([設定]->[全般]->[ウィンドウ]) の「Krita のインスタンスを一つに"
 "制限」チェックボックスをオンにしてください。"
 
-#: libs/ui/KisApplication.cpp:681
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30110,33 +30120,33 @@ msgstr ""
 "--new-image オプションを使用して新しいファイルを作成するか、既存のファイルを"
 "開いてください。"
 
-#: libs/ui/KisApplication.cpp:846
+#: libs/ui/KisApplication.cpp:852
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "ファイルを開けませんでした。%1"
 
-#: libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:871
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 "ファイル参照レイヤーを追加できません。開いているドキュメントがありません。"
 
-#: libs/ui/KisApplication.cpp:980
+#: libs/ui/KisApplication.cpp:986
 #, kde-format
 msgid "No template found for: %1"
 msgstr "以下の場所にテンプレートは存在しません: %1"
 
-#: libs/ui/KisApplication.cpp:983
+#: libs/ui/KisApplication.cpp:989
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "以下の場所にはテンプレートが多過ぎます: %1"
 
-#: libs/ui/KisApplication.cpp:999
+#: libs/ui/KisApplication.cpp:1005
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "テンプレート %1 は読み込みに失敗しました。"
 
-#: libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:1037
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30151,7 +30161,7 @@ msgstr ""
 "\n"
 "変更を有効にするには、Krita を再起動します。"
 
-#: libs/ui/KisApplication.cpp:1045
+#: libs/ui/KisApplication.cpp:1051
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30163,7 +30173,7 @@ msgstr ""
 "他のプログラムがこのファイルを使用中でないか確認した後もう一度お試しくださ"
 "い。"
 
-#: libs/ui/KisApplication.cpp:1073
+#: libs/ui/KisApplication.cpp:1079
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "設定ファイルをクリアしますか？"
@@ -30307,34 +30317,36 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "ドキュメントの複製"
 
-#: libs/ui/KisDocument.cpp:722
+#: libs/ui/KisDocument.cpp:733
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "%1 には書き込みできません。別の名前で保存してください。"
 
-#: libs/ui/KisDocument.cpp:760
-#, kde-format
+#: libs/ui/KisDocument.cpp:783
+#, fuzzy, kde-format
+#| msgctxt "JPEG-XL errors"
+#| msgid "Unable to read the image profile."
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr "バックアップファイルの作成に失敗しました。"
+msgstr "画像プロファイルを読み込めませんでした。"
 
-#: libs/ui/KisDocument.cpp:777
+#: libs/ui/KisDocument.cpp:800
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr "番号付きバックアップファイルの作成に失敗しました。"
+msgstr ""
 
-#: libs/ui/KisDocument.cpp:799
+#: libs/ui/KisDocument.cpp:822
 #, kde-format
 msgid "Exporting Document..."
 msgstr "ドキュメントをエクスポート中..."
 
-#: libs/ui/KisDocument.cpp:800
+#: libs/ui/KisDocument.cpp:823
 #, kde-format
 msgid "Saving Document..."
 msgstr "ドキュメントを保存中..."
 
-#: libs/ui/KisDocument.cpp:810
+#: libs/ui/KisDocument.cpp:833
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30342,18 +30354,23 @@ msgid ""
 msgstr ""
 "%1 の保存を開始できませんでした。現在の保存操作が終了するまでお待ちください。"
 
-#: libs/ui/KisDocument.cpp:939
+#: libs/ui/KisDocument.cpp:962
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "保存中のエラー %1: %2"
 
-#: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:954
-#, kde-format
+#: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not save\n"
+#| "%1"
 msgid "Could not save %1."
-msgstr "%1 の保存に失敗しました。"
+msgstr ""
+"保存に失敗しました\n"
+"%1"
 
-#: libs/ui/KisDocument.cpp:976
+#: libs/ui/KisDocument.cpp:999
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30361,45 +30378,53 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:982
-#, kde-format
+#: libs/ui/KisDocument.cpp:1005
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "dialog box shown to the user if there were warnings while saving the "
+#| "document, %1 is the file path"
+#| msgid ""
+#| "%1 has been saved but is incomplete.\n"
+#| "The following problems were encountered when saving:"
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
-msgstr "保存時に問題が発生しました。"
+msgstr ""
+"%1 は保存されましたが、不完全です。\n"
+"保存時に次の問題が発生しました:"
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1022
 #, kde-format
 msgid "Finished saving %1"
 msgstr "保存が完了しました %1"
 
-#: libs/ui/KisDocument.cpp:1402
+#: libs/ui/KisDocument.cpp:1425
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "自動保存中... %1"
 
-#: libs/ui/KisDocument.cpp:1410
+#: libs/ui/KisDocument.cpp:1433
 #, kde-format
 msgid "Autosaving..."
 msgstr "自動保存中..."
 
-#: libs/ui/KisDocument.cpp:1416
+#: libs/ui/KisDocument.cpp:1439
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "自動保存が延期されました: ドキュメントが使用中です..."
 
-#: libs/ui/KisDocument.cpp:1559
+#: libs/ui/KisDocument.cpp:1582
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "自動保存中のエラー %1: %2"
 
-#: libs/ui/KisDocument.cpp:1573
+#: libs/ui/KisDocument.cpp:1596
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "自動保存が完了しました %1"
 
-#: libs/ui/KisDocument.cpp:1815
+#: libs/ui/KisDocument.cpp:1838
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30408,40 +30433,40 @@ msgstr ""
 "パスの形式が不正です\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1881
+#: libs/ui/KisDocument.cpp:1904
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "ファイル %1 がありません。"
 
-#: libs/ui/KisDocument.cpp:1910
+#: libs/ui/KisDocument.cpp:1933
 #, kde-format
 msgid "Opening document"
 msgstr "ドキュメントを開いています"
 
-#: libs/ui/KisDocument.cpp:1926 libs/ui/KisDocument.cpp:1932
+#: libs/ui/KisDocument.cpp:1949 libs/ui/KisDocument.cpp:1955
 #, fuzzy, kde-format
 #| msgid "Could not open '%1'."
 msgid "Could not open %1."
 msgstr "'%1' を開けませんでした。"
 
-#: libs/ui/KisDocument.cpp:1945 libs/ui/KisDocument.cpp:1949
+#: libs/ui/KisDocument.cpp:1968 libs/ui/KisDocument.cpp:1972
 #, fuzzy, kde-format
 #| msgid "There were problems opening %1"
 msgid "There were problems opening %1."
 msgstr "%1 を開いている最中に問題が発生しました。"
 
-#: libs/ui/KisDocument.cpp:2080
+#: libs/ui/KisDocument.cpp:2103
 #, kde-format
 msgid "Not Saved"
 msgstr "未保存"
 
-#: libs/ui/KisDocument.cpp:2561
+#: libs/ui/KisDocument.cpp:2584
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "塗りつぶしの背景"
 
-#: libs/ui/KisDocument.cpp:2613
+#: libs/ui/KisDocument.cpp:2636
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30855,44 +30880,44 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "ワークスペース(&K)"
 
-#: libs/ui/KisMainWindow.cpp:585
+#: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "%1 ツールバーを表示"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:589
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "ツールバー %1 を非表示"
 
-#: libs/ui/KisMainWindow.cpp:1037
+#: libs/ui/KisMainWindow.cpp:1039
 #, kde-format
 msgid "Write Protected"
 msgstr "(書き込み保護)"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1043
 #, kde-format
 msgid "Recovered"
 msgstr "復元"
 
-#: libs/ui/KisMainWindow.cpp:1071
+#: libs/ui/KisMainWindow.cpp:1073
 #, kde-format
 msgid "Save as %1"
 msgstr "%1 として保存"
 
-#: libs/ui/KisMainWindow.cpp:1095
+#: libs/ui/KisMainWindow.cpp:1097
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "ファイル %1 が存在しません。"
 
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, kde-format
 msgid "Open Images"
 msgstr "画像を開く"
 
-#: libs/ui/KisMainWindow.cpp:1319
+#: libs/ui/KisMainWindow.cpp:1321
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30904,45 +30929,45 @@ msgstr ""
 "ものになったり、壊れたりする場合があります。\n"
 "元のファイルが無視されない場所を選んでください!"
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, kde-format
 msgid "Exporting"
 msgstr "エクスポート"
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, kde-format
 msgid "Saving As"
 msgstr "別名で保存"
 
-#: libs/ui/KisMainWindow.cpp:1679
+#: libs/ui/KisMainWindow.cpp:1729
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "新しいドキュメントを作成"
 
-#: libs/ui/KisMainWindow.cpp:1703
+#: libs/ui/KisMainWindow.cpp:1753
 #, kde-format
 msgid "Custom Document"
 msgstr "カスタムドキュメント"
 
-#: libs/ui/KisMainWindow.cpp:1715
+#: libs/ui/KisMainWindow.cpp:1765
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "クリップボードより作成"
 
-#: libs/ui/KisMainWindow.cpp:1893
+#: libs/ui/KisMainWindow.cpp:1950
 #, kde-format
 msgid "Layers/Masks"
 msgstr "レイヤー/マスク"
 
-#: libs/ui/KisMainWindow.cpp:1919
+#: libs/ui/KisMainWindow.cpp:1976
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "リソースバンドルが有効になっていません。"
 
-#: libs/ui/KisMainWindow.cpp:1923
+#: libs/ui/KisMainWindow.cpp:1980
 #, kde-format
 msgid ""
 "\n"
@@ -30953,7 +30978,7 @@ msgstr ""
 "ブラシプリセットが存在しません。プリセットを持つバンドルを有効にして続行して"
 "ください。\n"
 
-#: libs/ui/KisMainWindow.cpp:1933
+#: libs/ui/KisMainWindow.cpp:1990
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -30964,7 +30989,7 @@ msgstr ""
 "\n"
 "ローカルリソースのみ使用可能です。"
 
-#: libs/ui/KisMainWindow.cpp:2072 libs/ui/KisMainWindow.cpp:2154
+#: libs/ui/KisMainWindow.cpp:2129 libs/ui/KisMainWindow.cpp:2211
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30973,42 +30998,42 @@ msgstr ""
 "アニメーションのインポートを完了できませんでした:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2133
+#: libs/ui/KisMainWindow.cpp:2190
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "新しいドキュメントの作成に失敗しています。アニメーションのインポートが中止さ"
 "れました。"
 
-#: libs/ui/KisMainWindow.cpp:2560
+#: libs/ui/KisMainWindow.cpp:2617
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "ワークスペースをインポート(&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2575
+#: libs/ui/KisMainWindow.cpp:2632
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "新しいワークスペース(&N)..."
 
-#: libs/ui/KisMainWindow.cpp:2579
+#: libs/ui/KisMainWindow.cpp:2636
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "新しいワークスペース..."
 
-#: libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/KisMainWindow.cpp:2680
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2626
+#: libs/ui/KisMainWindow.cpp:2683
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2792
+#: libs/ui/KisMainWindow.cpp:2849
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -31017,19 +31042,19 @@ msgstr ""
 "Krita LittleCMS 色管理プラグインはインストールされていません。Krita は終了し"
 "ます。"
 
-#: libs/ui/KisMainWindow.cpp:2808
+#: libs/ui/KisMainWindow.cpp:2865
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "インストールのエラー"
 
-#: libs/ui/KisMainWindow.cpp:2917
+#: libs/ui/KisMainWindow.cpp:2974
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "テーマ(&T)"
 
-#: libs/ui/KisMainWindow.cpp:2975
+#: libs/ui/KisMainWindow.cpp:3032
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "スペーサーを拡大"
@@ -31164,7 +31189,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "新しいグループ %1"
 
-#: libs/ui/KisPart.cpp:588
+#: libs/ui/KisPart.cpp:578
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -31173,7 +31198,7 @@ msgstr ""
 "テンプレートから文書を作成できませんでした\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:591
+#: libs/ui/KisPart.cpp:581
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -31194,7 +31219,7 @@ msgstr "彩度を設定"
 msgid "Could not load %1."
 msgstr "%1 を読み込めませんでした。"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:39
+#: libs/ui/KisRemoteFileFetcher.cpp:41
 #, kde-format
 msgctxt "Fetching remote image"
 msgid ""
@@ -31202,19 +31227,19 @@ msgid ""
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:61
+#: libs/ui/KisRemoteFileFetcher.cpp:63
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "%1 から画像をダウンロード中..."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:75
+#: libs/ui/KisRemoteFileFetcher.cpp:77
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr "%1 から画像をダウンロード中... (%2 / %3)"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:92
+#: libs/ui/KisRemoteFileFetcher.cpp:94
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."
@@ -31484,12 +31509,12 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "匿名"
 
-#: libs/ui/KisWelcomePageWidget.cpp:148
+#: libs/ui/KisWelcomePageWidget.cpp:157
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr "お知らせを有効化し、新しいリリースを確認する"
 
-#: libs/ui/KisWelcomePageWidget.cpp:150
+#: libs/ui/KisWelcomePageWidget.cpp:159
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
@@ -31498,39 +31523,39 @@ msgstr ""
 "Krita に関するお知らせを表示: krita.org ウェブサイトからお知らせを取得するに"
 "はインターネット接続が必要です"
 
-#: libs/ui/KisWelcomePageWidget.cpp:153
+#: libs/ui/KisWelcomePageWidget.cpp:162
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, kde-format
 msgid "Language"
 msgstr "言語"
 
-#: libs/ui/KisWelcomePageWidget.cpp:154
+#: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid "English news is always up to date."
 msgstr "英語のお知らせが更新されています"
 
-#: libs/ui/KisWelcomePageWidget.cpp:420
+#: libs/ui/KisWelcomePageWidget.cpp:427
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
 msgstr "あなたの支援者の証はここにあります!"
 
-#: libs/ui/KisWelcomePageWidget.cpp:648
+#: libs/ui/KisWelcomePageWidget.cpp:655
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "\"%1\"を消去"
 
-#: libs/ui/KisWelcomePageWidget.cpp:745
+#: libs/ui/KisWelcomePageWidget.cpp:757
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "新しいバージョンの Krita があります。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:774
+#: libs/ui/KisWelcomePageWidget.cpp:786
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "アップデート中にエラーが発生しました。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:780
+#: libs/ui/KisWelcomePageWidget.cpp:792
 #, kde-format
 msgid "Restart is required."
 msgstr "再起動が必要です。"
@@ -32503,13 +32528,13 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:654
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "使用中の Intel グラフィックスドライバは、OpenGL に既知の問題が存在します。"
 
-#: libs/ui/opengl/kis_opengl.cpp:656
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32520,7 +32545,7 @@ msgstr ""
 "トでは ANGLE が使用されます。手動で OpenGL に切り替えられますが、正常動作は保"
 "証されません。"
 
-#: libs/ui/opengl/kis_opengl.cpp:1070
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32529,7 +32554,7 @@ msgstr ""
 "選択されたレンダラーは要求された Surface Formats をサポートしていません。別の"
 "レンダラーが選択されました。"
 
-#: libs/ui/opengl/kis_opengl.cpp:1072
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "選択された出力形式は使用可能なレンダラーではサポートされていません。"
@@ -34267,22 +34292,24 @@ msgid "Symmetric Difference"
 msgstr "対称差分"
 
 #: libs/ui/widgets/kis_selection_options.cc:233
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Set line width of actual selection"
 msgid "Smooths the edges of the selection"
-msgstr "選択範囲の沿面を平滑化"
+msgstr "実際の選択オブジェクトの線幅を設定"
 
 #: libs/ui/widgets/kis_selection_options.cc:235
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Blur the selection by the set amount"
 msgid "Grow or shrink the selection by the set amount"
-msgstr "設定された量で選択範囲を拡大/縮小"
+msgstr "設定した値だけ選択範囲をぼかします"
 
 #: libs/ui/widgets/kis_selection_options.cc:237
 #: plugins/tools/basictools/kis_tool_fill.cc:628
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
-msgstr "最も暗い、または最も不透明なピクセルで拡張を停止します"
+msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:239
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
@@ -34291,21 +34318,22 @@ msgid "Blur the selection by the set amount"
 msgstr "設定した値だけ選択範囲をぼかします"
 
 #: libs/ui/widgets/kis_selection_options.cc:242
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Obtain the region using the active layer"
 msgid "Select regions found from the active layer"
-msgstr "アクティブなレイヤーに存在する領域を選択します"
+msgstr "アクティブなレイヤーを用いて領域を取得する"
 
 #: libs/ui/widgets/kis_selection_options.cc:244
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Obtain the region using a merged copy of all layers"
 msgid "Select regions found from the merging of all layers"
-msgstr "すべてのレイヤーを統合したものに存在する領域を選択します"
+msgstr "すべてのレイヤーの統合済みコピーを用いて領域を取得する"
 
 #: libs/ui/widgets/kis_selection_options.cc:246
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
-"特定の色ラベルが付いているレイヤーを統合したものに存在する領域を選択します"
 
 #: libs/ui/widgets/kis_selection_options.cc:254
 #, kde-format
@@ -36062,12 +36090,12 @@ msgstr "秒 (s)"
 msgid "Toggle Preview"
 msgstr "プレビューを切り替え"
 
-#: libs/widgetutils/KoFileDialog.cpp:243
+#: libs/widgetutils/KoFileDialog.cpp:260
 #, kde-format
 msgid "Save As:"
 msgstr "上書き保存:"
 
-#: libs/widgetutils/KoFileDialog.cpp:326
+#: libs/widgetutils/KoFileDialog.cpp:343
 #, kde-format
 msgid ""
 "The selected file name does not have a file extension that Krita "
@@ -36075,7 +36103,7 @@ msgid ""
 "Make sure the file name ends in '.%1' for example."
 msgstr ""
 
-#: libs/widgetutils/KoFileDialog.cpp:511
+#: libs/widgetutils/KoFileDialog.cpp:533
 #, kde-format
 msgid "All supported formats"
 msgstr "サポートされているすべてのフォーマット"
@@ -37998,7 +38026,7 @@ msgid "Val:"
 msgstr "明度:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:127
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
 #, kde-format
 msgid "Onion skins menu"
 msgstr "オニオンスキンのメニュー"
@@ -38009,25 +38037,25 @@ msgid "Audio menu"
 msgstr "音声メニュー"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:180
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
 #, kde-format
 msgid "Animation settings menu"
 msgstr "アニメーション設定メニュー"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:192
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
 #, kde-format
 msgid "Clip Start: "
 msgstr "クリップ開始地点: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
 #, kde-format
 msgid "Clip End: "
 msgstr "クリップ終了地点: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
 #, kde-format
 msgid "Frame Rate: "
 msgstr "フレームレート: "
@@ -38052,42 +38080,42 @@ msgstr "チャンネルをリセット"
 msgid "Reset All Channels"
 msgstr "すべてのチャンネルをリセット"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:486
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:481
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:493
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:488
 #, kde-format
 msgid "Linear interpolation."
 msgstr "リニア補間"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:500
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:495
 #, fuzzy, kde-format
 #| msgid "Bilinear interpolation"
 msgid "Bezier curve interpolation."
 msgstr "バイリニア補間"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:507
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:502
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Set interpolation mode"
 msgid "Sharp interpolation tangents."
 msgstr "補完モードを設定"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:514
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:509
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Set interpolation mode"
 msgid "Smooth interpolation tangents."
 msgstr "補完モードを設定"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:521
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:516
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr "表示をチャンネル範囲に合わせる"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:528
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:523
 #, kde-format
 msgid "Zoom view to fit curve."
 msgstr "表示をカーブに合わせる"
@@ -38127,31 +38155,25 @@ msgid_plural "Adjust %1 Keyframes"
 msgstr[0] "キーフレーム%1つを調整"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:290
 #, kde-format
 msgid "Animation Timeline"
 msgstr "アニメーションタイムライン"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "Animation settings menu"
-msgid "Animation audio menu"
-msgstr "アニメーション設定メニュー"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
 #, fuzzy, kde-format
 #| msgid "&Import..."
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "インポート(&I)..."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "音声を削除"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu"
 #| msgid "Mute"
@@ -38159,7 +38181,7 @@ msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "消音"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu, slider"
 #| msgid "Volume:"
@@ -38167,33 +38189,39 @@ msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "音量:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#, fuzzy, kde-format
+#| msgid "Animation settings menu"
+msgid "Animation audio menu"
+msgstr "アニメーション設定メニュー"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
 msgid "AutoKey Blank"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
 #, fuzzy, kde-format
 #| msgid "Duplicate"
 msgid "AutoKey Duplicate"
 msgstr "複製"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:509
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "再生タイミングの保持を有効にします。"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:522
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:517
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "設定フレームレート:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:523
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:518
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "現実のフレームレート:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:519
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "フレーム落ち率:\t%1\\%"
@@ -38204,11 +38232,13 @@ msgid "Dropped frames are not available in this Krita instance"
 msgstr "フレーム落ちしたフレームはこの Krita インスタンスでは使用できません"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:876
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Add blank frame"
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
-msgstr[0] "%1 空フレームを 追加"
+msgstr[0] "空フレームを挿入"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
@@ -38654,14 +38684,16 @@ msgid "Select a Directory"
 msgstr "ディレクトリを選択"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Export Composition"
 msgid "Exporting Compositions..."
-msgstr "レイヤー表示構成をエクスポート..."
+msgstr "レイヤー表示構成をエクスポート"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Export Composition"
 msgid "Exporting composition: %1..."
-msgstr "レイヤー表示構成をエクスポート: %1..."
+msgstr "レイヤー表示構成をエクスポート"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
 #, kde-format
@@ -39014,30 +39046,29 @@ msgstr "シンプル"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:380
 #, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Layer Docker subtitle style"
-#| msgid "Balanced"
+#| msgid "Color Balance"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
-msgstr "バランス"
+msgstr "色のバランス"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:381
 #, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Layer Docker subtitle style"
-#| msgid "Detailed"
+#| msgid "Details"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
-msgstr "詳細"
+msgstr "詳細表示"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:394
 #, fuzzy, kde-format
-#| msgid "Line Opacity"
+#| msgid "Opening next page"
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "カーブ線の不透明度"
+msgstr "次のページを開いています"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:412
 #, fuzzy, kde-format
-#| msgid "Spline"
+#| msgctxt "spline filtering"
+#| msgid "spline"
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "スプライン"
@@ -39434,11 +39465,9 @@ msgid "Pin navigation controls"
 msgstr "ピンナビゲーションを制御"
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "レイヤーのサムネイルポップアップを表示しない"
+msgstr ""
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -39865,10 +39894,11 @@ msgstr "録画を削除"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRenderTimeTitle)
 #: plugins/dockers/recorder/recorder_export.ui:1026
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Render as:"
 msgctxt "How long it took to render the video"
 msgid "Render time:"
-msgstr "レンダリング時間:"
+msgstr "出力:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRestart)
 #: plugins/dockers/recorder/recorder_export.ui:1053
@@ -40262,7 +40292,9 @@ msgid "Snapshot Docker"
 msgstr "スナップショットドッキングパネル"
 
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:70
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - category HSY"
+#| msgid "HSY"
 msgid "HSY"
 msgstr "HSY"
 
@@ -40786,9 +40818,10 @@ msgstr "段階表示(&R)"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:560
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:767
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Orientation"
 msgid "Orientation:"
-msgstr "向き:"
+msgstr "方向"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryHorizontal)
@@ -40864,9 +40897,10 @@ msgstr "見本"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:356
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:687
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:894
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Max Patches: "
 msgid "Max Patches:"
-msgstr "最大表示色数:"
+msgstr "最大表示色数: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
@@ -40898,7 +40932,8 @@ msgstr "繰り返し処理数"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Line Count: "
 msgid "Line Count:"
 msgstr "列の数:"
 
@@ -40952,9 +40987,10 @@ msgstr "オフセット:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDisplay)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:157
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Display"
 msgid "Display:"
-msgstr "表示:"
+msgstr "表示"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbSlider)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
@@ -41469,7 +41505,8 @@ msgstr "バージョン"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "File Name"
 msgid "File name"
 msgstr "ファイル名"
 
@@ -47852,11 +47889,10 @@ msgid "Center-first order"
 msgstr "グラデーションストップを中央へ"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:89
-#, fuzzy, kde-format
-#| msgid "X resolution:"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
-msgstr "X 解像度:"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
 #, kde-format
@@ -48289,10 +48325,12 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:492
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Gmic filter"
 msgctxt "JPEG-XL encoder options"
 msgid "Gaborish filter"
-msgstr ""
+msgstr "Gmic フィルタ"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:499
@@ -48433,10 +48471,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:676
-#, fuzzy, kde-format
-#| msgid "Load a palette"
+#, kde-format
 msgid "Local channel palette range"
-msgstr "パレットを読み込み"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:687
@@ -48466,17 +48503,16 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:764
 #, fuzzy, kde-format
-#| msgid "Load a palette"
+#| msgid "Choose palette"
 msgctxt "JPEG-XL encoder options"
 msgid "Delta palette"
-msgstr "パレットを読み込み"
+msgstr "パレットを選択"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, lossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:771
-#, fuzzy, kde-format
-#| msgid "Enable background cache generation"
+#, kde-format
 msgid "Enables or disables delta palette. Used in modular mode."
-msgstr "バックグラウンドでのキャッシュ生成を有効化"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:778
@@ -48872,10 +48908,10 @@ msgstr "画像をエンコードまたは書き込みできませんでした。
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:210
 #, fuzzy, kde-format
-#| msgid "could not save keyframes"
+#| msgid "Could not save to svg: %1"
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
-msgstr "キーフレームの保存に失敗しました"
+msgstr "SVG の保存に失敗しました。%1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:222
 #, kde-format
@@ -50278,7 +50314,7 @@ msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
 msgstr "浮動小数点数の水平方向の差分"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1040
+#: plugins/impex/tiff/kis_tiff_import.cc:1044
 #, kde-format
 msgctxt "TIFF errors"
 msgid ""
@@ -50287,11 +50323,25 @@ msgid ""
 "version of libjpeg-turbo and try again."
 msgstr ""
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1143
-#: plugins/impex/tiff/kis_tiff_import.cc:1326
+#: plugins/impex/tiff/kis_tiff_import.cc:1147
+#: plugins/impex/tiff/kis_tiff_import.cc:1330
 #, kde-format
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1577
+#, kde-format
+msgctxt "@title:window"
+msgid "TIFF image with PSD data"
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1579
+#, kde-format
+msgctxt "the choice for the user on loading a TIFF file"
+msgid ""
+"The TIFF image contains valid PSD data embedded. Would you like to use PSD "
+"data instead of normal TIFF data?"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
@@ -50510,9 +50560,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, haveAnimation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:37
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Save as animated JPEG-XL"
 msgid "Save as animated WebP"
-msgstr "アニメーション WebP として保存"
+msgstr "アニメーション JPEG-XL として保存"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreset)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:50
@@ -50946,7 +50997,9 @@ msgstr "最大幅"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:829
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "JPEG metadata filter"
+#| msgid "Filters:"
 msgctxt "WebP metadata options"
 msgid "Filters:"
 msgstr "フィルタ:"
@@ -51499,10 +51552,9 @@ msgstr "アンチエイリアスなし"
 
 #: plugins/paintops/experiment/KisExperimentOpOptionWidget.cpp:60
 #, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Displacement Option"
+#| msgid "Experiment option"
 msgid "Experiment Option"
-msgstr "変位のオプション"
+msgstr "形状ブラシのオプション"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:33
@@ -53160,13 +53212,15 @@ msgid "Hard"
 msgstr "ハード"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:74
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Background"
 msgctxt "Background painting color"
 msgid "Background"
-msgstr "背景色"
+msgstr "背景"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:75
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Foreground"
 msgctxt "Foreground painting color"
 msgid "Foreground"
 msgstr "描画色"
@@ -53681,10 +53735,9 @@ msgstr "ぼかし (レーキ)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
 #, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparency"
+#| msgid "Preserve alpha"
 msgid "Smudge Transparency"
-msgstr "透過"
+msgstr "アルファを保護"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, fuzzy, kde-format
@@ -54098,9 +54151,6 @@ msgstr "パーティクルの数"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/spray/wdgsprayoptions.ui:194
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "How much the midtone point used in auto levels is close to the center of "
-#| "the histogram (0%) or to the point selected in the method (100%)"
 #| msgid "Amount:"
 msgctxt "Label for the amount of particles in the spray engine"
 msgid "Amount:"
@@ -56274,6 +56324,7 @@ msgstr "セット"
 
 #: plugins/python/palette_docker/palette_docker.py:72
 #, fuzzy
+#| msgctxt "Group as in Template Group"
 #| msgid "Add Group"
 msgctxt "Group as Color Group in a Palette"
 msgid "Add Group"
@@ -56353,10 +56404,9 @@ msgstr "参照フォルダを設定"
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, filterTextEdit)
 #: plugins/python/photobash_images/photobash_images_docker.ui:71
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Filter Layer..."
+#| msgid "Filter by name..."
 msgid "Filter images by words..."
-msgstr "フィルタレイヤー(&F)..."
+msgstr "名前でフィルタ..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, fitCanvasCheckBox)
 #: plugins/python/photobash_images/photobash_images_docker.ui:388
@@ -57082,21 +57132,22 @@ msgstr "リセット"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:606
 #, fuzzy, kde-format
-#| msgid "Failed to save the selection for filter mask %1."
+#| msgid "Blur the selection by the set amount"
 msgid "Fill the active selection, or the entire canvas"
-msgstr "フィルタマスク%1の選択範囲の保存に失敗しました。"
+msgstr "設定した値だけ選択範囲をぼかします"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:607
 #, fuzzy, kde-format
-#| msgid "Include translator's comments"
+#| msgctxt "The 'include contour regions' checkbox in enclose and fill tool"
+#| msgid "Include contour regions"
 msgid "Fill a contiguous region"
-msgstr "翻訳者のコメントを含める"
+msgstr "輪郭領域を含める"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:608
 #, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#| msgid "Fill regions of any color"
 msgid "Fill all regions of a similar color"
-msgstr "背景色で領域を塗りつぶす"
+msgstr "どのような色の領域をも塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:613
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
@@ -57133,21 +57184,24 @@ msgid "Set a custom blend mode for the fill"
 msgstr "レイヤーの合成モードを設定"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:619
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fill only regions similar in color to the initial region"
 msgid "Fill regions similar in color to the clicked region"
-msgstr ""
+msgstr "最初の領域の色に近い色の領域のみを塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:620
 #, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Regions of a specific color"
 msgid "Fill all regions until a specific boundary color"
-msgstr "背景色で領域を塗りつぶす"
+msgstr "特定色の範囲"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:621
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Background color"
 msgid "Boundary color"
-msgstr "境界の色"
+msgstr "背景色"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:622
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
@@ -57167,65 +57221,74 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:624
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Set if the contour of the current selection should be treated as a "
+#| "boundary when obtaining the region"
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when filling the region"
 msgstr ""
-"チェックすると、領域を塗りつぶす際にアクティブな選択範囲の境界線を境界として"
-"扱います。"
+"チェックすると、領域を取得する際に現在の選択範囲の境界線を境界として扱いま"
+"す。"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:626
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Smooth the jagged edges"
 msgid "Smooths the edges of the fill"
-msgstr "塗りつぶしの沿面を平滑化"
+msgstr "ギザギザな沿面を平滑化"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:627
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Blur the selection by the set amount"
 msgid "Grow or shrink the fill by the set amount"
-msgstr "設定された量で塗りつぶしを拡大/縮小"
+msgstr "設定した値だけ選択範囲をぼかします"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:629
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Blur the selection by the set amount"
 msgid "Blur the fill by the set amount"
-msgstr "設定した量だけ，塗りつぶしをぼかす"
+msgstr "設定した値だけ選択範囲をぼかします"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:631
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
 #, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#| msgid "Obtain the region using the active layer"
 msgid "Fill regions found from the active layer"
-msgstr "背景色で領域を塗りつぶす"
+msgstr "アクティブなレイヤーを用いて領域を取得する"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:632
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Obtain the region using a merged copy of all layers"
 msgid "Fill regions found from the merging of all layers"
-msgstr ""
+msgstr "すべてのレイヤーの統合済みコピーを用いて領域を取得する"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:633
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
 #, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "All regions except those of a specific color"
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
-msgstr "背景色で領域を塗りつぶす"
+msgstr "特定色を含むすべての範囲"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
 #, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#| msgid "Fill regions of any color"
 msgid "Dragging will fill regions of any color"
-msgstr "背景色で領域を塗りつぶす"
+msgstr "どのような色の領域をも塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:636
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fill only regions similar in color to the initial region"
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
 "(useful for filling line-art)"
-msgstr ""
+msgstr "最初の領域の色に近い色の領域のみを塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:638
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
@@ -57234,16 +57297,18 @@ msgid "Reset the options to their default values"
 msgstr "設定項目をデフォルトの値に戻す"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:647
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Simple mode"
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
-msgstr "塗りつぶしモード"
+msgstr "シンプルモード"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:654
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "All Resources"
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
-msgstr "塗りつぶしのソース"
+msgstr "すべてのリソース"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:668
 #, kde-format
@@ -57252,10 +57317,11 @@ msgid "Reference"
 msgstr "参照"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:677
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "File extension:"
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
-msgstr "塗りつぶしの範囲"
+msgstr "ファイルの拡張子:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:689
 #, kde-format
@@ -57267,7 +57333,7 @@ msgstr "調整"
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
-msgstr "ドラッグ塗りつぶしモード"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.h:234
 #, kde-format
@@ -58350,15 +58416,17 @@ msgid "Feather: "
 msgstr "塗り広げ:"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fill only regions similar in color to the initial region"
 msgid "Select regions similar in color to the clicked region"
-msgstr ""
+msgstr "最初の領域の色に近い色の領域のみを塗りつぶす"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
 #, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Regions of a specific color"
 msgid "Select all regions until a specific boundary color"
-msgstr "背景色で領域を塗りつぶす"
+msgstr "特定色の範囲"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
@@ -58376,12 +58444,15 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:410
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Set if the contour of the current selection should be treated as a "
+#| "boundary when obtaining the region"
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
-"チェックすると、新たに選択する際に現在の選択範囲の境界線を境界として扱いま"
+"チェックすると、領域を取得する際に現在の選択範囲の境界線を境界として扱いま"
 "す。"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
@@ -59688,22 +59759,26 @@ msgid "Reference"
 msgstr "参照"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:561
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Transparent regions"
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
-msgstr "対象の領域"
+msgstr "透過の範囲"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:571
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "All Resources"
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
-msgstr "塗りつぶしのソース"
+msgstr "すべてのリソース"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:585
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "File extension:"
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
-msgstr "塗りつぶしの範囲"
+msgstr "ファイルの拡張子:"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:594
 #, kde-format
@@ -59712,67 +59787,79 @@ msgid "Adjustments"
 msgstr "調整"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:848
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "All"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "すべて"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:851
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Specific Color Selector"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
-msgstr "特定色"
+msgstr "詳細色選択"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "透過"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "All regions except those of a specific color or transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
-msgstr "特定色もしくは透過"
+msgstr "特定色か透過を含むすべての範囲"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Regions of a specific color"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
-msgstr "すべて。特定色を含まない"
+msgstr "特定色の範囲"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
-msgstr "すべて。透過を含まない"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "All regions except those of a specific color or transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
-msgstr "すべて。特定色もしくは透過を含まない"
+msgstr "特定色か透過を含むすべての範囲"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
 #, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Regions surrounded by a specific color"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
-msgstr "背景色で領域を塗りつぶす"
+msgstr "特定色に囲まれた範囲"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
 #, fuzzy, kde-format
-#| msgid "Foreground to Transparent"
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Regions surrounded by transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
-msgstr "描画色を透明値に変換"
+msgstr "透過に囲まれた範囲"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:875
 #, fuzzy, kde-format
-#| msgid "Foreground to Transparent"
+#| msgctxt "Region selection method in enclose and fill tool"
+#| msgid "Regions surrounded by a specific color"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
-msgstr "描画色を透明値に変換"
+msgstr "特定色に囲まれた範囲"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
 #, kde-format
@@ -60851,12 +60938,457 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
 
+#~ msgid "&Canvas"
+#~ msgstr "キャンバス(&C)"
+
+#~ msgctxt "action"
+#~ msgid "&Reset zoom"
+#~ msgstr "表示倍率をリセット(&R)"
+
+#~ msgctxt "action"
+#~ msgid "Reset zoom"
+#~ msgstr "表示倍率をリセット"
+
+#~ msgid ""
+#~ "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on "
+#~ "another free program called FFmpeg to turn frame-by-frame animations into "
+#~ "video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
+#~ "i><br><br>            To learn more about setting up Krita for rendering "
+#~ "animations, <a href=\"https://docs.krita.org/en/reference_manual/"
+#~ "render_animation.html#setting-up-krita-for-exporting-animations\">please "
+#~ "visit this section of our User Manual.</a>"
+#~ msgstr ""
+#~ "<b>Krita は FFmpeg を見つけられませんでした!</b><br>                "
+#~ "<i>Krita はフレームごとのアニメーションを動画ファイルに変換する作業に、"
+#~ "FFmpeg という別のフリーソフトを使用しています。(<a href=\"https://www."
+#~ "ffmpeg.org\">www.ffmpeg.org</a>)</i><br><br>               アニメーション"
+#~ "をレンダリングするための Krita の設定の詳細については <a href=\"https://"
+#~ "docs.krita.org/en/reference_manual/render_animation.html#setting-up-krita-"
+#~ "for-exporting-animations\"> ユーザマニュアルのこの項目を参照してください。"
+#~ "</a>"
+
+#~ msgid "Please extract ffmpeg from the archive first."
+#~ msgstr "まずアーカイブから ffmpeg を取り出してください。"
+
+#~ msgid ""
+#~ "This is a source code archive. Please download the application archive "
+#~ "('Windows Builds'), unpack it and then provide the path to the extracted "
+#~ "ffmpeg file."
+#~ msgstr ""
+#~ "これはソースコード圧縮ファイルです。アプリケーションアーカイブ ('Windows "
+#~ "用ビルド') をダウンロードして展開し、取り出した ffmpeg ファイルへのパスを"
+#~ "指定してください。"
+
+#~ msgid "This is a source code archive. Please install ffmpeg instead."
+#~ msgstr ""
+#~ "これはソースコードのアーカイブです。代わりに ffmpeg をインストールしてくだ"
+#~ "さい。"
+
+#~ msgctxt "paletegen status mode option name"
+#~ msgid "Difference"
+#~ msgstr "Difference"
+
+#~ msgctxt "paleteuse dither option name"
+#~ msgid "none"
+#~ msgstr "none"
+
+#~ msgctxt "paleteuse diff mode option name"
+#~ msgid "none"
+#~ msgstr "none"
+
+#~ msgid "Choose a video file"
+#~ msgstr "動画ファイルを選択"
+
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
+#~ "\"utf-8\" /><style type=\"text/css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
+#~ "font-weight:500; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
+#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">This video contains "
+#~ "more than 100 frames. Loading too many frames can overload your computer. "
+#~ "Use a</span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;"
+#~ "\"> </span><a href=\"https://kdenlive.org\"><span style=\" font-"
+#~ "size:16pt; font-weight:400; text-decoration: underline; color:#2980b9;"
+#~ "\">video editor </span></a><span style=\" font-size:16pt; font-"
+#~ "weight:400; color:#ff692e;\">instead!</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
+#~ "\"utf-8\" /><style type=\"text/css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
+#~ "font-weight:500; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
+#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">この動画は100フレーム"
+#~ "以上あります。大量のフレームの読み込みは PC に負荷をかけます。Krita より</"
+#~ "span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;\"> </"
+#~ "span><a href=\"https://kdenlive.org\"><span style=\" font-size:16pt; font-"
+#~ "weight:400; text-decoration: underline; color:#2980b9;\">動画エディタ </"
+#~ "span></a><span style=\" font-size:16pt; font-weight:400; color:#ff692e;\">"
+#~ "を使用してください!</span></p></body></html>"
+
+#~ msgid "FFMpeg"
+#~ msgstr "FFMpeg"
+
+#~ msgid "Export:"
+#~ msgstr "エクスポート:"
+
+#~ msgid "Image Se&quence"
+#~ msgstr "画像シーケンス"
+
+#~ msgid "&Video"
+#~ msgstr "動画(&V)"
+
+#~ msgid "Video Options"
+#~ msgstr "動画のオプション"
+
+#~ msgid "FF&Mpeg: "
+#~ msgstr "FFMpeg(&M):"
+
+#~ msgid "Video Location:"
+#~ msgstr "動画の保存場所:"
+
+#, fuzzy
+#~| msgid ""
+#~| "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> you "
+#~| "need to restart Krita to enable or disable plugins.</p></body></html>"
+#~ msgid ""
+#~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
+#~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
+#~ "body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p><span style=\" font-weight:600;\">注意: </span>プラ"
+#~ "グインを有効または無効にするには、Krita を再起動する必要があります。</p></"
+#~ "body></html>"
+
+#~ msgid "Image Sequence Options"
+#~ msgstr "連番画像のオプション"
+
+#~ msgctxt "floating on-canvas message"
+#~ msgid ""
+#~ "Cannot open audio: \"%1\"\n"
+#~ "Error: %2"
+#~ msgstr ""
+#~ "音声ファイル\"%1\"を開けません\n"
+#~ "エラー: %2"
+
+#~ msgid "Drag an image into the window to open"
+#~ msgstr "ウィンドウに画像をドラッグして開く"
+
+#~ msgid "New File"
+#~ msgstr "新しいファイル"
+
+#~ msgid "Recent Documents"
+#~ msgstr "最近開いたドキュメント"
+
+#~ msgid "HDR Warning.................................."
+#~ msgstr "HDR Warning.................................."
+
+#~ msgid "Grid Settings"
+#~ msgstr "グリッド設定"
+
+#~ msgid ""
+#~ "<b>Note: Krita will need to be restarted for changes to take effect</b>"
+#~ msgstr "<b>ノート: 変更を反映するには、Krita の再起動が必要です</b>"
+
+#~ msgid "Enable Smooth Zooming"
+#~ msgstr "滑らかなズームを有効化"
+
+#~ msgid "&Description:"
+#~ msgstr "付記(&D):"
+
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "&Filter:"
+#~ msgstr "フィルタ(&F):"
+
+#~ msgid "Duplicate current profile"
+#~ msgstr "現在のプロファイルを複製"
+
+#~ msgid "Select Layer Mode"
+#~ msgstr "レイヤー選択モード"
+
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "複数レイヤー選択モード"
+
+#~ msgid "Reset Zoom to 100%"
+#~ msgstr "倍率を100%にリセット"
+
+#~ msgid ""
+#~ "Could not save %1.\n"
+#~ "Reason: %2"
+#~ msgstr ""
+#~ "%1 の保存に失敗しました\n"
+#~ "理由: %2"
+
+#~ msgid ""
+#~ "Could not open %2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "%2 を開けませんでした。\n"
+#~ "理由: %1"
+
+#~ msgid "Unexpected error. Please contact developers."
+#~ msgstr "予期しないエラーが発生しました。開発者に連絡してください。"
+
+#~ msgctxt "Fetching remote image"
+#~ msgid "Do you want to download the image at %1?"
+#~ msgstr "画像を %1 からダウンロードしますか？"
+
+#~ msgid ""
+#~ "Grow (positive values) or shrink (negative values) the selection by the "
+#~ "set amount"
+#~ msgstr ""
+#~ "設定された値だけ選択範囲を拡張（正の値の場合）または縮小（負の値の場合）し"
+#~ "ます。"
+
+#~ msgid "Make the selection using the active layer"
+#~ msgstr "アクティブなレイヤーを使用して選択範囲を作成します"
+
+#~ msgid "Make the selection using a merged copy of all layers"
+#~ msgstr "すべてのレイヤーを統合した際のコピーを使用して選択範囲を作成します"
+
+#~ msgid ""
+#~ "Make the selection using a merged copy of the selected color-labeled "
+#~ "layers"
+#~ msgstr ""
+#~ "選択した色ラベルが付いているレイヤーを統合した際のコピーを使用して選択範囲"
+#~ "を作成します"
+
+#~ msgid "Fit Page"
+#~ msgstr "ページに合わせる"
+
+#~ msgid "Colu&mns:"
+#~ msgstr "列数(&M):"
+
+#~ msgid "&Rows:"
+#~ msgstr "行数(&R):"
+
+#~ msgid "HSV Sliders to Show"
+#~ msgstr "HSV スライダーを表示"
+
+#~ msgid "HSL Sliders to Show"
+#~ msgstr "HSL スライダーを表示"
+
+#~ msgid "HSI Sliders to Show"
+#~ msgstr "HSI スライダーを表示"
+
+#~ msgid "HSY' Sliders to Show"
+#~ msgstr "HSY' スライダーを表示"
+
+# normal distance + absolute value
+#~ msgid "Edit Audio:"
+#~ msgstr "音声を編集:"
+
+#~ msgctxt "@item:inmenu"
+#~ msgid "Audio playback is not supported in this build!"
+#~ msgstr "このビルドでは音声の再生に対応していません!"
+
+#~ msgctxt "@item:inmenu"
+#~ msgid "Open audio..."
+#~ msgstr "音声を開く..."
+
+#~ msgctxt "@item:inmenu"
+#~ msgid "Change audio (%1)..."
+#~ msgstr "音声を変更 (%1)..."
+
+#~ msgid "Start merging time"
+#~ msgstr "統合時間の開始"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "The amount of time after a merged stroke before merging again"
+#~ msgstr "描線が統合された後、再度統合されるまでの時間"
+
+#~ msgid "Group time"
+#~ msgstr "グループ化の時間"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "The amount of time every stroke should be apart from its previous stroke "
+#~ "to be classified in one group"
+#~ msgstr ""
+#~ "すべての描線がその前の描線と分離され、一つのグループに分類されるまでの時間"
+
+#~ msgid "Split Strokes"
+#~ msgstr "描線を分離"
+
 #~ msgid ""
 #~ "⚠ Unsupported color space.\n"
 #~ "Only \"RGB/Alpha 8-bit\" is supported."
 #~ msgstr ""
 #~ "⚠ 色空間がサポートされていません。.\n"
 #~ "\"RGB/Alpha 8-bit\" のみサポートされています。"
+
+#, fuzzy
+#~| msgid "Kra File Compression"
+#~ msgid "Lossless compression"
+#~ msgstr "Kra ファイルの圧縮"
+
+#~ msgid "Information"
+#~ msgstr "情報"
+
+#~ msgid "Flip vertically"
+#~ msgstr "垂直方向に反転"
+
+#~ msgid "Bypass filtering"
+#~ msgstr "バイパスフィルタリング"
+
+#~ msgid "Use multithreaded decoding"
+#~ msgstr "マルチスレッドデコードを使用"
+
+#, fuzzy
+#~| msgid "Color space:"
+#~ msgid "Color planes: "
+#~ msgstr "色空間:"
+
+#, fuzzy
+#~| msgid "Alpha darken"
+#~ msgid "Alpha plane: "
+#~ msgstr "相対暗色(アルファ)"
+
+#~ msgid "Color Rate"
+#~ msgstr "描画色の割合"
+
+#~ msgctxt "PaintOp instant preview limitation"
+#~ msgid "Displacement Option"
+#~ msgstr "変位のオプション"
+
+#~ msgctxt "PaintOp instant preview limitation"
+#~ msgid "Source -> Total Random"
+#~ msgstr "参照点⇒完全ランダム"
+
+#~ msgctxt "PaintOp instant preview limitation"
+#~ msgid "Source -> Pattern"
+#~ msgstr "参照点⇒パターンとして使う"
+
+#~ msgctxt "PaintOp instant preview limitation"
+#~ msgid "Source -> Pattern Locked"
+#~ msgstr "参照点⇒ロックされたパターン"
+
+#~ msgid "0 px"
+#~ msgstr "0 px"
+
+#~ msgid "0 s"
+#~ msgstr "0 s"
+
+#~ msgid "1000"
+#~ msgstr "1000"
+
+#~ msgid "30 px"
+#~ msgstr "30 px"
+
+#~ msgid "3 s"
+#~ msgstr "3 s"
+
+#~ msgid "%1 s"
+#~ msgstr "%1 s"
+
+#~ msgctxt "option name"
+#~ msgid "Filter"
+#~ msgstr "フィルタ"
+
+#~ msgctxt "PaintOp instant preview limitation"
+#~ msgid "\"%1\" does not support scaled preview (non-linear filter)"
+#~ msgstr "%1は高速プレビューをサポートしていません (非線形フィルタ)"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "Luminosity value of the brush that will not change the painting color. "
+#~ "All brush pixels darker than neutral point will paint with darker color, "
+#~ "pixels lighter than neutral point — lighter."
+#~ msgstr ""
+#~ "描画色を変更しないブラシの光度値です。中間点より暗いすべてのブラシピクセル"
+#~ "は、より暗い色で描画されます。中間点より明るいピクセルは、より明るく描画さ"
+#~ "れます。"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Brightness correction for the brush"
+#~ msgstr "ブラシの明度補正"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Contrast correction for the brush"
+#~ msgstr "ブラシのコントラスト補正"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "The selected brush tip does not have color channels. The brush will work "
+#~ "in \"Mask\" mode."
+#~ msgstr ""
+#~ "選択されたブラシ形状には色チャンネルがありません。ブラシは「マスク」モード"
+#~ "で動作します。"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "The selected brush engine does not support \"Color\" or \"Lightness\" "
+#~ "modes. The brush will work in \"Mask\" mode."
+#~ msgstr ""
+#~ "選択されたブラシエンジンは、「色」または「光度」モードをサポートしていませ"
+#~ "ん。ブラシは「マスク」モードで動作します。"
+
+#~ msgid "Mirrored"
+#~ msgstr "100%の割合で反転される"
+
+#~ msgid "Not mirrored"
+#~ msgstr "100%割合で反転されない"
+
+#~ msgid " s"
+#~ msgstr " s"
+
+#~ msgid "Current selection"
+#~ msgstr "現在の選択範囲"
+
+#~ msgid "Contiguous region obtained from the layers"
+#~ msgstr "レイヤーから得られる連続した領域"
+
+#~ msgid ""
+#~ "Set how far the region should extend from the selected pixel in terms of "
+#~ "color similarity"
+#~ msgstr ""
+#~ "選択したピクセルから、色の類似度に基づいて範囲をどの程度広げるかを設定しま"
+#~ "す"
+
+#~ msgid ""
+#~ "Set how far the fully opaque portion of the region should extend.\n"
+#~ "0% will make opaque only the pixels that are exactly equal to the "
+#~ "selected pixel.\n"
+#~ "100% will make opaque all the pixels in the region up to its boundary."
+#~ msgstr ""
+#~ "完全に不透明な領域をどの程度広げるかを設定します。\n"
+#~ "0%にすると、選択したピクセルと完全に等しいピクセルのみを不透明にします。\n"
+#~ "100%にすると、境界までの領域内のすべてのピクセルを不透明にします。"
+
+#~ msgid ""
+#~ "Grow (positive values) or shrink (negative values) the region by the set "
+#~ "amount"
+#~ msgstr "設定した量だけ、領域を拡大(正の値)または縮小(負の値)する"
+
+#~ msgid ""
+#~ "Obtain the region using a merged copy of the selected color-labeled layers"
+#~ msgstr "選択した色ラベル付きレイヤーの統合済みコピーを用いて範囲を取得する"
+
+#~ msgctxt "The 'what to fill' section label in fill tool options"
+#~ msgid "What to fill"
+#~ msgstr "何を塗りつぶすか"
+
+#~ msgctxt "The 'fill with' section label in fill tool options"
+#~ msgid "Fill with"
+#~ msgstr "何で塗りつぶすか"
+
+#~ msgctxt "The 'region extent' section label in fill tool options"
+#~ msgid "Region extent"
+#~ msgstr "領域"
+
+#~ msgctxt "The 'multiple fill' section label in fill tool options"
+#~ msgid "Multiple fill"
+#~ msgstr "並列塗りつぶし"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Shear X"
@@ -60873,3 +61405,38 @@ msgstr "資料画像ツール"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Reset Transformations"
 #~ msgstr "変形をリセット"
+
+#~ msgid ""
+#~ "Set how far the selection should extend from the selected pixel in terms "
+#~ "of color similarity"
+#~ msgstr ""
+#~ "選択したピクセルから、色の類似性でどの程度まで選択範囲を広げるかを設定する"
+
+#~ msgid ""
+#~ "Set how far the fully opaque portion of the selection should extend.\n"
+#~ "0% will make the selection opaque only where the pixels are exactly equal "
+#~ "to the selected pixel.\n"
+#~ "100% will make all the selection opaque up to its boundary."
+#~ msgstr ""
+#~ "選択範囲内で、どこまで完全に不透明な部分を広げるかを設定する。0%では選択範"
+#~ "囲内のうち、選択したピクセルに完全に一致しているピクセルのみを不透明にす"
+#~ "る。100%では、選択範囲の境界までを不透明にする。"
+
+#~ msgid "Set how far the selection should extend in terms of color similarity"
+#~ msgstr "色の類似度に基づいて選択をどの程度拡張するかを設定します"
+
+#~ msgctxt "The 'what to fill' section label in enclose and fill tool options"
+#~ msgid "What to fill"
+#~ msgstr "何を塗りつぶすか"
+
+#~ msgctxt "The 'fill with' section label in enclose and fill tool options"
+#~ msgid "Fill with"
+#~ msgstr "何で塗りつぶすか"
+
+#~ msgctxt "The 'region extent' section label in enclose and fill tool options"
+#~ msgid "Region extent"
+#~ msgstr "領域"
+
+#~ msgctxt "Region selection method in enclose and fill tool"
+#~ msgid "All regions"
+#~ msgstr "すべての範囲"

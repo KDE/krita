@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-25 00:43+0000\n"
+"POT-Creation-Date: 2023-07-27 02:25+0000\n"
 "PO-Revision-Date: 2021-05-15 15:07+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -12995,7 +12995,7 @@ msgstr "&Ascunde/afișează plan..."
 msgid "File"
 msgstr "&Fișier"
 
-#: krita/krita5.xmlgui:419
+#: krita/krita5.xmlgui:420
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Pensule și chestii"
@@ -15921,27 +15921,27 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "&Culegător culoare"
 
-#: krita/main.cc:521
+#: krita/main.cc:527
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Formă triunghiulară"
 
-#: krita/main.cc:522
+#: krita/main.cc:528
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:632 libs/ui/KisApplication.cpp:409
-#: libs/ui/KisApplication.cpp:680
+#: krita/main.cc:646 libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:681
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Atenție!"
 
-#: krita/main.cc:633
+#: krita/main.cc:647
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15949,12 +15949,12 @@ msgid ""
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
 msgstr ""
 
-#: krita/main.cc:655 krita/main.cc:660
+#: krita/main.cc:669 krita/main.cc:674
 #, fuzzy, kde-format
 msgid "Krita Tablet Support"
 msgstr "Preconfigurări:"
 
-#: krita/main.cc:656
+#: krita/main.cc:670
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15962,7 +15962,7 @@ msgid ""
 "installed."
 msgstr ""
 
-#: krita/main.cc:661
+#: krita/main.cc:675
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16412,27 +16412,27 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3744
+#: libs/flake/text/KoSvgTextShape.cpp:3751
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3746
-#: libs/flake/text/KoSvgTextShape.cpp:3754
+#: libs/flake/text/KoSvgTextShape.cpp:3753
+#: libs/flake/text/KoSvgTextShape.cpp:3761
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "Formă text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3752
+#: libs/flake/text/KoSvgTextShape.cpp:3759
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3766
-#: libs/flake/text/KoSvgTextShape.cpp:3781
+#: libs/flake/text/KoSvgTextShape.cpp:3773
+#: libs/flake/text/KoSvgTextShape.cpp:3788
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17203,7 +17203,7 @@ msgstr "Importă imagine"
 msgid "Selection Mask"
 msgstr "Selecția"
 
-#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2554
+#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2577
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -17321,7 +17321,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profil:"
 
-#: libs/image/kis_image.cc:2486
+#: libs/image/kis_image.cc:2487
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -17455,9 +17455,7 @@ msgstr "Setează margina"
 msgid "Show Coloring"
 msgstr "Selecția"
 
-#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
 #: libs/image/kis_layer_properties_icons.cpp:32
-#: libs/ui/forms/KisWelcomePage.ui:1572
 #, fuzzy, kde-format
 #| msgid "Open palette"
 msgid "Open File"
@@ -17546,8 +17544,8 @@ msgid "Processing"
 msgstr "Presiune"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1420
-#: libs/ui/KisMainWindow.cpp:1700 libs/ui/KisMainWindow.cpp:1713
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1750 libs/ui/KisMainWindow.cpp:1763
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, fuzzy, kde-format
 msgid "Unnamed"
@@ -18017,7 +18015,7 @@ msgstr "Transformă"
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
-#: plugins/impex/tiff/kis_tiff_import.cc:562
+#: plugins/impex/tiff/kis_tiff_import.cc:566
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, fuzzy, kde-format
 msgid "Transparency Mask"
@@ -18289,8 +18287,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Document"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2064
-#: libs/ui/KisMainWindow.cpp:2147
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2121
+#: libs/ui/KisMainWindow.cpp:2204
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Importă imagine"
@@ -19611,7 +19609,7 @@ msgstr "Personalizat"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:498 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:504 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -19647,9 +19645,9 @@ msgstr "Șterge plan"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19665,24 +19663,24 @@ msgstr "Șterge plan"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:979
-#: libs/ui/KisApplication.cpp:982 libs/ui/KisApplication.cpp:998
-#: libs/ui/KisApplication.cpp:1030 libs/ui/KisApplication.cpp:1044
-#: libs/ui/KisApplication.cpp:1072 libs/ui/KisDocument.cpp:946
-#: libs/ui/KisDocument.cpp:953 libs/ui/KisDocument.cpp:973
-#: libs/ui/KisDocument.cpp:1881 libs/ui/KisDocument.cpp:1925
-#: libs/ui/KisDocument.cpp:1931 libs/ui/KisDocument.cpp:1944
-#: libs/ui/KisDocument.cpp:1948 libs/ui/KisMainWindow.cpp:979
-#: libs/ui/KisMainWindow.cpp:1095 libs/ui/KisMainWindow.cpp:1221
-#: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1924
-#: libs/ui/KisMainWindow.cpp:1933 libs/ui/KisMainWindow.cpp:2072
-#: libs/ui/KisMainWindow.cpp:2133 libs/ui/KisMainWindow.cpp:2154
-#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:588
-#: libs/ui/KisPart.cpp:591 libs/ui/KisReferenceImage.cpp:175
-#: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
-#: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:985
+#: libs/ui/KisApplication.cpp:988 libs/ui/KisApplication.cpp:1004
+#: libs/ui/KisApplication.cpp:1036 libs/ui/KisApplication.cpp:1050
+#: libs/ui/KisApplication.cpp:1078 libs/ui/KisDocument.cpp:969
+#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
+#: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
+#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:981
+#: libs/ui/KisMainWindow.cpp:1097 libs/ui/KisMainWindow.cpp:1223
+#: libs/ui/KisMainWindow.cpp:1320 libs/ui/KisMainWindow.cpp:1981
+#: libs/ui/KisMainWindow.cpp:1990 libs/ui/KisMainWindow.cpp:2129
+#: libs/ui/KisMainWindow.cpp:2190 libs/ui/KisMainWindow.cpp:2211
+#: libs/ui/KisMainWindow.cpp:2826 libs/ui/KisPart.cpp:578
+#: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
+#: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
-#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:738
 #: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20188,8 +20186,8 @@ msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Șterge resursă"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:334
-#: libs/ui/KisMainWindow.cpp:2569
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:335
+#: libs/ui/KisMainWindow.cpp:2626
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -20259,11 +20257,9 @@ msgstr ""
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:97
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Create shape"
 msgctxt "@title:window"
 msgid "Failed to rename the resource"
-msgstr "Creează formă"
+msgstr "Șterge plan"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:97
 #, fuzzy, kde-format
@@ -20648,7 +20644,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Șterge plan"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2174
+#: libs/ui/KisMainWindow.cpp:2231
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "Orientare"
@@ -20689,18 +20685,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:392
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:472
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -20708,28 +20704,28 @@ msgid ""
 "will be reduced to 50 frames per second"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:479
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Warning(s):"
 msgstr "Avertizment"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #, fuzzy, kde-format
 #| msgid "Please create an index to reference first."
 msgid "Please enter a file name to render to."
@@ -20965,7 +20961,7 @@ msgstr "Nu pot deschide fișierul %1"
 msgid "FFMpeg Crashed"
 msgstr ""
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:614
+#: libs/ui/animation/KisFFMpegWrapper.cpp:620
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -22648,7 +22644,7 @@ msgid "Numerical"
 msgstr "Vertical:"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "Importă imagine"
@@ -22694,7 +22690,7 @@ msgstr "Proprietăți plan..."
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -22796,7 +22792,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Introduceți nume grup:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2580
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2637
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -23764,38 +23760,116 @@ msgstr "Utilizează întotdeauna acest șablon la pornirea aplicației"
 msgid "Always use this template"
 msgstr "Utilizează întotdeauna acest șablon"
 
+#. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
+#: libs/ui/forms/KisWelcomePage.ui:48
+#, fuzzy, kde-format
+msgid "Support Krita!"
+msgstr "Culoare"
+
+#. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
+#: libs/ui/forms/KisWelcomePage.ui:79
+#, fuzzy, kde-format
+msgid "Recent Images"
+msgstr "Șterge imaginea"
+
+#. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
+#: libs/ui/forms/KisWelcomePage.ui:103
+#, fuzzy, kde-format
+msgctxt "Welcome Screen Recent Document List's Clear link Label"
+msgid "Clear"
+msgstr "Pensulă"
+
+#. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
+#: libs/ui/forms/KisWelcomePage.ui:154
+#, fuzzy, kde-format
+msgid ""
+"You don't seem to have any\n"
+"recently opened documents"
+msgstr "Nu s-a putut crea fişierul pentru salvare "
+
+#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:322
+#, fuzzy, kde-format
+#| msgid "Comments"
+msgid "Community"
+msgstr "Comentarii"
+
+#. i18n: ectx: property (text), widget (QLabel, manualLink)
+#: libs/ui/forms/KisWelcomePage.ui:391 libs/ui/KisWelcomePageWidget.cpp:391
+#, fuzzy, kde-format
+#| msgid "Manual"
+msgid "User Manual"
+msgstr "Manual"
+
+#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
+#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:394
+#, kde-format
+msgid "Support Krita"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
+#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:403
+#, kde-format
+msgid "Powered by KDE"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
+#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:400
+#, fuzzy, kde-format
+#| msgid "Source:"
+msgid "Source Code"
+msgstr "Sursă:"
+
+#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
+#: libs/ui/forms/KisWelcomePage.ui:748 libs/ui/KisWelcomePageWidget.cpp:388
+#, fuzzy, kde-format
+msgid "Getting Started"
+msgstr "Adnotare"
+
+#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
+#: libs/ui/forms/KisWelcomePage.ui:835 libs/ui/KisWelcomePageWidget.cpp:385
+#, fuzzy, kde-format
+msgid "User Community"
+msgstr "Plan"
+
+#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
+#: libs/ui/forms/KisWelcomePage.ui:922 libs/ui/KisWelcomePageWidget.cpp:397
+#, fuzzy, kde-format
+msgid "Krita Website"
+msgstr "Alfa"
+
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:168
+#: libs/ui/forms/KisWelcomePage.ui:1066
 #, fuzzy, kde-format
 msgid "News"
 msgstr "Nume"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:191
+#: libs/ui/forms/KisWelcomePage.ui:1089
 #, fuzzy, kde-format
 msgid "News options"
 msgstr "Alfa"
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:314
+#: libs/ui/forms/KisWelcomePage.ui:1212
 #, fuzzy, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr "Alfa"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:365
+#: libs/ui/forms/KisWelcomePage.ui:1263
 #, fuzzy, kde-format
 msgid "Update now!"
 msgstr "Actualizează previzualizarea"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:372
+#: libs/ui/forms/KisWelcomePage.ui:1270
 #, fuzzy, kde-format
 msgid "Show details"
 msgstr "&Ascunde/afișează plan..."
 
-#. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:455 libs/ui/KisWelcomePageWidget.cpp:398
+#. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
+#: libs/ui/forms/KisWelcomePage.ui:1353 libs/ui/KisWelcomePageWidget.cpp:405
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -23803,106 +23877,37 @@ msgid ""
 "with the menu above"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:562
-#, fuzzy, kde-format
-#| msgid "Comments"
-msgid "Community"
-msgstr "Comentarii"
-
-#. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:647 libs/ui/KisWelcomePageWidget.cpp:384
-#, fuzzy, kde-format
-#| msgid "Manual"
-msgid "User Manual"
-msgstr "Manual"
-
-#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:737 libs/ui/KisWelcomePageWidget.cpp:381
-#, fuzzy, kde-format
-msgid "Getting Started"
-msgstr "Adnotare"
-
-#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:824 libs/ui/KisWelcomePageWidget.cpp:378
-#, fuzzy, kde-format
-msgid "User Community"
-msgstr "Plan"
-
-#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:911 libs/ui/KisWelcomePageWidget.cpp:390
-#, fuzzy, kde-format
-msgid "Krita Website"
-msgstr "Alfa"
-
-#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:1001 libs/ui/KisWelcomePageWidget.cpp:393
-#, fuzzy, kde-format
-#| msgid "Source:"
-msgid "Source Code"
-msgstr "Sursă:"
-
-#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:1088 libs/ui/KisWelcomePageWidget.cpp:387
-#, kde-format
-msgid "Support Krita"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:1178 libs/ui/KisWelcomePageWidget.cpp:396
-#, kde-format
-msgid "Powered by KDE"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, dragImageHereLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1261
-#, fuzzy, kde-format
-#| msgid "Image Size"
-msgid "Drag an image into the window to open"
-msgstr "Dimensiune imagine"
-
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1361
+#: libs/ui/forms/KisWelcomePage.ui:1417
 #, fuzzy, kde-format
 msgid "Start"
 msgstr "Stea"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1428 libs/ui/KisWelcomePageWidget.cpp:625
+#: libs/ui/forms/KisWelcomePage.ui:1484 libs/ui/KisWelcomePageWidget.cpp:632
 #, kde-format
 msgid "DEV BUILD"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, newFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:1504
-#, fuzzy, kde-format
-msgid "New File"
-msgstr "Dimensiune imagine"
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
+#: libs/ui/forms/KisWelcomePage.ui:1560 libs/ui/forms/wdgimageproperties.ui:18
+#: libs/ui/forms/wdgnewimage.ui:18
+#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
+#, kde-format
+msgid "New Image"
+msgstr "Imagine nouă"
 
-#. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1655
+#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
+#: libs/ui/forms/KisWelcomePage.ui:1628
 #, fuzzy, kde-format
-#| msgid "Document"
-msgid "Recent Documents"
-msgstr "Document"
-
-#. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:1713
-#, fuzzy, kde-format
-msgctxt "Welcome Screen Recent Document List's Clear link Label"
-msgid "Clear"
-msgstr "Pensulă"
-
-#. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:1766
-#, fuzzy, kde-format
-msgid ""
-"You don't seem to have any\n"
-"recently opened documents"
-msgstr "Nu s-a putut crea fişierul pentru salvare "
+msgid "Open Image"
+msgstr "Imagine"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1874
+#: libs/ui/forms/KisWelcomePage.ui:1712
 #, fuzzy, kde-format
 #| msgid ""
 #| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -24726,9 +24731,9 @@ msgstr "Selecția"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpOpenGL)
 #: libs/ui/forms/wdgdisplaysettings.ui:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Canvas &Graphics Acceleration"
-msgstr "Selecția"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:73
@@ -24828,9 +24833,9 @@ msgstr "Editează prestabilite"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdgdisplaysettings.ui:255
-#, fuzzy, kde-format
+#, kde-format
 msgid "Preferred Output Format:"
-msgstr "Editează prestabilite"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:283
@@ -24922,7 +24927,7 @@ msgstr "Selecția"
 #: libs/ui/forms/wdgdisplaysettings.ui:427
 #, fuzzy, kde-format
 msgid "Outline opacity:"
-msgstr "Selecția"
+msgstr "Opacitate"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:440
@@ -25240,9 +25245,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: libs/ui/forms/wdggeneralsettings.ui:182
-#, fuzzy, kde-format
+#, kde-format
 msgid "Eraser Cursor Icon:"
-msgstr "Selecția"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #: libs/ui/forms/wdggeneralsettings.ui:195
@@ -25970,15 +25975,6 @@ msgstr "Rotește &90"
 msgid "Scale:"
 msgstr "&Scalează"
 
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:18
-#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
-#, kde-format
-msgid "New Image"
-msgstr "Imagine nouă"
-
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
@@ -26610,7 +26606,7 @@ msgstr "Editează prestabilite"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1076
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -27506,7 +27502,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:351
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:352
 #, fuzzy, kde-format
 msgid "Sessions"
 msgstr "Dimensiuni &pixel"
@@ -28988,7 +28984,7 @@ msgstr "Selecția"
 msgid "&Open Background color selector"
 msgstr "Culoare fundal"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:347
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -29001,8 +28997,8 @@ msgstr "Modele"
 msgid "Custom Pattern"
 msgstr "Modele"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:332
-#: libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
+#: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, kde-format
@@ -29743,62 +29739,62 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "&Mărește"
 
-#: libs/ui/KisApplication.cpp:324
+#: libs/ui/KisApplication.cpp:325
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, fuzzy, kde-format
 msgid "Brush presets"
 msgstr "Preconfigurări:"
 
-#: libs/ui/KisApplication.cpp:327 libs/ui/KisApplication.cpp:328
-#: libs/ui/KisApplication.cpp:329 libs/ui/KisApplication.cpp:330
+#: libs/ui/KisApplication.cpp:328 libs/ui/KisApplication.cpp:329
+#: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
 #, fuzzy, kde-format
 msgid "Brush tips"
 msgstr "Pensule"
 
-#: libs/ui/KisApplication.cpp:335
+#: libs/ui/KisApplication.cpp:336
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
 #, kde-format
 msgid "Palettes"
 msgstr "Palete"
 
-#: libs/ui/KisApplication.cpp:348 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, fuzzy, kde-format
 msgid "Workspaces"
 msgstr "&Culegător culoare"
 
-#: libs/ui/KisApplication.cpp:349
+#: libs/ui/KisApplication.cpp:350
 #, fuzzy, kde-format
 msgid "SVG symbol libraries"
 msgstr "&Următorul plan..."
 
-#: libs/ui/KisApplication.cpp:350 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, fuzzy, kde-format
 msgid "Window layouts"
 msgstr "Imagine"
 
-#: libs/ui/KisApplication.cpp:352
+#: libs/ui/KisApplication.cpp:353
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
 #, fuzzy, kde-format
 msgid "Gamut masks"
 msgstr "Modele"
 
-#: libs/ui/KisApplication.cpp:354
+#: libs/ui/KisApplication.cpp:355
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgid "SeExpr Scripts"
 msgstr "Indice inferior"
 
-#: libs/ui/KisApplication.cpp:359
+#: libs/ui/KisApplication.cpp:360
 #, fuzzy, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Imagine"
 
-#: libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:373
 #, kde-format
 msgid ""
 "%1\n"
@@ -29806,13 +29802,13 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:372 libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:373 libs/ui/KisApplication.cpp:379
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Selecția"
 
-#: libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:379
 #, kde-format
 msgid ""
 "\n"
@@ -29820,7 +29816,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:411
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -29828,65 +29824,65 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:427
+#: libs/ui/KisApplication.cpp:428
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "&Resurse"
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:459
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "&Resurse"
 
-#: libs/ui/KisApplication.cpp:462
+#: libs/ui/KisApplication.cpp:463
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "Selecția"
 
-#: libs/ui/KisApplication.cpp:468
+#: libs/ui/KisApplication.cpp:469
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "Șterge plan"
 
-#: libs/ui/KisApplication.cpp:477
+#: libs/ui/KisApplication.cpp:478
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "Modifică opțiunile urmăririi"
 
-#: libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:510
 #, fuzzy, kde-format
 msgid "Launching..."
 msgstr "Redenumește imagine"
 
-#: libs/ui/KisApplication.cpp:578
+#: libs/ui/KisApplication.cpp:579
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:634
+#: libs/ui/KisApplication.cpp:635
 #, fuzzy, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Șterge plan"
 
-#: libs/ui/KisApplication.cpp:661 libs/ui/KisApplication.cpp:851
+#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:857
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "&Alb"
 
-#: libs/ui/KisApplication.cpp:669 libs/ui/KisApplication.cpp:674
-#: libs/ui/KisApplication.cpp:845 libs/ui/KisApplication.cpp:859
-#: libs/ui/KisApplication.cpp:864
+#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:851 libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:870
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Atenție!"
 
-#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:866
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29899,7 +29895,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:681
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29907,32 +29903,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:846
+#: libs/ui/KisApplication.cpp:852
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
 msgstr "Elimină selecția"
 
-#: libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:871
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:980
+#: libs/ui/KisApplication.cpp:986
 #, fuzzy, kde-format
 msgid "No template found for: %1"
 msgstr "Proprietăți plan..."
 
-#: libs/ui/KisApplication.cpp:983
+#: libs/ui/KisApplication.cpp:989
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "S-au găsit prea multe șabloane pentru: %1"
 
-#: libs/ui/KisApplication.cpp:999
+#: libs/ui/KisApplication.cpp:1005
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "Selecția"
 
-#: libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:1037
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29942,7 +29938,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1045
+#: libs/ui/KisApplication.cpp:1051
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29950,7 +29946,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1073
+#: libs/ui/KisApplication.cpp:1079
 #, fuzzy, kde-format
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to clear the settings file?"
@@ -30079,54 +30075,54 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Mod culoare"
 
-#: libs/ui/KisDocument.cpp:722
+#: libs/ui/KisDocument.cpp:733
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:760
+#: libs/ui/KisDocument.cpp:783
 #, fuzzy, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Șterge plan"
 
-#: libs/ui/KisDocument.cpp:777
+#: libs/ui/KisDocument.cpp:800
 #, fuzzy, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Șterge plan"
 
-#: libs/ui/KisDocument.cpp:799
+#: libs/ui/KisDocument.cpp:822
 #, fuzzy, kde-format
 #| msgid "Open Document"
 msgid "Exporting Document..."
 msgstr "Deschide documentul"
 
-#: libs/ui/KisDocument.cpp:800
+#: libs/ui/KisDocument.cpp:823
 #, fuzzy, kde-format
 msgid "Saving Document..."
 msgstr "Salvează documentul"
 
-#: libs/ui/KisDocument.cpp:810
+#: libs/ui/KisDocument.cpp:833
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:939
+#: libs/ui/KisDocument.cpp:962
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Eroare în timpul salvării automate. Partiţie plină?"
 
-#: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:954
+#: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
 #, fuzzy, kde-format
 msgid "Could not save %1."
 msgstr "Elimină selecția"
 
-#: libs/ui/KisDocument.cpp:976
+#: libs/ui/KisDocument.cpp:999
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30134,47 +30130,47 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:982
+#: libs/ui/KisDocument.cpp:1005
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1022
 #, fuzzy, kde-format
 msgid "Finished saving %1"
 msgstr "Unealtă &linie"
 
-#: libs/ui/KisDocument.cpp:1402
+#: libs/ui/KisDocument.cpp:1425
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosaving... %1"
 msgstr "Salvare automată..."
 
-#: libs/ui/KisDocument.cpp:1410
+#: libs/ui/KisDocument.cpp:1433
 #, kde-format
 msgid "Autosaving..."
 msgstr "Salvare automată..."
 
-#: libs/ui/KisDocument.cpp:1416
+#: libs/ui/KisDocument.cpp:1439
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1559
+#: libs/ui/KisDocument.cpp:1582
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Eroare în timpul salvării automate. Partiţie plină?"
 
-#: libs/ui/KisDocument.cpp:1573
+#: libs/ui/KisDocument.cpp:1596
 #, fuzzy, kde-format
 msgid "Finished autosaving %1"
 msgstr "Unealtă &linie"
 
-#: libs/ui/KisDocument.cpp:1815
+#: libs/ui/KisDocument.cpp:1838
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -30186,41 +30182,41 @@ msgstr ""
 "URL eronat\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1881
+#: libs/ui/KisDocument.cpp:1904
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "File %1 does not exist."
 msgstr "Fișierul %1 nu există."
 
-#: libs/ui/KisDocument.cpp:1910
+#: libs/ui/KisDocument.cpp:1933
 #, fuzzy, kde-format
 #| msgid "Open Document"
 msgid "Opening document"
 msgstr "Deschide documentul"
 
-#: libs/ui/KisDocument.cpp:1926 libs/ui/KisDocument.cpp:1932
+#: libs/ui/KisDocument.cpp:1949 libs/ui/KisDocument.cpp:1955
 #, fuzzy, kde-format
 msgid "Could not open %1."
 msgstr "Elimină selecția"
 
-#: libs/ui/KisDocument.cpp:1945 libs/ui/KisDocument.cpp:1949
+#: libs/ui/KisDocument.cpp:1968 libs/ui/KisDocument.cpp:1972
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2080
+#: libs/ui/KisDocument.cpp:2103
 #, fuzzy, kde-format
 #| msgid "Not Filled"
 msgid "Not Saved"
 msgstr "Neumplut"
 
-#: libs/ui/KisDocument.cpp:2561
+#: libs/ui/KisDocument.cpp:2584
 #, fuzzy, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Fundal"
 
-#: libs/ui/KisDocument.cpp:2613
+#: libs/ui/KisDocument.cpp:2636
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30624,45 +30620,45 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "&Culegător culoare"
 
-#: libs/ui/KisMainWindow.cpp:585
+#: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Arată stratul-rădăcină"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:589
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "&Unelte"
 
-#: libs/ui/KisMainWindow.cpp:1037
+#: libs/ui/KisMainWindow.cpp:1039
 #, fuzzy, kde-format
 #| msgid "(write protected)"
 msgid "Write Protected"
 msgstr "(scris protejat)"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1043
 #, fuzzy, kde-format
 msgid "Recovered"
 msgstr "Dreptunghiular"
 
-#: libs/ui/KisMainWindow.cpp:1071
+#: libs/ui/KisMainWindow.cpp:1073
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "Factor scalare"
 
-#: libs/ui/KisMainWindow.cpp:1095
+#: libs/ui/KisMainWindow.cpp:1097
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Fișierul %1 nu există."
 
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, fuzzy, kde-format
 msgid "Open Images"
 msgstr "Imagine"
 
-#: libs/ui/KisMainWindow.cpp:1319
+#: libs/ui/KisMainWindow.cpp:1321
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30671,46 +30667,46 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "Exportă"
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, fuzzy, kde-format
 #| msgid "Saving Format"
 msgid "Saving As"
 msgstr "Format de salvare"
 
-#: libs/ui/KisMainWindow.cpp:1679
+#: libs/ui/KisMainWindow.cpp:1729
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "Pornește cu un document g&ol"
 
-#: libs/ui/KisMainWindow.cpp:1703
+#: libs/ui/KisMainWindow.cpp:1753
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "Gradient personalizat"
 
-#: libs/ui/KisMainWindow.cpp:1715
+#: libs/ui/KisMainWindow.cpp:1765
 #, fuzzy, kde-format
 msgid "Create from Clipboard"
 msgstr "Primul strat din clipboard"
 
-#: libs/ui/KisMainWindow.cpp:1893
+#: libs/ui/KisMainWindow.cpp:1950
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Salvează planul ca imagine..."
 
-#: libs/ui/KisMainWindow.cpp:1919
+#: libs/ui/KisMainWindow.cpp:1976
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Nu s-a putut crea fişierul pentru salvare "
 
-#: libs/ui/KisMainWindow.cpp:1923
+#: libs/ui/KisMainWindow.cpp:1980
 #, kde-format
 msgid ""
 "\n"
@@ -30718,7 +30714,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1933
+#: libs/ui/KisMainWindow.cpp:1990
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -30727,7 +30723,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2072 libs/ui/KisMainWindow.cpp:2154
+#: libs/ui/KisMainWindow.cpp:2129 libs/ui/KisMainWindow.cpp:2211
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30736,61 +30732,61 @@ msgstr ""
 "Nu s-a putut importa\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2133
+#: libs/ui/KisMainWindow.cpp:2190
 #, fuzzy, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Șterge plan"
 
-#: libs/ui/KisMainWindow.cpp:2560
+#: libs/ui/KisMainWindow.cpp:2617
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Culegător culoare"
 
-#: libs/ui/KisMainWindow.cpp:2575
+#: libs/ui/KisMainWindow.cpp:2632
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Culegător culoare"
 
-#: libs/ui/KisMainWindow.cpp:2579
+#: libs/ui/KisMainWindow.cpp:2636
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "&Culegător culoare"
 
-#: libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/KisMainWindow.cpp:2680
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "&%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2626
+#: libs/ui/KisMainWindow.cpp:2683
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2792
+#: libs/ui/KisMainWindow.cpp:2849
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2808
+#: libs/ui/KisMainWindow.cpp:2865
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Plan"
 
-#: libs/ui/KisMainWindow.cpp:2917
+#: libs/ui/KisMainWindow.cpp:2974
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2975
+#: libs/ui/KisMainWindow.cpp:3032
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -30926,14 +30922,14 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Normal"
 
-#: libs/ui/KisPart.cpp:588
+#: libs/ui/KisPart.cpp:578
 #, fuzzy, kde-format
 msgid ""
 "Could not create document from template\n"
 "%1"
 msgstr "Nu s-a putut crea fişierul pentru salvare "
 
-#: libs/ui/KisPart.cpp:591
+#: libs/ui/KisPart.cpp:581
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open %1\n"
@@ -30958,7 +30954,7 @@ msgstr "Saturație"
 msgid "Could not load %1."
 msgstr "Elimină selecția"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:39
+#: libs/ui/KisRemoteFileFetcher.cpp:41
 #, kde-format
 msgctxt "Fetching remote image"
 msgid ""
@@ -30966,19 +30962,19 @@ msgid ""
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:61
+#: libs/ui/KisRemoteFileFetcher.cpp:63
 #, fuzzy, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "Elimină selecția"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:75
+#: libs/ui/KisRemoteFileFetcher.cpp:77
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:92
+#: libs/ui/KisRemoteFileFetcher.cpp:94
 #, fuzzy, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."
@@ -31255,51 +31251,51 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:148
+#: libs/ui/KisWelcomePageWidget.cpp:157
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:150
+#: libs/ui/KisWelcomePageWidget.cpp:159
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
 "krita.org website"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:153
+#: libs/ui/KisWelcomePageWidget.cpp:162
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, fuzzy, kde-format
 msgid "Language"
 msgstr "Ultima pagină"
 
-#: libs/ui/KisWelcomePageWidget.cpp:154
+#: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:420
+#: libs/ui/KisWelcomePageWidget.cpp:427
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:648
+#: libs/ui/KisWelcomePageWidget.cpp:655
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, fuzzy, kde-format
 msgid "Forget \"%1\""
 msgstr "Exportă"
 
-#: libs/ui/KisWelcomePageWidget.cpp:745
+#: libs/ui/KisWelcomePageWidget.cpp:757
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:774
+#: libs/ui/KisWelcomePageWidget.cpp:786
 #, fuzzy, kde-format
 msgid "An error occurred during the update"
 msgstr "Alegeți mulțimea de canale active."
 
-#: libs/ui/KisWelcomePageWidget.cpp:780
+#: libs/ui/KisWelcomePageWidget.cpp:792
 #, kde-format
 msgid "Restart is required."
 msgstr ""
@@ -32286,12 +32282,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:654
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:656
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32299,14 +32295,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1070
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1072
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -34055,10 +34051,9 @@ msgstr "Decalaj aleator"
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:107
 #, fuzzy, kde-format
-#| msgid "Shadows 3"
 msgctxt "Output color used for the shadows in auto levels"
 msgid "Shadows color:"
-msgstr "Umbre 3"
+msgstr "Culori"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:114
@@ -34083,10 +34078,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:171
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Do not perform midtones enhancement in auto levels"
 msgid "Don't adjust the midtones"
-msgstr "Elimină selecția"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:176
@@ -35626,12 +35621,12 @@ msgstr ""
 msgid "Toggle Preview"
 msgstr "Previzualizează"
 
-#: libs/widgetutils/KoFileDialog.cpp:243
+#: libs/widgetutils/KoFileDialog.cpp:260
 #, fuzzy, kde-format
 msgid "Save As:"
 msgstr "Factor scalare"
 
-#: libs/widgetutils/KoFileDialog.cpp:326
+#: libs/widgetutils/KoFileDialog.cpp:343
 #, kde-format
 msgid ""
 "The selected file name does not have a file extension that Krita "
@@ -35639,7 +35634,7 @@ msgid ""
 "Make sure the file name ends in '.%1' for example."
 msgstr ""
 
-#: libs/widgetutils/KoFileDialog.cpp:511
+#: libs/widgetutils/KoFileDialog.cpp:533
 #, kde-format
 msgid "All supported formats"
 msgstr ""
@@ -37477,7 +37472,7 @@ msgid "Val:"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:127
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
 #, fuzzy, kde-format
 msgid "Onion skins menu"
 msgstr "Alfa"
@@ -37488,26 +37483,26 @@ msgid "Audio menu"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:180
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation settings menu"
 msgstr "Animat"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:192
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
 #, fuzzy, kde-format
 msgid "Clip Start: "
 msgstr "Stea"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
 #, kde-format
 msgid "Clip End: "
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
 #, fuzzy, kde-format
 msgid "Frame Rate: "
 msgstr "Sergiu Bivol"
@@ -37533,37 +37528,37 @@ msgstr "Dreptunghiular"
 msgid "Reset All Channels"
 msgstr "Canal"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:486
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:481
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:493
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:488
 #, fuzzy, kde-format
 msgid "Linear interpolation."
 msgstr "&Culegător culoare"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:500
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:495
 #, fuzzy, kde-format
 msgid "Bezier curve interpolation."
 msgstr "&Culegător culoare"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:507
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:502
 #, fuzzy, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "&Culegător culoare"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:514
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:509
 #, fuzzy, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "&Culegător culoare"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:521
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:516
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:528
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:523
 #, fuzzy, kde-format
 #| msgid "Zoom to All"
 msgid "Zoom view to fit curve."
@@ -37611,69 +37606,69 @@ msgstr[1] "Plan"
 msgstr[2] "Plan"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:290
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation Timeline"
 msgstr "Animat"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "Animated"
-msgid "Animation audio menu"
-msgstr "Animat"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Șterge plan"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "<<Elimină"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Mod"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #, fuzzy, kde-format
 #| msgid "Volume:"
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "Volum:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#, fuzzy, kde-format
+#| msgid "Animated"
+msgid "Animation audio menu"
+msgstr "Animat"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
 msgid "AutoKey Blank"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
 #, fuzzy, kde-format
 msgid "AutoKey Duplicate"
 msgstr "&Următorul plan..."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:509
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:522
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:517
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:523
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:518
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:519
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""
@@ -38539,7 +38534,7 @@ msgstr "Detaliu"
 #, fuzzy, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "Opacitate"
+msgstr "Adaugă o pagină nouă"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:412
 #, fuzzy, kde-format
@@ -38944,9 +38939,10 @@ msgstr ""
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
 #, fuzzy
+#| msgid "Update preview"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Importă imagine"
+msgstr "Actualizează previzualizarea"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, fuzzy, kde-format
@@ -38979,7 +38975,7 @@ msgstr "Șterge imaginea curentă"
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:125
 #, fuzzy, kde-format
 msgid "Load a palette"
-msgstr "Adaugă imagine nouă"
+msgstr "Palete"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:226
 #, fuzzy, kde-format
@@ -40124,13 +40120,13 @@ msgstr "Volum:"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:145
 #, fuzzy, kde-format
 msgid "SVG Template"
-msgstr "Creează"
+msgstr "Stea"
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
 #, fuzzy, kde-format
 msgid "SVG Template Path:"
-msgstr "Creează"
+msgstr "Stea"
 
 #. i18n: ectx: property (text), widget (QLabel, fontSizeLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:237
@@ -47115,24 +47111,24 @@ msgstr "Valoare"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:21
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "2x2 downsampling"
-msgstr "Valoare"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:22
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "4x4 downsampling"
-msgstr "Valoare"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:23
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "8x8 downsampling"
-msgstr "Valoare"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
@@ -47216,11 +47212,10 @@ msgid "Center-first order"
 msgstr "Modele"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:89
-#, fuzzy, kde-format
-#| msgid "X resolution:"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
-msgstr "Rezoluția X:"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
 #, kde-format
@@ -47635,10 +47630,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:492
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gaborish filter"
-msgstr ""
+msgstr "&Culegător culoare"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:499
@@ -47678,7 +47673,7 @@ msgstr ""
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Group order"
-msgstr "&Adaugă plan..."
+msgstr "Mod"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:544
@@ -47764,9 +47759,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:676
-#, fuzzy, kde-format
+#, kde-format
 msgid "Local channel palette range"
-msgstr "Adaugă imagine nouă"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:687
@@ -49466,7 +49461,7 @@ msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
 msgstr "Formă triunghiulară"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1040
+#: plugins/impex/tiff/kis_tiff_import.cc:1044
 #, kde-format
 msgctxt "TIFF errors"
 msgid ""
@@ -49475,11 +49470,25 @@ msgid ""
 "version of libjpeg-turbo and try again."
 msgstr ""
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1143
-#: plugins/impex/tiff/kis_tiff_import.cc:1326
+#: plugins/impex/tiff/kis_tiff_import.cc:1147
+#: plugins/impex/tiff/kis_tiff_import.cc:1330
 #, kde-format
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1577
+#, kde-format
+msgctxt "@title:window"
+msgid "TIFF image with PSD data"
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1579
+#, kde-format
+msgctxt "the choice for the user on loading a TIFF file"
+msgid ""
+"The TIFF image contains valid PSD data embedded. Would you like to use PSD "
+"data instead of normal TIFF data?"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
@@ -49785,9 +49794,9 @@ msgstr "mare"
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, segments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:260
 #: plugins/impex/webp/kis_wdg_options_webp.ui:276
-#, fuzzy, kde-format
+#, kde-format
 msgid "Maximum number of segments (1 to 4)."
-msgstr "Număr de rânduri:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSegments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:263
@@ -52720,9 +52729,8 @@ msgstr "Selecția"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
 #, fuzzy, kde-format
-#| msgid "Transparent"
 msgid "Smudge Transparency"
-msgstr "Transparent"
+msgstr "&Transparent"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, fuzzy, kde-format
@@ -56313,10 +56321,10 @@ msgid "Threshold: "
 msgstr "Prag de pictare"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:552
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in fill tool options"
 msgid "Spread: "
-msgstr "Opacitate"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:558
 #, fuzzy, kde-format
@@ -56462,10 +56470,10 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:633
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
-msgstr "Umple cu model"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
 #, fuzzy, kde-format
@@ -57560,10 +57568,10 @@ msgid "Threshold: "
 msgstr "Prag de pictare"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:374
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in contiguous selection tool options"
 msgid "Spread: "
-msgstr "Opacitate"
+msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:380
 #, fuzzy, kde-format
@@ -57591,9 +57599,9 @@ msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select all regions until a specific boundary color"
-msgstr "Umple cu model"
+msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
@@ -57622,7 +57630,7 @@ msgstr ""
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
 msgid "Selection extent"
-msgstr "Intenția de &randare:"
+msgstr "Regim selecție:"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:95
 #, fuzzy, kde-format
@@ -57737,7 +57745,7 @@ msgstr "Prag de pictare"
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
-msgstr "Intenția de &randare:"
+msgstr "Regim selecție:"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:57
 #, fuzzy, kde-format
@@ -58856,10 +58864,10 @@ msgid "Threshold: "
 msgstr "Prag de pictare"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
 msgid "Spread: "
-msgstr "Opacitate"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
 #, fuzzy, kde-format
@@ -58979,10 +58987,10 @@ msgid "Specific color or transparency"
 msgstr "Selecția"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
-msgstr "Umple cu model"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, fuzzy, kde-format
@@ -58997,10 +59005,10 @@ msgid "All, excluding a specific color or transparency"
 msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
-msgstr "Umple cu model"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
 #, fuzzy, kde-format
@@ -60075,58 +60083,29 @@ msgid "Reference Images Tool"
 msgstr "Șterge imaginea"
 
 #, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "Imagine nouă"
+#~ msgid "&Canvas"
+#~ msgstr "Actualizează imaginea"
 
 #, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "Imagine nouă"
+#~ msgctxt "action"
+#~ msgid "&Reset zoom"
+#~ msgstr "Selecția"
 
 #, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "&Scalează"
+#~ msgctxt "action"
+#~ msgid "Reset zoom"
+#~ msgstr "Selecția"
 
 #, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "Unealtă de ș&tergere"
+#~| msgid "Please create an index to reference first."
+#~ msgid "Please extract ffmpeg from the archive first."
+#~ msgstr "Mai întâi creaţi un index la acea referinţă."
 
 #, fuzzy
 #~| msgid "Difference"
 #~ msgctxt "paletegen status mode option name"
 #~ msgid "Difference"
 #~ msgstr "Diferenţă"
-
-#, fuzzy
-#~| msgid "&Filter:"
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "&Filtru:"
-
-#, fuzzy
-#~| msgid "Edition:"
-#~ msgid "Edit Audio:"
-#~ msgstr "Ediție:"
-
-#, fuzzy
-#~| msgid "Volume:"
-#~ msgctxt "@item:inmenu, slider"
-#~ msgid "Volume:"
-#~ msgstr "Volum:"
-
-#, fuzzy
-#~| msgid "Only print and exit"
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "Printează si închide"
-
-#, fuzzy
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "Nume"
 
 #, fuzzy
 #~ msgid "Choose a video file"
@@ -60203,12 +60182,114 @@ msgstr "Șterge imaginea"
 #~ msgstr "Rotește &90"
 
 #, fuzzy
-#~ msgid "FFMpeg Version: None"
-#~ msgstr "Versiune"
-
-#, fuzzy
 #~ msgid "Image Sequence Options"
 #~ msgstr "Modele"
+
+#, fuzzy
+#~| msgid "Image Size"
+#~ msgid "Drag an image into the window to open"
+#~ msgstr "Dimensiune imagine"
+
+#, fuzzy
+#~ msgid "New File"
+#~ msgstr "Dimensiune imagine"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgid "Recent Documents"
+#~ msgstr "Document"
+
+#, fuzzy
+#~| msgid "Settings"
+#~ msgid "Grid Settings"
+#~ msgstr "Configurări"
+
+#, fuzzy
+#~ msgid "Enable Smooth Zooming"
+#~ msgstr "Activează OpenGL"
+
+#, fuzzy
+#~ msgid "&Description:"
+#~ msgstr "Descriere:"
+
+#, fuzzy
+#~| msgid "&Filter:"
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "&Filter:"
+#~ msgstr "&Filtru:"
+
+#, fuzzy
+#~ msgid "Duplicate current profile"
+#~ msgstr "Șterge imaginea curentă"
+
+#, fuzzy
+#~ msgid "Select Layer Mode"
+#~ msgstr "Rotește &90"
+
+#, fuzzy
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Rotește &90"
+
+#, fuzzy
+#~ msgid "Reset Zoom to 100%"
+#~ msgstr "Selecția"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not save %1.\n"
+#~ "Reason: %2"
+#~ msgstr "Elimină selecția"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not open %2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Nu s-a putut deschide\n"
+#~ "%2.\n"
+#~ "Motiv: %1"
+
+#, fuzzy
+#~| msgid "Do you really want to overwrite the existing '%1' template?"
+#~ msgctxt "Fetching remote image"
+#~ msgid "Do you want to download the image at %1?"
+#~ msgstr "Sigur doriți să suprascrieți șablonul „%1” existent?"
+
+#, fuzzy
+#~ msgid ""
+#~ "Make the selection using a merged copy of the selected color-labeled "
+#~ "layers"
+#~ msgstr "Alegeți mulțimea de canale active."
+
+#~ msgid "Fit Page"
+#~ msgstr "Potrivire în pagină"
+
+#, fuzzy
+#~| msgid "Volume:"
+#~ msgid "Colu&mns:"
+#~ msgstr "Volum:"
+
+#, fuzzy
+#~| msgid "Edition:"
+#~ msgid "Edit Audio:"
+#~ msgstr "Ediție:"
+
+#, fuzzy
+#~| msgid "Volume:"
+#~ msgctxt "@item:inmenu, slider"
+#~ msgid "Volume:"
+#~ msgstr "Volum:"
+
+#, fuzzy
+#~| msgid "Only print and exit"
+#~ msgctxt "@item:inmenu"
+#~ msgid "Open audio..."
+#~ msgstr "Printează si închide"
+
+#, fuzzy
+#~ msgctxt "@item:inmenu"
+#~ msgid "Change audio (%1)..."
+#~ msgstr "Nume"
 
 #, fuzzy
 #~| msgid "Total editing time:"
@@ -60222,6 +60303,35 @@ msgstr "Șterge imaginea"
 #, fuzzy
 #~ msgid "Split Strokes"
 #~ msgstr "Setează margina"
+
+#, fuzzy
+#~ msgid "Lossless compression"
+#~ msgstr "Proprietăți:"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Culoare"
+
+#, fuzzy
+#~ msgid "Flip vertically"
+#~ msgstr "Selecția"
+
+#, fuzzy
+#~ msgid "Bypass filtering"
+#~ msgstr "&Culegător culoare"
+
+#, fuzzy
+#~ msgid "Use multithreaded decoding"
+#~ msgstr "Pensule"
+
+#, fuzzy
+#~| msgid "Color space:"
+#~ msgid "Color planes: "
+#~ msgstr "Spațiu de culori:"
+
+#, fuzzy
+#~ msgid "Alpha plane: "
+#~ msgstr "Alfa"
 
 #, fuzzy
 #~ msgid "Color Rate"
@@ -60266,140 +60376,6 @@ msgstr "Șterge imaginea"
 #~ msgstr "Neumplut"
 
 #, fuzzy
-#~ msgid "Select Layer Mode"
-#~ msgstr "Rotește &90"
-
-#, fuzzy
-#~ msgid "Select Multiple Layer Mode"
-#~ msgstr "Rotește &90"
-
-#, fuzzy
-#~| msgid "Please create an index to reference first."
-#~ msgid "Please extract ffmpeg from the archive first."
-#~ msgstr "Mai întâi creaţi un index la acea referinţă."
-
-#, fuzzy
-#~| msgid "Volume:"
-#~ msgid "Colu&mns:"
-#~ msgstr "Volum:"
-
-#, fuzzy
-#~| msgid "Do you really want to overwrite the existing '%1' template?"
-#~ msgctxt "Fetching remote image"
-#~ msgid "Do you want to download the image at %1?"
-#~ msgstr "Sigur doriți să suprascrieți șablonul „%1” existent?"
-
-#, fuzzy
-#~ msgid "&Description:"
-#~ msgstr "Descriere:"
-
-#, fuzzy
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr "Elimină selecția"
-
-#, fuzzy
-#~ msgid ""
-#~ "Could not open %2.\n"
-#~ "Reason: %1"
-#~ msgstr ""
-#~ "Nu s-a putut deschide\n"
-#~ "%2.\n"
-#~ "Motiv: %1"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "Unelte de desenare"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "Unelte de desenare"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Brush composite"
-#~ msgstr "Pensule"
-
-#, fuzzy
-#~ msgctxt "@item:inmenu Layers Docker settings, combobox"
-#~ msgid "Subtitle Style"
-#~ msgstr "Opacitate"
-
-#, fuzzy
-#~| msgid "None"
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "None"
-#~ msgstr "Nimic"
-
-#, fuzzy
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "Simple"
-#~ msgstr "Albastru"
-
-#, fuzzy
-#~ msgid "&Canvas"
-#~ msgstr "Actualizează imaginea"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "&Reset Zoom"
-#~ msgstr "Selecția"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Reset Zoom"
-#~ msgstr "Selecția"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page"
-#~ msgstr "Potrivire în pagină"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Width"
-#~ msgstr "&Lungime"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Width"
-#~ msgstr "Potrivire la lăţimea paginii"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Height"
-#~ msgstr "Potrivire la lăţimea paginii"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Height"
-#~ msgstr "Potrivire la lăţimea paginii"
-
-#, fuzzy
-#~ msgid "Duplicate current profile"
-#~ msgstr "Șterge imaginea curentă"
-
-#, fuzzy
-#~ msgid "Reset Zoom to 100%"
-#~ msgstr "Selecția"
-
-#~ msgid "Fit Page"
-#~ msgstr "Potrivire în pagină"
-
-#, fuzzy
-#~ msgid "Make the selection using a merged copy of all layers"
-#~ msgstr "Alegeți mulțimea de canale active."
-
-#, fuzzy
-#~ msgid ""
-#~ "Make the selection using a merged copy of the selected color-labeled "
-#~ "layers"
-#~ msgstr "Alegeți mulțimea de canale active."
-
-#, fuzzy
 #~| msgid "&Add to current selection"
 #~ msgid "Current selection"
 #~ msgstr "&Adaugă la selecția curentă"
@@ -60431,6 +60407,26 @@ msgstr "Șterge imaginea"
 #~ msgstr "Pensule"
 
 #, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "Imagine nouă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "Imagine nouă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "&Scalează"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "Unealtă de ș&tergere"
+
+#, fuzzy
 #~| msgid "&Save to Presets"
 #~ msgctxt "The 'what to fill' section label in enclose and fill tool options"
 #~ msgid "What to fill"
@@ -60449,59 +60445,26 @@ msgstr "Șterge imaginea"
 #, fuzzy
 #~ msgctxt "Region selection method in enclose and fill tool"
 #~ msgid "All regions"
-#~ msgstr "Selecția"
+#~ msgstr "Proprietăți plan..."
 
 #, fuzzy
-#~| msgid "Settings"
-#~ msgid "Grid Settings"
-#~ msgstr "Configurări"
+#~ msgctxt "action"
+#~ msgid "&Painter's Tools"
+#~ msgstr "Unelte de desenare"
 
 #, fuzzy
-#~ msgid "Enable Smooth Zooming"
-#~ msgstr "Activează OpenGL"
+#~ msgctxt "action"
+#~ msgid "Painter's Tools"
+#~ msgstr "Unelte de desenare"
 
 #, fuzzy
-#~ msgid "Lossless compression"
-#~ msgstr "Proprietăți:"
-
-#, fuzzy
-#~ msgid "Information"
-#~ msgstr "Culoare"
-
-#, fuzzy
-#~ msgid "Flip vertically"
-#~ msgstr "Selecția"
-
-#, fuzzy
-#~ msgid "Bypass filtering"
-#~ msgstr "&Culegător culoare"
-
-#, fuzzy
-#~ msgid "Use multithreaded decoding"
+#~ msgctxt "action"
+#~ msgid "Brush composite"
 #~ msgstr "Pensule"
-
-#, fuzzy
-#~| msgid "Color space:"
-#~ msgid "Color planes: "
-#~ msgstr "Spațiu de culori:"
-
-#, fuzzy
-#~ msgid "Alpha plane: "
-#~ msgstr "Alfa"
 
 #, fuzzy
 #~ msgid "Cache Location:"
 #~ msgstr "Saturație"
-
-#, fuzzy
-#~ msgctxt "@item:inmenu Layers Docker settings, checkbox"
-#~ msgid "Display Subtitles"
-#~ msgstr "Selecția"
-
-#, fuzzy
-#~ msgctxt "@item:tooltip"
-#~ msgid "Layer opacity and blending mode"
-#~ msgstr "Regim amestecare"
 
 #, fuzzy
 #~ msgid "Intensity"
@@ -60513,6 +60476,10 @@ msgstr "Șterge imaginea"
 #~ msgstr "Descriere:"
 
 #, fuzzy
+#~ msgid "Disable vsync (needs restart)"
+#~ msgstr "Alfa"
+
+#, fuzzy
 #~| msgid "Only print and exit"
 #~ msgctxt ""
 #~ "The 'include surrounding regions' checkbox in enclose and fill tool"
@@ -60520,15 +60487,66 @@ msgstr "Șterge imaginea"
 #~ msgstr "Printează si închide"
 
 #, fuzzy
-#~ msgid "Disable vsync (needs restart)"
-#~ msgstr "Alfa"
-
-#, fuzzy
 #~ msgid "Angle snapping delta:"
 #~ msgstr "Delta unghi îmbinare"
 
 #~ msgid "Angle Constraints"
 #~ msgstr "Restricții unghi"
+
+#, fuzzy
+#~ msgid "Open Color Profile"
+#~ msgstr "Proprietăți plan..."
+
+#, fuzzy
+#~ msgctxt "@title:window"
+#~ msgid "Select a swap directory"
+#~ msgstr "Dreptunghiular"
+
+#, fuzzy
+#~ msgid "Add new color profile:"
+#~ msgstr "Proprietăți plan..."
+
+#, fuzzy
+#~ msgctxt "Color model"
+#~ msgid "&Model:"
+#~ msgstr "Model:"
+
+#, fuzzy
+#~ msgid "Profi&le:"
+#~ msgstr "Profil:"
+
+#, fuzzy
+#~ msgid "Cursor Shape:"
+#~ msgstr "Formă &cursor:"
+
+#, fuzzy
+#~ msgid "Cursor Color:"
+#~ msgstr "Pensulă"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgid "General:"
+#~ msgstr "General"
+
+#, fuzzy
+#~ msgid "Enable Touch Rotation"
+#~ msgstr "Setări filtru"
+
+#, fuzzy
+#~ msgid "Animation:"
+#~ msgstr "Animat"
+
+#, fuzzy
+#~ msgid "Swap File Location:"
+#~ msgstr "Saturație"
+
+#, fuzzy
+#~ msgid "Force Instant Preview in Move Tool"
+#~ msgstr "Previzualizează"
+
+#, fuzzy
+#~ msgid "Force Instant Preview in Filters"
+#~ msgstr "Previzualizează"
 
 #, fuzzy
 #~ msgid "Intersect"
@@ -60544,6 +60562,20 @@ msgstr "Șterge imaginea"
 #, fuzzy
 #~ msgid "Symmetric Difference"
 #~ msgstr "Geometrice"
+
+#, fuzzy
+#~ msgid "Loading Plugins Exiv/IO..."
+#~ msgstr "Modele"
+
+#, fuzzy
+#~| msgid "%1 %"
+#~ msgid "%1 %2 px"
+#~ msgstr "%1 %"
+
+#, fuzzy
+#~ msgctxt "About <Profilename>"
+#~ msgid "About "
+#~ msgstr "Culoare"
 
 #, fuzzy
 #~| msgid "Current Layer"
@@ -60569,92 +60601,55 @@ msgstr "Șterge imaginea"
 #~ msgstr "Modificator culoare"
 
 #, fuzzy
+#~ msgid "Change the color of the line/border"
+#~ msgstr "Culoare fundal"
+
+#, fuzzy
 #~ msgctxt "@info:tooltip %2 is shortcut"
 #~ msgid "%1 (%2)"
 #~ msgstr "Verde"
 
-#, fuzzy
-#~ msgid "Fuzziness: "
-#~ msgstr "Luminează"
+#~ msgid "Use same aspect as pixels"
+#~ msgstr "Folosește același aspect ca pixeli"
 
 #, fuzzy
-#~ msgid "Opacity Spread: "
-#~ msgstr "Opacitate"
-
-#, fuzzy
-#~ msgid "Feathering radius: "
-#~ msgstr "&Culegător culoare"
-
-#, fuzzy
-#~ msgid "Use selection as boundary: "
-#~ msgstr "Elimină selecția"
-
-#, fuzzy
-#~ msgctxt "Threshold label in Magnetic Selection's Tool options"
-#~ msgid "Threshold: "
-#~ msgstr "Prag de pictare"
+#~ msgid "Hold Last Frame for:"
+#~ msgstr "Culori denumite"
 
 #, fuzzy
 #~ msgid "Vector Libraries"
 #~ msgstr "&Următorul plan..."
 
 #, fuzzy
-#~ msgid "Default (encoder chooses)"
-#~ msgstr "Culoare"
+#~ msgid "Colorspace"
+#~ msgstr "&Culegător culoare"
 
 #, fuzzy
-#~ msgid "Cursor Shape:"
-#~ msgstr "Formă &cursor:"
-
-#, fuzzy
-#~ msgid "Cursor Color:"
-#~ msgstr "Pensulă"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Paste"
-#~ msgid "Paste"
-#~ msgstr "Lipeşte"
-
-#, fuzzy
-#~ msgid "Max Gesture"
-#~ msgstr "Text"
+#~| msgid "Value"
+#~ msgctxt "Label of Brightness value in brush settings"
+#~ msgid "Value"
+#~ msgstr "Valoare"
 
 #, fuzzy
 #~ msgid "Gaussian distribution"
 #~ msgstr "Selecția"
 
-#~ msgid "Use same aspect as pixels"
-#~ msgstr "Folosește același aspect ca pixeli"
+#, fuzzy
+#~| msgid "Add Group"
+#~ msgctxt "Group as Swatch Group in a Palette"
+#~ msgid "Add Group"
+#~ msgstr "Adaugă grup"
 
 #, fuzzy
-#~ msgid "Enable Touch Rotation"
-#~ msgstr "Setări filtru"
-
-#, fuzzy
-#~ msgid "Hold last frame for:"
-#~ msgstr "Culori denumite"
-
-#, fuzzy
-#~ msgid "Fast mode:"
+#~ msgid "Fast mode: "
 #~ msgstr "Regim de expunere:"
 
 #, fuzzy
-#~ msgctxt "The Threshold label in Fill tool options"
-#~ msgid "Threshold:"
-#~ msgstr "Prag de pictare"
-
-#, fuzzy
-#~ msgctxt "The Opacity Spread label in Fill tool options"
-#~ msgid "Opacity Spread:"
-#~ msgstr "Curbă opacitate"
-
-#, fuzzy
-#~ msgid "Grow selection:"
+#~ msgid "Grow selection: "
 #~ msgstr "Elimină selecția"
 
 #, fuzzy
-#~ msgid "Feathering radius:"
+#~ msgid "Feathering radius: "
 #~ msgstr "&Culegător culoare"
 
 #, fuzzy
@@ -60674,11 +60669,6 @@ msgstr "Șterge imaginea"
 #, fuzzy
 #~ msgid "Fill entire selection:"
 #~ msgstr "Selecția"
-
-#, fuzzy
-#~ msgctxt "The 'continuous fill' label in Fill tool options"
-#~ msgid "Continuous Fill:"
-#~ msgstr "Culoare"
 
 #, fuzzy
 #~| msgid "Current Layer"
@@ -60704,103 +60694,23 @@ msgstr "Șterge imaginea"
 #~ msgstr "Modificator culoare"
 
 #, fuzzy
-#~| msgid "%1 %"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %"
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Paste"
+#~ msgid "Paste"
+#~ msgstr "Lipeşte"
 
 #, fuzzy
-#~| msgid "%1 %"
-#~ msgctxt "Brush Option Flow"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %"
+#~ msgid "Fuzziness: "
+#~ msgstr "Luminează"
 
 #, fuzzy
-#~| msgid "%1 %"
-#~ msgctxt "Edge softness, Brush Option Fade"
-#~ msgid "%1 %2"
-#~ msgstr "%1 %"
+#~ msgid "Use selection as boundary: "
+#~ msgstr "Elimină selecția"
 
 #, fuzzy
-#~| msgid "%1 %"
-#~ msgctxt "Brush Option Scatter"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %"
-
-#, fuzzy
-#~| msgid "%1 %"
-#~ msgid "%1 %2 px"
-#~ msgstr "%1 %"
-
-#, fuzzy
-#~| msgid "General"
-#~ msgid "General:"
-#~ msgstr "General"
-
-#, fuzzy
-#~ msgid "Animation:"
-#~ msgstr "Animat"
-
-#, fuzzy
-#~ msgid "Swap File Location:"
-#~ msgstr "Saturație"
-
-#, fuzzy
-#~ msgid "Force Instant Preview in Move Tool"
-#~ msgstr "Previzualizează"
-
-#, fuzzy
-#~ msgid "Force Instant Preview in Filters"
-#~ msgstr "Previzualizează"
-
-#, fuzzy
-#~ msgid "Open Color Profile"
-#~ msgstr "Proprietăți plan..."
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Select a swap directory"
-#~ msgstr "Dreptunghiular"
-
-#, fuzzy
-#~ msgid "Add new color profile:"
-#~ msgstr "Proprietăți plan..."
-
-#, fuzzy
-#~ msgid "Colorspace"
-#~ msgstr "&Culegător culoare"
-
-#, fuzzy
-#~ msgctxt "Color model"
-#~ msgid "&Model:"
-#~ msgstr "Model:"
-
-#, fuzzy
-#~ msgid "Profi&le:"
-#~ msgstr "Profil:"
-
-#, fuzzy
-#~ msgctxt "About <Profilename>"
-#~ msgid "About "
-#~ msgstr "Culoare"
-
-#, fuzzy
-#~ msgctxt "The Softness label in Fill tool options"
-#~ msgid "Softness:"
-#~ msgstr "Grosime linie"
-
-#, fuzzy
-#~ msgid "Softness: "
-#~ msgstr "Grosime linie"
-
-#, fuzzy
-#~ msgid "Change the color of the line/border"
-#~ msgstr "Culoare fundal"
-
-#, fuzzy
-#~| msgid "Value"
-#~ msgctxt "Label of Brightness value in brush settings"
-#~ msgid "Value"
-#~ msgstr "Valoare"
+#~ msgctxt "Threshold label in Magnetic Selection's Tool options"
+#~ msgid "Threshold: "
+#~ msgstr "Prag de pictare"
 
 #, fuzzy
 #~ msgctxt "action"
@@ -60811,11 +60721,6 @@ msgstr "Șterge imaginea"
 #~ msgctxt "action"
 #~ msgid "Brightness/Contrast curve"
 #~ msgstr "Luminează"
-
-#, fuzzy
-#~ msgctxt "The Threshold label in Fill tool options"
-#~ msgid "Threshold: "
-#~ msgstr "Prag de pictare"
 
 #, fuzzy
 #~| msgid "The file %1 does not exist."
@@ -60901,16 +60806,14 @@ msgstr "Șterge imaginea"
 #~ msgstr "&Culegător culoare"
 
 #, fuzzy
+#~| msgid ""
+#~| "Could not open %1\n"
+#~| "Reason: %2"
 #~ msgctxt "Error message when saving a .kra file"
 #~ msgid "Could not save resource %1 to the kra file."
-#~ msgstr "Elimină selecția"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Add shapes to group"
-#~ msgctxt "action"
-#~ msgid "Add a new &Group Layer"
-#~ msgstr "Adaugă forme la grup"
+#~ msgstr ""
+#~ "Nu s-a putut deschide %1\n"
+#~ "Motiv: %2"
 
 #, fuzzy
 #~ msgctxt "action"
@@ -61075,35 +60978,21 @@ msgstr "Șterge imaginea"
 #~ msgstr "Salvează paletă"
 
 #, fuzzy
+#~| msgid ""
+#~| "Could not open %1\n"
+#~| "Reason: %2"
 #~ msgid "Could not save preset under name %1, it already exists."
-#~ msgstr "Elimină selecția"
+#~ msgstr ""
+#~ "Nu s-a putut deschide %1\n"
+#~ "Motiv: %2"
 
 #, fuzzy
 #~ msgid "Could not update preset %1."
 #~ msgstr "Elimină selecția"
 
 #, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Couldn't add the session"
-#~ msgstr "Elimină selecția"
-
-#, fuzzy
-#~ msgctxt "Warning about not being able to rename a session"
-#~ msgid "Renaming the session failed."
-#~ msgstr "Redenumeşte forme"
-
-#, fuzzy
 #~ msgid "Clean Up"
 #~ msgstr "Albastru"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Filters"
-#~ msgstr "&Alb"
-
-#, fuzzy
-#~ msgid "Cutoff"
-#~ msgstr "Cafea"
 
 #, fuzzy
 #~ msgid "Export Directory: "
@@ -61128,19 +61017,13 @@ msgstr "Șterge imaginea"
 #~ msgstr "Pagină"
 
 #, fuzzy
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cells horizontally"
-#~ msgstr "Orizontal:"
+#~ msgctxt "action"
+#~ msgid "Filters"
+#~ msgstr "&Alb"
 
 #, fuzzy
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cell vertically"
-#~ msgstr "Selecția"
-
-#, fuzzy
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cells vertically"
-#~ msgstr "Selecția"
+#~ msgid "Cutoff"
+#~ msgstr "Cafea"
 
 #, fuzzy
 #~| msgid "Auto"
@@ -61149,15 +61032,11 @@ msgstr "Șterge imaginea"
 #~ msgstr "Automat"
 
 #, fuzzy
-#~ msgid "Loading Plugins Exiv/IO..."
-#~ msgstr "Modele"
+#~ msgid "lblThumbnail"
+#~ msgstr "Importă imagine"
 
 #~ msgid "No store backend"
 #~ msgstr "Nicio platformă de stocare"
-
-#, fuzzy
-#~ msgid "lblThumbnail"
-#~ msgstr "Importă imagine"
 
 #, fuzzy
 #~ msgid "KSqueezedTextLabel"
@@ -62026,6 +61905,10 @@ msgstr "Șterge imaginea"
 #~ msgstr "Regim selecție:"
 
 #, fuzzy
+#~ msgid "Select Behind Blending Mode"
+#~ msgstr "Regim amestecare"
+
+#, fuzzy
 #~ msgid "Select Clear Blending Mode"
 #~ msgstr "Regim amestecare"
 
@@ -62264,9 +62147,6 @@ msgstr "Șterge imaginea"
 
 #~ msgid "1 : 1"
 #~ msgstr "1 : 1"
-
-#~ msgid "Update preview"
-#~ msgstr "Actualizează previzualizarea"
 
 #, fuzzy
 #~ msgid "&Autoupdate"
@@ -63206,10 +63086,6 @@ msgstr "Șterge imaginea"
 #~ msgctxt "No border - has to fit in 48pixels"
 #~ msgid "None"
 #~ msgstr "Nimic"
-
-#, fuzzy
-#~ msgid "No Border"
-#~ msgstr "Mod"
 
 #, fuzzy
 #~ msgid "New Style"
@@ -65532,10 +65408,6 @@ msgstr "Șterge imaginea"
 #~ msgstr "Format pagină"
 
 #, fuzzy
-#~ msgid "Replace Image"
-#~ msgstr "Șterge imaginea"
-
-#, fuzzy
 #~ msgid "Vector image"
 #~ msgstr "Unealtă &dreptunghi"
 
@@ -65686,6 +65558,10 @@ msgstr "Șterge imaginea"
 #, fuzzy
 #~ msgid "Brush Radius:"
 #~ msgstr "&Culegător culoare"
+
+#, fuzzy
+#~ msgid "Opacity decrease"
+#~ msgstr "Curbă opacitate"
 
 #, fuzzy
 #~ msgid "Saturation decrease"
@@ -68451,6 +68327,11 @@ msgstr "Șterge imaginea"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Duration:"
 #~ msgstr "Saturație"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dynamics settings"
+#~ msgstr "&Următorul plan..."
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
@@ -74916,6 +74797,11 @@ msgstr "Șterge imaginea"
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Activate previous layer"
 #~ msgstr "Șterge plan"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) action"
+#~ msgid "&Group Layer"
+#~ msgstr "&Adaugă plan..."
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
@@ -87884,6 +87770,10 @@ msgstr "Șterge imaginea"
 #, fuzzy
 #~ msgid "Select a polygonal area"
 #~ msgstr "Modificator culoare"
+
+#, fuzzy
+#~ msgid "&Similar Selection"
+#~ msgstr "Selecția"
 
 #, fuzzy
 #~ msgid "&Polygon"

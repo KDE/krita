@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-25 00:43+0000\n"
+"POT-Creation-Date: 2023-07-27 02:25+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -13110,7 +13110,7 @@ msgstr ""
 msgid "File"
 msgstr "Failas"
 
-#: krita/krita5.xmlgui:419
+#: krita/krita5.xmlgui:420
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Teptukai ir priemonės"
@@ -16051,27 +16051,27 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Darbalaukiai"
 
-#: krita/main.cc:521
+#: krita/main.cc:527
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "&Skiriamoji geba:"
 
-#: krita/main.cc:522
+#: krita/main.cc:528
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:632 libs/ui/KisApplication.cpp:409
-#: libs/ui/KisApplication.cpp:680
+#: krita/main.cc:646 libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:681
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Įspėjimas"
 
-#: krita/main.cc:633
+#: krita/main.cc:647
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16079,12 +16079,12 @@ msgid ""
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
 msgstr ""
 
-#: krita/main.cc:655 krita/main.cc:660
+#: krita/main.cc:669 krita/main.cc:674
 #, fuzzy, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita %1"
 
-#: krita/main.cc:656
+#: krita/main.cc:670
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16092,7 +16092,7 @@ msgid ""
 "installed."
 msgstr ""
 
-#: krita/main.cc:661
+#: krita/main.cc:675
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16586,26 +16586,26 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3744
+#: libs/flake/text/KoSvgTextShape.cpp:3751
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tekstas"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3746
-#: libs/flake/text/KoSvgTextShape.cpp:3754
+#: libs/flake/text/KoSvgTextShape.cpp:3753
+#: libs/flake/text/KoSvgTextShape.cpp:3761
 #, fuzzy, kde-format
 msgid "SVG Text Shape"
 msgstr "teksto šešėlis"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3752
+#: libs/flake/text/KoSvgTextShape.cpp:3759
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "Tekstas"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3766
-#: libs/flake/text/KoSvgTextShape.cpp:3781
+#: libs/flake/text/KoSvgTextShape.cpp:3773
+#: libs/flake/text/KoSvgTextShape.cpp:3788
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17379,7 +17379,7 @@ msgstr "Paveikslėliams"
 msgid "Selection Mask"
 msgstr "Nieko nepažymėta"
 
-#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2554
+#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2577
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -17499,7 +17499,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Atverti spalvų profilį"
 
-#: libs/image/kis_image.cc:2486
+#: libs/image/kis_image.cc:2487
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -17641,9 +17641,7 @@ msgstr "&Piešimo sluoksnis"
 msgid "Show Coloring"
 msgstr "Pažymėjimas"
 
-#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
 #: libs/image/kis_layer_properties_icons.cpp:32
-#: libs/ui/forms/KisWelcomePage.ui:1572
 #, fuzzy, kde-format
 #| msgid "Open palette"
 msgid "Open File"
@@ -17734,8 +17732,8 @@ msgid "Processing"
 msgstr "Papildomas apdorojimas"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1420
-#: libs/ui/KisMainWindow.cpp:1700 libs/ui/KisMainWindow.cpp:1713
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1750 libs/ui/KisMainWindow.cpp:1763
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18217,7 +18215,7 @@ msgstr "Transformuoti mazgą"
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
-#: plugins/impex/tiff/kis_tiff_import.cc:562
+#: plugins/impex/tiff/kis_tiff_import.cc:566
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
 msgid "Transparency Mask"
@@ -18492,8 +18490,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Perrašyti esamą dokumentą"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2064
-#: libs/ui/KisMainWindow.cpp:2147
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2121
+#: libs/ui/KisMainWindow.cpp:2204
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Paveikslėliams"
@@ -19838,7 +19836,7 @@ msgstr "Iš"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:498 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:504 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -19874,9 +19872,9 @@ msgstr "Valyti resursų failus"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19892,24 +19890,24 @@ msgstr "Valyti resursų failus"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:979
-#: libs/ui/KisApplication.cpp:982 libs/ui/KisApplication.cpp:998
-#: libs/ui/KisApplication.cpp:1030 libs/ui/KisApplication.cpp:1044
-#: libs/ui/KisApplication.cpp:1072 libs/ui/KisDocument.cpp:946
-#: libs/ui/KisDocument.cpp:953 libs/ui/KisDocument.cpp:973
-#: libs/ui/KisDocument.cpp:1881 libs/ui/KisDocument.cpp:1925
-#: libs/ui/KisDocument.cpp:1931 libs/ui/KisDocument.cpp:1944
-#: libs/ui/KisDocument.cpp:1948 libs/ui/KisMainWindow.cpp:979
-#: libs/ui/KisMainWindow.cpp:1095 libs/ui/KisMainWindow.cpp:1221
-#: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1924
-#: libs/ui/KisMainWindow.cpp:1933 libs/ui/KisMainWindow.cpp:2072
-#: libs/ui/KisMainWindow.cpp:2133 libs/ui/KisMainWindow.cpp:2154
-#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:588
-#: libs/ui/KisPart.cpp:591 libs/ui/KisReferenceImage.cpp:175
-#: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
-#: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:985
+#: libs/ui/KisApplication.cpp:988 libs/ui/KisApplication.cpp:1004
+#: libs/ui/KisApplication.cpp:1036 libs/ui/KisApplication.cpp:1050
+#: libs/ui/KisApplication.cpp:1078 libs/ui/KisDocument.cpp:969
+#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
+#: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
+#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:981
+#: libs/ui/KisMainWindow.cpp:1097 libs/ui/KisMainWindow.cpp:1223
+#: libs/ui/KisMainWindow.cpp:1320 libs/ui/KisMainWindow.cpp:1981
+#: libs/ui/KisMainWindow.cpp:1990 libs/ui/KisMainWindow.cpp:2129
+#: libs/ui/KisMainWindow.cpp:2190 libs/ui/KisMainWindow.cpp:2211
+#: libs/ui/KisMainWindow.cpp:2826 libs/ui/KisPart.cpp:578
+#: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
+#: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
-#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:738
 #: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20410,7 +20408,7 @@ msgstr "Valyti resursų failus"
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:123
 #, fuzzy, kde-format
 msgid "Display settings"
-msgstr "Rodyti pažymėjimą"
+msgstr "Dublikuoti"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:130
 #, fuzzy, kde-format
@@ -20429,8 +20427,8 @@ msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Trinti resursą"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:334
-#: libs/ui/KisMainWindow.cpp:2569
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:335
+#: libs/ui/KisMainWindow.cpp:2626
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -20508,19 +20506,17 @@ msgstr ""
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:97
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Create shape"
+#| msgid "Failed to create an action."
 msgctxt "@title:window"
 msgid "Failed to rename the resource"
-msgstr "Sukurti formą"
+msgstr "Nepavyko sukurti veiksmo."
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:97
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Create shape"
+#| msgid "Failed to create an action."
 msgctxt "Warning message"
 msgid "Failed to rename the resource."
-msgstr "Sukurti formą"
+msgstr "Nepavyko sukurti veiksmo."
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:119
 #, fuzzy, kde-format
@@ -20909,7 +20905,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Nepavyko sukurti veiksmo."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2174
+#: libs/ui/KisMainWindow.cpp:2231
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "Orientacija"
@@ -20952,18 +20948,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:392
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:472
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
 #, fuzzy, kde-format
 #| msgid "<html><head/><body><p><br/></p></body></html>"
 msgctxt "ffmpeg warning checks"
@@ -20972,28 +20968,28 @@ msgid ""
 "will be reduced to 50 frames per second"
 msgstr "<html><head/><body><p><br/></p></body></html>"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:479
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Warning(s):"
 msgstr "Dėmesio"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr ""
@@ -21231,7 +21227,7 @@ msgstr "Nepavyko sukurti veiksmo."
 msgid "FFMpeg Crashed"
 msgstr ""
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:614
+#: libs/ui/animation/KisFFMpegWrapper.cpp:620
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -22934,7 +22930,7 @@ msgid "Numerical"
 msgstr "Kūginis"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "Paveikslėliams"
@@ -22980,7 +22976,7 @@ msgstr "Sluoksnio savybės"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -23082,7 +23078,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Įveskite grupės pavadinimą:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2580
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2637
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -24066,130 +24062,21 @@ msgstr "Visada naudoti šį šabloną pasileidžiant programai"
 msgid "Always use this template"
 msgstr "Visada naudoti šį šabloną"
 
-#. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:168
-#, kde-format
-msgid "News"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:191
-#, fuzzy, kde-format
-#| msgid "No options"
-msgid "News options"
-msgstr "Nėra parinkčių"
-
-#. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:314
-#, fuzzy, kde-format
-msgid "Krita Version X.X.X Available"
-msgstr "Baltos spalvos balansas:"
-
-#. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:365
-#, fuzzy, kde-format
-#| msgid "Update"
-msgid "Update now!"
-msgstr "Atnaujinti"
-
-#. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:372
-#, fuzzy, kde-format
-msgid "Show details"
-msgstr "Rodyti liniuotes"
-
-#. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:455 libs/ui/KisWelcomePageWidget.cpp:398
-#, kde-format
-msgid ""
-"You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
-"decoration: underline;\">enable news</a> from krita.org in various languages "
-"with the menu above"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:562
-#, fuzzy, kde-format
-msgid "Community"
-msgstr "Turinys"
-
-#. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:647 libs/ui/KisWelcomePageWidget.cpp:384
-#, fuzzy, kde-format
-#| msgid "Manual"
-msgid "User Manual"
-msgstr "Rankinis"
-
-#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:737 libs/ui/KisWelcomePageWidget.cpp:381
-#, fuzzy, kde-format
-msgid "Getting Started"
-msgstr "Anotacija"
-
-#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:824 libs/ui/KisWelcomePageWidget.cpp:378
-#, fuzzy, kde-format
-msgid "User Community"
-msgstr "Turinys"
-
-#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:911 libs/ui/KisWelcomePageWidget.cpp:390
-#, fuzzy, kde-format
-msgid "Krita Website"
-msgstr "Baltos spalvos balansas:"
-
-#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:1001 libs/ui/KisWelcomePageWidget.cpp:393
-#, fuzzy, kde-format
-#| msgid "Source"
-msgid "Source Code"
-msgstr "Šaltinis"
-
-#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:1088 libs/ui/KisWelcomePageWidget.cpp:387
+#. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
+#: libs/ui/forms/KisWelcomePage.ui:48
 #, fuzzy, kde-format
 #| msgid "&Support KDE"
-msgid "Support Krita"
+msgid "Support Krita!"
 msgstr "&Paremkite KDE"
 
-#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:1178 libs/ui/KisWelcomePageWidget.cpp:396
-#, kde-format
-msgid "Powered by KDE"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, dragImageHereLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1261
-#, kde-format
-msgid "Drag an image into the window to open"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1361
-#, fuzzy, kde-format
-msgid "Start"
-msgstr "Pradėti nuo"
-
-#. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1428 libs/ui/KisWelcomePageWidget.cpp:625
-#, kde-format
-msgid "DEV BUILD"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, newFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:1504
-#, fuzzy, kde-format
-msgid "New File"
-msgstr "Paveikslėlio dydis"
-
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1655
+#: libs/ui/forms/KisWelcomePage.ui:79
 #, fuzzy, kde-format
-msgid "Recent Documents"
-msgstr "Perrašyti esamą dokumentą"
+msgid "Recent Images"
+msgstr "Keisti paveikslėlio dydį"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:1713
+#: libs/ui/forms/KisWelcomePage.ui:103
 #, fuzzy, kde-format
 #| msgid "Clear"
 msgctxt "Welcome Screen Recent Document List's Clear link Label"
@@ -24197,15 +24084,136 @@ msgid "Clear"
 msgstr "Išvalyti"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:1766
+#: libs/ui/forms/KisWelcomePage.ui:154
 #, fuzzy, kde-format
 msgid ""
 "You don't seem to have any\n"
 "recently opened documents"
 msgstr "Monitoriaus profilis: "
 
+#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:322
+#, fuzzy, kde-format
+msgid "Community"
+msgstr "Turinys"
+
+#. i18n: ectx: property (text), widget (QLabel, manualLink)
+#: libs/ui/forms/KisWelcomePage.ui:391 libs/ui/KisWelcomePageWidget.cpp:391
+#, fuzzy, kde-format
+#| msgid "Manual"
+msgid "User Manual"
+msgstr "Rankinis"
+
+#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
+#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:394
+#, fuzzy, kde-format
+#| msgid "&Support KDE"
+msgid "Support Krita"
+msgstr "&Paremkite KDE"
+
+#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
+#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:403
+#, kde-format
+msgid "Powered by KDE"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
+#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:400
+#, fuzzy, kde-format
+#| msgid "Source"
+msgid "Source Code"
+msgstr "Šaltinis"
+
+#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
+#: libs/ui/forms/KisWelcomePage.ui:748 libs/ui/KisWelcomePageWidget.cpp:388
+#, fuzzy, kde-format
+msgid "Getting Started"
+msgstr "Anotacija"
+
+#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
+#: libs/ui/forms/KisWelcomePage.ui:835 libs/ui/KisWelcomePageWidget.cpp:385
+#, fuzzy, kde-format
+msgid "User Community"
+msgstr "Turinys"
+
+#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
+#: libs/ui/forms/KisWelcomePage.ui:922 libs/ui/KisWelcomePageWidget.cpp:397
+#, fuzzy, kde-format
+msgid "Krita Website"
+msgstr "Baltos spalvos balansas:"
+
+#. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1066
+#, kde-format
+msgid "News"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
+#: libs/ui/forms/KisWelcomePage.ui:1089
+#, fuzzy, kde-format
+#| msgid "No options"
+msgid "News options"
+msgstr "Nėra parinkčių"
+
+#. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1212
+#, fuzzy, kde-format
+msgid "Krita Version X.X.X Available"
+msgstr "Baltos spalvos balansas:"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
+#: libs/ui/forms/KisWelcomePage.ui:1263
+#, fuzzy, kde-format
+#| msgid "Update"
+msgid "Update now!"
+msgstr "Atnaujinti"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
+#: libs/ui/forms/KisWelcomePage.ui:1270
+#, fuzzy, kde-format
+msgid "Show details"
+msgstr "Rodyti liniuotes"
+
+#. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
+#: libs/ui/forms/KisWelcomePage.ui:1353 libs/ui/KisWelcomePageWidget.cpp:405
+#, kde-format
+msgid ""
+"You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
+"decoration: underline;\">enable news</a> from krita.org in various languages "
+"with the menu above"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1417
+#, fuzzy, kde-format
+msgid "Start"
+msgstr "Pradėti nuo"
+
+#. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1484 libs/ui/KisWelcomePageWidget.cpp:632
+#, kde-format
+msgid "DEV BUILD"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, newFileLink)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
+#: libs/ui/forms/KisWelcomePage.ui:1560 libs/ui/forms/wdgimageproperties.ui:18
+#: libs/ui/forms/wdgnewimage.ui:18
+#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
+#, kde-format
+msgid "New Image"
+msgstr "Naujas paveikslėlis"
+
+#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
+#: libs/ui/forms/KisWelcomePage.ui:1628
+#, fuzzy, kde-format
+msgid "Open Image"
+msgstr "Paveikslėliai"
+
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1874
+#: libs/ui/forms/KisWelcomePage.ui:1712
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -24999,10 +25007,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdgdisplaysettings.ui:46
-#, fuzzy, kde-format
-#| msgid "Operation"
+#, kde-format
 msgid "Canvas Acceleration"
-msgstr "Operacija"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpOpenGL)
 #: libs/ui/forms/wdgdisplaysettings.ui:58
@@ -25113,10 +25120,9 @@ msgstr "Dabartinis ruošinys"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdgdisplaysettings.ui:255
-#, fuzzy, kde-format
-#| msgid "Current preset"
+#, kde-format
 msgid "Preferred Output Format:"
-msgstr "Dabartinis ruošinys"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:283
@@ -25208,8 +25214,9 @@ msgstr "Žymėjimo veiksena"
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
 #, fuzzy, kde-format
+#| msgid "Layer Opacity"
 msgid "Outline opacity:"
-msgstr "Žymėjimo veiksena"
+msgstr "Sluoksnio permatomumą"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:440
@@ -25258,9 +25265,9 @@ msgstr "Keisti prisijungimą"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSelectionOutlineAntialiasing)
 #: libs/ui/forms/wdgdisplaysettings.ui:534
-#, fuzzy, kde-format
+#, kde-format
 msgid "Enable selection outline anti-aliasing"
-msgstr "Planšetės nuostatos"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoving)
 #: libs/ui/forms/wdgdisplaysettings.ui:541
@@ -25531,10 +25538,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: libs/ui/forms/wdggeneralsettings.ui:182
-#, fuzzy, kde-format
-#| msgid "Eraser"
+#, kde-format
 msgid "Eraser Cursor Icon:"
-msgstr "Trintukas"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #: libs/ui/forms/wdggeneralsettings.ui:195
@@ -25558,8 +25564,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: libs/ui/forms/wdggeneralsettings.ui:303
 #, fuzzy, kde-format
+#| msgid "Background Color"
 msgid "Brush Outline Color:"
-msgstr "Nuostatos"
+msgstr "Fono spalva"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdggeneralsettings.ui:324
@@ -26268,15 +26275,6 @@ msgstr "Pasukti"
 msgid "Scale:"
 msgstr "Mastelis:"
 
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:18
-#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
-#, kde-format
-msgid "New Image"
-msgstr "Naujas paveikslėlis"
-
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
@@ -26917,7 +26915,7 @@ msgstr "Dabartinis teptuko ruošinys"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1076
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -27832,7 +27830,7 @@ msgid "HSV CCW"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:351
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:352
 #, fuzzy, kde-format
 #| msgid "Dimensions"
 msgid "Sessions"
@@ -29322,7 +29320,7 @@ msgstr "Priekinio plano spalva"
 msgid "&Open Background color selector"
 msgstr "Fono spalva"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:347
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -29335,8 +29333,8 @@ msgstr "Šablonai"
 msgid "Custom Pattern"
 msgstr "Šablonas"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:332
-#: libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
+#: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, kde-format
@@ -30092,67 +30090,67 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Atstatyti mastelį į 100%"
 
-#: libs/ui/KisApplication.cpp:324
+#: libs/ui/KisApplication.cpp:325
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, fuzzy, kde-format
 #| msgid "Brush Presets"
 msgid "Brush presets"
 msgstr "Teptuko ruošiniai"
 
-#: libs/ui/KisApplication.cpp:327 libs/ui/KisApplication.cpp:328
-#: libs/ui/KisApplication.cpp:329 libs/ui/KisApplication.cpp:330
+#: libs/ui/KisApplication.cpp:328 libs/ui/KisApplication.cpp:329
+#: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
 #, fuzzy, kde-format
 #| msgid "Brush Tip"
 msgid "Brush tips"
 msgstr "Teptuko patarimas"
 
-#: libs/ui/KisApplication.cpp:335
+#: libs/ui/KisApplication.cpp:336
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
 #, kde-format
 msgid "Palettes"
 msgstr "Paletės"
 
-#: libs/ui/KisApplication.cpp:348 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
 msgid "Workspaces"
 msgstr "Darbalaukiai"
 
-#: libs/ui/KisApplication.cpp:349
+#: libs/ui/KisApplication.cpp:350
 #, fuzzy, kde-format
 #| msgid "Vector Layer"
 msgid "SVG symbol libraries"
 msgstr "Vektorinis sluoksnis"
 
-#: libs/ui/KisApplication.cpp:350 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, fuzzy, kde-format
 #| msgid "Window size"
 msgid "Window layouts"
 msgstr "Lango dydis"
 
-#: libs/ui/KisApplication.cpp:352
+#: libs/ui/KisApplication.cpp:353
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
 #, fuzzy, kde-format
 #| msgid "Rotate Canvas"
 msgid "Gamut masks"
 msgstr "Sukti drobę"
 
-#: libs/ui/KisApplication.cpp:354
+#: libs/ui/KisApplication.cpp:355
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgid "SeExpr Scripts"
 msgstr "Apatinis indeksas"
 
-#: libs/ui/KisApplication.cpp:359
+#: libs/ui/KisApplication.cpp:360
 #, fuzzy, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Sluoksnio dydis"
 
-#: libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:373
 #, kde-format
 msgid ""
 "%1\n"
@@ -30160,13 +30158,13 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:372 libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:373 libs/ui/KisApplication.cpp:379
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "&Skiriamoji geba:"
 
-#: libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:379
 #, kde-format
 msgid ""
 "\n"
@@ -30174,7 +30172,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:411
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -30182,68 +30180,68 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:427
+#: libs/ui/KisApplication.cpp:428
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "&Ištekliai"
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:459
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "&Ištekliai"
 
-#: libs/ui/KisApplication.cpp:462
+#: libs/ui/KisApplication.cpp:463
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "Valyti resursų failus"
 
-#: libs/ui/KisApplication.cpp:468
+#: libs/ui/KisApplication.cpp:469
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "Teptuko ruošiniai"
 
-#: libs/ui/KisApplication.cpp:477
+#: libs/ui/KisApplication.cpp:478
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "Perėjimas"
 
-#: libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:510
 #, fuzzy, kde-format
 #| msgid "&Oilpaint..."
 msgid "Launching..."
 msgstr "&Aliejinė tapyba..."
 
-#: libs/ui/KisApplication.cpp:578
+#: libs/ui/KisApplication.cpp:579
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:634
+#: libs/ui/KisApplication.cpp:635
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to render animation frames!"
 msgstr "Nepavyko sukurti veiksmo."
 
-#: libs/ui/KisApplication.cpp:661 libs/ui/KisApplication.cpp:851
+#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:857
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "&Filtro sluoksnis..."
 
-#: libs/ui/KisApplication.cpp:669 libs/ui/KisApplication.cpp:674
-#: libs/ui/KisApplication.cpp:845 libs/ui/KisApplication.cpp:859
-#: libs/ui/KisApplication.cpp:864
+#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:851 libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:870
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Įspėjimas"
 
-#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:866
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Nepavyksta parinkti spalvos, nes aktyvus sluoksnis nematomas."
 
-#: libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30256,7 +30254,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:681
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30264,33 +30262,33 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:846
+#: libs/ui/KisApplication.cpp:852
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
 msgstr "Monitoriaus profilis: "
 
-#: libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:871
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:980
+#: libs/ui/KisApplication.cpp:986
 #, fuzzy, kde-format
 #| msgid "Select a Directory"
 msgid "No template found for: %1"
 msgstr "Pasirinkite aplanką"
 
-#: libs/ui/KisApplication.cpp:983
+#: libs/ui/KisApplication.cpp:989
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:999
+#: libs/ui/KisApplication.cpp:1005
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "&Pažymėti viską"
 
-#: libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:1037
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30300,7 +30298,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1045
+#: libs/ui/KisApplication.cpp:1051
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30308,7 +30306,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1073
+#: libs/ui/KisApplication.cpp:1079
 #, fuzzy, kde-format
 #| msgid "Do you really want to remove that group?"
 msgid "Do you want to clear the settings file?"
@@ -30439,52 +30437,52 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Užverti dokumentą"
 
-#: libs/ui/KisDocument.cpp:722
+#: libs/ui/KisDocument.cpp:733
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:760
+#: libs/ui/KisDocument.cpp:783
 #, fuzzy, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Monitoriaus profilis: "
 
-#: libs/ui/KisDocument.cpp:777
+#: libs/ui/KisDocument.cpp:800
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:799
+#: libs/ui/KisDocument.cpp:822
 #, fuzzy, kde-format
 msgid "Exporting Document..."
 msgstr "Perrašyti esamą dokumentą"
 
-#: libs/ui/KisDocument.cpp:800
+#: libs/ui/KisDocument.cpp:823
 #, fuzzy, kde-format
 msgid "Saving Document..."
 msgstr "Išsaugoti dokumentą"
 
-#: libs/ui/KisDocument.cpp:810
+#: libs/ui/KisDocument.cpp:833
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:939
+#: libs/ui/KisDocument.cpp:962
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:954
+#: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
 #, fuzzy, kde-format
 msgid "Could not save %1."
 msgstr "Monitoriaus profilis: "
 
-#: libs/ui/KisDocument.cpp:976
+#: libs/ui/KisDocument.cpp:999
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30492,47 +30490,47 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:982
+#: libs/ui/KisDocument.cpp:1005
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1022
 #, fuzzy, kde-format
 msgid "Finished saving %1"
 msgstr "Pirmoji eilutė"
 
-#: libs/ui/KisDocument.cpp:1402
+#: libs/ui/KisDocument.cpp:1425
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosaving... %1"
 msgstr "Automatiškai išsaugoma..."
 
-#: libs/ui/KisDocument.cpp:1410
+#: libs/ui/KisDocument.cpp:1433
 #, kde-format
 msgid "Autosaving..."
 msgstr "Automatiškai išsaugoma..."
 
-#: libs/ui/KisDocument.cpp:1416
+#: libs/ui/KisDocument.cpp:1439
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1559
+#: libs/ui/KisDocument.cpp:1582
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1573
+#: libs/ui/KisDocument.cpp:1596
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Finished autosaving %1"
 msgstr "Automatiškai išsaugoma..."
 
-#: libs/ui/KisDocument.cpp:1815
+#: libs/ui/KisDocument.cpp:1838
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -30544,41 +30542,41 @@ msgstr ""
 "Neteisingas URL\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1881
+#: libs/ui/KisDocument.cpp:1904
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "File %1 does not exist."
 msgstr "Failas %1 neegzistuoja."
 
-#: libs/ui/KisDocument.cpp:1910
+#: libs/ui/KisDocument.cpp:1933
 #, fuzzy, kde-format
 msgid "Opening document"
 msgstr "Perrašyti esamą dokumentą"
 
-#: libs/ui/KisDocument.cpp:1926 libs/ui/KisDocument.cpp:1932
+#: libs/ui/KisDocument.cpp:1949 libs/ui/KisDocument.cpp:1955
 #, fuzzy, kde-format
 msgid "Could not open %1."
 msgstr "Monitoriaus profilis: "
 
-#: libs/ui/KisDocument.cpp:1945 libs/ui/KisDocument.cpp:1949
+#: libs/ui/KisDocument.cpp:1968 libs/ui/KisDocument.cpp:1972
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2080
+#: libs/ui/KisDocument.cpp:2103
 #, fuzzy, kde-format
 #| msgid "Save"
 msgid "Not Saved"
 msgstr "Išsaugoti"
 
-#: libs/ui/KisDocument.cpp:2561
+#: libs/ui/KisDocument.cpp:2584
 #, fuzzy, kde-format
 #| msgid "Background"
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Fonas"
 
-#: libs/ui/KisDocument.cpp:2613
+#: libs/ui/KisDocument.cpp:2636
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30985,45 +30983,45 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Darbalaukis"
 
-#: libs/ui/KisMainWindow.cpp:585
+#: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Rodyti šakninį sluoksnį"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:589
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Slinkties juostos"
 
-#: libs/ui/KisMainWindow.cpp:1037
+#: libs/ui/KisMainWindow.cpp:1039
 #, fuzzy, kde-format
 msgid "Write Protected"
 msgstr "Filtro sluoksnio savybės"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1043
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgid "Recovered"
 msgstr "Įrašymas"
 
-#: libs/ui/KisMainWindow.cpp:1071
+#: libs/ui/KisMainWindow.cpp:1073
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "Išsaugoti makro"
 
-#: libs/ui/KisMainWindow.cpp:1095
+#: libs/ui/KisMainWindow.cpp:1097
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Failas %1 neegzistuoja."
 
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, fuzzy, kde-format
 msgid "Open Images"
 msgstr "Paveikslėliai"
 
-#: libs/ui/KisMainWindow.cpp:1319
+#: libs/ui/KisMainWindow.cpp:1321
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -31032,46 +31030,46 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "Ekspozicija"
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, fuzzy, kde-format
 #| msgid "Saving Format"
 msgid "Saving As"
 msgstr "Išsaugojimo formatas"
 
-#: libs/ui/KisMainWindow.cpp:1679
+#: libs/ui/KisMainWindow.cpp:1729
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "Paskutiniai dokumentai"
 
-#: libs/ui/KisMainWindow.cpp:1703
+#: libs/ui/KisMainWindow.cpp:1753
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "Savitas gradientas"
 
-#: libs/ui/KisMainWindow.cpp:1715
+#: libs/ui/KisMainWindow.cpp:1765
 #, fuzzy, kde-format
 msgid "Create from Clipboard"
 msgstr "&Pirmas sluoksnis Iš iškarpinės"
 
-#: libs/ui/KisMainWindow.cpp:1893
+#: libs/ui/KisMainWindow.cpp:1950
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Išsaugoti sluoksnį/Kaukę..."
 
-#: libs/ui/KisMainWindow.cpp:1919
+#: libs/ui/KisMainWindow.cpp:1976
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Monitoriaus profilis: "
 
-#: libs/ui/KisMainWindow.cpp:1923
+#: libs/ui/KisMainWindow.cpp:1980
 #, kde-format
 msgid ""
 "\n"
@@ -31079,7 +31077,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1933
+#: libs/ui/KisMainWindow.cpp:1990
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -31088,7 +31086,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2072 libs/ui/KisMainWindow.cpp:2154
+#: libs/ui/KisMainWindow.cpp:2129 libs/ui/KisMainWindow.cpp:2211
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31097,62 +31095,62 @@ msgstr ""
 "Nepavyko atverti\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2133
+#: libs/ui/KisMainWindow.cpp:2190
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Nepavyko sukurti veiksmo."
 
-#: libs/ui/KisMainWindow.cpp:2560
+#: libs/ui/KisMainWindow.cpp:2617
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "Darbalaukiai"
 
-#: libs/ui/KisMainWindow.cpp:2575
+#: libs/ui/KisMainWindow.cpp:2632
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Darbalaukiai"
 
-#: libs/ui/KisMainWindow.cpp:2579
+#: libs/ui/KisMainWindow.cpp:2636
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Darbalaukiai"
 
-#: libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/KisMainWindow.cpp:2680
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "&%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2626
+#: libs/ui/KisMainWindow.cpp:2683
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2792
+#: libs/ui/KisMainWindow.cpp:2849
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2808
+#: libs/ui/KisMainWindow.cpp:2865
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Diegimo klaida"
 
-#: libs/ui/KisMainWindow.cpp:2917
+#: libs/ui/KisMainWindow.cpp:2974
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2975
+#: libs/ui/KisMainWindow.cpp:3032
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -31291,7 +31289,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Grupiniai pažymėjimai"
 
-#: libs/ui/KisPart.cpp:588
+#: libs/ui/KisPart.cpp:578
 #, fuzzy, kde-format
 #| msgid "Could not create the filter plugin"
 msgid ""
@@ -31299,7 +31297,7 @@ msgid ""
 "%1"
 msgstr "Nepavyko sukurti filtro įskiepio"
 
-#: libs/ui/KisPart.cpp:591
+#: libs/ui/KisPart.cpp:581
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open %1\n"
@@ -31324,7 +31322,7 @@ msgstr "Sodrumas"
 msgid "Could not load %1."
 msgstr "Monitoriaus profilis: "
 
-#: libs/ui/KisRemoteFileFetcher.cpp:39
+#: libs/ui/KisRemoteFileFetcher.cpp:41
 #, kde-format
 msgctxt "Fetching remote image"
 msgid ""
@@ -31332,19 +31330,19 @@ msgid ""
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:61
+#: libs/ui/KisRemoteFileFetcher.cpp:63
 #, fuzzy, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "Monitoriaus profilis: "
 
-#: libs/ui/KisRemoteFileFetcher.cpp:75
+#: libs/ui/KisRemoteFileFetcher.cpp:77
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:92
+#: libs/ui/KisRemoteFileFetcher.cpp:94
 #, fuzzy, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."
@@ -31623,51 +31621,51 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Anonimas"
 
-#: libs/ui/KisWelcomePageWidget.cpp:148
+#: libs/ui/KisWelcomePageWidget.cpp:157
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:150
+#: libs/ui/KisWelcomePageWidget.cpp:159
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
 "krita.org website"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:153
+#: libs/ui/KisWelcomePageWidget.cpp:162
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, fuzzy, kde-format
 msgid "Language"
 msgstr "Paskutinis puslapis:"
 
-#: libs/ui/KisWelcomePageWidget.cpp:154
+#: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:420
+#: libs/ui/KisWelcomePageWidget.cpp:427
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:648
+#: libs/ui/KisWelcomePageWidget.cpp:655
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, fuzzy, kde-format
 msgid "Forget \"%1\""
 msgstr "Ekspozicija"
 
-#: libs/ui/KisWelcomePageWidget.cpp:745
+#: libs/ui/KisWelcomePageWidget.cpp:757
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:774
+#: libs/ui/KisWelcomePageWidget.cpp:786
 #, kde-format
 msgid "An error occurred during the update"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:780
+#: libs/ui/KisWelcomePageWidget.cpp:792
 #, kde-format
 msgid "Restart is required."
 msgstr ""
@@ -32665,12 +32663,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:654
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:656
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32678,14 +32676,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1070
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1072
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -34234,9 +34232,9 @@ msgid "Select regions found from the active layer"
 msgstr "Pasirinkti maišymo veikseną sluoksniui."
 
 #: libs/ui/widgets/kis_selection_options.cc:244
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select regions found from the merging of all layers"
-msgstr "Pasirinkti maišymo veikseną sluoksniui."
+msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:246
 #, kde-format
@@ -34429,7 +34427,7 @@ msgstr ""
 msgctxt ""
 "Percentage of the histogram to clip in the shadows side in auto levels"
 msgid "Shadows clipping:"
-msgstr "Pažymėjimas"
+msgstr "Spalvos"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:90
@@ -34454,7 +34452,7 @@ msgstr "Atsitiktinis poslinkis:"
 #, fuzzy, kde-format
 msgctxt "Output color used for the shadows in auto levels"
 msgid "Shadows color:"
-msgstr "Pažymėjimas"
+msgstr "Spalvos"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:114
@@ -34480,10 +34478,10 @@ msgstr "Metodas"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:171
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Do not perform midtones enhancement in auto levels"
 msgid "Don't adjust the midtones"
-msgstr "Pažymėjimas"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:176
@@ -36045,12 +36043,12 @@ msgstr "%1 s"
 msgid "Toggle Preview"
 msgstr "Peržiūra"
 
-#: libs/widgetutils/KoFileDialog.cpp:243
+#: libs/widgetutils/KoFileDialog.cpp:260
 #, fuzzy, kde-format
 msgid "Save As:"
 msgstr "Išsaugoti makro"
 
-#: libs/widgetutils/KoFileDialog.cpp:326
+#: libs/widgetutils/KoFileDialog.cpp:343
 #, kde-format
 msgid ""
 "The selected file name does not have a file extension that Krita "
@@ -36058,7 +36056,7 @@ msgid ""
 "Make sure the file name ends in '.%1' for example."
 msgstr ""
 
-#: libs/widgetutils/KoFileDialog.cpp:511
+#: libs/widgetutils/KoFileDialog.cpp:533
 #, kde-format
 msgid "All supported formats"
 msgstr "Visi palaikomi formatai"
@@ -37943,7 +37941,7 @@ msgid "Val:"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:127
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
 #, fuzzy, kde-format
 msgid "Onion skins menu"
 msgstr "&Išlaikyti proporcijas"
@@ -37954,26 +37952,26 @@ msgid "Audio menu"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:180
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
 #, fuzzy, kde-format
 #| msgid "&Paint Layer"
 msgid "Animation settings menu"
 msgstr "&Piešimo sluoksnis"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:192
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
 #, fuzzy, kde-format
 msgid "Clip Start: "
 msgstr "Pradėti nuo"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
 #, kde-format
 msgid "Clip End: "
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
 #, fuzzy, kde-format
 msgid "Frame Rate: "
 msgstr "Liudas Ališauskas"
@@ -38002,37 +38000,37 @@ msgstr "Stačiakampis"
 msgid "Reset All Channels"
 msgstr "Visi kanalai"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:486
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:481
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:493
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:488
 #, fuzzy, kde-format
 msgid "Linear interpolation."
 msgstr "&Skiriamoji geba:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:500
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:495
 #, fuzzy, kde-format
 msgid "Bezier curve interpolation."
 msgstr "&Skiriamoji geba:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:507
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:502
 #, fuzzy, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "&Skiriamoji geba:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:514
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:509
 #, fuzzy, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "&Skiriamoji geba:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:521
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:516
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:528
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:523
 #, fuzzy, kde-format
 #| msgid "zoom to size"
 msgid "Zoom view to fit curve."
@@ -38081,68 +38079,68 @@ msgstr[2] "Įterpti pavadinimą"
 msgstr[3] "Įterpti pavadinimą"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:290
 #, fuzzy, kde-format
 msgid "Animation Timeline"
 msgstr "Linijos plotis:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "&Paint Layer"
-msgid "Animation audio menu"
-msgstr "&Piešimo sluoksnis"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Valyti resursų failus"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Pašalinti"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #, fuzzy, kde-format
 #| msgid "Volume:"
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "Skirsnis:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#, fuzzy, kde-format
+#| msgid "&Paint Layer"
+msgid "Animation audio menu"
+msgstr "&Piešimo sluoksnis"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
 msgid "AutoKey Blank"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
 #, fuzzy, kde-format
 msgid "AutoKey Duplicate"
 msgstr "Dubliuoti"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:509
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:522
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:517
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:523
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:518
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:519
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""
@@ -39026,10 +39024,9 @@ msgstr "Informacija"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:394
 #, fuzzy, kde-format
-#| msgid "Layer Opacity"
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "Sluoksnio permatomumą"
+msgstr "Įterpti puslapį"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:412
 #, fuzzy, kde-format
@@ -39441,10 +39438,10 @@ msgstr ""
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
 #, fuzzy
-#| msgid "Thumbnails"
+#| msgid "Update preview"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Miniatiūros"
+msgstr "Atnaujinti peržiūrą"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, fuzzy, kde-format
@@ -39476,9 +39473,9 @@ msgstr "Ištrinti dabartinį sluoksnį"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:125
 #, fuzzy, kde-format
-#| msgid "Add to palette:"
+#| msgid "Palettes"
 msgid "Load a palette"
-msgstr "Pridėti į paletę:"
+msgstr "Paletės"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:226
 #, fuzzy, kde-format
@@ -40656,13 +40653,13 @@ msgstr "Skirsnis:"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:145
 #, fuzzy, kde-format
 msgid "SVG Template"
-msgstr "&Sukurti"
+msgstr "Pradėti nuo"
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
 #, fuzzy, kde-format
 msgid "SVG Template Path:"
-msgstr "&Sukurti"
+msgstr "Pradėti nuo"
 
 #. i18n: ectx: property (text), widget (QLabel, fontSizeLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:237
@@ -47833,24 +47830,24 @@ msgstr "Be glotninimo"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:21
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "2x2 downsampling"
-msgstr "Be glotninimo"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:22
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "4x4 downsampling"
-msgstr "Be glotninimo"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:23
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "8x8 downsampling"
-msgstr "Be glotninimo"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
@@ -47936,11 +47933,10 @@ msgid "Center-first order"
 msgstr "Procentai"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:89
-#, fuzzy, kde-format
-#| msgid "X resolution:"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
-msgstr "X skiriamoji geba:"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
 #, kde-format
@@ -48359,10 +48355,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:492
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gaborish filter"
-msgstr ""
+msgstr "Šablonas"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:499
@@ -48400,9 +48396,10 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:537
 #, fuzzy, kde-format
+#| msgid "No Border"
 msgctxt "JPEG-XL encoder options"
 msgid "Group order"
-msgstr "&Grupuoti sluoksnį"
+msgstr "Be rėmelio"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:544
@@ -48492,10 +48489,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:676
-#, fuzzy, kde-format
-#| msgid "Add to palette:"
+#, kde-format
 msgid "Local channel palette range"
-msgstr "Pridėti į paletę:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:687
@@ -48525,10 +48521,10 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:764
 #, fuzzy, kde-format
-#| msgid "Add to palette:"
+#| msgid "Palettes"
 msgctxt "JPEG-XL encoder options"
 msgid "Delta palette"
-msgstr "Pridėti į paletę:"
+msgstr "Paletės"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, lossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:771
@@ -48911,7 +48907,7 @@ msgstr "Monitoriaus profilis: "
 #, fuzzy, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
-msgstr "Pažymėjimas"
+msgstr "Monitoriaus profilis: "
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:222
 #, kde-format
@@ -50199,7 +50195,7 @@ msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
 msgstr "Dalinis"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1040
+#: plugins/impex/tiff/kis_tiff_import.cc:1044
 #, kde-format
 msgctxt "TIFF errors"
 msgid ""
@@ -50208,11 +50204,25 @@ msgid ""
 "version of libjpeg-turbo and try again."
 msgstr ""
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1143
-#: plugins/impex/tiff/kis_tiff_import.cc:1326
+#: plugins/impex/tiff/kis_tiff_import.cc:1147
+#: plugins/impex/tiff/kis_tiff_import.cc:1330
 #, kde-format
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1577
+#, kde-format
+msgctxt "@title:window"
+msgid "TIFF image with PSD data"
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1579
+#, kde-format
+msgctxt "the choice for the user on loading a TIFF file"
+msgid ""
+"The TIFF image contains valid PSD data embedded. Would you like to use PSD "
+"data instead of normal TIFF data?"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
@@ -50521,9 +50531,9 @@ msgstr "Tikslas:"
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, segments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:260
 #: plugins/impex/webp/kis_wdg_options_webp.ui:276
-#, fuzzy, kde-format
+#, kde-format
 msgid "Maximum number of segments (1 to 4)."
-msgstr "Rašmenų:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSegments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:263
@@ -53514,9 +53524,8 @@ msgstr "Filtrai"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
 #, fuzzy, kde-format
-#| msgid "Transparent"
 msgid "Smudge Transparency"
-msgstr "Permatomas"
+msgstr "Ignoruoti alfa"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, fuzzy, kde-format
@@ -57156,11 +57165,10 @@ msgid "Threshold: "
 msgstr "Slenkstis: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:552
-#, fuzzy, kde-format
-#| msgid "Opacity:"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in fill tool options"
 msgid "Spread: "
-msgstr "Nepermatomumas:"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:558
 #, fuzzy, kde-format
@@ -57308,10 +57316,10 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:633
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
-msgstr "Užpildyti fono spalva"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
 #, fuzzy, kde-format
@@ -58431,11 +58439,10 @@ msgid "Threshold: "
 msgstr "Slenkstis: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:374
-#, fuzzy, kde-format
-#| msgid "Opacity:"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in contiguous selection tool options"
 msgid "Spread: "
-msgstr "Nepermatomumas:"
+msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:380
 #, fuzzy, kde-format
@@ -58464,9 +58471,9 @@ msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select all regions until a specific boundary color"
-msgstr "Užpildyti fono spalva"
+msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
@@ -58492,11 +58499,11 @@ msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
 #, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#| msgid "Selection Mode"
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
 msgid "Selection extent"
-msgstr "Rendering Intent"
+msgstr "Žymėjimo veiksena"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:95
 #, fuzzy, kde-format
@@ -58610,11 +58617,11 @@ msgstr "Slenkstis: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:472
 #, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#| msgid "Selection Mode"
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
-msgstr "Rendering Intent"
+msgstr "Žymėjimo veiksena"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:57
 #, fuzzy, kde-format
@@ -59748,11 +59755,10 @@ msgid "Threshold: "
 msgstr "Slenkstis: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
-#, fuzzy, kde-format
-#| msgid "Opacity:"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
 msgid "Spread: "
-msgstr "Nepermatomumas:"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
 #, fuzzy, kde-format
@@ -59876,10 +59882,10 @@ msgid "Specific color or transparency"
 msgstr "Pažymėjimas"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
-msgstr "Užpildyti fono spalva"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, kde-format
@@ -59894,10 +59900,10 @@ msgid "All, excluding a specific color or transparency"
 msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
-msgstr "Užpildyti fono spalva"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
 #, fuzzy, kde-format
@@ -60988,57 +60994,25 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Pasirinkimai"
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "Dalinti X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "Dalinti Y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "Mastelis"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "Atstatyti transformacijas"
+#, fuzzy
+#~ msgid "&Canvas"
+#~ msgstr "Drobė 01"
 
 #, fuzzy
-#~| msgid "<html><head/><body><p><br/></p></body></html>"
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
-#~ "Animated exports are <span style=\" font-weight:600;\">always</span> "
-#~ "flattened regardless of this setting.</p></body></html>"
-#~ msgstr "<html><head/><body><p><br/></p></body></html>"
+#~ msgctxt "action"
+#~ msgid "&Reset zoom"
+#~ msgstr "Atstatyti mastelį"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "Reset zoom"
+#~ msgstr "Atstatyti mastelį"
 
 #, fuzzy
 #~| msgid "Difference"
 #~ msgctxt "paletegen status mode option name"
 #~ msgid "Difference"
 #~ msgstr "Skirtumas"
-
-#, fuzzy
-#~| msgid "Filter:"
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "Filtras:"
-
-#, fuzzy
-#~| msgid "Edition:"
-#~ msgid "Edit Audio:"
-#~ msgstr "Leidimas:"
-
-#, fuzzy
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "Perrašyti esamą dokumentą"
-
-#, fuzzy
-#~| msgid "Save..."
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "Išsaugoti..."
 
 #, fuzzy
 #~| msgid "Choose workspace"
@@ -61063,10 +61037,6 @@ msgstr "Pasirinkimai"
 #~ msgstr "Sukimas:"
 
 #, fuzzy
-#~ msgid "FFMpeg Version: None"
-#~ msgstr "Versija"
-
-#, fuzzy
 #~| msgid "<html><head/><body><p><br/></p></body></html>"
 #~ msgid ""
 #~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
@@ -61079,9 +61049,95 @@ msgstr "Pasirinkimai"
 #~ msgstr "Procentai"
 
 #, fuzzy
-#~| msgid "%1 s"
-#~ msgid " sec"
-#~ msgstr "%1 s"
+#~ msgid "New File"
+#~ msgstr "Paveikslėlio dydis"
+
+#, fuzzy
+#~ msgid "Recent Documents"
+#~ msgstr "Perrašyti esamą dokumentą"
+
+#, fuzzy
+#~| msgid "Color Settings"
+#~ msgid "Grid Settings"
+#~ msgstr "Spalvų nuostatos"
+
+#, fuzzy
+#~ msgid "Enable Smooth Zooming"
+#~ msgstr "Planšetės nuostatos"
+
+#~ msgid "&Description:"
+#~ msgstr "&Aprašymas:"
+
+#, fuzzy
+#~| msgid "Filter:"
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "&Filter:"
+#~ msgstr "Filtras:"
+
+#, fuzzy
+#~ msgid "Duplicate current profile"
+#~ msgstr "Dubliuoti dabartinį sluoksnį"
+
+#, fuzzy
+#~ msgid "Select Layer Mode"
+#~ msgstr "Perjungti antrinę veikseną"
+
+#, fuzzy
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Perjungti antrinę veikseną"
+
+#~ msgid "Reset Zoom to 100%"
+#~ msgstr "Atstatyti mastelį į 100%"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not save %1.\n"
+#~ "Reason: %2"
+#~ msgstr "Pažymėjimas"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not open %2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Nepavyksta atverti\n"
+#~ "%2.\n"
+#~ "Priežastis: %1"
+
+#, fuzzy
+#~| msgid "Do you really want to remove that group?"
+#~ msgctxt "Fetching remote image"
+#~ msgid "Do you want to download the image at %1?"
+#~ msgstr "Ar tikrai norite pašalinti šią grupę?"
+
+#, fuzzy
+#~ msgid ""
+#~ "Make the selection using a merged copy of the selected color-labeled "
+#~ "layers"
+#~ msgstr "Pasirinkti maišymo veikseną sluoksniui."
+
+#~ msgid "Fit Page"
+#~ msgstr "Talpinti į puslapį"
+
+#, fuzzy
+#~ msgid "Colu&mns:"
+#~ msgstr "Atspindėti kaukę X"
+
+#, fuzzy
+#~| msgid "Edition:"
+#~ msgid "Edit Audio:"
+#~ msgstr "Leidimas:"
+
+#, fuzzy
+#~ msgctxt "@item:inmenu"
+#~ msgid "Open audio..."
+#~ msgstr "Perrašyti esamą dokumentą"
+
+#, fuzzy
+#~| msgid "Save..."
+#~ msgctxt "@item:inmenu"
+#~ msgid "Change audio (%1)..."
+#~ msgstr "Išsaugoti..."
 
 #, fuzzy
 #~| msgid "Start recording macro"
@@ -61095,6 +61151,38 @@ msgstr "Pasirinkimai"
 #, fuzzy
 #~ msgid "Split Strokes"
 #~ msgstr "&Piešimo sluoksnis"
+
+#, fuzzy
+#~ msgid "Lossless compression"
+#~ msgstr "Suspausti:"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Reset Transformations"
+#~ msgid "Information"
+#~ msgstr "Atstatyti transformacijas"
+
+#, fuzzy
+#~ msgid "Flip vertically"
+#~ msgstr "Žymėjimo veiksena"
+
+#, fuzzy
+#~ msgid "Bypass filtering"
+#~ msgstr "&Skiriamoji geba:"
+
+#, fuzzy
+#~ msgid "Use multithreaded decoding"
+#~ msgstr "Daugelio eilučių įvestis"
+
+#, fuzzy
+#~| msgid "Color space:"
+#~ msgid "Color planes: "
+#~ msgstr "Spalvų erdvė:"
+
+#, fuzzy
+#~| msgid "Alpha mask"
+#~ msgid "Alpha plane: "
+#~ msgstr "Alfa kaukė"
 
 #, fuzzy
 #~| msgid "Color Rate"
@@ -61154,132 +61242,6 @@ msgstr "Pasirinkimai"
 #~ msgstr "0 s"
 
 #, fuzzy
-#~ msgid "Select Layer Mode"
-#~ msgstr "Perjungti antrinę veikseną"
-
-#, fuzzy
-#~ msgid "Select Multiple Layer Mode"
-#~ msgstr "Perjungti antrinę veikseną"
-
-#, fuzzy
-#~ msgid "Colu&mns:"
-#~ msgstr "Atspindėti kaukę X"
-
-#, fuzzy
-#~| msgid "Do you really want to remove that group?"
-#~ msgctxt "Fetching remote image"
-#~ msgid "Do you want to download the image at %1?"
-#~ msgstr "Ar tikrai norite pašalinti šią grupę?"
-
-#~ msgid "&Description:"
-#~ msgstr "&Aprašymas:"
-
-#, fuzzy
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr "Pažymėjimas"
-
-#, fuzzy
-#~ msgid ""
-#~ "Could not open %2.\n"
-#~ "Reason: %1"
-#~ msgstr ""
-#~ "Nepavyksta atverti\n"
-#~ "%2.\n"
-#~ "Priežastis: %1"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "&Dailinko įrankiai"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "&Dailinko įrankiai"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Brush composite"
-#~ msgstr "Nuostatos"
-
-#, fuzzy
-#~| msgid "Layer Opacity"
-#~ msgctxt "@item:inmenu Layers Docker settings, combobox"
-#~ msgid "Subtitle Style"
-#~ msgstr "Sluoksnio permatomumą"
-
-#, fuzzy
-#~| msgid "None"
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "None"
-#~ msgstr "Nieko"
-
-#, fuzzy
-#~| msgid "Simple mode"
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "Simple"
-#~ msgstr "Paprastas režimas"
-
-#, fuzzy
-#~ msgid "&Canvas"
-#~ msgstr "Drobė 01"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "&Reset Zoom"
-#~ msgstr "Atstatyti mastelį"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Reset Zoom"
-#~ msgstr "Atstatyti mastelį"
-
-#, fuzzy
-#~| msgid "Fit to Page"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page"
-#~ msgstr "Talpinti puslapyje"
-
-#, fuzzy
-#~| msgid "Fit to Width"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Width"
-#~ msgstr "Talpinti į plotį"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Width"
-#~ msgstr "Tinkantis prie puslapio pločio"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Height"
-#~ msgstr "Tinkantis prie puslapio pločio"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Height"
-#~ msgstr "Tinkantis prie puslapio pločio"
-
-#, fuzzy
-#~ msgid "Duplicate current profile"
-#~ msgstr "Dubliuoti dabartinį sluoksnį"
-
-#~ msgid "Reset Zoom to 100%"
-#~ msgstr "Atstatyti mastelį į 100%"
-
-#~ msgid "Fit Page"
-#~ msgstr "Talpinti į puslapį"
-
-#, fuzzy
-#~ msgid ""
-#~ "Make the selection using a merged copy of the selected color-labeled "
-#~ "layers"
-#~ msgstr "Pasirinkti maišymo veikseną sluoksniui."
-
-#, fuzzy
 #~| msgid "&Add to current selection"
 #~ msgid "Current selection"
 #~ msgstr "&Pridėti prie esamo pažymėjimo"
@@ -61311,6 +61273,22 @@ msgstr "Pasirinkimai"
 #~ msgid "Multiple fill"
 #~ msgstr "Daugelio eilučių įvestis"
 
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "Dalinti X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "Dalinti Y"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "Mastelis"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "Atstatyti transformacijas"
+
 #, fuzzy
 #~ msgctxt "The 'what to fill' section label in enclose and fill tool options"
 #~ msgid "What to fill"
@@ -61329,64 +61307,29 @@ msgstr "Pasirinkimai"
 #~ msgstr "Rendering Intent"
 
 #, fuzzy
+#~| msgid "&All pages"
 #~ msgctxt "Region selection method in enclose and fill tool"
 #~ msgid "All regions"
-#~ msgstr "Pažymėjimas"
+#~ msgstr "&Visi puslapiai"
 
 #, fuzzy
-#~| msgid "Color Settings"
-#~ msgid "Grid Settings"
-#~ msgstr "Spalvų nuostatos"
+#~ msgctxt "action"
+#~ msgid "&Painter's Tools"
+#~ msgstr "&Dailinko įrankiai"
 
 #, fuzzy
-#~ msgid "Enable Smooth Zooming"
-#~ msgstr "Planšetės nuostatos"
+#~ msgctxt "action"
+#~ msgid "Painter's Tools"
+#~ msgstr "&Dailinko įrankiai"
 
 #, fuzzy
-#~ msgid "Lossless compression"
-#~ msgstr "Suspausti:"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Reset Transformations"
-#~ msgid "Information"
-#~ msgstr "Atstatyti transformacijas"
-
-#, fuzzy
-#~ msgid "Flip vertically"
-#~ msgstr "Žymėjimo veiksena"
-
-#, fuzzy
-#~ msgid "Bypass filtering"
-#~ msgstr "&Skiriamoji geba:"
-
-#, fuzzy
-#~ msgid "Use multithreaded decoding"
-#~ msgstr "Daugelio eilučių įvestis"
-
-#, fuzzy
-#~| msgid "Color space:"
-#~ msgid "Color planes: "
-#~ msgstr "Spalvų erdvė:"
-
-#, fuzzy
-#~| msgid "Alpha mask"
-#~ msgid "Alpha plane: "
-#~ msgstr "Alfa kaukė"
+#~ msgctxt "action"
+#~ msgid "Brush composite"
+#~ msgstr "Nuostatos"
 
 #, fuzzy
 #~ msgid "Cache Location:"
 #~ msgstr "Sodrumas"
-
-#, fuzzy
-#~ msgctxt "@item:inmenu Layers Docker settings, checkbox"
-#~ msgid "Display Subtitles"
-#~ msgstr "Rodyti pažymėjimą"
-
-#, fuzzy
-#~ msgctxt "@item:tooltip"
-#~ msgid "Layer opacity and blending mode"
-#~ msgstr "Pažymėjimas"
 
 #, fuzzy
 #~| msgid "Cannot pick a color as no layer is active."
@@ -61408,19 +61351,74 @@ msgstr "Pasirinkimai"
 #~ msgstr "Tankis"
 
 #, fuzzy
+#~ msgid "Disable vsync (needs restart)"
+#~ msgstr "Krita"
+
+#, fuzzy
 #~ msgctxt ""
 #~ "The 'include surrounding regions' checkbox in enclose and fill tool"
 #~ msgid "Include surrounding regions"
 #~ msgstr "Perrašyti esamą dokumentą"
 
 #, fuzzy
-#~ msgid "Disable vsync (needs restart)"
-#~ msgstr "Krita"
-
-#, fuzzy
 #~| msgid "Constant"
 #~ msgid "Angle Constraints"
 #~ msgstr "Konstanta"
+
+#~ msgid "Open Color Profile"
+#~ msgstr "Atverti spalvų profilį"
+
+#, fuzzy
+#~ msgctxt "@title:window"
+#~ msgid "Select a swap directory"
+#~ msgstr "Pasirinkite aplanką"
+
+#, fuzzy
+#~ msgid "Add new color profile:"
+#~ msgstr "Atverti spalvų profilį"
+
+#, fuzzy
+#~ msgctxt "Color model"
+#~ msgid "&Model:"
+#~ msgstr "Modelis:"
+
+#, fuzzy
+#~ msgid "Profi&le:"
+#~ msgstr "Profilis:"
+
+#, fuzzy
+#~ msgid "Cursor Shape:"
+#~ msgstr "Žymeklio forma:"
+
+#, fuzzy
+#~| msgid "Custom Brush"
+#~ msgid "Cursor Color:"
+#~ msgstr "Savitas teptukas"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgid "General:"
+#~ msgstr "Bendrai"
+
+#, fuzzy
+#~ msgid "Enable Touch Rotation"
+#~ msgstr "Planšetės nuostatos"
+
+#, fuzzy
+#~ msgid "Animation:"
+#~ msgstr "Animacija"
+
+#, fuzzy
+#~ msgid "Swap File Location:"
+#~ msgstr "Sodrumas"
+
+#, fuzzy
+#~ msgid "Force Instant Preview in Move Tool"
+#~ msgstr "Peržiūrėti paveikslėlį"
+
+#, fuzzy
+#~ msgid "Force Instant Preview in Filters"
+#~ msgstr "Peržiūrėti paveikslėlį"
 
 #, fuzzy
 #~ msgid "Intersect"
@@ -61438,6 +61436,20 @@ msgstr "Pasirinkimai"
 #~ msgstr "Simetrija"
 
 #, fuzzy
+#~ msgid "Loading Plugins Exiv/IO..."
+#~ msgstr "Ša&blonai"
+
+#, fuzzy
+#~| msgid "%1 %"
+#~ msgid "%1 %2 px"
+#~ msgstr "%1 %"
+
+#, fuzzy
+#~ msgctxt "About <Profilename>"
+#~ msgid "About "
+#~ msgstr "Krita"
+
+#, fuzzy
 #~| msgid "Current Layer"
 #~ msgctxt ""
 #~ "Option in selection tool: take only the current layer into account when "
@@ -61453,37 +61465,17 @@ msgstr "Pasirinkimai"
 #~ msgstr "&Filtro sluoksnis..."
 
 #, fuzzy
+#~ msgid "Change the color of the line/border"
+#~ msgstr "Fono spalva"
+
+#, fuzzy
 #~ msgctxt "@info:tooltip %2 is shortcut"
 #~ msgid "%1 (%2)"
 #~ msgstr "Kopijuoti"
 
 #, fuzzy
-#~ msgid "Fuzziness: "
-#~ msgstr "Šviesumas"
-
-#, fuzzy
-#~| msgid "Opacity:"
-#~ msgid "Opacity Spread: "
-#~ msgstr "Nepermatomumas:"
-
-#, fuzzy
-#~ msgid "Feathering radius: "
-#~ msgstr "Pažymėjimas"
-
-#, fuzzy
-#~ msgid "Use selection as boundary: "
-#~ msgstr "Iškirpti pažymėjimą į naują sluoksnį"
-
-#, fuzzy
-#~| msgid "Threshold: "
-#~ msgctxt "Threshold label in Magnetic Selection's Tool options"
-#~ msgid "Threshold: "
-#~ msgstr "Slenkstis: "
-
-#, fuzzy
-#~| msgid "0 s"
-#~ msgid " kB"
-#~ msgstr "0 s"
+#~ msgid "Hold Last Frame for:"
+#~ msgstr "Paskutinį kartą naudotas"
 
 #, fuzzy
 #~| msgid "Vector Layer"
@@ -61491,58 +61483,36 @@ msgstr "Pasirinkimai"
 #~ msgstr "Vektorinis sluoksnis"
 
 #, fuzzy
-#~ msgid "Cursor Shape:"
-#~ msgstr "Žymeklio forma:"
+#~| msgid "Color space:"
+#~ msgid "Colorspace"
+#~ msgstr "Spalvų erdvė:"
 
 #, fuzzy
-#~| msgid "Custom Brush"
-#~ msgid "Cursor Color:"
-#~ msgstr "Savitas teptukas"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Paste"
-#~ msgid "Paste"
-#~ msgstr "Įdėti"
-
-#, fuzzy
-#~ msgid "Max Gesture"
-#~ msgstr "Tekstūra"
+#~| msgid "Value"
+#~ msgctxt "Label of Brightness value in brush settings"
+#~ msgid "Value"
+#~ msgstr "Reikšmė"
 
 #, fuzzy
 #~ msgid "Gaussian distribution"
 #~ msgstr "Štačiakampis žymėjimas"
 
 #, fuzzy
-#~ msgid "Enable Touch Rotation"
-#~ msgstr "Planšetės nuostatos"
+#~| msgid "Add Group"
+#~ msgctxt "Group as Swatch Group in a Palette"
+#~ msgid "Add Group"
+#~ msgstr "Pridėti grupę"
 
 #, fuzzy
-#~ msgid "Hold last frame for:"
-#~ msgstr "Paskutinį kartą naudotas"
-
-#, fuzzy
-#~ msgid "Fast mode:"
+#~ msgid "Fast mode: "
 #~ msgstr "Fax veiksena:"
 
 #, fuzzy
-#~| msgid "Threshold:"
-#~ msgctxt "The Threshold label in Fill tool options"
-#~ msgid "Threshold:"
-#~ msgstr "Riba:"
-
-#, fuzzy
-#~| msgid "Opacity decrease"
-#~ msgctxt "The Opacity Spread label in Fill tool options"
-#~ msgid "Opacity Spread:"
-#~ msgstr "Nepermatomumo mažinimas"
-
-#, fuzzy
-#~ msgid "Grow selection:"
+#~ msgid "Grow selection: "
 #~ msgstr "Kiek padidinti pažymėtą sritį"
 
 #, fuzzy
-#~ msgid "Feathering radius:"
+#~ msgid "Feathering radius: "
 #~ msgstr "Pažymėjimas"
 
 #, fuzzy
@@ -61563,12 +61533,6 @@ msgstr "Pasirinkimai"
 #, fuzzy
 #~ msgid "Fill entire selection:"
 #~ msgstr "Filtro pasirinkimas"
-
-#, fuzzy
-#~| msgid "Painting Mode"
-#~ msgctxt "The 'continuous fill' label in Fill tool options"
-#~ msgid "Continuous Fill:"
-#~ msgstr "Piešimo veiksena"
 
 #, fuzzy
 #~| msgid "Current Layer"
@@ -61594,105 +61558,29 @@ msgstr "Pasirinkimai"
 #~ msgstr "Spalvų lygis"
 
 #, fuzzy
-#~| msgid "%1 %"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %"
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Paste"
+#~ msgid "Paste"
+#~ msgstr "Įdėti"
 
 #, fuzzy
-#~| msgid "%1 %"
-#~ msgctxt "Brush Option Flow"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %"
+#~ msgid "Fuzziness: "
+#~ msgstr "Šviesumas"
 
 #, fuzzy
-#~| msgid "%1 %"
-#~ msgctxt "Edge softness, Brush Option Fade"
-#~ msgid "%1 %2"
-#~ msgstr "%1 %"
+#~ msgid "Use selection as boundary: "
+#~ msgstr "Iškirpti pažymėjimą į naują sluoksnį"
 
 #, fuzzy
-#~| msgid "%1 %"
-#~ msgctxt "Brush Option Scatter"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %"
+#~| msgid "Threshold: "
+#~ msgctxt "Threshold label in Magnetic Selection's Tool options"
+#~ msgid "Threshold: "
+#~ msgstr "Slenkstis: "
 
 #, fuzzy
-#~| msgid "%1 %"
-#~ msgid "%1 %2 px"
-#~ msgstr "%1 %"
-
-#, fuzzy
-#~| msgid "General"
-#~ msgid "General:"
-#~ msgstr "Bendrai"
-
-#, fuzzy
-#~ msgid "Animation:"
-#~ msgstr "Animacija"
-
-#, fuzzy
-#~ msgid "Swap File Location:"
-#~ msgstr "Sodrumas"
-
-#, fuzzy
-#~ msgid "Force Instant Preview in Move Tool"
-#~ msgstr "Peržiūrėti paveikslėlį"
-
-#, fuzzy
-#~ msgid "Force Instant Preview in Filters"
-#~ msgstr "Peržiūrėti paveikslėlį"
-
-#~ msgid "Open Color Profile"
-#~ msgstr "Atverti spalvų profilį"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Select a swap directory"
-#~ msgstr "Pasirinkite aplanką"
-
-#, fuzzy
-#~ msgid "Add new color profile:"
-#~ msgstr "Atverti spalvų profilį"
-
-#, fuzzy
-#~| msgid "Color space:"
-#~ msgid "Colorspace"
-#~ msgstr "Spalvų erdvė:"
-
-#, fuzzy
-#~ msgctxt "Color model"
-#~ msgid "&Model:"
-#~ msgstr "Modelis:"
-
-#, fuzzy
-#~ msgid "Profi&le:"
-#~ msgstr "Profilis:"
-
-#, fuzzy
-#~ msgctxt "About <Profilename>"
-#~ msgid "About "
-#~ msgstr "Krita"
-
-#, fuzzy
-#~| msgid "Softness"
-#~ msgctxt "The Softness label in Fill tool options"
-#~ msgid "Softness:"
-#~ msgstr "Glotninimas"
-
-#, fuzzy
-#~| msgid "Softness"
-#~ msgid "Softness: "
-#~ msgstr "Glotninimas"
-
-#, fuzzy
-#~ msgid "Change the color of the line/border"
-#~ msgstr "Fono spalva"
-
-#, fuzzy
-#~| msgid "Value"
-#~ msgctxt "Label of Brightness value in brush settings"
-#~ msgid "Value"
-#~ msgstr "Reikšmė"
+#~| msgid "0 s"
+#~ msgid " kB"
+#~ msgstr "0 s"
 
 #, fuzzy
 #~ msgctxt "action"
@@ -61703,12 +61591,6 @@ msgstr "Pasirinkimai"
 #~ msgctxt "action"
 #~ msgid "Brightness/Contrast curve"
 #~ msgstr "&Ryškumo/Kontrasto kreivė..."
-
-#, fuzzy
-#~| msgid "Threshold: "
-#~ msgctxt "The Threshold label in Fill tool options"
-#~ msgid "Threshold: "
-#~ msgstr "Slenkstis: "
 
 #, fuzzy
 #~| msgid "The file %1 does not exist."
@@ -61798,12 +61680,6 @@ msgstr "Pasirinkimai"
 #~ msgctxt "Error message when saving a .kra file"
 #~ msgid "Could not save resource %1 to the kra file."
 #~ msgstr "Pažymėjimas"
-
-#, fuzzy
-#~| msgid "Add Group"
-#~ msgctxt "action"
-#~ msgid "Add a new &Group Layer"
-#~ msgstr "Pridėti grupę"
 
 #, fuzzy
 #~ msgctxt "action"
@@ -61950,27 +61826,12 @@ msgstr "Pasirinkimai"
 
 #, fuzzy
 #~ msgid "Could not update preset %1."
-#~ msgstr "Pažymėjimas"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Couldn't add the session"
-#~ msgstr "Pažymėjimas"
-
-#, fuzzy
-#~ msgctxt "Warning about not being able to rename a session"
-#~ msgid "Renaming the session failed."
-#~ msgstr "Perkelti puslapį"
+#~ msgstr "Monitoriaus profilis: "
 
 #, fuzzy
 #~| msgid "Facing pages"
 #~ msgid "Clean Up"
 #~ msgstr "Puslapiai greta"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Filters"
-#~ msgstr "Filtrai:"
 
 #, fuzzy
 #~| msgid "Select a Directory"
@@ -61996,20 +61857,9 @@ msgstr "Pasirinkimai"
 #~ msgstr "Puslapis"
 
 #, fuzzy
-#~| msgid "Horizontally"
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cells horizontally"
-#~ msgstr "Horizontaliai"
-
-#, fuzzy
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cell vertically"
-#~ msgstr "Žymėjimo veiksena"
-
-#, fuzzy
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cells vertically"
-#~ msgstr "Žymėjimo veiksena"
+#~ msgctxt "action"
+#~ msgid "Filters"
+#~ msgstr "Filtrai:"
 
 #, fuzzy
 #~| msgid "Auto"
@@ -62018,23 +61868,19 @@ msgstr "Pasirinkimai"
 #~ msgstr "Auto"
 
 #, fuzzy
-#~ msgid "Loading Plugins Exiv/IO..."
-#~ msgstr "Ša&blonai"
-
-#, fuzzy
 #~| msgid "Exif"
 #~ msgctxt "metadata editor page"
 #~ msgid "Exif"
 #~ msgstr "Exif"
 
 #, fuzzy
-#~ msgid "No store backend"
-#~ msgstr "Fono spalva"
-
-#, fuzzy
 #~| msgid "Thumbnails"
 #~ msgid "lblThumbnail"
 #~ msgstr "Miniatiūros"
+
+#, fuzzy
+#~ msgid "No store backend"
+#~ msgstr "Fono spalva"
 
 #, fuzzy
 #~| msgid "TextLabel"
@@ -62557,12 +62403,6 @@ msgstr "Pasirinkimai"
 #~ msgstr "Perėjimas"
 
 #, fuzzy
-#~| msgid "Palettes"
-#~ msgctxt "resource type"
-#~ msgid "palettes"
-#~ msgstr "Paletės"
-
-#, fuzzy
 #~| msgid "Workspaces"
 #~ msgctxt "resource type"
 #~ msgid "workspaces"
@@ -62900,6 +62740,10 @@ msgstr "Pasirinkimai"
 #~ msgstr "Žymėjimo veiksena"
 
 #, fuzzy
+#~ msgid "Select Behind Blending Mode"
+#~ msgstr "Pažymėjimas"
+
+#, fuzzy
 #~ msgid "Select Clear Blending Mode"
 #~ msgstr "Pažymėjimas"
 
@@ -63139,9 +62983,6 @@ msgstr "Pasirinkimai"
 
 #~ msgid "1 : 1"
 #~ msgstr "1 : 1"
-
-#~ msgid "Update preview"
-#~ msgstr "Atnaujinti peržiūrą"
 
 #~ msgid "&Autoupdate"
 #~ msgstr "&Automatiškai atnaujinti"
@@ -63977,9 +63818,6 @@ msgstr "Pasirinkimai"
 #~ msgctxt "No border - has to fit in 48pixels"
 #~ msgid "None"
 #~ msgstr "Nėra"
-
-#~ msgid "No Border"
-#~ msgstr "Be rėmelio"
 
 #, fuzzy
 #~ msgid "New Style"
@@ -65159,6 +64997,10 @@ msgstr "Pasirinkimai"
 #~ msgid "Export as PDF"
 #~ msgstr "Eksportuoti sluoksnį"
 
+#, fuzzy
+#~ msgid "Show color blip"
+#~ msgstr "Pažymėjimas"
+
 #~ msgid "Leadtools JPEG2000"
 #~ msgstr "Leadtools JPEG2000"
 
@@ -66129,10 +65971,6 @@ msgstr "Pasirinkimai"
 #~ msgid "Change Vector Data"
 #~ msgstr "Keisti vektorinius duomenis"
 
-#, fuzzy
-#~ msgid "Replace Image"
-#~ msgstr "Keisti paveikslėlio dydį"
-
 #~ msgid "Vector image"
 #~ msgstr "Vektorinis paveikslėlis"
 
@@ -66267,6 +66105,9 @@ msgstr "Pasirinkimai"
 #, fuzzy
 #~ msgid "Brush Radius:"
 #~ msgstr "Suliejimo spindulys:"
+
+#~ msgid "Opacity decrease"
+#~ msgstr "Nepermatomumo mažinimas"
 
 #, fuzzy
 #~ msgid "Saturation decrease"

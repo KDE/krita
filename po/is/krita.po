@@ -9,20 +9,20 @@
 #
 # Þórarinn R. Einarsson <thori@mindspring.com>, 2001.
 # Sveinn í Felli <sv1@fellsnet.is>, 2015.
-# Sveinn í Felli <sveinki@nett.is>, 2011, 2013, 2015, 2018, 2021.
+# Sveinn í Felli <sveinki@nett.is>, 2011, 2013, 2015, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-25 00:43+0000\n"
-"PO-Revision-Date: 2021-12-26 13:54+0000\n"
+"POT-Creation-Date: 2023-07-27 02:25+0000\n"
+"PO-Revision-Date: 2018-01-04 15:20+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
-"Language-Team: Icelandic\n"
+"Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
 "Language: is\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 1.5\n"
 "Plural-Forms: Plural-Forms: nplurals=2; plural=n != 1;\n"
 "\n"
 "\n"
@@ -350,7 +350,7 @@ msgstr "Hnitanet"
 #, kde-format
 msgctxt "./krita/data/patterns/hexacolBW__2.pat"
 msgid "Hexacol BW By Tarkan"
-msgstr "Hexacol BW eftir Tarkan"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -516,25 +516,25 @@ msgstr "Strípur"
 #, kde-format
 msgctxt "./krita/data/patterns/Zigzag01.pat"
 msgid "Zigzag01"
-msgstr "Sikksakk01"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Zigzag02.pat"
 msgid "Zigzag02"
-msgstr "Sikksakk02"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Zigzag03.pat"
 msgid "Zigzag03"
-msgstr "Sikksakk03"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Zigzag04.pat"
 msgid "Zigzag04"
-msgstr "Sikksakk04"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -546,7 +546,7 @@ msgstr "Renna að"
 #, kde-format
 msgctxt "./krita/data/patterns/02_rough-canvas.png"
 msgid "02 rough-canvas"
-msgstr "02 hrjúfur strigi"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5554,28 +5554,28 @@ msgstr "Strípur"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Zigzag01.pat"
 msgid "Zigzag01"
-msgstr "Sikksakk01"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Zigzag02.pat"
 msgid "Zigzag02"
-msgstr "Sikksakk02"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Zigzag03.pat"
 msgid "Zigzag03"
-msgstr "Sikksakk03"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Zigzag04.pat"
 msgid "Zigzag04"
-msgstr "Sikksakk04"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -13065,7 +13065,7 @@ msgstr "&Hjálp"
 msgid "File"
 msgstr "Skrá"
 
-#: krita/krita5.xmlgui:419
+#: krita/krita5.xmlgui:420
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr ""
@@ -16048,27 +16048,27 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Vinnusvæði"
 
-#: krita/main.cc:521
+#: krita/main.cc:527
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Gildi"
 
-#: krita/main.cc:522
+#: krita/main.cc:528
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:632 libs/ui/KisApplication.cpp:409
-#: libs/ui/KisApplication.cpp:680
+#: krita/main.cc:646 libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:681
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Viðvörun!"
 
-#: krita/main.cc:633
+#: krita/main.cc:647
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16076,12 +16076,12 @@ msgid ""
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
 msgstr ""
 
-#: krita/main.cc:655 krita/main.cc:660
+#: krita/main.cc:669 krita/main.cc:674
 #, fuzzy, kde-format
 msgid "Krita Tablet Support"
 msgstr "Penslar"
 
-#: krita/main.cc:656
+#: krita/main.cc:670
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16089,7 +16089,7 @@ msgid ""
 "installed."
 msgstr ""
 
-#: krita/main.cc:661
+#: krita/main.cc:675
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16562,25 +16562,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3744
+#: libs/flake/text/KoSvgTextShape.cpp:3751
 #, fuzzy, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texti"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3746
-#: libs/flake/text/KoSvgTextShape.cpp:3754
+#: libs/flake/text/KoSvgTextShape.cpp:3753
+#: libs/flake/text/KoSvgTextShape.cpp:3761
 #, fuzzy, kde-format
 msgid "SVG Text Shape"
 msgstr "Form"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3752
+#: libs/flake/text/KoSvgTextShape.cpp:3759
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "Texti:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3766
-#: libs/flake/text/KoSvgTextShape.cpp:3781
+#: libs/flake/text/KoSvgTextShape.cpp:3773
+#: libs/flake/text/KoSvgTextShape.cpp:3788
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17353,7 +17353,7 @@ msgstr "Innflutt mynd"
 msgid "Selection Mask"
 msgstr "Valhula"
 
-#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2554
+#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2577
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -17474,7 +17474,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Litasnið sem vantar"
 
-#: libs/image/kis_image.cc:2486
+#: libs/image/kis_image.cc:2487
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -17609,9 +17609,7 @@ msgstr "Stillingar"
 msgid "Show Coloring"
 msgstr "Sýna stikur"
 
-#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
 #: libs/image/kis_layer_properties_icons.cpp:32
-#: libs/ui/forms/KisWelcomePage.ui:1572
 #, fuzzy, kde-format
 msgid "Open File"
 msgstr "Opna skrá"
@@ -17705,8 +17703,8 @@ msgid "Processing"
 msgstr "Í vinnslu"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1420
-#: libs/ui/KisMainWindow.cpp:1700 libs/ui/KisMainWindow.cpp:1713
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1750 libs/ui/KisMainWindow.cpp:1763
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, fuzzy, kde-format
 msgid "Unnamed"
@@ -18170,7 +18168,7 @@ msgstr "Breyta"
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
-#: plugins/impex/tiff/kis_tiff_import.cc:562
+#: plugins/impex/tiff/kis_tiff_import.cc:566
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, fuzzy, kde-format
 msgid "Transparency Mask"
@@ -18442,8 +18440,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Skjal"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2064
-#: libs/ui/KisMainWindow.cpp:2147
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2121
+#: libs/ui/KisMainWindow.cpp:2204
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Flytja inn myndir"
@@ -19725,7 +19723,7 @@ msgstr "Út"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:498 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:504 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -19761,9 +19759,9 @@ msgstr "Mynd"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19779,24 +19777,24 @@ msgstr "Mynd"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:979
-#: libs/ui/KisApplication.cpp:982 libs/ui/KisApplication.cpp:998
-#: libs/ui/KisApplication.cpp:1030 libs/ui/KisApplication.cpp:1044
-#: libs/ui/KisApplication.cpp:1072 libs/ui/KisDocument.cpp:946
-#: libs/ui/KisDocument.cpp:953 libs/ui/KisDocument.cpp:973
-#: libs/ui/KisDocument.cpp:1881 libs/ui/KisDocument.cpp:1925
-#: libs/ui/KisDocument.cpp:1931 libs/ui/KisDocument.cpp:1944
-#: libs/ui/KisDocument.cpp:1948 libs/ui/KisMainWindow.cpp:979
-#: libs/ui/KisMainWindow.cpp:1095 libs/ui/KisMainWindow.cpp:1221
-#: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1924
-#: libs/ui/KisMainWindow.cpp:1933 libs/ui/KisMainWindow.cpp:2072
-#: libs/ui/KisMainWindow.cpp:2133 libs/ui/KisMainWindow.cpp:2154
-#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:588
-#: libs/ui/KisPart.cpp:591 libs/ui/KisReferenceImage.cpp:175
-#: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
-#: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:985
+#: libs/ui/KisApplication.cpp:988 libs/ui/KisApplication.cpp:1004
+#: libs/ui/KisApplication.cpp:1036 libs/ui/KisApplication.cpp:1050
+#: libs/ui/KisApplication.cpp:1078 libs/ui/KisDocument.cpp:969
+#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
+#: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
+#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:981
+#: libs/ui/KisMainWindow.cpp:1097 libs/ui/KisMainWindow.cpp:1223
+#: libs/ui/KisMainWindow.cpp:1320 libs/ui/KisMainWindow.cpp:1981
+#: libs/ui/KisMainWindow.cpp:1990 libs/ui/KisMainWindow.cpp:2129
+#: libs/ui/KisMainWindow.cpp:2190 libs/ui/KisMainWindow.cpp:2211
+#: libs/ui/KisMainWindow.cpp:2826 libs/ui/KisPart.cpp:578
+#: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
+#: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
-#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:738
 #: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20305,8 +20303,8 @@ msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Eyða auðlind"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:334
-#: libs/ui/KisMainWindow.cpp:2569
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:335
+#: libs/ui/KisMainWindow.cpp:2626
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20378,13 +20376,13 @@ msgstr ""
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Failed to rename the resource"
-msgstr "Búa til textaramma"
+msgstr "Viðbót"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:97
 #, fuzzy, kde-format
 msgctxt "Warning message"
 msgid "Failed to rename the resource."
-msgstr "Búa til textaramma"
+msgstr "Viðbót"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:119
 #, fuzzy, kde-format
@@ -20760,7 +20758,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Viðbót"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2174
+#: libs/ui/KisMainWindow.cpp:2231
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "Stefna"
@@ -20804,18 +20802,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:392
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:472
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
 #, fuzzy, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -20823,27 +20821,27 @@ msgid ""
 "will be reduced to 50 frames per second"
 msgstr "Nýlegar skrár"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:479
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, fuzzy, kde-format
 msgid "Warning(s):"
 msgstr "Aðvörun"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr ""
@@ -21081,7 +21079,7 @@ msgstr "Mettun"
 msgid "FFMpeg Crashed"
 msgstr "FFmpeg"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:614
+#: libs/ui/animation/KisFFMpegWrapper.cpp:620
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -22745,7 +22743,7 @@ msgid "Numerical"
 msgstr "Töluorð"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "Flytja inn myndir"
@@ -22791,7 +22789,7 @@ msgstr "Eiginleikar mynda"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -22892,7 +22890,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Skrifaðu nafn á hóp:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2580
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2637
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -23115,9 +23113,9 @@ msgid "Open default window"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:363
-#, kde-format
+#, fuzzy, kde-format
 msgid "Load previous session"
-msgstr "Hlaða inn fyrri setu"
+msgstr "Fara á fyrri síðu"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:364
 #, fuzzy, kde-format
@@ -23855,134 +23853,29 @@ msgstr "Alltaf nota þetta snið þegar forrit ræsir sig"
 msgid "Always use this template"
 msgstr "Alltaf nota þetta snið"
 
-#. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:168
-#, kde-format
-msgid "News"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:191
-#, fuzzy, kde-format
-msgid "News options"
-msgstr "PNG stillingar"
-
-#. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:314
-#, fuzzy, kde-format
-msgid "Krita Version X.X.X Available"
-msgstr "Stillingar"
-
-#. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:365
-#, fuzzy, kde-format
-msgid "Update now!"
-msgstr "Uppfæra"
-
-#. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:372
-#, fuzzy, kde-format
-msgid "Show details"
-msgstr "Sýna allt"
-
-#. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:455 libs/ui/KisWelcomePageWidget.cpp:398
-#, kde-format
-msgid ""
-"You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
-"decoration: underline;\">enable news</a> from krita.org in various languages "
-"with the menu above"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:562
-#, fuzzy, kde-format
-msgid "Community"
-msgstr "Athugasemd"
-
-#. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:647 libs/ui/KisWelcomePageWidget.cpp:384
-#, fuzzy, kde-format
-msgid "User Manual"
-msgstr "Handvirkt"
-
-#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:737 libs/ui/KisWelcomePageWidget.cpp:381
-#, fuzzy, kde-format
-msgid "Getting Started"
-msgstr "Snúningur"
-
-#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:824 libs/ui/KisWelcomePageWidget.cpp:378
-#, fuzzy, kde-format
-msgid "User Community"
-msgstr "Setja inn athugasemd"
-
-#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:911 libs/ui/KisWelcomePageWidget.cpp:390
-#, fuzzy, kde-format
-msgid "Krita Website"
-msgstr "Stillingar"
-
-#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:1001 libs/ui/KisWelcomePageWidget.cpp:393
-#, fuzzy, kde-format
-msgid "Source Code"
-msgstr "Uppruni"
-
-#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:1088 libs/ui/KisWelcomePageWidget.cpp:387
+#. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
+#: libs/ui/forms/KisWelcomePage.ui:48
 #, fuzzy, kde-format
 #| msgid "&Support KDE"
-msgid "Support Krita"
+msgid "Support Krita!"
 msgstr "&Styðja KDE"
 
-#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:1178 libs/ui/KisWelcomePageWidget.cpp:396
-#, kde-format
-msgid "Powered by KDE"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, dragImageHereLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1261
-#, fuzzy, kde-format
-msgid "Drag an image into the window to open"
-msgstr "Stærð myndar"
-
-#. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1361
-#, fuzzy, kde-format
-msgid "Start"
-msgstr "Upphaf:"
-
-#. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1428 libs/ui/KisWelcomePageWidget.cpp:625
-#, kde-format
-msgid "DEV BUILD"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, newFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:1504
-#, fuzzy, kde-format
-#| msgid "New Size"
-msgid "New File"
-msgstr "Ný stærð"
-
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1655
+#: libs/ui/forms/KisWelcomePage.ui:79
 #, fuzzy, kde-format
-msgid "Recent Documents"
-msgstr "Skjal"
+#| msgid "Open Images"
+msgid "Recent Images"
+msgstr "Opna myndir"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:1713
+#: libs/ui/forms/KisWelcomePage.ui:103
 #, fuzzy, kde-format
 msgctxt "Welcome Screen Recent Document List's Clear link Label"
 msgid "Clear"
 msgstr "Hreinsa"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:1766
+#: libs/ui/forms/KisWelcomePage.ui:154
 #, fuzzy, kde-format
 #| msgid "Could not create the output document"
 msgid ""
@@ -23990,8 +23883,126 @@ msgid ""
 "recently opened documents"
 msgstr "Gat ekki búið til skrá til vistunar"
 
+#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:322
+#, fuzzy, kde-format
+msgid "Community"
+msgstr "Athugasemd"
+
+#. i18n: ectx: property (text), widget (QLabel, manualLink)
+#: libs/ui/forms/KisWelcomePage.ui:391 libs/ui/KisWelcomePageWidget.cpp:391
+#, fuzzy, kde-format
+msgid "User Manual"
+msgstr "Handvirkt"
+
+#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
+#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:394
+#, fuzzy, kde-format
+#| msgid "&Support KDE"
+msgid "Support Krita"
+msgstr "&Styðja KDE"
+
+#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
+#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:403
+#, kde-format
+msgid "Powered by KDE"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
+#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:400
+#, fuzzy, kde-format
+msgid "Source Code"
+msgstr "Uppruni"
+
+#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
+#: libs/ui/forms/KisWelcomePage.ui:748 libs/ui/KisWelcomePageWidget.cpp:388
+#, fuzzy, kde-format
+msgid "Getting Started"
+msgstr "Snúningur"
+
+#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
+#: libs/ui/forms/KisWelcomePage.ui:835 libs/ui/KisWelcomePageWidget.cpp:385
+#, fuzzy, kde-format
+msgid "User Community"
+msgstr "Setja inn athugasemd"
+
+#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
+#: libs/ui/forms/KisWelcomePage.ui:922 libs/ui/KisWelcomePageWidget.cpp:397
+#, fuzzy, kde-format
+msgid "Krita Website"
+msgstr "Stillingar"
+
+#. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1066
+#, kde-format
+msgid "News"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
+#: libs/ui/forms/KisWelcomePage.ui:1089
+#, fuzzy, kde-format
+msgid "News options"
+msgstr "PNG stillingar"
+
+#. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1212
+#, fuzzy, kde-format
+msgid "Krita Version X.X.X Available"
+msgstr "Stillingar"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
+#: libs/ui/forms/KisWelcomePage.ui:1263
+#, fuzzy, kde-format
+msgid "Update now!"
+msgstr "Uppfæra"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
+#: libs/ui/forms/KisWelcomePage.ui:1270
+#, fuzzy, kde-format
+msgid "Show details"
+msgstr "Sýna allt"
+
+#. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
+#: libs/ui/forms/KisWelcomePage.ui:1353 libs/ui/KisWelcomePageWidget.cpp:405
+#, kde-format
+msgid ""
+"You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
+"decoration: underline;\">enable news</a> from krita.org in various languages "
+"with the menu above"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1417
+#, fuzzy, kde-format
+msgid "Start"
+msgstr "Upphaf:"
+
+#. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1484 libs/ui/KisWelcomePageWidget.cpp:632
+#, kde-format
+msgid "DEV BUILD"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, newFileLink)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
+#: libs/ui/forms/KisWelcomePage.ui:1560 libs/ui/forms/wdgimageproperties.ui:18
+#: libs/ui/forms/wdgnewimage.ui:18
+#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
+#, kde-format
+msgid "New Image"
+msgstr "Ný mynd"
+
+#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
+#: libs/ui/forms/KisWelcomePage.ui:1628
+#, fuzzy, kde-format
+#| msgid "Open Images"
+msgid "Open Image"
+msgstr "Opna myndir"
+
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1874
+#: libs/ui/forms/KisWelcomePage.ui:1712
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -24774,9 +24785,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdgdisplaysettings.ui:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "Canvas Acceleration"
-msgstr "Aðgerð"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpOpenGL)
 #: libs/ui/forms/wdgdisplaysettings.ui:58
@@ -24882,9 +24893,9 @@ msgstr "Eiginleikar..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdgdisplaysettings.ui:255
-#, fuzzy, kde-format
+#, kde-format
 msgid "Preferred Output Format:"
-msgstr "Eiginleikar..."
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:283
@@ -24972,9 +24983,8 @@ msgstr "Valhula"
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
 #, fuzzy, kde-format
-#| msgid "Selection Mask"
 msgid "Outline opacity:"
-msgstr "Valhula"
+msgstr "grænt"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:440
@@ -25301,9 +25311,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: libs/ui/forms/wdggeneralsettings.ui:182
-#, fuzzy, kde-format
+#, kde-format
 msgid "Eraser Cursor Icon:"
-msgstr "Strokleður"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #: libs/ui/forms/wdggeneralsettings.ui:195
@@ -25668,7 +25678,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1000
 #, kde-format
 msgid "Compress .kra files more (slows loading/saving)"
-msgstr "Þjappa .kra skrám meira (hægir á hleðslu/vistun)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkTrimKra)
 #: libs/ui/forms/wdggeneralsettings.ui:1010
@@ -26039,15 +26049,6 @@ msgstr "Snúa"
 #, fuzzy, kde-format
 msgid "Scale:"
 msgstr "Kvarði:"
-
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:18
-#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
-#, kde-format
-msgid "New Image"
-msgstr "Ný mynd"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
@@ -26687,7 +26688,7 @@ msgstr "Stillingar"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1076
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -27486,10 +27487,11 @@ msgstr "Smámyndir"
 #. i18n: ectx: property (text), widget (QPushButton, loadImageIntoThumbnailButton)
 #: libs/ui/forms/wdgsavebrushpreset.ui:157
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:119
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Load Image"
 msgctxt "Load Image as Thumbnail button"
 msgid "Load Image"
-msgstr "Hlaða inn mynd"
+msgstr "Hlaða mynd"
 
 #. i18n: ectx: property (text), widget (QPushButton, loadIconLibraryThumbnailButton)
 #: libs/ui/forms/wdgsavebrushpreset.ui:164
@@ -27589,7 +27591,7 @@ msgid "HSV CCW"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:351
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:352
 #, fuzzy, kde-format
 #| msgid "Dimensions"
 msgid "Sessions"
@@ -29079,7 +29081,7 @@ msgstr "Forgrunnslitur"
 msgid "&Open Background color selector"
 msgstr "Bakgrunnslitur"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:347
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -29092,8 +29094,8 @@ msgstr "Mynstur"
 msgid "Custom Pattern"
 msgstr "Skjár"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:332
-#: libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
+#: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, fuzzy, kde-format
@@ -29868,62 +29870,62 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Aðdráttur"
 
-#: libs/ui/KisApplication.cpp:324
+#: libs/ui/KisApplication.cpp:325
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, fuzzy, kde-format
 #| msgid "Brush Presets"
 msgid "Brush presets"
 msgstr "Penslar"
 
-#: libs/ui/KisApplication.cpp:327 libs/ui/KisApplication.cpp:328
-#: libs/ui/KisApplication.cpp:329 libs/ui/KisApplication.cpp:330
+#: libs/ui/KisApplication.cpp:328 libs/ui/KisApplication.cpp:329
+#: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
 #, fuzzy, kde-format
 msgid "Brush tips"
 msgstr "Penslar"
 
-#: libs/ui/KisApplication.cpp:335
+#: libs/ui/KisApplication.cpp:336
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
 #, fuzzy, kde-format
 msgid "Palettes"
 msgstr "Litatöflur"
 
-#: libs/ui/KisApplication.cpp:348 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
 msgid "Workspaces"
 msgstr "Vinnusvæði"
 
-#: libs/ui/KisApplication.cpp:349
+#: libs/ui/KisApplication.cpp:350
 #, fuzzy, kde-format
 msgid "SVG symbol libraries"
 msgstr "Vigralag"
 
-#: libs/ui/KisApplication.cpp:350 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, fuzzy, kde-format
 msgid "Window layouts"
 msgstr "Mynd"
 
-#: libs/ui/KisApplication.cpp:352
+#: libs/ui/KisApplication.cpp:353
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
 #, fuzzy, kde-format
 msgid "Gamut masks"
 msgstr "Málaratól"
 
-#: libs/ui/KisApplication.cpp:354
+#: libs/ui/KisApplication.cpp:355
 #, fuzzy, kde-format
 msgid "SeExpr Scripts"
 msgstr "Lýsing:"
 
-#: libs/ui/KisApplication.cpp:359
+#: libs/ui/KisApplication.cpp:360
 #, fuzzy, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Mynd"
 
-#: libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:373
 #, kde-format
 msgid ""
 "%1\n"
@@ -29931,13 +29933,13 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:372 libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:373 libs/ui/KisApplication.cpp:379
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Fléttun"
 
-#: libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:379
 #, kde-format
 msgid ""
 "\n"
@@ -29945,7 +29947,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:411
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -29953,66 +29955,66 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:427
+#: libs/ui/KisApplication.cpp:428
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "Stjórna auðlindum"
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:459
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "Mynd"
 
-#: libs/ui/KisApplication.cpp:462
+#: libs/ui/KisApplication.cpp:463
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "Mynd"
 
-#: libs/ui/KisApplication.cpp:468
+#: libs/ui/KisApplication.cpp:469
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "Mynd"
 
-#: libs/ui/KisApplication.cpp:477
-#, kde-format
+#: libs/ui/KisApplication.cpp:478
+#, fuzzy, kde-format
 msgid "Loading Main Window..."
-msgstr "Hleð inn aðalglugga..."
+msgstr "Hleð inn aðalglugga"
 
-#: libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:510
 #, fuzzy, kde-format
 #| msgid "Updating..."
 msgid "Launching..."
 msgstr "Uppfæri..."
 
-#: libs/ui/KisApplication.cpp:578
+#: libs/ui/KisApplication.cpp:579
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Tegund fannst ekki, reyndu að nota -mimetype valkostinn"
 
-#: libs/ui/KisApplication.cpp:634
+#: libs/ui/KisApplication.cpp:635
 #, fuzzy, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Viðbót"
 
-#: libs/ui/KisApplication.cpp:661 libs/ui/KisApplication.cpp:851
+#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:857
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "Kvarða lag"
 
-#: libs/ui/KisApplication.cpp:669 libs/ui/KisApplication.cpp:674
-#: libs/ui/KisApplication.cpp:845 libs/ui/KisApplication.cpp:859
-#: libs/ui/KisApplication.cpp:864
+#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:851 libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:870
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Viðvörun!"
 
-#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:866
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30025,7 +30027,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:681
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30033,33 +30035,33 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:846
+#: libs/ui/KisApplication.cpp:852
 #, fuzzy, kde-format
 #| msgid "Could not find %1"
 msgid "Couldn't open file %1"
 msgstr "Gat ekki fundið %1"
 
-#: libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:871
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:980
+#: libs/ui/KisApplication.cpp:986
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Ekkert snið fannst fyrir: %1 "
 
-#: libs/ui/KisApplication.cpp:983
+#: libs/ui/KisApplication.cpp:989
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Of mörg snið fundust fyrir: %1"
 
-#: libs/ui/KisApplication.cpp:999
+#: libs/ui/KisApplication.cpp:1005
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Mistókst að hlaða inn sniðinu %1."
 
-#: libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:1037
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30069,7 +30071,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1045
+#: libs/ui/KisApplication.cpp:1051
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30077,7 +30079,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1073
+#: libs/ui/KisApplication.cpp:1079
 #, fuzzy, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Viltu virkilega skrifa yfir sniðið '%1' sem þegar er til?"
@@ -30205,48 +30207,48 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Loka skjalinu"
 
-#: libs/ui/KisDocument.cpp:722
+#: libs/ui/KisDocument.cpp:733
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:760
+#: libs/ui/KisDocument.cpp:783
 #, fuzzy, kde-format
 #| msgid "Could not find %1"
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Gat ekki fundið %1"
 
-#: libs/ui/KisDocument.cpp:777
+#: libs/ui/KisDocument.cpp:800
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:799
+#: libs/ui/KisDocument.cpp:822
 #, fuzzy, kde-format
 msgid "Exporting Document..."
 msgstr "Flyt út skjal..."
 
-#: libs/ui/KisDocument.cpp:800
+#: libs/ui/KisDocument.cpp:823
 #, fuzzy, kde-format
 msgid "Saving Document..."
 msgstr "Vista skjal..."
 
-#: libs/ui/KisDocument.cpp:810
+#: libs/ui/KisDocument.cpp:833
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:939
+#: libs/ui/KisDocument.cpp:962
 #, fuzzy, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Villa við sjálfvirka vistun! Disksneið full?"
 
-#: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:954
+#: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -30256,7 +30258,7 @@ msgstr ""
 "Gat ekki vistað\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:976
+#: libs/ui/KisDocument.cpp:999
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30264,45 +30266,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:982
+#: libs/ui/KisDocument.cpp:1005
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1022
 #, fuzzy, kde-format
 msgid "Finished saving %1"
 msgstr "&Ljúka"
 
-#: libs/ui/KisDocument.cpp:1402
+#: libs/ui/KisDocument.cpp:1425
 #, fuzzy, kde-format
 msgid "Autosaving... %1"
 msgstr "Sjálfvirk vistun..."
 
-#: libs/ui/KisDocument.cpp:1410
+#: libs/ui/KisDocument.cpp:1433
 #, kde-format
 msgid "Autosaving..."
 msgstr "Sjálfvirk vistun..."
 
-#: libs/ui/KisDocument.cpp:1416
+#: libs/ui/KisDocument.cpp:1439
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1559
+#: libs/ui/KisDocument.cpp:1582
 #, fuzzy, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Villa við sjálfvirka vistun! Disksneið full?"
 
-#: libs/ui/KisDocument.cpp:1573
+#: libs/ui/KisDocument.cpp:1596
 #, fuzzy, kde-format
 msgid "Finished autosaving %1"
 msgstr "&Ljúka"
 
-#: libs/ui/KisDocument.cpp:1815
+#: libs/ui/KisDocument.cpp:1838
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -30314,40 +30316,40 @@ msgstr ""
 "Gölluð slóð\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1881
+#: libs/ui/KisDocument.cpp:1904
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Skráin %1 er ekki til."
 
-#: libs/ui/KisDocument.cpp:1910
+#: libs/ui/KisDocument.cpp:1933
 #, fuzzy, kde-format
 msgid "Opening document"
 msgstr "Vista skjal"
 
-#: libs/ui/KisDocument.cpp:1926 libs/ui/KisDocument.cpp:1932
+#: libs/ui/KisDocument.cpp:1949 libs/ui/KisDocument.cpp:1955
 #, fuzzy, kde-format
 #| msgid "Could not find %1"
 msgid "Could not open %1."
 msgstr "Gat ekki fundið %1"
 
-#: libs/ui/KisDocument.cpp:1945 libs/ui/KisDocument.cpp:1949
+#: libs/ui/KisDocument.cpp:1968 libs/ui/KisDocument.cpp:1972
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2080
+#: libs/ui/KisDocument.cpp:2103
 #, fuzzy, kde-format
 #| msgid "Not Filled"
 msgid "Not Saved"
 msgstr "Ekki fyllt"
 
-#: libs/ui/KisDocument.cpp:2561
+#: libs/ui/KisDocument.cpp:2584
 #, fuzzy, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Bakgrunnur"
 
-#: libs/ui/KisDocument.cpp:2613
+#: libs/ui/KisDocument.cpp:2636
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30753,44 +30755,44 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Vinnusvæði"
 
-#: libs/ui/KisMainWindow.cpp:585
+#: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Sýna %1 tækjaslá"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:589
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Fela %1 tækjaslá"
 
-#: libs/ui/KisMainWindow.cpp:1037
+#: libs/ui/KisMainWindow.cpp:1039
 #, fuzzy, kde-format
 msgid "Write Protected"
 msgstr "ritvörn"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1043
 #, fuzzy, kde-format
 msgid "Recovered"
 msgstr "(endurheimt)"
 
-#: libs/ui/KisMainWindow.cpp:1071
+#: libs/ui/KisMainWindow.cpp:1073
 #, kde-format
 msgid "Save as %1"
 msgstr "Vista sem %1"
 
-#: libs/ui/KisMainWindow.cpp:1095
+#: libs/ui/KisMainWindow.cpp:1097
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Skráin %1 er ekki til."
 
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, kde-format
 msgid "Open Images"
 msgstr "Opna myndir"
 
-#: libs/ui/KisMainWindow.cpp:1319
+#: libs/ui/KisMainWindow.cpp:1321
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30799,38 +30801,38 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "Flytja út"
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, fuzzy, kde-format
 msgid "Saving As"
 msgstr "Snið"
 
-#: libs/ui/KisMainWindow.cpp:1679
+#: libs/ui/KisMainWindow.cpp:1729
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Búa til nýtt skjal"
 
-#: libs/ui/KisMainWindow.cpp:1703
+#: libs/ui/KisMainWindow.cpp:1753
 #, kde-format
 msgid "Custom Document"
 msgstr "Sérsniðið skjal"
 
-#: libs/ui/KisMainWindow.cpp:1715
+#: libs/ui/KisMainWindow.cpp:1765
 #, fuzzy, kde-format
 msgid "Create from Clipboard"
 msgstr "Líma lag af klippispjaldi"
 
-#: libs/ui/KisMainWindow.cpp:1893
+#: libs/ui/KisMainWindow.cpp:1950
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Kvarða lag"
 
-#: libs/ui/KisMainWindow.cpp:1919
+#: libs/ui/KisMainWindow.cpp:1976
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, fuzzy, kde-format
@@ -30838,7 +30840,7 @@ msgstr "Kvarða lag"
 msgid "You don't have any resource bundles enabled."
 msgstr "Gat ekki búið til skrá til vistunar"
 
-#: libs/ui/KisMainWindow.cpp:1923
+#: libs/ui/KisMainWindow.cpp:1980
 #, kde-format
 msgid ""
 "\n"
@@ -30846,7 +30848,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1933
+#: libs/ui/KisMainWindow.cpp:1990
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -30855,66 +30857,66 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2072 libs/ui/KisMainWindow.cpp:2154
+#: libs/ui/KisMainWindow.cpp:2129 libs/ui/KisMainWindow.cpp:2211
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
 "%1"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2133
+#: libs/ui/KisMainWindow.cpp:2190
 #, fuzzy, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Viðbót"
 
-#: libs/ui/KisMainWindow.cpp:2560
+#: libs/ui/KisMainWindow.cpp:2617
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "Vinnusvæði"
 
-#: libs/ui/KisMainWindow.cpp:2575
+#: libs/ui/KisMainWindow.cpp:2632
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Vinnusvæði"
 
-#: libs/ui/KisMainWindow.cpp:2579
+#: libs/ui/KisMainWindow.cpp:2636
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Vinnusvæði"
 
-#: libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/KisMainWindow.cpp:2680
 #, fuzzy, kde-format
 msgid "&%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2626
+#: libs/ui/KisMainWindow.cpp:2683
 #, fuzzy, kde-format
 msgid "%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2792
+#: libs/ui/KisMainWindow.cpp:2849
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2808
+#: libs/ui/KisMainWindow.cpp:2865
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Innri villa"
 
-#: libs/ui/KisMainWindow.cpp:2917
+#: libs/ui/KisMainWindow.cpp:2974
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "Þ&emu"
 
-#: libs/ui/KisMainWindow.cpp:2975
+#: libs/ui/KisMainWindow.cpp:3032
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -31049,14 +31051,14 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Nýr hluti"
 
-#: libs/ui/KisPart.cpp:588
+#: libs/ui/KisPart.cpp:578
 #, fuzzy, kde-format
 msgid ""
 "Could not create document from template\n"
 "%1"
 msgstr "Gat ekki búið til skrá til vistunar"
 
-#: libs/ui/KisPart.cpp:591
+#: libs/ui/KisPart.cpp:581
 #, fuzzy, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -31073,11 +31075,12 @@ msgid "Set saturation"
 msgstr "Litmettun"
 
 #: libs/ui/KisReferenceImage.cpp:175
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Could not find %1"
 msgid "Could not load %1."
-msgstr "Gat ekki hlaðið inn %1."
+msgstr "Gat ekki fundið %1"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:39
+#: libs/ui/KisRemoteFileFetcher.cpp:41
 #, kde-format
 msgctxt "Fetching remote image"
 msgid ""
@@ -31085,24 +31088,24 @@ msgid ""
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:61
+#: libs/ui/KisRemoteFileFetcher.cpp:63
 #, fuzzy, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "Fjaðra val"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:75
+#: libs/ui/KisRemoteFileFetcher.cpp:77
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:92
+#: libs/ui/KisRemoteFileFetcher.cpp:94
 #, fuzzy, kde-format
-#| msgid "Could not load %1."
+#| msgid "Could not find %1"
 msgctxt "Fetching remote image"
 msgid "Could not download %1."
-msgstr "Gat ekki hlaðið inn %1."
+msgstr "Gat ekki fundið %1"
 
 #: libs/ui/KisTemplateCreateDia.cpp:87
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:91
@@ -31369,51 +31372,51 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Nafnlaus"
 
-#: libs/ui/KisWelcomePageWidget.cpp:148
+#: libs/ui/KisWelcomePageWidget.cpp:157
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:150
+#: libs/ui/KisWelcomePageWidget.cpp:159
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
 "krita.org website"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:153
+#: libs/ui/KisWelcomePageWidget.cpp:162
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, fuzzy, kde-format
 msgid "Language"
 msgstr "Tungumál:"
 
-#: libs/ui/KisWelcomePageWidget.cpp:154
+#: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:420
+#: libs/ui/KisWelcomePageWidget.cpp:427
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:648
+#: libs/ui/KisWelcomePageWidget.cpp:655
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, fuzzy, kde-format
 msgid "Forget \"%1\""
 msgstr "Flytja út"
 
-#: libs/ui/KisWelcomePageWidget.cpp:745
+#: libs/ui/KisWelcomePageWidget.cpp:757
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:774
+#: libs/ui/KisWelcomePageWidget.cpp:786
 #, fuzzy, kde-format
 msgid "An error occurred during the update"
 msgstr "Gat ekki lesið upphaf skráarinnar."
 
-#: libs/ui/KisWelcomePageWidget.cpp:780
+#: libs/ui/KisWelcomePageWidget.cpp:792
 #, kde-format
 msgid "Restart is required."
 msgstr ""
@@ -32393,12 +32396,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:654
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:656
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32406,14 +32409,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1070
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1072
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -34131,7 +34134,7 @@ msgstr ""
 msgctxt ""
 "Percentage of the histogram to clip in the shadows side in auto levels"
 msgid "Shadows clipping:"
-msgstr "Sýna tækjaslá"
+msgstr "Litur stoppmerkis"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:90
@@ -34158,7 +34161,7 @@ msgstr "Stillingar"
 #, fuzzy, kde-format
 msgctxt "Output color used for the shadows in auto levels"
 msgid "Shadows color:"
-msgstr "Sýna tækjaslá"
+msgstr "Litur stoppmerkis"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:114
@@ -34188,10 +34191,10 @@ msgstr "Aðferð:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:171
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Do not perform midtones enhancement in auto levels"
 msgid "Don't adjust the midtones"
-msgstr "Fjaðra val"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:176
@@ -35713,12 +35716,12 @@ msgstr "{seconds}sek"
 msgid "Toggle Preview"
 msgstr "Forsýna"
 
-#: libs/widgetutils/KoFileDialog.cpp:243
+#: libs/widgetutils/KoFileDialog.cpp:260
 #, fuzzy, kde-format
 msgid "Save As:"
 msgstr "Vista sem"
 
-#: libs/widgetutils/KoFileDialog.cpp:326
+#: libs/widgetutils/KoFileDialog.cpp:343
 #, kde-format
 msgid ""
 "The selected file name does not have a file extension that Krita "
@@ -35726,7 +35729,7 @@ msgid ""
 "Make sure the file name ends in '.%1' for example."
 msgstr ""
 
-#: libs/widgetutils/KoFileDialog.cpp:511
+#: libs/widgetutils/KoFileDialog.cpp:533
 #, kde-format
 msgid "All supported formats"
 msgstr ""
@@ -37638,7 +37641,7 @@ msgid "Val:"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:127
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
 #, kde-format
 msgid "Onion skins menu"
 msgstr ""
@@ -37649,25 +37652,25 @@ msgid "Audio menu"
 msgstr "ISO stúdió tungsten"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:180
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
 #, fuzzy, kde-format
 msgid "Animation settings menu"
 msgstr "Málaratól"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:192
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
 #, fuzzy, kde-format
 msgid "Clip Start: "
 msgstr "Upphaf:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
 #, kde-format
 msgid "Clip End: "
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
 #, fuzzy, kde-format
 #| msgid "Frame Rate:"
 msgid "Frame Rate: "
@@ -37693,37 +37696,37 @@ msgstr "Rétthyrningur"
 msgid "Reset All Channels"
 msgstr "Allar litrásir"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:486
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:481
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:493
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:488
 #, fuzzy, kde-format
 msgid "Linear interpolation."
 msgstr "Tvílínuleg innskot"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:500
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:495
 #, fuzzy, kde-format
 msgid "Bezier curve interpolation."
 msgstr "Tvílínuleg innskot"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:507
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:502
 #, fuzzy, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "Tvílínuleg innskot"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:514
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:509
 #, fuzzy, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "Tvílínuleg innskot"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:521
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:516
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:528
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:523
 #, fuzzy, kde-format
 msgid "Zoom view to fit curve."
 msgstr "Renna að gluggastærð"
@@ -37768,66 +37771,66 @@ msgstr[0] "Setja inn athugasemd"
 msgstr[1] "Setja inn athugasemd"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:290
 #, fuzzy, kde-format
 msgid "Animation Timeline"
 msgstr "Línubreidd"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-msgid "Animation audio menu"
-msgstr "Málaratól"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Mynd"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Málaratól"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Þagga niður"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "Gagnaflutningar:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#, fuzzy, kde-format
+msgid "Animation audio menu"
+msgstr "Málaratól"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
 msgid "AutoKey Blank"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
 #, fuzzy, kde-format
 msgid "AutoKey Duplicate"
 msgstr "Tvífalda"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:509
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:522
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:517
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:523
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:518
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:519
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""
@@ -38681,7 +38684,7 @@ msgstr "Nánar"
 #, fuzzy, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "grænt"
+msgstr "Fara á næstu síðu"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:412
 #, fuzzy, kde-format
@@ -38837,7 +38840,7 @@ msgstr "Mynstur"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:155
 #, kde-format
 msgid "File loading and saving"
-msgstr "Hleðsla og vistun skráa"
+msgstr ""
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:159
 #, kde-format
@@ -39092,9 +39095,10 @@ msgstr ""
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
 #, fuzzy
+#| msgid "Update preview"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Smámyndir"
+msgstr "Yfirlegg"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, fuzzy, kde-format
@@ -39127,7 +39131,7 @@ msgstr "Kvarða lag"
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:125
 #, fuzzy, kde-format
 msgid "Load a palette"
-msgstr "Mynstur"
+msgstr "Breyta mynstri"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:226
 #, fuzzy, kde-format
@@ -40267,16 +40271,14 @@ msgstr "Dálkar"
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:145
 #, fuzzy, kde-format
-#| msgid "Create Template"
 msgid "SVG Template"
-msgstr "Búa til sniðmát"
+msgstr "Stjarnan"
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
 #, fuzzy, kde-format
-#| msgid "Create Template"
 msgid "SVG Template Path:"
-msgstr "Búa til sniðmát"
+msgstr "Stjarnan"
 
 #. i18n: ectx: property (text), widget (QLabel, fontSizeLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:237
@@ -47309,24 +47311,24 @@ msgstr "Engi&n skölun"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:21
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "2x2 downsampling"
-msgstr "Engi&n skölun"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:22
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "4x4 downsampling"
-msgstr "Engi&n skölun"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:23
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "8x8 downsampling"
-msgstr "Engi&n skölun"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
@@ -47410,10 +47412,10 @@ msgid "Center-first order"
 msgstr "Miðjað"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
-msgstr "Upplausn:"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
 #, kde-format
@@ -47826,10 +47828,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:492
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gaborish filter"
-msgstr ""
+msgstr "Skjár"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:499
@@ -47869,7 +47871,7 @@ msgstr ""
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Group order"
-msgstr "Kroppa lag"
+msgstr "Enginn rammi"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:544
@@ -47958,9 +47960,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:676
-#, fuzzy, kde-format
+#, kde-format
 msgid "Local channel palette range"
-msgstr "Mynstur"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:687
@@ -48375,9 +48377,14 @@ msgstr "Gat ekki búið til skrá til vistunar"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:210
 #, fuzzy, kde-format
+#| msgid ""
+#| "Could not save\n"
+#| "%1"
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
-msgstr "Fjaðra val"
+msgstr ""
+"Gat ekki vistað\n"
+"%1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:222
 #, kde-format
@@ -49801,7 +49808,7 @@ msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
 msgstr "Lárétt:"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1040
+#: plugins/impex/tiff/kis_tiff_import.cc:1044
 #, kde-format
 msgctxt "TIFF errors"
 msgid ""
@@ -49810,11 +49817,25 @@ msgid ""
 "version of libjpeg-turbo and try again."
 msgstr ""
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1143
-#: plugins/impex/tiff/kis_tiff_import.cc:1326
+#: plugins/impex/tiff/kis_tiff_import.cc:1147
+#: plugins/impex/tiff/kis_tiff_import.cc:1330
 #, kde-format
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1577
+#, kde-format
+msgctxt "@title:window"
+msgid "TIFF image with PSD data"
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1579
+#, kde-format
+msgctxt "the choice for the user on loading a TIFF file"
+msgid ""
+"The TIFF image contains valid PSD data embedded. Would you like to use PSD "
+"data instead of normal TIFF data?"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
@@ -50113,9 +50134,9 @@ msgstr "Áfangastaður:"
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, segments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:260
 #: plugins/impex/webp/kis_wdg_options_webp.ui:276
-#, fuzzy, kde-format
+#, kde-format
 msgid "Maximum number of segments (1 to 4)."
-msgstr "Fjöldi raða"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSegments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:263
@@ -53068,7 +53089,7 @@ msgstr "Aðdráttarhamur:"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
 #, fuzzy, kde-format
 msgid "Smudge Transparency"
-msgstr "Gegnsætt"
+msgstr "Varðveita alfa"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, fuzzy, kde-format
@@ -54869,8 +54890,9 @@ msgid ""
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:378
+#, fuzzy
 msgid "Loading Pages..."
-msgstr "Hleð inn síðum..."
+msgstr "&Mynstur"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
@@ -56791,10 +56813,10 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:633
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
-msgstr "Fylla með bakgrunnslit"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
 #, fuzzy, kde-format
@@ -57922,9 +57944,9 @@ msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select all regions until a specific boundary color"
-msgstr "Fylla með bakgrunnslit"
+msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
@@ -57953,7 +57975,7 @@ msgstr ""
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
 msgid "Selection extent"
-msgstr "Myndgerðarmarkmið"
+msgstr "Valhamur"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:95
 #, fuzzy, kde-format
@@ -58013,7 +58035,7 @@ msgid "Bezier Curve Selection Tool"
 msgstr "Valtól"
 
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Polygonal Selection"
 msgstr "Valtól"
 
@@ -58070,7 +58092,7 @@ msgstr "Málaratól"
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
-msgstr "Myndgerðarmarkmið"
+msgstr "Valhamur"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:57
 #, fuzzy, kde-format
@@ -59308,10 +59330,10 @@ msgid "Specific color or transparency"
 msgstr "Name=HeimasvÃ¦Ã°iÃ° Ã¾itt"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
-msgstr "Fylla með bakgrunnslit"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, kde-format
@@ -59326,10 +59348,10 @@ msgid "All, excluding a specific color or transparency"
 msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
-msgstr "Fylla með bakgrunnslit"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
 #, fuzzy, kde-format
@@ -60112,9 +60134,9 @@ msgstr "Lóðréttar línur"
 
 #. i18n: ectx: property (whatsThis), widget (QFrame, liquifyOptionsLayout)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1784
-#, kde-format
+#, fuzzy, kde-format
 msgid "<html><head/><body><p><br/></p></body></html>"
-msgstr "<html><head/><body><p><br/></p></body></html>"
+msgstr "Nýlegar skrár"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2029
@@ -60412,61 +60434,23 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Stillingar"
 
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "Skekkja"
+#~ msgid "&Canvas"
+#~ msgstr "Mynd&flötur"
 
 #, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "Skekkja"
+#~ msgctxt "action"
+#~ msgid "&Reset zoom"
+#~ msgstr "Núllstilla aðdrátt"
 
 #, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "Kvarði"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "Málaratól"
-
-#, fuzzy
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
-#~ "Animated exports are <span style=\" font-weight:600;\">always</span> "
-#~ "flattened regardless of this setting.</p></body></html>"
-#~ msgstr "Nýlegar skrár"
+#~ msgctxt "action"
+#~ msgid "Reset zoom"
+#~ msgstr "Núllstilla aðdrátt"
 
 #, fuzzy
 #~ msgctxt "paletegen status mode option name"
 #~ msgid "Difference"
 #~ msgstr "Mismunur"
-
-#, fuzzy
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "&Sía:"
-
-#, fuzzy
-#~ msgid "Edit Audio:"
-#~ msgstr "Útgáfa"
-
-#, fuzzy
-#~ msgctxt "@item:inmenu, slider"
-#~ msgid "Volume:"
-#~ msgstr "Gagnaflutningar:"
-
-#, fuzzy
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "Opna slóð"
-
-#, fuzzy
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "Vista..."
 
 #, fuzzy
 #~ msgid "Choose a video file"
@@ -60500,10 +60484,6 @@ msgstr "Stillingar"
 #~ msgstr "Snúningur:"
 
 #, fuzzy
-#~ msgid "FFMpeg Version: None"
-#~ msgstr "Útgáfa"
-
-#, fuzzy
 #~ msgid ""
 #~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
 #~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
@@ -60515,8 +60495,100 @@ msgstr "Stillingar"
 #~ msgstr "Prósenta"
 
 #, fuzzy
-#~ msgid " sec"
-#~ msgstr "%1 sekúnda"
+#~ msgid "Drag an image into the window to open"
+#~ msgstr "Stærð myndar"
+
+#, fuzzy
+#~| msgid "New Size"
+#~ msgid "New File"
+#~ msgstr "Ný stærð"
+
+#, fuzzy
+#~ msgid "Recent Documents"
+#~ msgstr "Skjal"
+
+#, fuzzy
+#~ msgid "Grid Settings"
+#~ msgstr "Litastillingar"
+
+#, fuzzy
+#~ msgid "Enable Smooth Zooming"
+#~ msgstr "Mynstur"
+
+#, fuzzy
+#~ msgid "&Description:"
+#~ msgstr "&Lýsing:"
+
+#, fuzzy
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "&Filter:"
+#~ msgstr "&Sía:"
+
+#, fuzzy
+#~| msgid "Select Layer"
+#~ msgid "Select Layer Mode"
+#~ msgstr "Velja lag"
+
+#, fuzzy
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Kvarða lag"
+
+#, fuzzy
+#~ msgid "Reset Zoom to 100%"
+#~ msgstr "Aðdráttur 100%"
+
+#, fuzzy
+#~| msgid ""
+#~| "Could not save %1\n"
+#~| "Reason: %2"
+#~ msgid ""
+#~ "Could not save %1.\n"
+#~ "Reason: %2"
+#~ msgstr ""
+#~ "Gat ekki vistað %1\n"
+#~ "Ástæða: %2"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not open %2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Gat ekki opnað %1\n"
+#~ "Ástæða: %2"
+
+#, fuzzy
+#~ msgctxt "Fetching remote image"
+#~ msgid "Do you want to download the image at %1?"
+#~ msgstr "Viltu virkilega skrifa yfir sniðið '%1' sem þegar er til?"
+
+#~ msgid "Fit Page"
+#~ msgstr "Passa á síðu"
+
+#, fuzzy
+#~ msgid "Colu&mns:"
+#~ msgstr "Dálkar"
+
+#~ msgid "&Rows:"
+#~ msgstr "&Raðir:"
+
+#, fuzzy
+#~ msgid "Edit Audio:"
+#~ msgstr "Útgáfa"
+
+#, fuzzy
+#~ msgctxt "@item:inmenu, slider"
+#~ msgid "Volume:"
+#~ msgstr "Gagnaflutningar:"
+
+#, fuzzy
+#~ msgctxt "@item:inmenu"
+#~ msgid "Open audio..."
+#~ msgstr "Opna slóð"
+
+#, fuzzy
+#~ msgctxt "@item:inmenu"
+#~ msgid "Change audio (%1)..."
+#~ msgstr "Vista..."
 
 #, fuzzy
 #~ msgid "Start merging time"
@@ -60531,6 +60603,36 @@ msgstr "Stillingar"
 #~| msgid "Set stroke"
 #~ msgid "Split Strokes"
 #~ msgstr "Setja útlínu"
+
+#, fuzzy
+#~ msgid "Lossless compression"
+#~ msgstr "Þjöppun:"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Málaratól"
+
+#, fuzzy
+#~ msgid "Flip vertically"
+#~ msgstr "Spegla lóðrétt"
+
+#, fuzzy
+#~ msgid "Bypass filtering"
+#~ msgstr "Tvílínuleg innskot"
+
+#, fuzzy
+#~ msgid "Use multithreaded decoding"
+#~ msgstr "Penslar"
+
+#, fuzzy
+#~| msgid "Color space:"
+#~ msgid "Color planes: "
+#~ msgstr "Litrýmd:"
+
+#, fuzzy
+#~| msgid "Alpha mask"
+#~ msgid "Alpha plane: "
+#~ msgstr "Alpha maski"
 
 #, fuzzy
 #~| msgctxt "description of a file type"
@@ -60589,127 +60691,6 @@ msgstr "Stillingar"
 #~ msgstr " sek"
 
 #, fuzzy
-#~| msgid "Select Layer"
-#~ msgid "Select Layer Mode"
-#~ msgstr "Velja lag"
-
-#, fuzzy
-#~ msgid "Select Multiple Layer Mode"
-#~ msgstr "Kvarða lag"
-
-#, fuzzy
-#~ msgid "Colu&mns:"
-#~ msgstr "Dálkar"
-
-#~ msgid "&Rows:"
-#~ msgstr "&Raðir:"
-
-#, fuzzy
-#~ msgctxt "Fetching remote image"
-#~ msgid "Do you want to download the image at %1?"
-#~ msgstr "Viltu virkilega skrifa yfir sniðið '%1' sem þegar er til?"
-
-#, fuzzy
-#~ msgid "&Description:"
-#~ msgstr "&Lýsing:"
-
-#, fuzzy
-#~| msgid ""
-#~| "Could not save %1\n"
-#~| "Reason: %2"
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr ""
-#~ "Gat ekki vistað %1\n"
-#~ "Ástæða: %2"
-
-#, fuzzy
-#~ msgid ""
-#~ "Could not open %2.\n"
-#~ "Reason: %1"
-#~ msgstr ""
-#~ "Gat ekki opnað %1\n"
-#~ "Ástæða: %2"
-
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "Málaratól"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "Málaratól"
-
-#~ msgctxt "action"
-#~ msgid "Brush composite"
-#~ msgstr "Samsetning pensils"
-
-#, fuzzy
-#~ msgctxt "@item:inmenu Layers Docker settings, combobox"
-#~ msgid "Subtitle Style"
-#~ msgstr "grænt"
-
-#, fuzzy
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "None"
-#~ msgstr "Ekkert"
-
-#, fuzzy
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "Simple"
-#~ msgstr "Einfalt"
-
-#~ msgid "&Canvas"
-#~ msgstr "Mynd&flötur"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "&Reset Zoom"
-#~ msgstr "Núllstilla aðdrátt"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Reset Zoom"
-#~ msgstr "Núllstilla aðdrátt"
-
-#, fuzzy
-#~| msgid "Fit to Page"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page"
-#~ msgstr "Passa á síðu"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Width"
-#~ msgstr "Passa á breidd"
-
-#, fuzzy
-#~| msgid "Fit to Page &Width"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Width"
-#~ msgstr "Passa á síðu&breidd"
-
-#, fuzzy
-#~| msgid "Fit to Page &Height"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Height"
-#~ msgstr "Passa á síðu&hæð"
-
-#, fuzzy
-#~| msgid "Fit to Page &Height"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Height"
-#~ msgstr "Passa á síðu&hæð"
-
-#, fuzzy
-#~ msgid "Reset Zoom to 100%"
-#~ msgstr "Aðdráttur 100%"
-
-#~ msgid "Fit Page"
-#~ msgstr "Passa á síðu"
-
-#, fuzzy
 #~ msgid "Current selection"
 #~ msgstr "Umhverfa vali"
 
@@ -60736,6 +60717,26 @@ msgstr "Stillingar"
 #~ msgstr "Margfaldari:"
 
 #, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "Skekkja"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "Skekkja"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "Kvarði"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "Málaratól"
+
+#, fuzzy
 #~ msgctxt "The 'what to fill' section label in enclose and fill tool options"
 #~ msgid "What to fill"
 #~ msgstr "Mynstur"
@@ -60754,59 +60755,24 @@ msgstr "Stillingar"
 #, fuzzy
 #~ msgctxt "Region selection method in enclose and fill tool"
 #~ msgid "All regions"
-#~ msgstr "Fjaðra val"
+#~ msgstr "Allar síður"
 
-#, fuzzy
-#~ msgid "Grid Settings"
-#~ msgstr "Litastillingar"
-
-#, fuzzy
-#~ msgid "Enable Smooth Zooming"
-#~ msgstr "Mynstur"
-
-#, fuzzy
-#~ msgid "Lossless compression"
-#~ msgstr "Þjöppun:"
-
-#, fuzzy
-#~ msgid "Information"
+#~ msgctxt "action"
+#~ msgid "&Painter's Tools"
 #~ msgstr "Málaratól"
 
 #, fuzzy
-#~ msgid "Flip vertically"
-#~ msgstr "Spegla lóðrétt"
+#~ msgctxt "action"
+#~ msgid "Painter's Tools"
+#~ msgstr "Málaratól"
 
-#, fuzzy
-#~ msgid "Bypass filtering"
-#~ msgstr "Tvílínuleg innskot"
-
-#, fuzzy
-#~ msgid "Use multithreaded decoding"
-#~ msgstr "Penslar"
-
-#, fuzzy
-#~| msgid "Color space:"
-#~ msgid "Color planes: "
-#~ msgstr "Litrýmd:"
-
-#, fuzzy
-#~| msgid "Alpha mask"
-#~ msgid "Alpha plane: "
-#~ msgstr "Alpha maski"
+#~ msgctxt "action"
+#~ msgid "Brush composite"
+#~ msgstr "Samsetning pensils"
 
 #, fuzzy
 #~ msgid "Cache Location:"
 #~ msgstr "Mettun"
-
-#, fuzzy
-#~ msgctxt "@item:inmenu Layers Docker settings, checkbox"
-#~ msgid "Display Subtitles"
-#~ msgstr "Ekkert valið"
-
-#, fuzzy
-#~ msgctxt "@item:tooltip"
-#~ msgid "Layer opacity and blending mode"
-#~ msgstr "Valhamur"
 
 #, fuzzy
 #~ msgid "Intensity"
@@ -60818,17 +60784,74 @@ msgstr "Stillingar"
 #~ msgstr "Styrkur"
 
 #, fuzzy
+#~ msgid "Disable vsync (needs restart)"
+#~ msgstr "Valkostir tóla"
+
+#, fuzzy
 #~ msgctxt ""
 #~ "The 'include surrounding regions' checkbox in enclose and fill tool"
 #~ msgid "Include surrounding regions"
 #~ msgstr "Bara prenta og hætta"
 
-#, fuzzy
-#~ msgid "Disable vsync (needs restart)"
-#~ msgstr "Valkostir tóla"
-
 #~ msgid "Angle Constraints"
 #~ msgstr "Takmörk horns"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Missing Color Profile"
+#~ msgid "Open Color Profile"
+#~ msgstr "Litasnið sem vantar"
+
+#, fuzzy
+#~ msgctxt "@title:window"
+#~ msgid "Select a swap directory"
+#~ msgstr "Valtól"
+
+#, fuzzy
+#~| msgid "Color space:"
+#~ msgid "Add new color profile:"
+#~ msgstr "Litrýmd:"
+
+#, fuzzy
+#~ msgctxt "Color model"
+#~ msgid "&Model:"
+#~ msgstr "Módel"
+
+#, fuzzy
+#~ msgid "Profi&le:"
+#~ msgstr "Lýsing:"
+
+#, fuzzy
+#~ msgid "Cursor Shape:"
+#~ msgstr "Lögun bendils:"
+
+#, fuzzy
+#~ msgid "Cursor Color:"
+#~ msgstr "Litur bendils:"
+
+#, fuzzy
+#~ msgid "General:"
+#~ msgstr "Almennt"
+
+#, fuzzy
+#~ msgid "Enable Touch Rotation"
+#~ msgstr "Stillingar"
+
+#, fuzzy
+#~ msgid "Animation:"
+#~ msgstr "Teiknimyndir"
+
+#, fuzzy
+#~ msgid "Swap File Location:"
+#~ msgstr "Mettun"
+
+#, fuzzy
+#~ msgid "Force Instant Preview in Move Tool"
+#~ msgstr "Yfirlegg"
+
+#, fuzzy
+#~ msgid "Force Instant Preview in Filters"
+#~ msgstr "Yfirlegg"
 
 #, fuzzy
 #~ msgid "Intersect"
@@ -60849,6 +60872,19 @@ msgstr "Stillingar"
 #~ msgstr "Samhverfur punktur"
 
 #, fuzzy
+#~ msgid "Loading Plugins Exiv/IO..."
+#~ msgstr "&Mynstur"
+
+#, fuzzy
+#~ msgid "%1 %2 px"
+#~ msgstr "%1 %"
+
+#, fuzzy
+#~ msgctxt "About <Profilename>"
+#~ msgid "About "
+#~ msgstr "Um"
+
+#, fuzzy
 #~ msgctxt ""
 #~ "Option in selection tool: take only the current layer into account when "
 #~ "calculating the selection"
@@ -60863,90 +60899,51 @@ msgstr "Stillingar"
 #~ msgstr "Öll lög"
 
 #, fuzzy
+#~ msgid "Change the color of the line/border"
+#~ msgstr "bakgrunnur"
+
+#, fuzzy
 #~ msgctxt "@info:tooltip %2 is shortcut"
 #~ msgid "%1 (%2)"
 #~ msgstr "grænt"
 
 #, fuzzy
-#~ msgid "Fuzziness: "
-#~ msgstr "Ó&nákvæmni:"
-
-#, fuzzy
-#~| msgid "Opacity: "
-#~ msgid "Opacity Spread: "
-#~ msgstr "grænt"
-
-#, fuzzy
-#~ msgid "Feathering radius: "
-#~ msgstr "Ytri radíus:"
-
-#, fuzzy
-#~ msgid "Use selection as boundary: "
-#~ msgstr "Ramma myndval með"
-
-#, fuzzy
-#~| msgid "Threshold: "
-#~ msgctxt "Threshold label in Magnetic Selection's Tool options"
-#~ msgid "Threshold: "
-#~ msgstr "Málaratól"
-
-#, fuzzy
-#~| msgid " s"
-#~ msgid " kB"
-#~ msgstr " sek"
+#~ msgid "Hold Last Frame for:"
+#~ msgstr "Síðast notað"
 
 #, fuzzy
 #~ msgid "Vector Libraries"
 #~ msgstr "Vigralag"
 
 #, fuzzy
-#~ msgid "Cursor Shape:"
-#~ msgstr "Lögun bendils:"
+#~| msgid "Color space:"
+#~ msgid "Colorspace"
+#~ msgstr "Litrýmd:"
 
 #, fuzzy
-#~ msgid "Cursor Color:"
-#~ msgstr "Litur bendils:"
-
-#, fuzzy
-#~ msgid "Paste"
-#~ msgstr "Líma"
-
-#, fuzzy
-#~ msgid "Max Gesture"
-#~ msgstr "Efnisáferð"
+#~ msgctxt "Label of Brightness value in brush settings"
+#~ msgid "Value"
+#~ msgstr "Gildi"
 
 #, fuzzy
 #~ msgid "Gaussian distribution"
 #~ msgstr "Gauss mýking"
 
 #, fuzzy
-#~ msgid "Enable Touch Rotation"
-#~ msgstr "Stillingar"
+#~ msgctxt "Group as Swatch Group in a Palette"
+#~ msgid "Add Group"
+#~ msgstr "Bæta við hópi"
 
 #, fuzzy
-#~ msgid "Hold last frame for:"
-#~ msgstr "Síðast notað"
-
-#, fuzzy
-#~ msgid "Fast mode:"
+#~ msgid "Fast mode: "
 #~ msgstr "Mynd"
 
 #, fuzzy
-#~ msgctxt "The Threshold label in Fill tool options"
-#~ msgid "Threshold:"
-#~ msgstr "Þröskuldur:"
-
-#, fuzzy
-#~ msgctxt "The Opacity Spread label in Fill tool options"
-#~ msgid "Opacity Spread:"
-#~ msgstr "grænt"
-
-#, fuzzy
-#~ msgid "Grow selection:"
+#~ msgid "Grow selection: "
 #~ msgstr "Víkka val"
 
 #, fuzzy
-#~ msgid "Feathering radius:"
+#~ msgid "Feathering radius: "
 #~ msgstr "Ytri radíus:"
 
 #, fuzzy
@@ -60966,11 +60963,6 @@ msgstr "Stillingar"
 #, fuzzy
 #~ msgid "Fill entire selection:"
 #~ msgstr "Draga í val"
-
-#, fuzzy
-#~ msgctxt "The 'continuous fill' label in Fill tool options"
-#~ msgid "Continuous Fill:"
-#~ msgstr "Áfram"
 
 #, fuzzy
 #~ msgctxt ""
@@ -60995,117 +60987,36 @@ msgstr "Stillingar"
 #~ msgstr "Litamerki: "
 
 #, fuzzy
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %"
+#~ msgid "Paste"
+#~ msgstr "Líma"
 
 #, fuzzy
-#~ msgctxt "Brush Option Flow"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %"
+#~ msgid "Fuzziness: "
+#~ msgstr "Ó&nákvæmni:"
 
 #, fuzzy
-#~ msgctxt "Edge softness, Brush Option Fade"
-#~ msgid "%1 %2"
-#~ msgstr "%1 %"
+#~ msgid "Use selection as boundary: "
+#~ msgstr "Ramma myndval með"
 
 #, fuzzy
-#~ msgctxt "Brush Option Scatter"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %"
+#~| msgid "Threshold: "
+#~ msgctxt "Threshold label in Magnetic Selection's Tool options"
+#~ msgid "Threshold: "
+#~ msgstr "Málaratól"
 
 #, fuzzy
-#~ msgid "%1 %2 px"
-#~ msgstr "%1 %"
-
-#, fuzzy
-#~ msgid "General:"
-#~ msgstr "Almennt"
-
-#, fuzzy
-#~ msgid "Animation:"
-#~ msgstr "Teiknimyndir"
-
-#, fuzzy
-#~ msgid "Swap File Location:"
-#~ msgstr "Mettun"
-
-#, fuzzy
-#~ msgid "Force Instant Preview in Move Tool"
-#~ msgstr "Yfirlegg"
-
-#, fuzzy
-#~ msgid "Force Instant Preview in Filters"
-#~ msgstr "Yfirlegg"
-
-#, fuzzy
-#~| msgctxt "@title:window"
-#~| msgid "Missing Color Profile"
-#~ msgid "Open Color Profile"
-#~ msgstr "Litasnið sem vantar"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Select a swap directory"
-#~ msgstr "Valtól"
-
-#, fuzzy
-#~| msgid "Color space:"
-#~ msgid "Add new color profile:"
-#~ msgstr "Litrýmd:"
-
-#, fuzzy
-#~| msgid "Color space:"
-#~ msgid "Colorspace"
-#~ msgstr "Litrýmd:"
-
-#, fuzzy
-#~ msgctxt "Color model"
-#~ msgid "&Model:"
-#~ msgstr "Módel"
-
-#, fuzzy
-#~ msgid "Profi&le:"
-#~ msgstr "Lýsing:"
-
-#, fuzzy
-#~ msgctxt "About <Profilename>"
-#~ msgid "About "
-#~ msgstr "Um"
-
-#, fuzzy
-#~| msgid "Softness:"
-#~ msgctxt "The Softness label in Fill tool options"
-#~ msgid "Softness:"
-#~ msgstr "Mýking:"
-
-#, fuzzy
-#~| msgid "Softness:"
-#~ msgid "Softness: "
-#~ msgstr "Mýking:"
+#~| msgid " s"
+#~ msgid " kB"
+#~ msgstr " sek"
 
 #, fuzzy
 #~ msgid "0/0"
 #~ msgstr "0.0"
 
 #, fuzzy
-#~ msgid "Change the color of the line/border"
-#~ msgstr "bakgrunnur"
-
-#, fuzzy
-#~ msgctxt "Label of Brightness value in brush settings"
-#~ msgid "Value"
-#~ msgstr "Gildi"
-
-#, fuzzy
 #~ msgctxt "action"
 #~ msgid "Brightness/Contrast curve"
 #~ msgstr "Birtustig:"
-
-#, fuzzy
-#~| msgid "Threshold: "
-#~ msgctxt "The Threshold label in Fill tool options"
-#~ msgid "Threshold: "
-#~ msgstr "Málaratól"
 
 #, fuzzy
 #~ msgctxt "New layer style"
@@ -61188,12 +61099,9 @@ msgstr "Stillingar"
 #, fuzzy
 #~ msgctxt "Error message when saving a .kra file"
 #~ msgid "Could not save resource %1 to the kra file."
-#~ msgstr "Fjaðra val"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Add a new &Group Layer"
-#~ msgstr "Bæta við hópi"
+#~ msgstr ""
+#~ "Gat ekki opnað %1\n"
+#~ "Ástæða: %2"
 
 #, fuzzy
 #~ msgctxt "action"
@@ -61336,30 +61244,23 @@ msgstr "Stillingar"
 
 #, fuzzy
 #~ msgid "Could not save preset under name %1, it already exists."
-#~ msgstr "Fjaðra val"
+#~ msgstr ""
+#~ "Gat ekki opnað %1\n"
+#~ "Ástæða: %2"
 
 #, fuzzy
+#~| msgid ""
+#~| "Could not save\n"
+#~| "%1"
 #~ msgid "Could not update preset %1."
-#~ msgstr "Fjaðra val"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Couldn't add the session"
-#~ msgstr "Fjaðra val"
-
-#, fuzzy
-#~ msgctxt "Warning about not being able to rename a session"
-#~ msgid "Renaming the session failed."
-#~ msgstr "Heimasíða"
+#~ msgstr ""
+#~ "Gat ekki vistað\n"
+#~ "%1"
 
 #, fuzzy
 #~| msgid "Facing pages"
 #~ msgid "Clean Up"
 #~ msgstr "Passa á síðu"
-
-#~ msgctxt "action"
-#~ msgid "Filters"
-#~ msgstr "Síur"
 
 #, fuzzy
 #~ msgid "Export Directory: "
@@ -61383,29 +61284,14 @@ msgstr "Stillingar"
 #~ msgid "Columns per page :"
 #~ msgstr "Síða:"
 
-#, fuzzy
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cells horizontally"
-#~ msgstr "Lárétt"
-
-#, fuzzy
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cell vertically"
-#~ msgstr "Spegla lóðrétt"
-
-#, fuzzy
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cells vertically"
-#~ msgstr "Spegla lóðrétt"
+#~ msgctxt "action"
+#~ msgid "Filters"
+#~ msgstr "Síur"
 
 #, fuzzy
 #~ msgctxt "Autobrush Label"
 #~ msgid "Auto"
 #~ msgstr "Sjálfvirkt"
-
-#, fuzzy
-#~ msgid "Loading Plugins Exiv/IO..."
-#~ msgstr "&Mynstur"
 
 #, fuzzy
 #~| msgid "Exif"
@@ -61414,43 +61300,17 @@ msgstr "Stillingar"
 #~ msgstr "EXIF"
 
 #, fuzzy
-#~ msgid "No store backend"
-#~ msgstr "bakgrunnur"
-
-#, fuzzy
 #~ msgid "lblThumbnail"
 #~ msgstr "Smámyndir"
+
+#, fuzzy
+#~ msgid "No store backend"
+#~ msgstr "bakgrunnur"
 
 #, fuzzy
 #~| msgid "TextLabel"
 #~ msgid "KSqueezedTextLabel"
 #~ msgstr "TextaMerking"
-
-#, fuzzy
-#~| msgid ""
-#~| "<p>Adjust the compression time. Better compression takes longer.\n"
-#~| "<br>Note: the compression level does not change the quality of the "
-#~| "result.</p>"
-#~ msgid ""
-#~ "<p>Adjust the compression time. Better compression takes longer.\n"
-#~ "                <br>Note: the compression level does not change the "
-#~ "quality of the result.</p>"
-#~ msgstr ""
-#~ "<p>Breyta þjöppunartíma. Betri þjöppun tekur lengri tíma.\n"
-#~ "<br>Athugaðu: þjöppunarstigið hefur ekki áhrif á endanlegu gæðin.</p>"
-
-#, fuzzy
-#~| msgid ""
-#~| "<p>Adjust the compression time. Better compression takes longer.\n"
-#~| "<br>Note: the compression level does not change the quality of the "
-#~| "result.</p>"
-#~ msgid ""
-#~ "<p>Adjust the compression time. Better compression takes longer. "
-#~ "<br>Note: the compression level does not change the quality of the result."
-#~ "</p>"
-#~ msgstr ""
-#~ "<p>Breyta þjöppunartíma. Betri þjöppun tekur lengri tíma.\n"
-#~ "<br>Athugaðu: þjöppunarstigið hefur ekki áhrif á endanlegu gæðin.</p>"
 
 #, fuzzy
 #~ msgctxt "Error message when saving a .kra file"
@@ -62293,6 +62153,10 @@ msgstr "Stillingar"
 #~ msgstr "Valhamur"
 
 #, fuzzy
+#~ msgid "Select Behind Blending Mode"
+#~ msgstr "Valhamur"
+
+#, fuzzy
 #~ msgid "Select Clear Blending Mode"
 #~ msgstr "Valhamur"
 
@@ -62522,9 +62386,6 @@ msgstr "Stillingar"
 
 #~ msgid "Ori&ginal"
 #~ msgstr "Upprunaleg:"
-
-#~ msgid "Update preview"
-#~ msgstr "Yfirlegg"
 
 #~ msgid "&Autoupdate"
 #~ msgstr "Mettun"
@@ -63400,10 +63261,6 @@ msgstr "Stillingar"
 #~ msgctxt "No border - has to fit in 48pixels"
 #~ msgid "None"
 #~ msgstr "Ekkert"
-
-#, fuzzy
-#~ msgid "No Border"
-#~ msgstr "Enginn rammi"
 
 #~ msgid "New Style"
 #~ msgstr "Nýr stíll"
@@ -64630,6 +64487,10 @@ msgstr "Stillingar"
 #~ msgid "Export as PDF"
 #~ msgstr "Flytja út sem PDF"
 
+#, fuzzy
+#~ msgid "Show color blip"
+#~ msgstr "Sýna tækjaslá"
+
 #~ msgid "Leadtools JPEG2000"
 #~ msgstr "Leadtools JPEG2000"
 
@@ -65546,6 +65407,10 @@ msgstr "Stillingar"
 #, fuzzy
 #~ msgid "Telephone (work):"
 #~ msgstr "Vinnusími:"
+
+#, fuzzy
+#~ msgid "Opacity decrease"
+#~ msgstr "grænt"
 
 #, fuzzy
 #~ msgid "Saturation decrease"

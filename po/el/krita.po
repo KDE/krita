@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-25 00:43+0000\n"
+"POT-Creation-Date: 2023-07-27 02:25+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -13262,7 +13262,7 @@ msgstr "&Βοήθεια"
 msgid "File"
 msgstr "Αρ&χείο"
 
-#: krita/krita5.xmlgui:419
+#: krita/krita5.xmlgui:420
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Πινέλα και υλικά"
@@ -16217,27 +16217,27 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Χώροι εργασίας"
 
-#: krita/main.cc:521
+#: krita/main.cc:527
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Κατακόρυφο περίγραμμα"
 
-#: krita/main.cc:522
+#: krita/main.cc:528
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:632 libs/ui/KisApplication.cpp:409
-#: libs/ui/KisApplication.cpp:680
+#: krita/main.cc:646 libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:681
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Προειδοποίηση"
 
-#: krita/main.cc:633
+#: krita/main.cc:647
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16245,12 +16245,12 @@ msgid ""
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
 msgstr ""
 
-#: krita/main.cc:655 krita/main.cc:660
+#: krita/main.cc:669 krita/main.cc:674
 #, fuzzy, kde-format
 msgid "Krita Tablet Support"
 msgstr "A_Nice Sketch"
 
-#: krita/main.cc:656
+#: krita/main.cc:670
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16258,7 +16258,7 @@ msgid ""
 "installed."
 msgstr ""
 
-#: krita/main.cc:661
+#: krita/main.cc:675
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16707,28 +16707,28 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3744
+#: libs/flake/text/KoSvgTextShape.cpp:3751
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Κείμενο"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3746
-#: libs/flake/text/KoSvgTextShape.cpp:3754
+#: libs/flake/text/KoSvgTextShape.cpp:3753
+#: libs/flake/text/KoSvgTextShape.cpp:3761
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "Text Shape"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3752
+#: libs/flake/text/KoSvgTextShape.cpp:3759
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " Κείμενο:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3766
-#: libs/flake/text/KoSvgTextShape.cpp:3781
+#: libs/flake/text/KoSvgTextShape.cpp:3773
+#: libs/flake/text/KoSvgTextShape.cpp:3788
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17498,7 +17498,7 @@ msgstr "Εισαγωγή εικόνας"
 msgid "Selection Mask"
 msgstr "Μάσκα επιλογής..."
 
-#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2554
+#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2577
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -17617,7 +17617,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Εφαρμογή προφίλ"
 
-#: libs/image/kis_image.cc:2486
+#: libs/image/kis_image.cc:2487
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -17761,9 +17761,7 @@ msgstr "Ορισμός πινελιάς"
 msgid "Show Coloring"
 msgstr "Ιστορικό χρωμάτων"
 
-#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
 #: libs/image/kis_layer_properties_icons.cpp:32
-#: libs/ui/forms/KisWelcomePage.ui:1572
 #, fuzzy, kde-format
 #| msgid "Open palette"
 msgid "Open File"
@@ -17854,8 +17852,8 @@ msgid "Processing"
 msgstr "Μεταεπεξεργασία"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1420
-#: libs/ui/KisMainWindow.cpp:1700 libs/ui/KisMainWindow.cpp:1713
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1750 libs/ui/KisMainWindow.cpp:1763
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18338,7 +18336,7 @@ msgstr "Μετασχηματισμός"
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
-#: plugins/impex/tiff/kis_tiff_import.cc:562
+#: plugins/impex/tiff/kis_tiff_import.cc:566
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
 msgid "Transparency Mask"
@@ -18617,8 +18615,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Άνοιγμα σε νέα έγγραφα"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2064
-#: libs/ui/KisMainWindow.cpp:2147
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2121
+#: libs/ui/KisMainWindow.cpp:2204
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Εισαγωγή εικόνας"
@@ -19985,7 +19983,7 @@ msgstr "Προσαρμοσμένο"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:498 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:504 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -20021,9 +20019,9 @@ msgstr "Αρχεία πηγής:"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20039,24 +20037,24 @@ msgstr "Αρχεία πηγής:"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:979
-#: libs/ui/KisApplication.cpp:982 libs/ui/KisApplication.cpp:998
-#: libs/ui/KisApplication.cpp:1030 libs/ui/KisApplication.cpp:1044
-#: libs/ui/KisApplication.cpp:1072 libs/ui/KisDocument.cpp:946
-#: libs/ui/KisDocument.cpp:953 libs/ui/KisDocument.cpp:973
-#: libs/ui/KisDocument.cpp:1881 libs/ui/KisDocument.cpp:1925
-#: libs/ui/KisDocument.cpp:1931 libs/ui/KisDocument.cpp:1944
-#: libs/ui/KisDocument.cpp:1948 libs/ui/KisMainWindow.cpp:979
-#: libs/ui/KisMainWindow.cpp:1095 libs/ui/KisMainWindow.cpp:1221
-#: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1924
-#: libs/ui/KisMainWindow.cpp:1933 libs/ui/KisMainWindow.cpp:2072
-#: libs/ui/KisMainWindow.cpp:2133 libs/ui/KisMainWindow.cpp:2154
-#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:588
-#: libs/ui/KisPart.cpp:591 libs/ui/KisReferenceImage.cpp:175
-#: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
-#: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:985
+#: libs/ui/KisApplication.cpp:988 libs/ui/KisApplication.cpp:1004
+#: libs/ui/KisApplication.cpp:1036 libs/ui/KisApplication.cpp:1050
+#: libs/ui/KisApplication.cpp:1078 libs/ui/KisDocument.cpp:969
+#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
+#: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
+#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:981
+#: libs/ui/KisMainWindow.cpp:1097 libs/ui/KisMainWindow.cpp:1223
+#: libs/ui/KisMainWindow.cpp:1320 libs/ui/KisMainWindow.cpp:1981
+#: libs/ui/KisMainWindow.cpp:1990 libs/ui/KisMainWindow.cpp:2129
+#: libs/ui/KisMainWindow.cpp:2190 libs/ui/KisMainWindow.cpp:2211
+#: libs/ui/KisMainWindow.cpp:2826 libs/ui/KisPart.cpp:578
+#: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
+#: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
-#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:738
 #: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20579,8 +20577,8 @@ msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Διαγραφή πόρου"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:334
-#: libs/ui/KisMainWindow.cpp:2569
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:335
+#: libs/ui/KisMainWindow.cpp:2626
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20655,11 +20653,10 @@ msgstr ""
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:97
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Create shape"
+#| msgid "Failed to create an action."
 msgctxt "@title:window"
 msgid "Failed to rename the resource"
-msgstr "Δημιουργία σχήματος"
+msgstr "Αποτυχία δημιουργίας ενέργειας."
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:97
 #, fuzzy, kde-format
@@ -21058,7 +21055,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Αποτυχία δημιουργίας ενέργειας."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2174
+#: libs/ui/KisMainWindow.cpp:2231
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "Προσανατολισμός"
@@ -21103,18 +21100,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:392
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:472
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
 #, fuzzy, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -21124,28 +21121,28 @@ msgstr ""
 "<html><head/><body><p>Χρώμα φόντου το οποίο θα αντικαταστήσει τη διαφάνεια "
 "των εικονοστοιχείων.</p></body></html>"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:479
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Warning(s):"
 msgstr "Προειδοποίηση"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #, fuzzy, kde-format
 #| msgid "Please enter a name for the filter effect"
 msgid "Please enter a file name to render to."
@@ -21388,7 +21385,7 @@ msgstr "Αποτυχία λήψης απομακρυσμένου αρχείου"
 msgid "FFMpeg Crashed"
 msgstr ""
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:614
+#: libs/ui/animation/KisFFMpegWrapper.cpp:620
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -23114,7 +23111,7 @@ msgid "Numerical"
 msgstr "Κατακόρυφα:"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "Εισαγωγή εικόνας"
@@ -23160,7 +23157,7 @@ msgstr "Ιδιότητες στρώματος"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -23262,7 +23259,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Εισάγετε το όνομα ομάδας:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2580
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2637
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -24252,134 +24249,21 @@ msgstr "Χρήση πάντα αυτού του προτύπου κατά την
 msgid "Always use this template"
 msgstr "Χρήση πάντα αυτού του προτύπου"
 
-#. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:168
-#, kde-format
-msgid "News"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:191
+#. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
+#: libs/ui/forms/KisWelcomePage.ui:48
 #, fuzzy, kde-format
-#| msgid "No options"
-msgid "News options"
-msgstr "Χωρίς επιλογές"
-
-#. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:314
-#, fuzzy, kde-format
-msgid "Krita Version X.X.X Available"
-msgstr "Krita %1"
-
-#. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:365
-#, fuzzy, kde-format
-#| msgid "Update"
-msgid "Update now!"
-msgstr "Ενημέρωση"
-
-#. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:372
-#, fuzzy, kde-format
-#| msgid "Show all"
-msgid "Show details"
-msgstr "Εμφάνιση όλων"
-
-#. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:455 libs/ui/KisWelcomePageWidget.cpp:398
-#, kde-format
-msgid ""
-"You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
-"decoration: underline;\">enable news</a> from krita.org in various languages "
-"with the menu above"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:562
-#, fuzzy, kde-format
-#| msgid "Comments"
-msgid "Community"
-msgstr "Σχόλια"
-
-#. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:647 libs/ui/KisWelcomePageWidget.cpp:384
-#, fuzzy, kde-format
-#| msgid "Manual"
-msgid "User Manual"
-msgstr "Χειροκίνητο"
-
-#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:737 libs/ui/KisWelcomePageWidget.cpp:381
-#, fuzzy, kde-format
-#| msgid "Setting up Shader"
-msgid "Getting Started"
-msgstr "Ρύθμιση shader"
-
-#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:824 libs/ui/KisWelcomePageWidget.cpp:378
-#, fuzzy, kde-format
-msgid "User Community"
-msgstr "Εισαγωγή ονόματος"
-
-#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:911 libs/ui/KisWelcomePageWidget.cpp:390
-#, fuzzy, kde-format
-msgid "Krita Website"
-msgstr "Ισορροπία λευκού:"
-
-#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:1001 libs/ui/KisWelcomePageWidget.cpp:393
-#, fuzzy, kde-format
-#| msgid "Source"
-msgid "Source Code"
-msgstr "Πηγή"
-
-#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:1088 libs/ui/KisWelcomePageWidget.cpp:387
-#, fuzzy, kde-format
-msgid "Support Krita"
+msgid "Support Krita!"
 msgstr "Krita"
 
-#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:1178 libs/ui/KisWelcomePageWidget.cpp:396
-#, kde-format
-msgid "Powered by KDE"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, dragImageHereLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1261
-#, fuzzy, kde-format
-#| msgid "Image Split "
-msgid "Drag an image into the window to open"
-msgstr "Διαίρεση εικόνας "
-
-#. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1361
-#, fuzzy, kde-format
-msgid "Start"
-msgstr "Αστέρι"
-
-#. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1428 libs/ui/KisWelcomePageWidget.cpp:625
-#, kde-format
-msgid "DEV BUILD"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, newFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:1504
-#, fuzzy, kde-format
-msgid "New File"
-msgstr "Μέγεθος εικόνας"
-
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1655
+#: libs/ui/forms/KisWelcomePage.ui:79
 #, fuzzy, kde-format
-#| msgid "Open in New Documents"
-msgid "Recent Documents"
-msgstr "Άνοιγμα σε νέα έγγραφα"
+#| msgid "Separate Image"
+msgid "Recent Images"
+msgstr "Διαχωρισμός εικόνας"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:1713
+#: libs/ui/forms/KisWelcomePage.ui:103
 #, fuzzy, kde-format
 #| msgid "Clear"
 msgctxt "Welcome Screen Recent Document List's Clear link Label"
@@ -24387,7 +24271,7 @@ msgid "Clear"
 msgstr "Καθαρισμός"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:1766
+#: libs/ui/forms/KisWelcomePage.ui:154
 #, fuzzy, kde-format
 #| msgid "Could not create the output document"
 msgid ""
@@ -24395,8 +24279,131 @@ msgid ""
 "recently opened documents"
 msgstr "Αδυναμία δημιουργίας του αρχείου εξόδου"
 
+#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:322
+#, fuzzy, kde-format
+#| msgid "Comments"
+msgid "Community"
+msgstr "Σχόλια"
+
+#. i18n: ectx: property (text), widget (QLabel, manualLink)
+#: libs/ui/forms/KisWelcomePage.ui:391 libs/ui/KisWelcomePageWidget.cpp:391
+#, fuzzy, kde-format
+#| msgid "Manual"
+msgid "User Manual"
+msgstr "Χειροκίνητο"
+
+#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
+#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:394
+#, fuzzy, kde-format
+msgid "Support Krita"
+msgstr "Krita"
+
+#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
+#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:403
+#, kde-format
+msgid "Powered by KDE"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
+#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:400
+#, fuzzy, kde-format
+#| msgid "Source"
+msgid "Source Code"
+msgstr "Πηγή"
+
+#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
+#: libs/ui/forms/KisWelcomePage.ui:748 libs/ui/KisWelcomePageWidget.cpp:388
+#, fuzzy, kde-format
+#| msgid "Setting up Shader"
+msgid "Getting Started"
+msgstr "Ρύθμιση shader"
+
+#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
+#: libs/ui/forms/KisWelcomePage.ui:835 libs/ui/KisWelcomePageWidget.cpp:385
+#, fuzzy, kde-format
+msgid "User Community"
+msgstr "Εισαγωγή ονόματος"
+
+#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
+#: libs/ui/forms/KisWelcomePage.ui:922 libs/ui/KisWelcomePageWidget.cpp:397
+#, fuzzy, kde-format
+msgid "Krita Website"
+msgstr "Ισορροπία λευκού:"
+
+#. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1066
+#, kde-format
+msgid "News"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
+#: libs/ui/forms/KisWelcomePage.ui:1089
+#, fuzzy, kde-format
+#| msgid "No options"
+msgid "News options"
+msgstr "Χωρίς επιλογές"
+
+#. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1212
+#, fuzzy, kde-format
+msgid "Krita Version X.X.X Available"
+msgstr "Krita %1"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
+#: libs/ui/forms/KisWelcomePage.ui:1263
+#, fuzzy, kde-format
+#| msgid "Update"
+msgid "Update now!"
+msgstr "Ενημέρωση"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
+#: libs/ui/forms/KisWelcomePage.ui:1270
+#, fuzzy, kde-format
+#| msgid "Show all"
+msgid "Show details"
+msgstr "Εμφάνιση όλων"
+
+#. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
+#: libs/ui/forms/KisWelcomePage.ui:1353 libs/ui/KisWelcomePageWidget.cpp:405
+#, kde-format
+msgid ""
+"You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
+"decoration: underline;\">enable news</a> from krita.org in various languages "
+"with the menu above"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1417
+#, fuzzy, kde-format
+msgid "Start"
+msgstr "Αστέρι"
+
+#. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1484 libs/ui/KisWelcomePageWidget.cpp:632
+#, kde-format
+msgid "DEV BUILD"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, newFileLink)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
+#: libs/ui/forms/KisWelcomePage.ui:1560 libs/ui/forms/wdgimageproperties.ui:18
+#: libs/ui/forms/wdgnewimage.ui:18
+#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
+#, kde-format
+msgid "New Image"
+msgstr "Νέα εικόνα"
+
+#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
+#: libs/ui/forms/KisWelcomePage.ui:1628
+#, fuzzy, kde-format
+msgid "Open Image"
+msgstr "Εικόνες"
+
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1874
+#: libs/ui/forms/KisWelcomePage.ui:1712
 #, fuzzy, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -25287,10 +25294,9 @@ msgstr "Διακοσμήτικά καμβά"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpOpenGL)
 #: libs/ui/forms/wdgdisplaysettings.ui:58
-#, fuzzy, kde-format
-#| msgid "Canvas decorations"
+#, kde-format
 msgid "Canvas &Graphics Acceleration"
-msgstr "Διακοσμήτικά καμβά"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:73
@@ -25396,10 +25402,9 @@ msgstr "τρέχουσα προεπιλογή"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdgdisplaysettings.ui:255
-#, fuzzy, kde-format
-#| msgid "Current preset"
+#, kde-format
 msgid "Preferred Output Format:"
-msgstr "τρέχουσα προεπιλογή"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:283
@@ -25492,8 +25497,9 @@ msgstr "Επιλογή "
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
 #, fuzzy, kde-format
+#| msgid "Layer Opacity"
 msgid "Outline opacity:"
-msgstr "Επιλογή "
+msgstr "Αδιαφάνεια στρώματος"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:440
@@ -25820,10 +25826,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: libs/ui/forms/wdggeneralsettings.ui:182
-#, fuzzy, kde-format
-#| msgid "Eraser"
+#, kde-format
 msgid "Eraser Cursor Icon:"
-msgstr "Γόμα"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #: libs/ui/forms/wdggeneralsettings.ui:195
@@ -26564,15 +26569,6 @@ msgstr "Πε&ριστροφή"
 msgid "Scale:"
 msgstr "Κλιμάκωση:"
 
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:18
-#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
-#, kde-format
-msgid "New Image"
-msgstr "Νέα εικόνα"
-
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
@@ -27217,7 +27213,7 @@ msgstr "τρέχουσα προεπιλογή"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1076
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -28155,7 +28151,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:351
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:352
 #, fuzzy, kde-format
 #| msgid "Dimensions"
 msgid "Sessions"
@@ -29656,7 +29652,7 @@ msgstr "Μικρός επιλογέας χρώματος"
 msgid "&Open Background color selector"
 msgstr "Χρώμα φόντου"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:347
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -29669,8 +29665,8 @@ msgstr "Μοτίβα"
 msgid "Custom Pattern"
 msgstr "Προσαρμοσμένο μοτίβο"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:332
-#: libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
+#: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, kde-format
@@ -30427,67 +30423,67 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Μεγέθυνση"
 
-#: libs/ui/KisApplication.cpp:324
+#: libs/ui/KisApplication.cpp:325
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, fuzzy, kde-format
 #| msgid "Brush Presets"
 msgid "Brush presets"
 msgstr "Προρυθμίσεις πινέλου"
 
-#: libs/ui/KisApplication.cpp:327 libs/ui/KisApplication.cpp:328
-#: libs/ui/KisApplication.cpp:329 libs/ui/KisApplication.cpp:330
+#: libs/ui/KisApplication.cpp:328 libs/ui/KisApplication.cpp:329
+#: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
 #, fuzzy, kde-format
 #| msgid "Brush tip"
 msgid "Brush tips"
 msgstr "Άκρη πινέλου"
 
-#: libs/ui/KisApplication.cpp:335
+#: libs/ui/KisApplication.cpp:336
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
 #, kde-format
 msgid "Palettes"
 msgstr "Παλέτες"
 
-#: libs/ui/KisApplication.cpp:348 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
 msgid "Workspaces"
 msgstr "Χώροι εργασίας"
 
-#: libs/ui/KisApplication.cpp:349
+#: libs/ui/KisApplication.cpp:350
 #, fuzzy, kde-format
 #| msgid "Vector Layer"
 msgid "SVG symbol libraries"
 msgstr "Διανυσματικό στρώμα"
 
-#: libs/ui/KisApplication.cpp:350 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, fuzzy, kde-format
 #| msgid "Window size"
 msgid "Window layouts"
 msgstr "Μέγεθος παραθύρου"
 
-#: libs/ui/KisApplication.cpp:352
+#: libs/ui/KisApplication.cpp:353
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
 #, fuzzy, kde-format
 #| msgid "Raise Mask"
 msgid "Gamut masks"
 msgstr "Ανύψωση μάσκας"
 
-#: libs/ui/KisApplication.cpp:354
+#: libs/ui/KisApplication.cpp:355
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgid "SeExpr Scripts"
 msgstr "Δείκτης"
 
-#: libs/ui/KisApplication.cpp:359
+#: libs/ui/KisApplication.cpp:360
 #, fuzzy, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Μέγεθος στρώματος"
 
-#: libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:373
 #, kde-format
 msgid ""
 "%1\n"
@@ -30495,13 +30491,13 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:372 libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:373 libs/ui/KisApplication.cpp:379
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Βήμα ολοκλήρωσης:"
 
-#: libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:379
 #, kde-format
 msgid ""
 "\n"
@@ -30509,7 +30505,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:411
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -30520,67 +30516,67 @@ msgstr ""
 "Κάτι τέτοιο δε συνίσταται.\n"
 "Παρακαλούμε να λάβετε και να εγκαταστήσετε την κατασκευή x64."
 
-#: libs/ui/KisApplication.cpp:427
+#: libs/ui/KisApplication.cpp:428
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "&Πόροι"
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:459
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "&Πόροι"
 
-#: libs/ui/KisApplication.cpp:462
+#: libs/ui/KisApplication.cpp:463
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "Προκαθορισμένα πινέλα"
 
-#: libs/ui/KisApplication.cpp:468
+#: libs/ui/KisApplication.cpp:469
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "Αρχεία πηγής:"
 
-#: libs/ui/KisApplication.cpp:477
+#: libs/ui/KisApplication.cpp:478
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "Τροποποίηση επιλογών ιχνηλάτησης"
 
-#: libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:510
 #, fuzzy, kde-format
 msgid "Launching..."
 msgstr "Αντιστοίχηση τόνων"
 
-#: libs/ui/KisApplication.cpp:578
+#: libs/ui/KisApplication.cpp:579
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:634
+#: libs/ui/KisApplication.cpp:635
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to render animation frames!"
 msgstr "Αποτυχία δημιουργίας ενέργειας."
 
-#: libs/ui/KisApplication.cpp:661 libs/ui/KisApplication.cpp:851
+#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:857
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "Στρώμα &φίλτρου..."
 
-#: libs/ui/KisApplication.cpp:669 libs/ui/KisApplication.cpp:674
-#: libs/ui/KisApplication.cpp:845 libs/ui/KisApplication.cpp:859
-#: libs/ui/KisApplication.cpp:864
+#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:851 libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:870
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Προειδοποίηση"
 
-#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:866
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Αδυναμία επιλογής χρώματος καθώς το ενεργό στρώμα δεν είναι ενεργό."
 
-#: libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30593,7 +30589,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:681
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30601,32 +30597,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:846
+#: libs/ui/KisApplication.cpp:852
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:871
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:980
+#: libs/ui/KisApplication.cpp:986
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Δεν βρέθηκε πρότυπο για: %1"
 
-#: libs/ui/KisApplication.cpp:983
+#: libs/ui/KisApplication.cpp:989
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Βρέθηκαν πάρα πολλά πρότυπα για: %1"
 
-#: libs/ui/KisApplication.cpp:999
+#: libs/ui/KisApplication.cpp:1005
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "Επιλογή LUT αρχείου"
 
-#: libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:1037
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30636,7 +30632,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1045
+#: libs/ui/KisApplication.cpp:1051
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30644,7 +30640,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1073
+#: libs/ui/KisApplication.cpp:1079
 #, fuzzy, kde-format
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to clear the settings file?"
@@ -30778,55 +30774,55 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Άνοιγμα σε νέα έγγραφα"
 
-#: libs/ui/KisDocument.cpp:722
+#: libs/ui/KisDocument.cpp:733
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:760
+#: libs/ui/KisDocument.cpp:783
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Αποτυχία δημιουργίας ενέργειας."
 
-#: libs/ui/KisDocument.cpp:777
+#: libs/ui/KisDocument.cpp:800
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Αποτυχία δημιουργίας ενέργειας."
 
-#: libs/ui/KisDocument.cpp:799
+#: libs/ui/KisDocument.cpp:822
 #, fuzzy, kde-format
 msgid "Exporting Document..."
 msgstr "Άνοιγμα σε νέα έγγραφα"
 
-#: libs/ui/KisDocument.cpp:800
+#: libs/ui/KisDocument.cpp:823
 #, fuzzy, kde-format
 msgid "Saving Document..."
 msgstr "Αποθήκευση εγγράφου"
 
-#: libs/ui/KisDocument.cpp:810
+#: libs/ui/KisDocument.cpp:833
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:939
+#: libs/ui/KisDocument.cpp:962
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Σφάλμα κατά την αυτόματη αποθήκευση! Είναι η κατάτμηση πλήρης;"
 
-#: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:954
+#: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
 #, fuzzy, kde-format
 msgid "Could not save %1."
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: libs/ui/KisDocument.cpp:976
+#: libs/ui/KisDocument.cpp:999
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30834,47 +30830,47 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:982
+#: libs/ui/KisDocument.cpp:1005
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1022
 #, fuzzy, kde-format
 msgid "Finished saving %1"
 msgstr "&Τερματισμός συνεχούς γραμμής"
 
-#: libs/ui/KisDocument.cpp:1402
+#: libs/ui/KisDocument.cpp:1425
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosaving... %1"
 msgstr "Αυτόματη αποθήκευση..."
 
-#: libs/ui/KisDocument.cpp:1410
+#: libs/ui/KisDocument.cpp:1433
 #, kde-format
 msgid "Autosaving..."
 msgstr "Αυτόματη αποθήκευση..."
 
-#: libs/ui/KisDocument.cpp:1416
+#: libs/ui/KisDocument.cpp:1439
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1559
+#: libs/ui/KisDocument.cpp:1582
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Σφάλμα κατά την αυτόματη αποθήκευση! Είναι η κατάτμηση πλήρης;"
 
-#: libs/ui/KisDocument.cpp:1573
+#: libs/ui/KisDocument.cpp:1596
 #, fuzzy, kde-format
 msgid "Finished autosaving %1"
 msgstr "&Τερματισμός συνεχούς γραμμής"
 
-#: libs/ui/KisDocument.cpp:1815
+#: libs/ui/KisDocument.cpp:1838
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -30886,41 +30882,41 @@ msgstr ""
 "Λανθασμένο URL\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1881
+#: libs/ui/KisDocument.cpp:1904
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "File %1 does not exist."
 msgstr "Το αρχείο %1 δεν υπάρχει."
 
-#: libs/ui/KisDocument.cpp:1910
+#: libs/ui/KisDocument.cpp:1933
 #, fuzzy, kde-format
 msgid "Opening document"
 msgstr "Άνοιγμα σε νέα έγγραφα"
 
-#: libs/ui/KisDocument.cpp:1926 libs/ui/KisDocument.cpp:1932
+#: libs/ui/KisDocument.cpp:1949 libs/ui/KisDocument.cpp:1955
 #, fuzzy, kde-format
 msgid "Could not open %1."
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: libs/ui/KisDocument.cpp:1945 libs/ui/KisDocument.cpp:1949
+#: libs/ui/KisDocument.cpp:1968 libs/ui/KisDocument.cpp:1972
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2080
+#: libs/ui/KisDocument.cpp:2103
 #, fuzzy, kde-format
 #| msgid "Not Filled"
 msgid "Not Saved"
 msgstr "Χωρίς γέμισμα"
 
-#: libs/ui/KisDocument.cpp:2561
+#: libs/ui/KisDocument.cpp:2584
 #, fuzzy, kde-format
 #| msgid "Background"
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Φόντο"
 
-#: libs/ui/KisDocument.cpp:2613
+#: libs/ui/KisDocument.cpp:2636
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -31340,47 +31336,47 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Χώρος εργασίας"
 
-#: libs/ui/KisMainWindow.cpp:585
+#: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Εμφάνιση ριζικού στρώματος"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:589
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Γραμμές κύλισης"
 
-#: libs/ui/KisMainWindow.cpp:1037
+#: libs/ui/KisMainWindow.cpp:1039
 #, fuzzy, kde-format
 #| msgid "(write protected)"
 msgid "Write Protected"
 msgstr "(προστασία εγγραφής)"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1043
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Recover Files"
 msgid "Recovered"
 msgstr "Επαναφορά αρχείων"
 
-#: libs/ui/KisMainWindow.cpp:1071
+#: libs/ui/KisMainWindow.cpp:1073
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "Σχήματα flake %1"
 
-#: libs/ui/KisMainWindow.cpp:1095
+#: libs/ui/KisMainWindow.cpp:1097
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Το αρχείο %1 δεν υπάρχει."
 
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, fuzzy, kde-format
 msgid "Open Images"
 msgstr "Εικόνες"
 
-#: libs/ui/KisMainWindow.cpp:1319
+#: libs/ui/KisMainWindow.cpp:1321
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -31389,39 +31385,39 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "Εξαγωγή"
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, fuzzy, kde-format
 #| msgid "Saving Format"
 msgid "Saving As"
 msgstr "Τύπος αποθήκευσης"
 
-#: libs/ui/KisMainWindow.cpp:1679
+#: libs/ui/KisMainWindow.cpp:1729
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "Πρόσφατα έγγραφα"
 
-#: libs/ui/KisMainWindow.cpp:1703
+#: libs/ui/KisMainWindow.cpp:1753
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "Προσαρμοσμένη διαβάθμιση"
 
-#: libs/ui/KisMainWindow.cpp:1715
+#: libs/ui/KisMainWindow.cpp:1765
 #, fuzzy, kde-format
 msgid "Create from Clipboard"
 msgstr "Πρώτο στρώμα από το πρόχειρο"
 
-#: libs/ui/KisMainWindow.cpp:1893
+#: libs/ui/KisMainWindow.cpp:1950
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Αποθήκευση στρώματος ως εικόνα..."
 
-#: libs/ui/KisMainWindow.cpp:1919
+#: libs/ui/KisMainWindow.cpp:1976
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, fuzzy, kde-format
@@ -31429,7 +31425,7 @@ msgstr "Αποθήκευση στρώματος ως εικόνα..."
 msgid "You don't have any resource bundles enabled."
 msgstr "Αδυναμία δημιουργίας του αρχείου εξόδου"
 
-#: libs/ui/KisMainWindow.cpp:1923
+#: libs/ui/KisMainWindow.cpp:1980
 #, kde-format
 msgid ""
 "\n"
@@ -31437,7 +31433,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1933
+#: libs/ui/KisMainWindow.cpp:1990
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -31446,7 +31442,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2072 libs/ui/KisMainWindow.cpp:2154
+#: libs/ui/KisMainWindow.cpp:2129 libs/ui/KisMainWindow.cpp:2211
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31455,43 +31451,43 @@ msgstr ""
 "Αδυναμία εισαγωγής\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2133
+#: libs/ui/KisMainWindow.cpp:2190
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Αποτυχία δημιουργίας ενέργειας."
 
-#: libs/ui/KisMainWindow.cpp:2560
+#: libs/ui/KisMainWindow.cpp:2617
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Εισαγωγή γραφικού..."
 
-#: libs/ui/KisMainWindow.cpp:2575
+#: libs/ui/KisMainWindow.cpp:2632
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Εισαγωγή γραφικού..."
 
-#: libs/ui/KisMainWindow.cpp:2579
+#: libs/ui/KisMainWindow.cpp:2636
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "&Εισαγωγή γραφικού..."
 
-#: libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/KisMainWindow.cpp:2680
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "&%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2626
+#: libs/ui/KisMainWindow.cpp:2683
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2792
+#: libs/ui/KisMainWindow.cpp:2849
 #, fuzzy, kde-format
 #| msgid ""
 #| "The Calligra LittleCMS color management plugin is not installed. Krita "
@@ -31503,19 +31499,19 @@ msgstr ""
 "Το πρόσθετο διαχείρισης χρώματος Calligra LittleCMS δεν έχει εγκατασταθεί. "
 "Το Krita θα εγκαταλείψει τώρα."
 
-#: libs/ui/KisMainWindow.cpp:2808
+#: libs/ui/KisMainWindow.cpp:2865
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Σφάλμα εγκατάστασης"
 
-#: libs/ui/KisMainWindow.cpp:2917
+#: libs/ui/KisMainWindow.cpp:2974
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2975
+#: libs/ui/KisMainWindow.cpp:3032
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -31656,7 +31652,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Νέο πρόγραμμα %1"
 
-#: libs/ui/KisPart.cpp:588
+#: libs/ui/KisPart.cpp:578
 #, fuzzy, kde-format
 #| msgid "Could not create the output document"
 msgid ""
@@ -31664,7 +31660,7 @@ msgid ""
 "%1"
 msgstr "Αδυναμία δημιουργίας του αρχείου εξόδου"
 
-#: libs/ui/KisPart.cpp:591
+#: libs/ui/KisPart.cpp:581
 #, fuzzy, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -31684,7 +31680,7 @@ msgstr "Κορεσμού"
 msgid "Could not load %1."
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:39
+#: libs/ui/KisRemoteFileFetcher.cpp:41
 #, kde-format
 msgctxt "Fetching remote image"
 msgid ""
@@ -31692,19 +31688,19 @@ msgid ""
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:61
+#: libs/ui/KisRemoteFileFetcher.cpp:63
 #, fuzzy, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:75
+#: libs/ui/KisRemoteFileFetcher.cpp:77
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:92
+#: libs/ui/KisRemoteFileFetcher.cpp:94
 #, fuzzy, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."
@@ -31982,51 +31978,51 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Ανώνυμη κατάσταση"
 
-#: libs/ui/KisWelcomePageWidget.cpp:148
+#: libs/ui/KisWelcomePageWidget.cpp:157
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:150
+#: libs/ui/KisWelcomePageWidget.cpp:159
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
 "krita.org website"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:153
+#: libs/ui/KisWelcomePageWidget.cpp:162
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, fuzzy, kde-format
 msgid "Language"
 msgstr "Τελευταία σελίδα:"
 
-#: libs/ui/KisWelcomePageWidget.cpp:154
+#: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:420
+#: libs/ui/KisWelcomePageWidget.cpp:427
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:648
+#: libs/ui/KisWelcomePageWidget.cpp:655
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, fuzzy, kde-format
 msgid "Forget \"%1\""
 msgstr "Εξαγωγή"
 
-#: libs/ui/KisWelcomePageWidget.cpp:745
+#: libs/ui/KisWelcomePageWidget.cpp:757
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:774
+#: libs/ui/KisWelcomePageWidget.cpp:786
 #, fuzzy, kde-format
 msgid "An error occurred during the update"
 msgstr "Επιλέξτε τη λειτουργία ανάμειξης για το στρώμα."
 
-#: libs/ui/KisWelcomePageWidget.cpp:780
+#: libs/ui/KisWelcomePageWidget.cpp:792
 #, kde-format
 msgid "Restart is required."
 msgstr ""
@@ -33014,12 +33010,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:654
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:656
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -33027,14 +33023,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1070
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1072
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -34831,10 +34827,10 @@ msgstr "Τυχαία μετατόπιση"
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:107
 #, fuzzy, kde-format
-#| msgid "Shadows 3"
+#| msgid "Stop color."
 msgctxt "Output color used for the shadows in auto levels"
 msgid "Shadows color:"
-msgstr "Σκιές 3"
+msgstr "Διακοπή χρωματισμού."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:114
@@ -34860,10 +34856,10 @@ msgstr "Μέθοδος"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:171
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Do not perform midtones enhancement in auto levels"
 msgid "Don't adjust the midtones"
-msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:176
@@ -36432,12 +36428,12 @@ msgstr "%1 s"
 msgid "Toggle Preview"
 msgstr "Προεπισκόπηση"
 
-#: libs/widgetutils/KoFileDialog.cpp:243
+#: libs/widgetutils/KoFileDialog.cpp:260
 #, fuzzy, kde-format
 msgid "Save As:"
 msgstr "Αποθήκευση μακροεντολής"
 
-#: libs/widgetutils/KoFileDialog.cpp:326
+#: libs/widgetutils/KoFileDialog.cpp:343
 #, kde-format
 msgid ""
 "The selected file name does not have a file extension that Krita "
@@ -36445,7 +36441,7 @@ msgid ""
 "Make sure the file name ends in '.%1' for example."
 msgstr ""
 
-#: libs/widgetutils/KoFileDialog.cpp:511
+#: libs/widgetutils/KoFileDialog.cpp:533
 #, kde-format
 msgid "All supported formats"
 msgstr "Όλοι οι υποστηριζόμενοι τύποι"
@@ -38308,7 +38304,7 @@ msgid "Val:"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:127
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
 #, fuzzy, kde-format
 msgid "Onion skins menu"
 msgstr "&Περιορισμός αναλογιών"
@@ -38320,26 +38316,26 @@ msgid "Audio menu"
 msgstr "Βολφραμίου ISO θαλάμου"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:180
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation settings menu"
 msgstr "Κινούμενο"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:192
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
 #, fuzzy, kde-format
 msgid "Clip Start: "
 msgstr "Αστέρι"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
 #, kde-format
 msgid "Clip End: "
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
 #, fuzzy, kde-format
 msgid "Frame Rate: "
 msgstr "Σπύρος Γεωργαράς, Τούσης Μανώλης"
@@ -38366,39 +38362,39 @@ msgstr "Ορθογώνιο"
 msgid "Reset All Channels"
 msgstr "Όλα τα κανάλια"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:486
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:481
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:493
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:488
 #, fuzzy, kde-format
 #| msgid "Bilinear interpolation"
 msgid "Linear interpolation."
 msgstr "Διγραμμική παρεμβολή"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:500
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:495
 #, fuzzy, kde-format
 #| msgid "Bilinear interpolation"
 msgid "Bezier curve interpolation."
 msgstr "Διγραμμική παρεμβολή"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:507
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:502
 #, fuzzy, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "Διγραμμική παρεμβολή"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:514
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:509
 #, fuzzy, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "Διγραμμική παρεμβολή"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:521
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:516
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:528
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:523
 #, fuzzy, kde-format
 #| msgid "Zoom to All"
 msgid "Zoom view to fit curve."
@@ -38446,70 +38442,70 @@ msgstr[0] "Εισαγωγή ονόματος"
 msgstr[1] "Εισαγωγή ονόματος"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:290
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation Timeline"
 msgstr "Κινούμενο"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "Animated"
-msgid "Animation audio menu"
-msgstr "Κινούμενο"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Αρχεία πηγής:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "<<Αφαίρεση"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #, fuzzy, kde-format
 #| msgid "Volume:"
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "Τόμος:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#, fuzzy, kde-format
+#| msgid "Animated"
+msgid "Animation audio menu"
+msgstr "Κινούμενο"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
 msgid "AutoKey Blank"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
 #, fuzzy, kde-format
 #| msgid "Duplicate"
 msgid "AutoKey Duplicate"
 msgstr "Αντιγραφή"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:509
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:522
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:517
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:523
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:518
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:519
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""
@@ -39386,10 +39382,9 @@ msgstr "Λεπτομέρειες"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:394
 #, fuzzy, kde-format
-#| msgid "Layer Opacity"
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "Αδιαφάνεια στρώματος"
+msgstr "Προσθήκη νέας σελίδας"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:412
 #, fuzzy, kde-format
@@ -39805,10 +39800,10 @@ msgstr ""
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
 #, fuzzy
-#| msgid "Thumbnails"
+#| msgid "Update preview"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Εικόνες επισκόπησης"
+msgstr "Ενημέρωση προεπισκόπησης"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, fuzzy, kde-format
@@ -39840,9 +39835,9 @@ msgstr "Διαγραφή τρέχοντος στρώματος"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:125
 #, fuzzy, kde-format
-#| msgid "Add New Palette"
+#| msgid "Ella palette"
 msgid "Load a palette"
-msgstr "Προσθήκη νέας παλέτας"
+msgstr "Ella palette"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:226
 #, fuzzy, kde-format
@@ -41032,13 +41027,13 @@ msgstr "Τόμος:"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:145
 #, fuzzy, kde-format
 msgid "SVG Template"
-msgstr "Δημιουργία"
+msgstr "Αστέρι"
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
 #, fuzzy, kde-format
 msgid "SVG Template Path:"
-msgstr "Δημιουργία"
+msgstr "Αστέρι"
 
 #. i18n: ectx: property (text), widget (QLabel, fontSizeLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:237
@@ -48275,24 +48270,24 @@ msgstr "Εξομάλυνση"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:21
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "2x2 downsampling"
-msgstr "Εξομάλυνση"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:22
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "4x4 downsampling"
-msgstr "Εξομάλυνση"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:23
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "8x8 downsampling"
-msgstr "Εξομάλυνση"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
@@ -48378,11 +48373,10 @@ msgid "Center-first order"
 msgstr "Κέντρο:"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:89
-#, fuzzy, kde-format
-#| msgid "X resolution:"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
-msgstr "Ανάλυση X:"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
 #, kde-format
@@ -48805,10 +48799,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:492
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gaborish filter"
-msgstr ""
+msgstr "Προσαρμοσμένο μοτίβο"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:499
@@ -48846,9 +48840,10 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:537
 #, fuzzy, kde-format
+#| msgid "No Border"
 msgctxt "JPEG-XL encoder options"
 msgid "Group order"
-msgstr "Στρώμα &ομάδας"
+msgstr "Κανένα περίγραμμα"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:544
@@ -48940,10 +48935,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:676
-#, fuzzy, kde-format
-#| msgid "Add New Palette"
+#, kde-format
 msgid "Local channel palette range"
-msgstr "Προσθήκη νέας παλέτας"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:687
@@ -49365,7 +49359,7 @@ msgstr "Αδυναμία δημιουργίας του αρχείου για α�
 #, fuzzy, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
-msgstr "Επιλογή διανύσματος"
+msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:222
 #, kde-format
@@ -50683,7 +50677,7 @@ msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
 msgstr "Οριζόντια ακτίνα:"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1040
+#: plugins/impex/tiff/kis_tiff_import.cc:1044
 #, kde-format
 msgctxt "TIFF errors"
 msgid ""
@@ -50692,11 +50686,25 @@ msgid ""
 "version of libjpeg-turbo and try again."
 msgstr ""
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1143
-#: plugins/impex/tiff/kis_tiff_import.cc:1326
+#: plugins/impex/tiff/kis_tiff_import.cc:1147
+#: plugins/impex/tiff/kis_tiff_import.cc:1330
 #, kde-format
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1577
+#, kde-format
+msgctxt "@title:window"
+msgid "TIFF image with PSD data"
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1579
+#, kde-format
+msgctxt "the choice for the user on loading a TIFF file"
+msgid ""
+"The TIFF image contains valid PSD data embedded. Would you like to use PSD "
+"data instead of normal TIFF data?"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
@@ -51010,10 +51018,9 @@ msgstr "Προορισμός:"
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, segments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:260
 #: plugins/impex/webp/kis_wdg_options_webp.ui:276
-#, fuzzy, kde-format
-#| msgid "Number of tiles"
+#, kde-format
 msgid "Maximum number of segments (1 to 4)."
-msgstr "Αριθμός εικόνων παράθεσης"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSegments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:263
@@ -54058,9 +54065,9 @@ msgstr "Ρυθμός κηλίδων"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
 #, fuzzy, kde-format
-#| msgid "Transparent"
+#| msgid "Burning Transparency"
 msgid "Smudge Transparency"
-msgstr "Διαφανές"
+msgstr "Φλεγόμενη διαφάνεια"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, fuzzy, kde-format
@@ -57771,11 +57778,10 @@ msgid "Threshold: "
 msgstr "Κατώφλι: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:552
-#, fuzzy, kde-format
-#| msgid "Opacity: "
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in fill tool options"
 msgid "Spread: "
-msgstr "Αδιαφάνεια: "
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:558
 #, fuzzy, kde-format
@@ -57925,10 +57931,10 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:633
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
-msgstr "Γέμισμα με χρώμα φόντου"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
 #, fuzzy, kde-format
@@ -59057,11 +59063,10 @@ msgid "Threshold: "
 msgstr "Κατώφλι: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:374
-#, fuzzy, kde-format
-#| msgid "Opacity: "
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in contiguous selection tool options"
 msgid "Spread: "
-msgstr "Αδιαφάνεια: "
+msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:380
 #, fuzzy, kde-format
@@ -59092,9 +59097,9 @@ msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select all regions until a specific boundary color"
-msgstr "Γέμισμα με χρώμα φόντου"
+msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
@@ -59120,11 +59125,11 @@ msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
 #, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#| msgid "Selection Mode"
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
 msgid "Selection extent"
-msgstr "Ένταση αποτύπωσης"
+msgstr "Λειτουργία επιλογής"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:95
 #, fuzzy, kde-format
@@ -59237,11 +59242,11 @@ msgstr "Κατώφλι: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:472
 #, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#| msgid "Selection Mode"
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
-msgstr "Ένταση αποτύπωσης"
+msgstr "Λειτουργία επιλογής"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:57
 #, fuzzy, kde-format
@@ -60378,11 +60383,10 @@ msgid "Threshold: "
 msgstr "Κατώφλι: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
-#, fuzzy, kde-format
-#| msgid "Opacity: "
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
 msgid "Spread: "
-msgstr "Αδιαφάνεια: "
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
 #, fuzzy, kde-format
@@ -60511,10 +60515,10 @@ msgid "Specific color or transparency"
 msgstr "Ειδικός επιλογέας χρώματος"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
-msgstr "Γέμισμα με χρώμα φόντου"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, fuzzy, kde-format
@@ -60530,10 +60534,10 @@ msgid "All, excluding a specific color or transparency"
 msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
-msgstr "Γέμισμα με χρώμα φόντου"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
 #, fuzzy, kde-format
@@ -61636,65 +61640,30 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Εικόνες αναφοράς"
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "Διάτμηση Χ"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "Διάτμηση Υ"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "Κλιμάκωση"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "Μηδενισμός μετασχηματισμών"
+#, fuzzy
+#~ msgid "&Canvas"
+#~ msgstr "Canvas 01"
 
 #, fuzzy
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
-#~ "Animated exports are <span style=\" font-weight:600;\">always</span> "
-#~ "flattened regardless of this setting.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Χρώμα φόντου το οποίο θα αντικαταστήσει τη "
-#~ "διαφάνεια των εικονοστοιχείων.</p></body></html>"
+#~ msgctxt "action"
+#~ msgid "&Reset zoom"
+#~ msgstr "Επαναφορά ζουμ"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "Reset zoom"
+#~ msgstr "Επαναφορά ζουμ"
+
+#, fuzzy
+#~| msgid "Please enter a name for the filter effect"
+#~ msgid "Please extract ffmpeg from the archive first."
+#~ msgstr "Παρακαλώ δώστε ένα όνομα για το εφέ φίλτρου"
 
 #, fuzzy
 #~| msgid "Difference"
 #~ msgctxt "paletegen status mode option name"
 #~ msgid "Difference"
 #~ msgstr "Διαφορά"
-
-#, fuzzy
-#~| msgid "&Filter:"
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "&Φίλτρο:"
-
-#, fuzzy
-#~| msgid "Edition:"
-#~ msgid "Edit Audio:"
-#~ msgstr "Έκδοση:"
-
-#, fuzzy
-#~| msgid "Volume:"
-#~ msgctxt "@item:inmenu, slider"
-#~ msgid "Volume:"
-#~ msgstr "Τόμος:"
-
-#, fuzzy
-#~| msgid "Open and edit..."
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "Άνοιγμα και επεξεργασία..."
-
-#, fuzzy
-#~| msgid "Save..."
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "Αποθήκευση..."
 
 #, fuzzy
 #~| msgid "Choose workspace"
@@ -61769,10 +61738,6 @@ msgstr "Εικόνες αναφοράς"
 #~ msgstr "Περιστροφή: "
 
 #, fuzzy
-#~ msgid "FFMpeg Version: None"
-#~ msgstr "Έκδοση"
-
-#, fuzzy
 #~ msgid ""
 #~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
 #~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
@@ -61786,9 +61751,107 @@ msgstr "Εικόνες αναφοράς"
 #~ msgstr "Κέντρο:"
 
 #, fuzzy
-#~| msgid "%1 s"
-#~ msgid " sec"
-#~ msgstr "%1 s"
+#~| msgid "Image Split "
+#~ msgid "Drag an image into the window to open"
+#~ msgstr "Διαίρεση εικόνας "
+
+#, fuzzy
+#~ msgid "New File"
+#~ msgstr "Μέγεθος εικόνας"
+
+#, fuzzy
+#~| msgid "Open in New Documents"
+#~ msgid "Recent Documents"
+#~ msgstr "Άνοιγμα σε νέα έγγραφα"
+
+#, fuzzy
+#~| msgid "Settings"
+#~ msgid "Grid Settings"
+#~ msgstr "Ρυθμίσεις"
+
+#, fuzzy
+#~ msgid "Enable Smooth Zooming"
+#~ msgstr "Ενεργοποίηση του OpenGL"
+
+#, fuzzy
+#~ msgid "&Description:"
+#~ msgstr "Περιγραφή:"
+
+#, fuzzy
+#~| msgid "&Filter:"
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "&Filter:"
+#~ msgstr "&Φίλτρο:"
+
+#, fuzzy
+#~ msgid "Duplicate current profile"
+#~ msgstr "Αντίγραφο τρέχοντος στρώματος"
+
+#, fuzzy
+#~ msgid "Select Layer Mode"
+#~ msgstr "Εναλλαγή λειτουργίας κλίσης"
+
+#, fuzzy
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Εναλλαγή λειτουργίας κλίσης"
+
+#~ msgid "Reset Zoom to 100%"
+#~ msgstr "Επαναφορά ζουμ στο 100%"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not save %1.\n"
+#~ "Reason: %2"
+#~ msgstr "Επιλογή διανύσματος"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not open %2.\n"
+#~ "Reason: %1"
+#~ msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
+
+#, fuzzy
+#~| msgid "Do you really want to overwrite the existing '%1' template?"
+#~ msgctxt "Fetching remote image"
+#~ msgid "Do you want to download the image at %1?"
+#~ msgstr "Επιθυμείτε πραγματικά την αντικατάσταση στο υπάρχον πρότυπο '%1';"
+
+#, fuzzy
+#~ msgid ""
+#~ "Make the selection using a merged copy of the selected color-labeled "
+#~ "layers"
+#~ msgstr "Επιλέξτε τη λειτουργία ανάμειξης για το στρώμα."
+
+#~ msgid "Fit Page"
+#~ msgstr "Προσαρμογή σελίδας"
+
+#, fuzzy
+#~| msgid "Volume:"
+#~ msgid "Colu&mns:"
+#~ msgstr "Τόμος:"
+
+#, fuzzy
+#~| msgid "Edition:"
+#~ msgid "Edit Audio:"
+#~ msgstr "Έκδοση:"
+
+#, fuzzy
+#~| msgid "Volume:"
+#~ msgctxt "@item:inmenu, slider"
+#~ msgid "Volume:"
+#~ msgstr "Τόμος:"
+
+#, fuzzy
+#~| msgid "Open and edit..."
+#~ msgctxt "@item:inmenu"
+#~ msgid "Open audio..."
+#~ msgstr "Άνοιγμα και επεξεργασία..."
+
+#, fuzzy
+#~| msgid "Save..."
+#~ msgctxt "@item:inmenu"
+#~ msgid "Change audio (%1)..."
+#~ msgstr "Αποθήκευση..."
 
 #, fuzzy
 #~| msgid "Start recording macro"
@@ -61804,6 +61867,38 @@ msgstr "Εικόνες αναφοράς"
 #~| msgid "Set stroke"
 #~ msgid "Split Strokes"
 #~ msgstr "Ορισμός πινελιάς"
+
+#, fuzzy
+#~ msgid "Lossless compression"
+#~ msgstr "Συμπίεση:"
+
+#, fuzzy
+#~| msgid "Tool information"
+#~ msgid "Information"
+#~ msgstr "Πληροφορίες εργαλείου"
+
+#, fuzzy
+#~| msgid "Sobel vertically"
+#~ msgid "Flip vertically"
+#~ msgstr "Άκρα Sobel κατακόρυφα"
+
+#, fuzzy
+#~ msgid "Bypass filtering"
+#~ msgstr "Διγραμμική παρεμβολή"
+
+#, fuzzy
+#~ msgid "Use multithreaded decoding"
+#~ msgstr "Περίγραμμα:"
+
+#, fuzzy
+#~| msgid "Color space:"
+#~ msgid "Color planes: "
+#~ msgstr "Χώρος χρωμάτων:"
+
+#, fuzzy
+#~| msgid "Alpha darken"
+#~ msgid "Alpha plane: "
+#~ msgstr "Άλφα σκοτείνιασμα"
 
 #, fuzzy
 #~| msgid "Color Rate"
@@ -61869,140 +61964,6 @@ msgstr "Εικόνες αναφοράς"
 #~ msgstr "0 s"
 
 #, fuzzy
-#~ msgid "Select Layer Mode"
-#~ msgstr "Εναλλαγή λειτουργίας κλίσης"
-
-#, fuzzy
-#~ msgid "Select Multiple Layer Mode"
-#~ msgstr "Εναλλαγή λειτουργίας κλίσης"
-
-#, fuzzy
-#~| msgid "Please enter a name for the filter effect"
-#~ msgid "Please extract ffmpeg from the archive first."
-#~ msgstr "Παρακαλώ δώστε ένα όνομα για το εφέ φίλτρου"
-
-#, fuzzy
-#~| msgid "Volume:"
-#~ msgid "Colu&mns:"
-#~ msgstr "Τόμος:"
-
-#, fuzzy
-#~| msgid "Do you really want to overwrite the existing '%1' template?"
-#~ msgctxt "Fetching remote image"
-#~ msgid "Do you want to download the image at %1?"
-#~ msgstr "Επιθυμείτε πραγματικά την αντικατάσταση στο υπάρχον πρότυπο '%1';"
-
-#, fuzzy
-#~ msgid "&Description:"
-#~ msgstr "Περιγραφή:"
-
-#, fuzzy
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr "Επιλογή διανύσματος"
-
-#, fuzzy
-#~ msgid ""
-#~ "Could not open %2.\n"
-#~ "Reason: %1"
-#~ msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "Εργαλεία &ζωγραφικής"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "Εργαλεία &ζωγραφικής"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Brush composite"
-#~ msgstr "Μέγεθος πινέλου"
-
-#, fuzzy
-#~| msgid "Layer Opacity"
-#~ msgctxt "@item:inmenu Layers Docker settings, combobox"
-#~ msgid "Subtitle Style"
-#~ msgstr "Αδιαφάνεια στρώματος"
-
-#, fuzzy
-#~| msgid "None"
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "None"
-#~ msgstr "Κανένα"
-
-#, fuzzy
-#~| msgid "simple"
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "Simple"
-#~ msgstr "απλό"
-
-#, fuzzy
-#~ msgid "&Canvas"
-#~ msgstr "Canvas 01"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "&Reset Zoom"
-#~ msgstr "Επαναφορά ζουμ"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Reset Zoom"
-#~ msgstr "Επαναφορά ζουμ"
-
-#, fuzzy
-#~| msgid "Fit to Page"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page"
-#~ msgstr "Ταίριασμα στη σελίδα"
-
-#, fuzzy
-#~| msgid "Fit to Width"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Width"
-#~ msgstr "Ταίριασμα στο πλάτος"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Width"
-#~ msgstr "Προσαρμογή στο πλάτος σελίδας"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Height"
-#~ msgstr "Προσαρμογή στο πλάτος σελίδας"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Height"
-#~ msgstr "Προσαρμογή στο πλάτος σελίδας"
-
-#, fuzzy
-#~ msgid "Duplicate current profile"
-#~ msgstr "Αντίγραφο τρέχοντος στρώματος"
-
-#~ msgid "Reset Zoom to 100%"
-#~ msgstr "Επαναφορά ζουμ στο 100%"
-
-#~ msgid "Fit Page"
-#~ msgstr "Προσαρμογή σελίδας"
-
-#, fuzzy
-#~ msgid "Make the selection using a merged copy of all layers"
-#~ msgstr "Επιλέξτε τη λειτουργία ανάμειξης για το στρώμα."
-
-#, fuzzy
-#~ msgid ""
-#~ "Make the selection using a merged copy of the selected color-labeled "
-#~ "layers"
-#~ msgstr "Επιλέξτε τη λειτουργία ανάμειξης για το στρώμα."
-
-#, fuzzy
 #~| msgid "&Add to current selection"
 #~ msgid "Current selection"
 #~ msgstr "Προσ&θήκη στην τρέχουσα επιλογή"
@@ -62035,6 +61996,22 @@ msgstr "Εικόνες αναφοράς"
 #~ msgid "Multiple fill"
 #~ msgstr "Περίγραμμα:"
 
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "Διάτμηση Χ"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "Διάτμηση Υ"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "Κλιμάκωση"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "Μηδενισμός μετασχηματισμών"
+
 #, fuzzy
 #~| msgid "Save to Palette"
 #~ msgctxt "The 'what to fill' section label in enclose and fill tool options"
@@ -62054,64 +62031,29 @@ msgstr "Εικόνες αναφοράς"
 #~ msgstr "Ένταση αποτύπωσης"
 
 #, fuzzy
+#~| msgid "Small Tiles"
 #~ msgctxt "Region selection method in enclose and fill tool"
 #~ msgid "All regions"
-#~ msgstr "Επιλογή παρόμοιου"
+#~ msgstr "Μικρές εικόνες παράθεσης"
 
 #, fuzzy
-#~| msgid "Settings"
-#~ msgid "Grid Settings"
-#~ msgstr "Ρυθμίσεις"
+#~ msgctxt "action"
+#~ msgid "&Painter's Tools"
+#~ msgstr "Εργαλεία &ζωγραφικής"
 
 #, fuzzy
-#~ msgid "Enable Smooth Zooming"
-#~ msgstr "Ενεργοποίηση του OpenGL"
+#~ msgctxt "action"
+#~ msgid "Painter's Tools"
+#~ msgstr "Εργαλεία &ζωγραφικής"
 
 #, fuzzy
-#~ msgid "Lossless compression"
-#~ msgstr "Συμπίεση:"
-
-#, fuzzy
-#~| msgid "Tool information"
-#~ msgid "Information"
-#~ msgstr "Πληροφορίες εργαλείου"
-
-#, fuzzy
-#~| msgid "Sobel vertically"
-#~ msgid "Flip vertically"
-#~ msgstr "Άκρα Sobel κατακόρυφα"
-
-#, fuzzy
-#~ msgid "Bypass filtering"
-#~ msgstr "Διγραμμική παρεμβολή"
-
-#, fuzzy
-#~ msgid "Use multithreaded decoding"
-#~ msgstr "Περίγραμμα:"
-
-#, fuzzy
-#~| msgid "Color space:"
-#~ msgid "Color planes: "
-#~ msgstr "Χώρος χρωμάτων:"
-
-#, fuzzy
-#~| msgid "Alpha darken"
-#~ msgid "Alpha plane: "
-#~ msgstr "Άλφα σκοτείνιασμα"
+#~ msgctxt "action"
+#~ msgid "Brush composite"
+#~ msgstr "Μέγεθος πινέλου"
 
 #, fuzzy
 #~ msgid "Cache Location:"
 #~ msgstr "Δημιουργία σχήματος:"
-
-#, fuzzy
-#~ msgctxt "@item:inmenu Layers Docker settings, checkbox"
-#~ msgid "Display Subtitles"
-#~ msgstr "Εμφάνιση επιλογής"
-
-#, fuzzy
-#~ msgctxt "@item:tooltip"
-#~ msgid "Layer opacity and blending mode"
-#~ msgstr "Λειτουργία ανάμειξης"
 
 #, fuzzy
 #~| msgid "Cannot pick a color as no layer is active."
@@ -62133,20 +62075,75 @@ msgstr "Εικόνες αναφοράς"
 #~ msgstr "Πυκνότητα"
 
 #, fuzzy
+#~ msgid "Disable vsync (needs restart)"
+#~ msgstr "Επιλογές"
+
+#, fuzzy
 #~ msgctxt ""
 #~ "The 'include surrounding regions' checkbox in enclose and fill tool"
 #~ msgid "Include surrounding regions"
 #~ msgstr "Άνοιγμα και επεξεργασία..."
-
-#, fuzzy
-#~ msgid "Disable vsync (needs restart)"
-#~ msgstr "Επιλογές"
 
 #~ msgid "Angle snapping delta:"
 #~ msgstr "Δέλτα γωνιακού σημείου:"
 
 #~ msgid "Angle Constraints"
 #~ msgstr "Περιορισμοί γωνίας"
+
+#~ msgid "Open Color Profile"
+#~ msgstr "Άνοιγμα χρωματικού προφίλ"
+
+#, fuzzy
+#~ msgctxt "@title:window"
+#~ msgid "Select a swap directory"
+#~ msgstr "Επιλέξτε μια ορθογώνια περιοχή"
+
+#, fuzzy
+#~ msgid "Add new color profile:"
+#~ msgstr "Άνοιγμα χρωματικού προφίλ"
+
+#, fuzzy
+#~ msgctxt "Color model"
+#~ msgid "&Model:"
+#~ msgstr "Μοντέλο:"
+
+#, fuzzy
+#~ msgid "Profi&le:"
+#~ msgstr "Προφίλ:"
+
+#, fuzzy
+#~ msgid "Cursor Shape:"
+#~ msgstr "Σχήμα δρομέα"
+
+#, fuzzy
+#~| msgid "Stop color."
+#~ msgid "Cursor Color:"
+#~ msgstr "Διακοπή χρωματισμού."
+
+#, fuzzy
+#~| msgid "General"
+#~ msgid "General:"
+#~ msgstr "Γενικά"
+
+#, fuzzy
+#~ msgid "Enable Touch Rotation"
+#~ msgstr "Ρυθμίσεις φίλτρου"
+
+#, fuzzy
+#~ msgid "Animation:"
+#~ msgstr "Κινούμενο"
+
+#, fuzzy
+#~ msgid "Swap File Location:"
+#~ msgstr "Δημιουργία σχήματος:"
+
+#, fuzzy
+#~ msgid "Force Instant Preview in Move Tool"
+#~ msgstr "Προεπισκόπηση εικόνας"
+
+#, fuzzy
+#~ msgid "Force Instant Preview in Filters"
+#~ msgstr "Προεπισκόπηση εικόνας"
 
 #~ msgid "Intersect"
 #~ msgstr "Τομή"
@@ -62161,6 +62158,20 @@ msgstr "Εικόνες αναφοράς"
 #, fuzzy
 #~ msgid "Symmetric Difference"
 #~ msgstr "Συμμετρία"
+
+#, fuzzy
+#~ msgid "Loading Plugins Exiv/IO..."
+#~ msgstr "&Μοτίβα"
+
+#, fuzzy
+#~| msgid "%1 %"
+#~ msgid "%1 %2 px"
+#~ msgstr "%1 %"
+
+#, fuzzy
+#~ msgctxt "About <Profilename>"
+#~ msgid "About "
+#~ msgstr "Krita"
 
 #, fuzzy
 #~| msgid "Current Layer"
@@ -62185,104 +62196,54 @@ msgstr "Εικόνες αναφοράς"
 #~ msgid "Color Labeled Layers"
 #~ msgstr "Ρυθμός χρώματος"
 
+#~ msgid "Change the color of the line/border"
+#~ msgstr "Αλλαγή χρώματος (οριο)γραμμής"
+
 #, fuzzy
 #~ msgctxt "@info:tooltip %2 is shortcut"
 #~ msgid "%1 (%2)"
 #~ msgstr "Αντιγραφή από"
 
-#~ msgid "Fuzziness: "
-#~ msgstr "Ασάφεια: "
+#~ msgid "Use same aspect as pixels"
+#~ msgstr "Χρήση ίδιας αναλογίας με τα εικονοστοιχεία"
 
 #, fuzzy
-#~| msgid "Opacity: "
-#~ msgid "Opacity Spread: "
-#~ msgstr "Αδιαφάνεια: "
-
-#, fuzzy
-#~ msgid "Feathering radius: "
-#~ msgstr "Ακτίνα δείγματος:"
-
-#, fuzzy
-#~| msgid "Border selection by"
-#~ msgid "Use selection as boundary: "
-#~ msgstr "Περίγραμμα επιλογής κατά"
-
-#, fuzzy
-#~| msgid "Threshold: "
-#~ msgctxt "Threshold label in Magnetic Selection's Tool options"
-#~ msgid "Threshold: "
-#~ msgstr "Κατώφλι: "
-
-#, fuzzy
-#~| msgid "0 s"
-#~ msgid " kB"
-#~ msgstr "0 s"
+#~ msgid "Hold Last Frame for:"
+#~ msgstr "Τελευταία χρήση"
 
 #, fuzzy
 #~| msgid "Vector Layer"
 #~ msgid "Vector Libraries"
 #~ msgstr "Διανυσματικό στρώμα"
 
-#, fuzzy
-#~| msgid "Default printer color model:"
-#~ msgid "Default (encoder chooses)"
-#~ msgstr "Προκαθορισμένο χρωματικό μοντέλο εκτυπωτή:"
+#~ msgid "Colorspace"
+#~ msgstr "Χώρος χρωμάτων"
 
 #, fuzzy
-#~ msgid "Cursor Shape:"
-#~ msgstr "Σχήμα δρομέα"
-
-#, fuzzy
-#~| msgid "Stop color."
-#~ msgid "Cursor Color:"
-#~ msgstr "Διακοπή χρωματισμού."
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Paste"
-#~ msgid "Paste"
-#~ msgstr "Επικόλληση"
-
-#, fuzzy
-#~ msgid "Max Gesture"
-#~ msgstr "Υφή"
+#~| msgid "Value"
+#~ msgctxt "Label of Brightness value in brush settings"
+#~ msgid "Value"
+#~ msgstr "Τιμή"
 
 #~ msgid "Gaussian distribution"
 #~ msgstr "Κατανομή Gauss"
 
-#~ msgid "Use same aspect as pixels"
-#~ msgstr "Χρήση ίδιας αναλογίας με τα εικονοστοιχεία"
+#, fuzzy
+#~| msgid "Add Group"
+#~ msgctxt "Group as Swatch Group in a Palette"
+#~ msgid "Add Group"
+#~ msgstr "Προσθήκη ομάδας"
 
 #, fuzzy
-#~ msgid "Enable Touch Rotation"
-#~ msgstr "Ρυθμίσεις φίλτρου"
-
-#, fuzzy
-#~ msgid "Hold last frame for:"
-#~ msgstr "Τελευταία χρήση"
-
-#, fuzzy
-#~ msgid "Fast mode:"
+#~ msgid "Fast mode: "
 #~ msgstr "Λειτουργία φαξ:"
 
 #, fuzzy
-#~| msgid "Threshold:"
-#~ msgctxt "The Threshold label in Fill tool options"
-#~ msgid "Threshold:"
-#~ msgstr "Κατώφλι:"
-
-#, fuzzy
-#~| msgid "Opacity decrease"
-#~ msgctxt "The Opacity Spread label in Fill tool options"
-#~ msgid "Opacity Spread:"
-#~ msgstr "Μείωση αδιαφάνειας"
-
-#, fuzzy
-#~ msgid "Grow selection:"
+#~ msgid "Grow selection: "
 #~ msgstr "Μεγέθυνση επιλογής κατά"
 
 #, fuzzy
-#~ msgid "Feathering radius:"
+#~ msgid "Feathering radius: "
 #~ msgstr "Ακτίνα δείγματος:"
 
 #, fuzzy
@@ -62323,12 +62284,6 @@ msgstr "Εικόνες αναφοράς"
 #~ "αλλά γεμίζεται όλη επιλεγμένη περιοχή"
 
 #, fuzzy
-#~| msgid "Continue"
-#~ msgctxt "The 'continuous fill' label in Fill tool options"
-#~ msgid "Continuous Fill:"
-#~ msgstr "Συνέχεια"
-
-#, fuzzy
 #~| msgid "Current Layer"
 #~ msgctxt ""
 #~ "Option in fill tool: take only the current layer into account when "
@@ -62352,107 +62307,34 @@ msgstr "Εικόνες αναφοράς"
 #~ msgstr "Ρυθμός χρώματος"
 
 #, fuzzy
-#~| msgid "%1 %"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %"
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Paste"
+#~ msgid "Paste"
+#~ msgstr "Επικόλληση"
+
+#~ msgid "Fuzziness: "
+#~ msgstr "Ασάφεια: "
 
 #, fuzzy
-#~| msgid "%1 %"
-#~ msgctxt "Brush Option Flow"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %"
+#~| msgid "Border selection by"
+#~ msgid "Use selection as boundary: "
+#~ msgstr "Περίγραμμα επιλογής κατά"
 
 #, fuzzy
-#~| msgid "%1 %"
-#~ msgctxt "Edge softness, Brush Option Fade"
-#~ msgid "%1 %2"
-#~ msgstr "%1 %"
+#~| msgid "Threshold: "
+#~ msgctxt "Threshold label in Magnetic Selection's Tool options"
+#~ msgid "Threshold: "
+#~ msgstr "Κατώφλι: "
 
 #, fuzzy
-#~| msgid "%1 %"
-#~ msgctxt "Brush Option Scatter"
-#~ msgid "%1 %2%"
-#~ msgstr "%1 %"
-
-#, fuzzy
-#~| msgid "%1 %"
-#~ msgid "%1 %2 px"
-#~ msgstr "%1 %"
-
-#, fuzzy
-#~| msgid "General"
-#~ msgid "General:"
-#~ msgstr "Γενικά"
-
-#, fuzzy
-#~ msgid "Animation:"
-#~ msgstr "Κινούμενο"
-
-#, fuzzy
-#~ msgid "Swap File Location:"
-#~ msgstr "Δημιουργία σχήματος:"
-
-#, fuzzy
-#~ msgid "Force Instant Preview in Move Tool"
-#~ msgstr "Προεπισκόπηση εικόνας"
-
-#, fuzzy
-#~ msgid "Force Instant Preview in Filters"
-#~ msgstr "Προεπισκόπηση εικόνας"
-
-#~ msgid "Open Color Profile"
-#~ msgstr "Άνοιγμα χρωματικού προφίλ"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Select a swap directory"
-#~ msgstr "Επιλέξτε μια ορθογώνια περιοχή"
-
-#, fuzzy
-#~ msgid "Add new color profile:"
-#~ msgstr "Άνοιγμα χρωματικού προφίλ"
-
-#~ msgid "Colorspace"
-#~ msgstr "Χώρος χρωμάτων"
-
-#, fuzzy
-#~ msgctxt "Color model"
-#~ msgid "&Model:"
-#~ msgstr "Μοντέλο:"
-
-#, fuzzy
-#~ msgid "Profi&le:"
-#~ msgstr "Προφίλ:"
-
-#, fuzzy
-#~ msgctxt "About <Profilename>"
-#~ msgid "About "
-#~ msgstr "Krita"
-
-#, fuzzy
-#~| msgid "Softness"
-#~ msgctxt "The Softness label in Fill tool options"
-#~ msgid "Softness:"
-#~ msgstr "Απαλότητα"
-
-#, fuzzy
-#~| msgid "Softness"
-#~ msgid "Softness: "
-#~ msgstr "Απαλότητα"
+#~| msgid "0 s"
+#~ msgid " kB"
+#~ msgstr "0 s"
 
 #, fuzzy
 #~| msgid "0.0"
 #~ msgid "0/0"
 #~ msgstr "0.0"
-
-#~ msgid "Change the color of the line/border"
-#~ msgstr "Αλλαγή χρώματος (οριο)γραμμής"
-
-#, fuzzy
-#~| msgid "Value"
-#~ msgctxt "Label of Brightness value in brush settings"
-#~ msgid "Value"
-#~ msgstr "Τιμή"
 
 #~ msgid ""
 #~ "The mixing option mixes the paint on the brush with that on the canvas."
@@ -62468,12 +62350,6 @@ msgstr "Εικόνες αναφοράς"
 #~ msgctxt "action"
 #~ msgid "Brightness/Contrast curve"
 #~ msgstr "Καμπύλη &λαμπρότητας/αντίθεσης..."
-
-#, fuzzy
-#~| msgid "Threshold: "
-#~ msgctxt "The Threshold label in Fill tool options"
-#~ msgid "Threshold: "
-#~ msgstr "Κατώφλι: "
 
 #, fuzzy
 #~| msgid "The file %1 does not exist."
@@ -62563,14 +62439,7 @@ msgstr "Εικόνες αναφοράς"
 #, fuzzy
 #~ msgctxt "Error message when saving a .kra file"
 #~ msgid "Could not save resource %1 to the kra file."
-#~ msgstr "Επιλογή διανύσματος"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Add shapes to group"
-#~ msgctxt "action"
-#~ msgid "Add a new &Group Layer"
-#~ msgstr "Προσθήκη σχημάτων στην ομάδα"
+#~ msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
 #, fuzzy
 #~| msgctxt "(qtundo-format)"
@@ -62742,35 +62611,16 @@ msgstr "Εικόνες αναφοράς"
 
 #, fuzzy
 #~ msgid "Could not save preset under name %1, it already exists."
-#~ msgstr "Επιλογή διανύσματος"
-
-#, fuzzy
-#~ msgid "Could not update preset %1."
-#~ msgstr "Επιλογή διανύσματος"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Couldn't add the session"
 #~ msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
 #, fuzzy
-#~ msgctxt "Warning about not being able to rename a session"
-#~ msgid "Renaming the session failed."
-#~ msgstr "Μετονομασία σχημάτων"
+#~ msgid "Could not update preset %1."
+#~ msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
 #, fuzzy
 #~| msgid "Facing pages"
 #~ msgid "Clean Up"
 #~ msgstr "Αντικριστές σελίδες"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Filters"
-#~ msgstr "Φίλτρα"
-
-#, fuzzy
-#~ msgid "Cutoff"
-#~ msgstr "Καφές"
 
 #, fuzzy
 #~ msgid "Export Directory: "
@@ -62797,22 +62647,13 @@ msgstr "Εικόνες αναφοράς"
 #~ msgstr "κάλυψη"
 
 #, fuzzy
-#~| msgid "Sobel horizontally"
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cells horizontally"
-#~ msgstr "Άκρα Sobel οριζόντια"
+#~ msgctxt "action"
+#~ msgid "Filters"
+#~ msgstr "Φίλτρα"
 
 #, fuzzy
-#~| msgid "Sobel vertically"
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cell vertically"
-#~ msgstr "Άκρα Sobel κατακόρυφα"
-
-#, fuzzy
-#~| msgid "Sobel vertically"
-#~ msgctxt "Suffix. Part of 'Every # cell/s horizontally"
-#~ msgid " cells vertically"
-#~ msgstr "Άκρα Sobel κατακόρυφα"
+#~ msgid "Cutoff"
+#~ msgstr "Καφές"
 
 #, fuzzy
 #~| msgid "Auto"
@@ -62821,57 +62662,23 @@ msgstr "Εικόνες αναφοράς"
 #~ msgstr "Αυτόματο"
 
 #, fuzzy
-#~ msgid "Loading Plugins Exiv/IO..."
-#~ msgstr "&Μοτίβα"
-
-#, fuzzy
 #~| msgid "Exif"
 #~ msgctxt "metadata editor page"
 #~ msgid "Exif"
 #~ msgstr "Exif"
-
-#~ msgid "No store backend"
-#~ msgstr "Χωρίς σύστημα υποστήριξης αποθήκευσης"
 
 #, fuzzy
 #~| msgid "Thumbnails"
 #~ msgid "lblThumbnail"
 #~ msgstr "Εικόνες επισκόπησης"
 
+#~ msgid "No store backend"
+#~ msgstr "Χωρίς σύστημα υποστήριξης αποθήκευσης"
+
 #, fuzzy
 #~| msgid "TextLabel"
 #~ msgid "KSqueezedTextLabel"
 #~ msgstr "Ετικέτα κειμένου"
-
-#, fuzzy
-#~| msgid ""
-#~| "<p>Adjust the compression time. Better compression takes longer.\n"
-#~| "<br>Note: the compression level does not change the quality of the "
-#~| "result.</p>"
-#~ msgid ""
-#~ "<p>Adjust the compression time. Better compression takes longer.\n"
-#~ "                <br>Note: the compression level does not change the "
-#~ "quality of the result.</p>"
-#~ msgstr ""
-#~ "<p>Προσαρμόστε το χρόνο συμπίεσης. Καλύτερη συμπίεση χρειάζεται "
-#~ "περισσότερο χρόνο.\n"
-#~ "<br>Σημείωση: το επίπεδο συμπίεσης δεν αλλάζει την ποιότητα του "
-#~ "αποτελέσματος.</p>"
-
-#, fuzzy
-#~| msgid ""
-#~| "<p>Adjust the compression time. Better compression takes longer.\n"
-#~| "<br>Note: the compression level does not change the quality of the "
-#~| "result.</p>"
-#~ msgid ""
-#~ "<p>Adjust the compression time. Better compression takes longer. "
-#~ "<br>Note: the compression level does not change the quality of the result."
-#~ "</p>"
-#~ msgstr ""
-#~ "<p>Προσαρμόστε το χρόνο συμπίεσης. Καλύτερη συμπίεση χρειάζεται "
-#~ "περισσότερο χρόνο.\n"
-#~ "<br>Σημείωση: το επίπεδο συμπίεσης δεν αλλάζει την ποιότητα του "
-#~ "αποτελέσματος.</p>"
 
 #, fuzzy
 #~ msgctxt "Error message when saving a .kra file"
@@ -63765,6 +63572,10 @@ msgstr "Εικόνες αναφοράς"
 #~ msgstr "Λειτουργία επιλογής"
 
 #, fuzzy
+#~ msgid "Select Behind Blending Mode"
+#~ msgstr "Λειτουργία ανάμειξης"
+
+#, fuzzy
 #~ msgid "Select Clear Blending Mode"
 #~ msgstr "Λειτουργία ανάμειξης"
 
@@ -64005,9 +63816,6 @@ msgstr "Εικόνες αναφοράς"
 
 #~ msgid "1 : 1"
 #~ msgstr "1 : 1"
-
-#~ msgid "Update preview"
-#~ msgstr "Ενημέρωση προεπισκόπησης"
 
 #~ msgid "Automatically update the preview whenever the filter settings change"
 #~ msgstr ""
@@ -64949,9 +64757,6 @@ msgstr "Εικόνες αναφοράς"
 #~ msgctxt "No border - has to fit in 48pixels"
 #~ msgid "None"
 #~ msgstr "Κανένα"
-
-#~ msgid "No Border"
-#~ msgstr "Κανένα περίγραμμα"
 
 #~ msgid "Create a new style inheriting the current style"
 #~ msgstr "Δημιουργία νέου στιλ που να κληρονομεί το τρέχον στιλ"
@@ -67353,11 +67158,6 @@ msgstr "Εικόνες αναφοράς"
 #~ msgid "Change Vector Data"
 #~ msgstr "Αλλαγή δεδομένων διανύσματος"
 
-#, fuzzy
-#~| msgid "Separate Image"
-#~ msgid "Replace Image"
-#~ msgstr "Διαχωρισμός εικόνας"
-
 #~ msgid "Vector image"
 #~ msgstr "Διανυσματική εικόνα"
 
@@ -67505,6 +67305,9 @@ msgstr "Εικόνες αναφοράς"
 #, fuzzy
 #~ msgid "Brush Radius:"
 #~ msgstr "Ακτίνα θολώματος:"
+
+#~ msgid "Opacity decrease"
+#~ msgstr "Μείωση αδιαφάνειας"
 
 #~ msgid "Saturation decrease"
 #~ msgstr "Μείωση κορεσμού"
@@ -71047,6 +70850,11 @@ msgstr "Εικόνες αναφοράς"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "s"
 #~ msgstr "s"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dynamics settings"
+#~ msgstr "Δυναμικό πινέλο"
 
 #, fuzzy
 #~| msgid "Fixed angle"
@@ -79163,6 +78971,11 @@ msgstr "Εικόνες αναφοράς"
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Activate previous layer"
 #~ msgstr "Ενεργοποίηση προηγούμενου στρώματος"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) action"
+#~ msgid "&Group Layer"
+#~ msgstr "Στρώμα &ομάδας"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"

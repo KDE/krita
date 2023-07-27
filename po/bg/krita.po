@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-25 00:43+0000\n"
-"PO-Revision-Date: 2022-12-09 17:44+0100\n"
+"POT-Creation-Date: 2023-07-27 02:25+0000\n"
+"PO-Revision-Date: 2022-07-21 20:17+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Poedit 3.0.1\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,1000,-1,-1,-1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -899,13 +899,13 @@ msgstr "VFX палитра"
 #, kde-format
 msgctxt "./krita/data/windowlayouts/Cockpit (laptop mode).kwl"
 msgid "Cockpit (laptop mode)"
-msgstr "Кокпит \"режим за  лаптоп\""
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/windowlayouts/Dual screen editing.kwl"
 msgid "Dual screen editing"
-msgstr "Редактиране на два екрана"
+msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -11303,21 +11303,21 @@ msgstr "Маска на филтър"
 #, kde-format
 msgctxt "action"
 msgid "Add &Colorize Mask"
-msgstr "Добавяне на маска за &оцветяване"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2574
 #, kde-format
 msgctxt "action"
 msgid "Add a new Colorize Mask"
-msgstr "Добавяне на нова маска за оцветяване"
+msgstr ""
 
 #. i18n: context: iconText @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2575
 #, kde-format
 msgctxt "action"
 msgid "Colorize Mask"
-msgstr "Маска за оцветяване"
+msgstr ""
 
 #. i18n: context: text @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2584
@@ -12805,7 +12805,7 @@ msgstr "&Помощ"
 msgid "File"
 msgstr "Файл"
 
-#: krita/krita5.xmlgui:419
+#: krita/krita5.xmlgui:420
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Четки и материали"
@@ -13869,10 +13869,12 @@ msgstr "Огледален изглед около курсора"
 #. i18n: context: iconText @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:752 krita/kritamenu.action:754
 #: krita/kritamenu.action:755
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Mirror View Around Cursor"
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr "Огледален изглед около платното"
+msgstr "Огледален изглед около курсора"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
@@ -15734,27 +15736,27 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Работно пространство"
 
-#: krita/main.cc:521
+#: krita/main.cc:527
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Фатална грешка"
 
-#: krita/main.cc:522
+#: krita/main.cc:528
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:632 libs/ui/KisApplication.cpp:409
-#: libs/ui/KisApplication.cpp:680
+#: krita/main.cc:646 libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Предупреждение"
 
-#: krita/main.cc:633
+#: krita/main.cc:647
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15762,12 +15764,12 @@ msgid ""
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
 msgstr ""
 
-#: krita/main.cc:655 krita/main.cc:660
+#: krita/main.cc:669 krita/main.cc:674
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr ""
 
-#: krita/main.cc:656
+#: krita/main.cc:670
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15775,7 +15777,7 @@ msgid ""
 "installed."
 msgstr ""
 
-#: krita/main.cc:661
+#: krita/main.cc:675
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16215,25 +16217,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3744
+#: libs/flake/text/KoSvgTextShape.cpp:3751
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3746
-#: libs/flake/text/KoSvgTextShape.cpp:3754
+#: libs/flake/text/KoSvgTextShape.cpp:3753
+#: libs/flake/text/KoSvgTextShape.cpp:3761
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Форма на SVG Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3752
+#: libs/flake/text/KoSvgTextShape.cpp:3759
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3766
-#: libs/flake/text/KoSvgTextShape.cpp:3781
+#: libs/flake/text/KoSvgTextShape.cpp:3773
+#: libs/flake/text/KoSvgTextShape.cpp:3788
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16983,7 +16985,7 @@ msgstr ""
 msgid "Selection Mask"
 msgstr "Маска на селекция"
 
-#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2554
+#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2577
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -17081,7 +17083,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr ""
 
-#: libs/image/kis_image.cc:2486
+#: libs/image/kis_image.cc:2487
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Отрязване на селекция"
@@ -17212,11 +17214,9 @@ msgstr ""
 #: libs/image/kis_layer_properties_icons.cpp:31
 #, kde-format
 msgid "Show Coloring"
-msgstr "Показване на оцветяването"
+msgstr ""
 
-#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
 #: libs/image/kis_layer_properties_icons.cpp:32
-#: libs/ui/forms/KisWelcomePage.ui:1572
 #, kde-format
 msgid "Open File"
 msgstr "Отваряне на файл"
@@ -17294,8 +17294,8 @@ msgid "Processing"
 msgstr ""
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1420
-#: libs/ui/KisMainWindow.cpp:1700 libs/ui/KisMainWindow.cpp:1713
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1750 libs/ui/KisMainWindow.cpp:1763
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -17589,22 +17589,22 @@ msgstr ""
 #: libs/image/lazybrush/kis_colorize_mask.cpp:943
 msgctxt "(qtundo-format)"
 msgid "Change Key Stroke Color"
-msgstr "Промяна на цвета на ключов щрих"
+msgstr ""
 
 #: libs/image/lazybrush/kis_colorize_mask.cpp:968
 msgctxt "(qtundo-format)"
 msgid "Remove Key Stroke"
-msgstr "Премахване на ключов срих"
+msgstr ""
 
 #: libs/image/lazybrush/kis_colorize_stroke_strategy.cpp:74
 msgctxt "(qtundo-format)"
 msgid "Colorize"
-msgstr "Оцветяване"
+msgstr ""
 
 #: libs/image/lazybrush/kis_colorize_stroke_strategy.cpp:74
 msgctxt "(qtundo-format)"
 msgid "Prefilter Colorize Mask"
-msgstr "Предварителен филтър на маска за оцветяване"
+msgstr ""
 
 #: libs/impex/AnimationCheck.h:25
 #, kde-format
@@ -17723,7 +17723,7 @@ msgstr ""
 #: libs/impex/KisExportCheckRegistry.cpp:120 libs/ui/kis_mask_manager.cc:274
 #, kde-format
 msgid "Colorize Mask"
-msgstr "Маска за оцветяване"
+msgstr ""
 
 #: libs/impex/KisExportCheckRegistry.cpp:122
 #: libs/ui/dialogs/kis_dlg_filter.cpp:218 libs/ui/kis_mask_manager.cc:223
@@ -17740,7 +17740,7 @@ msgstr "Маска за трансформиране"
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
-#: plugins/impex/tiff/kis_tiff_import.cc:562
+#: plugins/impex/tiff/kis_tiff_import.cc:566
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
 msgid "Transparency Mask"
@@ -17894,7 +17894,7 @@ msgstr ""
 #, kde-format
 msgctxt "description of a file type"
 msgid "OpenColorIO Configuration"
-msgstr "Конфигурация на OpenColorIO"
+msgstr ""
 
 #: libs/koplugin/KisMimeDatabase.cpp:249
 #, kde-format
@@ -18012,13 +18012,12 @@ msgstr ""
 
 #: libs/koplugin/KisMimeDatabase.cpp:349
 #, fuzzy, kde-format
-#| msgid "Document"
 msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Документ"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2064
-#: libs/ui/KisMainWindow.cpp:2147
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2121
+#: libs/ui/KisMainWindow.cpp:2204
 #, kde-format
 msgid "Import frames"
 msgstr "Импортиране на кадри"
@@ -19141,13 +19140,13 @@ msgstr "Увеличаване на насищане на HSL"
 #, kde-format
 msgctxt "Blending mode - Decrease Lightness"
 msgid "Decrease Lightness"
-msgstr "Намаляване на светлост"
+msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:169
 #, kde-format
 msgctxt "Blending mode - Increase Lightness"
 msgid "Increase Lightness"
-msgstr "Увеличаване на светлост"
+msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:171
 #, kde-format
@@ -19266,7 +19265,7 @@ msgstr "Навън"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:498 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:504 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19302,9 +19301,9 @@ msgstr ""
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19320,24 +19319,24 @@ msgstr ""
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:979
-#: libs/ui/KisApplication.cpp:982 libs/ui/KisApplication.cpp:998
-#: libs/ui/KisApplication.cpp:1030 libs/ui/KisApplication.cpp:1044
-#: libs/ui/KisApplication.cpp:1072 libs/ui/KisDocument.cpp:946
-#: libs/ui/KisDocument.cpp:953 libs/ui/KisDocument.cpp:973
-#: libs/ui/KisDocument.cpp:1881 libs/ui/KisDocument.cpp:1925
-#: libs/ui/KisDocument.cpp:1931 libs/ui/KisDocument.cpp:1944
-#: libs/ui/KisDocument.cpp:1948 libs/ui/KisMainWindow.cpp:979
-#: libs/ui/KisMainWindow.cpp:1095 libs/ui/KisMainWindow.cpp:1221
-#: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1924
-#: libs/ui/KisMainWindow.cpp:1933 libs/ui/KisMainWindow.cpp:2072
-#: libs/ui/KisMainWindow.cpp:2133 libs/ui/KisMainWindow.cpp:2154
-#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:588
-#: libs/ui/KisPart.cpp:591 libs/ui/KisReferenceImage.cpp:175
-#: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
-#: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:985
+#: libs/ui/KisApplication.cpp:988 libs/ui/KisApplication.cpp:1004
+#: libs/ui/KisApplication.cpp:1036 libs/ui/KisApplication.cpp:1050
+#: libs/ui/KisApplication.cpp:1078 libs/ui/KisDocument.cpp:969
+#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
+#: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
+#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:981
+#: libs/ui/KisMainWindow.cpp:1097 libs/ui/KisMainWindow.cpp:1223
+#: libs/ui/KisMainWindow.cpp:1320 libs/ui/KisMainWindow.cpp:1981
+#: libs/ui/KisMainWindow.cpp:1990 libs/ui/KisMainWindow.cpp:2129
+#: libs/ui/KisMainWindow.cpp:2190 libs/ui/KisMainWindow.cpp:2211
+#: libs/ui/KisMainWindow.cpp:2826 libs/ui/KisPart.cpp:578
+#: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
+#: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
-#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:738
 #: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -19840,8 +19839,8 @@ msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Изтриване на ресурс"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:334
-#: libs/ui/KisMainWindow.cpp:2569
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:335
+#: libs/ui/KisMainWindow.cpp:2626
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20283,7 +20282,7 @@ msgstr ""
 "Неуспешно изграждане кадрите на анимацията! Изходните файлове са непълни."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2174
+#: libs/ui/KisMainWindow.cpp:2231
 #, kde-format
 msgid "Render Animation"
 msgstr "Изграждане на анимация"
@@ -20327,18 +20326,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "N/A"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:392
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:472
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -20346,27 +20345,27 @@ msgid ""
 "will be reduced to 50 frames per second"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:479
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgid "Warning(s):"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr ""
@@ -20586,7 +20585,7 @@ msgstr ""
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
 #, kde-format
 msgid "No video stream could be found!"
-msgstr ""
+msgstr "Не може да бъде намерен видео поток!"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #, kde-format
@@ -20598,7 +20597,7 @@ msgstr ""
 msgid "FFMpeg Crashed"
 msgstr ""
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:614
+#: libs/ui/animation/KisFFMpegWrapper.cpp:620
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -21232,7 +21231,7 @@ msgstr ""
 #, kde-format
 msgctxt "WEBP codec name"
 msgid "WEBP"
-msgstr "WEBP"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:308
 #, kde-format
@@ -21778,16 +21777,16 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
 #, fuzzy, kde-format
-#| msgid "Version:"
+#| msgid "Save Location:"
 msgid "FFmpeg location:"
-msgstr "Версия:"
+msgstr "Място за запис:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
 #, fuzzy, kde-format
-#| msgid "Version:"
+#| msgid "FFmpeg:"
 msgid "FFmpeg version:"
-msgstr "Версия:"
+msgstr "FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -21860,7 +21859,7 @@ msgstr ""
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:107
 #, kde-format
 msgid "Up"
-msgstr "Нагоре"
+msgstr "Преместване нагоре"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDown)
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:114
@@ -22297,7 +22296,7 @@ msgid "Numerical"
 msgstr "Цифрено"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, kde-format
 msgid "Import Images"
 msgstr "Импортиране на изображение"
@@ -22343,7 +22342,7 @@ msgstr "Настройки на слой"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -22443,7 +22442,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2580
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2637
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -23135,7 +23134,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "Saturation:"
 msgid "Max group duration:"
-msgstr "Насищане:"
+msgstr "Наситеност:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -23423,38 +23422,115 @@ msgstr "Зареждане на програмата винаги с този ш
 msgid "Always use this template"
 msgstr "Използване на този шаблон винаги"
 
+#. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
+#: libs/ui/forms/KisWelcomePage.ui:48
+#, fuzzy, kde-format
+#| msgid "Support Krita"
+msgid "Support Krita!"
+msgstr "Подкрепете Krita"
+
+#. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
+#: libs/ui/forms/KisWelcomePage.ui:79
+#, fuzzy, kde-format
+#| msgid "Open Images"
+msgid "Recent Images"
+msgstr "Отваряне на изображения"
+
+#. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
+#: libs/ui/forms/KisWelcomePage.ui:103
+#, kde-format
+msgctxt "Welcome Screen Recent Document List's Clear link Label"
+msgid "Clear"
+msgstr "Изчистване"
+
+#. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
+#: libs/ui/forms/KisWelcomePage.ui:154
+#, kde-format
+msgid ""
+"You don't seem to have any\n"
+"recently opened documents"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:322
+#, kde-format
+msgid "Community"
+msgstr "Общност"
+
+#. i18n: ectx: property (text), widget (QLabel, manualLink)
+#: libs/ui/forms/KisWelcomePage.ui:391 libs/ui/KisWelcomePageWidget.cpp:391
+#, kde-format
+msgid "User Manual"
+msgstr "Ръководство за потребителя"
+
+#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
+#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:394
+#, kde-format
+msgid "Support Krita"
+msgstr "Подкрепете Krita"
+
+#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
+#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:403
+#, kde-format
+msgid "Powered by KDE"
+msgstr "Powered by KDE"
+
+#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
+#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:400
+#, kde-format
+msgid "Source Code"
+msgstr "Изходен код"
+
+#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
+#: libs/ui/forms/KisWelcomePage.ui:748 libs/ui/KisWelcomePageWidget.cpp:388
+#, kde-format
+msgid "Getting Started"
+msgstr "Първи стъпки"
+
+#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
+#: libs/ui/forms/KisWelcomePage.ui:835 libs/ui/KisWelcomePageWidget.cpp:385
+#, kde-format
+msgid "User Community"
+msgstr "Потребителска общност"
+
+#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
+#: libs/ui/forms/KisWelcomePage.ui:922 libs/ui/KisWelcomePageWidget.cpp:397
+#, kde-format
+msgid "Krita Website"
+msgstr "Интернет страница на Krita"
+
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:168
+#: libs/ui/forms/KisWelcomePage.ui:1066
 #, kde-format
 msgid "News"
 msgstr "Новини"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:191
+#: libs/ui/forms/KisWelcomePage.ui:1089
 #, kde-format
 msgid "News options"
 msgstr "Настройки на Новини"
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:314
+#: libs/ui/forms/KisWelcomePage.ui:1212
 #, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:365
+#: libs/ui/forms/KisWelcomePage.ui:1263
 #, kde-format
 msgid "Update now!"
 msgstr "Обновяване сега!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:372
+#: libs/ui/forms/KisWelcomePage.ui:1270
 #, kde-format
 msgid "Show details"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:455 libs/ui/KisWelcomePageWidget.cpp:398
+#. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
+#: libs/ui/forms/KisWelcomePage.ui:1353 libs/ui/KisWelcomePageWidget.cpp:405
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -23465,101 +23541,38 @@ msgstr ""
 "decoration: underline;\">активирате новините</a> от krita.org на различни "
 "езици с менюто по-горе"
 
-#. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:562
-#, kde-format
-msgid "Community"
-msgstr "Общност"
-
-#. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:647 libs/ui/KisWelcomePageWidget.cpp:384
-#, kde-format
-msgid "User Manual"
-msgstr "Ръководство за потребителя"
-
-#. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:737 libs/ui/KisWelcomePageWidget.cpp:381
-#, kde-format
-msgid "Getting Started"
-msgstr "Първи стъпки"
-
-#. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:824 libs/ui/KisWelcomePageWidget.cpp:378
-#, kde-format
-msgid "User Community"
-msgstr "Потребителска общност"
-
-#. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:911 libs/ui/KisWelcomePageWidget.cpp:390
-#, kde-format
-msgid "Krita Website"
-msgstr "Интернет страница на Krita"
-
-#. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:1001 libs/ui/KisWelcomePageWidget.cpp:393
-#, kde-format
-msgid "Source Code"
-msgstr "Изходен код"
-
-#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:1088 libs/ui/KisWelcomePageWidget.cpp:387
-#, kde-format
-msgid "Support Krita"
-msgstr "Подкрепете Krita"
-
-#. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:1178 libs/ui/KisWelcomePageWidget.cpp:396
-#, kde-format
-msgid "Powered by KDE"
-msgstr "Powered by KDE"
-
-#. i18n: ectx: property (text), widget (QLabel, dragImageHereLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1261
-#, kde-format
-msgid "Drag an image into the window to open"
-msgstr "Завлечете изображение в прозореца, за да го отворите"
-
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1361
+#: libs/ui/forms/KisWelcomePage.ui:1417
 #, kde-format
 msgid "Start"
 msgstr "Начало"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1428 libs/ui/KisWelcomePageWidget.cpp:625
+#: libs/ui/forms/KisWelcomePage.ui:1484 libs/ui/KisWelcomePageWidget.cpp:632
 #, kde-format
 msgid "DEV BUILD"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, newFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:1504
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
+#: libs/ui/forms/KisWelcomePage.ui:1560 libs/ui/forms/wdgimageproperties.ui:18
+#: libs/ui/forms/wdgnewimage.ui:18
+#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
 #, kde-format
-msgid "New File"
-msgstr "Нов файл"
+msgid "New Image"
+msgstr "Ново изображение"
 
-#. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1655
-#, kde-format
-msgid "Recent Documents"
-msgstr "Скорошни документи"
-
-#. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:1713
-#, kde-format
-msgctxt "Welcome Screen Recent Document List's Clear link Label"
-msgid "Clear"
-msgstr "Изчистване"
-
-#. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:1766
-#, kde-format
-msgid ""
-"You don't seem to have any\n"
-"recently opened documents"
-msgstr ""
+#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
+#: libs/ui/forms/KisWelcomePage.ui:1628
+#, fuzzy, kde-format
+#| msgid "Open Images"
+msgid "Open Image"
+msgstr "Отваряне на изображения"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1874
+#: libs/ui/forms/KisWelcomePage.ui:1712
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -23794,8 +23807,7 @@ msgstr "За програмата"
 
 #. i18n: ectx: attribute (title), widget (QWidget, authorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:35
-#, fuzzy, kde-format
-#| msgid "Authors"
+#, kde-format
 msgctxt "Heading for the list of Krita authors/developers"
 msgid "Authors"
 msgstr "Автори"
@@ -24283,8 +24295,8 @@ msgstr ""
 "колориметрично. Бялата точка се променя, за да се получи резултат в\n"
 "неутрално сиво.\n"
 "Ако в профила има подходяща таблица, \n"
-"тогава тя се използва. В противен случай се преминава към\n"
-"намерение на възприемане."
+"тогава тя се използва. В противен случай се преминава към възприемане\n"
+"намерение."
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
 #: libs/ui/forms/wdgconvertcolorspace.ui:86
@@ -24399,10 +24411,9 @@ msgstr "&Добавяне на предварително зададени ша�
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdgdisplaysettings.ui:46
-#, fuzzy, kde-format
-#| msgid "Channel Operations"
+#, kde-format
 msgid "Canvas Acceleration"
-msgstr "Действия с канали"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpOpenGL)
 #: libs/ui/forms/wdgdisplaysettings.ui:58
@@ -24427,32 +24438,27 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:115
-#, fuzzy, kde-format
-#| msgid "Bilinear"
+#, kde-format
 msgid "Bilinear Filtering"
-msgstr "Двулинейно"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:120
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Normalize Filter"
+#, kde-format
 msgid "Trilinear Filtering"
-msgstr "Филтър за нормализиране"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:125
-#, fuzzy, kde-format
-#| msgid "High Pass Filter"
+#, kde-format
 msgid "High Quality Filtering"
-msgstr "Филтър на високи честоти"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:139
-#, fuzzy, kde-format
-#| msgid "Blending Mode:"
+#, kde-format
 msgid "Scaling Mode:"
-msgstr "Режим на смесване:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
@@ -24462,17 +24468,13 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdgdisplaysettings.ui:172
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current Renderer:"
-msgstr "Текущ слой"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLargePixmapCache)
 #: libs/ui/forms/wdgdisplaysettings.ui:201
 #, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Background color to replace transparent pixels with."
-#| "</p></body></html>"
 msgid ""
 "<html><head/><body><p>This should be enabled if you see any artifacts while "
 "using assistants.</p></body></html>"
@@ -24488,30 +24490,27 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
 #: libs/ui/forms/wdgdisplaysettings.ui:218
-#, fuzzy, kde-format
-#| msgid "Settings"
+#, kde-format
 msgid "HDR Settings"
-msgstr "Настройки"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentDisplayFormat)
 #: libs/ui/forms/wdgdisplaysettings.ui:224
-#, fuzzy, kde-format
-#| msgid "Current layer"
+#, kde-format
 msgid "Current Display Format"
-msgstr "Текущ слой"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/forms/wdgdisplaysettings.ui:231
-#, fuzzy, kde-format
-#| msgid "Display Name"
+#, kde-format
 msgid "Display Format:"
-msgstr "Показвано име"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRootSurfaceFormat)
 #: libs/ui/forms/wdgdisplaysettings.ui:238
 #, kde-format
 msgid "Current Surface Value"
-msgstr ""
+msgstr "Текуща яркост на повърхност"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdgdisplaysettings.ui:245
@@ -24534,10 +24533,9 @@ msgstr "Декорация:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgdisplaysettings.ui:289
-#, fuzzy, kde-format
-#| msgid "Transparency Mask"
+#, kde-format
 msgid "Transparency Checkerboard:"
-msgstr "Маска за прозрачност"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:295
@@ -24569,19 +24567,15 @@ msgstr "Размер:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCanvasBorderColor)
 #: libs/ui/forms/wdgdisplaysettings.ui:352
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Choose Foreground Color"
+#, kde-format
 msgid "Canvas Border Color:"
-msgstr "Избиране на цвят на преден план"
+msgstr "Цвят на рамка на платното"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:372
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Pixel Grid"
+#, kde-format
 msgid "Pixel Grid:"
-msgstr "Показване на пикселна мрежа"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -24606,24 +24600,22 @@ msgstr "Цвят:"
 
 #. i18n: ectx: property (text), widget (QLabel, gridThresholdLabel)
 #: libs/ui/forms/wdgdisplaysettings.ui:395
-#, fuzzy, kde-format
-#| msgid "Start at: "
+#, kde-format
 msgid "Start showing at:"
-msgstr "Започване от:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:415
-#, fuzzy, kde-format
-#| msgid "Selection mode:"
+#, kde-format
 msgid "Selection Overlay:"
-msgstr "Режим на маркиране:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
 #, fuzzy, kde-format
-#| msgid "Selection mode:"
+#| msgid "Opacity:"
 msgid "Outline opacity:"
-msgstr "Режим на маркиране:"
+msgstr "Непрозрачност:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:440
@@ -24648,30 +24640,27 @@ msgstr "Разни"
 
 #. i18n: ectx: property (text), widget (QCheckBox, hideScrollbars)
 #: libs/ui/forms/wdgdisplaysettings.ui:500
-#, fuzzy, kde-format
-#| msgid "Scrollbars"
+#, kde-format
 msgid "Hide Canvas Scrollbars"
-msgstr "Плъзгачи"
+msgstr "Скриване на лентите за превъртане на платното"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCurveAntialiasing)
 #: libs/ui/forms/wdgdisplaysettings.ui:510
-#, fuzzy, kde-format
-#| msgid "Anti-aliasing"
+#, kde-format
 msgid "Enable curve anti-aliasing"
-msgstr "Изглаждане"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHidePopups)
 #: libs/ui/forms/wdgdisplaysettings.ui:517
 #, kde-format
 msgid "Hide layer thumbnail popup"
-msgstr ""
+msgstr "Скриване  на изскачащия прозорец на миниатюри на слой"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannelsAsColor)
 #: libs/ui/forms/wdgdisplaysettings.ui:524
-#, fuzzy, kde-format
-#| msgid "Choose channels to blend"
+#, kde-format
 msgid "Color channels in color"
-msgstr "Избиране на канали за смесване"
+msgstr "Цветни канали в цветове"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSelectionOutlineAntialiasing)
 #: libs/ui/forms/wdgdisplaysettings.ui:534
@@ -24747,9 +24736,10 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
 #, fuzzy, kde-format
-#| msgid "Blending Mode:"
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Filter"
 msgid "&Scaling Filter:"
-msgstr "Режим на смесване:"
+msgstr "Промяна на филтър"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -25543,13 +25533,13 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1459
 #, kde-format
 msgid "Add \"Merged\" to merged group layers"
-msgstr "Добавете \"Merged\" към слоевете на обединената група"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1466
 #, kde-format
 msgid "Add \"(pasted)\" to pasted layers"
-msgstr "Добавяне на \"(pasted)\" към слоевете, които са поставени"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1491
@@ -25686,15 +25676,6 @@ msgstr "Завъртване:"
 #, kde-format
 msgid "Scale:"
 msgstr "Мащаб:"
-
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:18
-#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
-#, kde-format
-msgid "New Image"
-msgstr "Ново изображение"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
@@ -26342,7 +26323,7 @@ msgstr "Текущи настройки на четка"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1076
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -27239,7 +27220,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:351
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:352
 #, kde-format
 msgid "Sessions"
 msgstr "Сесии"
@@ -28300,7 +28281,7 @@ msgstr "Жест на завъртване"
 #: libs/ui/input/kis_shortcut_configuration.cpp:477
 #, kde-format
 msgid "Smart Zoom Gesture"
-msgstr "Жест за интелигентно мащабиране "
+msgstr ""
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:480
 #, kde-format
@@ -28705,7 +28686,7 @@ msgstr "Избор на цвят на &преден план"
 msgid "&Open Background color selector"
 msgstr "Избор на цвят на &фон"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:347
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -28718,8 +28699,8 @@ msgstr "Шарки"
 msgid "Custom Pattern"
 msgstr "Потребителски шаблон"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:332
-#: libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
+#: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, kde-format
@@ -28927,7 +28908,7 @@ msgstr "Нова маска на филтър"
 #: libs/ui/kis_mask_manager.cc:274
 msgctxt "(qtundo-format)"
 msgid "Add Colorize Mask"
-msgstr "Добавяне на маска за оцветяване"
+msgstr ""
 
 #: libs/ui/kis_mask_manager.cc:286
 msgctxt "(qtundo-format)"
@@ -28950,9 +28931,10 @@ msgid "Mirror View Around Cursor"
 msgstr "Огледален изглед около курсора"
 
 #: libs/ui/kis_mirror_manager.cpp:48
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Mirror View Around Cursor"
 msgid "Mirror View Around Canvas"
-msgstr "Огледален изглед около платното"
+msgstr "Огледален изглед около курсора"
 
 #: libs/ui/kis_node_manager.cpp:453
 #, kde-format
@@ -29451,61 +29433,61 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Увеличаване на мащаба: %1 %"
 
-#: libs/ui/KisApplication.cpp:324
+#: libs/ui/KisApplication.cpp:325
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, kde-format
 msgid "Brush presets"
 msgstr "Настройки на четка"
 
-#: libs/ui/KisApplication.cpp:327 libs/ui/KisApplication.cpp:328
-#: libs/ui/KisApplication.cpp:329 libs/ui/KisApplication.cpp:330
+#: libs/ui/KisApplication.cpp:328 libs/ui/KisApplication.cpp:329
+#: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
 #, kde-format
 msgid "Brush tips"
 msgstr "Върхове за четка"
 
-#: libs/ui/KisApplication.cpp:335
+#: libs/ui/KisApplication.cpp:336
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
 #, kde-format
 msgid "Palettes"
 msgstr "Палитри"
 
-#: libs/ui/KisApplication.cpp:348 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
 msgid "Workspaces"
 msgstr "Работно пространство"
 
-#: libs/ui/KisApplication.cpp:349
+#: libs/ui/KisApplication.cpp:350
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:350 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr "Оформления на прозорци"
 
-#: libs/ui/KisApplication.cpp:352
+#: libs/ui/KisApplication.cpp:353
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
 #, kde-format
 msgid "Gamut masks"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:354
+#: libs/ui/KisApplication.cpp:355
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:359
+#: libs/ui/KisApplication.cpp:360
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Стилове на слой"
 
-#: libs/ui/KisApplication.cpp:372
+#: libs/ui/KisApplication.cpp:373
 #, kde-format
 msgid ""
 "%1\n"
@@ -29516,13 +29498,13 @@ msgstr ""
 "\n"
 "Krita ще се затвори сега."
 
-#: libs/ui/KisApplication.cpp:372 libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:373 libs/ui/KisApplication.cpp:379
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Фатална грешка"
 
-#: libs/ui/KisApplication.cpp:378
+#: libs/ui/KisApplication.cpp:379
 #, kde-format
 msgid ""
 "\n"
@@ -29533,7 +29515,7 @@ msgstr ""
 "\n"
 "Krita ще се затвори сега."
 
-#: libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:411
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -29541,68 +29523,68 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:427
+#: libs/ui/KisApplication.cpp:428
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Инициализиране  глобални параметри..."
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:459
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Добавяне на видове ресурси..."
 
-#: libs/ui/KisApplication.cpp:462
+#: libs/ui/KisApplication.cpp:463
 #, fuzzy, kde-format
 #| msgid "Loading Pages..."
 msgid "Loading plugins..."
 msgstr "Зареждане на страници..."
 
-#: libs/ui/KisApplication.cpp:468
+#: libs/ui/KisApplication.cpp:469
 #, fuzzy, kde-format
 #| msgid "Adding resource types..."
 msgid "Loading resources..."
 msgstr "Добавяне на видове ресурси..."
 
-#: libs/ui/KisApplication.cpp:477
+#: libs/ui/KisApplication.cpp:478
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Зареждане на основния прозорец..."
 
-#: libs/ui/KisApplication.cpp:509
+#: libs/ui/KisApplication.cpp:510
 #, fuzzy, kde-format
 #| msgid "Scanning..."
 msgid "Launching..."
 msgstr "Претърсване..."
 
-#: libs/ui/KisApplication.cpp:578
+#: libs/ui/KisApplication.cpp:579
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:634
+#: libs/ui/KisApplication.cpp:635
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Неуспешно изграждане кадрите на анимацията!"
 
-#: libs/ui/KisApplication.cpp:661 libs/ui/KisApplication.cpp:851
+#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:857
 #, kde-format
 msgid "File layer"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:669 libs/ui/KisApplication.cpp:674
-#: libs/ui/KisApplication.cpp:845 libs/ui/KisApplication.cpp:859
-#: libs/ui/KisApplication.cpp:864
+#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:851 libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:870
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Предупреждение"
 
-#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:866
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29615,7 +29597,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:681
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29623,32 +29605,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:846
+#: libs/ui/KisApplication.cpp:852
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Не може да се отвори файл %1"
 
-#: libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:871
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:980
+#: libs/ui/KisApplication.cpp:986
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Не е открит шаблон за: %1"
 
-#: libs/ui/KisApplication.cpp:983
+#: libs/ui/KisApplication.cpp:989
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Открити са много шаблони за: %1"
 
-#: libs/ui/KisApplication.cpp:999
+#: libs/ui/KisApplication.cpp:1005
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:1037
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29663,7 +29645,7 @@ msgstr ""
 "\n"
 "Рестартирайте Крита, за да влязат в сила промените."
 
-#: libs/ui/KisApplication.cpp:1045
+#: libs/ui/KisApplication.cpp:1051
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29671,7 +29653,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1073
+#: libs/ui/KisApplication.cpp:1079
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr ""
@@ -29798,47 +29780,47 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Клониране на документ"
 
-#: libs/ui/KisDocument.cpp:722
+#: libs/ui/KisDocument.cpp:733
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:760
+#: libs/ui/KisDocument.cpp:783
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:777
+#: libs/ui/KisDocument.cpp:800
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:799
+#: libs/ui/KisDocument.cpp:822
 #, kde-format
 msgid "Exporting Document..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:800
+#: libs/ui/KisDocument.cpp:823
 #, kde-format
 msgid "Saving Document..."
 msgstr "Запазване на документ..."
 
-#: libs/ui/KisDocument.cpp:810
+#: libs/ui/KisDocument.cpp:833
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:939
+#: libs/ui/KisDocument.cpp:962
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:954
+#: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -29848,7 +29830,7 @@ msgstr ""
 "Грешка при запис\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:976
+#: libs/ui/KisDocument.cpp:999
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -29856,84 +29838,84 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:982
+#: libs/ui/KisDocument.cpp:1005
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1022
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Запазването на %1 е завършено"
 
-#: libs/ui/KisDocument.cpp:1402
+#: libs/ui/KisDocument.cpp:1425
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Автоматичен запис... %1"
 
-#: libs/ui/KisDocument.cpp:1410
+#: libs/ui/KisDocument.cpp:1433
 #, kde-format
 msgid "Autosaving..."
 msgstr "Автоматичен запис..."
 
-#: libs/ui/KisDocument.cpp:1416
+#: libs/ui/KisDocument.cpp:1439
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1559
+#: libs/ui/KisDocument.cpp:1582
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1573
+#: libs/ui/KisDocument.cpp:1596
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1815
+#: libs/ui/KisDocument.cpp:1838
 #, kde-format
 msgid ""
 "Malformed Path\n"
 "%1"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1881
+#: libs/ui/KisDocument.cpp:1904
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Файл %1 не съществува."
 
-#: libs/ui/KisDocument.cpp:1910
+#: libs/ui/KisDocument.cpp:1933
 #, kde-format
 msgid "Opening document"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1926 libs/ui/KisDocument.cpp:1932
+#: libs/ui/KisDocument.cpp:1949 libs/ui/KisDocument.cpp:1955
 #, fuzzy, kde-format
 #| msgid "Could not load %1."
 msgid "Could not open %1."
 msgstr "Неуспешно зареждане на %1"
 
-#: libs/ui/KisDocument.cpp:1945 libs/ui/KisDocument.cpp:1949
+#: libs/ui/KisDocument.cpp:1968 libs/ui/KisDocument.cpp:1972
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2080
+#: libs/ui/KisDocument.cpp:2103
 #, kde-format
 msgid "Not Saved"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2561
+#: libs/ui/KisDocument.cpp:2584
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Запълване на фона"
 
-#: libs/ui/KisDocument.cpp:2613
+#: libs/ui/KisDocument.cpp:2636
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30294,10 +30276,10 @@ msgstr ""
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 #, fuzzy
-#| msgid "Duplicate layer or mask"
+#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "Дублиране на слой или маска"
+msgstr "Скриване  на изскачащия прозорец на миниатюри на слой"
 
 #: libs/ui/KisMainWindow.cpp:185
 #, kde-format
@@ -30329,44 +30311,44 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Работна &среда"
 
-#: libs/ui/KisMainWindow.cpp:585
+#: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Показване на лентата с инстр&ументи %1"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:589
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Скриване на лента с инструменти %1"
 
-#: libs/ui/KisMainWindow.cpp:1037
+#: libs/ui/KisMainWindow.cpp:1039
 #, kde-format
 msgid "Write Protected"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1043
 #, kde-format
 msgid "Recovered"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1071
+#: libs/ui/KisMainWindow.cpp:1073
 #, kde-format
 msgid "Save as %1"
 msgstr "Запазване като %1"
 
-#: libs/ui/KisMainWindow.cpp:1095
+#: libs/ui/KisMainWindow.cpp:1097
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Файлът %1 не съществува."
 
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1191
 #, kde-format
 msgid "Open Images"
 msgstr "Отваряне на изображения"
 
-#: libs/ui/KisMainWindow.cpp:1319
+#: libs/ui/KisMainWindow.cpp:1321
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30375,45 +30357,45 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, kde-format
 msgid "Exporting"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1377
 #, kde-format
 msgid "Saving As"
 msgstr "Запазване като."
 
-#: libs/ui/KisMainWindow.cpp:1679
+#: libs/ui/KisMainWindow.cpp:1729
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Създаване на нов документ"
 
-#: libs/ui/KisMainWindow.cpp:1703
+#: libs/ui/KisMainWindow.cpp:1753
 #, kde-format
 msgid "Custom Document"
 msgstr "Потребителски документ"
 
-#: libs/ui/KisMainWindow.cpp:1715
+#: libs/ui/KisMainWindow.cpp:1765
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Създаване от клипборда"
 
-#: libs/ui/KisMainWindow.cpp:1893
+#: libs/ui/KisMainWindow.cpp:1950
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Слоеве/Маски"
 
-#: libs/ui/KisMainWindow.cpp:1919
+#: libs/ui/KisMainWindow.cpp:1976
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Нямате активиран пакет с ресурси."
 
-#: libs/ui/KisMainWindow.cpp:1923
+#: libs/ui/KisMainWindow.cpp:1980
 #, kde-format
 msgid ""
 "\n"
@@ -30424,7 +30406,7 @@ msgstr ""
 "Няма инсталиран набор от четки. Моля, инсталирайте пакет със съответния "
 "набор преди да продължите.\n"
 
-#: libs/ui/KisMainWindow.cpp:1933
+#: libs/ui/KisMainWindow.cpp:1990
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -30435,70 +30417,66 @@ msgstr ""
 "\n"
 "Налични са само локални ресурси."
 
-#: libs/ui/KisMainWindow.cpp:2072 libs/ui/KisMainWindow.cpp:2154
+#: libs/ui/KisMainWindow.cpp:2129 libs/ui/KisMainWindow.cpp:2211
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
 "%1"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2133
+#: libs/ui/KisMainWindow.cpp:2190
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2560
+#: libs/ui/KisMainWindow.cpp:2617
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Импортиране на работна среда..."
 
-#: libs/ui/KisMainWindow.cpp:2575
+#: libs/ui/KisMainWindow.cpp:2632
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Нова работна среда..."
 
-#: libs/ui/KisMainWindow.cpp:2579
+#: libs/ui/KisMainWindow.cpp:2636
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Нова работна среда..."
 
-#: libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/KisMainWindow.cpp:2680
 #, fuzzy, kde-format
-#| msgctxt "@item:inmenu opened document, %1=index %2=document path"
-#| msgid "&%1 %2"
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2626
+#: libs/ui/KisMainWindow.cpp:2683
 #, fuzzy, kde-format
-#| msgctxt "@item:inmenu opened document, %1=index %2=document path"
-#| msgid "%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2792
+#: libs/ui/KisMainWindow.cpp:2849
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2808
+#: libs/ui/KisMainWindow.cpp:2865
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2917
+#: libs/ui/KisMainWindow.cpp:2974
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Теми"
 
-#: libs/ui/KisMainWindow.cpp:2975
+#: libs/ui/KisMainWindow.cpp:3032
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -30619,7 +30597,7 @@ msgstr "Цвят:"
 #: libs/widgets/kis_palette_view.cpp:118
 #, kde-format
 msgid "Spot color:"
-msgstr "Солиден цвят:"
+msgstr ""
 
 #: libs/ui/KisPaletteEditor.cpp:428 libs/widgets/kis_palette_view.cpp:114
 #, kde-format
@@ -30632,14 +30610,14 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr ""
 
-#: libs/ui/KisPart.cpp:588
+#: libs/ui/KisPart.cpp:578
 #, kde-format
 msgid ""
 "Could not create document from template\n"
 "%1"
 msgstr ""
 
-#: libs/ui/KisPart.cpp:591
+#: libs/ui/KisPart.cpp:581
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -30657,7 +30635,7 @@ msgstr ""
 msgid "Could not load %1."
 msgstr "Неуспешно зареждане на %1"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:39
+#: libs/ui/KisRemoteFileFetcher.cpp:41
 #, kde-format
 msgctxt "Fetching remote image"
 msgid ""
@@ -30665,19 +30643,19 @@ msgid ""
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:61
+#: libs/ui/KisRemoteFileFetcher.cpp:63
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:75
+#: libs/ui/KisRemoteFileFetcher.cpp:77
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:92
+#: libs/ui/KisRemoteFileFetcher.cpp:94
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."
@@ -30947,12 +30925,12 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Анонимен"
 
-#: libs/ui/KisWelcomePageWidget.cpp:148
+#: libs/ui/KisWelcomePageWidget.cpp:157
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr "Активиране на новини и проверка за нови версии"
 
-#: libs/ui/KisWelcomePageWidget.cpp:150
+#: libs/ui/KisWelcomePageWidget.cpp:159
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
@@ -30961,39 +30939,39 @@ msgstr ""
 "Показване на новини относно Krita: това изисква връзка с интернет за "
 "извличане на информацията от krita.org"
 
-#: libs/ui/KisWelcomePageWidget.cpp:153
+#: libs/ui/KisWelcomePageWidget.cpp:162
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, kde-format
 msgid "Language"
 msgstr "Език"
 
-#: libs/ui/KisWelcomePageWidget.cpp:154
+#: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid "English news is always up to date."
 msgstr "Английските новини са винаги актуални."
 
-#: libs/ui/KisWelcomePageWidget.cpp:420
+#: libs/ui/KisWelcomePageWidget.cpp:427
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:648
+#: libs/ui/KisWelcomePageWidget.cpp:655
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Забравяне на \"%1\"?"
 
-#: libs/ui/KisWelcomePageWidget.cpp:745
+#: libs/ui/KisWelcomePageWidget.cpp:757
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Налична е nова версия на  Krita."
 
-#: libs/ui/KisWelcomePageWidget.cpp:774
+#: libs/ui/KisWelcomePageWidget.cpp:786
 #, kde-format
 msgid "An error occurred during the update"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:780
+#: libs/ui/KisWelcomePageWidget.cpp:792
 #, kde-format
 msgid "Restart is required."
 msgstr ""
@@ -31971,12 +31949,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:654
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:656
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -31984,14 +31962,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1070
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1072
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -33085,11 +33063,11 @@ msgstr ""
 "лесно да надхвърлят цветовата гама на sRGB по отношение на синьото, зеленото "
 "и жълто-зеленото. Цветовете от интерполирани необработени файлове от "
 "фотоапарати също често надвишават цветовата гама sRGB. </p><p>Като много "
-"важно отклонение, използването на целево намерение на възприемане при "
-"конвертиране към sRGB не предава магически цветове извън гамата да се "
-"вместят в цветовата гама на sRGB! Стандартното цветово пространство sRGB "
-"(заедно с всички останали профили RGB, предоставени в моя пакет с профили) е "
-"матрица а матричните профили нямат целеви таблици.</p>"
+"важно отклонение, използването на целево възприемане на намеренията при "
+"конвертиране към sRGB не предава магически цветове извън гаматада се вместят "
+"в цветовата гама на sRGB! Стандартното цветово пространство sRGB (заедно с "
+"всички останали профили RGB, предоставени в моя пакет с профили) е матрица а "
+"матричните профили нямат целеви таблици.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:629
 #, kde-format
@@ -33405,7 +33383,7 @@ msgstr "Оттенък:"
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:62
 #, kde-format
 msgid "Saturation:"
-msgstr "Насищане:"
+msgstr "Наситеност:"
 
 #: libs/ui/widgets/kis_paintop_preset_icon_library.cpp:31
 #, kde-format
@@ -34403,7 +34381,7 @@ msgstr "Интензивност:"
 #: libs/widgets/KisSpinboxHSXSelector.cpp:83
 #, kde-format
 msgid "Luma:"
-msgstr "Осветеност:"
+msgstr ""
 
 #: libs/widgets/KisTagSelectionWidget.cpp:60
 #, kde-format
@@ -35337,12 +35315,12 @@ msgstr ""
 msgid "Toggle Preview"
 msgstr ""
 
-#: libs/widgetutils/KoFileDialog.cpp:243
+#: libs/widgetutils/KoFileDialog.cpp:260
 #, kde-format
 msgid "Save As:"
 msgstr "Запазване като:"
 
-#: libs/widgetutils/KoFileDialog.cpp:326
+#: libs/widgetutils/KoFileDialog.cpp:343
 #, kde-format
 msgid ""
 "The selected file name does not have a file extension that Krita "
@@ -35350,7 +35328,7 @@ msgid ""
 "Make sure the file name ends in '.%1' for example."
 msgstr ""
 
-#: libs/widgetutils/KoFileDialog.cpp:511
+#: libs/widgetutils/KoFileDialog.cpp:533
 #, kde-format
 msgid "All supported formats"
 msgstr "Всички поддържани формати"
@@ -37250,7 +37228,7 @@ msgid "Val:"
 msgstr "Val:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:127
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
 #, kde-format
 msgid "Onion skins menu"
 msgstr ""
@@ -37261,25 +37239,25 @@ msgid "Audio menu"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:180
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
 #, kde-format
 msgid "Animation settings menu"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:192
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
 #, kde-format
 msgid "Clip Start: "
 msgstr "Начало на клип:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
 #, kde-format
 msgid "Clip End: "
 msgstr "Край на клип:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
 #, kde-format
 msgid "Frame Rate: "
 msgstr ""
@@ -37304,37 +37282,37 @@ msgstr ""
 msgid "Reset All Channels"
 msgstr "Нулиране на всички канали"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:486
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:481
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:493
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:488
 #, kde-format
 msgid "Linear interpolation."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:500
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:495
 #, kde-format
 msgid "Bezier curve interpolation."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:507
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:502
 #, kde-format
 msgid "Sharp interpolation tangents."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:514
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:509
 #, kde-format
 msgid "Smooth interpolation tangents."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:521
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:516
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:528
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:523
 #, kde-format
 msgid "Zoom view to fit curve."
 msgstr ""
@@ -37375,31 +37353,25 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:290
 #, kde-format
 msgid "Animation Timeline"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "Animation"
-msgid "Animation audio menu"
-msgstr "Анимация"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
 #, fuzzy, kde-format
 #| msgid "&Import..."
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "И&мпортиране..."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu"
 #| msgid "Mute"
@@ -37407,7 +37379,7 @@ msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Изключване на звука"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu, slider"
 #| msgid "Volume:"
@@ -37415,32 +37387,38 @@ msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "Сила на звука:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#, fuzzy, kde-format
+#| msgid "Animation"
+msgid "Animation audio menu"
+msgstr "Анимация"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
 msgid "AutoKey Blank"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
 #, kde-format
 msgid "AutoKey Duplicate"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:509
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:522
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:517
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Ефективни FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:523
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:518
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Реални FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:519
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""
@@ -37902,14 +37880,16 @@ msgid "Select a Directory"
 msgstr "Избор на директория"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Export options:"
 msgid "Exporting Compositions..."
-msgstr ""
+msgstr "Настройки на изнасянето:"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Export options:"
 msgid "Exporting composition: %1..."
-msgstr ""
+msgstr "Настройки на изнасянето:"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
 #, kde-format
@@ -38271,12 +38251,10 @@ msgid "Detailed"
 msgstr "Подробен"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:394
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Layers Docker settings, slider"
-#| msgid "Subtitle Opacity"
+#, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "Прозрачност на субтитри"
+msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:412
 #, fuzzy, kde-format
@@ -38558,7 +38536,7 @@ msgstr "Избиране на конфигурация на OpenColorIO"
 #: plugins/dockers/lut/lutdocker_dock.cpp:518
 #, kde-format
 msgid "Luminance"
-msgstr "Осветеност"
+msgstr ""
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:519
 #, kde-format
@@ -38575,7 +38553,7 @@ msgstr "Без"
 #: plugins/dockers/lut/wdglut.ui:36
 #, kde-format
 msgid "Use OpenColorIO"
-msgstr "Използване на OpenColorIO"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblDisplayDevice)
 #: plugins/dockers/lut/wdglut.ui:93
@@ -38677,11 +38655,9 @@ msgid "Pin navigation controls"
 msgstr "Закачане на контролите за навигация"
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgid "Duplicate layer or mask"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Дублиране на слой или маска"
+msgstr ""
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -40114,9 +40090,9 @@ msgstr "Цвят на обновяване"
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateExternal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:421
 #, fuzzy, kde-format
-#| msgid "Choose channels to blend"
+#| msgid "Color channels in color"
 msgid "Color changes externally"
-msgstr "Избиране на канали за смесване"
+msgstr "Цветни канали в цветове"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateOnRightClick)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
@@ -43538,7 +43514,7 @@ msgstr "Светлост"
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:234
 #, kde-format
 msgid "Luma"
-msgstr "Осветеност"
+msgstr ""
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:231
 #: plugins/filters/halftone/KisHalftoneConfigWidget.cpp:36
@@ -43806,7 +43782,7 @@ msgstr "Висока към нормална карта"
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:21
 #, kde-format
 msgid "Height to Normal Map does not work on this colorspace."
-msgstr " Висока към нормална карта не функционира в това цветово пространство"
+msgstr ""
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:28
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:20
@@ -44357,7 +44333,7 @@ msgstr "Нива"
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:49
 #, kde-format
 msgid "Modify lightness only"
-msgstr "Промяна само на светлост"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAllChannelsMode)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:71
@@ -44894,7 +44870,7 @@ msgstr "Количество:"
 #: plugins/filters/unsharp/wdgunsharp.ui:88
 #, kde-format
 msgid "Lightness Only:"
-msgstr "Само светлост:"
+msgstr ""
 
 #: plugins/filters/wavefilter/wavefilter.cpp:97
 #, kde-format
@@ -47012,7 +46988,6 @@ msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:172
 #, fuzzy, kde-format
-#| msgid "Save as %1"
 msgctxt "Color space option"
 msgid "Save as is"
 msgstr "Запазване като %1"
@@ -47550,8 +47525,6 @@ msgid ""
 "Selection on layer %s couldn't be loaded. It will be replaced by an empty "
 "selection."
 msgstr ""
-"Селекцията на слой %s не може да бъде заредена. Тя ще бъде заменена с празна "
-"селекция."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:326
 #, kde-format
@@ -47566,7 +47539,7 @@ msgstr ""
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
-msgstr "Не може да се зареди \"id\" на маската за трансформация"
+msgstr ""
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
 #, kde-format
@@ -48559,7 +48532,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:slider"
 msgid "T(K):"
-msgstr "T(K):"
+msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:484
 #, kde-format
@@ -49126,7 +49099,7 @@ msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
 msgstr ""
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1040
+#: plugins/impex/tiff/kis_tiff_import.cc:1044
 #, kde-format
 msgctxt "TIFF errors"
 msgid ""
@@ -49135,11 +49108,25 @@ msgid ""
 "version of libjpeg-turbo and try again."
 msgstr ""
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1143
-#: plugins/impex/tiff/kis_tiff_import.cc:1326
+#: plugins/impex/tiff/kis_tiff_import.cc:1147
+#: plugins/impex/tiff/kis_tiff_import.cc:1330
 #, kde-format
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1577
+#, kde-format
+msgctxt "@title:window"
+msgid "TIFF image with PSD data"
+msgstr ""
+
+#: plugins/impex/tiff/kis_tiff_import.cc:1579
+#, kde-format
+msgctxt "the choice for the user on loading a TIFF file"
+msgid ""
+"The TIFF image contains valid PSD data embedded. Would you like to use PSD "
+"data instead of normal TIFF data?"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
@@ -51445,7 +51432,7 @@ msgstr ""
 #, kde-format
 msgctxt "Lightness Map blend mode for brush texture"
 msgid "Lightness Map"
-msgstr "Карта на светлост"
+msgstr ""
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:58
 #, kde-format
@@ -51791,7 +51778,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
 #, kde-format
 msgid "Lightness Map"
-msgstr "Карта на светлост"
+msgstr ""
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:33
 #, kde-format
@@ -52024,7 +52011,7 @@ msgstr "Надеждност"
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:126
 #, kde-format
 msgid "Lightness Strength"
-msgstr "Сила на светлост"
+msgstr ""
 
 #: plugins/paintops/libpaintop/KisTextureOptionData.cpp:62
 #, kde-format
@@ -52213,14 +52200,11 @@ msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:86
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Pixel"
 msgid "Snap To Pixel"
 msgstr "към пиксел"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:96
 #, fuzzy, kde-format
-#| msgid "Pressure"
 msgid "Pressure Gain"
 msgstr "Налягане"
 
@@ -52252,7 +52236,7 @@ msgstr ""
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:151
 #, kde-format
 msgid "Colorize"
-msgstr "Оцветяване"
+msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
 #, fuzzy, kde-format
@@ -52287,8 +52271,6 @@ msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:223
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Slope, Offset, Power Filter"
 msgid "Offset by Speed Filter"
 msgstr "Филтър за наклон, отместване, сила"
 
@@ -52369,9 +52351,9 @@ msgstr "Размазан наклон на блок"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
 #, fuzzy, kde-format
-#| msgid "Transparent"
+#| msgid "Transparency Mask"
 msgid "Smudge Transparency"
-msgstr "Прозрачен"
+msgstr "Маска за прозрачност"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
@@ -58155,10 +58137,10 @@ msgstr "Всички"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:851
 #, fuzzy, kde-format
-#| msgid "Spot color:"
+#| msgid "Update color"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
-msgstr "Солиден цвят:"
+msgstr "Цвят на обновяване"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
 #, fuzzy, kde-format
@@ -58228,12 +58210,12 @@ msgstr "Обграждане и запълване"
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.cpp:49
 msgctxt "(qtundo-format)"
 msgid "Colorize Mask Key Stroke"
-msgstr "Ключов стрих на маска за оцветяване"
+msgstr ""
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.h:84
 #, kde-format
 msgid "Colorize Mask Editing Tool"
-msgstr "Редактиране на маска за оцветяване"
+msgstr ""
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #, kde-format
@@ -58376,36 +58358,36 @@ msgstr "Изберете слой за рисуване, за да използ�
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:173
 msgctxt "(qtundo-format)"
 msgid "Smart Patch"
-msgstr "Ретуширане"
+msgstr ""
 
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
 #, kde-format
 msgid "Smart Patch Tool"
-msgstr "Ретуширане"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, Fast)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:27
 #, kde-format
 msgid "low/fast"
-msgstr "ниско/бързо"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, Accurate)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:50
 #, kde-format
 msgid "high/slow"
-msgstr "високо/бавно"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, Fast_2)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:98
 #, kde-format
 msgid "Accuracy:"
-msgstr "Точност:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, patchRadiusLabel)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:115
 #, kde-format
 msgid "Patch Radius:"
-msgstr "Радиус на път:"
+msgstr ""
 
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
@@ -59073,7 +59055,7 @@ msgstr "Маска за оцветяване"
 #, kde-format
 msgctxt "action"
 msgid "Smart Patch Tool"
-msgstr "Ретуширане"
+msgstr ""
 
 #. i18n: context: text @ Action (PanTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (PanTool), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59267,35 +59249,33 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Референтни изображения"
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "Наклоняване по Х"
+#~ msgid "&Canvas"
+#~ msgstr "&Платно"
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "Наклоняване по Y"
+#~ msgctxt "action"
+#~ msgid "&Reset zoom"
+#~ msgstr "&Възстановяване на мащаба"
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "Мащабиране"
+#~ msgctxt "action"
+#~ msgid "Reset zoom"
+#~ msgstr "Възстановяване на мащаба"
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "Възстановяване на преобразуванията"
-
-#, fuzzy
-#~| msgid ""
-#~| "<html><head/><body><p><span style=\" font-weight:600;\">Split a layer "
-#~| "according to color</span></p><p>Creates a new layer for every color in "
-#~| "the active layer.</p></body></html>"
 #~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
-#~ "Animated exports are <span style=\" font-weight:600;\">always</span> "
-#~ "flattened regardless of this setting.</p></body></html>"
+#~ "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on "
+#~ "another free program called FFmpeg to turn frame-by-frame animations into "
+#~ "video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
+#~ "i><br><br>            To learn more about setting up Krita for rendering "
+#~ "animations, <a href=\"https://docs.krita.org/en/reference_manual/"
+#~ "render_animation.html#setting-up-krita-for-exporting-animations\">please "
+#~ "visit this section of our User Manual.</a>"
 #~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Разделя слоевете "
-#~ "според цвета</span></p><p>Създава нов слой за всеки цвят в активния слой."
-#~ "</p></body></html>"
+#~ "<b>Krita не може да намери FFmpeg!</b><br>             <i>Krita зависи "
+#~ "от  FFmpeg, за да генерира анимация кадър по кадър във видео файл. (<a "
+#~ "href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
+#~ "i><br><br>            За да научите повече как да настроите Krita да "
+#~ "създава анимации, <a href=\"https://docs.krita.org/en/reference_manual/"
+#~ "render_animation.html#setting-up-krita-for-exporting-animations\">моля, "
+#~ "посетете тази глава в нашето ръководство за потребителя.</a>"
 
 #~ msgctxt "paleteuse dither option name"
 #~ msgid "none"
@@ -59305,24 +59285,8 @@ msgstr "Референтни изображения"
 #~ msgid "none"
 #~ msgstr "без"
 
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "&Филтър:"
-
-#~ msgctxt "floating on-canvas message"
-#~ msgid ""
-#~ "Cannot open audio: \"%1\"\n"
-#~ "Error: %2"
-#~ msgstr ""
-#~ "Не може да се отвори аудио файлът:  \"%1\"\n"
-#~ "Грешка: %2"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "Отваряне на аудио..."
-
 #~ msgid "Choose a video file"
-#~ msgstr "Изберете видео файл"
+#~ msgstr "Избиране на видео файл"
 
 #~ msgid ""
 #~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -59371,11 +59335,55 @@ msgstr "Референтни изображения"
 #~ msgid "&Video"
 #~ msgstr "&Видео"
 
-#, fuzzy
-#~| msgctxt "suffix for \"seconds\""
-#~| msgid " sec"
-#~ msgid " sec"
-#~ msgstr " сек"
+#~ msgctxt "floating on-canvas message"
+#~ msgid ""
+#~ "Cannot open audio: \"%1\"\n"
+#~ "Error: %2"
+#~ msgstr ""
+#~ "Не може да се отвори аудио файлът:  \"%1\"\n"
+#~ "Грешка: %2"
+
+#~ msgid "Drag an image into the window to open"
+#~ msgstr "Завлечете изображение в прозореца, за да го отворите"
+
+#~ msgid "New File"
+#~ msgstr "Нов файл"
+
+#~ msgid "Recent Documents"
+#~ msgstr "Скорошни документи"
+
+#~ msgid "&Description:"
+#~ msgstr "Опис&ание:"
+
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "&Filter:"
+#~ msgstr "&Филтър:"
+
+#~ msgid "Reset Zoom to 100%"
+#~ msgstr "Възстановяване на мащабирането до 100%"
+
+#~ msgid ""
+#~ "Could not open %2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Грешка при отваряне на %2\n"
+#~ "Причина: %1"
+
+#~ msgid "Fit Page"
+#~ msgstr "Напасване на страницата"
+
+#~ msgid "Colu&mns:"
+#~ msgstr "Ко&лони:"
+
+#~ msgid "&Rows:"
+#~ msgstr "&Редове:"
+
+#~ msgid "HSV Sliders to Show"
+#~ msgstr "Показване на плъзгачи на HSV"
+
+#~ msgctxt "@item:inmenu"
+#~ msgid "Open audio..."
+#~ msgstr "Отваряне на аудио..."
 
 #~ msgid "Start merging time"
 #~ msgstr "Начало на сливане"
@@ -59390,6 +59398,15 @@ msgstr "Референтни изображения"
 
 #~ msgid "Split Strokes"
 #~ msgstr "Разделяне на очертания"
+
+#~ msgid "Lossless compression"
+#~ msgstr "Компресия без загуби"
+
+#~ msgid "Information"
+#~ msgstr "Информация"
+
+#~ msgid "Flip vertically"
+#~ msgstr "Обръщане вертикално"
 
 #~ msgid "0 px"
 #~ msgstr "0 px"
@@ -59426,28 +59443,45 @@ msgstr "Референтни изображения"
 #~ msgid " s"
 #~ msgstr " s"
 
-#~ msgid ""
-#~ "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on "
-#~ "another free program called FFmpeg to turn frame-by-frame animations into "
-#~ "video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-#~ "i><br><br>            To learn more about setting up Krita for rendering "
-#~ "animations, <a href=\"https://docs.krita.org/en/reference_manual/"
-#~ "render_animation.html#setting-up-krita-for-exporting-animations\">please "
-#~ "visit this section of our User Manual.</a>"
-#~ msgstr ""
-#~ "<b>Krita не може да намери FFmpeg!</b><br>             <i>Krita зависи "
-#~ "от  FFmpeg, за да генерира анимация кадър по кадър във видео файл. (<a "
-#~ "href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-#~ "i><br><br>            За да научите повече как да настроите Krita да "
-#~ "създава анимации, <a href=\"https://docs.krita.org/en/reference_manual/"
-#~ "render_animation.html#setting-up-krita-for-exporting-animations\">моля, "
-#~ "посетете тази глава в нашето ръководство за потребителя.</a>"
+#~ msgid "Current selection"
+#~ msgstr "Текуща селекция"
 
-#~ msgid "Colu&mns:"
-#~ msgstr "Ко&лони:"
+#~ msgctxt "The 'what to fill' section label in fill tool options"
+#~ msgid "What to fill"
+#~ msgstr "Какво да се запълни"
 
-#~ msgid "&Rows:"
-#~ msgstr "&Редове:"
+#~ msgctxt "The 'fill with' section label in fill tool options"
+#~ msgid "Fill with"
+#~ msgstr "Запълване с"
 
-#~ msgid "HSV Sliders to Show"
-#~ msgstr "Показване на плъзгачи на HSV"
+#~ msgctxt "The 'multiple fill' section label in fill tool options"
+#~ msgid "Multiple fill"
+#~ msgstr "Множество запълвания"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "Наклоняване по Х"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "Наклоняване по Y"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "Мащабиране"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "Възстановяване на преобразуванията"
+
+#~ msgctxt "The 'what to fill' section label in enclose and fill tool options"
+#~ msgid "What to fill"
+#~ msgstr "Какво да се запълни"
+
+#~ msgctxt "The 'fill with' section label in enclose and fill tool options"
+#~ msgid "Fill with"
+#~ msgstr "Запълване с"
+
+#~ msgctxt "Region selection method in enclose and fill tool"
+#~ msgid "All regions except the transparent ones"
+#~ msgstr "Всички региони, с изключение на прозрачните"

@@ -152,8 +152,8 @@ QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
             // the shortened post text, excluding the "This post [...] appeared
             // first on [...]" text.
             QString text = doc.firstBlock().text();
-            if (text.length() > 92) {
-                text.truncate(90);
+            if (text.length() > 292) {
+                text.truncate(290);
                 text.append("...");
             }
             return QString("<b><a href=\"" + item.link + "\">" + item.title + "</a></b>"

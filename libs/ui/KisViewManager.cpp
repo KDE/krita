@@ -445,10 +445,15 @@ void KisViewManager::setCurrentView(KisView *view)
             KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
             const QString defaultPresetName = "b) Basic-5 Size Opacity";
 
-            KisConfig cfg(true);
-            QString lastPreset = cfg.readEntry("LastPreset", defaultPresetName);
+            QTabletEvent::TabletDevice dev = QTabletEvent::NoDevice;
+            QTabletEvent::PointerType ptr = QTabletEvent::Pen;
+            qint64 id = -1;
+            const KoInputDevice inputDevice(dev, ptr, id);
 
-            KisPaintOpPresetSP preset = rserver->resource("", "", lastPreset);
+            KisConfig cfg(true);
+            KisPaintOpPresetSP preset =
+                    rserver->resource("", "", cfg.readEntry<QString>(QString("LastPreset_%1").arg(inputDevice.uniqueTabletId()), defaultPresetName));
+
             if (!preset) {
                 preset = rserver->resource("", "", defaultPresetName);
             }

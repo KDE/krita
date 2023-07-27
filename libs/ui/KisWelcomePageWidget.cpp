@@ -808,8 +808,8 @@ Java_org_krita_android_JNIWrappers_donationSuccessful(JNIEnv* /*env*/,
                                                       jobject /*obj*/,
                                                       jint    /*n*/)
 {
-    KisWelcomePageWidget::donationLink->hide();
-    KisWelcomePageWidget::donationBannerImage->show();
+    // KisWelcomePageWidget::donationLink->hide();
+    // KisWelcomePageWidget::donationBannerImage->show();
 }
 #endif
 

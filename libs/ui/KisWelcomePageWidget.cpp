@@ -358,8 +358,9 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     showDropAreaIndicator(false);
 
     // add icons for new and open settings to make them stand out a bit more
-    openFileLink->setIconSize(QSize(30, 30));
-    newFileLink->setIconSize(QSize(30, 30));
+    openFileLink->setIconSize(QSize(48, 48));
+    newFileLink->setIconSize(QSize(48, 48));
+
     openFileLink->setIcon(KisIconUtils::loadIcon("document-open"));
     newFileLink->setIcon(KisIconUtils::loadIcon("document-new"));
 

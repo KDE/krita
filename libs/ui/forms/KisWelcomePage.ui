@@ -239,7 +239,7 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QPushButton" name="newFileLink">
+            <widget class="QToolButton" name="newFileLink">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>
@@ -260,10 +260,19 @@
              <property name="text">
               <string>New Image</string>
              </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
              <property name="checkable">
               <bool>false</bool>
              </property>
-             <property name="flat">
+             <property name="toolButtonStyle">
+              <enum>Qt::ToolButtonTextUnderIcon</enum>
+             </property>
+             <property name="autoRaise">
               <bool>true</bool>
              </property>
             </widget>
@@ -291,7 +300,7 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QPushButton" name="openFileLink">
+            <widget class="QToolButton" name="openFileLink">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>
@@ -312,10 +321,19 @@
              <property name="text">
               <string>Open Image</string>
              </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
              <property name="checkable">
               <bool>false</bool>
              </property>
-             <property name="flat">
+             <property name="toolButtonStyle">
+              <enum>Qt::ToolButtonTextUnderIcon</enum>
+             </property>
+             <property name="autoRaise">
               <bool>true</bool>
              </property>
             </widget>

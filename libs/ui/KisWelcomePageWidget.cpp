@@ -424,8 +424,8 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 #endif
 
 #ifdef Q_OS_ANDROID
-    donationLink->setStyleSheet(blendedStyle);
-    donationLink->setText(QString(i18n("Get your Krita Supporter Badge here!")));
+    // donationLink->setStyleSheet(blendedStyle);
+    // donationLink->setText(QString(i18n("Get your Krita Supporter Badge here!")));
 #endif
 }
 

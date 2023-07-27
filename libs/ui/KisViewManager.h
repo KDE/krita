@@ -11,6 +11,7 @@
 #include <QQueue>
 #include <QPointer>
 
+#include <KoInputDevice.h>
 #include <KoToolManager.h>
 
 #include <kritaui_export.h>
@@ -197,6 +198,31 @@ public:
 
     static void initializeResourceManager(KoCanvasResourceProvider *resourceManager);
 
+private:
+    struct TabletToolID {
+        TabletToolID(const KoInputDevice& dev) {
+            // Only the eraser is special, and we don't look at Cursor
+            pointer = QTabletEvent::Pen;
+            if (dev.pointer() == QTabletEvent::Eraser) {
+                pointer = QTabletEvent::Eraser;
+            }
+            uniqueTabletId = dev.uniqueTabletId();
+        }
+
+        bool operator == (const TabletToolID& id) const {
+            return pointer == id.pointer;
+        }
+
+        bool operator < (const TabletToolID& id) const {
+            return pointer < id.pointer;
+        }
+
+        QTabletEvent::PointerType  pointer;
+        qint64 uniqueTabletId;
+    };
+
+    TabletToolID     m_currTabletToolID {KoInputDevice::invalid()};
+
 public Q_SLOTS:
 
     void switchCanvasOnly(bool toggled);
@@ -256,6 +282,7 @@ private Q_SLOTS:
     void slotResetRotation();
     void slotResetDisplay();
     void slotToggleFullscreen();
+
 private:
     void createActions();
     void setupManagers();

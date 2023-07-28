@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-27 02:25+0000\n"
+"POT-Creation-Date: 2023-07-28 02:34+0000\n"
 "PO-Revision-Date: 2011-06-01 01:29-0400\n"
 "Last-Translator: Agron Selimaj <linuxmaster@verizon.net>\n"
 "Language-Team: Albanian <sq@li.org>\n"
@@ -15756,8 +15756,8 @@ msgid ""
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:646 libs/ui/KisApplication.cpp:410
-#: libs/ui/KisApplication.cpp:681
+#: krita/main.cc:646 libs/ui/KisApplication.cpp:412
+#: libs/ui/KisApplication.cpp:683
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -16263,26 +16263,26 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3751
+#: libs/flake/text/KoSvgTextShape.cpp:3748
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Teksti"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3753
-#: libs/flake/text/KoSvgTextShape.cpp:3761
+#: libs/flake/text/KoSvgTextShape.cpp:3750
+#: libs/flake/text/KoSvgTextShape.cpp:3758
 #, fuzzy, kde-format
 msgid "SVG Text Shape"
 msgstr "Teksti"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3759
+#: libs/flake/text/KoSvgTextShape.cpp:3756
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "Teksti:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3773
-#: libs/flake/text/KoSvgTextShape.cpp:3788
+#: libs/flake/text/KoSvgTextShape.cpp:3770
+#: libs/flake/text/KoSvgTextShape.cpp:3785
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -19433,10 +19433,10 @@ msgstr "Burimi"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:985
-#: libs/ui/KisApplication.cpp:988 libs/ui/KisApplication.cpp:1004
-#: libs/ui/KisApplication.cpp:1036 libs/ui/KisApplication.cpp:1050
-#: libs/ui/KisApplication.cpp:1078 libs/ui/KisDocument.cpp:969
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:1007
+#: libs/ui/KisApplication.cpp:1010 libs/ui/KisApplication.cpp:1026
+#: libs/ui/KisApplication.cpp:1058 libs/ui/KisApplication.cpp:1072
+#: libs/ui/KisApplication.cpp:1100 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
 #: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
@@ -19450,7 +19450,7 @@ msgstr "Burimi"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
-#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:738
+#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:739
 #: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -23455,113 +23455,153 @@ msgid "Always use this template"
 msgstr "Zgjedhës i ngjyrës"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
-#: libs/ui/forms/KisWelcomePage.ui:48
+#: libs/ui/forms/KisWelcomePage.ui:60
 #, fuzzy, kde-format
 msgid "Support Krita!"
 msgstr "..."
 
-#. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:79
+#. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
+#: libs/ui/forms/KisWelcomePage.ui:140
 #, fuzzy, kde-format
-msgid "Recent Images"
+msgid "Start"
+msgstr "Yll"
+
+#. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
+#: libs/ui/forms/KisWelcomePage.ui:207 libs/ui/KisWelcomePageWidget.cpp:633
+#, kde-format
+msgid "DEV BUILD"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, newFileLink)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
+#: libs/ui/forms/KisWelcomePage.ui:261 libs/ui/forms/wdgimageproperties.ui:18
+#: libs/ui/forms/wdgnewimage.ui:18
+#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
+#, fuzzy, kde-format
+msgid "New Image"
 msgstr "Imazhi"
 
-#. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:103
+#. i18n: ectx: property (text), widget (QLabel, newFileLinkShortcut)
+#. i18n: ectx: property (text), widget (QLabel, openFileShortcut)
+#: libs/ui/forms/KisWelcomePage.ui:294 libs/ui/forms/KisWelcomePage.ui:355
+#: plugins/color/lcms2engine/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:22
+#: plugins/color/lcms2engine/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:27
+#: plugins/color/lcms2engine/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:22
+#: plugins/color/lcms2engine/colorspaces/xyz_u8/XyzU8ColorSpace.cpp:22
 #, fuzzy, kde-format
-msgctxt "Welcome Screen Recent Document List's Clear link Label"
-msgid "Clear"
-msgstr "Filtri:"
+msgid "X"
+msgstr "Stili:"
 
-#. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:154
+#. i18n: ectx: property (text), widget (QToolButton, openFileLink)
+#: libs/ui/forms/KisWelcomePage.ui:322
 #, fuzzy, kde-format
-msgid ""
-"You don't seem to have any\n"
-"recently opened documents"
-msgstr "Përzgjedhje"
+msgid "Open Image"
+msgstr "Imazhi"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:322
+#: libs/ui/forms/KisWelcomePage.ui:394
 #, fuzzy, kde-format
 msgid "Community"
 msgstr "Shtresat"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:391 libs/ui/KisWelcomePageWidget.cpp:391
+#: libs/ui/forms/KisWelcomePage.ui:463 libs/ui/KisWelcomePageWidget.cpp:392
 #, kde-format
 msgid "User Manual"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:394
+#: libs/ui/forms/KisWelcomePage.ui:553 libs/ui/KisWelcomePageWidget.cpp:395
 #, kde-format
 msgid "Support Krita"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:403
+#: libs/ui/forms/KisWelcomePage.ui:643 libs/ui/KisWelcomePageWidget.cpp:404
 #, kde-format
 msgid "Powered by KDE"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:400
+#: libs/ui/forms/KisWelcomePage.ui:733 libs/ui/KisWelcomePageWidget.cpp:401
 #, fuzzy, kde-format
 #| msgid "Source"
 msgid "Source Code"
 msgstr "Burimi"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:748 libs/ui/KisWelcomePageWidget.cpp:388
+#: libs/ui/forms/KisWelcomePage.ui:820 libs/ui/KisWelcomePageWidget.cpp:389
 #, fuzzy, kde-format
 msgid "Getting Started"
 msgstr "Raporti:"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:835 libs/ui/KisWelcomePageWidget.cpp:385
+#: libs/ui/forms/KisWelcomePage.ui:907 libs/ui/KisWelcomePageWidget.cpp:386
 #, fuzzy, kde-format
 msgid "User Community"
 msgstr "Shtresat"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:922 libs/ui/KisWelcomePageWidget.cpp:397
+#: libs/ui/forms/KisWelcomePage.ui:994 libs/ui/KisWelcomePageWidget.cpp:398
 #, fuzzy, kde-format
 msgid "Krita Website"
 msgstr "Profili:"
 
+#. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
+#: libs/ui/forms/KisWelcomePage.ui:1069
+#, fuzzy, kde-format
+msgid "Recent Images"
+msgstr "Imazhi"
+
+#. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
+#: libs/ui/forms/KisWelcomePage.ui:1093
+#, fuzzy, kde-format
+msgctxt "Welcome Screen Recent Document List's Clear link Label"
+msgid "Clear"
+msgstr "Filtri:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
+#: libs/ui/forms/KisWelcomePage.ui:1144
+#, fuzzy, kde-format
+msgid ""
+"You don't seem to have any\n"
+"recently opened documents"
+msgstr "Përzgjedhje"
+
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1066
+#: libs/ui/forms/KisWelcomePage.ui:1275
 #, kde-format
 msgid "News"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:1089
+#: libs/ui/forms/KisWelcomePage.ui:1298
 #, fuzzy, kde-format
 msgid "News options"
 msgstr "Teksti"
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1212
+#: libs/ui/forms/KisWelcomePage.ui:1405
 #, fuzzy, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr "Profili:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:1263
+#: libs/ui/forms/KisWelcomePage.ui:1456
 #, fuzzy, kde-format
 msgid "Update now!"
 msgstr "Zgjedhës i ngjyrës"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:1270
+#: libs/ui/forms/KisWelcomePage.ui:1463
 #, fuzzy, kde-format
 msgid "Show details"
 msgstr "Ngopja"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1353 libs/ui/KisWelcomePageWidget.cpp:405
+#: libs/ui/forms/KisWelcomePage.ui:1515 libs/ui/KisWelcomePageWidget.cpp:406
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -23569,37 +23609,8 @@ msgid ""
 "with the menu above"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1417
-#, fuzzy, kde-format
-msgid "Start"
-msgstr "Yll"
-
-#. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1484 libs/ui/KisWelcomePageWidget.cpp:632
-#, kde-format
-msgid "DEV BUILD"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, newFileLink)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/KisWelcomePage.ui:1560 libs/ui/forms/wdgimageproperties.ui:18
-#: libs/ui/forms/wdgnewimage.ui:18
-#: libs/ui/forms/wdgstrokeselectionproperties.ui:24
-#, fuzzy, kde-format
-msgid "New Image"
-msgstr "Imazhi"
-
-#. i18n: ectx: property (text), widget (QPushButton, openFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:1628
-#, fuzzy, kde-format
-msgid "Open Image"
-msgstr "Imazhi"
-
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1712
+#: libs/ui/forms/KisWelcomePage.ui:1587
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -27135,7 +27146,7 @@ msgid "HSV CCW"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:352
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:354
 #, fuzzy, kde-format
 msgid "Sessions"
 msgstr "&Dimensionet e Pikselëve"
@@ -28596,7 +28607,7 @@ msgstr "Zgjedhës i ngjyrës"
 msgid "&Open Background color selector"
 msgstr "Zgjedhës i ngjyrës"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:350
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -28609,8 +28620,8 @@ msgstr "Ngopja"
 msgid "Custom Pattern"
 msgstr "Ngopja"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
-#: libs/ui/KisApplication.cpp:334
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:335
+#: libs/ui/KisApplication.cpp:336
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, fuzzy, kde-format
@@ -29347,61 +29358,61 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Zmadho"
 
-#: libs/ui/KisApplication.cpp:325
+#: libs/ui/KisApplication.cpp:327
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, fuzzy, kde-format
 msgid "Brush presets"
 msgstr "Blu"
 
-#: libs/ui/KisApplication.cpp:328 libs/ui/KisApplication.cpp:329
 #: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
+#: libs/ui/KisApplication.cpp:332 libs/ui/KisApplication.cpp:333
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
 #, fuzzy, kde-format
 msgid "Brush tips"
 msgstr "Blu"
 
-#: libs/ui/KisApplication.cpp:336
+#: libs/ui/KisApplication.cpp:338
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
 #, fuzzy, kde-format
 msgid "Palettes"
 msgstr "Imazhi"
 
-#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, fuzzy, kde-format
 msgid "Workspaces"
 msgstr "Zgjedhës i ngjyrës"
 
-#: libs/ui/KisApplication.cpp:350
+#: libs/ui/KisApplication.cpp:352
 #, fuzzy, kde-format
 msgid "SVG symbol libraries"
 msgstr "Shtresat"
 
-#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:353 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, fuzzy, kde-format
 msgid "Window layouts"
 msgstr "Rastësore"
 
-#: libs/ui/KisApplication.cpp:353
+#: libs/ui/KisApplication.cpp:355
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
 #, fuzzy, kde-format
 msgid "Gamut masks"
 msgstr "Rrotullo Imazhin"
 
-#: libs/ui/KisApplication.cpp:355
+#: libs/ui/KisApplication.cpp:357
 #, fuzzy, kde-format
 msgid "SeExpr Scripts"
 msgstr "Përzgjedhje"
 
-#: libs/ui/KisApplication.cpp:360
+#: libs/ui/KisApplication.cpp:362
 #, fuzzy, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Shtresat"
 
-#: libs/ui/KisApplication.cpp:373
+#: libs/ui/KisApplication.cpp:375
 #, kde-format
 msgid ""
 "%1\n"
@@ -29409,13 +29420,13 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:373 libs/ui/KisApplication.cpp:379
+#: libs/ui/KisApplication.cpp:375 libs/ui/KisApplication.cpp:381
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Horizonti 1"
 
-#: libs/ui/KisApplication.cpp:379
+#: libs/ui/KisApplication.cpp:381
 #, kde-format
 msgid ""
 "\n"
@@ -29423,7 +29434,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:411
+#: libs/ui/KisApplication.cpp:413
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -29431,65 +29442,65 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:428
+#: libs/ui/KisApplication.cpp:430
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "Burimi"
 
-#: libs/ui/KisApplication.cpp:459
+#: libs/ui/KisApplication.cpp:461
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "Burimi"
 
-#: libs/ui/KisApplication.cpp:463
+#: libs/ui/KisApplication.cpp:465
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "Burimi"
 
-#: libs/ui/KisApplication.cpp:469
+#: libs/ui/KisApplication.cpp:471
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "Burimi"
 
-#: libs/ui/KisApplication.cpp:478
+#: libs/ui/KisApplication.cpp:480
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "Përzgjedhje"
 
-#: libs/ui/KisApplication.cpp:510
+#: libs/ui/KisApplication.cpp:512
 #, fuzzy, kde-format
 msgid "Launching..."
 msgstr "Duke printuar"
 
-#: libs/ui/KisApplication.cpp:579
+#: libs/ui/KisApplication.cpp:581
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:635
+#: libs/ui/KisApplication.cpp:637
 #, fuzzy, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Përzgjedhje"
 
-#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:857
+#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:879
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "Shtresat"
 
-#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
-#: libs/ui/KisApplication.cpp:851 libs/ui/KisApplication.cpp:865
-#: libs/ui/KisApplication.cpp:870
+#: libs/ui/KisApplication.cpp:672 libs/ui/KisApplication.cpp:677
+#: libs/ui/KisApplication.cpp:873 libs/ui/KisApplication.cpp:887
+#: libs/ui/KisApplication.cpp:892
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Përzgjedhje"
 
-#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:866
+#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:888
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:676
+#: libs/ui/KisApplication.cpp:678
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29502,7 +29513,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:682
+#: libs/ui/KisApplication.cpp:684
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29510,32 +29521,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:852
+#: libs/ui/KisApplication.cpp:874
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
 msgstr "Përzgjedhje"
 
-#: libs/ui/KisApplication.cpp:871
+#: libs/ui/KisApplication.cpp:893
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:986
+#: libs/ui/KisApplication.cpp:1008
 #, fuzzy, kde-format
 msgid "No template found for: %1"
 msgstr "Filtrat"
 
-#: libs/ui/KisApplication.cpp:989
+#: libs/ui/KisApplication.cpp:1011
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1005
+#: libs/ui/KisApplication.cpp:1027
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "Filtrat"
 
-#: libs/ui/KisApplication.cpp:1037
+#: libs/ui/KisApplication.cpp:1059
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29545,7 +29556,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1051
+#: libs/ui/KisApplication.cpp:1073
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29553,7 +29564,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1079
+#: libs/ui/KisApplication.cpp:1101
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr ""
@@ -30728,47 +30739,47 @@ msgstr "Ngopja"
 msgid "Gamut Warnings turned off."
 msgstr "Përzgjedhje"
 
-#: libs/ui/KisViewManager.cpp:791
+#: libs/ui/KisViewManager.cpp:796
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Zgjedhës i ngjyrës"
 
-#: libs/ui/KisViewManager.cpp:921
+#: libs/ui/KisViewManager.cpp:926
 #, kde-format
 msgid "%1 (Copy)"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1064 libs/ui/KisViewManager.cpp:1145
+#: libs/ui/KisViewManager.cpp:1069 libs/ui/KisViewManager.cpp:1150
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1064
+#: libs/ui/KisViewManager.cpp:1069
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1145
+#: libs/ui/KisViewManager.cpp:1150
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1328
+#: libs/ui/KisViewManager.cpp:1333
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
 "Press %1 to go back."
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1368
+#: libs/ui/KisViewManager.cpp:1373
 #, fuzzy, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Burimi"
 
-#: libs/ui/KisViewManager.cpp:1372
+#: libs/ui/KisViewManager.cpp:1377
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -30783,19 +30794,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1387
+#: libs/ui/KisViewManager.cpp:1392
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1388
+#: libs/ui/KisViewManager.cpp:1393
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1506 libs/ui/KisViewManager.cpp:1524
+#: libs/ui/KisViewManager.cpp:1511 libs/ui/KisViewManager.cpp:1529
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -30824,28 +30835,23 @@ msgstr "Transformo"
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:427
-#, kde-format
-msgid "Get your Krita Supporter Badge here!"
-msgstr ""
-
-#: libs/ui/KisWelcomePageWidget.cpp:655
+#: libs/ui/KisWelcomePageWidget.cpp:656
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, fuzzy, kde-format
 msgid "Forget \"%1\""
 msgstr "Pre"
 
-#: libs/ui/KisWelcomePageWidget.cpp:757
+#: libs/ui/KisWelcomePageWidget.cpp:758
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:786
+#: libs/ui/KisWelcomePageWidget.cpp:787
 #, fuzzy, kde-format
 msgid "An error occurred during the update"
 msgstr "Përzgjedhje"
 
-#: libs/ui/KisWelcomePageWidget.cpp:792
+#: libs/ui/KisWelcomePageWidget.cpp:793
 #, kde-format
 msgid "Restart is required."
 msgstr ""
@@ -36287,14 +36293,6 @@ msgstr "pikselët"
 #, kde-format
 msgid "Gray"
 msgstr ""
-
-#: plugins/color/lcms2engine/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:22
-#: plugins/color/lcms2engine/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:27
-#: plugins/color/lcms2engine/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:22
-#: plugins/color/lcms2engine/colorspaces/xyz_u8/XyzU8ColorSpace.cpp:22
-#, fuzzy, kde-format
-msgid "X"
-msgstr "Stili:"
 
 #: plugins/color/lcms2engine/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:23
 #: plugins/color/lcms2engine/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:28

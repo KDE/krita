@@ -54,13 +54,11 @@ public:
     {
         QUuid nodeId;
         int sequenceNumber;
-        bool isVisible;
         int opacity;
 
         bool operator==(const ReferenceNodeInfo &other) const
         {
-            return nodeId == other.nodeId && sequenceNumber == other.sequenceNumber &&
-                   isVisible == other.isVisible && opacity == other.opacity;
+            return nodeId == other.nodeId && sequenceNumber == other.sequenceNumber && opacity == other.opacity;
         }
     };
 
@@ -115,8 +113,9 @@ public:
 
 private:
     void mergeLabeledLayers();
-    bool acceptNode(KisNodeSP node) const;
-    bool checkChangesInNodes() const;
+    bool hastToCheckForChangesInNodes() const;
+    QPair<KisNodeSP, QPair<bool, bool>> collectNode(KisNodeSP node) const;
+    bool collectNodes(KisNodeSP node, QList<KisNodeSP> &nodeList, ReferenceNodeInfoList &nodeInfoList) const;
 
 private:
     KisImageSP m_refImage;

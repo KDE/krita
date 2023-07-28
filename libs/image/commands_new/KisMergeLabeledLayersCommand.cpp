@@ -14,6 +14,8 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_layer.h"
+#include "kis_clone_layer.h"
+#include "kis_paint_layer.h"
 #include "kis_assert.h"
 #include "KisDeleteLaterWrapper.h"
 #include <kis_image_animation_interface.h>
@@ -90,37 +92,124 @@ KisPaintDeviceSP KisMergeLabeledLayersCommand::createRefPaintDevice(KisImageSP o
     return KisPaintDeviceSP(new KisPaintDevice(originalImage->colorSpace(), name));
 }
 
+QPair<KisNodeSP, QPair<bool, bool>> KisMergeLabeledLayersCommand::collectNode(KisNodeSP node) const
+{
+    KisNodeSP transformedNode = nullptr;
+    bool visitNextSibling, visitChildren;
+
+    if (!node->visible()) {
+        // Do not visit the children if the node is hidden but visit the next sibling
+        visitNextSibling = true;
+        visitChildren = false;
+
+    } else if (!m_selectedLabels.contains(node->colorLabelIndex())) {
+        // If the node is not labeled appropriately it's children are still
+        // visited if it is a group, as well as the next sibling
+        visitNextSibling = true;
+        visitChildren = true;
+
+    } else if (node->inherits("KisCloneLayer")) {
+        // Make a copy of the clone layer as a paint layer. The source layer
+        // may not be color labeled and therefore not added to the temporary
+        // image. So this ensures that the real contents are represented
+        // in any case
+        KisCloneLayerSP cloneLayer = dynamic_cast<KisCloneLayer*>(node.data());
+        transformedNode = cloneLayer->reincarnateAsPaintLayer();
+        // The next sibling is visited. Although this is not a group
+        // and does not have children, visitChildren is initialized to true
+        visitNextSibling = true;
+        visitChildren = true;
+
+    } else if (node->inherits("KisAdjustmentLayer")) {
+        // Similar to the clone layer case. The filter layer uses the
+        // composition of the layers below as source to apply the effect
+        // so we must use a paint layer representation of the result
+        // because the next sibling nodes may not be color labeled and
+        // therefore not added to the temporary image.
+        KisPaintDeviceSP proj = new KisPaintDevice(*(node->projection()));
+        KisPaintLayerSP newLayer = new KisPaintLayer(node->image(), node->name(), node->opacity(), proj);
+        newLayer->setX(newLayer->x() + node->x());
+        newLayer->setY(newLayer->y() + node->y());
+        newLayer->mergeNodeProperties(node->nodeProperties());
+        transformedNode = newLayer;
+        // This new node already has the contents of the next layers on
+        // the same level baked, so the next sibling nodes are not visited.
+        // Although this is not a group and does not have children,
+        // visitChildren is initialized to true
+        visitNextSibling = false;
+        visitChildren = true;
+
+    } else if (node->inherits("KisGroupLayer")) {
+        if (m_groupSelectionPolicy == GroupSelectionPolicy_NeverSelect ||
+            (m_groupSelectionPolicy == GroupSelectionPolicy_SelectIfColorLabeled && node->colorLabelIndex() == 0)) {
+            // If the node is a group and should not be selected, it's children
+            // are still visited as well as the next sibling
+            visitNextSibling = true;
+            visitChildren = true;
+
+        } else {
+            // Just add the group node, which adds also all the children
+            transformedNode = node;
+            // This group node already has all the children, so the child nodes
+            // are not visited. The next sibling is visited
+            visitNextSibling = true;
+            visitChildren = false;
+        }
+    } else {
+        transformedNode = node;
+        visitNextSibling = true;
+        visitChildren = true;
+    }
+    
+    return {transformedNode, {visitNextSibling, visitChildren}};
+}
+
+bool KisMergeLabeledLayersCommand::collectNodes(KisNodeSP node, QList<KisNodeSP> &nodeList, ReferenceNodeInfoList &nodeInfoList) const
+{
+    QPair<KisNodeSP, QPair<bool, bool>> result = collectNode(node);
+    KisNodeSP collectedNode = result.first;
+    const bool visitNextSibling = result.second.first;
+    const bool visitChildren = result.second.second;
+
+    if (collectedNode) {
+        // If the node should be selected, it is added to the list
+        nodeList << collectedNode;
+        // Store additional info to check if the new list of reference nodes
+        // is different. Use the original node to extract the info
+        if (hastToCheckForChangesInNodes()) {
+            const QUuid uuid = node->uuid();
+            const int sequenceNumber = node->projection()->sequenceNumber();
+            const int opacity = node->opacity();
+            nodeInfoList.append({uuid, sequenceNumber, opacity});
+        }
+    }
+
+    if (visitChildren) {
+        node = node->lastChild();
+        while (node) {
+            const bool mustVisitNextSibling = collectNodes(node, nodeList, nodeInfoList);
+            if (!mustVisitNextSibling) {
+                break;
+            }
+            node = node->prevSibling();
+        }
+    }
+    
+    return visitNextSibling;
+}
+
 void KisMergeLabeledLayersCommand::mergeLabeledLayers()
 {
     QList<KisNodeSP> currentNodesList;
     ReferenceNodeInfoList currentNodeInfoList;
-    KisImageSP refImage = m_refImage;
 
-    KisLayerUtils::recursiveApplyNodes(
-        m_currentRoot,
-        [&currentNodesList, &currentNodeInfoList, this] (KisNodeSP node) mutable
-        {
-            if (!acceptNode(node)) {
-                return;
-            }
+    collectNodes(m_currentRoot, currentNodesList, currentNodeInfoList);
 
-            currentNodesList << node;
-
-            if (checkChangesInNodes()) {
-                const QUuid uuid = node->uuid();
-                const int sequenceNumber = node->projection()->sequenceNumber();
-                const bool isVisible = node->visible();
-                const int opacity = node->opacity();
-                currentNodeInfoList.append({uuid, sequenceNumber, isVisible, opacity});
-            }
-        }
-    );
-
-    if (checkChangesInNodes()) {
+    if (hastToCheckForChangesInNodes()) {
         *m_newRefNodeInfoList = currentNodeInfoList;
     }
     
-    if (checkChangesInNodes() && !m_forceRegeneration && (currentNodeInfoList == *m_prevRefNodeInfoList)) {
+    if (hastToCheckForChangesInNodes() && !m_forceRegeneration && (currentNodeInfoList == *m_prevRefNodeInfoList)) {
         m_newRefPaintDevice->prepareClone(m_prevRefPaintDevice);
         m_newRefPaintDevice->makeCloneFromRough(m_prevRefPaintDevice, m_prevRefPaintDevice->extent());
     } else {
@@ -140,7 +229,7 @@ void KisMergeLabeledLayersCommand::mergeLabeledLayers()
 
             copy->setCompositeOpId(COMPOSITE_OVER);
 
-            bool success = refImage->addNode(copy, refImage->root());
+            bool success = m_refImage->addNode(copy, m_refImage->root(), 0);
 
             if (!success) {
                 continue;
@@ -178,18 +267,7 @@ void KisMergeLabeledLayersCommand::mergeLabeledLayers()
     m_refImage.clear();
 }
 
-bool KisMergeLabeledLayersCommand::acceptNode(KisNodeSP node) const
-{
-    if (node->inherits("KisGroupLayer") &&
-        (m_groupSelectionPolicy == GroupSelectionPolicy_NeverSelect ||
-          (m_groupSelectionPolicy == GroupSelectionPolicy_SelectIfColorLabeled &&
-           node->colorLabelIndex() == 0))) {
-        return false;
-    }
-    return m_selectedLabels.contains(node->colorLabelIndex());
-}
-
-bool KisMergeLabeledLayersCommand::checkChangesInNodes() const
+bool KisMergeLabeledLayersCommand::hastToCheckForChangesInNodes() const
 {
     return m_prevRefNodeInfoList && m_newRefNodeInfoList && m_prevRefPaintDevice;
 }

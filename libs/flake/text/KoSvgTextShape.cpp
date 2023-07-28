@@ -558,6 +558,17 @@ void KoSvgTextShape::resetTextShape()
     relayout();
 }
 
+QString glyphFormatToStr(const FT_Glyph_Format _v)
+{
+    const unsigned int v = _v;
+    QString s;
+    s += (v >> 24) & 0xFF;
+    s += (v >> 16) & 0xFF;
+    s += (v >> 8) & 0xFF;
+    s += (v >> 0) & 0xFF;
+    return s;
+}
+
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::relayout() const
 {
@@ -571,7 +582,7 @@ void KoSvgTextShape::relayout() const
 
     bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
 
-    FT_Int32 loadFlags = FT_LOAD_RENDER;
+    FT_Int32 loadFlags = 0;
 
     if (d->textRendering == GeometricPrecision || d->textRendering == Auto) {
         // without load_no_hinting, the advance and offset will be rounded
@@ -800,10 +811,10 @@ void KoSvgTextShape::relayout() const
                 FT_Int32 faceLoadFlags = loadFlags;
                 const FT_FaceUP &face = faces.at(static_cast<size_t>(i));
                 if (FT_HAS_COLOR(face)) {
-                    loadFlags |= FT_LOAD_COLOR;
+                    faceLoadFlags |= FT_LOAD_COLOR;
                 }
                 if (!isHorizontal && FT_HAS_VERTICAL(face)) {
-                    loadFlags |= FT_LOAD_VERTICAL_LAYOUT;
+                    faceLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
                 }
                 if (start == 0) {
                     raqm_set_freetype_face(layout.data(), face.data());
@@ -958,26 +969,31 @@ void KoSvgTextShape::relayout() const
         qreal factor_16 = 1.0 / 65536.0;
         glyphTf.setMatrix(matrix.xx * factor_16, matrix.xy * factor_16, 0, matrix.yx * factor_16, matrix.yy * factor_16, 0, 0, 0, 1);
 
-        QPainterPath glyph = d->convertFromFreeTypeOutline(currentGlyph.ftface->glyph);
+        if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
+            QPainterPath glyph = d->convertFromFreeTypeOutline(currentGlyph.ftface->glyph);
 
-        glyph.translate(currentGlyph.x_offset, currentGlyph.y_offset);
-        glyph = glyphTf.map(glyph);
-        glyph = ftTF.map(glyph);
+            glyph.translate(currentGlyph.x_offset, currentGlyph.y_offset);
+            glyph = glyphTf.map(glyph);
+            glyph = ftTF.map(glyph);
 
-        if (!charResult.path.isEmpty()) {
-            // this is for glyph clusters, unicode combining marks are always
-            // added. we could have these as seperate paths, but there's no real
-            // purpose, and the svg standard prefers 'ligatures' to be treated
-            // as a single glyph. It simplifies things for us in any case.
-            charResult.path.addPath(glyph.translated(charResult.advance));
+            if (!charResult.path.isEmpty()) {
+                // this is for glyph clusters, unicode combining marks are always
+                // added. we could have these as seperate paths, but there's no real
+                // purpose, and the svg standard prefers 'ligatures' to be treated
+                // as a single glyph. It simplifies things for us in any case.
+                charResult.path.addPath(glyph.translated(charResult.advance));
+            } else {
+                charResult.path = glyph;
+            }
+        } else if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_BITMAP) {
+            // TODO: Handle glyph clusters better...
+            charResult.image =
+                d->convertFromFreeTypeBitmap(currentGlyph.ftface->glyph)
+                    .transformed(glyphTf,
+                                d->textRendering == OptimizeSpeed ? Qt::FastTransformation : Qt::SmoothTransformation);
         } else {
-            charResult.path = glyph;
+            warnFlake << "Unsupported glyph format" << glyphFormatToStr(currentGlyph.ftface->glyph->format);
         }
-        // TODO: Handle glyph clusters better...
-        charResult.image =
-            d->convertFromFreeTypeBitmap(currentGlyph.ftface->glyph)
-                .transformed(glyphTf,
-                             d->textRendering == OptimizeSpeed ? Qt::FastTransformation : Qt::SmoothTransformation);
 
         // Retreive CPAL/COLR V0 color layers, directly based off the sample
         // code in the freetype docs.
@@ -1008,12 +1024,15 @@ void KoSvgTextShape::relayout() const
                     layerColor = QColor(color.red, color.green, color.blue, color.alpha);
                 }
                 FT_Load_Glyph(currentGlyph.ftface, layerGlyphIndex, faceLoadFlags);
-                QPainterPath p = d->convertFromFreeTypeOutline(currentGlyph.ftface->glyph);
-                p.translate(currentGlyph.x_offset, currentGlyph.y_offset);
-                charResult.colorLayers.append(ftTF.map(p));
-                charResult.colorLayerColors.append(layerColor);
-                charResult.replaceWithForeGroundColor.append(isForeGroundColor);
-
+                if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
+                    QPainterPath p = d->convertFromFreeTypeOutline(currentGlyph.ftface->glyph);
+                    p.translate(currentGlyph.x_offset, currentGlyph.y_offset);
+                    charResult.colorLayers.append(ftTF.map(p));
+                    charResult.colorLayerColors.append(layerColor);
+                    charResult.replaceWithForeGroundColor.append(isForeGroundColor);
+                } else {
+                    warnFlake << "Unsupported glyph format" << glyphFormatToStr(currentGlyph.ftface->glyph->format) << "in glyph layers";
+                }
             } while (FT_Get_Color_Glyph_Layer(currentGlyph.ftface,
                                               currentGlyph.index,
                                               &layerGlyphIndex,

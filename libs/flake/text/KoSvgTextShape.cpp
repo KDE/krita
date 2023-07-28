@@ -962,12 +962,7 @@ void KoSvgTextShape::relayout() const
 
         debugFlake << "glyph" << i << "cluster" << cluster << currentGlyph.index << text.at(cluster).unicode();
 
-        FT_Matrix matrix;
-        FT_Vector delta;
-        FT_Get_Transform(currentGlyph.ftface, &matrix, &delta);
         QTransform glyphTf;
-        qreal factor_16 = 1.0 / 65536.0;
-        glyphTf.setMatrix(matrix.xx * factor_16, matrix.xy * factor_16, 0, matrix.yx * factor_16, matrix.yy * factor_16, 0, 0, 0, 1);
 
         if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
             QPainterPath glyph = d->convertFromFreeTypeOutline(currentGlyph.ftface->glyph);

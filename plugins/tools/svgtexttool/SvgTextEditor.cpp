@@ -336,6 +336,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     switchTextEditorTab();
 
     m_textEditorWidget.richTextEdit->document()->setDefaultStyleSheet("p {margin:0px;}");
+    m_textEditorWidget.richTextEdit->installEventFilter(this);
 
     applySettings();
 
@@ -1527,4 +1528,20 @@ void SvgTextEditor::slotCloseEditor()
 {
     close();
     emit textEditorClosed();
+}
+
+bool SvgTextEditor::eventFilter(QObject *const watched, QEvent *const event)
+{
+    if (watched == m_textEditorWidget.richTextEdit) {
+        if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
+            QKeyEvent *const keyEvent = static_cast<QKeyEvent *>(event);
+            if ((keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
+                && (keyEvent->modifiers() & Qt::ShiftModifier)) {
+                // Disable soft line breaks
+                return true;
+            }
+        }
+        return false;
+    }
+    return KXmlGuiWindow::eventFilter(watched, event);
 }

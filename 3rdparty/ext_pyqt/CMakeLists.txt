@@ -113,6 +113,7 @@ elseif(WIN32)
         URL_HASH SHA256=4877580c38ceb5320e129b381d083b0a8601c68166d8b99707f08fa0a1689eef
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Support-MinGW-and-MSYS-Python-builds.patch
+              COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-building-pyqt-on-Windows.patch
 
         CONFIGURE_COMMAND ""
 

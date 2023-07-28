@@ -1,0 +1,35 @@
+From 95a19b641810128da9e01768fc0e706266cbca0b Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Fri, 28 Jul 2023 15:25:49 +0200
+Subject: [PATCH] Fix building pyqt on Windows
+
+For some reason, when we write
+
+distinfo.extra = \\?\C:\dev\env-2\i\bin\sip-distinfo --inventory <...>
+
+in PyQt5.pro, then this line is incorrectly converted into Makefile as
+
+\?\C:\dev\env-2\i\bin\sip-distinfo --inventory <...>
+
+That is, the first backslash is lost. This path just workarounds the issue
+by stripping UNC-path that is leaked from argv[0] of sip-build.exe
+---
+ pyqtbuild/builder.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyqtbuild/builder.py b/pyqtbuild/builder.py
+index c5dbe04..e922a38 100644
+--- a/pyqtbuild/builder.py
++++ b/pyqtbuild/builder.py
+@@ -63,7 +63,7 @@ class QmakeBuilder(Builder):
+             if tool != 'pep517':
+                 self._sip_distinfo = os.path.join(
+                         os.path.abspath(os.path.dirname(
+-                            sys.argv[0]).replace('\\', '/')),
++                            sys.argv[0]).removeprefix('\\\\?\\').replace('\\', '/')),
+                         self._sip_distinfo)
+ 
+             # Check we have a qmake.
+-- 
+2.38.1.windows.1
+

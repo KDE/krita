@@ -819,6 +819,10 @@ TextTransformInfo parseTextTransform(const QString &value)
             textTransform.fullWidth = true;
         } else if (param == "full-size-kana") {
             textTransform.fullSizeKana = true;
+        } else if (param == "none") {
+            textTransform.capitals = TextTransformNone;
+            textTransform.fullWidth = false;
+            textTransform.fullSizeKana = false;
         } else {
             qWarning() << "Unknown parameter in text-transform" << param;
         }

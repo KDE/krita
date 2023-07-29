@@ -558,7 +558,7 @@ void KoSvgTextShape::resetTextShape()
     relayout();
 }
 
-QString glyphFormatToStr(const FT_Glyph_Format _v)
+static QString glyphFormatToStr(const FT_Glyph_Format _v)
 {
     const unsigned int v = _v;
     QString s;

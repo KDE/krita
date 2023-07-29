@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-28 02:34+0000\n"
+"POT-Creation-Date: 2023-07-29 02:25+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -16655,28 +16655,28 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3748
+#: libs/flake/text/KoSvgTextShape.cpp:3767
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Szöveg"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3750
-#: libs/flake/text/KoSvgTextShape.cpp:3758
+#: libs/flake/text/KoSvgTextShape.cpp:3769
+#: libs/flake/text/KoSvgTextShape.cpp:3777
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "Szöveg alakzat"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3756
+#: libs/flake/text/KoSvgTextShape.cpp:3775
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " Szöveg:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3770
-#: libs/flake/text/KoSvgTextShape.cpp:3785
+#: libs/flake/text/KoSvgTextShape.cpp:3789
+#: libs/flake/text/KoSvgTextShape.cpp:3804
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16985,7 +16985,7 @@ msgstr "alapértelmezett"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1444
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
 #, kde-format
 msgid "Size"
 msgstr "Méret"
@@ -20042,7 +20042,7 @@ msgstr "Erőforráscsomagok kezelése…"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -23132,7 +23132,7 @@ msgstr "Réteg tulajdonságai"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1481
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1482
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -26397,7 +26397,7 @@ msgstr "Előtérszín"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1460
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1461
 #, kde-format
 msgid "Background Color"
 msgstr "Háttérszín"
@@ -31821,34 +31821,34 @@ msgstr "Az egyszerű ellenőrzés még mindig ki van kapcsolva."
 msgid "Gamut Warnings turned off."
 msgstr "Figyelem"
 
-#: libs/ui/KisViewManager.cpp:796
+#: libs/ui/KisViewManager.cpp:791
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Színprofil megnyitása"
 
-#: libs/ui/KisViewManager.cpp:926
+#: libs/ui/KisViewManager.cpp:921
 #, fuzzy, kde-format
 msgid "%1 (Copy)"
 msgstr "Másolás"
 
-#: libs/ui/KisViewManager.cpp:1069 libs/ui/KisViewManager.cpp:1150
+#: libs/ui/KisViewManager.cpp:1064 libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1069
+#: libs/ui/KisViewManager.cpp:1064
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Nem sikerült menteni növekményes verziót"
 
-#: libs/ui/KisViewManager.cpp:1150
+#: libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Nem sikerült menteni növekményes biztonsági másolatot"
 
-#: libs/ui/KisViewManager.cpp:1333
+#: libs/ui/KisViewManager.cpp:1328
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31857,13 +31857,13 @@ msgstr ""
 "Átlépés csak vászon módba.\n"
 "A visszatéréshez nyomja meg: %1."
 
-#: libs/ui/KisViewManager.cpp:1373
+#: libs/ui/KisViewManager.cpp:1368
 #, fuzzy, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Erőforrásmappa megnyitása"
 
-#: libs/ui/KisViewManager.cpp:1377
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31878,19 +31878,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1392
+#: libs/ui/KisViewManager.cpp:1387
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1393
+#: libs/ui/KisViewManager.cpp:1388
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1511 libs/ui/KisViewManager.cpp:1529
+#: libs/ui/KisViewManager.cpp:1506 libs/ui/KisViewManager.cpp:1524
 #, fuzzy, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -59521,74 +59521,74 @@ msgstr "A lista módosítása"
 msgid "Text Tool"
 msgstr "Szöveg eszköz"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:384
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #, fuzzy, kde-format
 #| msgid "Connection Point"
 msgid "Conversion failed"
 msgstr "Kapcsolódási pont"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:601
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:602
 #, kde-format
 msgid "Find Text"
 msgstr "Keresés"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:604
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:647
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:605
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
 #, kde-format
 msgid "Find:"
 msgstr "Keresés:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:643
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:644
 #, kde-format
 msgid "Find and Replace all"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
 #, kde-format
 msgid "Replace:"
 msgstr "Csere:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1288
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1294
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1289
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Rich text"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1291
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1292
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1296
 #, kde-format
 msgid "SVG Source"
 msgstr "SVG forrás"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1435
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1436
 #, kde-format
 msgid "Font"
 msgstr "Betűtípus"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1452
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1453
 #, kde-format
 msgid "Text Color"
 msgstr "Szövegszín"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1467
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1468
 #, fuzzy, kde-format
 #| msgid "Select similar colors"
 msgid "Sample a Color"
 msgstr "Hasonló színek kijelölése"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1478
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1479
 #, fuzzy, kde-format
 msgid "Line height"
 msgstr "Nyomtatási magasság:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1490
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1491
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, fuzzy, kde-format
 #| msgid "Line Spacing"

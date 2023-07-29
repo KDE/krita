@@ -48,8 +48,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-28 02:34+0000\n"
-"PO-Revision-Date: 2023-06-22 16:07+0200\n"
+"POT-Creation-Date: 2023-07-29 02:25+0000\n"
+"PO-Revision-Date: 2023-06-28 14:15+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -8416,12 +8416,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:294
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Select Similar Color"
+#, kde-format
 msgctxt "action"
 msgid "Sample Screen Color"
-msgstr "Vybrat podobnou barvu"
+msgstr ""
 
 #. i18n: context: text @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:301
@@ -8728,11 +8726,10 @@ msgstr ""
 #. i18n: context: toolTip @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:526 krita/krita.action:528 krita/krita.action:529
-#, fuzzy, kde-format
-#| msgid "Choose brush preset"
+#, kde-format
 msgctxt "action"
 msgid "Toggle eraser preset"
-msgstr "Zvolte předvolbu štětce"
+msgstr ""
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -13742,11 +13739,10 @@ msgstr "Celoobrazovkový režim"
 #. i18n: context: text @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:640 krita/kritamenu.action:643
-#, fuzzy, kde-format
-#| msgid "Rotate Canvas"
+#, kde-format
 msgctxt "action"
 msgid "Detach Canvas"
-msgstr "Otočit plátno"
+msgstr "Oddělit plátno"
 
 #. i18n: context: toolTip @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:642
@@ -13793,12 +13789,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:676 krita/kritamenu.action:678
 #: krita/kritamenu.action:679
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Horizontally"
-msgstr "Zrcadlit vodorovně"
+msgstr ""
 
 #. i18n: context: text @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
@@ -13808,12 +13802,10 @@ msgstr "Zrcadlit vodorovně"
 #. i18n: context: iconText @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:688 krita/kritamenu.action:690
 #: krita/kritamenu.action:691
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Vertically"
-msgstr "Zrcadlit svisle"
+msgstr ""
 
 #. i18n: context: text @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:700
@@ -13902,28 +13894,24 @@ msgstr "Zrcadlit pohled okolo kurzoru"
 #. i18n: context: iconText @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:752 krita/kritamenu.action:754
 #: krita/kritamenu.action:755
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror View Around Cursor"
+#, kde-format
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr "Zrcadlit pohled okolo kurzoru"
+msgstr ""
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
-#, fuzzy, no-c-format, kde-format
-#| msgid "Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr "Zvětšení na 100%"
+msgstr "&Zvětšení na 100%"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:764 krita/kritamenu.action:765
-#, fuzzy, no-c-format, kde-format
-#| msgid "Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
 msgstr "Zvětšení na 100%"
@@ -13961,57 +13949,51 @@ msgstr "Oddálit"
 #. i18n: context: text @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:798 krita/kritamenu.action:801
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View"
-msgstr "Přizpůsobit stránce"
+msgstr "Vyplnit pohled"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:800
-#, fuzzy, kde-format
-#| msgid "Canvas Size"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View"
-msgstr "Velikost plátna"
+msgstr ""
 
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:808 krita/kritamenu.action:811
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
-msgstr "Přizpůsobit šířce"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Width"
-msgstr "Přizpůsobit šířce"
+msgstr ""
 
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:818 krita/kritamenu.action:821
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Height"
-msgstr "Přizpůsobit výšce"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:820
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Height"
-msgstr "Přizpůsobit výšce"
+msgstr ""
 
 #. i18n: context: text @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -14078,11 +14060,10 @@ msgstr "Vrátit otočení plátna"
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:874 krita/kritamenu.action:877
-#, fuzzy, kde-format
-#| msgid "Display"
+#, kde-format
 msgctxt "action"
 msgid "Reset Display"
-msgstr "Zobrazit"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:876
@@ -14096,11 +14077,10 @@ msgstr ""
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:884 krita/kritamenu.action:887
-#, fuzzy, kde-format
-#| msgid "Print Size"
+#, kde-format
 msgctxt "action"
 msgid "View Print Size"
-msgstr "Velikost tisku"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:886
@@ -16247,25 +16227,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3748
+#: libs/flake/text/KoSvgTextShape.cpp:3767
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3750
-#: libs/flake/text/KoSvgTextShape.cpp:3758
+#: libs/flake/text/KoSvgTextShape.cpp:3769
+#: libs/flake/text/KoSvgTextShape.cpp:3777
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Tvar textu SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3756
+#: libs/flake/text/KoSvgTextShape.cpp:3775
 #, kde-format
 msgid "SVG Text"
 msgstr "Text SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3770
-#: libs/flake/text/KoSvgTextShape.cpp:3785
+#: libs/flake/text/KoSvgTextShape.cpp:3789
+#: libs/flake/text/KoSvgTextShape.cpp:3804
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16571,7 +16551,7 @@ msgstr "výchozí"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1444
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
 #, kde-format
 msgid "Size"
 msgstr "Velikost"
@@ -17012,8 +16992,7 @@ msgstr "Maska Výběru"
 
 #: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2577
 #: plugins/impex/psd/psd_loader.cpp:193
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Pozadí"
@@ -19385,7 +19364,7 @@ msgstr ""
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -19561,16 +19540,15 @@ msgstr "Značky"
 
 #: libs/resources/KisResourceModel.cpp:150
 #: libs/resources/KisTagResourceModel.cpp:652
-#, fuzzy, kde-format
-#| msgid "Thumbnail"
+#, kde-format
 msgid "Large Thumbnail"
-msgstr "Náhled"
+msgstr "Velký náhled"
 
 #: libs/resources/KisResourceModel.cpp:152
 #: libs/resources/KisTagResourceModel.cpp:654
 #, kde-format
 msgid "Dirty"
-msgstr ""
+msgstr "Špinavé"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
@@ -19781,49 +19759,43 @@ msgstr ""
 #: libs/resources/KisTagResourceModel.cpp:664
 #, kde-format
 msgid "Tag ID"
-msgstr ""
+msgstr "ID značky"
 
 #: libs/resources/KisTagResourceModel.cpp:666
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource ID"
-msgstr "Zdroje"
+msgstr "ID zdroje"
 
 #: libs/resources/KisTagResourceModel.cpp:668
 #, kde-format
 msgid "Tag Url"
-msgstr ""
+msgstr "URL značky"
 
 #: libs/resources/KisTagResourceModel.cpp:670
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource"
-msgstr "Zdroje"
+msgstr "Zdroj"
 
 #: libs/resources/KisTagResourceModel.cpp:672
-#, fuzzy, kde-format
-#| msgid "Resource Type"
+#, kde-format
 msgid "Resource Active"
-msgstr "Typ zdroje"
+msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:674
-#, fuzzy, kde-format
-#| msgid "Active"
+#, kde-format
 msgid "Tag Active"
-msgstr "Aktivní"
+msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:678
-#, fuzzy, kde-format
-#| msgid "Resource Type"
+#, kde-format
 msgid "Resource Name"
-msgstr "Typ zdroje"
+msgstr "Název zdroje"
 
 #: libs/resources/KisTagResourceModel.cpp:680
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "Tag File Name"
-msgstr "Název souboru"
+msgstr ""
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:110
 #, kde-format
@@ -19832,11 +19804,9 @@ msgid "resource folder"
 msgstr "složka zdrojů"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:123
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Display Selection"
+#, kde-format
 msgid "Display settings"
-msgstr "Zobrazit výběr"
+msgstr "Nastavení zobrazení"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:130
 #, kde-format
@@ -20329,10 +20299,7 @@ msgid "spline"
 msgstr "splajn"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:106
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Not Applicable, used where there's no colorants or gamma curve found"
-#| msgid "N/A"
+#, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "Nedostupné"
@@ -20340,7 +20307,7 @@ msgstr "Nedostupné"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
-msgstr ""
+msgstr "Nebyl poskytnut platný spustitelný soubor FFmpeg..."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
 #, kde-format
@@ -20635,14 +20602,13 @@ msgstr "Vytváření %1 požadovaného souboru: selhalo: %2/%3 rámců."
 #: libs/ui/animation/video_export_options_dialog.ui:13
 #, kde-format
 msgid "Codec:"
-msgstr ""
+msgstr "Kodek:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
 #: libs/ui/animation/video_export_options_dialog.ui:23
-#, fuzzy, kde-format
-#| msgid "No options"
+#, kde-format
 msgid "Codec options"
-msgstr "Žádné možnosti"
+msgstr "Možnosti kodeku"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -20708,10 +20674,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/video_export_options_dialog.ui:249
-#, fuzzy, kde-format
-#| msgid "Bitrate (MBit/s)"
+#, kde-format
 msgid "Bitrate (MBit/s):"
-msgstr "Datový tok (MBit/s)"
+msgstr "Datový tok (MBit/s):"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
@@ -20809,10 +20774,9 @@ msgstr "Kvalita obrázku:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:457
-#, fuzzy, kde-format
-#| msgid "Custom Options:"
+#, kde-format
 msgid "Custom options"
-msgstr "Vlastní možnosti:"
+msgstr "Vlastní možnosti"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:466
@@ -21119,36 +21083,28 @@ msgid "Global/Full"
 msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Difference"
-#| msgid "Difference"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Difference"
 msgstr "Rozdíl"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:95
-#, fuzzy, kde-format
-#| msgid "Previous Frame"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Per Single Frame"
-msgstr "Předchozí rámec"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:97
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "none"
-msgstr "žádný"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:98
-#, fuzzy, kde-format
-#| msgid "Layer"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "bayer"
-msgstr "Vrstva"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:99
 #, kde-format
@@ -21175,22 +21131,16 @@ msgid "sierra2_4a"
 msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "none"
-msgstr "žádný"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "paleteuse diff mode option name"
-#| msgid "rectangle"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
-msgstr "obdélník"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:149
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:168
@@ -21200,11 +21150,10 @@ msgid "kbps"
 msgstr "kbps"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:292
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
-msgstr "Otevřít"
+msgstr "OpenH264"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:293
 #, kde-format
@@ -21421,10 +21370,9 @@ msgstr "Obecné"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:40
-#, fuzzy, kde-format
-#| msgid "Profile:"
+#, kde-format
 msgid "Video file:"
-msgstr "Profil:"
+msgstr "Soubor videa:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
@@ -21648,25 +21596,21 @@ msgstr "Filtr:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
 #: libs/ui/animation/VideoImportDialog.ui:601
-#, fuzzy, kde-format
-#| msgid "FFmpeg:"
+#, kde-format
 msgid "FFmpeg"
-msgstr "FFmpeg:"
+msgstr "FFmpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:607
-#, fuzzy, kde-format
-#| msgid "FFmpeg:"
+#, kde-format
 msgid "FFmpeg path:"
-msgstr "FFmpeg:"
+msgstr "Cesta k FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:634
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Combine paths"
+#, kde-format
 msgid "FFprobe path:"
-msgstr "Kombinovat cesty"
+msgstr "Cesta k FFprobe:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimationRenderer)
 #: libs/ui/animation/wdg_animationrenderer.ui:10
@@ -21688,17 +21632,15 @@ msgstr "Poslední rámec:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:49
-#, fuzzy, kde-format
-#| msgid "Export Images"
+#, kde-format
 msgid "Export as image sequence"
-msgstr "Exportovat obrázky"
+msgstr "Exportovat jako sekvenci obrázků"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/wdg_animationrenderer.ui:58
-#, fuzzy, kde-format
-#| msgid "Fi&le format:"
+#, kde-format
 msgid "File format:"
-msgstr "Formát soubor&u:"
+msgstr "Formát souboru:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbMimetype)
 #: libs/ui/animation/wdg_animationrenderer.ui:67
@@ -21746,11 +21688,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
-#, fuzzy, kde-format
-#| msgctxt "Export storyboard as PDF"
-#| msgid "Export as PDF"
+#, kde-format
 msgid "Export as video"
-msgstr "Exportovat jako PDF"
+msgstr "Exportovat jako video"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
@@ -21782,17 +21722,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
-#, fuzzy, kde-format
-#| msgid "Image location:"
+#, kde-format
 msgid "FFmpeg location:"
-msgstr "Umístění obrázku:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
-#, fuzzy, kde-format
-#| msgid "FFmpeg:"
+#, kde-format
 msgid "FFmpeg version:"
-msgstr "FFmpeg:"
+msgstr "Verze FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -22401,7 +22339,7 @@ msgstr "Vlastnosti vrstvy"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1481
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1482
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -22668,10 +22606,9 @@ msgid "Show session manager"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:432
-#, fuzzy, kde-format
-#| msgid "Note: Krita will need to be restarted for changes to take effect"
+#, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
-msgstr "Poznámka: Aby se změny projevily, musíte restartovat aplikaci Krita"
+msgstr "Aby se změny projevily, je potřeba restartovat aplikaci Krita."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:438
 #, kde-format
@@ -22680,21 +22617,19 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:470
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Internal Storage"
-msgstr "Vnitřní"
+msgstr "Interní úložiště"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:472
 #, kde-format
 msgid "SD-Card"
-msgstr ""
+msgstr "SD karta"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:510
-#, fuzzy, kde-format
-#| msgid "User Manual"
+#, kde-format
 msgid "Choose Manually"
-msgstr "Uživatelská příručka"
+msgstr "Vybrat ručně"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:575
 #, kde-format
@@ -22726,7 +22661,7 @@ msgstr "%1 není platným souborem obrázku."
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
-msgstr ""
+msgstr "<b>Varování:</b> Na toto místo nelze zapisovat."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1027
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1136
@@ -22761,26 +22696,23 @@ msgstr ""
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1318
-#, fuzzy, kde-format
-#| msgid "Maximum brush size:"
+#, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
-msgstr[0] "Maximální velikost štětce:"
-msgstr[1] "Maximální velikost štětce:"
-msgstr[2] "Maximální velikost štětce:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1327
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Brush Smoothing: Disabled"
+#, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
-msgstr[0] "Vyhlazování štětce: Vypnuto"
-msgstr[1] "Vyhlazování štětce: Vypnuto"
-msgstr[2] "Vyhlazování štětce: Vypnuto"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1424
@@ -23067,7 +22999,7 @@ msgstr ""
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
 msgid "Wait before merging strokes:"
-msgstr ""
+msgstr "Čekat před sloučením tahů:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
 #, kde-format
@@ -23080,7 +23012,7 @@ msgstr ""
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
 msgid "Exclude last strokes from merge:"
-msgstr ""
+msgstr "Vyjmout poslední tahy ze sloučení:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
 #, kde-format
@@ -23093,7 +23025,7 @@ msgstr ""
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
 msgid "Max interval of grouped strokes:"
-msgstr ""
+msgstr "Maximální interval seskupených tahů:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:89
 #, kde-format
@@ -23105,10 +23037,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
-#| msgid "Video duration:"
+#, kde-format
 msgid "Max group duration:"
-msgstr "Délka videa:"
+msgstr "Maximální délka trvání skupiny:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -23395,10 +23326,9 @@ msgstr "Vždy používat tuto šablonu"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
 #: libs/ui/forms/KisWelcomePage.ui:60
-#, fuzzy, kde-format
-#| msgid "Support Krita"
+#, kde-format
 msgid "Support Krita!"
-msgstr "Podpořte Kritu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:140
@@ -23436,10 +23366,9 @@ msgstr "X"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
 #: libs/ui/forms/KisWelcomePage.ui:322
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Open Image"
-msgstr "Otevřít obrázky"
+msgstr "Otevřít obrázek"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:394
@@ -23491,10 +23420,9 @@ msgstr "Webová stránka aplikace Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1069
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Recent Images"
-msgstr "Otevřít obrázky"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
 #: libs/ui/forms/KisWelcomePage.ui:1093
@@ -23780,9 +23708,7 @@ msgstr "Autoři"
 
 #. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Translators"
+#, kde-format
 msgid "Translators"
 msgstr "Překladatelé"
 
@@ -24483,10 +24409,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:283
-#, fuzzy, kde-format
-#| msgid "Decoration:"
+#, kde-format
 msgid "Canvas Decorations"
-msgstr "Dekorace:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgdisplaysettings.ui:289
@@ -24496,18 +24421,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:295
-#, fuzzy, kde-format
-#| msgctxt "Default name for a color swatch"
-#| msgid "Color %1"
+#, kde-format
 msgid "Color 1:"
-msgstr "Barva %1"
+msgstr "Barva 1:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/forms/wdgdisplaysettings.ui:322
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Color 2:"
-msgstr "Barva:"
+msgstr "Barva 2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCheckSize)
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
@@ -24569,25 +24491,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
-#, fuzzy, kde-format
-#| msgid "Opacity:"
+#, kde-format
 msgid "Outline opacity:"
-msgstr "Krytí:"
+msgstr "Krytí obrysové čáry:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:440
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Overlay"
-#| msgid "Overlay"
+#, kde-format
 msgid "Overlay color:"
-msgstr "Překrytí"
+msgstr "Barva překrytí:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:460
-#, fuzzy, kde-format
-#| msgid "Opacity:"
+#, kde-format
 msgid "Overlay opacity:"
-msgstr "Krytí:"
+msgstr "Krytí překrytí:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -24694,10 +24612,9 @@ msgstr "Uzpůsobit na rozlišení obrázku (ppi)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
-#, fuzzy, kde-format
-#| msgid "Scaling Mode:"
+#, kde-format
 msgid "&Scaling Filter:"
-msgstr "Režim změny měřítka"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -24964,10 +24881,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, group_subWinMode)
 #: libs/ui/forms/wdggeneralsettings.ui:408
-#, fuzzy, kde-format
-#| msgid "Subwindows"
+#, kde-format
 msgid "Subwindow mode"
-msgstr "Pod-okna"
+msgstr "Režim pod-okna"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton)
 #. i18n: ectx: property (text), widget (QPushButton, clearBgImageButton)
@@ -25030,10 +24946,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:623
 #: libs/ui/forms/wdggeneralsettings.ui:807
-#, fuzzy, kde-format
-#| msgid "(Needs restart)"
+#, kde-format
 msgid "(needs restart)"
-msgstr "(Potřebuje restartovat)"
+msgstr "(potřebuje restartovat)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:650
@@ -25116,12 +25031,9 @@ msgstr "Citlivost:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
 #: libs/ui/forms/wdggeneralsettings.ui:781
-#, fuzzy, kde-format
-#| msgid ""
-#| "Hide docker scrollbars if kinetic scrolling is enabled (needs restart)"
+#, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
-msgstr ""
-"Skrýt posuvníky doku pokud je zapnutý kinetický posun (potřebuje restartovat)"
+msgstr "Skrýt posuvníky doku pokud je zapnutý kinetický posun"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:834
@@ -25137,10 +25049,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:847
-#, fuzzy, kde-format
-#| msgid "Kinetic Scrolling (needs restart)"
+#, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "Kinetický posun (potřebuje restartovat)"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:855
@@ -25271,11 +25182,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1044
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Painting"
+#, kde-format
 msgid "Pasting"
-msgstr "Malování"
+msgstr "Vkládání"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnDownload)
 #: libs/ui/forms/wdggeneralsettings.ui:1056
@@ -25472,11 +25381,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1453
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Automatic color axis adjustments"
+#, kde-format
 msgid "Automatic layer suffixes"
-msgstr "Automatická úprava barevných os"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1459
@@ -25494,13 +25401,11 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1491
 #, kde-format
 msgid "Use cumulative undo"
-msgstr ""
+msgstr "Použít kumulativní krok zpátky"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1511
-#, fuzzy, kde-format
-#| msgctxt "Tablet mapping settings"
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "Pokročilé..."
 
@@ -25548,7 +25453,7 @@ msgstr "Barva popředí"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1460
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1461
 #, kde-format
 msgid "Background Color"
 msgstr "Barva pozadí"
@@ -27490,8 +27395,7 @@ msgstr "Rozměry v pixelech"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPixelFilter)
 #: libs/ui/imagesize/wdg_imagesize.ui:81
-#, fuzzy, kde-format
-#| msgid "&Filter:"
+#, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "&Filter:"
 msgstr "&Filtr:"
@@ -27522,9 +27426,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #: libs/ui/imagesize/wdg_layersize.ui:119
-#, fuzzy, kde-format
-#| msgctxt "Resize intepolation method list label"
-#| msgid "Filter:"
+#, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "Filter:"
 msgstr "Filtr:"
@@ -27584,7 +27486,7 @@ msgstr "Činnost"
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:271
 #, kde-format
 msgid "A conflict exists between two or more shortcuts."
-msgstr ""
+msgstr "Existuje konflikt mezi dvěma nebo vícero zkratkami."
 
 #. i18n: ectx: property (text), widget (QPushButton, editProfilesButton)
 #: libs/ui/input/config/kis_edit_profiles_dialog.cpp:54
@@ -27658,7 +27560,7 @@ msgstr ""
 #: libs/ui/input/config/kis_input_configuration_page_item.ui:111
 #, kde-format
 msgid "Conflict found for a Shortcut in this Action."
-msgstr ""
+msgstr "Pro zkratku k této činnosti byl nalezen konflikt."
 
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:52
 #, kde-format
@@ -28023,9 +27925,7 @@ msgid "Select from Menu (Add to Selection)"
 msgstr ""
 
 #: libs/ui/input/kis_select_layer_action.cpp:246
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select all layers"
+#, kde-format
 msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"
 msgstr "Vybrat všechny vrstvy"
@@ -28379,22 +28279,19 @@ msgid "Zoom to 100%"
 msgstr "Zvětšení na 100%"
 
 #: libs/ui/input/kis_zoom_action.cpp:118
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgid "Fit to View"
-msgstr "Přizpůsobit stránce"
+msgstr "Vyplnit pohled"
 
 #: libs/ui/input/kis_zoom_action.cpp:119
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgid "Fit to View Width"
-msgstr "Přizpůsobit šířce"
+msgstr ""
 
 #: libs/ui/input/kis_zoom_action.cpp:120
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgid "Fit to View Height"
-msgstr "Přizpůsobit výšce"
+msgstr ""
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:37
 #, kde-format
@@ -28445,10 +28342,9 @@ msgid "Toggle Eraser"
 msgstr ""
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgid "Display"
+#, kde-format
 msgid "Reset Display"
-msgstr "Zobrazit"
+msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, TabletTest)
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:18
@@ -28845,10 +28741,9 @@ msgid "Mirror View Around Cursor"
 msgstr "Zrcadlit pohled okolo kurzoru"
 
 #: libs/ui/kis_mirror_manager.cpp:48
-#, fuzzy, kde-format
-#| msgid "Mirror View Around Cursor"
+#, kde-format
 msgid "Mirror View Around Canvas"
-msgstr "Zrcadlit pohled okolo kurzoru"
+msgstr ""
 
 #: libs/ui/kis_node_manager.cpp:453
 #, kde-format
@@ -29145,10 +29040,9 @@ msgid "100%"
 msgstr "100%"
 
 #: libs/ui/kis_popup_palette.cpp:198
-#, fuzzy, kde-format
-#| msgid "Canvas Size"
+#, kde-format
 msgid "Fit Canvas to View"
-msgstr "Velikost plátna"
+msgstr ""
 
 #: libs/ui/kis_popup_palette.cpp:875
 #, kde-format
@@ -29445,16 +29339,14 @@ msgid "Adding resource types..."
 msgstr ""
 
 #: libs/ui/KisApplication.cpp:465
-#, fuzzy, kde-format
-#| msgid "Loading Main Window..."
+#, kde-format
 msgid "Loading plugins..."
-msgstr "Načítá se hlavní okno"
+msgstr "Načítá přídavné moduly..."
 
 #: libs/ui/KisApplication.cpp:471
-#, fuzzy, kde-format
-#| msgid "Manage Resources..."
+#, kde-format
 msgid "Loading resources..."
-msgstr "Spravovat zdroje..."
+msgstr ""
 
 #: libs/ui/KisApplication.cpp:480
 #, kde-format
@@ -29462,10 +29354,9 @@ msgid "Loading Main Window..."
 msgstr "Načítá se hlavní okno"
 
 #: libs/ui/KisApplication.cpp:512
-#, fuzzy, kde-format
-#| msgid "Scanning..."
+#, kde-format
 msgid "Launching..."
-msgstr "Zkoumám..."
+msgstr "Spouštím..."
 
 #: libs/ui/KisApplication.cpp:581
 #, kde-format
@@ -29695,13 +29586,13 @@ msgstr "Do souboru %1 nelze zapisovat. Prosím zvolte jiný název souboru."
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr ""
+msgstr "Vytvoření záložního souboru selhalo"
 
 #: libs/ui/KisDocument.cpp:800
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr ""
+msgstr "Vytvoření číslovaného záložního souboru selhalo"
 
 #: libs/ui/KisDocument.cpp:822
 #, kde-format
@@ -29727,14 +29618,9 @@ msgid "Error during saving %1: %2"
 msgstr ""
 
 #: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save\n"
-#| "%1"
+#, kde-format
 msgid "Could not save %1."
-msgstr ""
-"Nelze uložit\n"
-"%1"
+msgstr "Nelze uložit %1."
 
 #: libs/ui/KisDocument.cpp:999
 #, kde-format
@@ -29800,16 +29686,14 @@ msgid "Opening document"
 msgstr "Otevírá se dokument"
 
 #: libs/ui/KisDocument.cpp:1949 libs/ui/KisDocument.cpp:1955
-#, fuzzy, kde-format
-#| msgid "Could not open '%1'."
+#, kde-format
 msgid "Could not open %1."
-msgstr "Nelze otevřít '%1'."
+msgstr "Nelze otevřít %1."
 
 #: libs/ui/KisDocument.cpp:1968 libs/ui/KisDocument.cpp:1972
-#, fuzzy, kde-format
-#| msgid "There were problems opening %1"
+#, kde-format
 msgid "There were problems opening %1."
-msgstr "Při otevírání došlo k problémům %1"
+msgstr "Při otevírání došlo k problémům %1."
 
 #: libs/ui/KisDocument.cpp:2103
 #, kde-format
@@ -29918,7 +29802,7 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:139
 #, kde-format
 msgid "Unexpected error."
-msgstr ""
+msgstr "Neočekávaná chyba."
 
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format
@@ -30163,11 +30047,9 @@ msgid "Also save your image as a Krita file."
 msgstr ""
 
 #: libs/ui/KisImportExportUtils.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Image Color Space"
+#, kde-format
 msgid "Convert image color space on import"
-msgstr "Převést barevný prostor obrázku"
+msgstr ""
 
 #: libs/ui/KisImportExportUtils.cpp:51
 #, kde-format
@@ -30178,11 +30060,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
-#, fuzzy
-#| msgid "Duplicate layer or mask"
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "Duplikovat vrstvu nebo masku"
+msgstr ""
 
 #: libs/ui/KisMainWindow.cpp:185
 #, kde-format
@@ -30405,15 +30285,13 @@ msgstr ""
 #, kde-format
 msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
-msgstr ""
+msgstr "Paleta Krita (KPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "GIMP Patterns"
+#, kde-format
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
-msgstr "Vzorky GIMPu"
+msgstr "Paleta GIMPu (GPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:106
 #, kde-format
@@ -30743,34 +30621,34 @@ msgstr ""
 msgid "Gamut Warnings turned off."
 msgstr "Varování Gamut vypnuta."
 
-#: libs/ui/KisViewManager.cpp:796
+#: libs/ui/KisViewManager.cpp:791
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Aktivní profil autora"
 
-#: libs/ui/KisViewManager.cpp:926
+#: libs/ui/KisViewManager.cpp:921
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (Kopírovat)"
 
-#: libs/ui/KisViewManager.cpp:1069 libs/ui/KisViewManager.cpp:1150
+#: libs/ui/KisViewManager.cpp:1064 libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1069
+#: libs/ui/KisViewManager.cpp:1064
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1150
+#: libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Nelze uložit přírůstkovou zálohu"
 
-#: libs/ui/KisViewManager.cpp:1333
+#: libs/ui/KisViewManager.cpp:1328
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -30779,13 +30657,13 @@ msgstr ""
 "Přepínám do režimu Pouze plátno.\n"
 "Stiskněte %1 pro návrat."
 
-#: libs/ui/KisViewManager.cpp:1373
+#: libs/ui/KisViewManager.cpp:1368
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Otevřít složku zdrojů"
 
-#: libs/ui/KisViewManager.cpp:1377
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -30800,19 +30678,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1392
+#: libs/ui/KisViewManager.cpp:1387
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1393
+#: libs/ui/KisViewManager.cpp:1388
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1511 libs/ui/KisViewManager.cpp:1529
+#: libs/ui/KisViewManager.cpp:1506 libs/ui/KisViewManager.cpp:1524
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -34430,17 +34308,14 @@ msgid "Tool Options"
 msgstr "Možnosti nástrojů"
 
 #: libs/widgets/KoZoomMode.cpp:14
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "View"
+#, kde-format
 msgid "Fit View"
-msgstr "Pohled"
+msgstr "Vyplnit pohled"
 
 #: libs/widgets/KoZoomMode.cpp:15
-#, fuzzy, kde-format
-#| msgid "Fit Page Width"
+#, kde-format
 msgid "Fit View Width"
-msgstr "Přizpůsobit šířce stránky"
+msgstr ""
 
 #: libs/widgets/KoZoomMode.cpp:17
 #, kde-format
@@ -34453,10 +34328,9 @@ msgid "Fit Text Width"
 msgstr "Přizpůsobit text šířce"
 
 #: libs/widgets/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgid "Fit Page Height"
+#, kde-format
 msgid "Fit View Height"
-msgstr "Přizpůsobit výšce stránky"
+msgstr ""
 
 #: libs/widgets/KoZoomWidget.cpp:124
 #, kde-format
@@ -36753,10 +36627,9 @@ msgstr "toto nezahrnuje změnu barvy pomocí palety odstínů"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:392
-#, fuzzy, kde-format
-#| msgid "Background color change"
+#, kde-format
 msgid "Background color changes"
-msgstr "Změna barvy pozadí"
+msgstr "Změny barvy pozadí"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnForeground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:405
@@ -37128,11 +37001,10 @@ msgid "Animation Timeline"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
-#, fuzzy, kde-format
-#| msgid "&Import..."
+#, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
-msgstr "&Importovat..."
+msgstr ""
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, kde-format
@@ -37141,26 +37013,21 @@ msgid "Remove audio"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "Mute"
+#, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
-msgstr "Ztlumit"
+msgstr ""
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu, slider"
-#| msgid "Volume:"
+#, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
-msgstr "Svazek:"
+msgstr ""
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
-#, fuzzy, kde-format
-#| msgid "Animation Curves"
+#, kde-format
 msgid "Animation audio menu"
-msgstr "Křivky animace"
+msgstr ""
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
@@ -37198,15 +37065,13 @@ msgid "Dropped frames are not available in this Krita instance"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:876
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Keyframe"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
-msgstr[0] "Přidat klíčový snímek"
-msgstr[1] "Přidat klíčový snímek"
-msgstr[2] "Přidat klíčový snímek"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
@@ -37655,16 +37520,14 @@ msgid "Select a Directory"
 msgstr "Vyberte adresář"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
-#, fuzzy, kde-format
-#| msgid "Export Composition"
+#, kde-format
 msgid "Exporting Compositions..."
-msgstr "Exportovat kompozici"
+msgstr ""
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
-#, fuzzy, kde-format
-#| msgid "Export Composition"
+#, kde-format
 msgid "Exporting composition: %1..."
-msgstr "Exportovat kompozici"
+msgstr ""
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
 #, kde-format
@@ -37935,11 +37798,9 @@ msgid "Grid and Guides"
 msgstr ""
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
-#, fuzzy
-#| msgid "Histogram"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
-msgstr "Histogram"
+msgstr ""
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -37981,11 +37842,10 @@ msgid "Tree Indentation"
 msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:371
-#, fuzzy, kde-format
-#| msgid "Blending Mode"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
-msgstr "Režim mísení"
+msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:373
 #, kde-format
@@ -37998,32 +37858,28 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:378
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Žádný"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:379
-#, fuzzy, kde-format
-#| msgid "Simple"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Jednoduchý"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:380
-#, fuzzy, kde-format
-#| msgid "Color Balance"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
-msgstr "Vyvážení barev"
+msgstr "Vyvážený"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:381
-#, fuzzy, kde-format
-#| msgid "Details"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
-msgstr "Podrobnosti"
+msgstr "Podrobný"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:394
 #, kde-format
@@ -38032,12 +37888,10 @@ msgid "Blending info text opacity"
 msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:412
-#, fuzzy, kde-format
-#| msgctxt "spline filtering"
-#| msgid "spline"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
-msgstr "splajn"
+msgstr "Vloženě"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:414
 #, kde-format
@@ -38048,12 +37902,10 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:426
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Selection to New Layer"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "Kopírovat výběr do nové vrstvy"
+msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:427
 #, kde-format
@@ -38498,10 +38350,9 @@ msgstr "Přidat barvu popředí"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLock)
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:139
-#, fuzzy, kde-format
-#| msgid "Save the current script"
+#, kde-format
 msgid "Lock the current palette."
-msgstr "Uložit aktuální skript"
+msgstr ""
 
 #: plugins/dockers/presetdocker/presetdocker_dock.cpp:25
 #, kde-format
@@ -38530,16 +38381,14 @@ msgid "Bubble Up on Repeated Use"
 msgstr ""
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:206
-#, fuzzy, kde-format
-#| msgid "Number of resolutions:"
+#, kde-format
 msgid "Set Number of Brushes Shown"
-msgstr "Počet rozlišení:"
+msgstr ""
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:207
-#, fuzzy, kde-format
-#| msgid "Number of resolutions:"
+#, kde-format
 msgid "Number of Brushes Shown:"
-msgstr "Počet rozlišení:"
+msgstr ""
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:309
 #, kde-format
@@ -38855,11 +38704,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelRenderTimeTitle)
 #: plugins/dockers/recorder/recorder_export.ui:1026
-#, fuzzy, kde-format
-#| msgid "Render as:"
+#, kde-format
 msgctxt "How long it took to render the video"
 msgid "Render time:"
-msgstr "Vykreslit jako:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRestart)
 #: plugins/dockers/recorder/recorder_export.ui:1053
@@ -39253,9 +39101,7 @@ msgid "Snapshot Docker"
 msgstr ""
 
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:70
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - category HSY"
-#| msgid "HSY"
+#, kde-format
 msgid "HSY"
 msgstr "HSY"
 
@@ -39669,10 +39515,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
-#, fuzzy, kde-format
-#| msgid "Color Mode"
+#, kde-format
 msgid "Color Model"
-msgstr "Barevný režim"
+msgstr "Model barev"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:42
@@ -39682,67 +39527,57 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgid "Static"
-msgstr "Stav"
+msgstr "Statický"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
 #, kde-format
 msgid "Dynamic"
-msgstr ""
+msgstr "Dynamický"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
 #, kde-format
 msgid "Dynamic + Static Edge"
-msgstr ""
+msgstr "Dynamický + statický okraj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpQuickSettingsMenu)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:109
-#, fuzzy, kde-format
-#| msgid "Quick Settings Docker"
+#, kde-format
 msgid "Show &Quick Settings Menu"
-msgstr "Dok pro rychlé nastavení"
+msgstr "Zobrazit na&bídku rychlého nastavení"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:124
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select layout"
+#, kde-format
 msgid "Favorite Selector Layouts:"
-msgstr "Vybrat rozložení"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (KisPopupButton, btnFavoriteSelectors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
-#, fuzzy, kde-format
-#| msgid "&Select..."
+#, kde-format
 msgid "Select..."
-msgstr "V&ybrat..."
+msgstr "Vybrat..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Projection Color Space"
+#, kde-format
 msgid "Selection Color Space:"
-msgstr "Převést barevné prostředí projekce"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
-#, fuzzy, kde-format
-#| msgid "Layers/Masks"
+#, kde-format
 msgid "Layer/Mask"
-msgstr "Vrstvy/masky"
+msgstr "Vrstva/maska"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProofColors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Projection Color Space"
+#, kde-format
 msgid "Proof Colors to Painting Color Space"
-msgstr "Převést barevné prostředí projekce"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPopups)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
@@ -39752,19 +39587,17 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:202
-#, fuzzy, kde-format
-#| msgid "Drop size"
+#, kde-format
 msgid "Pop-up size:"
-msgstr "Velikost kapek"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:221
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:539
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Patches"
-msgstr "Ba&revné dílky"
+msgstr "Barevné dílky"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -39772,10 +39605,9 @@ msgstr "Ba&revné dílky"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:560
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:767
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Orientation:"
-msgstr "Orientace"
+msgstr "Orientace:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryHorizontal)
@@ -39783,10 +39615,9 @@ msgstr "Orientace"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:260
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:582
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:789
-#, fuzzy, kde-format
-#| msgid "Hori&zontal"
+#, kde-format
 msgid "hori&zontal"
-msgstr "Vodoro&vně"
+msgstr "vodor&ovně"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryVertical)
@@ -39794,10 +39625,9 @@ msgstr "Vodoro&vně"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:270
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:592
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:799
-#, fuzzy, kde-format
-#| msgid "&Vertical"
+#, kde-format
 msgid "&vertical"
-msgstr "S&vislá"
+msgstr "s&visle"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -39805,10 +39635,9 @@ msgstr "S&vislá"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:289
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:628
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:835
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Along Orientation"
-msgstr "Orientace"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -39816,10 +39645,9 @@ msgstr "Orientace"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:294
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:633
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:840
-#, fuzzy, kde-format
-#| msgid "Vertically"
+#, kde-format
 msgid "Laterally"
-msgstr "Svisle"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_12)
@@ -39827,10 +39655,9 @@ msgstr "Svisle"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:302
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:641
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:848
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Scrolling:"
-msgstr "Mezery:"
+msgstr "Rolování:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -39838,10 +39665,9 @@ msgstr "Mezery:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:322
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:651
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:858
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Patches"
-msgstr "Ba&revné dílky"
+msgstr "Opravy"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #. i18n: ectx: property (text), widget (QLabel, label_15)
@@ -39849,11 +39675,9 @@ msgstr "Ba&revné dílky"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:356
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:687
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:894
-#, fuzzy, kde-format
-#| msgctxt "EXIF: lens"
-#| msgid "Max aperture:"
+#, kde-format
 msgid "Max Patches:"
-msgstr "Maximální clona:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
@@ -39863,68 +39687,57 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateExternal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:421
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Color Range Selection"
+#, kde-format
 msgid "Color changes externally"
-msgstr "Výběr rozsahu barev"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateOnRightClick)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
-#, fuzzy, kde-format
-#| msgid "Right clicking on shade selector"
+#, kde-format
 msgid "Right-clicking on shade selector"
 msgstr "Pravým kliknutím na paletu odstínů"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
-#, fuzzy, kde-format
-#| msgid "Iterations"
+#, kde-format
 msgid "Interaction ends"
-msgstr "Iterace"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
-#, fuzzy, kde-format
-#| msgid "Line Count: "
+#, kde-format
 msgid "Line Count:"
-msgstr "Počet čar: "
+msgstr "Počet čar:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:465
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgid "Line Height:"
-msgstr "Tloušťka čáry: "
+msgstr "Tloušťka čáry:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:726
-#, fuzzy, kde-format
-#| msgctxt "left mouse button"
-#| msgid "left button"
+#, kde-format
 msgid "Clear Button"
-msgstr "levé tlačítko"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:752
-#, fuzzy, kde-format
-#| msgid "Colors from Image"
+#, kde-format
 msgid "Colors fro&m Image"
-msgstr "Barvy z obrázku"
+msgstr "Barvy z obrázk&u"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgid "Auto Update"
-msgstr "Aktualizovat"
+msgstr "Automaticky aktualizovat"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRange)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:38
-#, fuzzy, kde-format
-#| msgid "&Range:"
+#, kde-format
 msgid "Range:"
-msgstr "&Rozsah:"
+msgstr "Rozsah:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOffset)
 #. i18n: ectx: property (text), widget (QLabel, labelOffset)
@@ -39940,55 +39753,48 @@ msgstr "Posunout na:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDisplay)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:157
-#, fuzzy, kde-format
-#| msgid "Display"
+#, kde-format
 msgid "Display:"
-msgstr "Zobrazit"
+msgstr "Zobrazení:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbSlider)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
 #, kde-format
 msgid "S&lider"
-msgstr ""
+msgstr "P&osuvník"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Pa&tches"
-msgstr "Ba&revné dílky"
+msgstr "Barevné díl&ky"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Preview:"
-msgstr "Náhled"
+msgstr "Náhled:"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:4
-#, fuzzy, kde-format
-#| msgid "Color Selector Settings"
+#, kde-format
 msgctxt "action"
 msgid "WG Color Selector Actions"
-msgstr "Nastavení palety barev"
+msgstr ""
 
 #. i18n: context: text @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:7
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color history"
+#, kde-format
 msgctxt "action"
 msgid "Show wide-gamut color selector"
-msgstr "Zobrazit historii barev"
+msgstr ""
 
 #. i18n: context: text @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:17
-#, fuzzy, kde-format
-#| msgid "Hide Shade Selector"
+#, kde-format
 msgctxt "action"
 msgid "Show wide-gamut shade selector"
-msgstr "Skrýt paletu odstínů"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
@@ -39996,11 +39802,10 @@ msgstr "Skrýt paletu odstínů"
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:19
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:20
-#, fuzzy, kde-format
-#| msgid "Shade Selector"
+#, kde-format
 msgctxt "action"
 msgid "Show shade selector"
-msgstr "Paleta odstínů"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
@@ -40008,11 +39813,10 @@ msgstr "Paleta odstínů"
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:29
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:30
-#, fuzzy, kde-format
-#| msgid "Shade Selector"
+#, kde-format
 msgctxt "action"
 msgid "Show MyPaint selector"
-msgstr "Paleta odstínů"
+msgstr ""
 
 #. i18n: context: text @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
@@ -40020,12 +39824,10 @@ msgstr "Paleta odstínů"
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:47
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:50
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color lighter"
+#, kde-format
 msgctxt "action"
 msgid "Make color lighter"
-msgstr "Zesvětlit barvu štětce"
+msgstr "Zesvětlit barvu"
 
 #. i18n: context: toolTip @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:49
@@ -40042,12 +39844,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:57
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color darker"
+#, kde-format
 msgctxt "action"
 msgid "Make color darker"
-msgstr "Ztmavit barvu štětce"
+msgstr "Ztmavit barvu"
 
 #. i18n: context: toolTip @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:59
@@ -40064,12 +39864,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:67
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:70
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Saturation HSY"
-#| msgid "Increase Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Increase color saturation"
-msgstr "Zvýšit nasycení barev"
+msgstr "Zvýšit barevné nasycení"
 
 #. i18n: context: toolTip @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:69
@@ -40084,12 +39882,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:77
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:80
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Saturation HSY"
-#| msgid "Decrease Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Decrease color saturation"
-msgstr "Snížit nasycení barev"
+msgstr "Snížit barevné nasycení"
 
 #. i18n: context: toolTip @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:79
@@ -40104,11 +39900,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:87
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:90
-#, fuzzy, kde-format
-#| msgid "Anticlockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue clockwise"
-msgstr "Proti směru hodinových ručiček"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:89
@@ -40123,39 +39918,33 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:97
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:100
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue counter-clockwise"
-msgstr "Otočit objekt o 90° proti směru hodinových ručiček"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:99
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue of the selected color counter-clockwise"
-msgstr "Otočit výběr proti směru hodinových ručiček o 90 stupňů"
+msgstr ""
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:48
-#, fuzzy, kde-format
-#| msgid "Color Selector"
+#, kde-format
 msgid "Wide Gamut Color Selector"
-msgstr "Paleta barev"
+msgstr ""
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
-#, fuzzy, kde-format
-#| msgid "&Configure %1..."
+#, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
-msgstr "N&astavit %1..."
+msgstr "Nastavit..."
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
-#, fuzzy, kde-format
-#| msgid "Color Selector Settings"
+#, kde-format
 msgid "Wide Gamut Color Selector Settings"
-msgstr "Nastavení palety barev"
+msgstr ""
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:35
 #, kde-format
@@ -40444,15 +40233,13 @@ msgid "Resources Cache Database Explorer"
 msgstr ""
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
-#, fuzzy, kde-format
-#| msgid "Versions"
+#, kde-format
 msgid "Version"
 msgstr "Verze"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "File name"
 msgstr "Název souboru"
 
@@ -40469,22 +40256,19 @@ msgid "Display Name"
 msgstr "Zobrazované jméno"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
-#, fuzzy, kde-format
-#| msgid "Database:"
+#, kde-format
 msgid "Database version"
-msgstr "Databáze:"
+msgstr "Verze databáze"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:149
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version"
 msgstr "Verze Krita"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:150
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgid "Upgrade date"
-msgstr "Aktualizovat"
+msgstr "Datum aktualizace"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
@@ -40506,30 +40290,27 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
-#, fuzzy, kde-format
-#| msgid "Equalization:"
+#, kde-format
 msgid "Initialization"
-msgstr "Vyrovnání hladin:"
+msgstr "Inicializace"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
-#, fuzzy, kde-format
-#| msgid "Database:"
+#, kde-format
 msgid "Database version:"
-msgstr "Databáze:"
+msgstr "Verze databáze:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version:"
-msgstr "Verze Krita"
+msgstr "Verze Krita:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSchema)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
 #, kde-format
 msgid "Schema upgrades"
-msgstr ""
+msgstr "Aktualizace schématu"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
@@ -45548,11 +45329,10 @@ msgid "Sine Wave"
 msgstr ""
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:38
-#, fuzzy, kde-format
-#| msgid "Triangle"
+#, kde-format
 msgctxt "Screentone Pattern - Triangular Wave Lines"
 msgid "Triangular Wave"
-msgstr "Trojúhelník"
+msgstr ""
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:39
 #, kde-format
@@ -46773,14 +46553,13 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
 #, kde-format
 msgid "If this is not enabled, the image will be saved losslessly."
-msgstr ""
+msgstr "Pokud je tato volba není zapnuta, bude obrázek uložen bezeztrátově."
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:59
-#, fuzzy, kde-format
-#| msgid "Ascending"
+#, kde-format
 msgid "Lossy encoding"
-msgstr "Vzestupně"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblHighQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:77
@@ -46892,11 +46671,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:239
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten image"
+#, kde-format
 msgid "Flatten the image"
-msgstr "Sloučit obraz"
+msgstr "Zploštit obraz"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:256
@@ -46908,11 +46685,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:345
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
+#, kde-format
 msgid "Encoder parameters"
-msgstr "Změnit parametr"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:351
@@ -47586,11 +47361,10 @@ msgstr ""
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:316
 #: plugins/impex/libkra/kis_kra_saver.cpp:339
-#, fuzzy, kde-format
-#| msgid "Could not read pixel data: %1."
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
-msgstr "Nelze přečíst data o pixelech: %1."
+msgstr ""
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:452
 #, kde-format
@@ -49537,9 +49311,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:829
-#, fuzzy, kde-format
-#| msgctxt "JPEG metadata filter"
-#| msgid "Filters:"
+#, kde-format
 msgctxt "WebP metadata options"
 msgid "Filters:"
 msgstr "Filtry:"
@@ -51377,7 +51149,7 @@ msgstr " ms"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:70
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1 ms"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, kde-format
@@ -51640,15 +51412,13 @@ msgid "Hard"
 msgstr "Těžká"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:74
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgctxt "Background painting color"
 msgid "Background"
 msgstr "Pozadí"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:75
-#, fuzzy, kde-format
-#| msgid "Foreground"
+#, kde-format
 msgctxt "Foreground painting color"
 msgid "Foreground"
 msgstr "Popředí"
@@ -51785,29 +51555,25 @@ msgid "repeat"
 msgstr "opakování"
 
 #: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "MyPaint option name"
 msgid "Basic"
 msgstr "Základní"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
-#, fuzzy, kde-format
-#| msgid "CPU Limit:"
+#, kde-format
 msgid "Y limit: "
-msgstr "Omezení CPU:"
+msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "Suffix: “Every x min”"
-#| msgid " min"
+#, kde-format
 msgid "X min: "
-msgstr " min"
+msgstr "X min:"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:40
 #, kde-format
 msgid "X max: "
-msgstr ""
+msgstr "X max:"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
 #, kde-format
@@ -51997,10 +51763,9 @@ msgid "Colorize"
 msgstr "Vybarvit"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
-#, fuzzy, kde-format
-#| msgid "Iterations"
+#, kde-format
 msgid "Posterization Levels"
-msgstr "Iterace"
+msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
@@ -52094,23 +51859,19 @@ msgid "Smudge Radius Log"
 msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Smudge Length Multiplier"
-msgstr "Délka rozmazání"
+msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Smudge Bucket"
-msgstr "Délka rozmazání"
+msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Transparency Mask"
+#, kde-format
 msgid "Smudge Transparency"
-msgstr "Přidat masku průhlednosti"
+msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
@@ -52399,10 +52160,9 @@ msgid "Shape dynamics"
 msgstr "Dynamika tvaru"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Spiral Shape"
+#, kde-format
 msgid "Spray Shape"
-msgstr "Spirálový tvar"
+msgstr ""
 
 #: plugins/paintops/spray/spray_paintop_plugin.cpp:27
 #, kde-format
@@ -55276,10 +55036,9 @@ msgstr "Měřítko: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:534
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:449
-#, fuzzy, kde-format
-#| msgid "Use custom interface font"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "Použít vlastní písmo prostředí"
+msgstr "Použít vlastní volby mísení"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:549
 #, kde-format
@@ -55356,13 +55115,13 @@ msgstr ""
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
 #, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr ""
+msgstr "Nastavit vlastní úroveň krytí výplně"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:617
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
 #, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr ""
+msgstr "Nastavit vlastní režim mísení výplně"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:619
 #, kde-format
@@ -55376,10 +55135,9 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:621
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgid "Boundary color"
-msgstr "Barva pozadí"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:622
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
@@ -55461,18 +55219,16 @@ msgid "Reset the options to their default values"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:647
-#, fuzzy, kde-format
-#| msgid "Simple mode"
+#, kde-format
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
-msgstr "Jednoduchý režim"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:654
-#, fuzzy, kde-format
-#| msgid "SVG source"
+#, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
-msgstr "Zdroj SVG"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:668
 #, kde-format
@@ -55481,11 +55237,10 @@ msgid "Reference"
 msgstr "Odkaz"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:677
-#, fuzzy, kde-format
-#| msgid "File extension:"
+#, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
-msgstr "Přípona souboru:"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:689
 #, kde-format
@@ -56890,72 +56645,72 @@ msgstr "Změnit SvgTextTool"
 msgid "Text Tool"
 msgstr "Nástroj na text"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:384
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #, kde-format
 msgid "Conversion failed"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:601
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:602
 #, kde-format
 msgid "Find Text"
 msgstr "Najít text"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:604
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:647
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:605
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
 #, kde-format
 msgid "Find:"
 msgstr "Najít:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:643
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:644
 #, kde-format
 msgid "Find and Replace all"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
 #, kde-format
 msgid "Replace:"
 msgstr "Nahradit:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1288
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1294
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1289
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Rich text"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1291
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1292
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1296
 #, kde-format
 msgid "SVG Source"
 msgstr "Zdroj SVG"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1435
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1436
 #, kde-format
 msgid "Font"
 msgstr "Písmo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1452
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1453
 #, kde-format
 msgid "Text Color"
 msgstr "Barva textu"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1467
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1468
 #, kde-format
 msgid "Sample a Color"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1478
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1479
 #, kde-format
 msgid "Line height"
 msgstr "Tloušťka čáry"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1490
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1491
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"
@@ -57828,25 +57583,22 @@ msgid "Reference"
 msgstr "Odkaz"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:561
-#, fuzzy, kde-format
-#| msgid "Target Size"
+#, kde-format
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
-msgstr "Cílová velikost"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:571
-#, fuzzy, kde-format
-#| msgid "SVG source"
+#, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
-msgstr "Zdroj SVG"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:585
-#, fuzzy, kde-format
-#| msgid "File extension:"
+#, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
-msgstr "Přípona souboru:"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:594
 #, kde-format
@@ -57855,32 +57607,30 @@ msgid "Adjustments"
 msgstr "Přizpůsobení"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:848
-#, fuzzy, kde-format
-#| msgid "All"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Vše"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:851
-#, fuzzy, kde-format
-#| msgid "Specific Color Selector"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
-msgstr "Výběr konkrétní barvy"
+msgstr ""
 
+# Přechod sklouznutí má posunovače, kde vlevo (žádný výběr) znamená průhlednost a vpravo (výběr 100 %) znamená neprůhlednost.
+# Opačně to nedává smysl.
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
-msgstr "Průhledné"
+msgstr "Průhlednost"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
-#, fuzzy, kde-format
-#| msgid "Specific Color Selector"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
-msgstr "Výběr konkrétní barvy"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
 #, kde-format
@@ -58964,200 +58714,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#~ msgid "&Canvas"
-#~ msgstr "&Plátno"
-
-#~ msgctxt "action"
-#~ msgid "&Reset zoom"
-#~ msgstr "&Původní přiblížení"
-
-#~ msgctxt "action"
-#~ msgid "Reset zoom"
-#~ msgstr "Původní přiblížení"
-
-#~ msgctxt "paletegen status mode option name"
-#~ msgid "Difference"
-#~ msgstr "Rozdíl"
-
-#~ msgctxt "paleteuse dither option name"
-#~ msgid "none"
-#~ msgstr "žádný"
-
-#~ msgctxt "paleteuse diff mode option name"
-#~ msgid "none"
-#~ msgstr "žádný"
-
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
-#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">This video contains "
-#~ "more than 100 frames. Loading too many frames can overload your computer. "
-#~ "Use a</span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;"
-#~ "\"> </span><a href=\"https://kdenlive.org\"><span style=\" font-"
-#~ "size:16pt; font-weight:400; text-decoration: underline; color:#2980b9;"
-#~ "\">video editor </span></a><span style=\" font-size:16pt; font-"
-#~ "weight:400; color:#ff692e;\">instead!</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">VAROVÁNÍ: </span><span style="
-#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">Toto video obsahuje "
-#~ "více než 100 rámců. Načítání příliš mnoha rámců může přetížit počítač. "
-#~ "Raději použijte</span><span style=\" font-size:16pt; font-weight:400; "
-#~ "color:#ff1500;\"> </span><a href=\"https://kdenlive.org\"><span style=\" "
-#~ "font-size:16pt; font-weight:400; text-decoration: underline; color:"
-#~ "#2980b9;\">video editor </span></a><span style=\" font-size:16pt; font-"
-#~ "weight:400; color:#ff692e;\">!</span></p></body></html>"
-
-#~ msgid "FFMpeg"
-#~ msgstr "FFMpeg"
-
-#~ msgid "Export:"
-#~ msgstr "Exportovat:"
-
-#~ msgid "Image Se&quence"
-#~ msgstr "Obrázková se&kvence"
-
-#~ msgid "&Video"
-#~ msgstr "&Video"
-
-#~ msgid "FF&Mpeg: "
-#~ msgstr "FF&Mpeg: "
-
-#~ msgid "Image Sequence Options"
-#~ msgstr "Možnosti obrázkové sekvence"
-
-#~ msgid "New File"
-#~ msgstr "Nový soubor"
-
-#~ msgid "Recent Documents"
-#~ msgstr "Nedávné dokumenty"
-
-#~ msgid "Grid Settings"
-#~ msgstr "Nastavení mřížky"
-
-#~ msgid ""
-#~ "<b>Note: Krita will need to be restarted for changes to take effect</b>"
-#~ msgstr ""
-#~ "<b>Poznámka: Aby se změny projevily, musíte restartovat aplikaci Krita</b>"
-
-#~ msgid "Enable Smooth Zooming"
-#~ msgstr "Povolit plynulé přiblížení"
-
-#~ msgid "&Description:"
-#~ msgstr "&Popis:"
-
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "&Filtr:"
-
-#~ msgid "Duplicate current profile"
-#~ msgstr "Duplikovat současný profil"
-
-#~ msgid "Reset Zoom to 100%"
-#~ msgstr "Vrátit přiblížení na 100%"
-
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr ""
-#~ "Nelze uložit %1.\n"
-#~ "Důvod: %2"
-
-#~ msgid ""
-#~ "Could not open %2.\n"
-#~ "Reason: %1"
-#~ msgstr ""
-#~ "Nelze otevřít %2.\n"
-#~ "Důvod: %1"
-
-#~ msgid "Fit Page"
-#~ msgstr "Přizpůsobit stránce"
-
-#~ msgid "Colu&mns:"
-#~ msgstr "Sloup&ce:"
-
-#~ msgid "&Rows:"
-#~ msgstr "Řád&ky:"
-
-#~ msgid "Edit Audio:"
-#~ msgstr "Upravit zvuk:"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "Otevřít audio..."
-
-#~ msgid "Split Strokes"
-#~ msgstr "Rozdělit tahy"
-
-#~ msgid "Lossless compression"
-#~ msgstr "Bezeztrátová komprese"
-
-#~ msgid "Information"
-#~ msgstr "Informace"
-
-#~ msgid "Flip vertically"
-#~ msgstr "Převrátit svisle"
-
-#~ msgid "Color Rate"
-#~ msgstr "Barvy:"
-
-#~ msgid "0 px"
-#~ msgstr "0 px"
-
-#~ msgid "0 s"
-#~ msgstr "0 s"
-
-#~ msgid "1000"
-#~ msgstr "1000"
-
-#~ msgid "30 px"
-#~ msgstr "30 px"
-
-#~ msgid "3 s"
-#~ msgstr "3 s"
-
-#~ msgid "%1 s"
-#~ msgstr "%1 s"
-
-#~ msgctxt "option name"
-#~ msgid "Filter"
-#~ msgstr "Filtr"
-
-#~ msgid " s"
-#~ msgstr " s"
-
-#~ msgid "Current selection"
-#~ msgstr "Současný výběr"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "Zkosit podle X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "Zkosit podle Y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "Změnit měřítko"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "Resetovat transformace"

@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-28 02:34+0000\n"
-"PO-Revision-Date: 2023-06-14 13:30+0200\n"
+"POT-Creation-Date: 2023-07-29 02:25+0000\n"
+"PO-Revision-Date: 2023-07-28 17:15+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -8398,11 +8398,10 @@ msgstr "Rimuovi l'istantanea selezionata"
 
 #. i18n: context: text @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:291
-#, fuzzy, kde-format
-#| msgid "Sample a Color"
+#, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color"
-msgstr "Campiona un colore"
+msgstr "&Campiona colore schermo"
 
 #. i18n: context: toolTip @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -8416,18 +8415,17 @@ msgstr "Campiona un colore dallo schermo"
 
 #. i18n: context: iconText @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:294
-#, fuzzy, kde-format
-#| msgid "Sample a Color"
+#, kde-format
 msgctxt "action"
 msgid "Sample Screen Color"
-msgstr "Campiona un colore"
+msgstr "Campiona colore schermo"
 
 #. i18n: context: text @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:301
 #, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color (Sample Real Canvas)"
-msgstr ""
+msgstr "&Campiona colore schermo (campiona tela reale)"
 
 #. i18n: context: toolTip @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:303
@@ -8437,13 +8435,15 @@ msgid ""
 "Sample a color from the screen while sampling a real color from the canvas "
 "if the cursor is over it"
 msgstr ""
+"Campiona un colore preso dallo schermo durante il campionamento di un colore "
+"reale dalla tela, se il cursore è posizionato sopra"
 
 #. i18n: context: iconText @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:304
 #, kde-format
 msgctxt "action"
 msgid "Sample Screen Color (Sample Real Canvas)"
-msgstr ""
+msgstr "Campiona colore schermo (campiona tela reale)"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:311
@@ -8727,11 +8727,10 @@ msgstr "Imposta la modalità della gomma"
 #. i18n: context: toolTip @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:526 krita/krita.action:528 krita/krita.action:529
-#, fuzzy, kde-format
-#| msgid "Toggle Eraser"
+#, kde-format
 msgctxt "action"
 msgid "Toggle eraser preset"
-msgstr "Attiva/disattiva gomma"
+msgstr "Attiva/disattiva preimpostazione gomma"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -12741,16 +12740,14 @@ msgid "&View"
 msgstr "&Vista"
 
 #: krita/krita5.xmlgui:89
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Wrap Around Mode"
+#, kde-format
 msgid "Wrap Around Mode Direction"
-msgstr "Modalità arrotolamento"
+msgstr "Direzione della modalità di arrotolamento"
 
 #: krita/krita5.xmlgui:99
 #, kde-format
 msgid "&Zoom, Rotate, and Mirror"
-msgstr ""
+msgstr "&Ingrandimento, rotazione e rispecchiamento"
 
 #: krita/krita5.xmlgui:131
 #, kde-format
@@ -13775,9 +13772,7 @@ msgstr "Modalità a schermo intero"
 #. i18n: context: text @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:640 krita/kritamenu.action:643
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Detach canvas"
+#, kde-format
 msgctxt "action"
 msgid "Detach Canvas"
 msgstr "Stacca tela"
@@ -13814,12 +13809,10 @@ msgstr "Modalità arrotolamento"
 #. i18n: context: iconText @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:664 krita/kritamenu.action:666
 #: krita/kritamenu.action:667
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Wrap Around Mode"
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Both Directions"
-msgstr "Modalità arrotolamento"
+msgstr "Arrotola in entrambe le direzioni"
 
 #. i18n: context: text @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
@@ -13829,12 +13822,10 @@ msgstr "Modalità arrotolamento"
 #. i18n: context: iconText @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:676 krita/kritamenu.action:678
 #: krita/kritamenu.action:679
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Horizontally"
-msgstr "Rispecchia orizzontalmente"
+msgstr "Arrotola in orizzontale"
 
 #. i18n: context: text @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
@@ -13844,12 +13835,10 @@ msgstr "Rispecchia orizzontalmente"
 #. i18n: context: iconText @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:688 krita/kritamenu.action:690
 #: krita/kritamenu.action:691
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Vertically"
-msgstr "Rispecchia verticalmente"
+msgstr "Arrotola in verticale"
 
 #. i18n: context: text @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:700
@@ -13940,28 +13929,24 @@ msgstr "Vista specchiata attorno al cursore"
 #. i18n: context: iconText @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:752 krita/kritamenu.action:754
 #: krita/kritamenu.action:755
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror View Around Cursor"
+#, kde-format
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr "Vista specchiata attorno al cursore"
+msgstr "Vista specchiata attorno alla tela"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
-#, fuzzy, no-c-format, kde-format
-#| msgid "Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr "Ingrandisci al 100%"
+msgstr "In&grandisci al 100%"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:764 krita/kritamenu.action:765
-#, fuzzy, no-c-format, kde-format
-#| msgid "Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
 msgstr "Ingrandisci al 100%"
@@ -13999,57 +13984,51 @@ msgstr "Rimpicciolisci"
 #. i18n: context: text @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:798 krita/kritamenu.action:801
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View"
-msgstr "Adatta alla pagina"
+msgstr "Adatta alla vista"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:800
-#, fuzzy, kde-format
-#| msgid "Canvas Size"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View"
-msgstr "Dimensioni della tela"
+msgstr "Adatta tela alla vista"
 
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:808 krita/kritamenu.action:811
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
-msgstr "Adatta alla larghezza"
+msgstr "Adatta alla larghezza della vista"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Width"
-msgstr "Adatta alla larghezza"
+msgstr "Adatta tela alla vista della vista"
 
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:818 krita/kritamenu.action:821
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Height"
-msgstr "Adatta all'altezza"
+msgstr "Adatta all'altezza della vista"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:820
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Height"
-msgstr "Adatta all'altezza"
+msgstr "Adatta tela all'altezza della vista"
 
 #. i18n: context: text @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -14059,12 +14038,10 @@ msgstr "Adatta all'altezza"
 #. i18n: context: iconText @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:828 krita/kritamenu.action:830
 #: krita/kritamenu.action:831
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle Zoom Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Fit to View"
-msgstr "Attiva/disattiva Adatta alla pagina"
+msgstr "Attiva/disattiva Adatta alla vista"
 
 #. i18n: context: text @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:838
@@ -14118,30 +14095,29 @@ msgstr "Azzera rotazione della tela"
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:874 krita/kritamenu.action:877
-#, fuzzy, kde-format
-#| msgid "Master Display:"
+#, kde-format
 msgctxt "action"
 msgid "Reset Display"
-msgstr "Vista master:"
+msgstr "Azzera la vista"
 
 #. i18n: context: toolTip @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:876
-#, fuzzy, kde-format
-#| msgid "Reset the options to their default values"
+#, kde-format
 msgctxt "action"
 msgid "Reset zoom, rotation, and mirroring to their default states."
-msgstr "Riporta le opzioni ai valori predefiniti"
+msgstr ""
+"Riporta l'ingrandimento, la rotazione e il rispecchiamento al loro stato "
+"originale"
 
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:884 krita/kritamenu.action:887
-#, fuzzy, kde-format
-#| msgid "Print Size"
+#, kde-format
 msgctxt "action"
 msgid "View Print Size"
-msgstr "Dimensione di stampa"
+msgstr "Visualizza dimensione di stampa"
 
 #. i18n: context: toolTip @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:886
@@ -14149,6 +14125,8 @@ msgstr "Dimensione di stampa"
 msgctxt "action"
 msgid "Map the canvas display to print size, based on the image resolution."
 msgstr ""
+"Mappa la vista della tela alla dimensione di stampa, in base alla "
+"risoluzione dell'immagine."
 
 #. i18n: context: text @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:894
@@ -15954,11 +15932,9 @@ msgstr ""
 
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:28
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "Error message when saving a .kra file"
-#| msgid "Could not save animation meta data."
+#, kde-format
 msgid "Could not access brush tip metadata"
-msgstr "Impossibile salvare i metadati dell'animazione."
+msgstr "Impossibile accedere ai metadati della punta del pennello."
 
 #: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
 #, kde-format
@@ -16307,25 +16283,25 @@ msgstr ""
 "il documento l'oggetto di testo sarà convertito nel formato di Krita 5 che "
 "diverrà incompatibile con Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3748
+#: libs/flake/text/KoSvgTextShape.cpp:3767
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Testo"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3750
-#: libs/flake/text/KoSvgTextShape.cpp:3758
+#: libs/flake/text/KoSvgTextShape.cpp:3769
+#: libs/flake/text/KoSvgTextShape.cpp:3777
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma di testo SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3756
+#: libs/flake/text/KoSvgTextShape.cpp:3775
 #, kde-format
 msgid "SVG Text"
 msgstr "Testo SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3770
-#: libs/flake/text/KoSvgTextShape.cpp:3785
+#: libs/flake/text/KoSvgTextShape.cpp:3789
+#: libs/flake/text/KoSvgTextShape.cpp:3804
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16635,7 +16611,7 @@ msgstr "predefinito"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1444
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
 #, kde-format
 msgid "Size"
 msgstr "Dimensione"
@@ -17085,8 +17061,7 @@ msgstr "Maschera di selezione"
 
 #: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2577
 #: plugins/impex/psd/psd_loader.cpp:193
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Sfondo"
@@ -17452,7 +17427,7 @@ msgstr "Selezione anti-aliasing"
 #: libs/image/kis_selection_filters.cpp:1195
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
-msgstr ""
+msgstr "Espandi la selezione fino al pixel più scuro"
 
 #: libs/image/kis_switch_time_stroke_strategy.cpp:32
 msgctxt "(qtundo-format)"
@@ -17799,6 +17774,9 @@ msgid ""
 "millisecond</b>. The format cannot represent this, and the frame duration "
 "will be rounded to the nearest millisecond."
 msgstr ""
+"L'immagine è animata con una durata di fotogramma in <b>frazioni di un "
+"millisecondo</b>. Il formato non può rappresentare questo aspetto, e la "
+"durata del fotogramma sarà arrotondata al millisecondo più vicino."
 
 #: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:652
 #, kde-format
@@ -17860,18 +17838,14 @@ msgid "Transparency Mask"
 msgstr "Maschera di trasparenza"
 
 #: libs/impex/LayerOpacityCheck.h:109
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Your image contains layers with a color model that is different from the "
-#| "image. The layers will be converted."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Your image contains layers with a partial opacity. The layers will be "
 "exported at full opacity."
 msgstr ""
-"L'immagine contiene livelli con un modello dei colori diverso dall'immagine. "
-"I livelli saranno convertiti."
+"L'immagine contiene livelli con opacità parziale. I livelli saranno "
+"esportati con opacità completa."
 
 #: libs/impex/MultiLayerCheck.h:24
 #, kde-format
@@ -18960,13 +18934,13 @@ msgstr "Sovrapponi"
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Linear)"
 msgid "Lambert Lighting (Linear)"
-msgstr ""
+msgstr "Illuminazione di Lambert (Lineare)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:114
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Gamma 2.2)"
 msgid "Lambert Lighting (Gamma 2.2)"
-msgstr ""
+msgstr "Illuminazione di Lambert (Gamma 2.2)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:115
 #, kde-format
@@ -19496,7 +19470,7 @@ msgstr "Risorse locali"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -19675,16 +19649,15 @@ msgstr "Tag"
 
 #: libs/resources/KisResourceModel.cpp:150
 #: libs/resources/KisTagResourceModel.cpp:652
-#, fuzzy, kde-format
-#| msgid "Clear Thumbnail"
+#, kde-format
 msgid "Large Thumbnail"
-msgstr "Pulisci miniatura"
+msgstr "Miniatura grande"
 
 #: libs/resources/KisResourceModel.cpp:152
 #: libs/resources/KisTagResourceModel.cpp:654
 #, kde-format
 msgid "Dirty"
-msgstr ""
+msgstr "Sporco"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
@@ -19895,49 +19868,43 @@ msgstr "Tutte le risorse senza tag"
 #: libs/resources/KisTagResourceModel.cpp:664
 #, kde-format
 msgid "Tag ID"
-msgstr ""
+msgstr "ID tag"
 
 #: libs/resources/KisTagResourceModel.cpp:666
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
-#, fuzzy, kde-format
-#| msgid "Resource"
+#, kde-format
 msgid "Resource ID"
-msgstr "Risorsa"
+msgstr "ID risorsa"
 
 #: libs/resources/KisTagResourceModel.cpp:668
 #, kde-format
 msgid "Tag Url"
-msgstr ""
+msgstr "URL tag"
 
 #: libs/resources/KisTagResourceModel.cpp:670
-#, fuzzy, kde-format
-#| msgid "Resource"
+#, kde-format
 msgid "Resource"
 msgstr "Risorsa"
 
 #: libs/resources/KisTagResourceModel.cpp:672
-#, fuzzy, kde-format
-#| msgid "Resource View"
+#, kde-format
 msgid "Resource Active"
-msgstr "Panoramica sulla risorsa"
+msgstr "Risorsa attiva"
 
 #: libs/resources/KisTagResourceModel.cpp:674
-#, fuzzy, kde-format
-#| msgid "Storage Active"
+#, kde-format
 msgid "Tag Active"
-msgstr "Archiviazione attiva"
+msgstr "Tag attivo"
 
 #: libs/resources/KisTagResourceModel.cpp:678
-#, fuzzy, kde-format
-#| msgid "Resource Type"
+#, kde-format
 msgid "Resource Name"
-msgstr "Tipo di risorsa"
+msgstr "Nome risorsa"
 
 #: libs/resources/KisTagResourceModel.cpp:680
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "Tag File Name"
-msgstr "Nome del file"
+msgstr "Nome file del tag"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:110
 #, kde-format
@@ -19946,10 +19913,9 @@ msgid "resource folder"
 msgstr "cartella delle risorse"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:123
-#, fuzzy, kde-format
-#| msgid "Dynamics settings"
+#, kde-format
 msgid "Display settings"
-msgstr "Impostazioni dinamiche"
+msgstr "Impostazioni di visualizzazione"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:130
 #, kde-format
@@ -20468,10 +20434,7 @@ msgid "spline"
 msgstr "spline"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:106
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Not Applicable, used where there's no colorants or gamma curve found"
-#| msgid "N/A"
+#, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "N/D"
@@ -20479,29 +20442,26 @@ msgstr "N/D"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
-msgstr ""
+msgstr "Nessun eseguibile FFmpeg valido fornito..."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
+"Affinché la trasparenza GIF funzioni devi utilizzare FFMpeg in versione 4.2 "
+"o superiore"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#| "animated gif images cannot have a framerate higher than 50. The framerate "
-#| "will be reduced to 50 frames per second.</p></body></html>"
+#, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
 "Animated GIF images cannot have a framerate higher than 50. The framerate "
 "will be reduced to 50 frames per second"
 msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Attenzione:</span> "
-"le immagini GIF animate non possono avere una velocità dei fotogrammi "
+"Le immagini GIF animate non possono avere una velocità dei fotogrammi "
 "superiore a 50. La velocità dei fotogrammi sarà ridotta a 50 fotogrammi al "
-"secondo.</p></body></html>"
+"secondo"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
@@ -20515,18 +20475,17 @@ msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
+"Il file FFmpeg che hai fornito sembra essere compresso. Prova prima a "
+"estrarre il file FFmpeg dall'archivio."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
-#, fuzzy, kde-format
-#| msgid ""
-#| "The location of FFmpeg is invalid. Please select the correct location of "
-#| "the FFmpeg executable on your system."
+#, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
-"La posizione del file FFmpeg non è valida. Seleziona la posizione attuale "
-"dell'eseguibile FFmpeg nel tuo sistema."
+"Il file FFmpeg che hai fornito non sembra valido. Seleziona la posizione "
+"attuale di un eseguibile FFmpeg nel tuo sistema."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #, kde-format
@@ -20687,18 +20646,14 @@ msgstr ""
 "visualizzare l'intera durata</em></font>"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:487
-#, fuzzy, kde-format
-#| msgctxt "part of warning in video importer."
-#| msgid ""
-#| "WARNING, you are trying to import %1 frames, the maximum amount you can "
-#| "import is %2."
+#, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "<b>Warning:</b> you are trying to import %1 frames, the maximum amount you "
 "can import is %2."
 msgstr ""
-"ATTENZIONE: stai tentando di importare %1 fotogrammi; la quantità massima "
-"d'importazione ammessa è %2."
+"<b>Attenzione:</b> stai tentando di importare %1 fotogrammi; la quantità "
+"massima d'importazione ammessa è %2."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:494
 #, kde-format
@@ -20726,18 +20681,14 @@ msgstr ""
 "risultare difficoltosa."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
-#, fuzzy, kde-format
-#| msgctxt "part of warning in video importer."
-#| msgid ""
-#| "Krita does not support the video transfer curve (%1), it will be loaded "
-#| "as linear"
+#, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "Krita does not support the video transfer curve (%1), it will be loaded as "
 "linear."
 msgstr ""
 "Krita non supporta la curva di trasferimento video (%1), esso sarà caricato "
-"come lineare"
+"come lineare."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:549
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:551
@@ -20815,14 +20766,13 @@ msgstr "Creazione del file %1 richiesto: %2 di %3 fotogrammi."
 #: libs/ui/animation/video_export_options_dialog.ui:13
 #, kde-format
 msgid "Codec:"
-msgstr ""
+msgstr "Codificatore:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
 #: libs/ui/animation/video_export_options_dialog.ui:23
-#, fuzzy, kde-format
-#| msgid "No options"
+#, kde-format
 msgid "Codec options"
-msgstr "Senza opzioni"
+msgstr "Opzioni codificatore"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -20888,10 +20838,9 @@ msgstr "Metadati HDR..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/video_export_options_dialog.ui:249
-#, fuzzy, kde-format
-#| msgid "Bitrate (MBit/s)"
+#, kde-format
 msgid "Bitrate (MBit/s):"
-msgstr "Bitrate (MBit/s)"
+msgstr "Bitrate (MBit/s):"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
@@ -20919,10 +20868,9 @@ msgstr "Differenza di trasparenza"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/animation/video_export_options_dialog.ui:300
-#, fuzzy, kde-format
-#| msgid "Auto-generate 8bit Palette"
+#, kde-format
 msgid "Auto-generate 8bit Palette:"
-msgstr "Genera automaticamente tavolozza a 8 bit"
+msgstr "Genera automaticamente tavolozza a 8 bit:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
@@ -21005,23 +20953,19 @@ msgstr "Qualità immagine:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:457
-#, fuzzy, kde-format
-#| msgid "Custom Options:"
+#, kde-format
 msgid "Custom options"
-msgstr "Opzioni personalizzate:"
+msgstr "Opzioni personalizzate"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:466
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add any ffmpeg filtering options here. It will be put between source and "
-#| "destination streams of the ffmpeg"
+#, kde-format
 msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
 "destination streams of the FFmpeg instance"
 msgstr ""
-"Aggiungi qui le opzioni di filtraggio ffmpeg. Saranno inserite tra i flussi "
-"ffmpeg sorgenti e quelli di destinazione"
+"Aggiungi qui le opzioni di filtraggio FFmpeg. Saranno inserite tra i flussi "
+"sorgenti e quelli di destinazione dell'istanza FFmpeg"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -21314,92 +21258,67 @@ msgid "text"
 msgstr "testo"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "paletegen status mode option name"
-#| msgid "Global/Full"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Global/Full"
 msgstr "Globale/Completa"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:94
-#, fuzzy, kde-format
-#| msgid "Difference"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Difference"
 msgstr "Differenza"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:95
-#, fuzzy, kde-format
-#| msgctxt "paletegen status mode option name"
-#| msgid "Per Single Frame"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Per Single Frame"
 msgstr "Per singolo fotogramma"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:97
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "none"
 msgstr "nessuna"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:98
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "bayer"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "bayer"
 msgstr "bayer"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "floyd_steinberg"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "floyd_steinberg"
 msgstr "floyd_steinberg"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:100
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "heckbert"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "heckbert"
 msgstr "heckbert"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:101
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "sierra2"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2"
 msgstr "sierra2"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:102
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "sierra2_4a"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2_4a"
 msgstr "sierra2_4a"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "none"
 msgstr "nessuna"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "paleteuse diff mode option name"
-#| msgid "rectangle"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
 msgstr "rettangolo"
@@ -21412,11 +21331,10 @@ msgid "kbps"
 msgstr "kbps"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:292
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
-msgstr "Apri"
+msgstr "OpenH264"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:293
 #, kde-format
@@ -21633,10 +21551,9 @@ msgstr "Generale"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:40
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgid "Video file:"
-msgstr "FPS del video:"
+msgstr "File video:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
@@ -21865,24 +21782,21 @@ msgstr "Filtro:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
 #: libs/ui/animation/VideoImportDialog.ui:601
-#, fuzzy, kde-format
-#| msgid "FFmpeg:"
+#, kde-format
 msgid "FFmpeg"
-msgstr "FFmpeg:"
+msgstr "FFmpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:607
-#, fuzzy, kde-format
-#| msgid "FFMpeg Path:"
+#, kde-format
 msgid "FFmpeg path:"
 msgstr "Percorso FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:634
-#, fuzzy, kde-format
-#| msgid "FFProbe Path:"
+#, kde-format
 msgid "FFprobe path:"
-msgstr "Percorso FFProbe:"
+msgstr "Percorso FFprobe:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimationRenderer)
 #: libs/ui/animation/wdg_animationrenderer.ui:10
@@ -21904,17 +21818,15 @@ msgstr "Ultimo fotogramma:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:49
-#, fuzzy, kde-format
-#| msgid "Export sequence"
+#, kde-format
 msgid "Export as image sequence"
-msgstr "Esporta sequenza"
+msgstr "Esporta come sequenza di immagini"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/wdg_animationrenderer.ui:58
-#, fuzzy, kde-format
-#| msgid "Fi&le format:"
+#, kde-format
 msgid "File format:"
-msgstr "Formato fi&le:"
+msgstr "Formato del file:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbMimetype)
 #: libs/ui/animation/wdg_animationrenderer.ui:67
@@ -21964,10 +21876,9 @@ msgstr "Solo fotogrammi univoci"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
-#, fuzzy, kde-format
-#| msgid "Export size:"
+#, kde-format
 msgid "Export as video"
-msgstr "Dimensione di esportazione:"
+msgstr "Esporta come video"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
@@ -21979,10 +21890,9 @@ msgstr "Rendi come:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
 #: libs/ui/animation/wdg_animationrenderer.ui:210
-#, fuzzy, kde-format
-#| msgid "Select the ffmpeg render options."
+#, kde-format
 msgid "Select the FFmpeg render options."
-msgstr "Seleziona le opzioni di resa ffmpeg."
+msgstr "Seleziona le opzioni di resa FFmpeg."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, labelExportTo)
@@ -22000,17 +21910,15 @@ msgstr "Includi audio"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
-#, fuzzy, kde-format
-#| msgid "Image location:"
+#, kde-format
 msgid "FFmpeg location:"
-msgstr "Posizione immagine:"
+msgstr "Posizione FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
-#, fuzzy, kde-format
-#| msgid "FFMpeg Version: None"
+#, kde-format
 msgid "FFmpeg version:"
-msgstr "Versione FFmpeg: nessuna"
+msgstr "Versione FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -22373,8 +22281,7 @@ msgid "Save without waiting"
 msgstr "Salva senza attendere"
 
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Cancel Operation and Save"
+#, kde-format
 msgid "Cancel operation and save"
 msgstr "Annulla l'operazione e salva"
 
@@ -22652,7 +22559,7 @@ msgstr "Proprietà del livello"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1481
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1482
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -22920,36 +22827,33 @@ msgstr "Carica sessione precedente"
 msgid "Show session manager"
 msgstr "Mostra il gestore delle sessioni"
 
-# VM: 'take affect' è scorretto; dovrebbe essere 'take effect'...
 #: libs/ui/dialogs/kis_dlg_preferences.cc:432
-#, fuzzy, kde-format
-#| msgid "Note: Krita will need to be restarted for changes to take effect"
+#, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
-msgstr ""
-"Nota: affinché le modifiche abbiano effetto, Krita deve essere riavviato"
+msgstr "Affinché le modifiche abbiano effetto, Krita dovrà essere riavviato."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:438
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
+"Il salvataggio in una posizione presa dalla finestra Scelta file potrebbe "
+"rallentare l'avvio."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:470
-#, fuzzy, kde-format
-#| msgid "Internal error"
+#, kde-format
 msgid "Internal Storage"
-msgstr "Errore interno"
+msgstr "Memoria interna"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:472
 #, kde-format
 msgid "SD-Card"
-msgstr ""
+msgstr "Scheda SD"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:510
-#, fuzzy, kde-format
-#| msgid "User Manual"
+#, kde-format
 msgid "Choose Manually"
-msgstr "Manuale utente"
+msgstr "Scegli manualmente"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:575
 #, kde-format
@@ -22988,11 +22892,10 @@ msgid "%1 is not a valid image file!"
 msgstr "%1 non è un file immagine valido!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:925
-#, fuzzy, kde-format
-#| msgid "2. The resource location at %1 is not writable."
+#, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
-msgstr "2. La posizione delle risorse in %1 non è scrivibile."
+msgstr "<b>Attenzione</b>: questa posizione non è scrivibile."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1027
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1136
@@ -23030,24 +22933,21 @@ msgstr ""
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1318
-#, fuzzy, kde-format
-#| msgid "Maximum brush size:"
+#, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
-msgstr[0] "Dimensione massima del pennello:"
-msgstr[1] "Dimensione massima del pennello:"
+msgstr[0] "Velocità massima del pennello: {n} px/ms"
+msgstr[1] "Velocità massima del pennello: {n} px/ms"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1327
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Brush Smoothing: Disabled"
+#, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
-msgstr[0] "Smussatura pennello: disabilitata"
-msgstr[1] "Smussatura pennello: disabilitata"
+msgstr[0] "Smussatura velocità del pennello: {n} campione"
+msgstr[1] "Smussatura velocità del pennello: {n} campioni"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1424
@@ -23152,10 +23052,9 @@ msgid "White Point: %1, %2"
 msgstr "Punto di bianco: %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1961
-#, fuzzy, kde-format
-#| msgid "WARNING: current display doesn't support HDR rendering"
+#, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
-msgstr "ATTENZIONE: lo schermo attuale non supporta la resa HDR"
+msgstr "<b>Attenzione</b>: lo schermo attuale non supporta la resa HDR"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2046
 #, kde-format
@@ -23303,10 +23202,11 @@ msgstr ""
 "Resa annullata."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgid "Wait for existing frame generation process to complete..."
-msgstr "In attesa del completamento dell'operazione sull'immagine..."
+msgstr ""
+"In attesa di completamento del processo di generazione del fotogramma "
+"esistente..."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
@@ -23353,27 +23253,29 @@ msgid ""
 "The amount of time during which the strokes will be kept unmerged. When a "
 "stroke becomes old enough, Krita will try to merge it"
 msgstr ""
+"La quantità di tempo durante il quale i tratteggi verranno tenuti separati. "
+"Quando un tratteggio diventa sufficientemente vecchio, Krita tenterà di "
+"unirlo"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
 msgid "Wait before merging strokes:"
-msgstr ""
+msgstr "Attendi prima di unire i tratteggi:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "The number of last strokes which Krita should store separately"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The number of last strokes that Krita will not merge (even if they are old "
 "enough)"
 msgstr ""
-"Il numero degli ultimi tratteggi che Krita deve memorizzare separatamente"
+"Il numero degli ultimi tratteggi che Krita non unirà (anche se sono "
+"sufficientemente vecchi)"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
 msgid "Exclude last strokes from merge:"
-msgstr ""
+msgstr "Escludi gli ultimi tratteggi dall'unione:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
 #, kde-format
@@ -23382,11 +23284,13 @@ msgid ""
 "If two strokes have short time interval (delay) between each other, then "
 "they will be considered as belonging to the same group and merged"
 msgstr ""
+"Se due tratteggi hanno un intervallo breve (ritardo) tra di loro, allora "
+"saranno considerati come appartenenti allo stesso gruppo e quindi uniti"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
 msgid "Max interval of grouped strokes:"
-msgstr ""
+msgstr "Intervallo massimo di tratteggi raggruppati:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:89
 #, kde-format
@@ -23396,13 +23300,15 @@ msgid ""
 "to be longer than this limit in the result of the merge, this merge will not "
 "happen."
 msgstr ""
+"Durata massima consentita del gruppo dopo l'unione. Se il gruppo sarà più "
+"lungo di questo limite nel risultato dell'unione, questa non verrà eseguita."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
-#| msgid "Video duration:"
+#, kde-format
 msgid "Max group duration:"
-msgstr "Durata del video:"
+msgstr "Durata massima del gruppo:"
 
+# VM: cannot filnd the string "Max group strokes delay"
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
 msgid ""
@@ -23414,6 +23320,14 @@ msgid ""
 "try  to merge this action into a group. The groups are formed using \"Max "
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
+"L'annullamento cumulativo permette a Krita di unire azioni e creare un "
+"pulitore di cronologia degli annullamenti. Krita manterrà le ultime azioni "
+"non unite in base alle opzioni «Attendi prima di unire i tratteggi» e "
+"«Escludi gli ultimi tratteggi dall'unione». Ogni qualvolta un'azione diventa "
+"obsoleta tramite il limite di tempo e non viene esclusa utilizzando «Escludi "
+"gli ultimi tratteggi dall'unione», Krita tenterà di unire l'azione a un "
+"gruppo. I gruppo vengono formati in base alle opzioni «Ritardo massimo dei "
+"tratteggi del gruppo» e «Durata massima del gruppo»."
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
 #, kde-format
@@ -23690,10 +23604,9 @@ msgstr "Usa sempre questo modello"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
 #: libs/ui/forms/KisWelcomePage.ui:60
-#, fuzzy, kde-format
-#| msgid "Support Krita"
+#, kde-format
 msgid "Support Krita!"
-msgstr "Sostieni Krita"
+msgstr "Sostieni Krita!"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:140
@@ -23731,10 +23644,9 @@ msgstr "X"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
 #: libs/ui/forms/KisWelcomePage.ui:322
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Open Image"
-msgstr "Apri immagini"
+msgstr "Apri immagine"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:394
@@ -23786,10 +23698,9 @@ msgstr "Sito web di Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1069
-#, fuzzy, kde-format
-#| msgid "Replace Image"
+#, kde-format
 msgid "Recent Images"
-msgstr "Sostituisci immagine"
+msgstr "Immagini recenti"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
 #: libs/ui/forms/KisWelcomePage.ui:1093
@@ -24093,9 +24004,7 @@ msgstr "Autori"
 
 #. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Translators"
+#, kde-format
 msgid "Translators"
 msgstr "Traduttori"
 
@@ -24820,8 +24729,7 @@ msgstr "Formato di output preferito:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:283
-#, fuzzy, kde-format
-#| msgid "Canvas decorations"
+#, kde-format
 msgid "Canvas Decorations"
 msgstr "Decorazioni della tela"
 
@@ -24833,18 +24741,15 @@ msgstr "Scacchiera di trasparenza:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:295
-#, fuzzy, kde-format
-#| msgctxt "Default name for a color swatch"
-#| msgid "Color %1"
+#, kde-format
 msgid "Color 1:"
-msgstr "Colore %1"
+msgstr "Colore 1:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/forms/wdgdisplaysettings.ui:322
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Color 2:"
-msgstr "Colore:"
+msgstr "Colore 2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCheckSize)
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
@@ -24906,24 +24811,21 @@ msgstr "Sovrapposizione della selezione:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
-#, fuzzy, kde-format
-#| msgid "Line Opacity"
+#, kde-format
 msgid "Outline opacity:"
-msgstr "Opacità delle linee"
+msgstr "Opacità contorno:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:440
-#, fuzzy, kde-format
-#| msgid "Overlay Mode"
+#, kde-format
 msgid "Overlay color:"
-msgstr "Modalità di sovrapposizione"
+msgstr "Colore di sovrapposizione:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:460
-#, fuzzy, kde-format
-#| msgid "Overall opacity:"
+#, kde-format
 msgid "Overlay opacity:"
-msgstr "Opacità globale:"
+msgstr "Opacità di sovrapposizione:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -25035,10 +24937,9 @@ msgstr "Adatta alla risoluzione dell'immagine (PPI)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
-#, fuzzy, kde-format
-#| msgid "in Filters"
+#, kde-format
 msgid "&Scaling Filter:"
-msgstr "nei filtri"
+msgstr "Filtro di ri&scalatura:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -25307,10 +25208,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, group_subWinMode)
 #: libs/ui/forms/wdggeneralsettings.ui:408
-#, fuzzy, kde-format
-#| msgid "Subwindows"
+#, kde-format
 msgid "Subwindow mode"
-msgstr "Sottofinestre"
+msgstr "Modalità sottofinestre"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton)
 #. i18n: ectx: property (text), widget (QPushButton, clearBgImageButton)
@@ -25373,10 +25273,9 @@ msgstr "Abilita il fattore di scala frazionale"
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:623
 #: libs/ui/forms/wdggeneralsettings.ui:807
-#, fuzzy, kde-format
-#| msgid "(Needs restart)"
+#, kde-format
 msgid "(needs restart)"
-msgstr "(Richiede il riavvio)"
+msgstr "(richiede il riavvio)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:650
@@ -25443,7 +25342,7 @@ msgstr "Attiva lo strumento Trasforma dopo aver incollato"
 #: libs/ui/forms/wdggeneralsettings.ui:724
 #, kde-format
 msgid "Zoom steps between powers of 2"
-msgstr ""
+msgstr "Passi ingrandimento tra potenze di 2"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:741
@@ -25459,34 +25358,29 @@ msgstr "Sensibilità:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
 #: libs/ui/forms/wdggeneralsettings.ui:781
-#, fuzzy, kde-format
-#| msgid ""
-#| "Hide docker scrollbars if kinetic scrolling is enabled (needs restart)"
+#, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr ""
 "Nascondi le barre di scorrimento dell'area di aggancio, se è abilitato lo "
-"scorrimento cinetico (richiede riavvio)"
+"scorrimento cinetico"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:834
-#, fuzzy, kde-format
-#| msgid "Creamy (Krita 4.2+)"
+#, kde-format
 msgid "Subtractive (Krita 5.2+)"
-msgstr "Pastoso (Krita 4.2+)"
+msgstr "Sottrattivo (Krita 5.2+)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:839
-#, fuzzy, kde-format
-#| msgid "Hard (Krita 4.1 and earlier versions)"
+#, kde-format
 msgid "Additive (Krita 5.1 and earlier versions)"
-msgstr "Duro (Krita 4.1 e versioni precedenti)"
+msgstr "Additivo (Krita 5.1 e versioni precedenti)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:847
-#, fuzzy, kde-format
-#| msgid "Brush Flow Mode (needs restart):"
+#, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "Modalità flusso del pennello (richiede il riavvio):"
+msgstr "Metodo di fusione CMYK (richiede il riavvio):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:855
@@ -25623,11 +25517,9 @@ msgstr "Ritaglia i fotogrammi quando importi animazioni"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1044
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Painting"
+#, kde-format
 msgid "Pasting"
-msgstr "Disegno"
+msgstr "Incollaggio"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnDownload)
 #: libs/ui/forms/wdggeneralsettings.ui:1056
@@ -25859,36 +25751,31 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1453
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Automatic color axis adjustments"
+#, kde-format
 msgid "Automatic layer suffixes"
-msgstr "Regolazione automatica degli assi dei colori"
+msgstr "Suffissi automatici dei livelli"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1459
 #, kde-format
 msgid "Add \"Merged\" to merged group layers"
-msgstr ""
+msgstr "Aggiungi «Unito» ai livelli di gruppo uniti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1466
 #, kde-format
 msgid "Add \"(pasted)\" to pasted layers"
-msgstr ""
+msgstr "Aggiungi «(incollato)» ai livelli incollati"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1491
-#, fuzzy, kde-format
-#| msgid "Disable Cumulative Undo"
+#, kde-format
 msgid "Use cumulative undo"
-msgstr "Disabilita annullamenti cumulativi"
+msgstr "Usa annullamento cumulativo"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1511
-#, fuzzy, kde-format
-#| msgctxt "Tablet mapping settings"
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "Avanzate..."
 
@@ -25936,7 +25823,7 @@ msgstr "Colore di primo piano"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1460
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1461
 #, kde-format
 msgid "Background Color"
 msgstr "Colore di sfondo"
@@ -28010,8 +27897,7 @@ msgstr "Dimensioni in pixel"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPixelFilter)
 #: libs/ui/imagesize/wdg_imagesize.ui:81
-#, fuzzy, kde-format
-#| msgid "&Filter:"
+#, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "&Filter:"
 msgstr "&Filtro:"
@@ -28042,9 +27928,7 @@ msgstr "Regola le dimensioni di stampa a parte"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #: libs/ui/imagesize/wdg_layersize.ui:119
-#, fuzzy, kde-format
-#| msgctxt "Resize intepolation method list label"
-#| msgid "Filter:"
+#, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "Filter:"
 msgstr "Filtro:"
@@ -28102,10 +27986,9 @@ msgid "Action"
 msgstr "Azione"
 
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:271
-#, fuzzy, kde-format
-#| msgid "A connection between two other shapes"
+#, kde-format
 msgid "A conflict exists between two or more shortcuts."
-msgstr "Una connessione tra due altre forme"
+msgstr "È presente un conflitto tra due o più scorciatoie."
 
 #. i18n: ectx: property (text), widget (QPushButton, editProfilesButton)
 #: libs/ui/input/config/kis_edit_profiles_dialog.cpp:54
@@ -28173,14 +28056,14 @@ msgstr "Profilo di input"
 #: libs/ui/input/config/kis_input_configuration_page.ui:83
 #, kde-format
 msgid "Manage canvas input profiles"
-msgstr ""
+msgstr "Gestisci i profili di input della tela"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, warningConflictButton)
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:27
 #: libs/ui/input/config/kis_input_configuration_page_item.ui:111
 #, kde-format
 msgid "Conflict found for a Shortcut in this Action."
-msgstr ""
+msgstr "Conflitto per una scorciatoia riscontrato in questa azione."
 
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:52
 #, kde-format
@@ -28516,54 +28399,42 @@ msgid "Select Layer"
 msgstr "Seleziona livello"
 
 #: libs/ui/input/kis_select_layer_action.cpp:117
-#, fuzzy, kde-format
-#| msgid "Selects a layer under cursor position"
+#, kde-format
 msgid "Select layers under the cursor position"
-msgstr "Seleziona un livello sotto il cursore"
+msgstr "Seleziona livelli sotto la posizione del cursore"
 
 #: libs/ui/input/kis_select_layer_action.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select &Opaque (Replace)"
+#, kde-format
 msgid "Select Top Layer (Replace Selection)"
-msgstr "Seleziona &opacità (Sostituisci)"
+msgstr "Seleziona livello in cima (sostituisci la selezione)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select &Opaque (Replace)"
+#, kde-format
 msgid "Select All Layers (Replace Selection)"
-msgstr "Seleziona &opacità (Sostituisci)"
+msgstr "Seleziona tutti i livelli (sostituisci la selezione)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:124
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Selection Mode: Replace"
+#, kde-format
 msgid "Select from Menu (Replace Selection)"
-msgstr "Modalità di selezione: Sostituisci"
+msgstr "Seleziona dal menu (sostituisci la selezione)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
 msgid "Select Top Layer (Add to Selection)"
-msgstr ""
+msgstr "Seleziona livello in cima (aggiungi alla selezione)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:128
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale All Layers to new Size"
+#, kde-format
 msgid "Select All Layers (Add to Selection)"
-msgstr "Cambia tutti i livelli a nuova dimensione"
+msgstr "Seleziona tutti i livelli (aggiungi alla selezione)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:130
-#, fuzzy, kde-format
-#| msgid "Subtract fro&m current selection"
+#, kde-format
 msgid "Select from Menu (Add to Selection)"
-msgstr "Sottrai dalla sele&zione attuale"
+msgstr "Seleziona dal menu (aggiungi alla selezione)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:246
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select all layers"
+#, kde-format
 msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"
 msgstr "Seleziona tutti i livelli"
@@ -28917,22 +28788,19 @@ msgid "Zoom to 100%"
 msgstr "Ingrandisci al 100%"
 
 #: libs/ui/input/kis_zoom_action.cpp:118
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgid "Fit to View"
-msgstr "Adatta alla pagina"
+msgstr "Adatta alla vista"
 
 #: libs/ui/input/kis_zoom_action.cpp:119
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgid "Fit to View Width"
-msgstr "Adatta alla larghezza"
+msgstr "Adatta alla larghezza della vista"
 
 #: libs/ui/input/kis_zoom_action.cpp:120
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgid "Fit to View Height"
-msgstr "Adatta all'altezza"
+msgstr "Adatta all'altezza della vista"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:37
 #, kde-format
@@ -28986,10 +28854,9 @@ msgid "Toggle Eraser"
 msgstr "Attiva/disattiva gomma"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgid "Master Display:"
+#, kde-format
 msgid "Reset Display"
-msgstr "Vista master:"
+msgstr "Azzera la vista"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, TabletTest)
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:18
@@ -29390,10 +29257,9 @@ msgid "Mirror View Around Cursor"
 msgstr "Vista specchiata attorno al cursore"
 
 #: libs/ui/kis_mirror_manager.cpp:48
-#, fuzzy, kde-format
-#| msgid "Mirror View Around Cursor"
+#, kde-format
 msgid "Mirror View Around Canvas"
-msgstr "Vista specchiata attorno al cursore"
+msgstr "Vista specchiata attorno alla tela"
 
 #: libs/ui/kis_node_manager.cpp:453
 #, kde-format
@@ -29692,10 +29558,9 @@ msgid "100%"
 msgstr "100%"
 
 #: libs/ui/kis_popup_palette.cpp:198
-#, fuzzy, kde-format
-#| msgid "Canvas Size"
+#, kde-format
 msgid "Fit Canvas to View"
-msgstr "Dimensioni della tela"
+msgstr "Adatta tela alla vista"
 
 #: libs/ui/kis_popup_palette.cpp:875
 #, kde-format
@@ -30017,16 +29882,14 @@ msgid "Adding resource types..."
 msgstr "Aggiunta dei tipi di risorse..."
 
 #: libs/ui/KisApplication.cpp:465
-#, fuzzy, kde-format
-#| msgid "Loading Bundles..."
+#, kde-format
 msgid "Loading plugins..."
-msgstr "Caricamento dei gruppi..."
+msgstr "Caricamento delle estensioni..."
 
 #: libs/ui/KisApplication.cpp:471
-#, fuzzy, kde-format
-#| msgid "Loading Resource Bundles..."
+#, kde-format
 msgid "Loading resources..."
-msgstr "Caricamento dei gruppi di risorse..."
+msgstr "Caricamento delle risorse..."
 
 #: libs/ui/KisApplication.cpp:480
 #, kde-format
@@ -30034,10 +29897,9 @@ msgid "Loading Main Window..."
 msgstr "Caricamento della finestra principale..."
 
 #: libs/ui/KisApplication.cpp:512
-#, fuzzy, kde-format
-#| msgid "Scanning..."
+#, kde-format
 msgid "Launching..."
-msgstr "Analisi in corso..."
+msgstr "Avvio corso..."
 
 #: libs/ui/KisApplication.cpp:581
 #, kde-format
@@ -30300,18 +30162,16 @@ msgid "%1 cannot be written to. Please save under a different name."
 msgstr "Impossibile scrivere in %1. Salva con un altro nome."
 
 #: libs/ui/KisDocument.cpp:783
-#, fuzzy, kde-format
-#| msgid "Failed to create an action."
+#, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr "Creazione di una nuova azione non riuscita."
+msgstr "Creazione della copia di sicurezza non riuscita"
 
 #: libs/ui/KisDocument.cpp:800
-#, fuzzy, kde-format
-#| msgid "Failed to create an action."
+#, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr "Creazione di una nuova azione non riuscita."
+msgstr "Creazione della copia di sicurezza numerata non riuscita"
 
 #: libs/ui/KisDocument.cpp:822
 #, kde-format
@@ -30349,22 +30209,14 @@ msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
 "document, %1 is the file path"
 msgid "%1 has been saved but is incomplete."
-msgstr ""
+msgstr "%1 è stato salvato ma è incompleto."
 
 #: libs/ui/KisDocument.cpp:1005
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "dialog box shown to the user if there were warnings while saving the "
-#| "document, %1 is the file path"
-#| msgid ""
-#| "%1 has been saved but is incomplete.\n"
-#| "The following problems were encountered when saving:"
+#, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
-msgstr ""
-"%1 è stato salvato ma è incompleto.\n"
-"Durante il salvataggio sono stati riscontrati i seguenti problemi:"
+msgstr "Durante il salvataggio sono stati riscontrati alcuni problemi."
 
 #: libs/ui/KisDocument.cpp:1022
 #, kde-format
@@ -30417,16 +30269,14 @@ msgid "Opening document"
 msgstr "Apertura del documento"
 
 #: libs/ui/KisDocument.cpp:1949 libs/ui/KisDocument.cpp:1955
-#, fuzzy, kde-format
-#| msgid "Could not open '%1'."
+#, kde-format
 msgid "Could not open %1."
-msgstr "Impossibile aprire «%1»."
+msgstr "Impossibile aprire %1."
 
 #: libs/ui/KisDocument.cpp:1968 libs/ui/KisDocument.cpp:1972
-#, fuzzy, kde-format
-#| msgid "There were problems opening %1"
+#, kde-format
 msgid "There were problems opening %1."
-msgstr "Si sono verificati problemi durante l'apertura di %1"
+msgstr "Si sono verificati problemi durante l'apertura di %1."
 
 #: libs/ui/KisDocument.cpp:2103
 #, kde-format
@@ -30533,10 +30383,9 @@ msgid "Cannot open file for writing. Reason: %1"
 msgstr "Impossibile aprire il file in scrittura. Motivo: %1"
 
 #: libs/ui/KisImportExportErrorCode.cpp:139
-#, fuzzy, kde-format
-#| msgid "Internal error."
+#, kde-format
 msgid "Unexpected error."
-msgstr "Errore interno."
+msgstr "Errore inatteso."
 
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format
@@ -30806,11 +30655,9 @@ msgid "Also save your image as a Krita file."
 msgstr "Salva anche la tua immagine come file Krita."
 
 #: libs/ui/KisImportExportUtils.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Image Color Space"
+#, kde-format
 msgid "Convert image color space on import"
-msgstr "Converti lo spazio dei colori dell'immagine"
+msgstr "Converti lo spazio dei colori dell'immagine durante l'importazione"
 
 #: libs/ui/KisImportExportUtils.cpp:51
 #, kde-format
@@ -30819,13 +30666,14 @@ msgid ""
 "The image has a profile attached that Krita cannot edit images in (\"%1\"), "
 "please select a space to convert to for editing: \n"
 msgstr ""
+"All'immagine è agganciato un profilo per il quale Krita non è in grado di "
+"modificare le immagini in («%1»). Seleziona uno spazio a cui convertire per "
+"consentire modifica: \n"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "Nascondi la finestra a comparsa delle miniature livello"
+msgstr "Aggiorna le miniature dei livelli"
 
 #: libs/ui/KisMainWindow.cpp:185
 #, kde-format
@@ -31060,19 +30908,16 @@ msgid "New palette name:"
 msgstr "Nome della nuova tavolozza:"
 
 #: libs/ui/KisPaletteEditor.cpp:102
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "Krita Color Palette"
+#, kde-format
 msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
-msgstr "Tavolozza dei colori Krita"
+msgstr "Tavolozza Krita (KPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:103
-#, fuzzy, kde-format
-#| msgid "GIMP Patterns (*.pat)"
+#, kde-format
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
-msgstr "Motivi di GIMP (*.pat)"
+msgstr "Tavolozza GIMP (GPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:106
 #, kde-format
@@ -31204,6 +31049,9 @@ msgid ""
 "Do you want to download the image from %1?\n"
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
+"Vuoi scaricare l'immagine da %1?\n"
+"Fai clic su «Mostra dettagli» per visualizzare il collegamento completo "
+"all'immagine."
 
 #: libs/ui/KisRemoteFileFetcher.cpp:63
 #, kde-format
@@ -31412,36 +31260,36 @@ msgstr "Ma la prova colore è ancora spenta."
 msgid "Gamut Warnings turned off."
 msgstr "Avvisi per il gamut spenti."
 
-#: libs/ui/KisViewManager.cpp:796
+#: libs/ui/KisViewManager.cpp:791
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Profilo autore attivo"
 
-#: libs/ui/KisViewManager.cpp:926
+#: libs/ui/KisViewManager.cpp:921
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (Copia)"
 
-#: libs/ui/KisViewManager.cpp:1069 libs/ui/KisViewManager.cpp:1150
+#: libs/ui/KisViewManager.cpp:1064 libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Nomi alternativi terminati, prova a salvare manualmente con un numero più "
 "elevato"
 
-#: libs/ui/KisViewManager.cpp:1069
+#: libs/ui/KisViewManager.cpp:1064
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Impossibile salvare una versione incrementale"
 
-#: libs/ui/KisViewManager.cpp:1150
+#: libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Impossibile salvare una copia di sicurezza incrementale"
 
-#: libs/ui/KisViewManager.cpp:1333
+#: libs/ui/KisViewManager.cpp:1328
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31450,13 +31298,13 @@ msgstr ""
 "Passaggio alla modalità di sola tela.\n"
 "Premi %1 per tornare indietro."
 
-#: libs/ui/KisViewManager.cpp:1373
+#: libs/ui/KisViewManager.cpp:1368
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Apri cartella delle risorse"
 
-#: libs/ui/KisViewManager.cpp:1377
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31481,19 +31329,19 @@ msgstr ""
 "<p><b>Posizione app riservata</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1392
+#: libs/ui/KisViewManager.cpp:1387
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Open in AppData &utente"
 
-#: libs/ui/KisViewManager.cpp:1393
+#: libs/ui/KisViewManager.cpp:1388
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Apri nella posizione app &riservata"
 
-#: libs/ui/KisViewManager.cpp:1511 libs/ui/KisViewManager.cpp:1529
+#: libs/ui/KisViewManager.cpp:1506 libs/ui/KisViewManager.cpp:1524
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -34033,13 +33881,7 @@ msgstr ""
 "«Annulla» per tornare alla finestra delle impostazioni."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:535
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel "
-#| "in bits. arg5: image size"
-#| msgid ""
-#| "This document will be %1 pixels by %2 pixels in %3, which means the pixel "
-#| "size is %4 bit. A single paint layer will thus take up %5 of RAM."
+#, kde-format
 msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
 "bits. arg5: image size"
@@ -34047,9 +33889,8 @@ msgid ""
 "This document will be %1 pixels by %2 pixels in %3. The pixel size is %4 "
 "bit. A single paint layer will use %5 of RAM."
 msgstr ""
-"Questo documento sarà %1 pixel per %2 pixel in %3, il che significa che la "
-"dimensione dei pixel è di %4 bit. Un singolo livello di disegno occuperà "
-"dunque %5 di RAM."
+"Questo documento sarà %1 pixel per %2 pixel in %3. La dimensione dei pixel è "
+"di %4 bit. Un singolo livello di disegno utilizzerà %5 di RAM."
 
 #: libs/ui/widgets/kis_filter_selector_widget.cc:157
 #, kde-format
@@ -34306,24 +34147,22 @@ msgid "Symmetric Difference"
 msgstr "Differenza simmetrica"
 
 #: libs/ui/widgets/kis_selection_options.cc:233
-#, fuzzy, kde-format
-#| msgid "Set line width of actual selection"
+#, kde-format
 msgid "Smooths the edges of the selection"
-msgstr "Imposta la larghezza della linea della selezione attuale"
+msgstr "Ammorbidisce i bordi della selezione"
 
 #: libs/ui/widgets/kis_selection_options.cc:235
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Grow or shrink the selection by the set amount"
-msgstr "Offusca la selezione della quantità impostata"
+msgstr "Espandi o riduci la selezione della quantità impostata"
 
 #: libs/ui/widgets/kis_selection_options.cc:237
 #: plugins/tools/basictools/kis_tool_fill.cc:628
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
-msgstr ""
+msgstr "Ferma l'espansione ai pixel più scuri e/o più opachi"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
@@ -34332,23 +34171,22 @@ msgid "Blur the selection by the set amount"
 msgstr "Offusca la selezione della quantità impostata"
 
 #: libs/ui/widgets/kis_selection_options.cc:242
-#, fuzzy, kde-format
-#| msgid "Obtain the region using the active layer"
+#, kde-format
 msgid "Select regions found from the active layer"
-msgstr "Ottieni la regione utilizzando il livello attivo"
+msgstr "Seleziona le regioni rinvenute nel livello attivo"
 
 #: libs/ui/widgets/kis_selection_options.cc:244
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select a color from the image or current layer"
+#, kde-format
 msgid "Select regions found from the merging of all layers"
-msgstr "Seleziona un colore dall'immagine o dal livello attuale"
+msgstr "Seleziona le regioni rinvenute dall'unione di tutti i livelli"
 
 #: libs/ui/widgets/kis_selection_options.cc:246
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
+"Seleziona le regioni rinvenute dall'unione dei livelli con specifiche "
+"etichette di colore"
 
 #: libs/ui/widgets/kis_selection_options.cc:254
 #, kde-format
@@ -34529,10 +34367,7 @@ msgstr "Regola per contrasto del canale"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:83
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Percentage of the histogram to clip in the shadous side in auto levels"
-#| msgid "Shadows clipping:"
+#, kde-format
 msgctxt ""
 "Percentage of the histogram to clip in the shadows side in auto levels"
 msgid "Shadows clipping:"
@@ -35438,18 +35273,15 @@ msgstr "Distanza:"
 msgid "Tool Options"
 msgstr "Opzioni dello strumento"
 
-# XXX Come sopra, nome di un test...
 #: libs/widgets/KoZoomMode.cpp:14
-#, fuzzy, kde-format
-#| msgid "PaintView"
+#, kde-format
 msgid "Fit View"
-msgstr "PaintView"
+msgstr "Adatta alla vista"
 
 #: libs/widgets/KoZoomMode.cpp:15
-#, fuzzy, kde-format
-#| msgid "Fit Page Width"
+#, kde-format
 msgid "Fit View Width"
-msgstr "Adatta alla larghezza della pagina"
+msgstr "Adatta alla larghezza della vista"
 
 #: libs/widgets/KoZoomMode.cpp:17
 #, kde-format
@@ -35462,10 +35294,9 @@ msgid "Fit Text Width"
 msgstr "Adatta alla larghezza del testo"
 
 #: libs/widgets/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgid "Fit Page Height"
+#, kde-format
 msgid "Fit View Height"
-msgstr "Adatta all'altezza della pagina"
+msgstr "Adatta all'altezza della vista"
 
 #: libs/widgets/KoZoomWidget.cpp:124
 #, kde-format
@@ -37804,10 +37635,9 @@ msgstr "ciò non include un cambio del colore da parte del selettore d'ombra"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:392
-#, fuzzy, kde-format
-#| msgid "Background color change"
+#, kde-format
 msgid "Background color changes"
-msgstr "Cambia il colore di sfondo"
+msgstr "Modifiche al colore di sfondo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnForeground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:405
@@ -38179,11 +38009,10 @@ msgid "Animation Timeline"
 msgstr "Linea temporale dell'animazione"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
-#, fuzzy, kde-format
-#| msgid "Import Bundles..."
+#, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
-msgstr "Importa gruppi..."
+msgstr "Importa audio..."
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, kde-format
@@ -38192,25 +38021,21 @@ msgid "Remove audio"
 msgstr "Rimuovi audio"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "Mute"
+#, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Silenzia"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Volume:"
+#, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
-msgstr "Volume:"
+msgstr "Volume: "
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
-#, fuzzy, kde-format
-#| msgid "Animation settings menu"
+#, kde-format
 msgid "Animation audio menu"
-msgstr "Menu impostazioni animazione"
+msgstr "Menu audio animazione"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
@@ -38249,14 +38074,12 @@ msgstr ""
 "I fotogrammi tralasciati non sono disponibili in questa istanza di Krita"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:876
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add blank frame"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
 msgstr[0] "Aggiungi fotogramma vuoto"
-msgstr[1] "Aggiungi fotogramma vuoto"
+msgstr[1] "Aggiungi %1 fotogrammi vuoti"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
@@ -38704,16 +38527,14 @@ msgid "Select a Directory"
 msgstr "Seleziona una cartella"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
-#, fuzzy, kde-format
-#| msgid "Export Composition"
+#, kde-format
 msgid "Exporting Compositions..."
-msgstr "Esporta composizione"
+msgstr "Esportazione delle composizioni..."
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
-#, fuzzy, kde-format
-#| msgid "Export Composition"
+#, kde-format
 msgid "Exporting composition: %1..."
-msgstr "Esporta composizione"
+msgstr "Esportazione della composizione: %1..."
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
 #, kde-format
@@ -38987,11 +38808,9 @@ msgid "Grid and Guides"
 msgstr "Griglia e guide"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
-#, fuzzy
-#| msgid "Reshape Histogram"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
-msgstr "Cambia forma a istogramma"
+msgstr "Aggiorna istogramma"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -39035,11 +38854,10 @@ msgid "Tree Indentation"
 msgstr "Rientro albero"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:371
-#, fuzzy, kde-format
-#| msgid "Blending Mode"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
-msgstr "Metodo di fusione"
+msgstr "Stile informazioni sul metodo di fusione"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:373
 #, kde-format
@@ -39050,49 +38868,48 @@ msgid ""
 "Balanced: Show both opacity and blending mode if either are changed.\n"
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
+"Nessuno: non viene mostrato nulla.\n"
+"Semplice: vengono mostrate opacità o metodi di fusione modificati.\n"
+"Bilanciato: vengono mostrate opacità e metodo di fusione se l'una o l'altro "
+"sono modificati.\n"
+"Dettagliato: vengono mostrati entrambi opacità e metodo di fusione anche se "
+"non modificati."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:378
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Nessuno"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:379
-#, fuzzy, kde-format
-#| msgid "Simple"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Semplice"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:380
-#, fuzzy, kde-format
-#| msgid "Color Balance"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
-msgstr "Bilanciamento del colore"
+msgstr "Bilanciato"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:381
-#, fuzzy, kde-format
-#| msgid "Details"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
-msgstr "Dettagli"
+msgstr "Dettagliato"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:394
-#, fuzzy, kde-format
-#| msgid "Opening next page"
+#, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "Apertura della pagina successiva"
+msgstr "Opacità del testo informativo del metodo di fusione"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:412
-#, fuzzy, kde-format
-#| msgctxt "spline filtering"
-#| msgid "spline"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
-msgstr "spline"
+msgstr "In linea"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:414
 #, kde-format
@@ -39101,20 +38918,22 @@ msgid ""
 "If enabled, show blending info beside layer names.\n"
 "If disabled, show below layer names (when enough space)."
 msgstr ""
+"Se abilitata, mostra le informazioni sul metodo di fusione accanto ai nomi "
+"dei livelli.\n"
+"Se disabilitata, mostra sotto i nomi dei livelli (se c'è spazio sufficiente)."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:426
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Merge Selected Layers"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "Unisci livelli selezionati"
+msgstr "Casella di controllo per la selezione dei livelli"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:427
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
+"Mostra la casella di controllo per selezionare o deselezionare i livelli."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:994
 msgctxt "(qtundo-format)"
@@ -39491,11 +39310,9 @@ msgid "Pin navigation controls"
 msgstr "Fissa controlli di navigazione"
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgid "Update preview"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Aggiorna l'anteprima"
+msgstr "Aggiorna le miniature della panoramica"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -39535,11 +39352,10 @@ msgid "Export Palette"
 msgstr "Esporta tavolozza"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:239
-#, fuzzy, kde-format
-#| msgid "Import successful"
+#, kde-format
 msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
-msgstr "Importazione completata correttamente"
+msgstr "Tavolozza esportata correttamente"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:400
 #, kde-format
@@ -39566,10 +39382,9 @@ msgstr "Aggiungi colore di primo piano"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLock)
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:139
-#, fuzzy, kde-format
-#| msgid "Remove current palette"
+#, kde-format
 msgid "Lock the current palette."
-msgstr "Rimuovi la tavolozza attuale"
+msgstr "Blocca la tavolozza attuale."
 
 #: plugins/dockers/presetdocker/presetdocker_dock.cpp:25
 #, kde-format
@@ -39598,16 +39413,14 @@ msgid "Bubble Up on Repeated Use"
 msgstr "Comparsa con l'uso ripetuto"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:206
-#, fuzzy, kde-format
-#| msgid "Number of rows:"
+#, kde-format
 msgid "Set Number of Brushes Shown"
-msgstr "Numero di righe:"
+msgstr "Imposta il numero di pennelli mostrati"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:207
-#, fuzzy, kde-format
-#| msgid "Number of rows:"
+#, kde-format
 msgid "Number of Brushes Shown:"
-msgstr "Numero di righe:"
+msgstr "Numero di pennelli mostrati:"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:309
 #, kde-format
@@ -39622,7 +39435,7 @@ msgstr "Comportamento della cronologia:"
 #: plugins/dockers/presethistory/presethistory_dock.cpp:316
 #, kde-format
 msgid "Configure Number of Brushes Shown..."
-msgstr ""
+msgstr "Configura numero di pennelli mostrati..."
 
 #. i18n: context: text @ Actions (Recorder), ActionCollection (Recorder)
 #: plugins/dockers/recorder/recorder.action:4
@@ -39843,10 +39656,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, extendResultCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:351
-#, fuzzy, kde-format
-#| msgid "Extend end result"
+#, kde-format
 msgid "Extend result for:"
-msgstr "Estendi risultato alla fine"
+msgstr "Estendi risultato per:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseExport)
 #: plugins/dockers/recorder/recorder_export.ui:360
@@ -39866,10 +39678,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, resultPreviewCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:409
-#, fuzzy, kde-format
-#| msgid "Enable result preview"
+#, kde-format
 msgid "Enable preview for:"
-msgstr "Abilita anteprima del risultato"
+msgstr "Abilita anteprima per:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseFfmpeg)
 #: plugins/dockers/recorder/recorder_export.ui:537
@@ -39937,11 +39748,10 @@ msgstr "Rimuovi registrazioni"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRenderTimeTitle)
 #: plugins/dockers/recorder/recorder_export.ui:1026
-#, fuzzy, kde-format
-#| msgid "Render as:"
+#, kde-format
 msgctxt "How long it took to render the video"
 msgid "Render time:"
-msgstr "Rendi come:"
+msgstr "Tempo di esportazione:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRestart)
 #: plugins/dockers/recorder/recorder_export.ui:1053
@@ -40320,6 +40130,8 @@ msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time. Try increasing the capture interval."
 msgstr ""
+"Avviso di prestazioni basse. Il registratore non è in grado di scrivere "
+"tutti i fotogrammi in tempo. Prova a incrementare l'intervallo di cattura."
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
 #, kde-format
@@ -40779,104 +40591,89 @@ msgstr "Tocco"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
-#, fuzzy, kde-format
-#| msgid "Color Mode"
+#, kde-format
 msgid "Color Model"
-msgstr "Modalità colore"
+msgstr "Modello dei colori"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:42
-#, fuzzy, kde-format
-#| msgid "Selector Appearance"
+#, kde-format
 msgid "Hue Ring Appearance:"
-msgstr "Aspetto del selettore"
+msgstr "Aspetto anello delle tonalità:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Static"
-msgstr "Statistiche"
+msgstr "Statico"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
-#, fuzzy, kde-format
-#| msgid "Dyna"
+#, kde-format
 msgid "Dynamic"
-msgstr "Dinamica"
+msgstr "Dinamico"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
-#, fuzzy, kde-format
-#| msgid "Dynamics settings"
+#, kde-format
 msgid "Dynamic + Static Edge"
-msgstr "Impostazioni dinamiche"
+msgstr "Dinamico + bordo statico"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpQuickSettingsMenu)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:109
-#, fuzzy, kde-format
-#| msgid "Quick Settings Docker"
+#, kde-format
 msgid "Show &Quick Settings Menu"
-msgstr "Area delle impostazioni rapide"
+msgstr "Mostra menu delle impostazioni &rapide"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:124
-#, fuzzy, kde-format
-#| msgid "Favorite presets:"
+#, kde-format
 msgid "Favorite Selector Layouts:"
-msgstr "Preimpostazioni preferite:"
+msgstr "Disposizioni preferite del selettore:"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, btnFavoriteSelectors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
-#, fuzzy, kde-format
-#| msgid "&Select..."
+#, kde-format
 msgid "Select..."
-msgstr "&Seleziona..."
+msgstr "Seleziona..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
-#, fuzzy, kde-format
-#| msgid "Select a Color Space"
+#, kde-format
 msgid "Selection Color Space:"
-msgstr "Seleziona uno spazio dei colori"
+msgstr "Spazio dei colori della selezione:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
-#, fuzzy, kde-format
-#| msgid "Layers/Masks"
+#, kde-format
 msgid "Layer/Mask"
-msgstr "Livelli/maschere"
+msgstr "Livello/maschera"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProofColors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Projection Color Space"
+#, kde-format
 msgid "Proof Colors to Painting Color Space"
-msgstr "Converti lo spazio dei colori della proiezione"
+msgstr "Prova colori nello spazio dei colori di disegno"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPopups)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
 #, kde-format
 msgid "Pop-ups"
-msgstr ""
+msgstr "Finestrelle a comparsa"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:202
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Group size"
+#, kde-format
 msgid "Pop-up size:"
-msgstr "Dimensione gruppo"
+msgstr "Dimensione finestrelle:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:221
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:539
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Patches"
-msgstr "Pezze di colo&re"
+msgstr "Pezze di colore"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -40884,8 +40681,7 @@ msgstr "Pezze di colo&re"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:560
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:767
-#, fuzzy, kde-format
-#| msgid "Orientation:"
+#, kde-format
 msgid "Orientation:"
 msgstr "Orientazione:"
 
@@ -40895,10 +40691,9 @@ msgstr "Orientazione:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:260
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:582
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:789
-#, fuzzy, kde-format
-#| msgid "Hori&zontal"
+#, kde-format
 msgid "hori&zontal"
-msgstr "Ori&zzontale"
+msgstr "ori&zzontale"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryVertical)
@@ -40906,10 +40701,9 @@ msgstr "Ori&zzontale"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:270
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:592
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:799
-#, fuzzy, kde-format
-#| msgid "&Vertical"
+#, kde-format
 msgid "&vertical"
-msgstr "&Verticale"
+msgstr "&verticale"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -40917,10 +40711,9 @@ msgstr "&Verticale"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:289
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:628
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:835
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Along Orientation"
-msgstr "Orientazione"
+msgstr "Orientazione in lungo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -40928,10 +40721,9 @@ msgstr "Orientazione"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:294
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:633
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:840
-#, fuzzy, kde-format
-#| msgid "Trilateral"
+#, kde-format
 msgid "Laterally"
-msgstr "Trilaterale"
+msgstr "Lateralmente"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_12)
@@ -40939,10 +40731,9 @@ msgstr "Trilaterale"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:302
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:641
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:848
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Scrolling:"
-msgstr "Spaziatura:"
+msgstr "Scorrimento:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -40950,12 +40741,9 @@ msgstr "Spaziatura:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:322
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:651
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:858
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatche.gpl"
-#| msgid "Swatches"
+#, kde-format
 msgid "Patches"
-msgstr "Campioni"
+msgstr "Pezze"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #. i18n: ectx: property (text), widget (QLabel, label_15)
@@ -40963,81 +40751,69 @@ msgstr "Campioni"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:356
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:687
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:894
-#, fuzzy, kde-format
-#| msgid "Max Patches: "
+#, kde-format
 msgid "Max Patches:"
-msgstr "Pezze max: "
+msgstr "Pezze max:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
-#, fuzzy, kde-format
-#| msgid "Update Selector When:"
+#, kde-format
 msgid "Update Base Color When:"
-msgstr "Aggiorna selettore quando:"
+msgstr "Aggiorna il colore di base quando:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateExternal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:421
-#, fuzzy, kde-format
-#| msgid "Color channels in color"
+#, kde-format
 msgid "Color changes externally"
-msgstr "Canali di colore nel colore"
+msgstr "Il colore cambia esternamente"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateOnRightClick)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
-#, fuzzy, kde-format
-#| msgid "Right clicking on shade selector"
+#, kde-format
 msgid "Right-clicking on shade selector"
-msgstr "Clic destro sul selettore d'ombra"
+msgstr "Fai clic destro sul selettore d'ombra"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
-#, fuzzy, kde-format
-#| msgid "Iterations"
+#, kde-format
 msgid "Interaction ends"
-msgstr "Iterazioni"
+msgstr "L'interazione finisce"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
-#, fuzzy, kde-format
-#| msgid "Line Count: "
+#, kde-format
 msgid "Line Count:"
-msgstr "Conteggio della linea: "
+msgstr "Conteggio della linea:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:465
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgid "Line Height:"
-msgstr "Altezza della linea: "
+msgstr "Altezza della linea:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:726
-#, fuzzy, kde-format
-#| msgctxt "left mouse button"
-#| msgid "left button"
+#, kde-format
 msgid "Clear Button"
-msgstr "tasto sinistro"
+msgstr "Pulsante Pulisci"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:752
-#, fuzzy, kde-format
-#| msgid "Colors from Image"
+#, kde-format
 msgid "Colors fro&m Image"
-msgstr "Colori dell'immagine"
+msgstr "Colori dell'im&magine"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
-#, fuzzy, kde-format
-#| msgid "Auto updates"
+#, kde-format
 msgid "Auto Update"
-msgstr "Aggiornamenti automatici"
+msgstr "Aggiornamento automatico"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRange)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:38
-#, fuzzy, kde-format
-#| msgid "&Range:"
+#, kde-format
 msgid "Range:"
-msgstr "&Intervallo:"
+msgstr "Intervallo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOffset)
 #. i18n: ectx: property (text), widget (QLabel, labelOffset)
@@ -41059,49 +40835,42 @@ msgstr "Vista:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbSlider)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
-#, fuzzy, kde-format
-#| msgid "Slider widget"
+#, kde-format
 msgid "S&lider"
-msgstr "Cursore regolabile"
+msgstr "C&ursore"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Pa&tches"
-msgstr "Pezze di colo&re"
+msgstr "Pez&ze di colore"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Preview:"
-msgstr "Anteprima"
+msgstr "Anteprima:"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:4
-#, fuzzy, kde-format
-#| msgid "Color Selector Settings"
+#, kde-format
 msgctxt "action"
 msgid "WG Color Selector Actions"
-msgstr "Impostazioni del selettore dei colori"
+msgstr "Azioni del selettore dei colori WG"
 
 #. i18n: context: text @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:7
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color selector"
+#, kde-format
 msgctxt "action"
 msgid "Show wide-gamut color selector"
-msgstr "Mostra selettore dei colori"
+msgstr "Mostra selettore dei colori del gamut esteso"
 
 #. i18n: context: text @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:17
-#, fuzzy, kde-format
-#| msgid "hide shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show wide-gamut shade selector"
-msgstr "nascondi selettore d'ombra"
+msgstr "Mostra selettore d'ombra del gamut esteso"
 
 #. i18n: context: toolTip @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
@@ -41109,11 +40878,10 @@ msgstr "nascondi selettore d'ombra"
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:19
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:20
-#, fuzzy, kde-format
-#| msgid "hide shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show shade selector"
-msgstr "nascondi selettore d'ombra"
+msgstr "Mostra selettore d'ombra"
 
 #. i18n: context: toolTip @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
@@ -41121,12 +40889,10 @@ msgstr "nascondi selettore d'ombra"
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:29
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:30
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show MyPaint shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show MyPaint selector"
-msgstr "Mostra selettore d'ombra MyPaint"
+msgstr "Mostra selettore MyPaint"
 
 #. i18n: context: text @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
@@ -41134,12 +40900,10 @@ msgstr "Mostra selettore d'ombra MyPaint"
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:47
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:50
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color lighter"
+#, kde-format
 msgctxt "action"
 msgid "Make color lighter"
-msgstr "Schiarisci il colore del pennello"
+msgstr "Schiarisci il colore"
 
 #. i18n: context: toolTip @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:49
@@ -41149,6 +40913,8 @@ msgid ""
 "Increase value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
+"Aumenta il valore, la chiarezza, l'intensità o il luma del colore "
+"selezionato, a seconda del modello dei colori scelto"
 
 #. i18n: context: text @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
@@ -41156,12 +40922,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:57
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color darker"
+#, kde-format
 msgctxt "action"
 msgid "Make color darker"
-msgstr "Scurisci il colore del pennello"
+msgstr "Scurisci il colore"
 
 #. i18n: context: toolTip @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:59
@@ -41171,6 +40935,8 @@ msgid ""
 "Decreases value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
+"Diminuisce il valore, la chiarezza, l'intensità o il luma del colore "
+"selezionato, a seconda del modello dei colori scelto"
 
 #. i18n: context: text @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
@@ -41178,19 +40944,17 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:67
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:70
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Saturation HSY"
-#| msgid "Increase Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Increase color saturation"
-msgstr "Aumenta saturazione"
+msgstr "Aumenta saturazione del colore"
 
 #. i18n: context: toolTip @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:69
 #, kde-format
 msgctxt "action"
 msgid "Increase saturation of the selected color"
-msgstr ""
+msgstr "Aumenta la saturazione del colore selezionato"
 
 #. i18n: context: text @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
@@ -41198,19 +40962,17 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:77
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:80
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Saturation HSY"
-#| msgid "Decrease Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Decrease color saturation"
-msgstr "Riduci saturazione"
+msgstr "Riduci saturazione del colore"
 
 #. i18n: context: toolTip @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:79
 #, kde-format
 msgctxt "action"
 msgid "Decrease saturation of the selected color"
-msgstr ""
+msgstr "Riduce la saturazione del colore selezionato"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
@@ -41218,21 +40980,17 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:87
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:90
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue clockwise"
-msgstr "Sposta la tonalità di colore del pennello in senso orario"
+msgstr "Sposta la tonalità in senso orario"
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:89
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue of the selected color clockwise"
-msgstr "Sposta la tonalità di colore del pennello in senso orario"
+msgstr "Sposta in senso orario la tonalità del colore selezionato"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
@@ -41240,41 +40998,33 @@ msgstr "Sposta la tonalità di colore del pennello in senso orario"
 #. i18n: context: iconText @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:97
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:100
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue counter-clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue counter-clockwise"
-msgstr "Sposta la tonalità di colore del pennello in senso antiorario"
+msgstr "Sposta la tonalità in senso antiorario"
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:99
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue counter-clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue of the selected color counter-clockwise"
-msgstr "Sposta la tonalità di colore del pennello in senso antiorario"
+msgstr "Sposta in senso antiorario la tonalità del colore selezionato"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:48
-#, fuzzy, kde-format
-#| msgid "Wide Gamut Selector"
+#, kde-format
 msgid "Wide Gamut Color Selector"
-msgstr "Selettore gamut esteso"
+msgstr "Selettore dei colori del gamut esteso"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Configure..."
+#, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
 msgstr "Configura..."
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
-#, fuzzy, kde-format
-#| msgid "Color Selector Settings"
+#, kde-format
 msgid "Wide Gamut Color Selector Settings"
-msgstr "Impostazioni del selettore dei colori"
+msgstr "Impostazioni del selettore dei colori del gamut esteso"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:35
 #, kde-format
@@ -41571,10 +41321,9 @@ msgid "Resources Cache Database Explorer"
 msgstr "Navigatore banca dati della cache delle risorse"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
-#, fuzzy, kde-format
-#| msgid "Versions"
+#, kde-format
 msgid "Version"
-msgstr "Versioni"
+msgstr "Versione"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
@@ -41595,22 +41344,19 @@ msgid "Display Name"
 msgstr "Nome visualizzato"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version"
 msgstr "Versione banca dati"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:149
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version"
 msgstr "Versione di Krita"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:150
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgid "Upgrade date"
-msgstr "Aggiorna"
+msgstr "Aggiorna la data"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
@@ -41632,30 +41378,27 @@ msgstr "Informazioni sullo schema"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
-#, fuzzy, kde-format
-#| msgid "Capitalization:"
+#, kde-format
 msgid "Initialization"
-msgstr "Uso delle maiuscole:"
+msgstr "Inizializzazione"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version:"
-msgstr "Versione banca dati"
+msgstr "Versione banca dati:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version:"
-msgstr "Versione di Krita"
+msgstr "Versione di Krita:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSchema)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
 #, kde-format
 msgid "Schema upgrades"
-msgstr ""
+msgstr "Aggiornamenti dello schema"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
@@ -44709,10 +44452,11 @@ msgid "Height to Normal Map"
 msgstr "Da mappa di altitudine a normale"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:21
-#, fuzzy, kde-format
-#| msgid "Color sampler does not work on this layer."
+#, kde-format
 msgid "Height to Normal Map does not work on this colorspace."
-msgstr "Il campionatore dei colori non funziona su questo livello."
+msgstr ""
+"La conversione «Da mappa di altitudine a normale» non funziona in questo "
+"spazio dei colori."
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:28
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:20
@@ -46739,9 +46483,7 @@ msgid "Sine Wave"
 msgstr "Onda sinusoidale"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "Screentone Pattern - Trianular Wave Lines"
-#| msgid "Triangular Wave"
+#, kde-format
 msgctxt "Screentone Pattern - Triangular Wave Lines"
 msgid "Triangular Wave"
 msgstr "Onda triangolare"
@@ -47722,6 +47464,8 @@ msgctxt "JPEG-XL errors"
 msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
+"Rilevata immagine JPEG-XL con canali di colori a tinta piatta, verrà "
+"importata l'immagine appiattita."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:637
 #: plugins/impex/jxl/JPEGXLImport.cpp:647
@@ -47739,12 +47483,14 @@ msgid ""
 "Detected multi layer JPEG-XL image with unsupported blending mode, importing "
 "flattened image."
 msgstr ""
+"Rilevata immagine JPEG-XL a più livelli con metodo di fusione non "
+"supportato, verrà importata l'immagine appiattita."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:828
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
-msgstr ""
+msgstr "Lunghezza del nome del livello JPEG-XL non valido"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:887
 #, kde-format
@@ -48037,17 +47783,15 @@ msgstr "Opzioni di codifica"
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
-#, fuzzy, kde-format
-#| msgid "If this is not enabled, only the first frame will be saved."
+#, kde-format
 msgid "If this is not enabled, the image will be saved losslessly."
-msgstr "Se non è abilitata, sarà salvato solo il primo fotogramma."
+msgstr "Se non è abilitata, l'immagine sarà salvata senza perdita di dati."
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:59
-#, fuzzy, kde-format
-#| msgid "Lossless encoding"
+#, kde-format
 msgid "Lossy encoding"
-msgstr "Codifica senza perdita"
+msgstr "Codifica con perdita di dati"
 
 #. i18n: ectx: property (text), widget (QLabel, lblHighQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:77
@@ -48064,6 +47808,8 @@ msgid ""
 "Set the lossy quality of JPEG-XL export.\n"
 "Default: 90 (visually lossless)."
 msgstr ""
+"Imposta la qualità della perdita di dati dell'esportazione JPEG-XL.\n"
+"Predefinito: 90 (visualmente senza perdita)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:107
@@ -48081,12 +47827,16 @@ msgid ""
 "(e.g. for non-photographic images).\n"
 "Default: disabled."
 msgstr ""
+"Usa la codifica modulare anziché il VarDCT predefinito per la compressione "
+"con perdita di dati\n"
+"(per es., per immagini non fotografiche).\n"
+"Predefinito: disabilitato."
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceModular)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:121
 #, kde-format
 msgid "Use modular mode"
-msgstr ""
+msgstr "Usa modalità modulare"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:131
@@ -48166,13 +47916,17 @@ msgid ""
 "setting.</p><p>It is advised to leave this option checked for web delivery "
 "and general compatibility with other applications.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Se questa opzione non è abilitata, i livelli saranno "
+"rasterizzati e salvati. Tuttavia, le esportazioni animate saranno sempre "
+"appiattite, a prescindere da questa impostazione.</p><p>Si consiglia di "
+"lasciare attiva questa opzione per gli usi nel web e la compatibilità "
+"generale con altre applicazioni.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:239
-#, fuzzy, kde-format
-#| msgid "Flatten the &image"
+#, kde-format
 msgid "Flatten the image"
-msgstr "Appiattisci l'&immagine"
+msgstr "Appiattisci l'immagine"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:256
@@ -48187,10 +47941,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:345
-#, fuzzy, kde-format
-#| msgid "Modular parameters"
+#, kde-format
 msgid "Encoder parameters"
-msgstr "Parametri modulari"
+msgstr "Parametri del codificatore"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:351
@@ -48747,6 +48500,8 @@ msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
 "\"%2\" is deactivated"
 msgstr ""
+"Sono state trovate due maschere di selezione in stato attivo. «%1» è "
+"mantenuta attiva, «%2» è disattivata"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:898
 #, kde-format
@@ -48776,6 +48531,10 @@ msgid ""
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
+"Il livello «%1» contiene il metodo di fusione «%2\"», che ha cambiato il suo "
+"comportamento per il colore CMYK in Krita 5.2. Verifica il risultato e "
+"considera di abilitare il precedente algoritmo «Additivo» in Impostazioni -"
+">Configura Krita->Generale->Strumenti->Metodo di fusione CMYK"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1103
 #, kde-format
@@ -48950,12 +48709,10 @@ msgstr "Impossibile salvare i metadati dell'animazione."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:316
 #: plugins/impex/libkra/kis_kra_saver.cpp:339
-#, fuzzy, kde-format
-#| msgctxt "Error message when saving a .kra file"
-#| msgid "Could not save animation meta data."
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
-msgstr "Impossibile salvare i metadati dell'animazione."
+msgstr "Impossibile salvare i metadati dell'audio."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:452
 #, kde-format
@@ -50429,7 +50186,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "TIFF image with PSD data"
-msgstr ""
+msgstr "Immagine TIFF con dati PSD"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1579
 #, kde-format
@@ -50438,6 +50195,8 @@ msgid ""
 "The TIFF image contains valid PSD data embedded. Would you like to use PSD "
 "data instead of normal TIFF data?"
 msgstr ""
+"L'immagine TIFF incorpora dati PSD validi. Vuoi usare i dati PSD al posto "
+"dei dati TIFF normali?"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
 #. i18n: ectx: property (title), widget (QGroupBox, tiffOptions)
@@ -50655,10 +50414,9 @@ msgstr "Dithering pseudo casuale"
 
 #. i18n: ectx: property (text), widget (QCheckBox, haveAnimation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:37
-#, fuzzy, kde-format
-#| msgid "Save as animated JPEG-XL"
+#, kde-format
 msgid "Save as animated WebP"
-msgstr "Salva come JPEG-XL animata"
+msgstr "Salva come WebP animata"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreset)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:50
@@ -51105,9 +50863,7 @@ msgstr "Qualità massima"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:829
-#, fuzzy, kde-format
-#| msgctxt "JPEG metadata filter"
-#| msgid "Filters:"
+#, kde-format
 msgctxt "WebP metadata options"
 msgid "Filters:"
 msgstr "Filtri:"
@@ -53038,7 +52794,7 @@ msgstr " ms"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:70
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1 ms"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, kde-format
@@ -53313,15 +53069,13 @@ msgid "Hard"
 msgstr "Duro"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:74
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgctxt "Background painting color"
 msgid "Background"
 msgstr "Sfondo"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:75
-#, fuzzy, kde-format
-#| msgid "Foreground"
+#, kde-format
 msgctxt "Foreground painting color"
 msgid "Foreground"
 msgstr "Primo piano"
@@ -53458,39 +53212,33 @@ msgid "repeat"
 msgstr "ripeti"
 
 #: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "MyPaint option name"
 msgid "Basic"
 msgstr "Di base"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
-#, fuzzy, kde-format
-#| msgid "CPU Limit:"
+#, kde-format
 msgid "Y limit: "
-msgstr "Limite di CPU:"
+msgstr "Limite Y: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "Suffix: “Every x min”"
-#| msgid " min"
+#, kde-format
 msgid "X min: "
-msgstr " min"
+msgstr "X min: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:40
 #, kde-format
 msgid "X max: "
-msgstr ""
+msgstr "X max: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Random Sensor Active, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
 msgstr ""
-"Sensore di casualità attivo, considera la disattivazione dell'anteprima "
-"automatica"
+"Sensore di casualità attivo nell'opzione %1, considera la disattivazione "
+"dell'anteprima automatica"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
 #, kde-format
@@ -53675,10 +53423,9 @@ msgid "Colorize"
 msgstr "Colorizza"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
-#, fuzzy, kde-format
-#| msgid "Posterize"
+#, kde-format
 msgid "Posterization Levels"
-msgstr "Posterizza"
+msgstr "Livelli di posterizzazione"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
@@ -53774,25 +53521,19 @@ msgid "Smudge Radius Log"
 msgstr "Registro del Raggio dello sfumino"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Smudge Length Multiplier"
-msgstr "Lunghezza dello sfumino"
+msgstr "Moltiplicatore lunghezza dello sfumino"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Smudge_rake.kpp"
-#| msgid "Smudge rake"
+#, kde-format
 msgid "Smudge Bucket"
-msgstr "Sfumino rastrello"
+msgstr "Barattolo sfumino"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
-#, fuzzy, kde-format
-#| msgid "Burning Transparency"
+#, kde-format
 msgid "Smudge Transparency"
-msgstr "Lucido a fuoco"
+msgstr "Trasparenza sfumino"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
@@ -54113,8 +53854,7 @@ msgid "Shape dynamics"
 msgstr "Dinamica delle forme"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgid "Spray Shape"
 msgstr "Forma a spruzzo"
 
@@ -57115,10 +56855,9 @@ msgstr "Scala: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:534
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:449
-#, fuzzy, kde-format
-#| msgid "Encoding options"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "Opzioni di codifica"
+msgstr "Usa opzioni di fusione personalizzate"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:549
 #, kde-format
@@ -57159,23 +56898,19 @@ msgid "Reset"
 msgstr "Azzera"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:606
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Fill the active selection, or the entire canvas"
-msgstr "Offusca la selezione della quantità impostata"
+msgstr "Riempi la selezione attiva o l'intera tela"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:607
-#, fuzzy, kde-format
-#| msgctxt "The 'include contour regions' checkbox in enclose and fill tool"
-#| msgid "Include contour regions"
+#, kde-format
 msgid "Fill a contiguous region"
-msgstr "Racchiudi regioni del contorno"
+msgstr "Riempi una regione contigua"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:608
-#, fuzzy, kde-format
-#| msgid "Fill regions of any color"
+#, kde-format
 msgid "Fill all regions of a similar color"
-msgstr "Riempi le regioni di qualsiasi colore"
+msgstr "Riempi tutte le regioni di colore simile"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:613
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
@@ -57194,41 +56929,37 @@ msgstr "Imposta la rotazione del motivo"
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
+"Imposta opzioni di fusione personalizzate anziché usare quelle del pennello"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr "Imposta l'opacità principale del livello"
+msgstr "Imposta un'opacità personalizzata per il riempimento"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:617
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "Imposta il metodo di fusione del livello"
+msgstr "Imposta un metodo di fusione personalizzato per il riempimento"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:619
-#, fuzzy, kde-format
-#| msgid "Fill only regions similar in color to the initial region"
+#, kde-format
 msgid "Fill regions similar in color to the clicked region"
 msgstr ""
-"Riempi solo le regioni con colori simili al colore della regione iniziale"
+"Riempi le regioni con colori simili al colore della regione cui hai fatto "
+"clic"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:620
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions of a specific color"
+#, kde-format
 msgid "Fill all regions until a specific boundary color"
-msgstr "Regioni di un colore specifico"
+msgstr "Riempi tutte le regioni fino a un colore di contorno specifico"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:621
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgid "Boundary color"
-msgstr "Colore di sfondo"
+msgstr "Colore del contorno"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:622
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
@@ -57237,6 +56968,8 @@ msgid ""
 "Set the color similarity tolerance of the fill. Increasing threshold "
 "increases the range of similar colors to be filled."
 msgstr ""
+"Imposta la tolleranza di somiglianza tra i colori del riempimento. L'aumento "
+"della soglia aumenta l'intervallo dei colori simili da riempire."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:623
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
@@ -57245,78 +56978,72 @@ msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
 "decreases opacity of fill areas depending on color similarity."
 msgstr ""
+"Imposta l'estensione della porzione opaca del riempimento. La riduzione "
+"della diffusione riduce l'opacità delle aree di riempimento a seconda della "
+"somiglianza tra i colori."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:624
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set if the contour of the current selection should be treated as a "
-#| "boundary when obtaining the region"
+#, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when filling the region"
 msgstr ""
-"Imposta se il contorno della selezione attuale debba essere trattato come un "
-"confine, durante l'ottenimento della regione"
+"Imposta se il contorno della selezione attiva debba essere trattato come un "
+"confine, durante il riempimento della regione"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:626
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
-#, fuzzy, kde-format
-#| msgid "Smooth the jagged edges"
+#, kde-format
 msgid "Smooths the edges of the fill"
-msgstr "Ammorbidisci i bordi frastagliati"
+msgstr "Ammorbidisce i bordi del riempimento"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:627
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
-#, fuzzy, kde-format
-#| msgid "Blur the region by the set amount"
+#, kde-format
 msgid "Grow or shrink the fill by the set amount"
-msgstr "Offusca la regione della quantità impostata"
+msgstr "Espandi o riduci il riempimento della quantità impostata"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:629
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
-#, fuzzy, kde-format
-#| msgid "Blur the region by the set amount"
+#, kde-format
 msgid "Blur the fill by the set amount"
-msgstr "Offusca la regione della quantità impostata"
+msgstr "Offusca il riempimento della quantità impostata"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:631
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
-#, fuzzy, kde-format
-#| msgid "Obtain the region using the active layer"
+#, kde-format
 msgid "Fill regions found from the active layer"
-msgstr "Ottieni la regione utilizzando il livello attivo"
+msgstr "Riempi le regioni rinvenute nel livello attivo"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:632
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
-#, fuzzy, kde-format
-#| msgid "Obtain the region using a merged copy of all layers"
+#, kde-format
 msgid "Fill regions found from the merging of all layers"
-msgstr "Ottieni la regione utilizzando una copia unita di tutti i livelli"
+msgstr "Riempi le regioni rinvenute dall'unione di tutti i livelli"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:633
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "All regions except those of a specific color"
+#, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
-msgstr "Tutte le regioni eccetto quelle di un colore specifico"
+msgstr ""
+"Riempi le regioni rinvenute dall'unione dei livelli con specifiche etichette "
+"di colore"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
-#, fuzzy, kde-format
-#| msgid "Fill regions of any color"
+#, kde-format
 msgid "Dragging will fill regions of any color"
-msgstr "Riempi le regioni di qualsiasi colore"
+msgstr "Il trascinamento riempie le regioni di qualsiasi colore"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:636
-#, fuzzy, kde-format
-#| msgid "Fill only regions similar in color to the initial region"
+#, kde-format
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
 "(useful for filling line-art)"
 msgstr ""
-"Riempi solo le regioni con colori simili al colore della regione iniziale"
+"Il trascinamento riempie solo le regioni con colori simili al colore della "
+"regione iniziale (utile per riempire line art)"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:638
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
@@ -57325,18 +57052,16 @@ msgid "Reset the options to their default values"
 msgstr "Riporta le opzioni ai valori predefiniti"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:647
-#, fuzzy, kde-format
-#| msgid "Simple mode"
+#, kde-format
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
-msgstr "Modalità semplice"
+msgstr "Modalità Riempimento"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:654
-#, fuzzy, kde-format
-#| msgid "All Resources"
+#, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
-msgstr "Tutte le risorse"
+msgstr "Origine riempimento"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:668
 #, kde-format
@@ -57345,11 +57070,10 @@ msgid "Reference"
 msgstr "Riferimento"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:677
-#, fuzzy, kde-format
-#| msgid "File extension:"
+#, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
-msgstr "Estensione file:"
+msgstr "Estensione riempimento"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:689
 #, kde-format
@@ -57361,7 +57085,7 @@ msgstr "Regolazioni"
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
-msgstr ""
+msgstr "Modalità Trascina e riempi"
 
 #: plugins/tools/basictools/kis_tool_fill.h:234
 #, kde-format
@@ -58429,18 +58153,16 @@ msgid "Feather: "
 msgstr "Sfumatura: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
-#, fuzzy, kde-format
-#| msgid "Fill only regions similar in color to the initial region"
+#, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr ""
-"Riempi solo le regioni con colori simili al colore della regione iniziale"
+"Seleziona le regioni con colori simili al colore della regione in cui hai "
+"fatto clic"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions of a specific color"
+#, kde-format
 msgid "Select all regions until a specific boundary color"
-msgstr "Regioni di un colore specifico"
+msgstr "Seleziona tutte le regioni fino a un colore di contorno specifico"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
@@ -58449,6 +58171,8 @@ msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
+"Imposta la tolleranza di somiglianza tra i colori della selezione. L'aumento "
+"della soglia aumenta l'intervallo dei colori simili da selezionare."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
 #, kde-format
@@ -58456,18 +58180,18 @@ msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
+"Imposta l'estensione della porzione opaca della selezione. La riduzione "
+"della diffusione riduce l'opacità delle aree di selezione a seconda della "
+"somiglianza tra i colori."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:410
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set if the contour of the current selection should be treated as a "
-#| "boundary when obtaining the new one"
+#, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
-"Imposta se il contorno della selezione attuale debba essere trattato come un "
-"confine, quando se ne ottiene una nuova"
+"Imposta se il contorno della selezione attiva debba essere trattato come un "
+"confine, quando ne crei una nuova"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
 #, kde-format
@@ -58811,72 +58535,72 @@ msgstr "Cambia SvgTextTool"
 msgid "Text Tool"
 msgstr "Strumento Testo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:384
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #, kde-format
 msgid "Conversion failed"
 msgstr "Conversione non riuscita"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:601
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:602
 #, kde-format
 msgid "Find Text"
 msgstr "Trova testo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:604
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:647
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:605
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
 #, kde-format
 msgid "Find:"
 msgstr "Trova:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:643
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:644
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Trova e sostituisci tutto"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
 #, kde-format
 msgid "Replace:"
 msgstr "Sostituisci:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Hai modificato il testo. Scartare le modifiche?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1288
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1294
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1289
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Testo formattato"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1291
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1292
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1296
 #, kde-format
 msgid "SVG Source"
 msgstr "Sorgente SVG"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1435
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1436
 #, kde-format
 msgid "Font"
 msgstr "Caratteri"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1452
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1453
 #, kde-format
 msgid "Text Color"
 msgstr "Colore testo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1467
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1468
 #, kde-format
 msgid "Sample a Color"
 msgstr "Campiona un colore"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1478
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1479
 #, kde-format
 msgid "Line height"
 msgstr "Altezza linea"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1490
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1491
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"
@@ -59734,18 +59458,15 @@ msgstr "Lazo"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:511
 #, kde-format
 msgid "Enable to fill opposite regions instead"
-msgstr ""
+msgstr "Abilita per riempire invece le regioni opposte"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:512
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check this option to also fill the shapes that touch the contour of the "
-#| "enclosing region"
+#, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
-"Attiva questa opzione per riempire anche le forme che toccano il contorno "
-"della regione racchiusa"
+"Abilita per riempire anche le forme che toccano il contorno della regione "
+"racchiusa"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:544
 #, kde-format
@@ -59760,26 +59481,22 @@ msgid "Reference"
 msgstr "Riferimento"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:561
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparent regions"
+#, kde-format
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
-msgstr "Regioni trasparenti"
+msgstr "Regioni di destinazione"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:571
-#, fuzzy, kde-format
-#| msgid "All Resources"
+#, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
-msgstr "Tutte le risorse"
+msgstr "Origine riempimento"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:585
-#, fuzzy, kde-format
-#| msgid "File extension:"
+#, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
-msgstr "Estensione file:"
+msgstr "Estensione riempimento"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:594
 #, kde-format
@@ -59788,80 +59505,64 @@ msgid "Adjustments"
 msgstr "Regolazioni"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:848
-#, fuzzy, kde-format
-#| msgid "All"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Tutto"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:851
-#, fuzzy, kde-format
-#| msgid "Specific Color Selector"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
-msgstr "Selettore di colore specifico"
+msgstr "Colore specifico"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
-msgstr "Trasparente"
+msgstr "Trasparenza"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions of a specific color or transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
-msgstr "Regioni di un colore specifico o trasparenti"
+msgstr "Colore specifico o trasparenza"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions of a specific color"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
-msgstr "Regioni di un colore specifico"
+msgstr "Tutto, eccetto un colore specifico"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
-#, fuzzy, kde-format
-#| msgid "Burning Transparency"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
-msgstr "Lucido a fuoco"
+msgstr "Tutto, eccetto la trasparenza"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions of a specific color or transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
-msgstr "Regioni di un colore specifico o trasparenti"
+msgstr "Tutto, eccetto un colore specifico o la trasparenza"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions surrounded by a specific color"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
-msgstr "Regioni circondate da un colore specifico"
+msgstr "Tutto quello circondato da un colore specifico"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions surrounded by transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
-msgstr "Regioni circondate dal trasparente"
+msgstr "Tutto quello circondato dalla trasparenza"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:875
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions surrounded by a specific color or transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
-msgstr "Regioni circondate da un colore specifico o dal trasparente"
+msgstr "Tutto quello circondato da un colore specifico o dalla trasparenza"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
 #, kde-format

@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-28 00:43+0000\n"
-"PO-Revision-Date: 2023-07-18 21:30+0200\n"
+"POT-Creation-Date: 2023-07-29 00:43+0000\n"
+"PO-Revision-Date: 2023-07-28 17:15+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -8737,12 +8737,10 @@ msgstr "Attiva/disattiva preimpostazione gomma"
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:538 krita/krita.action:541
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgctxt "action"
 msgid "Select eraser preset"
-msgstr "Attiva/disattiva preimpostazione gomma"
+msgstr "Seleziona preimpostazione gomma"
 
 #. i18n: context: toolTip @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:540
@@ -8750,17 +8748,18 @@ msgstr "Attiva/disattiva preimpostazione gomma"
 msgctxt "action"
 msgid "Select eraser preset, along with the freehand brush tool"
 msgstr ""
+"Seleziona la preimpostazione della gomma, insieme con lo strumento Pennello "
+"a mano libera"
 
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:550 krita/krita.action:553
-#, fuzzy, kde-format
-#| msgid "Current brush preset"
+#, kde-format
 msgctxt "action"
 msgid "Select brush preset"
-msgstr "Preimpostazione del pennello attuale"
+msgstr "Seleziona preimpostazione pennello"
 
 #. i18n: context: toolTip @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:552
@@ -8768,6 +8767,8 @@ msgstr "Preimpostazione del pennello attuale"
 msgctxt "action"
 msgid "Select brush preset, along with the freehand brush tool"
 msgstr ""
+"Seleziona la preimpostazione del pennello, insieme con lo strumento Pennello "
+"a mano libera"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -16320,25 +16321,25 @@ msgstr ""
 "il documento l'oggetto di testo sarà convertito nel formato di Krita 5 che "
 "diverrà incompatibile con Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3748
+#: libs/flake/text/KoSvgTextShape.cpp:3767
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Testo"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3750
-#: libs/flake/text/KoSvgTextShape.cpp:3758
+#: libs/flake/text/KoSvgTextShape.cpp:3769
+#: libs/flake/text/KoSvgTextShape.cpp:3777
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma di testo SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3756
+#: libs/flake/text/KoSvgTextShape.cpp:3775
 #, kde-format
 msgid "SVG Text"
 msgstr "Testo SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3770
-#: libs/flake/text/KoSvgTextShape.cpp:3785
+#: libs/flake/text/KoSvgTextShape.cpp:3789
+#: libs/flake/text/KoSvgTextShape.cpp:3804
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16648,7 +16649,7 @@ msgstr "predefinito"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1444
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
 #, kde-format
 msgid "Size"
 msgstr "Dimensione"
@@ -18152,11 +18153,10 @@ msgid "CSV Document"
 msgstr "Documento CSV"
 
 #: libs/koplugin/KisMimeDatabase.cpp:354
-#, fuzzy, kde-format
-#| msgid "Replace Image"
+#, kde-format
 msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
-msgstr "Sostituisci immagine"
+msgstr "Immagine RGBE Radiance"
 
 #: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2121
 #: libs/ui/KisMainWindow.cpp:2204
@@ -19514,7 +19514,7 @@ msgstr "Risorse locali"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22603,7 +22603,7 @@ msgstr "Proprietà del livello"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1481
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1482
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -23648,10 +23648,9 @@ msgstr "Usa sempre questo modello"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
 #: libs/ui/forms/KisWelcomePage.ui:60
-#, fuzzy, kde-format
-#| msgid "Support Krita"
+#, kde-format
 msgid "Support Krita!"
-msgstr "Sostieni Krita"
+msgstr "Sostieni Krita!"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:140
@@ -23689,10 +23688,9 @@ msgstr "X"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
 #: libs/ui/forms/KisWelcomePage.ui:322
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Open Image"
-msgstr "Apri immagini"
+msgstr "Apri immagine"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:394
@@ -23744,10 +23742,9 @@ msgstr "Sito web di Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1069
-#, fuzzy, kde-format
-#| msgid "Replace Image"
+#, kde-format
 msgid "Recent Images"
-msgstr "Sostituisci immagine"
+msgstr "Immagini recenti"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
 #: libs/ui/forms/KisWelcomePage.ui:1093
@@ -25870,7 +25867,7 @@ msgstr "Colore di primo piano"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1460
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1461
 #, kde-format
 msgid "Background Color"
 msgstr "Colore di sfondo"
@@ -28907,11 +28904,9 @@ msgid "Reset Display"
 msgstr "Azzera la vista"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:26
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Previous Brush Preset"
-msgstr "Attiva/disattiva preimpostazione gomma"
+msgstr "Attiva/disattiva preimpostazione pennello precedente"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:27
@@ -28921,31 +28916,24 @@ msgid "Color Sampler"
 msgstr "Campionatore dei colori"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Deselect"
+#, kde-format
 msgid "Deselect"
 msgstr "Deseleziona"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate next layer"
+#, kde-format
 msgid "Activate Next Layer"
 msgstr "Attiva livello successivo"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:30
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate previous layer"
+#, kde-format
 msgid "Activate Previous Layer"
 msgstr "Attiva livello precedente"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:31
-#, fuzzy, kde-format
-#| msgid "Freehand Brush Tool"
+#, kde-format
 msgid "Activate Freehand Brush Tool"
-msgstr "Strumento pennello a mano libera"
+msgstr "Attiva strumento Pennello a mano libera"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:32
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
@@ -28954,9 +28942,7 @@ msgid "Freehand Selection Tool"
 msgstr "Strumento Selezione a mano libera"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:34
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Activate transform tool"
+#, kde-format
 msgid "Activate Transform Tool"
 msgstr "Attiva strumento Trasforma"
 
@@ -31362,36 +31348,36 @@ msgstr "Ma la prova colore è ancora spenta."
 msgid "Gamut Warnings turned off."
 msgstr "Avvisi per il gamut spenti."
 
-#: libs/ui/KisViewManager.cpp:796
+#: libs/ui/KisViewManager.cpp:791
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Profilo autore attivo"
 
-#: libs/ui/KisViewManager.cpp:926
+#: libs/ui/KisViewManager.cpp:921
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (Copia)"
 
-#: libs/ui/KisViewManager.cpp:1069 libs/ui/KisViewManager.cpp:1150
+#: libs/ui/KisViewManager.cpp:1064 libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Nomi alternativi terminati, prova a salvare manualmente con un numero più "
 "elevato"
 
-#: libs/ui/KisViewManager.cpp:1069
+#: libs/ui/KisViewManager.cpp:1064
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Impossibile salvare una versione incrementale"
 
-#: libs/ui/KisViewManager.cpp:1150
+#: libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Impossibile salvare una copia di sicurezza incrementale"
 
-#: libs/ui/KisViewManager.cpp:1333
+#: libs/ui/KisViewManager.cpp:1328
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31400,13 +31386,13 @@ msgstr ""
 "Passaggio alla modalità di sola tela.\n"
 "Premi %1 per tornare indietro."
 
-#: libs/ui/KisViewManager.cpp:1373
+#: libs/ui/KisViewManager.cpp:1368
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Apri cartella delle risorse"
 
-#: libs/ui/KisViewManager.cpp:1377
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31431,19 +31417,19 @@ msgstr ""
 "<p><b>Posizione app riservata</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1392
+#: libs/ui/KisViewManager.cpp:1387
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Open in AppData &utente"
 
-#: libs/ui/KisViewManager.cpp:1393
+#: libs/ui/KisViewManager.cpp:1388
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Apri nella posizione app &riservata"
 
-#: libs/ui/KisViewManager.cpp:1511 libs/ui/KisViewManager.cpp:1529
+#: libs/ui/KisViewManager.cpp:1506 libs/ui/KisViewManager.cpp:1524
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -50296,7 +50282,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "TIFF image with PSD data"
-msgstr ""
+msgstr "Immagine TIFF con dati PSD"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1579
 #, kde-format
@@ -50305,6 +50291,8 @@ msgid ""
 "The TIFF image contains valid PSD data embedded. Would you like to use PSD "
 "data instead of normal TIFF data?"
 msgstr ""
+"L'immagine TIFF incorpora dati PSD validi. Vuoi usare i dati PSD al posto "
+"dei dati TIFF normali?"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
 #. i18n: ectx: property (title), widget (QGroupBox, tiffOptions)
@@ -58632,72 +58620,72 @@ msgstr "Cambia SvgTextTool"
 msgid "Text Tool"
 msgstr "Strumento Testo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:384
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #, kde-format
 msgid "Conversion failed"
 msgstr "Conversione non riuscita"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:601
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:602
 #, kde-format
 msgid "Find Text"
 msgstr "Trova testo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:604
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:647
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:605
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
 #, kde-format
 msgid "Find:"
 msgstr "Trova:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:643
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:644
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Trova e sostituisci tutto"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
 #, kde-format
 msgid "Replace:"
 msgstr "Sostituisci:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Hai modificato il testo. Scartare le modifiche?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1288
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1294
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1289
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Testo formattato"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1291
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1292
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1296
 #, kde-format
 msgid "SVG Source"
 msgstr "Sorgente SVG"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1435
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1436
 #, kde-format
 msgid "Font"
 msgstr "Caratteri"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1452
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1453
 #, kde-format
 msgid "Text Color"
 msgstr "Colore testo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1467
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1468
 #, kde-format
 msgid "Sample a Color"
 msgstr "Campiona un colore"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1478
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1479
 #, kde-format
 msgid "Line height"
 msgstr "Altezza linea"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1490
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1491
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"

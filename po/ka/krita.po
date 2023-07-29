@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-28 00:43+0000\n"
-"PO-Revision-Date: 2023-07-13 06:44+0200\n"
+"POT-Creation-Date: 2023-07-29 00:43+0000\n"
+"PO-Revision-Date: 2023-07-28 10:22+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -8695,9 +8695,7 @@ msgstr "საშლელის პრესეტის გადართვ�
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:538 krita/krita.action:541
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgctxt "action"
 msgid "Select eraser preset"
 msgstr "საშლელის პრესეტის გადართვა"
@@ -8714,11 +8712,10 @@ msgstr ""
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:550 krita/krita.action:553
-#, fuzzy, kde-format
-#| msgid "Current brush preset"
+#, kde-format
 msgctxt "action"
 msgid "Select brush preset"
-msgstr "მიმდინარე ფუნჯის პრესეტი"
+msgstr "აირჩიეთ ფუნჯის პრესეტი"
 
 #. i18n: context: toolTip @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:552
@@ -13893,7 +13890,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr ""
+msgstr "სარკული ხედი ტილოს გარშემო"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
@@ -16219,25 +16216,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3748
+#: libs/flake/text/KoSvgTextShape.cpp:3767
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3750
-#: libs/flake/text/KoSvgTextShape.cpp:3758
+#: libs/flake/text/KoSvgTextShape.cpp:3769
+#: libs/flake/text/KoSvgTextShape.cpp:3777
 #, kde-format
 msgid "SVG Text Shape"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3756
+#: libs/flake/text/KoSvgTextShape.cpp:3775
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3770
-#: libs/flake/text/KoSvgTextShape.cpp:3785
+#: libs/flake/text/KoSvgTextShape.cpp:3789
+#: libs/flake/text/KoSvgTextShape.cpp:3804
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16543,7 +16540,7 @@ msgstr "ნაგულისხმები"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1444
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
 #, kde-format
 msgid "Size"
 msgstr "ზომა"
@@ -19362,7 +19359,7 @@ msgstr "ლოკალური რესურსები"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22322,7 +22319,7 @@ msgstr "ფენის თვისებები"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1481
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1482
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -23307,10 +23304,9 @@ msgstr "ყოველთვის გამოიყენეთ ეს შა
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
 #: libs/ui/forms/KisWelcomePage.ui:60
-#, fuzzy, kde-format
-#| msgid "Support Krita"
+#, kde-format
 msgid "Support Krita!"
-msgstr "Krita-ის მხარდაჭერა"
+msgstr "დაუჭირეთ მხარი Krita-ს!"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:140
@@ -23348,8 +23344,7 @@ msgstr "X"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
 #: libs/ui/forms/KisWelcomePage.ui:322
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Open Image"
 msgstr "გამოსახულების გახსნა"
 
@@ -23403,10 +23398,9 @@ msgstr "Krita-ის ვებგვერდი"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1069
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Recent Images"
-msgstr "გამოსახულების გახსნა"
+msgstr "ბოლო გამოსახულებები"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
 #: libs/ui/forms/KisWelcomePage.ui:1093
@@ -25396,7 +25390,7 @@ msgstr "წინა პლანის ფერი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1460
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1461
 #, kde-format
 msgid "Background Color"
 msgstr "ფონის ფერი"
@@ -28284,11 +28278,9 @@ msgid "Reset Display"
 msgstr "ეკრანის საწყის მნიშვნელობებზე დაყენება"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:26
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Previous Brush Preset"
-msgstr "საშლელის პრესეტის გადართვა"
+msgstr "წინა ფუნჯის პრესეტის გადართვა"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:27
@@ -28298,31 +28290,24 @@ msgid "Color Sampler"
 msgstr ""
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Deselect"
+#, kde-format
 msgid "Deselect"
 msgstr "მონიშვნის მოხსნა"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate next layer"
+#, kde-format
 msgid "Activate Next Layer"
 msgstr "შემდეგი ფენის გააქტიურება"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:30
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate previous layer"
+#, kde-format
 msgid "Activate Previous Layer"
 msgstr "წინა ფენის გააქტიურება"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:31
-#, fuzzy, kde-format
-#| msgid "Activate Freehand Selection Tool"
+#, kde-format
 msgid "Activate Freehand Brush Tool"
-msgstr "თავისუფალი მონიშვნის ხელსაწყოს გააქტიურება"
+msgstr "თავისუფალი მონიშვნის ფუნჯის ხელსაწყოს გააქტიურება"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:32
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
@@ -28331,10 +28316,9 @@ msgid "Freehand Selection Tool"
 msgstr ""
 
 #: libs/ui/input/KisTouchGestureAction.cpp:34
-#, fuzzy, kde-format
-#| msgid "Activate Measure Tool"
+#, kde-format
 msgid "Activate Transform Tool"
-msgstr "გაზომვის ხელსაწყოს გააქტიურება"
+msgstr "გარდაქმნის ხელსაწყოს გააქტიურება"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, TabletTest)
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:18
@@ -28728,7 +28712,7 @@ msgstr ""
 #: libs/ui/kis_mirror_manager.cpp:48
 #, kde-format
 msgid "Mirror View Around Canvas"
-msgstr ""
+msgstr "სარკული ხედი ტილოს გარშემო"
 
 #: libs/ui/kis_node_manager.cpp:453
 #, kde-format
@@ -30593,47 +30577,47 @@ msgstr ""
 msgid "Gamut Warnings turned off."
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:796
+#: libs/ui/KisViewManager.cpp:791
 #, kde-format
 msgid "Active Author Profile"
 msgstr "აქტიური ავტორის პროფილი"
 
-#: libs/ui/KisViewManager.cpp:926
+#: libs/ui/KisViewManager.cpp:921
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (ასლი)"
 
-#: libs/ui/KisViewManager.cpp:1069 libs/ui/KisViewManager.cpp:1150
+#: libs/ui/KisViewManager.cpp:1064 libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1069
+#: libs/ui/KisViewManager.cpp:1064
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "ინკრემენტული ვერსიის შენახვის შეცდომა"
 
-#: libs/ui/KisViewManager.cpp:1150
+#: libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "ინკრემენტული მარქაფის შენახვის შეცდომა"
 
-#: libs/ui/KisViewManager.cpp:1333
+#: libs/ui/KisViewManager.cpp:1328
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
 "Press %1 to go back."
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1373
+#: libs/ui/KisViewManager.cpp:1368
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "რესურსების საქაღალდის გახსნა"
 
-#: libs/ui/KisViewManager.cpp:1377
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -30648,19 +30632,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1392
+#: libs/ui/KisViewManager.cpp:1387
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1393
+#: libs/ui/KisViewManager.cpp:1388
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1511 libs/ui/KisViewManager.cpp:1529
+#: libs/ui/KisViewManager.cpp:1506 libs/ui/KisViewManager.cpp:1524
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -37477,7 +37461,7 @@ msgstr "კომპოზიციების გატანა..."
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
 #, kde-format
 msgid "Exporting composition: %1..."
-msgstr ""
+msgstr "კომპოზიციების გატანა: %1..."
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
 #, kde-format
@@ -38338,7 +38322,7 @@ msgstr ""
 #: plugins/dockers/presethistory/presethistory_dock.cpp:207
 #, kde-format
 msgid "Number of Brushes Shown:"
-msgstr ""
+msgstr "ნაჩვენები ფუნჯების რაოდენობა:"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:309
 #, kde-format
@@ -48844,7 +48828,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:205
 #, kde-format
 msgid "Target Size"
-msgstr ""
+msgstr "სამიზნე ზომა"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, targetSize)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:221
@@ -49493,7 +49477,7 @@ msgstr "აღდგენა"
 #: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings.cpp:219
 #, kde-format
 msgid "Move Source"
-msgstr ""
+msgstr "წყაროს გადატანა"
 
 #: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:64
 #, kde-format
@@ -52479,7 +52463,7 @@ msgstr "არხებიდან ფენებამდე"
 
 #: plugins/python/channels2layers/channels2layers.py:67
 msgid "RGB Colors"
-msgstr ""
+msgstr "RGB ფერები"
 
 #: plugins/python/channels2layers/channels2layers.py:68
 msgid "CMY Colors"
@@ -55032,7 +55016,7 @@ msgstr ""
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
 #, kde-format
 msgid "Boundary color"
-msgstr ""
+msgstr "საზღვრის ფერი"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:622
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
@@ -55135,7 +55119,7 @@ msgstr "ბმა"
 #, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
-msgstr ""
+msgstr "გაფართოების შევსება"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:689
 #, kde-format
@@ -56525,72 +56509,72 @@ msgstr ""
 msgid "Text Tool"
 msgstr "ტექსტის ხელსაწყო"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:384
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
 #, kde-format
 msgid "Conversion failed"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:601
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:602
 #, kde-format
 msgid "Find Text"
 msgstr "ტექსტის ძებნა"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:604
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:647
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:605
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
 #, kde-format
 msgid "Find:"
 msgstr "ძებნა:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:643
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:644
 #, kde-format
 msgid "Find and Replace all"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
 #, kde-format
 msgid "Replace:"
 msgstr "ჩანაცვლება:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1288
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1294
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1289
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "მდიდარი ტექსტი"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1291
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1292
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1296
 #, kde-format
 msgid "SVG Source"
 msgstr "SVG წყარო"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1435
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1436
 #, kde-format
 msgid "Font"
 msgstr "შრიფტი"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1452
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1453
 #, kde-format
 msgid "Text Color"
 msgstr "ტექსტის ფერი"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1467
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1468
 #, kde-format
 msgid "Sample a Color"
 msgstr "ფერის სემპლი"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1478
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1479
 #, kde-format
 msgid "Line height"
 msgstr "ხაზის სიმაღლე"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1490
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1491
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"
@@ -57478,7 +57462,7 @@ msgstr "წყაროს შევსება"
 #, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
-msgstr ""
+msgstr "გაფართოების შევსება"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:594
 #, kde-format
@@ -58047,7 +58031,7 @@ msgstr ""
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:233
 #, kde-format
 msgid "Liquify"
-msgstr ""
+msgstr "გათხევადება"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, meshButton)
 #. i18n: ectx: property (text), widget (QToolButton, meshButton)

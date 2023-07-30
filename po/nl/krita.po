@@ -62,7 +62,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-29 00:43+0000\n"
-"PO-Revision-Date: 2023-07-27 09:45+0200\n"
+"PO-Revision-Date: 2023-07-29 13:13+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -8786,12 +8786,10 @@ msgstr "Voorinstelling van wisser omschakelen"
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:538 krita/krita.action:541
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgctxt "action"
 msgid "Select eraser preset"
-msgstr "Voorinstelling van wisser omschakelen"
+msgstr "Voorinstelling van wisser selecteren"
 
 #. i18n: context: toolTip @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:540
@@ -8799,17 +8797,18 @@ msgstr "Voorinstelling van wisser omschakelen"
 msgctxt "action"
 msgid "Select eraser preset, along with the freehand brush tool"
 msgstr ""
+"Voorinstelling van wisser selecteren, samen met het hulpmiddel van het "
+"penseel uit de vrije hand"
 
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:550 krita/krita.action:553
-#, fuzzy, kde-format
-#| msgid "Current brush preset"
+#, kde-format
 msgctxt "action"
 msgid "Select brush preset"
-msgstr "Huidige penseelinstelling"
+msgstr "Voorinstelling van penseel selecteren"
 
 #. i18n: context: toolTip @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:552
@@ -8817,6 +8816,8 @@ msgstr "Huidige penseelinstelling"
 msgctxt "action"
 msgid "Select brush preset, along with the freehand brush tool"
 msgstr ""
+"Voorinstelling van penseel selecteren, samen met het hulpmiddel van het "
+"penseel uit de vrije hand"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)

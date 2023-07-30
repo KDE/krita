@@ -355,7 +355,7 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
 
     for (int i = 0; i < lengths.size(); i++) {
         const FontEntry &font = fonts.at(i);
-        const QString fontCacheEntry = font.fileName + "#" + QString::number(font.fontIndex) + modifications;
+        const QString fontCacheEntry = font.fileName + "#" + QString::number(font.fontIndex) + "#" + modifications;
         auto entry = d->typeFaces().find(fontCacheEntry);
         if (entry != d->typeFaces().end()) {
             faces.emplace_back(entry.value());

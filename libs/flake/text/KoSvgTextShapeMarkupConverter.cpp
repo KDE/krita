@@ -1028,20 +1028,6 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
         if (propertyId == QTextCharFormat::FontFamily) {
             const QString fontFamily = format.properties()[propertyId].toString();
             c.append("font-family").append(":").append(fontFamily);
-            style.append(c);
-            c.clear();
-
-            QVector<int> lengths;
-            const std::vector<FT_FaceUP> faces =
-                KoFontRegistry::instance()->facesForCSSValues({fontFamily}, lengths, {});
-            if (!faces.empty()) {
-                const FT_FaceUP &face = faces[0];
-                const TT_OS2 *const os2 = static_cast<TT_OS2 *>(FT_Get_Sfnt_Table(face.data(), ft_sfnt_os2));
-                if (os2 && os2->sxHeight) {
-                    const qreal xRatio = static_cast<qreal>(os2->sxHeight) / face->units_per_EM;
-                    c.append("font-size-adjust").append(":").append(QString::number(xRatio));
-                }
-            }
         }
         if (propertyId == QTextCharFormat::FontPointSize ||
             propertyId == QTextCharFormat::FontPixelSize) {

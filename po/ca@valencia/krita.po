@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-29 00:43+0000\n"
-"PO-Revision-Date: 2023-07-12 07:54+0200\n"
+"PO-Revision-Date: 2023-07-28 13:04+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -8710,19 +8710,17 @@ msgstr "Establix el mode esborrador"
 #, kde-format
 msgctxt "action"
 msgid "Toggle eraser preset"
-msgstr "Canvia la predefinició de l'esborrador"
+msgstr "Canvia l'esborrador predefinit"
 
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:538 krita/krita.action:541
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgctxt "action"
 msgid "Select eraser preset"
-msgstr "Canvia la predefinició de l'esborrador"
+msgstr "Seleccioneu l'esborrador predefinit"
 
 #. i18n: context: toolTip @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:540
@@ -8730,17 +8728,17 @@ msgstr "Canvia la predefinició de l'esborrador"
 msgctxt "action"
 msgid "Select eraser preset, along with the freehand brush tool"
 msgstr ""
+"Selecciona l'esborrador predefinit, junt amb l'eina de pinzell a mà alçada"
 
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:550 krita/krita.action:553
-#, fuzzy, kde-format
-#| msgid "Current brush preset"
+#, kde-format
 msgctxt "action"
 msgid "Select brush preset"
-msgstr "Pinzell predefinit actual"
+msgstr "Seleccioneu l'el pinzell predefinit"
 
 #. i18n: context: toolTip @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:552
@@ -8748,6 +8746,7 @@ msgstr "Pinzell predefinit actual"
 msgctxt "action"
 msgid "Select brush preset, along with the freehand brush tool"
 msgstr ""
+"Selecciona el pinzell predefinit, junt amb l'eina de pinzell a mà alçada"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -18136,7 +18135,7 @@ msgstr "Document CSV"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
-msgstr ""
+msgstr "Imatge RGBE de Radiance"
 
 #: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2121
 #: libs/ui/KisMainWindow.cpp:2204
@@ -19177,7 +19176,7 @@ msgstr "Disminuïx la lluminositat"
 #, kde-format
 msgctxt "Blending mode - Increase Luminosity HSY"
 msgid "Increase Luminosity"
-msgstr "Augmenta la lluminositat"
+msgstr "Augmenta la brillantor"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:153
 #, kde-format
@@ -23633,10 +23632,9 @@ msgstr "Utilitza sempre esta plantilla"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
 #: libs/ui/forms/KisWelcomePage.ui:60
-#, fuzzy, kde-format
-#| msgid "Support Krita"
+#, kde-format
 msgid "Support Krita!"
-msgstr "Contribució a Krita"
+msgstr "Ajudeu a Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:140
@@ -23674,10 +23672,9 @@ msgstr "X"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
 #: libs/ui/forms/KisWelcomePage.ui:322
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Open Image"
-msgstr "Obri imatges"
+msgstr "Obri una imatge"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:394
@@ -23729,10 +23726,9 @@ msgstr "Lloc web de Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1069
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Recent Images"
-msgstr "Obri imatges"
+msgstr "Imatges recents"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
 #: libs/ui/forms/KisWelcomePage.ui:1093
@@ -28878,11 +28874,9 @@ msgid "Reset Display"
 msgstr "Reinicia la visualització"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:26
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Previous Brush Preset"
-msgstr "Canvia la predefinició de l'esborrador"
+msgstr "Canvia el pinzell predefinit previ"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:27
@@ -28892,31 +28886,24 @@ msgid "Color Sampler"
 msgstr "Color de mostra"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Deselect"
+#, kde-format
 msgid "Deselect"
 msgstr "Desselecciona"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate next layer"
+#, kde-format
 msgid "Activate Next Layer"
 msgstr "Activa la capa següent"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:30
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate previous layer"
+#, kde-format
 msgid "Activate Previous Layer"
 msgstr "Activa la capa anterior"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:31
-#, fuzzy, kde-format
-#| msgid "Freehand Brush Tool"
+#, kde-format
 msgid "Activate Freehand Brush Tool"
-msgstr "Eina de pinzell a mà alçada"
+msgstr "Activa l'eina de pinzell a mà alçada"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:32
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
@@ -28925,9 +28912,7 @@ msgid "Freehand Selection Tool"
 msgstr "Eina de selecció a mà alçada"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:34
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Activate transform tool"
+#, kde-format
 msgid "Activate Transform Tool"
 msgstr "Activa l'eina de transformació"
 
@@ -50252,7 +50237,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "TIFF image with PSD data"
-msgstr ""
+msgstr "Imatge TIFF amb dades PSD"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1579
 #, kde-format
@@ -50261,6 +50246,8 @@ msgid ""
 "The TIFF image contains valid PSD data embedded. Would you like to use PSD "
 "data instead of normal TIFF data?"
 msgstr ""
+"La imatge TIFF conté dades PSD incrustades vàlides. Voleu utilitzar les "
+"dades PSD en lloc de les dades TIFF normals?"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
 #. i18n: ectx: property (title), widget (QGroupBox, tiffOptions)
@@ -60668,19 +60655,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "Drag an image into the window to open"
-#~ msgstr "Arrossegueu una imatge fins a la finestra per a obrir-la"
-
-#~ msgid "New File"
-#~ msgstr "Fitxer nou"
-
-#~ msgid "Recent Documents"
-#~ msgstr "Documents recents"
-
-#~ msgid ""
-#~ "⚠ Unsupported color space.\n"
-#~ "Only \"RGB/Alpha 8-bit\" is supported."
-#~ msgstr ""
-#~ "⚠ Espai de color no acceptat.\n"
-#~ "Només s'accepta «RGB/Alpha de 8 bits»."

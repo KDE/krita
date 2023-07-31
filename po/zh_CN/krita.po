@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-29 00:43+0000\n"
-"PO-Revision-Date: 2023-07-23 12:28\n"
+"PO-Revision-Date: 2023-07-30 07:09\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -8096,7 +8096,7 @@ msgstr "显示拾色器"
 #, kde-format
 msgctxt "action"
 msgid "Show MyPaint shade selector"
-msgstr "显示 MyPaint 渐变色拾色器"
+msgstr "显示 MyPaint 过渡色调拾色器"
 
 #. i18n: context: text @ Action (show_minimal_shade_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_minimal_shade_selector), Actions (General), ActionCollection (Krita)
@@ -8108,7 +8108,7 @@ msgstr "显示 MyPaint 渐变色拾色器"
 #, kde-format
 msgctxt "action"
 msgid "Show minimal shade selector"
-msgstr "显示简单渐变色拾色器"
+msgstr "显示简单过渡色调拾色器"
 
 #. i18n: context: text @ Action (show_color_history), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_color_history), Actions (General), ActionCollection (Krita)
@@ -8129,7 +8129,7 @@ msgstr "显示简单渐变色拾色器"
 #, kde-format
 msgctxt "action"
 msgid "Show color history"
-msgstr "显示颜色历史"
+msgstr "显示颜色历史色块"
 
 #. i18n: context: text @ Action (show_common_colors), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_common_colors), Actions (General), ActionCollection (Krita)
@@ -8687,44 +8687,41 @@ msgstr "橡皮擦模式"
 #, kde-format
 msgctxt "action"
 msgid "Toggle eraser preset"
-msgstr "橡皮擦预设开关"
+msgstr "切换橡皮擦预设"
 
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:538 krita/krita.action:541
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgctxt "action"
 msgid "Select eraser preset"
-msgstr "橡皮擦预设开关"
+msgstr "选择橡皮擦预设"
 
 #. i18n: context: toolTip @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:540
 #, kde-format
 msgctxt "action"
 msgid "Select eraser preset, along with the freehand brush tool"
-msgstr ""
+msgstr "选择手绘笔刷工具并切换至橡皮擦预设"
 
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:550 krita/krita.action:553
-#, fuzzy, kde-format
-#| msgid "Current brush preset"
+#, kde-format
 msgctxt "action"
 msgid "Select brush preset"
-msgstr "当前笔刷预设"
+msgstr "选择笔刷预设"
 
 #. i18n: context: toolTip @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:552
 #, kde-format
 msgctxt "action"
 msgid "Select brush preset, along with the freehand brush tool"
-msgstr ""
+msgstr "选择手绘笔刷工具并切换至笔刷预设"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -18039,7 +18036,7 @@ msgstr "CSV 文档"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
-msgstr ""
+msgstr "Radiance RGBE 图像"
 
 #: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2121
 #: libs/ui/KisMainWindow.cpp:2204
@@ -21664,7 +21661,7 @@ msgstr "导入视频缩放选项"
 #, kde-format
 msgctxt "Resize intepolation method list label"
 msgid "Filter:"
-msgstr "平滑方式："
+msgstr "缩放插值方式："
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
 #: libs/ui/animation/VideoImportDialog.ui:601
@@ -21734,7 +21731,7 @@ msgstr "选择帧导出选项"
 #: libs/ui/animation/wdg_animationrenderer.ui:86
 #, kde-format
 msgid "Image location:"
-msgstr "图像输出位置："
+msgstr "图像导出位置："
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/wdg_animationrenderer.ui:96
@@ -21758,7 +21755,7 @@ msgstr "序列起点编号："
 #: libs/ui/animation/wdg_animationrenderer.ui:124
 #, kde-format
 msgid "Only Unique Frames"
-msgstr "只输出独立帧"
+msgstr "只生成图像发生变化的帧"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
@@ -21786,7 +21783,7 @@ msgstr "选择 FFmpeg 渲染器选项。"
 #: plugins/dockers/recorder/recorder_export.ui:374
 #, kde-format
 msgid "Video location:"
-msgstr "导出位置："
+msgstr "视频导出位置："
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIncludeAudio)
 #: libs/ui/animation/wdg_animationrenderer.ui:232
@@ -22637,12 +22634,12 @@ msgstr "三角形 (惯用左手)"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:215
 #, kde-format
 msgid "Black Pixel"
-msgstr "单像素黑色"
+msgstr "单像素黑点"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:216
 #, kde-format
 msgid "White Pixel"
-msgstr "单像素白色"
+msgstr "单像素白点"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:219
 #, kde-format
@@ -22844,7 +22841,7 @@ msgstr " 帧/秒"
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
-msgstr "OpenGL - 原生模式"
+msgstr "OpenGL"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1660
 #, kde-format
@@ -22856,7 +22853,7 @@ msgstr "软件渲染器 - 非常缓慢"
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
-msgstr "Direct3D 11 - 基于 ANGLE"
+msgstr "Direct3D 11 - 通过 ANGLE 转译"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1664
 #, kde-format
@@ -23463,10 +23460,9 @@ msgstr "总是使用此模板"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
 #: libs/ui/forms/KisWelcomePage.ui:60
-#, fuzzy, kde-format
-#| msgid "Support Krita"
+#, kde-format
 msgid "Support Krita!"
-msgstr "捐款支持"
+msgstr "请捐款支持 Krita！"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:140
@@ -23504,8 +23500,7 @@ msgstr "X"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
 #: libs/ui/forms/KisWelcomePage.ui:322
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Open Image"
 msgstr "打开图像"
 
@@ -23559,10 +23554,9 @@ msgstr "官方网站"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1069
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Recent Images"
-msgstr "打开图像"
+msgstr "最近图像"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
 #: libs/ui/forms/KisWelcomePage.ui:1093
@@ -24512,14 +24506,14 @@ msgid ""
 "<html><head/><body><p>This should be enabled if you see any artifacts while "
 "using assistants.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>如果在使用辅助尺时发生显示错误，请启用此选项。</p></"
+"<html><head/><body><p>如果在使用辅助尺时出现显示错误，请启用此选项。</p></"
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLargePixmapCache)
 #: libs/ui/forms/wdgdisplaysettings.ui:204
 #, kde-format
 msgid "Use large pixmap cache"
-msgstr "使用大像素图缓存"
+msgstr "使用大像素映射缓存"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
 #: libs/ui/forms/wdgdisplaysettings.ui:218
@@ -25125,7 +25119,7 @@ msgstr "工具选项面板(&K)"
 #: libs/ui/forms/wdggeneralsettings.ui:669
 #, kde-format
 msgid "I&n Toolbar"
-msgstr "工具栏按钮/点击弹出(&N)"
+msgstr "工具栏按钮 (点击弹出)(&N)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlowMode)
 #: libs/ui/forms/wdggeneralsettings.ui:682
@@ -25167,7 +25161,7 @@ msgstr "变形工具：粘贴后自动激活"
 #: libs/ui/forms/wdggeneralsettings.ui:724
 #, kde-format
 msgid "Zoom steps between powers of 2"
-msgstr "2 的幂之间的缩放级数"
+msgstr "缩放平滑度 (主要缩放比例之间的过渡级数)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:741
@@ -25550,19 +25544,19 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1453
 #, kde-format
 msgid "Automatic layer suffixes"
-msgstr "自动添加图层名称后缀"
+msgstr "图层名称后缀"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1459
 #, kde-format
 msgid "Add \"Merged\" to merged group layers"
-msgstr "添加“合并”到合并后的图层组"
+msgstr "图层组合并后：自动附加“合并”后缀"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1466
 #, kde-format
 msgid "Add \"(pasted)\" to pasted layers"
-msgstr "添加“(粘贴)”到粘贴的图层"
+msgstr "粘贴的图层：自动附加“(粘贴)”后缀"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1491
@@ -26244,8 +26238,8 @@ msgid ""
 "Use background color and opacity as the base canvas color. This can be "
 "reconfigured in `Image > Properties.`"
 msgstr ""
-"将上面指定的背景色和不透明度设为图像本身的属性。此属性可在“图像 > 属性”中重新"
-"配置。"
+"将上面指定的背景色和不透明度设为图像的基准画布颜色。此属性可在“图像 > 属性”中"
+"重新配置。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:570
@@ -28143,7 +28137,7 @@ msgstr "选择所有图层 (替换当前选中图层)"
 #: libs/ui/input/kis_select_layer_action.cpp:124
 #, kde-format
 msgid "Select from Menu (Replace Selection)"
-msgstr "打开图层选择菜单进行选择 (替换当前选中图层)"
+msgstr "打开图层菜单选择图层 (替换当前选中图层)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
@@ -28158,7 +28152,7 @@ msgstr "选择所有图层 (添加到当前选中图层)"
 #: libs/ui/input/kis_select_layer_action.cpp:130
 #, kde-format
 msgid "Select from Menu (Add to Selection)"
-msgstr "打开图层选择菜单进行选择 (添加到当前选中图层)"
+msgstr "打开图层菜单选择图层 (添加到当前选中图层)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:246
 #, kde-format
@@ -28582,11 +28576,9 @@ msgid "Reset Display"
 msgstr "重置视图"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:26
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Previous Brush Preset"
-msgstr "橡皮擦预设开关"
+msgstr "切换上一个笔刷预设"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:27
@@ -28596,31 +28588,24 @@ msgid "Color Sampler"
 msgstr "拾色器"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Deselect"
+#, kde-format
 msgid "Deselect"
 msgstr "取消选择"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate next layer"
+#, kde-format
 msgid "Activate Next Layer"
-msgstr "将下一个图层设为活动"
+msgstr "激活下一个图层"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:30
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate previous layer"
+#, kde-format
 msgid "Activate Previous Layer"
-msgstr "将上一个图层设为活动"
+msgstr "激活上一个图层"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:31
-#, fuzzy, kde-format
-#| msgid "Freehand Brush Tool"
+#, kde-format
 msgid "Activate Freehand Brush Tool"
-msgstr "手绘笔刷工具/画笔"
+msgstr "激活手绘笔刷工具"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:32
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
@@ -28629,9 +28614,7 @@ msgid "Freehand Selection Tool"
 msgstr "手绘轮廓选区工具/套索"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:34
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Activate transform tool"
+#, kde-format
 msgid "Activate Transform Tool"
 msgstr "激活变形工具"
 
@@ -28864,7 +28847,7 @@ msgstr "导入图像"
 #: libs/ui/kis_image_manager.cc:197 libs/ui/widgets/KoDualColorButton.cpp:92
 #, kde-format
 msgid "Select a Color"
-msgstr "选择一种颜色"
+msgstr "选择颜色"
 
 #: libs/ui/kis_layer_manager.cc:191
 #, kde-format
@@ -29580,7 +29563,7 @@ msgstr "工作区"
 #: libs/ui/KisApplication.cpp:352
 #, kde-format
 msgid "SVG symbol libraries"
-msgstr "SVG 矢量图形库"
+msgstr "矢量图形库"
 
 #: libs/ui/KisApplication.cpp:353 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
@@ -33626,7 +33609,7 @@ msgstr "中间灰亮度："
 #, kde-format
 msgctxt "@title Which elements to display (e.g., thumbnails or details)"
 msgid "Display"
-msgstr "显示器"
+msgstr "显示"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:169
@@ -36930,12 +36913,12 @@ msgstr "颜色调整快捷键"
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:54
 #, kde-format
 msgid "Change to a Horizontal Layout"
-msgstr "自动调整混色区位置"
+msgstr "自动调整过渡色调拾色器位置为水平并排"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:55
 #, kde-format
 msgid "Hide Shade Selector"
-msgstr "自动隐藏渐变混色区"
+msgstr "自动隐藏过渡色调拾色器"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:56
 #, kde-format
@@ -37053,7 +37036,7 @@ msgstr "面板："
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:36
 #, kde-format
 msgid "Color Selector"
-msgstr "主拾色器区"
+msgstr "主拾色器"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkShowColorSelector)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:72
@@ -37156,7 +37139,7 @@ msgstr "左键点击后立即隐藏放大镜 (左键拖动时不隐藏)"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:406
 #, kde-format
 msgid "Shade Selector"
-msgstr "渐变混色区"
+msgstr "过渡色调拾色器"
 
 #. i18n: ectx: property (text), widget (QLabel, myPaintColorModelLabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:367
@@ -37169,7 +37152,7 @@ msgstr "色彩模型："
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:383
 #, kde-format
 msgid "Update Selector When:"
-msgstr "更新渐变混色区的颜色，如果："
+msgstr "基准颜色更新条件："
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnForeground)
@@ -37177,37 +37160,37 @@ msgstr "更新渐变混色区的颜色，如果："
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:402
 #, kde-format
 msgid "this doesn't include a color change by the shade selector"
-msgstr "不包含通过混色区引起的前景色/背景色变化"
+msgstr "不包含过渡色调拾色器导致的前景色/背景色变化"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:392
 #, kde-format
 msgid "Background color changes"
-msgstr "背景色发生了变化"
+msgstr "背景色发生变化时"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnForeground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:405
 #, kde-format
 msgid "Foreground color changes"
-msgstr "前景色发生了变化"
+msgstr "前景色发生变化时"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnLeftClick)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:415
 #, kde-format
 msgid "Left clicking on shade selector"
-msgstr "左键点击了混色区"
+msgstr "左键点击过渡色调拾色器时"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnRightClick)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:422
 #, kde-format
 msgid "Right clicking on shade selector"
-msgstr "右键点击了渐变混色区"
+msgstr "右键点击过渡色调拾色器时"
 
 #. i18n: ectx: property (title), widget (QGroupBox, minimalShadeSelectorGroup)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:438
 #, kde-format
 msgid "Minimal Shade Selector"
-msgstr "简单渐变混色区"
+msgstr "简单过渡色调拾色器"
 
 #. i18n: ectx: property (text), widget (QRadioButton, minimalShadeSelectorAsColorPatches)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:450
@@ -37225,13 +37208,13 @@ msgstr "渐变(&G)"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:513
 #, kde-format
 msgid "Line Count: "
-msgstr "渐变色条数："
+msgstr "过渡色条数量："
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:533
 #, kde-format
 msgid "Line Height: "
-msgstr "颜色条高度："
+msgstr "过渡色条高度："
 
 #. i18n: ectx: property (text), widget (QLabel, patchesPerLineLabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:556
@@ -37245,13 +37228,13 @@ msgstr "每行色块数："
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:545
 #, kde-format
 msgid "Color History"
-msgstr "颜色历史区"
+msgstr "颜色历史色块"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lastUsedColorsShow)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:609
 #, kde-format
 msgid "Show Color Histor&y"
-msgstr "显示颜色历史(&Y)"
+msgstr "显示颜色历史色块(&Y)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
@@ -37259,7 +37242,7 @@ msgstr "显示颜色历史(&Y)"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:855
 #, kde-format
 msgid "Patch Options"
-msgstr "色块选项"
+msgstr "色块"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
@@ -37281,7 +37264,7 @@ msgstr "最大色块数："
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:761
 #, kde-format
 msgid "Layout"
-msgstr "显示方式："
+msgstr "布局"
 
 #. i18n: ectx: property (text), widget (QRadioButton, lastUsedColorsAlignVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, commonColorsAlignVertical)
@@ -37315,13 +37298,13 @@ msgstr "允许滚动"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:822
 #, kde-format
 msgid "Colors from Image"
-msgstr "图像颜色区"
+msgstr "图像采样色块"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsShow)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:831
 #, kde-format
 msgid "Show Colors from the ima&ge"
-msgstr "显示采样自图像的颜色(&G)"
+msgstr "显示图像采样色块(&G)"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, commonColorsAutoUpdate)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1015
@@ -38101,7 +38084,7 @@ msgstr "导出已勾选方案的图像。"
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:37
 #, kde-format
 msgid "Digital Colors Mixer"
-msgstr "颜色比例混合器"
+msgstr "过渡色调混合器"
 
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:142
 #, kde-format
@@ -38456,7 +38439,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "显示图层选择复选框"
+msgstr "显示图层选择框"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:427
 #, kde-format
@@ -40033,7 +40016,7 @@ msgstr "模式"
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:156
 #, kde-format
 msgid "Symbol Libraries"
-msgstr "SVG 矢量图形库"
+msgstr "矢量图形库"
 
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:78
 #, kde-format
@@ -40104,19 +40087,19 @@ msgstr "色相环外观："
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
 #, kde-format
 msgid "Static"
-msgstr "静态"
+msgstr "静态：始终显示全饱和、全亮度颜色"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
 #, kde-format
 msgid "Dynamic"
-msgstr "动态"
+msgstr "动态：根据当前颜色动态调整饱和度和亮度"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
 #, kde-format
 msgid "Dynamic + Static Edge"
-msgstr "动态 + 静态边缘"
+msgstr "动态内圈 + 静态外圈"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpQuickSettingsMenu)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:109
@@ -40128,19 +40111,19 @@ msgstr "显示快速设置菜单(&Q)"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:124
 #, kde-format
 msgid "Favorite Selector Layouts:"
-msgstr "常用拾色器布局："
+msgstr "常用拾色器形状："
 
 #. i18n: ectx: property (text), widget (KisPopupButton, btnFavoriteSelectors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
 #, kde-format
 msgid "Select..."
-msgstr "选择 (可选择多种)..."
+msgstr "点击选择 (可选中多种)..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
 #, kde-format
 msgid "Selection Color Space:"
-msgstr "拾取色的色彩空间"
+msgstr "拾色器色彩空间"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
@@ -40152,19 +40135,19 @@ msgstr "图层/蒙版"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
 #, kde-format
 msgid "Proof Colors to Painting Color Space"
-msgstr "色彩校样到绘制色彩空间"
+msgstr "色彩校样：确保拾色器按照绘制色彩空间显示颜色"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPopups)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
 #, kde-format
 msgid "Pop-ups"
-msgstr "悬浮窗口"
+msgstr "画布悬浮拾色器"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:202
 #, kde-format
 msgid "Pop-up size:"
-msgstr "悬浮窗口大小："
+msgstr "画布悬浮拾色器大小："
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
@@ -40192,7 +40175,7 @@ msgstr "方向："
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:789
 #, kde-format
 msgid "hori&zontal"
-msgstr "水平(&Z)"
+msgstr "横向(&Z)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryVertical)
@@ -40202,7 +40185,7 @@ msgstr "水平(&Z)"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:799
 #, kde-format
 msgid "&vertical"
-msgstr "垂直(&V)"
+msgstr "竖向(&V)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -40212,7 +40195,7 @@ msgstr "垂直(&V)"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:835
 #, kde-format
 msgid "Along Orientation"
-msgstr "平滑滚动"
+msgstr "跟随布局方向"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -40222,7 +40205,7 @@ msgstr "平滑滚动"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:840
 #, kde-format
 msgid "Laterally"
-msgstr "逐版跳跃"
+msgstr "垂直于布局方向"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_12)
@@ -40258,37 +40241,37 @@ msgstr "最大色块数："
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
 #, kde-format
 msgid "Update Base Color When:"
-msgstr "更新基础颜色，如果："
+msgstr "基准颜色更新条件："
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateExternal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:421
 #, kde-format
 msgid "Color changes externally"
-msgstr "颜色在拾色器外发生了改变"
+msgstr "颜色在过渡色调拾色器的外部被改变时"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateOnRightClick)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
 #, kde-format
 msgid "Right-clicking on shade selector"
-msgstr "右键点击了渐变混色区"
+msgstr "右键点击过渡色调拾色器时"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
 #, kde-format
 msgid "Interaction ends"
-msgstr "操作交互结束"
+msgstr "拾色操作结束时"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
 #, kde-format
 msgid "Line Count:"
-msgstr "渐变色条数："
+msgstr "过渡色条数量："
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:465
 #, kde-format
 msgid "Line Height:"
-msgstr "颜色条高度："
+msgstr "过渡色条高度："
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:726
@@ -40300,7 +40283,7 @@ msgstr "清除按钮"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:752
 #, kde-format
 msgid "Colors fro&m Image"
-msgstr "图像颜色区"
+msgstr "图像采样色块(&M)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
@@ -40330,7 +40313,7 @@ msgstr "偏移："
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:157
 #, kde-format
 msgid "Display:"
-msgstr "显示方式："
+msgstr "显示："
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbSlider)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
@@ -40369,7 +40352,7 @@ msgstr "显示宽色域拾色器"
 #, kde-format
 msgctxt "action"
 msgid "Show wide-gamut shade selector"
-msgstr "显示宽色域渐变混色区"
+msgstr "显示宽色域过渡色调拾色器"
 
 #. i18n: context: toolTip @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
@@ -40380,7 +40363,7 @@ msgstr "显示宽色域渐变混色区"
 #, kde-format
 msgctxt "action"
 msgid "Show shade selector"
-msgstr "显示渐变混色区"
+msgstr "显示过渡色调拾色器"
 
 #. i18n: context: toolTip @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
@@ -40391,7 +40374,7 @@ msgstr "显示渐变混色区"
 #, kde-format
 msgctxt "action"
 msgid "Show MyPaint selector"
-msgstr "显示 MyPaint 渐变色混色区"
+msgstr "显示 MyPaint 拾色器"
 
 #. i18n: context: text @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
@@ -49439,7 +49422,7 @@ msgstr "无法加载使用 JPEG 压缩的次采样 YCbCr TIFF 图像。"
 #, kde-format
 msgctxt "@title:window"
 msgid "TIFF image with PSD data"
-msgstr ""
+msgstr "TIFF 图像 (含 PSD 数据)"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1579
 #, kde-format
@@ -49448,6 +49431,8 @@ msgid ""
 "The TIFF image contains valid PSD data embedded. Would you like to use PSD "
 "data instead of normal TIFF data?"
 msgstr ""
+"此 TIFF 图像包含有效的嵌入 PSD 数据。您想要使用嵌入的 PSD 数据而不是通常的 "
+"TIFF 数据吗？"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
 #. i18n: ectx: property (title), widget (QGroupBox, tiffOptions)
@@ -55206,11 +55191,11 @@ msgstr "更改设置"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:58
 msgid "Mixer Slider Docker"
-msgstr "渐变色拾色条"
+msgstr "过渡色调混合器"
 
 #: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:36
 msgid "Number of slider lines: "
-msgstr "渐变色条数："
+msgstr "过渡色调混合器条数："
 
 #: plugins/python/palette_docker/palette_docker.py:37
 msgid "Python Palette Docker"
@@ -56003,17 +55988,17 @@ msgstr "重置"
 #: plugins/tools/basictools/kis_tool_fill.cc:606
 #, kde-format
 msgid "Fill the active selection, or the entire canvas"
-msgstr "填充活动选区或整个画布"
+msgstr "当前选区/整个画布"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:607
 #, kde-format
 msgid "Fill a contiguous region"
-msgstr "填充图层中颜色相连的区域"
+msgstr "相连颜色区域"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:608
 #, kde-format
 msgid "Fill all regions of a similar color"
-msgstr "填充与您点击位置颜色相似的所有区域"
+msgstr "相似颜色区域"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:613
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
@@ -56127,14 +56112,14 @@ msgstr "对带有指定颜色标签的图层进行采样并进行填充"
 #: plugins/tools/basictools/kis_tool_fill.cc:635
 #, kde-format
 msgid "Dragging will fill regions of any color"
-msgstr "拖动时将填充任意颜色的区域"
+msgstr "填充任意颜色的区域"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:636
 #, kde-format
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
 "(useful for filling line-art)"
-msgstr "拖动时将仅填充与拖动开始区域颜色相似的区域 (适用于填充线稿)"
+msgstr "仅填充与拖动开始处颜色相似的区域 (适用于填充线稿)"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:638
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
@@ -56152,7 +56137,7 @@ msgstr "填充区域"
 #, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
-msgstr "填充内容"
+msgstr "填充颜色"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:668
 #, kde-format
@@ -56164,7 +56149,7 @@ msgstr "采样图层"
 #, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
-msgstr "填充范围"
+msgstr "填充界限"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:689
 #, kde-format
@@ -56176,7 +56161,7 @@ msgstr "填充区域调整"
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
-msgstr "拖动连续填充"
+msgstr "拖动式填充模式"
 
 #: plugins/tools/basictools/kis_tool_fill.h:234
 #, kde-format
@@ -58530,13 +58515,13 @@ msgstr "目标区域"
 #, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
-msgstr "填充内容"
+msgstr "填充颜色"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:585
 #, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
-msgstr "填充范围"
+msgstr "填充界限"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:594
 #, kde-format
@@ -59655,12 +59640,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgid "Drag an image into the window to open"
-#~ msgstr "将图像拖进窗口即可打开"
-
-#~ msgid "New File"
-#~ msgstr "新建图像"
-
-#~ msgid "Recent Documents"
-#~ msgstr "最近图像"

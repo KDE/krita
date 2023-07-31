@@ -47,12 +47,12 @@
         <widget class="QComboBox" name="cmbSelectorRenderingMode">
          <item>
           <property name="text">
-           <string>Static</string>
+           <string comment="Wide Gamut Color Selector option: Always shows full saturation and full brightness colors.">Static</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Dynamic</string>
+           <string comment="Wide Gamut Color Selector option: Shows colors depending on the current color saturation and brightness.">Dynamic</string>
           </property>
          </item>
          <item>

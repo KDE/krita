@@ -410,6 +410,7 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
         QRectF rectangle = QRectF(m_dragStart, m_dragEnd).normalized();
         if (rectangle.width() < 4 && rectangle.height() < 4) {
             m_dragging = false;
+            canvas()->updateCanvas(rectangle);
             event->accept();
             return;
         }
@@ -460,7 +461,16 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void SvgTextTool::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key()==Qt::Key_Enter || event->key()==Qt::Key_Return) {
+    if (m_dragging) {
+        if (event->key() == Qt::Key_Escape) {
+            m_dragging = false;
+            const QRectF rectangle = QRectF(m_dragStart, m_dragEnd).normalized();
+            canvas()->updateCanvas(rectangle);
+            event->accept();
+        } else {
+            event->ignore();
+        }
+    } else if (event->key()==Qt::Key_Enter || event->key()==Qt::Key_Return) {
         showEditor();
         event->accept();
     } else {

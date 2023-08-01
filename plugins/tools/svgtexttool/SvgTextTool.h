@@ -76,11 +76,16 @@ private Q_SLOTS:
     void storeDefaults();
 
 private:
+    enum class DragMode {
+        None = 0,
+        Create,
+    };
+
     QPointer<SvgTextEditor> m_editor;
     QPushButton *m_edit {nullptr};
     QPointF m_dragStart {QPointF(0, 0)};
     QPointF m_dragEnd {QPointF(0, 0)};
-    bool m_dragging {false};
+    DragMode m_dragging {DragMode::None};
     QFontComboBox *m_defFont {nullptr};
     QComboBox *m_defPointSize {nullptr};
     QButtonGroup *m_defAlignment {nullptr};

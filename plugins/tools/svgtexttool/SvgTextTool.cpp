@@ -328,7 +328,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
 
     KisHandlePainterHelper handlePainter(&gc);
 
-    if (m_dragging) {
+    if (m_dragging == DragMode::Create) {
         QPolygonF poly(QRectF(m_dragStart, m_dragEnd));
         handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
         handlePainter.drawRubberLine(poly);
@@ -363,7 +363,7 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
             canvas()->shapeManager()->selection()->select(hoveredShape);
         } else {
             m_dragStart = m_dragEnd = event->point;
-            m_dragging = true;
+            m_dragging = DragMode::Create;
             event->accept();
         }
     }
@@ -373,7 +373,7 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
 {
     QRectF updateRect = m_hoveredShapeHighlightRect.boundingRect();
 
-    if (m_dragging) {
+    if (m_dragging == DragMode::Create) {
         m_dragEnd = event->point;
         m_hoveredShapeHighlightRect = QPainterPath();
         updateRect |= QRectF(m_dragStart, m_dragEnd).normalized().toAlignedRect();
@@ -406,10 +406,10 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
 
 void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (m_dragging) {
+    if (m_dragging == DragMode::Create) {
         QRectF rectangle = QRectF(m_dragStart, m_dragEnd).normalized();
         if (rectangle.width() < 4 && rectangle.height() < 4) {
-            m_dragging = false;
+            m_dragging = DragMode::None;
             canvas()->updateCanvas(rectangle);
             event->accept();
             return;
@@ -417,9 +417,9 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoSvgTextShapeID");
         KoProperties *params = new KoProperties();//Fill these with "svgText", "defs" and "shapeRect"
         params->setProperty("defs", QVariant(generateDefs()));
-        if (m_dragging) {
+        if (m_dragging == DragMode::Create) {
             m_dragEnd = event->point;
-            m_dragging = false;
+            m_dragging = DragMode::None;
 
             //The following show only happen when we're creating preformatted text. If we're making
             //Word-wrapped text, it should take the rectangle unmodified.
@@ -461,9 +461,9 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void SvgTextTool::keyPressEvent(QKeyEvent *event)
 {
-    if (m_dragging) {
+    if (m_dragging == DragMode::Create) {
         if (event->key() == Qt::Key_Escape) {
-            m_dragging = false;
+            m_dragging = DragMode::None;
             const QRectF rectangle = QRectF(m_dragStart, m_dragEnd).normalized();
             canvas()->updateCanvas(rectangle);
             event->accept();

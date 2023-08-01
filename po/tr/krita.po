@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-29 00:43+0000\n"
+"POT-Creation-Date: 2023-08-01 00:43+0000\n"
 "PO-Revision-Date: 2023-07-28 11:58+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -16266,25 +16266,25 @@ msgstr ""
 "metin nesnesi Krita 5 biçimine dönüştürülür ve Krita 4.x ile uyumlu olmaktan "
 "çıkar."
 
-#: libs/flake/text/KoSvgTextShape.cpp:3767
+#: libs/flake/text/KoSvgTextShape.cpp:3867
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3769
-#: libs/flake/text/KoSvgTextShape.cpp:3777
+#: libs/flake/text/KoSvgTextShape.cpp:3869
+#: libs/flake/text/KoSvgTextShape.cpp:3877
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Metin Şekli"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3775
+#: libs/flake/text/KoSvgTextShape.cpp:3875
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3789
-#: libs/flake/text/KoSvgTextShape.cpp:3804
+#: libs/flake/text/KoSvgTextShape.cpp:3889
+#: libs/flake/text/KoSvgTextShape.cpp:3904
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -40492,13 +40492,21 @@ msgstr "Ton Halkası Görünüşü"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Static"
+msgctxt ""
+"Wide Gamut Color Selector option: Always shows full saturation and full "
+"brightness colors."
 msgid "Static"
 msgstr "Durgun"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Dynamic"
+msgctxt ""
+"Wide Gamut Color Selector option: Shows colors depending on the current "
+"color saturation and brightness."
 msgid "Dynamic"
 msgstr "Devingen"
 

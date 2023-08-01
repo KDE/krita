@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-29 00:43+0000\n"
+"POT-Creation-Date: 2023-08-01 00:43+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -17373,26 +17373,26 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3767
+#: libs/flake/text/KoSvgTextShape.cpp:3867
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3769
-#: libs/flake/text/KoSvgTextShape.cpp:3777
+#: libs/flake/text/KoSvgTextShape.cpp:3869
+#: libs/flake/text/KoSvgTextShape.cpp:3877
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG tekstikujund"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3775
+#: libs/flake/text/KoSvgTextShape.cpp:3875
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3789
-#: libs/flake/text/KoSvgTextShape.cpp:3804
+#: libs/flake/text/KoSvgTextShape.cpp:3889
+#: libs/flake/text/KoSvgTextShape.cpp:3904
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -42483,6 +42483,9 @@ msgstr "Valija nähtavus"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
 #, fuzzy, kde-format
 #| msgid "Statistics"
+msgctxt ""
+"Wide Gamut Color Selector option: Always shows full saturation and full "
+"brightness colors."
 msgid "Static"
 msgstr "Statistika"
 
@@ -42490,6 +42493,9 @@ msgstr "Statistika"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
 #, fuzzy, kde-format
 #| msgid "Dyna"
+msgctxt ""
+"Wide Gamut Color Selector option: Shows colors depending on the current "
+"color saturation and brightness."
 msgid "Dynamic"
 msgstr "Dyna"
 

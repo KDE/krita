@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-29 00:43+0000\n"
+"POT-Creation-Date: 2023-08-01 00:43+0000\n"
 "PO-Revision-Date: 2023-06-25 15:34+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
@@ -16389,25 +16389,25 @@ msgstr ""
 "enregistrez le document, l'objet de texte sera converti au format de Krita 5 "
 "et ne sera plus compatible avec Krita 4.x."
 
-#: libs/flake/text/KoSvgTextShape.cpp:3767
+#: libs/flake/text/KoSvgTextShape.cpp:3867
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texte"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3769
-#: libs/flake/text/KoSvgTextShape.cpp:3777
+#: libs/flake/text/KoSvgTextShape.cpp:3869
+#: libs/flake/text/KoSvgTextShape.cpp:3877
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Objet textuel SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3775
+#: libs/flake/text/KoSvgTextShape.cpp:3875
 #, kde-format
 msgid "SVG Text"
 msgstr "Texte SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3789
-#: libs/flake/text/KoSvgTextShape.cpp:3804
+#: libs/flake/text/KoSvgTextShape.cpp:3889
+#: libs/flake/text/KoSvgTextShape.cpp:3904
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -40956,13 +40956,21 @@ msgstr "Apparence de teinte en anneau :"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Static"
+msgctxt ""
+"Wide Gamut Color Selector option: Always shows full saturation and full "
+"brightness colors."
 msgid "Static"
 msgstr "Statique"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Dynamic"
+msgctxt ""
+"Wide Gamut Color Selector option: Shows colors depending on the current "
+"color saturation and brightness."
 msgid "Dynamic"
 msgstr "Dynamique"
 

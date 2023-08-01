@@ -61,57 +61,52 @@ bool KoResourceBundle::load()
     if (!resourceStore || resourceStore->bad()) {
         qWarning() << "Could not open store on bundle" << m_filename;
         return false;
-
     }
-    else {
 
-        m_metadata.clear();
+    m_metadata.clear();
 
-        if (resourceStore->open("META-INF/manifest.xml")) {
-            if (!m_manifest.load(resourceStore->device())) {
-                qWarning() << "Could not open manifest for bundle" << m_filename;
-                return false;
-            }
-            resourceStore->close();
-
-            Q_FOREACH (KoResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
-                if (!resourceStore->hasFile(ref.resourcePath)) {
-                    m_manifest.removeResource(ref);
-                    qWarning() << "Bundle" << filename() <<  "is broken. File" << ref.resourcePath << "is missing";
-                }
-            }
-
-        } else {
-            qWarning() << "Could not load META-INF/manifest.xml";
+    if (resourceStore->open("META-INF/manifest.xml")) {
+        if (!m_manifest.load(resourceStore->device())) {
+            qWarning() << "Could not open manifest for bundle" << m_filename;
             return false;
         }
+        resourceStore->close();
 
-        bool versionFound = false;
-        if (!readMetaData(resourceStore.data())) {
-            qWarning() << "Could not load meta.xml";
-            return false;
+        Q_FOREACH (KoResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
+            if (!resourceStore->hasFile(ref.resourcePath)) {
+                m_manifest.removeResource(ref);
+                qWarning() << "Bundle" << filename() <<  "is broken. File" << ref.resourcePath << "is missing";
+            }
         }
 
-        if (resourceStore->open("preview.png")) {
-            // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
-            // fails with "libpng error: IDAT: CRC error"
-            QByteArray data = resourceStore->device()->readAll();
-            QBuffer buffer(&data);
-            m_thumbnail.load(&buffer, "PNG");
-            resourceStore->close();
-        }
-        else {
-            qWarning() << "Could not open preview.png";
-        }
+    } else {
+        qWarning() << "Could not load META-INF/manifest.xml";
+        return false;
+    }
 
-        /*
-         * If no version is found it's an old bundle with md5 hashes to fix, or if some manifest resource entry
-         * doesn't not correspond to a file the bundle is "broken", in both cases we need to recreate the bundle.
-         */
-        if (!versionFound) {
-            m_metadata.insert(KisResourceStorage::s_meta_version, "1");
-        }
+    bool versionFound = false;
+    if (!readMetaData(resourceStore.data())) {
+        qWarning() << "Could not load meta.xml";
+        return false;
+    }
 
+    if (resourceStore->open("preview.png")) {
+        // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
+        // fails with "libpng error: IDAT: CRC error"
+        QByteArray data = resourceStore->device()->readAll();
+        QBuffer buffer(&data);
+        m_thumbnail.load(&buffer, "PNG");
+        resourceStore->close();
+    } else {
+        qWarning() << "Could not open preview.png";
+    }
+
+    /*
+     * If no version is found it's an old bundle with md5 hashes to fix, or if some manifest resource entry
+     * doesn't not correspond to a file the bundle is "broken", in both cases we need to recreate the bundle.
+     */
+    if (!versionFound) {
+        m_metadata.insert(KisResourceStorage::s_meta_version, "1");
     }
 
     return true;

@@ -316,61 +316,57 @@ void KoResourceBundle::writeUserDefinedMeta(const QString &metaTag, KoXmlWriter 
 
 bool KoResourceBundle::readMetaData(KoStore *resourceStore)
 {
-    if (resourceStore->open("meta.xml")) {
-        QDomDocument doc;
-        if (!doc.setContent(resourceStore->device())) {
-            qWarning() << "Could not parse meta.xml for" << m_filename;
-            return false;
-        }
-        // First find the manifest:manifest node.
-        QDomNode n = doc.firstChild();
-        for (; !n.isNull(); n = n.nextSibling()) {
-            if (!n.isElement()) {
+    if (!resourceStore->open("meta.xml")) {
+        qWarning() << "Could not open meta.xml for" << m_filename;
+        return false;
+    }
+
+    QDomDocument doc;
+    if (!doc.setContent(resourceStore->device())) {
+        qWarning() << "Could not parse meta.xml for" << m_filename;
+        return false;
+    }
+
+    const QDomElement root = doc.documentElement();
+    if (root.tagName() != "meta:meta") {
+        qWarning() << "Expected meta:meta element root, but found"
+                   << root.tagName();
+        return false;
+    }
+
+    QDomElement e;
+    for (e = root.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+        QString name  = e.tagName();
+        QString value = e.text();
+        if (name == "meta:meta-userdefined") {
+            name  = e.attribute("meta:name");
+            value = e.attribute("meta:value");
+
+            if (name == "tag") {
+                m_bundletags << value;
                 continue;
             }
-            if (n.toElement().tagName() == "meta:meta") {
-                break;
+
+            if (name != "email"   &&
+                name != "license" &&
+                name != "website") {
+                qWarning() << "Unrecognized metadata: "
+                           << e.tagName()
+                           << name
+                           << value;
             }
+
+            m_metadata.insert(name, value);
+            name = "meta:" + name;
         }
 
-        if (n.isNull()) {
-            qWarning() << "Could not find manifest node for bundle" << m_filename;
-            return false;
+        if (!m_metadata.contains(name)) {
+            m_metadata.insert(name, value);
         }
-
-        const QDomElement  metaElement = n.toElement();
-        for (n = metaElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
-            if (n.isElement()) {
-                QDomElement e = n.toElement();
-                if (e.tagName() == "meta:meta-userdefined") {
-                    if (e.attribute("meta:name") == "tag") {
-                        m_bundletags << e.attribute("meta:value");
-                    }
-                    else {
-                        QString metaName = e.attribute("meta:name");
-                        if (!metaName.startsWith("meta:") && !metaName.startsWith("dc:")) {
-                            if (metaName == "email" || metaName == "license" || metaName == "website") { // legacy metadata options
-                                if (!m_metadata.contains("meta:" + metaName)) {
-                                    m_metadata.insert("meta:" + metaName, e.attribute("meta:value"));
-                                }
-                            } else {
-                                qWarning() << "Unrecognized metadata: " << e.tagName() << e.attribute("meta:name") << e.attribute("meta:value");
-                            }
-                        }
-                        m_metadata.insert(e.attribute("meta:name"), e.attribute("meta:value"));
-                    }
-                }
-                else {
-                    if (!m_metadata.contains(e.tagName())) {
-                        m_metadata.insert(e.tagName(), e.firstChild().toText().data());
-                    }
-                }
-            }
-        }
-        resourceStore->close();
-        return true;
     }
-    return false;
+
+    resourceStore->close();
+    return true;
 }
 
 void KoResourceBundle::saveMetadata(QScopedPointer<KoStore> &store)

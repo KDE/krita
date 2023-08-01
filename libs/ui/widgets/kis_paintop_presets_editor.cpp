@@ -144,7 +144,7 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
 
         // Show Panel Button
         m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setCheckable(true);
-        m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setChecked(false);
+        m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setChecked(cfg.presetStripVisible());
 
         connect(m_d->uiWdgPaintOpPresetSettings.showPresetsButton, SIGNAL(clicked(bool)), this, SLOT(slotSwitchShowPresets(bool)));
 
@@ -320,7 +320,7 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
     m_d->uiWdgPaintOpPresetSettings.gridLayout->addWidget(m_d->horzSplitter, 3, 0, 1, 3);
 
     // Default Configuration
-    slotSwitchShowPresets(false); // hide presets by default
+    slotSwitchShowPresets(cfg.presetStripVisible());
     slotSwitchScratchpad(cfg.scratchpadVisible());
 }
 
@@ -450,6 +450,8 @@ void KisPaintOpPresetsEditor::setPaintOpSettingsWidget(QWidget * widget)
         } else {
             slotSwitchScratchpad(false);
         }
+
+        slotSwitchShowPresets(cfg.presetStripVisible());
 
         KisLodAvailabilityModel *model =
             new KisLodAvailabilityModel(m_d->lodAvailabilityData,
@@ -638,11 +640,45 @@ void KisPaintOpPresetsEditor::hideEvent(QHideEvent *event)
     if (m_d->ignoreHideEvents) {
         return;
     }
+
+    KisConfig cfg(false);
+
+    QList<int> splitterSizes = m_d->horzSplitter->sizes();
+    if (!cfg.presetStripVisible()) {
+        splitterSizes[0] = m_d->presetPanelWidth;
+    }
+
+    if (!cfg.scratchpadVisible()) {
+        splitterSizes[2] = m_d->scratchPanelWidth;
+    }
+
+    cfg.writeList<int>("brushEditorSplitterSizes", splitterSizes);
+
     QWidget::hideEvent(event);
 }
 
 void KisPaintOpPresetsEditor::showEvent(QShowEvent *)
 {
+    KisConfig cfg(false);
+    QList<int> splitterSizes = cfg.readList<int>("brushEditorSplitterSizes");
+
+    if (splitterSizes.length() == 3) {
+        m_d->presetPanelWidth = splitterSizes[0];
+        if (!cfg.presetStripVisible()) {
+        splitterSizes[0] = 0;
+        }
+
+        m_d->scratchPanelWidth = splitterSizes[2];
+        if (!cfg.scratchpadVisible()) {
+        splitterSizes[2] = 0;
+        }
+
+        m_d->horzSplitter->setSizes(splitterSizes);
+    } else {
+        m_d->presetPanelWidth  = brushPresetsPanelInitWidth;
+        m_d->scratchPanelWidth = scratchPadPanelInitWidth;
+    }
+
     emit brushEditorShown();
 }
 
@@ -724,7 +760,6 @@ void KisPaintOpPresetsEditor::slotSwitchShowPresets(bool visible)
         QList<int> splitterSizes = m_d->horzSplitter->sizes();
         splitterSizes[0] = m_d->presetPanelWidth;
         m_d->horzSplitter->setSizes(splitterSizes);
-
     } else {
         showBtn->setIcon(KisIconUtils::loadIcon("arrow-left"));
 
@@ -739,6 +774,9 @@ void KisPaintOpPresetsEditor::slotSwitchShowPresets(bool visible)
         splitterSizes[1] = 0xFF'FFFF;
         m_d->horzSplitter->setSizes(splitterSizes);
     }
+
+    KisConfig cfg(false);
+    cfg.setPresetStripVisible(visible);
 }
 
 void KisPaintOpPresetsEditor::slotUpdatePaintOpFilter() {
@@ -824,9 +862,9 @@ void KisPaintOpPresetsEditor::updateThemedIcons()
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setIcon(KisIconUtils::loadIcon("deletelayer"));
     //m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("view-choose"));
 
-    // if we cannot see the "Preset label", we know it is not visible
-    // maybe this can also be stored in the config like the scratchpad?
-    if (m_d->uiWdgPaintOpPresetSettings.presetsSidebarLabel->isVisible()) {
+    // store if the scratchpad or brush presets are visible in the config
+    KisConfig cfg(true);
+    if (cfg.presetStripVisible()) {
         //m_d->uiWdgPaintOpPresetSettings.presetsSpacer->changeSize(0,0, QSizePolicy::Ignored,QSizePolicy::Ignored);
         m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
     } else {
@@ -834,8 +872,6 @@ void KisPaintOpPresetsEditor::updateThemedIcons()
         m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
     }
 
-    // we store whether the scratchpad if visible in the config.
-    KisConfig cfg(true);
     if (cfg.scratchpadVisible()) {
         m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
     } else {

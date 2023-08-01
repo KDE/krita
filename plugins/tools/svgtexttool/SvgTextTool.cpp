@@ -101,6 +101,12 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
             koSelection()->select(foundTextShape);
         }
     }
+
+    QRectF updateRect;
+    Q_FOREACH (const KoShape *const shape, shapes) {
+        updateRect |= shape->boundingRect();
+    }
+    canvas()->updateCanvas(kisGrowRect(updateRect, 100));
 }
 
 void SvgTextTool::deactivate()
@@ -375,6 +381,7 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
     } else {
         KoSvgTextShape *hoveredShape = dynamic_cast<KoSvgTextShape *>(canvas()->shapeManager()->shapeAt(event->point));
         if (hoveredShape) {
+            m_hoveredShapeHighlightRect = {};
             if (hoveredShape->shapesInside().isEmpty()) {
                 m_hoveredShapeHighlightRect.addRect(hoveredShape->boundingRect());
             } else {
@@ -468,6 +475,8 @@ void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
         event->ignore(); // allow the event to be used by another
         return;
     }
+    const QRectF updateRect = std::exchange(m_hoveredShapeHighlightRect, QPainterPath()).boundingRect();
+    canvas()->updateCanvas(kisGrowRect(updateRect, 100));
     showEditor();
     if(m_editor) {
         m_editor->raise();

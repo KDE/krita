@@ -74,7 +74,7 @@ static bool ReadOldLine(quint8 *image, int width, QDataStream &s)
 
         if ((image[0] == 1) && (image[1] == 1) && (image[2] == 1)) {
             for (i = image[3] << rshift; i > 0; i--) {
-                std::memcpy(image, image-4, 4);
+                memcpy(image, image-4, 4);
                 image += 4;
                 width--;
             }
@@ -100,11 +100,11 @@ static void RGBEToPaintDevice(quint8 *image, int width, KisSequentialIterator &i
                                         float(image[1]) * v,
                                         float(image[2]) * v,
                                         1.0f};
-            std::memcpy(dst, pixelData, 4 * sizeof(float));
+            memcpy(dst, pixelData, 4 * sizeof(float));
         } else {
             // Zero exponent handle
             const float pixelData[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-            std::memcpy(dst, pixelData, 4 * sizeof(float));
+            memcpy(dst, pixelData, 4 * sizeof(float));
         }
 
         image += 4;

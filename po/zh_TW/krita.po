@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-01 00:43+0000\n"
-"PO-Revision-Date: 2023-07-24 10:52+0000\n"
+"PO-Revision-Date: 2023-08-01 13:34+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
 "krita/zh_Hant/>\n"
@@ -8700,37 +8700,34 @@ msgstr "切換橡皮刷預設"
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:538 krita/krita.action:541
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgctxt "action"
 msgid "Select eraser preset"
-msgstr "切換橡皮刷預設"
+msgstr "選取橡皮刷預設"
 
 #. i18n: context: toolTip @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:540
 #, kde-format
 msgctxt "action"
 msgid "Select eraser preset, along with the freehand brush tool"
-msgstr ""
+msgstr "選取橡皮刷預設，並切換至手繪筆刷工具"
 
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:550 krita/krita.action:553
-#, fuzzy, kde-format
-#| msgid "Current brush preset"
+#, kde-format
 msgctxt "action"
 msgid "Select brush preset"
-msgstr "目前筆刷預設"
+msgstr "選取繪畫筆刷預設"
 
 #. i18n: context: toolTip @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:552
 #, kde-format
 msgctxt "action"
 msgid "Select brush preset, along with the freehand brush tool"
-msgstr ""
+msgstr "選取繪畫筆刷預設，並切換至手繪筆刷工具"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -18044,7 +18041,7 @@ msgstr "CSV 檔案"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
-msgstr ""
+msgstr "Radiance RGBE 影像"
 
 #: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2121
 #: libs/ui/KisMainWindow.cpp:2204
@@ -23457,10 +23454,9 @@ msgstr "總是使用此範本"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
 #: libs/ui/forms/KisWelcomePage.ui:60
-#, fuzzy, kde-format
-#| msgid "Support Krita"
+#, kde-format
 msgid "Support Krita!"
-msgstr "支援 Krita"
+msgstr "支援 Krita！"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:140
@@ -23498,8 +23494,7 @@ msgstr "X"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
 #: libs/ui/forms/KisWelcomePage.ui:322
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Open Image"
 msgstr "開啟影像"
 
@@ -23553,10 +23548,9 @@ msgstr "Krita 官方網站"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1069
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Recent Images"
-msgstr "開啟影像"
+msgstr "最近影像"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
 #: libs/ui/forms/KisWelcomePage.ui:1093
@@ -28589,11 +28583,9 @@ msgid "Reset Display"
 msgstr "重設顯示"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:26
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Previous Brush Preset"
-msgstr "切換橡皮刷預設"
+msgstr "切換先前筆刷預設"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:27
@@ -28603,31 +28595,24 @@ msgid "Color Sampler"
 msgstr "色彩取樣器"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Deselect"
+#, kde-format
 msgid "Deselect"
 msgstr "取消選取"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate next layer"
+#, kde-format
 msgid "Activate Next Layer"
 msgstr "切換至上方圖層"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:30
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate previous layer"
+#, kde-format
 msgid "Activate Previous Layer"
 msgstr "切換至下方圖層"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:31
-#, fuzzy, kde-format
-#| msgid "Freehand Brush Tool"
+#, kde-format
 msgid "Activate Freehand Brush Tool"
-msgstr "手繪筆刷工具"
+msgstr "切換至手繪筆刷工具"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:32
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
@@ -28636,11 +28621,9 @@ msgid "Freehand Selection Tool"
 msgstr "手繪選取區域工具"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:34
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Activate transform tool"
+#, kde-format
 msgid "Activate Transform Tool"
-msgstr "貼上後自動切換到變形工具"
+msgstr "切換至變形工具"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, TabletTest)
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:18
@@ -40091,8 +40074,7 @@ msgstr "色調環外觀："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, fuzzy, kde-format
-#| msgid "Static"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Always shows full saturation and full "
 "brightness colors."
@@ -40101,8 +40083,7 @@ msgstr "靜態"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
-#, fuzzy, kde-format
-#| msgid "Dynamic"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Shows colors depending on the current "
 "color saturation and brightness."
@@ -49452,7 +49433,7 @@ msgstr "無法載入經 YCbCr 色度採樣並以 JPEG 壓縮的檔案。"
 #, kde-format
 msgctxt "@title:window"
 msgid "TIFF image with PSD data"
-msgstr ""
+msgstr "含 PSD 資料的 TIFF 影像"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1579
 #, kde-format
@@ -49461,6 +49442,7 @@ msgid ""
 "The TIFF image contains valid PSD data embedded. Would you like to use PSD "
 "data instead of normal TIFF data?"
 msgstr ""
+"該 TIFF 影像含有嵌入的 PSD 資料。您希望使用 PSD 資料代替正常的 TIFF 資料嗎？"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
 #. i18n: ectx: property (title), widget (QGroupBox, tiffOptions)

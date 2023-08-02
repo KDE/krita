@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-01 00:43+0000\n"
-"PO-Revision-Date: 2023-07-27 14:29+0200\n"
+"PO-Revision-Date: 2023-08-01 08:19+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -8743,12 +8743,10 @@ msgstr "Ändra förinställning av radergummi"
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:538 krita/krita.action:541
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgctxt "action"
 msgid "Select eraser preset"
-msgstr "Ändra förinställning av radergummi"
+msgstr "Välj förinställning av radergummi"
 
 #. i18n: context: toolTip @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:540
@@ -8756,24 +8754,24 @@ msgstr "Ändra förinställning av radergummi"
 msgctxt "action"
 msgid "Select eraser preset, along with the freehand brush tool"
 msgstr ""
+"Välj förinställning av radergummi, tillsammans med frihandspenselverktyget"
 
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:550 krita/krita.action:553
-#, fuzzy, kde-format
-#| msgid "Current brush preset"
+#, kde-format
 msgctxt "action"
 msgid "Select brush preset"
-msgstr "Nuvarande penselförinställningar"
+msgstr "Välj penselförinställning"
 
 #. i18n: context: toolTip @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:552
 #, kde-format
 msgctxt "action"
 msgid "Select brush preset, along with the freehand brush tool"
-msgstr ""
+msgstr "Välj förinställning av pensel, tillsammans med frihandspenselverktyget"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -18136,12 +18134,10 @@ msgid "CSV Document"
 msgstr "CSV-dokument"
 
 #: libs/koplugin/KisMimeDatabase.cpp:354
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Replace Image"
+#, kde-format
 msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
-msgstr "Ersätt bild"
+msgstr "Radiance RGBE-bild"
 
 #: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2121
 #: libs/ui/KisMainWindow.cpp:2204
@@ -28818,11 +28814,9 @@ msgid "Reset Display"
 msgstr "Återställ skärm"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:26
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle eraser preset"
+#, kde-format
 msgid "Toggle Previous Brush Preset"
-msgstr "Ändra förinställning av radergummi"
+msgstr "Ändra föregående penselförinställning"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:27
@@ -28832,31 +28826,24 @@ msgid "Color Sampler"
 msgstr "Färghämtare"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Deselect"
+#, kde-format
 msgid "Deselect"
 msgstr "Avmarkera"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate next layer"
+#, kde-format
 msgid "Activate Next Layer"
 msgstr "Aktivera nästa lager"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:30
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Activate previous layer"
+#, kde-format
 msgid "Activate Previous Layer"
 msgstr "Aktivera föregående lager"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:31
-#, fuzzy, kde-format
-#| msgid "Freehand Brush Tool"
+#, kde-format
 msgid "Activate Freehand Brush Tool"
-msgstr "Frihandspenselverktyg"
+msgstr "Aktivera frihandspenselverktyg"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:32
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
@@ -28865,9 +28852,7 @@ msgid "Freehand Selection Tool"
 msgstr "Frihandsmarkeringsverktyg"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:34
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Activate transform tool"
+#, kde-format
 msgid "Activate Transform Tool"
 msgstr "Aktivera transformeringsverktyg"
 
@@ -40547,18 +40532,16 @@ msgstr "Färgtonsringens utseende:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, fuzzy, kde-format
-#| msgid "Static"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Always shows full saturation and full "
 "brightness colors."
 msgid "Static"
-msgstr "Statistik"
+msgstr "Statisk"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
-#, fuzzy, kde-format
-#| msgid "Dynamic"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Shows colors depending on the current "
 "color saturation and brightness."

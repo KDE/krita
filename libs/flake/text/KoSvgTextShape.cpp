@@ -1010,7 +1010,8 @@ void KoSvgTextShape::relayout() const
             spaceAdvance = QPointF(currentGlyph.ftface->glyph->advance.x, currentGlyph.ftface->glyph->advance.y);
         }
 
-        if (FT_Load_Glyph(currentGlyph.ftface, currentGlyph.index, faceLoadFlags) != 0) {
+        if (const FT_Error err = FT_Load_Glyph(currentGlyph.ftface, currentGlyph.index, faceLoadFlags)) {
+            warnFlake << "Failed to load glyph, freetype error" << err;
             continue;
         }
 
@@ -1058,7 +1059,20 @@ void KoSvgTextShape::relayout() const
             } else {
                 charResult.path = glyph;
             }
-        } else if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_BITMAP) {
+        } else {
+            if (currentGlyph.ftface->glyph->format != FT_GLYPH_FORMAT_BITMAP) {
+                debugFlake << "Unsupported glyph format" << glyphFormatToStr(currentGlyph.ftface->glyph->format)
+                           << "asking freetype to render it for us";
+                FT_Render_Mode mode = FT_LOAD_TARGET_MODE(faceLoadFlags);
+                if (mode == FT_RENDER_MODE_NORMAL && (faceLoadFlags & FT_LOAD_MONOCHROME)) {
+                    mode = FT_RENDER_MODE_MONO;
+                }
+                if (const FT_Error err = FT_Render_Glyph(currentGlyph.ftface->glyph, mode)) {
+                    warnFlake << "Failed to render glyph, freetype error" << err;
+                    continue;
+                }
+            }
+
             // TODO: Handle glyph clusters better...
             charResult.image = d->convertFromFreeTypeBitmap(currentGlyph.ftface->glyph);
 
@@ -1090,8 +1104,6 @@ void KoSvgTextShape::relayout() const
                 currentGlyph.ftface->glyph->bitmap_left += offset.x();
                 currentGlyph.ftface->glyph->bitmap_top -= offset.y();
             }
-        } else {
-            warnFlake << "Unsupported glyph format" << glyphFormatToStr(currentGlyph.ftface->glyph->format);
         }
 
         // Retreive CPAL/COLR V0 color layers, directly based off the sample

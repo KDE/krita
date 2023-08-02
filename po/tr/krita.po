@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-01 02:42+0000\n"
-"PO-Revision-Date: 2023-07-27 14:11+0300\n"
+"PO-Revision-Date: 2023-08-02 01:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 23.11.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -22851,6 +22851,7 @@ msgstr ""
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
+"Dosya Seçicisi'den seçilmiş bir konuma kaydetmek başlangıcı yavaşlatabilir!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:470
 #, fuzzy, kde-format
@@ -24389,7 +24390,7 @@ msgstr "Dosyadan yeni bir profil kur."
 #: libs/ui/forms/wdgcolorspaceselector.ui:134
 #, kde-format
 msgid "Color Space Browser"
-msgstr "Renk Uzayı Tarayıcı"
+msgstr "Renk Uzayı Tarayıcısı"
 
 #. i18n: ectx: property (text), widget (QLabel, lbl_descriptionwidget)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
@@ -24411,7 +24412,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:51
 #, kde-format
 msgid "Profile Picker"
-msgstr "Profil Seçici"
+msgstr "Profil Seçicisi"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:59
@@ -26550,7 +26551,7 @@ msgstr "yol"
 #: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:449
 #, kde-format
 msgid "Brush Editor"
-msgstr "Fırça Düzenleyici"
+msgstr "Fırça Düzenleyicisi"
 
 #. i18n: ectx: property (text), widget (QLabel, currentBrushNameLabel)
 #: libs/ui/forms/wdgpaintopsettings.ui:130
@@ -27237,14 +27238,14 @@ msgstr "Renk Seçici:"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:90
 #, kde-format
 msgid "sRGB Triangle Selector"
-msgstr "sRGB Üçgen Seçici"
+msgstr "sRGB Üçgen Seçicisi"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:95
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:69
 #, kde-format
 msgid "Wide Gamut Selector"
-msgstr "Geniş Gam Seçici"
+msgstr "Geniş Gam Seçicisi"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:103
@@ -37351,7 +37352,7 @@ msgstr "Yatay Bir Yerleşime Dönüştür"
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:55
 #, kde-format
 msgid "Hide Shade Selector"
-msgstr "Gölge Seçiciyi Gizle"
+msgstr "Gölge Seçicisini Gizle"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:56
 #, kde-format
@@ -37543,13 +37544,13 @@ msgstr "Sabitleyici Yeniden Boyutlandığında: "
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:294
 #, kde-format
 msgid "Show Zoom Selector UI: "
-msgstr "Yakınlaştırma Seçici Arayüzünü Göster: "
+msgstr "Yakınlaştırma Seçicisi Arayüzünü Göster: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:304
 #, kde-format
 msgid "Zoom Selector Size: "
-msgstr "Yakınlaştırma Seçici Boyutu: "
+msgstr "Yakınlaştırma Seçicisi Boyutu: "
 
 #. i18n: ectx: property (text), widget (QCheckBox, hidePopupOnClickCheck)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:330
@@ -37562,7 +37563,7 @@ msgstr "Açılır Pencereyi tıklamada gizle."
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:406
 #, kde-format
 msgid "Shade Selector"
-msgstr "Gölge Seçici"
+msgstr "Gölge Seçicisi"
 
 #. i18n: ectx: property (text), widget (QLabel, myPaintColorModelLabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:367
@@ -37614,7 +37615,7 @@ msgstr "Gölge seçiciye sağ tıklayarak"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:438
 #, kde-format
 msgid "Minimal Shade Selector"
-msgstr "Küçük Gölge Seçici"
+msgstr "Küçük Gölge Seçicisi"
 
 #. i18n: ectx: property (text), widget (QRadioButton, minimalShadeSelectorAsColorPatches)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:450
@@ -38310,7 +38311,7 @@ msgstr "Düzenle"
 #: plugins/dockers/artisticcolorselector/artisticcolorselector_dock.cpp:70
 #, kde-format
 msgid "Artistic Color Selector"
-msgstr "Sanatsal Renk Seçici"
+msgstr "Sanatsal Renk Seçicisi"
 
 #: plugins/dockers/artisticcolorselector/artisticcolorselector_dock.cpp:117
 #: plugins/dockers/artisticcolorselector/artisticcolorselector_dock.cpp:118
@@ -40570,7 +40571,7 @@ msgctxt ""
 "Wide Gamut Color Selector option: Shows colors depending on the current "
 "color saturation and brightness."
 msgid "Dynamic"
-msgstr ""
+msgstr "Devingen"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
@@ -42769,7 +42770,7 @@ msgstr "İstisna"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:18
 #, kde-format
 msgid "Script Editor"
-msgstr "Betik Düzenleyici"
+msgstr "Betik Düzenleyicisi"
 
 #. i18n: ectx: property (title), widget (QMenu, menuRun)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)

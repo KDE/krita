@@ -99,7 +99,6 @@
 #include <brushengine/kis_paintop_preset.h>
 #include "KisPart.h"
 #include <KoUpdater.h>
-#include "KisResourceServerProvider.h"
 #include "kis_selection.h"
 #include "kis_selection_mask.h"
 #include "kis_selection_manager.h"
@@ -416,21 +415,14 @@ void KisViewManager::slotViewRemoved(KisView *view)
     if (view->viewManager() == this && viewCount() == 0) {
         d->statusBar.hideAllStatusBarItems();
     }
-
-    KisConfig cfg(false);
-    if (canvasResourceProvider() && canvasResourceProvider()->currentPreset()) {
-        cfg.writeEntry("LastPreset", canvasResourceProvider()->currentPreset()->name());
-    }
 }
 
 void KisViewManager::setCurrentView(KisView *view)
 {
-    bool first = true;
     if (d->currentImageView) {
         d->currentImageView->notifyCurrentStateChanged(false);
 
         d->currentImageView->canvasBase()->setCursor(QCursor(Qt::ArrowCursor));
-        first = false;
         KisDocument* doc = d->currentImageView->document();
         if (doc) {
             doc->image()->compositeProgressProxy()->removeProxy(d->persistentImageProgressUpdater);
@@ -461,42 +453,6 @@ void KisViewManager::setCurrentView(KisView *view)
                     SIGNAL(documentMousePositionChanged(QPointF)),
                     &d->statusBar,
                     SLOT(documentMousePositionChanged(QPointF)));
-        }
-
-        // Restore the last used brush preset, color and background color.
-        if (first) {
-            KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-            const QString defaultPresetName = "b) Basic-5 Size Opacity";
-
-            KisConfig cfg(true);
-            QString lastPreset = cfg.readEntry("LastPreset", defaultPresetName);
-
-            KisPaintOpPresetSP preset = rserver->resource("", "", lastPreset);
-            if (!preset) {
-                preset = rserver->resource("", "", defaultPresetName);
-            }
-
-            if (!preset && rserver->resourceCount() > 0) {
-                KisResourceModel *resourceModel = rserver->resourceModel();
-                for (int i = 0; i < resourceModel->rowCount(); i++) {
-
-                    QModelIndex idx = resourceModel->index(i, 0);
-
-                    QString resourceName = idx.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
-                    QString fileName = idx.data(Qt::UserRole + KisAbstractResourceModel::Filename).toString();
-
-                    if (resourceName.toLower().contains("default") || fileName.toLower().contains("default")) {
-                        preset = resourceModel->resourceForIndex(idx).dynamicCast<KisPaintOpPreset>();
-                        break;
-                    }
-                }
-            }
-
-            if (preset) {
-
-                paintOpBox()->restoreResource(preset);
-                canvasResourceProvider()->setCurrentCompositeOp(preset->settings()->paintOpCompositeOp());
-            }
         }
 
         KisCanvasController *canvasController = dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController());

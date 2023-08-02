@@ -548,8 +548,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     slotInputDeviceChanged(KoToolManager::instance()->currentInputDevice());
 
     m_brushSelectPresetAction->setChecked(true);
-
-    findDefaultPresets();
 }
 
 
@@ -909,6 +907,9 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
         KisConfig cfg(true);
         KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
         KisPaintOpPresetSP preset;
+
+        findDefaultPresets();
+
         if (inputDevice.pointer() == QTabletEvent::Eraser) {
             preset = rserver->resource("", "", cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), m_eraserName));
         }

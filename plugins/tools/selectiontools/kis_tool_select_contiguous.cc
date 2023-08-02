@@ -381,19 +381,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     checkBoxSelectionAsBoundary->setSizePolicy(QSizePolicy::Ignored,
                                                QSizePolicy::Preferred);
 
-    KisSliderSpinBox *sliderGrow = new KisSliderSpinBox;
-    sliderGrow->setPrefix(i18nc(
-        "The 'grow/shrink' spinbox prefix in contiguous selection tool options",
-        "Grow: "));
-    sliderGrow->setRange(-40, 40);
-    sliderGrow->setSuffix(i18n(" px"));
-    KisSliderSpinBox *sliderFeather = new KisSliderSpinBox;
-    sliderFeather->setPrefix(i18nc(
-        "The 'feather' spinbox prefix in contiguous selection tool options",
-        "Feather: "));
-    sliderFeather->setRange(0, 40);
-    sliderFeather->setSuffix(i18n(" px"));
-
     // Set the tooltips
     buttonContiguousSelectionModeFloodFill->setToolTip(
         i18n("Select regions similar in color to the clicked region"));
@@ -409,9 +396,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     checkBoxSelectionAsBoundary->setToolTip(
         i18n("Set if the contour of the active selection should be treated as "
              "a boundary when making a new selection"));
-
-    sliderGrow->setToolTip(i18n("Grow or shrink the selection by the set amount"));
-    sliderFeather->setToolTip(i18n("Blur the selection by the set amount"));
 
     // Construct the option widget
     KisOptionCollectionWidgetWithHeader *sectionSelectionExtent =

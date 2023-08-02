@@ -868,6 +868,10 @@ void KoSvgTextShape::relayout() const
                 if (!isHorizontal && FT_HAS_VERTICAL(face)) {
                     faceLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
                 }
+                if (!FT_IS_SCALABLE(face)) {
+                    // This is needed for the CBDT version of Noto Color Emoji
+                    faceLoadFlags &= ~FT_LOAD_NO_BITMAP;
+                }
                 if (start == 0) {
                     raqm_set_freetype_face(layout.data(), face.data());
                     raqm_set_freetype_load_flags(layout.data(), faceLoadFlags);
@@ -1003,6 +1007,10 @@ void KoSvgTextShape::relayout() const
         if (FT_HAS_COLOR(currentGlyph.ftface)) {
             faceLoadFlags |= FT_LOAD_COLOR;
         }
+        if (!FT_IS_SCALABLE(currentGlyph.ftface)) {
+            // This is needed for the CBDT version of Noto Color Emoji
+            faceLoadFlags &= ~FT_LOAD_NO_BITMAP;
+        }
 
         QPointF spaceAdvance;
         if (tabSizeInfo.contains(cluster)) {
@@ -1060,7 +1068,22 @@ void KoSvgTextShape::relayout() const
                 charResult.path = glyph;
             }
         } else {
-            if (currentGlyph.ftface->glyph->format != FT_GLYPH_FORMAT_BITMAP) {
+            QTransform bitmapTf;
+
+            if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_BITMAP) {
+                if (FT_HAS_COLOR(currentGlyph.ftface)) {
+                    // This applies the transform for CBDT bitmaps (e.g. Noto
+                    // Color Emoji) that was set in KoFontRegistry::configureFaces
+                    FT_Matrix matrix;
+                    FT_Vector delta;
+                    FT_Get_Transform(currentGlyph.ftface, &matrix, &delta);
+                    constexpr qreal FACTOR_16 = 1.0 / 65536.0;
+                    bitmapTf.setMatrix(matrix.xx * FACTOR_16, matrix.xy * FACTOR_16, 0, matrix.yx * FACTOR_16, matrix.yy * FACTOR_16, 0, 0, 0, 1);
+                    QPointF anchor(-currentGlyph.ftface->glyph->bitmap_left, currentGlyph.ftface->glyph->bitmap_top);
+                    bitmapTf = QTransform::fromTranslate(-anchor.x(), -anchor.y()) * bitmapTf
+                        * QTransform::fromTranslate(anchor.x(), anchor.y());
+                }
+            } else {
                 debugFlake << "Unsupported glyph format" << glyphFormatToStr(currentGlyph.ftface->glyph->format)
                            << "asking freetype to render it for us";
                 FT_Render_Mode mode = FT_LOAD_TARGET_MODE(faceLoadFlags);
@@ -1082,25 +1105,29 @@ void KoSvgTextShape::relayout() const
                 // Since we are dealing with a bitmap glyph, we'll just use a nice
                 // round floating point number.
                 constexpr double SLANT_BITMAP = 0.25;
-                QTransform bitmapTf;
+                QTransform shearTf;
                 QPoint shearAt;
                 if (isHorizontal) {
-                    bitmapTf.shear(-SLANT_BITMAP, 0);
+                    shearTf.shear(-SLANT_BITMAP, 0);
                     shearAt = QPoint(0, currentGlyph.ftface->glyph->bitmap_top);
                 } else {
-                    bitmapTf.shear(0, SLANT_BITMAP);
+                    shearTf.shear(0, SLANT_BITMAP);
                     shearAt = QPoint(charResult.image.width() / 2, 0);
                 }
                 // We need to shear around the baseline, hence the translation.
-                bitmapTf = QTransform::fromTranslate(-shearAt.x(), -shearAt.y()) * bitmapTf
-                    * QTransform::fromTranslate(shearAt.x(), shearAt.y());
+                bitmapTf = (QTransform::fromTranslate(-shearAt.x(), -shearAt.y()) * shearTf
+                    * QTransform::fromTranslate(shearAt.x(), shearAt.y())) * bitmapTf;
+            }
+
+            if (!bitmapTf.isIdentity()) {
+                const QSize srcSize = charResult.image.size();
                 charResult.image = std::move(charResult.image).transformed(
                     bitmapTf,
                     d->textRendering == OptimizeSpeed ? Qt::FastTransformation : Qt::SmoothTransformation);
 
                 // This does the same as `QImage::trueMatrix` to get the image
                 // offset after transforming.
-                const QPoint offset = bitmapTf.mapRect(QRectF({0, 0}, charResult.image.size())).toAlignedRect().topLeft();
+                const QPoint offset = bitmapTf.mapRect(QRectF({0, 0}, srcSize)).toAlignedRect().topLeft();
                 currentGlyph.ftface->glyph->bitmap_left += offset.x();
                 currentGlyph.ftface->glyph->bitmap_top -= offset.y();
             }

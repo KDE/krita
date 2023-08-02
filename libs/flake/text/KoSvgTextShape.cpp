@@ -1684,18 +1684,30 @@ void addWordToLine(QVector<CharacterResult> &result,
                 }
                 cr.isHanging = true;
             }
+
+            // Ensure that the first non-collapsed result will always set the line-top and bottom.
+            if (cr.ascent <= 0) {
+                currentLine.actualLineTop = cr.ascent-cr.halfLeading;
+                currentLine.actualLineBottom = cr.descent+cr.halfLeading;
+            } else {
+                currentLine.actualLineTop = cr.ascent+cr.halfLeading;
+                currentLine.actualLineBottom = cr.descent-cr.halfLeading;
+            }
         }
         cr.cssPosition = currentPos;
         currentPos += cr.advance;
-        if (currentLine.firstLine) {
-        }
         lineAdvance = currentPos;
 
         result[j] = cr;
         currentChunk.boundingBox |= cr.boundingBox.translated(cr.cssPosition);
 
-        currentLine.actualLineTop = qMax(fabs(cr.ascent-cr.halfLeading), currentLine.actualLineTop);
-        currentLine.actualLineBottom = qMax(fabs(cr.descent+cr.halfLeading), currentLine.actualLineBottom);
+        if (cr.ascent <= 0) {
+            currentLine.actualLineTop = qMin(cr.ascent-cr.halfLeading, currentLine.actualLineTop);
+            currentLine.actualLineBottom = qMax(cr.descent+cr.halfLeading, currentLine.actualLineBottom);
+        } else {
+            currentLine.actualLineTop = qMax(cr.ascent+cr.halfLeading, currentLine.actualLineTop);
+            currentLine.actualLineBottom = qMin(cr.descent-cr.halfLeading, currentLine.actualLineBottom);
+        }
     }
     currentPos = lineAdvance;
     currentChunk.chunkIndices += wordIndices;
@@ -1714,7 +1726,8 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
 {
     QPointF lineTop;
     QPointF lineBottom;
-    QPointF correctionOffset;
+    QPointF correctionOffset; ///< This is for determining the difference between
+                              ///< a predicted line-height (for text-in-shape) and the actual line-height.
 
     if (currentLine.chunks.isEmpty()) {
         return QPointF();
@@ -1728,37 +1741,43 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
         QVector<int> chunkIndices = currentLine.chunks[0].chunkIndices;
         if (chunkIndices.size() > 0) {
             CharacterResult cr = result[chunkIndices.first()];
-            currentLine.actualLineTop = qMax(fabs(cr.ascent-cr.halfLeading), currentLine.actualLineTop);
-            currentLine.actualLineBottom = qMax(fabs(cr.descent+cr.halfLeading), currentLine.actualLineBottom);
+            if (cr.ascent <= 0) {
+                currentLine.actualLineTop = cr.ascent-cr.halfLeading;
+                currentLine.actualLineBottom = cr.descent+cr.halfLeading;
+            } else {
+                currentLine.actualLineTop = cr.ascent+cr.halfLeading;
+                currentLine.actualLineBottom = cr.descent-cr.halfLeading;
+            }
         }
     }
 
-    qreal expectedLineTop = qMax(currentLine.expectedLineTop, currentLine.actualLineTop);
+    qreal expectedLineTop = currentLine.actualLineTop > 0? qMax(currentLine.expectedLineTop, currentLine.actualLineTop):
+                                                       qMin(currentLine.expectedLineTop, currentLine.actualLineTop);
     if (writingMode == KoSvgText::HorizontalTB) {
-        lineTop = QPointF(0, currentLine.actualLineTop);
-        lineBottom = QPointF(0, currentLine.actualLineBottom);
+        currentLine.baselineTop = QPointF(0, currentLine.actualLineTop);
+        currentLine.baselineBottom = QPointF(0, currentLine.actualLineBottom);
         correctionOffset = QPointF(0, expectedLineTop);
-        currentLine.baselineTop = -lineTop;
-        currentLine.baselineBottom = lineBottom;
+        lineTop = -currentLine.baselineTop;
+        lineBottom = currentLine.baselineBottom;
     } else if (writingMode == KoSvgText::VerticalLR) {
-        lineTop = QPointF(currentLine.actualLineTop, 0);
-        lineBottom = QPointF(currentLine.actualLineBottom, 0);
-        correctionOffset = QPointF(expectedLineTop, 0);
-        // Note: while Vertical LR goes left-to-right in its lines, its lines themselves are
-        // oriented with the top pointed in the positive x directi´on.
-        currentLine.baselineTop = lineTop;
-        currentLine.baselineBottom = -lineBottom;
-    } else {
-        lineTop = QPointF(-currentLine.actualLineTop, 0);
-        lineBottom = QPointF(-currentLine.actualLineBottom, 0);
+        currentLine.baselineTop = QPointF(-currentLine.actualLineTop, 0);
+        currentLine.baselineBottom = QPointF(-currentLine.actualLineBottom, 0);
         correctionOffset = QPointF(-expectedLineTop, 0);
-        currentLine.baselineTop = lineTop;
-        currentLine.baselineBottom = -lineBottom;
+        // Note: while Vertical LR goes left-to-right in its lines, its lines themselves are
+        // oriented with the top pointed in the positive x direction.
+        lineTop = currentLine.baselineTop;
+        lineBottom = -currentLine.baselineBottom;
+    } else {
+        currentLine.baselineTop = QPointF(currentLine.actualLineTop, 0);
+        currentLine.baselineBottom = QPointF(currentLine.actualLineBottom, 0);
+        correctionOffset = QPointF(expectedLineTop, 0);
+        lineTop = currentLine.baselineTop;
+        lineBottom = -currentLine.baselineBottom;
     }
     bool returnDescent = firstLine;
     QPointF offset = lineTop + lineBottom;
 
-    correctionOffset -= lineTop;
+    correctionOffset -= currentLine.baselineTop;
     if (!returnDescent) {
         Q_FOREACH(LineChunk chunk, currentLine.chunks) {
             Q_FOREACH (int j, chunk.chunkIndices) {
@@ -2671,8 +2690,8 @@ QVector<LineBox> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProper
                     currentLine.setCurrentChunkForPos(currentPos, isHorizontal);
                 }
                 currentLine.firstLine = firstLine;
-                currentLine.expectedLineTop = isHorizontal? fabs(wordBox.top()):
-                                                            writingMode == KoSvgText::VerticalRL? fabs(wordBox.right()): fabs(wordBox.left());
+                currentLine.expectedLineTop = isHorizontal? -wordBox.top():
+                                                            writingMode == KoSvgText::VerticalRL? wordBox.right(): wordBox.left();
                 currentLine.justifyLine = align == KoSvgText::AlignJustify;
                 currentPos = currentLine.chunk().length.p1() + indent;
                 lineOffset = currentPos;

@@ -816,6 +816,10 @@ bool KisApplication::isStoreApplication()
         return true;
     }
 
+    if (applicationDirPath().toLower().contains("steam")) {
+        return true;
+    }
+
 #ifdef Q_OS_WIN
     // This is also true for user-installed MSIX, but that's
     // likely only true in institutional situations, where

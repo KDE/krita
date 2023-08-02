@@ -54,6 +54,8 @@ public Q_SLOTS:
     virtual bool supportsAudio() override { return true; }
     virtual bool supportsVariablePlaybackSpeed() override { return true; }
 
+    PlaybackStats playbackStatistics() const override;
+
 protected Q_SLOTS:
     virtual void setCanvas(KoCanvasBase* canvas) override;
     virtual void unsetCanvas() override;

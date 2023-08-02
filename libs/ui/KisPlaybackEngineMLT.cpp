@@ -438,5 +438,10 @@ bool KisPlaybackEngineMLT::isMute()
     return m_d->mute;
 }
 
+KisPlaybackEngine::PlaybackStats KisPlaybackEngineMLT::playbackStatistics() const
+{
+    return {};
+}
+
 
 

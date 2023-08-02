@@ -25,6 +25,7 @@ set(kritaglobal_LIB_SRCS
     kis_latency_tracker.cpp
     KisQPainterStateSaver.cpp
     KisRollingMeanAccumulatorWrapper.cpp
+    KisRollingSumAccumulatorWrapper.cpp
     kis_config_notifier.cpp
     KisDeleteLaterWrapper.cpp
     KisUsageLogger.cpp

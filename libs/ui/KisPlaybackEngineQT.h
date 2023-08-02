@@ -44,7 +44,11 @@ public:
     virtual bool supportsAudio() override {return false;}
     virtual bool supportsVariablePlaybackSpeed() override { return true; }
 
-    boost::optional<int64_t> activeFramesPerSecond();
+    void setDropFramesMode(bool value) override;
+
+    boost::optional<int64_t> activeFramesPerSecond() const;
+
+    PlaybackStats playbackStatistics() const override;
 
 protected Q_SLOTS:
     /**

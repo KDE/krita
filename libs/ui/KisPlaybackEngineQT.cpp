@@ -15,6 +15,8 @@
 
 #include <QTimer>
 #include "animation/KisFrameDisplayProxy.h"
+#include "KisRollingMeanAccumulatorWrapper.h"
+#include "KisRollingSumAccumulatorWrapper.h"
 
 #include "KisPlaybackEngineQT.h"
 
@@ -65,9 +67,6 @@ Q_SIGNALS:
 
 private:
     KisPlaybackEngineQT* m_engine;
-    QElapsedTimer time;
-    int m_measureRemainder = 0;
-
 };
 
 PlaybackDriver::PlaybackDriver( KisPlaybackEngineQT* engine, QObject* parent )
@@ -188,19 +187,22 @@ void LoopDrivenPlayback::updatePlaybackLoopInterval(const int &in_fps, const qre
  * Only allocated when playback begins.
  */
 struct FrameMeasure {
+    static constexpr int frameStatsWindow = 50;
+
     FrameMeasure()
-        : remainder(0)
-        , averageDriverCallbackTime(0)
-        , driverCallbackCalls(0)
-        , waitingForFrame(false) {
+        : averageTimePerFrame(frameStatsWindow)
+        , waitingForFrame(false)
+        , droppedFramesStat(frameStatsWindow)
+
+    {
         timeSinceLastFrame.start();
     }
 
     QElapsedTimer timeSinceLastFrame;
-    int remainder;
-    qreal averageDriverCallbackTime;
-    int driverCallbackCalls;
+    KisRollingMeanAccumulatorWrapper averageTimePerFrame;
     bool waitingForFrame;
+
+    KisRollingSumAccumulatorWrapper droppedFramesStat;
 };
 
 // ====== KisPlaybackEngineQT ======
@@ -261,13 +263,40 @@ void KisPlaybackEngineQT::setPlaybackSpeedNormalized(double value)
     m_d->driver->setSpeed(value);
 }
 
-boost::optional<int64_t> KisPlaybackEngineQT::activeFramesPerSecond()
+void KisPlaybackEngineQT::setDropFramesMode(bool value)
+{
+    KisPlaybackEngine::setDropFramesMode(value);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->driver);
+    m_d->driver->setDropFrames(value);
+}
+
+boost::optional<int64_t> KisPlaybackEngineQT::activeFramesPerSecond() const
 {
     if (activeCanvas()) {
         return activeCanvas()->image()->animationInterface()->framerate();
     } else {
         return boost::none;
     }
+}
+
+KisPlaybackEngine::PlaybackStats KisPlaybackEngineQT::playbackStatistics() const
+{
+    KisPlaybackEngine::PlaybackStats stats;
+
+    if (m_d->measure && activeCanvas()->animationState()->playbackState() == PLAYING) {
+        const int droppedFrames = m_d->measure->droppedFramesStat.rollingSum();
+        const int totalFrames =
+            m_d->measure->droppedFramesStat.rollingCount() +
+            droppedFrames;
+
+        stats.droppedFramesPortion = qreal(droppedFrames) / totalFrames;
+        stats.expectedFps = qreal(activeFramesPerSecond().get_value_or(24)) * m_d->driver->speed();
+
+        const qreal avgTimePerFrame = m_d->measure->averageTimePerFrame.rollingMeanSafe();
+        stats.realFps = !qFuzzyIsNull(avgTimePerFrame) ? 1000.0 / avgTimePerFrame : 0.0;
+    }
+
+    return stats;
 }
 
 void KisPlaybackEngineQT::throttledDriverCallback()
@@ -296,39 +325,20 @@ void KisPlaybackEngineQT::throttledDriverCallback()
     const int startFrame = animInterface->activePlaybackRange().start();
     const int endFrame = animInterface->activePlaybackRange().end();
 
-    const int timeSinceLastFrame =  m_d->measure->timeSinceLastFrame.elapsed();
-    m_d->measure->timeSinceLastFrame.restart();
+    const int timeSinceLastFrame =  m_d->measure->timeSinceLastFrame.restart();
     const int timePerFrame = qRound(1000.0 / qreal(activeFramesPerSecond().get_value_or(24)) / m_d->driver->speed());
+    m_d->measure->averageTimePerFrame(timeSinceLastFrame);
+
 
     // Drop frames logic...
     int extraFrames = 0;
     if (m_d->driver->dropFrames()) {
         KIS_ASSERT(m_d->measure);
-
-        int offset = timeSinceLastFrame - timePerFrame;
-        m_d->measure->remainder += offset;
-        extraFrames = (m_d->measure->remainder) / timePerFrame;
-        m_d->measure->remainder = m_d->measure->remainder % timePerFrame;
+        const int offset = timeSinceLastFrame - timePerFrame;
+        extraFrames = qMax(0, offset) / timePerFrame;
     }
 
-    // We need to update the timing interval of the internal loop to be as accurate as possible...
-    // This is most important for drop frames mode, where frame timing should be as consistent as possible.
-    // So...
-    //      - Calculate our running average of msec-per-frame
-    //      - Based on the error, we adjust our loop timer to offset toward a target time per frame
-    //      - We clip this value to a minimum and maximum possible time per frame -- to prevent locking the system.
-    // The only exception is the first driver callback -- here we'll just initialize our average and continue.
-    // Also another consideration is whether this needs to happen at all for non-dropframes mode 
-    // or if the logic should simply be different.
-    if (m_d->measure->averageDriverCallbackTime == 0) {
-        m_d->measure->averageDriverCallbackTime = timeSinceLastFrame;
-    } else {
-        static const uint8_t SLOPE_CONSTANT = 5; // Used to control how radically we will change timer duration based on latency.
-        m_d->measure->averageDriverCallbackTime += qreal(timeSinceLastFrame - m_d->measure->averageDriverCallbackTime) / SLOPE_CONSTANT;
-        const int delay = qRound(m_d->measure->averageDriverCallbackTime) - timePerFrame;
-        const int newTargetTimerTime = qMax( timePerFrame / 2, timePerFrame - delay );
-        m_d->driver->setTimerDuration(newTargetTimerTime);
-    }
+    m_d->measure->droppedFramesStat(extraFrames);
 
     // If we have an audio-driver or otherwise external playback driver: we will only go to what the driver determines to be the desired frame...
     if (m_d->driver->desiredFrame()) {

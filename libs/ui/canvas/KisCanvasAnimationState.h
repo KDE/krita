@@ -77,7 +77,6 @@ Q_SIGNALS:
     void sigCancelPlayback();
 
 private:
-    void updateDropFramesMode();
     KisTimeSpan activePlaybackRange();
 
     void setupAudioTracks();

@@ -17,6 +17,8 @@
 
 #include <math.h>
 
+constexpr qreal DISCRETE_ANGLE_STEP = 15.0;  // discrete rotation snapping angle
+
 class KisRotateCanvasAction::Private
 {
 public:
@@ -26,6 +28,7 @@ public:
     Shortcut mode {RotateModeShortcut};
 
     qreal previousAngle {0.0};
+    qreal snapRotation {0.0};
     qreal touchRotation {0.0};
     bool allowRotation {false};
 };
@@ -77,6 +80,7 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
     KisAbstractInputAction::begin(shortcut, event);
     d->allowRotation = false;
     d->previousAngle = 0;
+    d->snapRotation = 0;
     d->touchRotation = 0;
 
     KisCanvasController *canvasController =
@@ -87,9 +91,15 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
 
     switch(shortcut) {
         case RotateModeShortcut:
-        case DiscreteRotateModeShortcut:
+        case DiscreteRotateModeShortcut: {
+            // If the canvas has been rotated to an angle that is not an exact multiple of DISCRETE_ANGLE_STEP,
+            // we need to adjust the final discrete rotation by that angle difference.
+            // trunc() is used to round the negative numbers towards zero.
+            const qreal startRotation = inputManager()->canvas()->rotationAngle();
+            d->snapRotation = startRotation - std::trunc(startRotation / DISCRETE_ANGLE_STEP) * DISCRETE_ANGLE_STEP;
             canvasController->beginCanvasRotation();
             break;
+        }
         case RotateLeftShortcut:
             canvasController->rotateCanvasLeft15();
             break;
@@ -137,12 +147,10 @@ void KisRotateCanvasAction::cursorMovedAbsolute(const QPointF &startPos, const Q
     qreal newRotation = (180 / M_PI) * (newAngle - oldAngle);
 
     if (d->mode == DiscreteRotateModeShortcut) {
-        const qreal angleStep = 15;
-
-        // avoid jumps at the beginning of the rotation action
-        if (qAbs(newRotation) > 0.5 * angleStep || d->allowRotation) {
+        // Do not snap unless the user rotated half-way in the desired direction.
+        if (qAbs(newRotation) > 0.5 * DISCRETE_ANGLE_STEP || d->allowRotation) {
             d->allowRotation = true;
-            newRotation = qRound(newRotation / angleStep) * angleStep;
+            newRotation = qRound((newRotation + d->snapRotation) / DISCRETE_ANGLE_STEP) * DISCRETE_ANGLE_STEP - d->snapRotation;
         } else {
             newRotation = 0.0;
         }

@@ -34,58 +34,14 @@
 #include <kis_selection_options.h>
 #include <kis_image_animation_interface.h>
 #include <kis_default_bounds.h>
-
-void selectByColor(KisPaintDeviceSP dev,
-                   KisPixelSelectionSP selection,
-                   const quint8 *c,
-                   int threshold,
-                   const QRect &rc)
-{
-    if (rc.isEmpty()) {
-        return;
-    }
-    // XXX: Multithread this!
-    qint32 x, y, w, h;
-    x = rc.x();
-    y = rc.y();
-    w = rc.width();
-    h = rc.height();
-
-    const KoColorSpace * cs = dev->colorSpace();
-
-    KisHLineConstIteratorSP hiter = dev->createHLineConstIteratorNG(x, y, w);
-    KisHLineIteratorSP selIter = selection->createHLineIteratorNG(x, y, w);
-
-    quint8 wantedOpacity = cs->opacityU8(c);
-
-    for (int row = y; row < y + h; ++row) {
-        do {
-            if (threshold == 1) {
-                if (wantedOpacity == 0 && cs->opacityU8(hiter->rawDataConst()) == 0) {
-                    *(selIter->rawData()) = MAX_SELECTED;
-                }
-                else if (memcmp(c, hiter->rawDataConst(), cs->pixelSize()) == 0) {
-                    *(selIter->rawData()) = MAX_SELECTED;
-                }
-            } else {
-                quint8 match = cs->difference(c, hiter->rawDataConst());
-                if (match <= threshold) {
-                    *(selIter->rawData()) = MAX_SELECTED;
-                }
-            }
-        }
-        while (hiter->nextPixel() && selIter->nextPixel());
-        hiter->nextRow();
-        selIter->nextRow();
-    }
-
-}
+#include <kis_fill_painter.h>
 
 KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_similar_selection_cursor.png", 6, 6),
                     i18n("Similar Color Selection"))
     , m_threshold(20)
+    , m_opacitySpread(100)
     , m_previousTime(0)
 {
 }
@@ -113,37 +69,31 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     KisPaintDeviceSP dev;
 
     if (!currentNode() ||
-        !(dev = currentNode()->projection()) ||
+        !(currentNode()->projection()) ||
         !selectionEditable()) {
 
         event->ignore();
         return;
     }
 
-    QPointF pos = convertToPixelCoord(event);
-
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
 
-    
     beginSelectInteraction();
 
     KisCursorOverrideLock cursorLock(KisCursor::waitCursor());
 
-    KisProcessingApplicator applicator(currentImage(),
-                                       currentNode(),
-                                       KisProcessingApplicator::NONE,
-                                       KisImageSignalVector(),
-                                       kundo2_i18n("Select Similar Color"));
+    // Create the stroke
+    KisStrokeStrategyUndoCommandBased *strategy =
+            new KisStrokeStrategyUndoCommandBased(kundo2_i18n("Select Similar Color"), false, image().data());
+    strategy->setSupportsWrapAroundMode(false);
+    KisStrokeId strokeId = image()->startStroke(strategy);
 
-    KisImageSP imageSP = currentImage();
-    KisPaintDeviceSP sourceDevice;
-    QRect areaToCheck;
-
+    // Construct the reference device
     if (sampleLayersMode() == SampleCurrentLayer) {
-        sourceDevice = m_referencePaintDevice = dev;
+        m_referencePaintDevice = currentNode()->projection();
     } else if (sampleLayersMode() == SampleAllLayers) {
-        sourceDevice = m_referencePaintDevice = currentImage()->projection();
+        m_referencePaintDevice = currentImage()->projection();
     } else if (sampleLayersMode() == SampleColorLabeledLayers) {
         if (!m_referenceNodeList) {
             m_referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Similar Colors Selection Tool Reference Result Paint Device");
@@ -152,284 +102,99 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
         KisPaintDeviceSP newReferencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Similar Colors Selection Tool Reference Result Paint Device");
         KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP newReferenceNodeList(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
         const int currentTime = image()->animationInterface()->currentTime();
-        applicator.applyCommand(
-            new KisMergeLabeledLayersCommand(
-                image(),
-                m_referenceNodeList,
-                newReferenceNodeList,
-                m_referencePaintDevice,
-                newReferencePaintDevice,
-                colorLabelsSelected(),
-                KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled,
-                m_previousTime != currentTime
-            ),
-            KisStrokeJobData::SEQUENTIAL,
-            KisStrokeJobData::EXCLUSIVE
+
+        image()->addJob(
+            strokeId,
+            new KisStrokeStrategyUndoCommandBased::Data(
+                KUndo2CommandSP(new KisMergeLabeledLayersCommand(
+                    image(),
+                    m_referenceNodeList,
+                    newReferenceNodeList,
+                    m_referencePaintDevice,
+                    newReferencePaintDevice,
+                    colorLabelsSelected(),
+                    KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled,
+                    m_previousTime != currentTime
+                )),
+                false,
+                KisStrokeJobData::SEQUENTIAL,
+                KisStrokeJobData::EXCLUSIVE
+            )
         );
-        sourceDevice = m_referencePaintDevice = newReferencePaintDevice;
+
+        m_referencePaintDevice = newReferencePaintDevice;
         m_referenceNodeList = newReferenceNodeList;
         m_previousTime = currentTime;
     }
 
-    if (sampleLayersMode() == SampleColorLabeledLayers) {
-        // source device is not ready to get a pixel out of it, let's assume image bounds
-        areaToCheck = imageSP->bounds();
-    } else {
-        KoColor pixelColor;
-        sourceDevice->pixel(pos.x(), pos.y(), &pixelColor);
-        if (sourceDevice->colorSpace()->difference(
-                pixelColor.data(),
-                sourceDevice->defaultPixel().data())
-            <= m_threshold) {
-            areaToCheck = imageSP->bounds() | sourceDevice->exactBounds();
-        } else {
-            areaToCheck = sourceDevice->exactBounds();
-        }
-        // Reset this so that the device from color labeled layers gets
-        // regenerated when that mode is selected again
-        m_referenceNodeList.reset();
+    // Get the color of the pixel where the user clicked
+    KisPaintDeviceSP sourceDevice = m_referencePaintDevice;
+    const QPoint pos = convertToImagePixelCoordFloored(event);
+    QSharedPointer<KoColor> referenceColor = QSharedPointer<KoColor>(new KoColor(sourceDevice->colorSpace()));
+    // We need to obtain the reference color from the reference paint
+    // device, but it is produced in a stroke, so we must get the color
+    // after the device is ready. So we get it in the stroke
+    image()->addJob(
+        strokeId,
+        new KisStrokeStrategyUndoCommandBased::Data(
+            KUndo2CommandSP(new KisCommandUtils::LambdaCommand(
+                [sourceDevice, referenceColor, pos]() -> KUndo2Command*
+                {
+                    *referenceColor = sourceDevice->pixel(pos);
+                    return 0;
+                }
+            )),
+            false,
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE
+        )
+    );
+
+    // Get the similar colors selection
+    KisFillPainter painter;
+    QRect bounds = currentImage()->bounds();
+    QSharedPointer<KisProcessingVisitor::ProgressHelper>
+        progressHelper(new KisProcessingVisitor::ProgressHelper(currentNode()));
+    KisPixelSelectionSP tmpSel = new KisPixelSelection(new KisSelectionDefaultBounds(currentNode()->projection()));
+
+    painter.setFillThreshold(m_threshold);
+    painter.setOpacitySpread(m_opacitySpread);
+    painter.setAntiAlias(antiAliasSelection());
+    painter.setSizemod(growSelection());
+    painter.setStopGrowingAtDarkestPixel(this->stopGrowingAtDarkestPixel());
+    painter.setFeather(featherSelection());
+
+    QVector<KisStrokeJobData*> jobs =
+        painter.createSimilarColorsSelectionJobs(
+            tmpSel, referenceColor, sourceDevice,
+            bounds, nullptr, progressHelper
+        );
+
+    for (KisStrokeJobData *job : jobs) {
+        image()->addJob(strokeId, job);
     }
 
-
-    // XXX we should make this configurable: "allow to select transparent"
-    // if (opacity > OPACITY_TRANSPARENT)
-    KisPixelSelectionSP tmpSel =
-        new KisPixelSelection(new KisSelectionDefaultBounds(dev));
-
-    const int threshold = m_threshold;
-    const bool antiAlias = antiAliasSelection();
-    const int grow = growSelection();
-    const bool stopGrowingAtDarkestPixel = this->stopGrowingAtDarkestPixel();
-    const int feather = featherSelection();
-    // new stroke
-
-    QSharedPointer<KoColor> color = QSharedPointer<KoColor>(new KoColor(sourceDevice->colorSpace()));
-    QSharedPointer<bool> isDefaultPixel = QSharedPointer<bool>(new bool(true));
-
-    KUndo2Command *cmdPickColor = new KisCommandUtils::LambdaCommand(
-        [pos, sourceDevice, color, isDefaultPixel, threshold]() mutable
-        -> KUndo2Command * {
-            sourceDevice->pixel(pos.x(), pos.y(), color.data());
-            *isDefaultPixel.data() = sourceDevice->colorSpace()->difference(
-                                         color.data()->data(),
-                                         sourceDevice->defaultPixel().data())
-                < threshold;
-
-            return 0;
-        });
-
-    applicator.applyCommand(cmdPickColor, KisStrokeJobData::SEQUENTIAL);
-
-    QVector<QRect> patches = KritaUtils::splitRectIntoPatches(areaToCheck, KritaUtils::optimalPatchSize());
-
-    for (int i = 0; i < patches.count(); i++) {
-        QSharedPointer<QRect> patch = QSharedPointer<QRect>(new QRect(patches[i]));
-        KUndo2Command *patchCmd = new KisCommandUtils::LambdaCommand(
-            [threshold,
-             tmpSel,
-             sourceDevice,
-             patch,
-             color,
-             isDefaultPixel]() mutable -> KUndo2Command * {
-                QRect patchRect = *patch.data();
-                QRect finalRect = patchRect;
-                if (!isDefaultPixel) {
-                    finalRect =
-                        patchRect.intersected(sourceDevice->exactBounds());
+    image()->addJob(
+        strokeId,
+        new KisStrokeStrategyUndoCommandBased::Data(
+            KUndo2CommandSP(new KisCommandUtils::LambdaCommand(
+                [tmpSel]() mutable -> KUndo2Command*
+                {
+                    tmpSel->invalidateOutlineCache();
+                    return 0;
                 }
-                if (!finalRect.isEmpty()) {
-                    selectByColor(sourceDevice,
-                                  tmpSel,
-                                  color->data(),
-                                  threshold,
-                                  patchRect);
-                }
-                return 0;
-            });
+            )),
+            false,
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE
+        )
+    );
 
-        applicator.applyCommand(patchCmd, KisStrokeJobData::CONCURRENT);
-    }
+    image()->endStroke(strokeId);
 
-
-
-    /*
-     * Division of out-of-the-image-bounds areas
-     * into different commands
-     *
-     * i---i------------------i
-     * |   |       top        |
-     * | l |--------------i---|
-     * | e |              |   |
-     * | f |              | r |
-     * | t |    image     | i |
-     * |   |              | g |
-     * |   |              | h |
-     * |___|______________| t |
-     * |      bottom      |   |
-     * |__________________|___|
-     */
-
-    if (sampleLayersMode() == SampleColorLabeledLayers) {
-        QRect imageRect = image()->bounds();
-
-        KUndo2Command *topCmd = new KisCommandUtils::LambdaCommand(
-            [threshold,
-             tmpSel,
-             sourceDevice,
-             color,
-             imageRect,
-             isDefaultPixel]() mutable -> KUndo2Command * {
-                QRect contentRect = sourceDevice->exactBounds();
-                QRect patchRect = QRect(
-                    QPoint(0, contentRect.top()),
-                    QPoint(qMax(contentRect.right(), imageRect.right()), 0));
-                QRect finalRect = patchRect;
-                if (!*isDefaultPixel) {
-                    finalRect = patchRect.intersected(contentRect);
-                }
-                if (!finalRect.isEmpty()) {
-                    selectByColor(sourceDevice,
-                                  tmpSel,
-                                  color->data(),
-                                  threshold,
-                                  finalRect);
-                }
-                return 0;
-            });
-
-        KUndo2Command *rightCmd = new KisCommandUtils::LambdaCommand(
-            [threshold,
-             tmpSel,
-             sourceDevice,
-             color,
-             imageRect,
-             isDefaultPixel]() mutable -> KUndo2Command * {
-                QRect contentRect = sourceDevice->exactBounds();
-                QRect patchRect = QRect(
-                    QPoint(imageRect.width(), 0),
-                    QPoint(contentRect.right(),
-                           qMax(contentRect.bottom(), imageRect.bottom())));
-                QRect finalRect = patchRect;
-                if (!*isDefaultPixel) {
-                    finalRect = patchRect.intersected(contentRect);
-                }
-                if (!finalRect.isEmpty()) {
-                    selectByColor(sourceDevice,
-                                  tmpSel,
-                                  color->data(),
-                                  threshold,
-                                  finalRect);
-                }
-                return 0;
-            });
-
-        KUndo2Command *bottomCmd = new KisCommandUtils::LambdaCommand(
-            [threshold,
-             tmpSel,
-             sourceDevice,
-             color,
-             imageRect,
-             isDefaultPixel]() mutable -> KUndo2Command * {
-                QRect contentRect = sourceDevice->exactBounds();
-                QRect patchRect =
-                    QRect(QPoint(qMin(contentRect.left(), imageRect.left()),
-                                 imageRect.bottom()),
-                          QPoint(imageRect.right(), contentRect.bottom()));
-                QRect finalRect = patchRect;
-                if (!*isDefaultPixel) {
-                    finalRect = patchRect.intersected(contentRect);
-                }
-                if (!finalRect.isEmpty()) {
-                    selectByColor(sourceDevice,
-                                  tmpSel,
-                                  color->data(),
-                                  threshold,
-                                  finalRect);
-                }
-                return 0;
-            });
-
-        KUndo2Command *leftCmd = new KisCommandUtils::LambdaCommand(
-            [threshold,
-             tmpSel,
-             sourceDevice,
-             color,
-             imageRect,
-             isDefaultPixel]() mutable -> KUndo2Command * {
-                QRect contentRect = sourceDevice->exactBounds();
-                QRect patchRect =
-                    QRect(QPoint(contentRect.left(),
-                                 qMin(contentRect.top(), imageRect.top())),
-                          QPoint(0, imageRect.bottom()));
-                QRect finalRect = patchRect;
-                if (!*isDefaultPixel) {
-                    finalRect = patchRect.intersected(contentRect);
-                }
-                if (!finalRect.isEmpty()) {
-                    selectByColor(sourceDevice,
-                                  tmpSel,
-                                  color->data(),
-                                  threshold,
-                                  finalRect);
-                }
-                return 0;
-            });
-
-        applicator.applyCommand(topCmd, KisStrokeJobData::CONCURRENT);
-        applicator.applyCommand(rightCmd, KisStrokeJobData::CONCURRENT);
-        applicator.applyCommand(bottomCmd, KisStrokeJobData::CONCURRENT);
-        applicator.applyCommand(leftCmd, KisStrokeJobData::CONCURRENT);
-
-    }
-
-    KUndo2Command *cmdAdjustSelection = new KisCommandUtils::LambdaCommand(
-        [tmpSel, sourceDevice, antiAlias, grow, stopGrowingAtDarkestPixel, feather]
-        () mutable -> KUndo2Command * {
-            if (grow > 0) {
-                if (stopGrowingAtDarkestPixel) {
-                    KisGrowUntilDarkestPixelSelectionFilter biggy(grow, sourceDevice);
-                    biggy.process(
-                        tmpSel,
-                        tmpSel->selectedRect().adjusted(-grow, -grow, grow, grow));
-                } else {
-                    KisGrowSelectionFilter biggy(grow, grow);
-                    biggy.process(
-                        tmpSel,
-                        tmpSel->selectedRect().adjusted(-grow, -grow, grow, grow));
-                }
-            } else if (grow < 0) {
-                KisShrinkSelectionFilter tiny(-grow, -grow, false);
-                tiny.process(tmpSel, tmpSel->selectedRect());
-            }
-            // Since the feathering already smooths the selection, the antiAlias
-            // is not applied if we must feather
-            if (feather > 0) {
-                KisFeatherSelectionFilter feathery(feather);
-                feathery.process(tmpSel,
-                                 tmpSel->selectedRect().adjusted(-feather,
-                                                                 -feather,
-                                                                 feather,
-                                                                 feather));
-            } else if (antiAlias) {
-                KisAntiAliasSelectionFilter antiAliasFilter;
-                antiAliasFilter.process(tmpSel, tmpSel->selectedRect());
-            }
-
-            return 0;
-        });
-    applicator.applyCommand(cmdAdjustSelection, KisStrokeJobData::SEQUENTIAL);
-
-    KUndo2Command *cmdInvalidateCache = new KisCommandUtils::LambdaCommand(
-        [tmpSel]() mutable -> KUndo2Command * {
-            tmpSel->invalidateOutlineCache();
-            return 0;
-        });
-    applicator.applyCommand(cmdInvalidateCache, KisStrokeJobData::SEQUENTIAL);
-
+    // Apply selection
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Similar Color"));
-    helper.selectPixelSelection(applicator, tmpSel, selectionAction());
-
-    applicator.end();
+    helper.selectPixelSelection(tmpSel, selectionAction());
 }
 
 void KisToolSelectSimilar::endPrimaryAction(KoPointerEvent *event)
@@ -448,6 +213,12 @@ void KisToolSelectSimilar::slotSetThreshold(int threshold)
     m_configGroup.writeEntry("threshold", threshold);
 }
 
+void KisToolSelectSimilar::slotSetOpacitySpread(int opacitySpread)
+{
+    m_opacitySpread = opacitySpread;
+    m_configGroup.writeEntry("opacitySpread", opacitySpread);
+}
+
 QWidget* KisToolSelectSimilar::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
@@ -455,25 +226,41 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
 
     selectionWidget->setStopGrowingAtDarkestPixelButtonVisible(true);
 
+    // Create widgets
     KisSliderSpinBox *sliderThreshold = new KisSliderSpinBox;
     sliderThreshold->setPrefix(i18nc(
         "The 'threshold' spinbox prefix in similar selection tool options",
         "Threshold: "));
-    sliderThreshold->setRange(1, 200);
+    sliderThreshold->setRange(1, 100);
     sliderThreshold->setSingleStep(1);
     sliderThreshold->setToolTip(
         i18n("Set the color similarity tolerance of the selection. "
              "Increasing threshold increases the range of similar colors to be selected."));
 
+    KisSliderSpinBox *sliderSpread = new KisSliderSpinBox;
+    sliderSpread->setPrefix(i18nc(
+        "The 'spread' spinbox prefix in similar color selection tool options",
+        "Spread: "));
+    sliderSpread->setSuffix(i18n("%"));
+    sliderSpread->setRange(0, 100);
+
+    // Set the tooltips
+    sliderThreshold->setToolTip(
+        i18n("Set the color similarity tolerance of the selection. "
+             "Increasing threshold increases the range of similar colors to be selected."));
+    sliderSpread->setToolTip(
+        i18n("Set the extent of the opaque portion of the selection. "
+             "Decreasing spread decreases opacity of selection areas depending on color similarity."));
+
+    // Construct the option widget
     KisOptionCollectionWidgetWithHeader *sectionSelectionExtent =
         new KisOptionCollectionWidgetWithHeader(
             i18nc("The 'selection extent' section label in similar selection "
                   "tool options",
                   "Selection extent"));
     sectionSelectionExtent->appendWidget("sliderThreshold", sliderThreshold);
-    selectionWidget->insertWidget(3,
-                                  "sectionSelectionExtent",
-                                  sectionSelectionExtent);
+    sectionSelectionExtent->appendWidget("sliderSpread", sliderSpread);
+    selectionWidget->insertWidget(3, "sectionSelectionExtent", sectionSelectionExtent);
 
     // load setting from config
     if (m_configGroup.hasKey("threshold")) {
@@ -483,10 +270,18 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     }
     sliderThreshold->setValue(m_threshold);
 
+    m_opacitySpread = m_configGroup.readEntry("opacitySpread", 100);
+    sliderSpread->setValue(m_opacitySpread);
+
+    // Make connections
     connect(sliderThreshold,
             SIGNAL(valueChanged(int)),
             this,
             SLOT(slotSetThreshold(int)));
+    connect(sliderSpread,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(slotSetOpacitySpread(int)));
 
     return selectionWidget;
 }

@@ -46,6 +46,12 @@ public:
     KisPlaybackEngine(QObject* parent = nullptr);
     ~KisPlaybackEngine();
 
+    struct PlaybackStats {
+        qreal expectedFps {0.0};
+        qreal realFps {0.0};
+        qreal droppedFramesPortion {0.0};
+    };
+
 public Q_SLOTS:
     // Basic transport controls...
     virtual void play();
@@ -88,8 +94,16 @@ public Q_SLOTS:
     virtual void setMute(bool val) = 0;
     virtual bool isMute() = 0;
 
+    virtual void setDropFramesMode(bool value);
+    bool dropFrames() const;
+
     virtual bool supportsAudio() = 0;
     virtual bool supportsVariablePlaybackSpeed() = 0;
+
+    virtual PlaybackStats playbackStatistics() const = 0;
+
+Q_SIGNALS:
+    void sigDropFramesModeChanged(bool value);
 
 protected:
     class KisCanvas2* activeCanvas() const;

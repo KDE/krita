@@ -90,8 +90,11 @@ public:
     CanvasPlaybackEnvironment(int originFrame, KisCanvasAnimationState* parent = nullptr)
         : QObject(parent)
         , m_originFrame(originFrame)
+        , m_statsTimer(new QTimer(this))
     {
         connect(&m_cancelTrigger, SIGNAL(output()), parent, SIGNAL(sigCancelPlayback()));
+        connect(m_statsTimer, SIGNAL(timeout()), SIGNAL(sigPlaybackStatisticsUpdated()));
+        m_statsTimer->setInterval(1000);
     }
 
     ~CanvasPlaybackEnvironment() {
@@ -171,6 +174,9 @@ public:
                     canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
                     &m_cancelTrigger, SLOT(tryFire()));
         }
+
+        m_statsTimer->start();
+        Q_EMIT sigPlaybackStatisticsUpdated();
     }
 
     void restore() {
@@ -194,6 +200,9 @@ public:
         }
     }
 
+Q_SIGNALS:
+    void sigPlaybackStatisticsUpdated();
+
 private:
     int m_originFrame; //!< The frame user started playback from.
     KisSignalAutoConnectionsStore m_cancelStrokeConnections;
@@ -203,6 +212,7 @@ private:
     KisCanvas2* m_canvas;
 
     KisTimeSpan m_playbackRange;
+    QTimer *m_statsTimer;
 };
 
 // Needed for QObject definition outside of header file.
@@ -301,11 +311,6 @@ void KisCanvasAnimationState::showFrame(int frame, bool finalize)
     m_d->displayProxy->displayFrame(frame, finalize);
 }
 
-void KisCanvasAnimationState::updateDropFramesMode()
-{
-    KisConfig cfg(true);
-}
-
 KisTimeSpan KisCanvasAnimationState::activePlaybackRange()
 {
     if (!m_d->canvas || !m_d->canvas->image()) {
@@ -349,6 +354,8 @@ void KisCanvasAnimationState::setPlaybackState(PlaybackState p_state)
         if (m_d->state == PLAYING) {
             if (!m_d->playbackEnvironment) {
                 m_d->playbackEnvironment.reset(new CanvasPlaybackEnvironment(m_d->displayProxy->activeFrame(), this));
+                connect(m_d->playbackEnvironment.data(), SIGNAL(sigPlaybackStatisticsUpdated()),
+                        this, SIGNAL(sigPlaybackStatisticsUpdated()));
             }
 
             m_d->playbackEnvironment->prepare(m_d->canvas);

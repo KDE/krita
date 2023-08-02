@@ -49,6 +49,9 @@
 #include "kis_slider_spin_box.h"
 #include "kis_signals_blocker.h"
 #include "KisMainWindow.h"
+#include "KisAnimationPlaybackControlsModel.h"
+#include "KisWidgetConnectionUtils.h"
+
 
 KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
     KisUtilityTitleBar(new QLabel(i18n("Animation Timeline"), parent), parent)
@@ -282,6 +285,7 @@ struct KisAnimTimelineDocker::Private
 
     KisSignalAutoConnectionsStore canvasConnections;
     KisMainWindow *mainWindow;
+    KisAnimationPlaybackControlsModel controlsModel;
 };
 
 
@@ -430,15 +434,18 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
         connect(m_d->titlebar->sbEndFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentRangeEndFrame(int)));
 
         connect(m_d->canvas->animationState(), SIGNAL(sigFrameChanged()), this, SLOT(updateFrameRegister()));
-        connect(m_d->canvas->animationState(), &KisCanvasAnimationState::sigPlaybackStateChanged, [this](PlaybackState state){
+        connect(m_d->canvas->animationState(), &KisCanvasAnimationState::sigPlaybackStateChanged, this, [this](PlaybackState state){
             m_d->titlebar->frameRegister->setDisabled(state == PlaybackState::PLAYING);
             if (state == PlaybackState::STOPPED) {
                 updateFrameRegister();
             }
         });
-        connect(m_d->canvas->animationState(), &KisCanvasAnimationState::sigPlaybackStateChanged, [this](PlaybackState state){
+        connect(m_d->canvas->animationState(), &KisCanvasAnimationState::sigPlaybackStateChanged, this, [this](PlaybackState state){
             m_d->titlebar->transport->setPlaying(state == PlaybackState::PLAYING);
         });
+
+        connect(m_d->canvas->animationState(), &KisCanvasAnimationState::sigPlaybackStatisticsUpdated,
+                this, &KisAnimTimelineDocker::updatePlaybackStatistics);
 
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(updateFrameRegister()));
 
@@ -486,13 +493,14 @@ void KisAnimTimelineDocker::updatePlaybackStatistics()
     qreal framesDropped = 0.0;
     bool isPlaying = false;
 
-    KisCanvasAnimationState *player = m_d->canvas &&  m_d->canvas->animationState() ?  m_d->canvas->animationState() : 0;
-    if (player) {
-//        effectiveFps = player->effectiveFps();
-//        realFps = player->realFps();
-//        framesDropped = player->framesDroppedPortion();
-//        isPlaying = player->isPlaying();
+    {
+        KisPlaybackEngine::PlaybackStats stats = KisPart::instance()->playbackEngine()->playbackStatistics();
+        effectiveFps = stats.expectedFps;
+        realFps = stats.realFps;
+        framesDropped = stats.droppedFramesPortion;
+        isPlaying = effectiveFps > 0.0;
     }
+
 
     KisConfig cfg(true);
     const bool shouldDropFrames = cfg.animationDropFrames();
@@ -514,11 +522,11 @@ void KisAnimTimelineDocker::updatePlaybackStatistics()
                        "%5")
             .arg(KisAnimUtils::dropFramesActionName)
             .arg(KritaUtils::toLocalizedOnOff(shouldDropFrames))
-            .arg(i18n("Effective FPS:\t%1", effectiveFps))
-            .arg(i18n("Real FPS:\t%1", realFps))
-            .arg(i18n("Frames dropped:\t%1\%", framesDropped * 100));
+                         .arg(i18n("Effective FPS:\t%1", QString::number(effectiveFps, 'f', 1)))
+            .arg(i18n("Real FPS:\t%1", QString::number(realFps, 'f', 1)))
+            .arg(i18n("Frames dropped:\t%1\%", QString::number(framesDropped * 100, 'f', 1)));
     }
-    action->setText(actionText);
+    action->setToolTip(actionText);
 }
 
 void KisAnimTimelineDocker::unsetCanvas()
@@ -556,25 +564,25 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
     // Connect playback-related actions..
     action = actionManager->createAction("toggle_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, [this](bool){
+    connect(action, &KisAction::triggered, this, [this](bool){
         KisPart::instance()->playbackEngine()->playPause();
     });
 
     action = actionManager->createAction("stop_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, [this](bool){
+    connect(action, &KisAction::triggered, this, [this](bool){
         KisPart::instance()->playbackEngine()->stop();
     });
 
     action = actionManager->createAction("previous_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, [this](bool){
+    connect(action, &KisAction::triggered, this, [this](bool){
         KisPart::instance()->playbackEngine()->previousFrame();
     });
 
     action = actionManager->createAction("next_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, [this](bool){
+    connect(action, &KisAction::triggered, this, [this](bool){
         KisPart::instance()->playbackEngine()->nextFrame();
     });
 
@@ -616,7 +624,7 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
 
     action = actionManager->createAction("first_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, [this](bool){
+    connect(action, &KisAction::triggered, this, [this](bool){
        if (m_d->canvas) {
            KisPart::instance()->playbackEngine()->firstFrame();
        }
@@ -624,7 +632,7 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
 
     action = actionManager->createAction("last_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, [this](bool){
+    connect(action, &KisAction::triggered, this, [this](bool){
        if (m_d->canvas) {
            KisPart::instance()->playbackEngine()->lastFrame();
        }
@@ -644,16 +652,9 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
         action = actionManager->createAction("drop_frames");
         m_d->titlebar->btnDropFrames->setDefaultAction(action);
         m_d->titlebar->btnDropFrames->setIconSize(QSize(22, 22));
-        connect(action, &KisAction::triggered, [this](bool dropFrames){
-            KisConfig cfg(false);
-            if (dropFrames != cfg.animationDropFrames()) {
-                cfg.setAnimationDropFrames(dropFrames);
-                updatePlaybackStatistics();
-            }
-        });
 
-        KisConfig config(true);
-        action->setChecked(config.animationDropFrames());
+        using namespace KisWidgetConnectionUtils;
+        connectControl(action, &m_d->controlsModel, "dropFramesMode");
     }
 }
 
@@ -671,6 +672,12 @@ void KisAnimTimelineDocker::setPlaybackEngine(KisPlaybackEngine *playbackEngine)
 
     connect(m_d->titlebar->frameRegister, SIGNAL(valueChanged(int)), playbackEngine, SLOT(seek(int)));
     connect(m_d->titlebar->sbSpeed, SIGNAL(valueChanged(int)), playbackEngine, SLOT(setPlaybackSpeedPercent(int)));
+
+    m_d->controlsModel.setdropFramesMode(playbackEngine->dropFrames());
+    connect(&m_d->controlsModel, SIGNAL(dropFramesModeChanged(bool)),
+            playbackEngine, SLOT(setDropFramesMode(bool)));
+    connect(playbackEngine, &KisPlaybackEngine::sigDropFramesModeChanged,
+            &m_d->controlsModel, &KisAnimationPlaybackControlsModel::setdropFramesMode);
 }
 
 void KisAnimTimelineDocker::setAutoKey(bool value)

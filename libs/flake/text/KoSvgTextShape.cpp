@@ -1375,6 +1375,7 @@ void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     chunkShape->layoutInterface()->clearAssociatedOutline();
+    chunkShape->layoutInterface()->clearTextDecorations();
 
     Q_FOREACH (KoShape *child, chunkShape->shapes()) {
         clearAssociatedOutlines(child);
@@ -3318,8 +3319,6 @@ void KoSvgTextShape::Private::computeTextDecorations( // NOLINT(readability-func
         }
 
         // And finally add the paths to the chunkshape.
-
-        chunkShape->layoutInterface()->clearTextDecorations();
 
         Q_FOREACH (TextDecoration type, decorationPaths.keys()) {
             QPainterPath decorationPath = decorationPaths.value(type);

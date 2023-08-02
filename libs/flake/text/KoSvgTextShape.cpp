@@ -3004,7 +3004,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
         hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_UNDERLINE_OFFSET, &baseline);
         offset = baseline;
         offset *= -freetypePixelsToPt;
-        width *= -freetypePixelsToPt;
+        width *= freetypePixelsToPt;
 
         chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationUnderline, offset, width);
         chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationOverline, 0, width);
@@ -3012,7 +3012,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
         hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &baseline);
         width = baseline;
         hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &baseline);
-        width *= -freetypePixelsToPt;
+        width *= freetypePixelsToPt;
         offset *= -freetypePixelsToPt;
         chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationLineThrough, offset, width);
     } else {

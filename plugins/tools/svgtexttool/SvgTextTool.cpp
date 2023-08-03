@@ -9,6 +9,7 @@
 #include "KoSvgTextProperties.h"
 #include "KoSvgTextShape.h"
 #include "KoSvgTextShapeMarkupConverter.h"
+#include "SvgCreateTextStrategy.h"
 #include "SvgInlineSizeChangeCommand.h"
 #include "SvgInlineSizeChangeStrategy.h"
 #include "SvgInlineSizeHelper.h"
@@ -328,19 +329,36 @@ void SvgTextTool::storeDefaults()
     m_configGroup.writeEntry("defaultLetterSpacing", m_defLetterSpacing->value());
 }
 
+QFont SvgTextTool::defaultFont() const
+{
+    int size = QFontDatabase::standardSizes().at(m_defPointSize->currentIndex() > -1 ? m_defPointSize->currentIndex() : 0);
+    QFont font = m_defFont->currentFont();
+    font.setPointSize(size);
+    return font;
+}
+
+Qt::Alignment SvgTextTool::horizontalAlign() const
+{
+    if (m_defAlignment->button(1)->isChecked()) {
+        return Qt::AlignHCenter;
+    }
+    if (m_defAlignment->button(2)->isChecked()) {
+        return Qt::AlignRight;
+    }
+    return Qt::AlignLeft;
+}
+
 void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
 {
     if (!isActivated()) return;
 
+    if (m_dragging == DragMode::Create) {
+        m_interactionStrategy->paint(gc, converter);
+    }
+
     gc.setTransform(converter.documentToView(), true);
 
     KisHandlePainterHelper handlePainter(&gc);
-
-    if (m_dragging == DragMode::Create) {
-        QPolygonF poly(QRectF(m_dragStart, m_dragEnd));
-        handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
-        handlePainter.drawRubberLine(poly);
-    }
 
     KoSvgTextShape *shape = selectedShape();
     if (shape) {
@@ -402,7 +420,7 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
                 deselectUpdateRect |= info->boundingRect();
             }
         } else {
-            m_dragStart = m_dragEnd = event->point;
+            m_interactionStrategy.reset(new SvgCreateTextStrategy(this, event->point));
             m_dragging = DragMode::Create;
             event->accept();
         }
@@ -437,13 +455,9 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
 {
     QRectF updateRect = m_hoveredShapeHighlightRect.boundingRect();
 
-    if (m_dragging == DragMode::Create) {
-        m_dragEnd = event->point;
-        m_hoveredShapeHighlightRect = QPainterPath();
-        updateRect |= QRectF(m_dragStart, m_dragEnd).normalized().toAlignedRect();
-        event->accept();
-    } else if (m_dragging == DragMode::InlineSizeHandle) {
+    if (m_dragging == DragMode::Create || m_dragging == DragMode::InlineSizeHandle) {
         m_interactionStrategy->handleMouseMove(event->point, event->modifiers());
+        event->accept();
     } else {
         KoSvgTextShape *const selectedShape = this->selectedShape();
         Qt::CursorShape cursor = Qt::ArrowCursor;
@@ -490,58 +504,7 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
 
 void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (m_dragging == DragMode::Create) {
-        QRectF rectangle = QRectF(m_dragStart, m_dragEnd).normalized();
-        if (rectangle.width() < 4 && rectangle.height() < 4) {
-            m_dragging = DragMode::None;
-            canvas()->updateCanvas(rectangle);
-            event->accept();
-            return;
-        }
-        QString extraProperties;
-        if (event->modifiers().testFlag(Qt::ControlModifier)) {
-            extraProperties = QLatin1String("inline-size:%1;").arg(QString::number(rectangle.width()));
-        }
-        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoSvgTextShapeID");
-        KoProperties *params = new KoProperties();//Fill these with "svgText", "defs" and "shapeRect"
-        params->setProperty("defs", QVariant(generateDefs(extraProperties)));
-        if (m_dragging == DragMode::Create) {
-            m_dragEnd = event->point;
-            m_dragging = DragMode::None;
-
-            //The following show only happen when we're creating preformatted text. If we're making
-            //Word-wrapped text, it should take the rectangle unmodified.
-            int size = QFontDatabase::standardSizes().at(m_defPointSize->currentIndex() > -1 ? m_defPointSize->currentIndex() : 0);
-            QFont font = m_defFont->currentFont();
-            font.setPointSize(size);
-            rectangle.setTop(rectangle.top()+QFontMetrics(font).lineSpacing());
-            if (m_defAlignment->button(1)->isChecked()) {
-                rectangle.setLeft(rectangle.center().x());
-            } else if (m_defAlignment->button(2)->isChecked()) {
-                qreal right = rectangle.right();
-                rectangle.setRight(right+10);
-                rectangle.setLeft(right);
-            }
-
-            params->setProperty("shapeRect", QVariant(rectangle));
-        }
-        KoShape *textShape = factory->createShape( params, canvas()->shapeController()->resourceManager());
-
-        KUndo2Command *parentCommand = new KUndo2Command();
-
-        new KoKeepShapesSelectedCommand(koSelection()->selectedShapes(), {}, canvas()->selectedShapesProxy(), false, parentCommand);
-
-        KUndo2Command *cmd = canvas()->shapeController()->addShape(textShape, 0, parentCommand);
-        parentCommand->setText(cmd->text());
-
-        new KoKeepShapesSelectedCommand({}, {textShape}, canvas()->selectedShapesProxy(), true, parentCommand);
-
-        canvas()->addCommand(parentCommand);
-
-        showEditor();
-        event->accept();
-
-    } else if (m_dragging == DragMode::InlineSizeHandle) {
+    if (m_dragging == DragMode::Create || m_dragging == DragMode::InlineSizeHandle) {
         m_interactionStrategy->finishInteraction(event->modifiers());
         KUndo2Command *const command = m_interactionStrategy->createCommand();
         if (command) {
@@ -558,16 +521,7 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void SvgTextTool::keyPressEvent(QKeyEvent *event)
 {
-    if (m_dragging == DragMode::Create) {
-        if (event->key() == Qt::Key_Escape) {
-            m_dragging = DragMode::None;
-            const QRectF rectangle = QRectF(m_dragStart, m_dragEnd).normalized();
-            canvas()->updateCanvas(rectangle);
-            event->accept();
-        } else {
-            event->ignore();
-        }
-    } else if (m_dragging == DragMode::InlineSizeHandle) {
+    if (m_dragging == DragMode::Create || m_dragging == DragMode::InlineSizeHandle) {
         if (event->key() == Qt::Key_Escape) {
             m_dragging = DragMode::None;
             m_interactionStrategy->cancelInteraction();
@@ -575,6 +529,7 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
             useCursor(Qt::ArrowCursor);
             event->accept();
         } else {
+            // FIXME: Send modifier key updates to interactionStrategy?
             event->ignore();
         }
     } else if (event->key()==Qt::Key_Enter || event->key()==Qt::Key_Return) {

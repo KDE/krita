@@ -27,6 +27,9 @@ class KoInteractionStrategy;
 class SvgTextTool : public KoToolBase
 {
     Q_OBJECT
+
+    friend class SvgCreateTextStrategy;
+
 public:
     explicit SvgTextTool(KoCanvasBase *canvas);
     ~SvgTextTool() override;
@@ -60,6 +63,9 @@ protected:
 private:
     qreal grabSensitivityInPt() const;
 
+    QFont defaultFont() const;
+    Qt::Alignment horizontalAlign() const;
+
 private Q_SLOTS:
 
     void showEditor();
@@ -90,10 +96,7 @@ private:
 
     QPointer<SvgTextEditor> m_editor;
     QPushButton *m_edit {nullptr};
-    QPointF m_dragStart {QPointF(0, 0)};
-    QPointF m_dragEnd {QPointF(0, 0)};
     DragMode m_dragging {DragMode::None};
-    // Currently only used with SvgInlineSizeChangeStrategy
     std::unique_ptr<KoInteractionStrategy> m_interactionStrategy;
     bool m_isOverInlineSizeHandle {false};
     QFontComboBox *m_defFont {nullptr};

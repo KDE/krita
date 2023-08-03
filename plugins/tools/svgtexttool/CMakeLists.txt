@@ -5,6 +5,7 @@ set(CMAKE_AUTORCC ON)
 set (SvgTextTool_SRCS
     BasicXMLSyntaxHighlighter.cpp
     Plugin.cpp
+    SvgCreateTextStrategy.cpp
     SvgInlineSizeChangeCommand.cpp
     SvgInlineSizeChangeStrategy.cpp
     SvgTextChangeCommand.cpp

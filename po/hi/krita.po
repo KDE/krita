@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-01 00:43+0000\n"
+"POT-Creation-Date: 2023-08-03 00:44+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -12862,7 +12862,7 @@ msgstr "साधन (&T)"
 msgid "Scripts"
 msgstr "स्क्रिप्टें"
 
-#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:64
+#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
 #, kde-format
 msgid "Setti&ngs"
 msgstr "सेटिंग्स (&n)"
@@ -12875,7 +12875,7 @@ msgstr "मदत (&H)"
 
 #: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
 #, kde-format
 msgid "File"
 msgstr "फाइल"
@@ -16324,47 +16324,47 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3867
+#: libs/flake/text/KoSvgTextShape.cpp:3924
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "पाठ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3869
-#: libs/flake/text/KoSvgTextShape.cpp:3877
+#: libs/flake/text/KoSvgTextShape.cpp:3926
+#: libs/flake/text/KoSvgTextShape.cpp:3934
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "एसवीजी पाठ आकृति"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3875
+#: libs/flake/text/KoSvgTextShape.cpp:3932
 #, kde-format
 msgid "SVG Text"
 msgstr "एसवीजी पाठ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3889
-#: libs/flake/text/KoSvgTextShape.cpp:3904
+#: libs/flake/text/KoSvgTextShape.cpp:3946
+#: libs/flake/text/KoSvgTextShape.cpp:3961
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
 msgstr "<text>स्थानधारक पाठ</text>"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:139
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:144
 #, kde-format
 msgid "More than one 'text' node found!"
 msgstr "एक से अधिक 'पाठ' के नोड मिले!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:148
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:153
 #, kde-format
 msgid "Unknown node of type '%1' found!"
 msgstr "अज्ञात '%1' प्रकार का नोड पाया गया!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:154
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:159
 #, kde-format
 msgid "No 'text' node found!"
 msgstr "कोई 'पाठ' का नोड मिला नही!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:362
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:747
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:367
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:809
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "SVG टेक्स्ट एलिमेंट लिखने में अज्ञात त्रुटि"
@@ -16648,7 +16648,7 @@ msgstr "डिफ़ॉल्ट"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1571
 #, kde-format
 msgid "Size"
 msgstr "आकार"
@@ -19449,10 +19449,10 @@ msgstr "स्थानीय संसाधन"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:1007
-#: libs/ui/KisApplication.cpp:1010 libs/ui/KisApplication.cpp:1026
-#: libs/ui/KisApplication.cpp:1058 libs/ui/KisApplication.cpp:1072
-#: libs/ui/KisApplication.cpp:1100 libs/ui/KisDocument.cpp:969
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:1011
+#: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
+#: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
+#: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
 #: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
@@ -19500,7 +19500,7 @@ msgstr "स्थानीय संसाधन"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1226
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22543,7 +22543,7 @@ msgstr "परत गुण"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1482
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1611
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -25692,7 +25692,7 @@ msgstr "अग्रभूमि का रंग"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1461
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1587
 #, kde-format
 msgid "Background Color"
 msgstr "पृष्ठभूमि रंग"
@@ -28090,39 +28090,39 @@ msgstr "ऊपर पैन करें"
 msgid "Pan Down"
 msgstr "नीचे पैन करें"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:38
+#: libs/ui/input/kis_rotate_canvas_action.cpp:41
 #, kde-format
 msgid "Rotate Canvas"
 msgstr "कैनवास घुमाएँ"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:39
+#: libs/ui/input/kis_rotate_canvas_action.cpp:42
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr ""
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:42
+#: libs/ui/input/kis_rotate_canvas_action.cpp:45
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Rotate Mode"
 msgstr "घुमानेवाला मोड"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:43
+#: libs/ui/input/kis_rotate_canvas_action.cpp:46
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:40
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr "असतत घुमानेवाला मोड"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:44
+#: libs/ui/input/kis_rotate_canvas_action.cpp:47
 #, kde-format
 msgid "Rotate Left"
 msgstr "बाएँ घुमाएँ"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:45
+#: libs/ui/input/kis_rotate_canvas_action.cpp:48
 #, kde-format
 msgid "Rotate Right"
 msgstr "दाएं घुमाएँ"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:46
+#: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Reset Rotation"
 msgstr "परिक्रमण रीसेट करें"
@@ -29701,20 +29701,20 @@ msgstr ""
 msgid "Failed to render animation frames!"
 msgstr "एनीमेशन फ्रेम रेंडर करने में विफल!"
 
-#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:879
+#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:883
 #, kde-format
 msgid "File layer"
 msgstr "फ़ाइल परत"
 
 #: libs/ui/KisApplication.cpp:672 libs/ui/KisApplication.cpp:677
-#: libs/ui/KisApplication.cpp:873 libs/ui/KisApplication.cpp:887
-#: libs/ui/KisApplication.cpp:892
+#: libs/ui/KisApplication.cpp:877 libs/ui/KisApplication.cpp:891
+#: libs/ui/KisApplication.cpp:896
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "क्रिता : चेतावनी"
 
-#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:888
+#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:892
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "फ़ाइल परत के रूप में %1 नहीं जोड़ सकता: फ़ाइल मौजूद नहीं है।"
@@ -29740,32 +29740,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:874
+#: libs/ui/KisApplication.cpp:878
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "%1 फाइल खोली नहीं जा सकी."
 
-#: libs/ui/KisApplication.cpp:893
+#: libs/ui/KisApplication.cpp:897
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "फ़ाइल परत नहीं जोड़ सकते: कोई दस्तावेज़ खुला नहीं है।"
 
-#: libs/ui/KisApplication.cpp:1008
+#: libs/ui/KisApplication.cpp:1012
 #, kde-format
 msgid "No template found for: %1"
 msgstr "%1 : के लिए कोई टैम्पलेट नहीं मिला"
 
-#: libs/ui/KisApplication.cpp:1011
+#: libs/ui/KisApplication.cpp:1015
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "%1 के लिए बहुत सारे टैम्प्लेट्स हैं"
 
-#: libs/ui/KisApplication.cpp:1027
+#: libs/ui/KisApplication.cpp:1031
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "टैम्पलेट %1 लोड करने में असफल।"
 
-#: libs/ui/KisApplication.cpp:1059
+#: libs/ui/KisApplication.cpp:1063
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29775,7 +29775,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1073
+#: libs/ui/KisApplication.cpp:1077
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29787,7 +29787,7 @@ msgstr ""
 "कृपया सुनिश्चित करें कि कोई अन्य अनुप्रयोग फ़ाइल का उपयोग नहीं कर रहा है और पुनः प्रयास "
 "करें।"
 
-#: libs/ui/KisApplication.cpp:1101
+#: libs/ui/KisApplication.cpp:1105
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "क्या आप सेटिंग फ़ाइल को साफ़ करना चाहते हैं?"
@@ -30444,13 +30444,13 @@ msgid "Wor&kspace"
 msgstr "कार्यक्षेत्र (&k)"
 
 #: libs/ui/KisMainWindow.cpp:587
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "औज़ार पट्टी %1 दिखाएँ"
 
 #: libs/ui/KisMainWindow.cpp:589
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "औज़ार-पट्टी %1 छुपाएँ"
@@ -57715,83 +57715,103 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "समान रंग चयन औज़ार"
 
+#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:36
+msgctxt "(qtundo-format)"
+msgid "Adjust text auto wrap"
+msgstr ""
+
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "एसवीजी पाठ साधन बदलें"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:261
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
 #, kde-format
 msgid "Text Tool"
 msgstr "पाठ औज़ार"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:397
 #, kde-format
 msgid "Conversion failed"
 msgstr "परिवर्तन असफल"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:602
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
 #, kde-format
 msgid "Find Text"
 msgstr "पाठ ढूंढें"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:605
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:694
 #, kde-format
 msgid "Find:"
 msgstr "ढूंढें :"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:644
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:690
 #, kde-format
 msgid "Find and Replace all"
 msgstr "सभी को ढूंढें और बदलें"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
 #, kde-format
 msgid "Replace:"
 msgstr "प्रतिस्थापित :"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1226
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1289
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1407
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1413
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "संपन्न पाठ्य"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1292
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1296
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1410
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1414
 #, kde-format
 msgid "SVG Source"
 msgstr "एसविजि स्रोत"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1436
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1562
 #, kde-format
 msgid "Font"
 msgstr "फॉन्ट"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1453
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
 #, kde-format
 msgid "Text Color"
 msgstr "पाठ रंग"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1468
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
 #, kde-format
 msgid "Sample a Color"
 msgstr "एक रंग चुने"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1479
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
 #, kde-format
 msgid "Line height"
 msgstr "लकीर की ऊँचाई"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1491
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:206
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1612
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1621
+#, fuzzy, kde-format
+#| msgid "Normal"
+msgctxt "Default line height for text"
+msgid "Normal"
+msgstr "सामान्य"
+
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1625
+#, fuzzy, kde-format
+#| msgid "100%"
+msgctxt "line height for text"
+msgid "100%"
+msgstr "१००%"
+
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1639
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
 #, kde-format
 msgid "Letter Spacing"
 msgstr "अक्षर बीच दूरी"
@@ -58175,32 +58195,90 @@ msgctxt "action"
 msgid "Kerning"
 msgstr "कर्निंग "
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:135
+#. i18n: context: iconText @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:266
+#: plugins/tools/svgtexttool/SvgTextTool.action:273
+#, kde-format
+msgctxt "action"
+msgid "Legacy Hard Wrap"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:268
+#, kde-format
+msgctxt "action"
+msgid ""
+"Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
+"are explicitly positioned, but the line height may be slightly inaccurate."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:276
+#: plugins/tools/svgtexttool/SvgTextTool.action:283
+#, kde-format
+msgctxt "action"
+msgid "SVG Hard Wrap"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:278
+#, kde-format
+msgctxt "action"
+msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:286
+#: plugins/tools/svgtexttool/SvgTextTool.action:293
+#, kde-format
+msgctxt "action"
+msgid "SVG Auto Wrap with Fixed Width"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:288
+#, kde-format
+msgctxt "action"
+msgid ""
+"Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
+"defining the text width."
+msgstr ""
+
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:149
 #, kde-format
 msgid "Create new texts with..."
 msgstr "इसके के साथ नया पाठ बनाएं..."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:172
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:186
 #, kde-format
 msgid "Anchor text to the left."
 msgstr "पाठ को बाईं ओर जमाएँ।"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:181
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:195
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "पाठ को बीच में जमाएँ।"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:190
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:204
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "पाठ को दाईं ओर जमाएँ।"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:234
 #, kde-format
 msgid "Edit Text"
 msgstr "पाठ संपादन "
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:256
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:270
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -58221,12 +58299,18 @@ msgstr "प्रारूपित करें"
 msgid "&Weight"
 msgstr "मोटाई (&W)"
 
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:81
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:63
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:107
+#, fuzzy, kde-format
+msgid "Text W&rapping"
+msgstr "पाठ संपादन औज़ार"
+
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:87
 #, kde-format
 msgid "Font Settings"
 msgstr "फ़ॉन्ट सेटिंग"
 
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:90
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:96
 #, kde-format
 msgid "Formatting"
 msgstr "प्रारूपण"
@@ -63455,10 +63539,6 @@ msgstr "संदर्भ छवि औज़ार"
 #, fuzzy
 #~ msgid "Autocorrection"
 #~ msgstr "लेंस सुधार... (&L)"
-
-#, fuzzy
-#~ msgid "Text editing"
-#~ msgstr "पाठ संपादन औज़ार"
 
 #, fuzzy
 #~ msgid "Escape Direction"

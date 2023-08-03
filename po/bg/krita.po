@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-01 00:43+0000\n"
+"POT-Creation-Date: 2023-08-03 00:44+0000\n"
 "PO-Revision-Date: 2022-12-09 17:44+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -12823,7 +12823,7 @@ msgstr "&Инструменти"
 msgid "Scripts"
 msgstr "Скриптове"
 
-#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:64
+#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
 #, kde-format
 msgid "Setti&ngs"
 msgstr "&Настройки"
@@ -12836,7 +12836,7 @@ msgstr "&Помощ"
 
 #: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
 #, kde-format
 msgid "File"
 msgstr "Файл"
@@ -16251,47 +16251,47 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3867
+#: libs/flake/text/KoSvgTextShape.cpp:3924
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3869
-#: libs/flake/text/KoSvgTextShape.cpp:3877
+#: libs/flake/text/KoSvgTextShape.cpp:3926
+#: libs/flake/text/KoSvgTextShape.cpp:3934
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Форма на SVG Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3875
+#: libs/flake/text/KoSvgTextShape.cpp:3932
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3889
-#: libs/flake/text/KoSvgTextShape.cpp:3904
+#: libs/flake/text/KoSvgTextShape.cpp:3946
+#: libs/flake/text/KoSvgTextShape.cpp:3961
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:139
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:144
 #, kde-format
 msgid "More than one 'text' node found!"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:148
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:153
 #, kde-format
 msgid "Unknown node of type '%1' found!"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:154
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:159
 #, kde-format
 msgid "No 'text' node found!"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:362
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:747
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:367
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:809
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr ""
@@ -16575,7 +16575,7 @@ msgstr "по подразбиране"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1571
 #, kde-format
 msgid "Size"
 msgstr "Размер"
@@ -19360,10 +19360,10 @@ msgstr ""
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:1007
-#: libs/ui/KisApplication.cpp:1010 libs/ui/KisApplication.cpp:1026
-#: libs/ui/KisApplication.cpp:1058 libs/ui/KisApplication.cpp:1072
-#: libs/ui/KisApplication.cpp:1100 libs/ui/KisDocument.cpp:969
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:1011
+#: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
+#: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
+#: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
 #: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
@@ -19411,7 +19411,7 @@ msgstr ""
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1226
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22446,7 +22446,7 @@ msgstr "Настройки на слой"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1482
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1611
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -25674,7 +25674,7 @@ msgstr "Цвят на преден план"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1461
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1587
 #, kde-format
 msgid "Background Color"
 msgstr "Цвят на фон"
@@ -28104,39 +28104,39 @@ msgstr ""
 msgid "Pan Down"
 msgstr ""
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:38
+#: libs/ui/input/kis_rotate_canvas_action.cpp:41
 #, kde-format
 msgid "Rotate Canvas"
 msgstr "Завъртване на платно"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:39
+#: libs/ui/input/kis_rotate_canvas_action.cpp:42
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr "Действието <i>Завъртване на платно</i>  завърта платното ."
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:42
+#: libs/ui/input/kis_rotate_canvas_action.cpp:45
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Rotate Mode"
 msgstr "Режим на завъртване"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:43
+#: libs/ui/input/kis_rotate_canvas_action.cpp:46
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:40
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr "Дискретен режим на завъртване"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:44
+#: libs/ui/input/kis_rotate_canvas_action.cpp:47
 #, kde-format
 msgid "Rotate Left"
 msgstr "Завъртване наляво"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:45
+#: libs/ui/input/kis_rotate_canvas_action.cpp:48
 #, kde-format
 msgid "Rotate Right"
 msgstr "Завъртване надясно"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:46
+#: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Reset Rotation"
 msgstr "Нулиране на завъртването"
@@ -29693,20 +29693,20 @@ msgstr ""
 msgid "Failed to render animation frames!"
 msgstr "Неуспешно изграждане кадрите на анимацията!"
 
-#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:879
+#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:883
 #, kde-format
 msgid "File layer"
 msgstr ""
 
 #: libs/ui/KisApplication.cpp:672 libs/ui/KisApplication.cpp:677
-#: libs/ui/KisApplication.cpp:873 libs/ui/KisApplication.cpp:887
-#: libs/ui/KisApplication.cpp:892
+#: libs/ui/KisApplication.cpp:877 libs/ui/KisApplication.cpp:891
+#: libs/ui/KisApplication.cpp:896
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Предупреждение"
 
-#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:888
+#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:892
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
@@ -29732,32 +29732,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:874
+#: libs/ui/KisApplication.cpp:878
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Не може да се отвори файл %1"
 
-#: libs/ui/KisApplication.cpp:893
+#: libs/ui/KisApplication.cpp:897
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1008
+#: libs/ui/KisApplication.cpp:1012
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Не е открит шаблон за: %1"
 
-#: libs/ui/KisApplication.cpp:1011
+#: libs/ui/KisApplication.cpp:1015
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Открити са много шаблони за: %1"
 
-#: libs/ui/KisApplication.cpp:1027
+#: libs/ui/KisApplication.cpp:1031
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1059
+#: libs/ui/KisApplication.cpp:1063
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29772,7 +29772,7 @@ msgstr ""
 "\n"
 "Рестартирайте Крита, за да влязат в сила промените."
 
-#: libs/ui/KisApplication.cpp:1073
+#: libs/ui/KisApplication.cpp:1077
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29780,7 +29780,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1101
+#: libs/ui/KisApplication.cpp:1105
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr ""
@@ -30439,13 +30439,13 @@ msgid "Wor&kspace"
 msgstr "Работна &среда"
 
 #: libs/ui/KisMainWindow.cpp:587
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Показване на лентата с инстр&ументи %1"
 
 #: libs/ui/KisMainWindow.cpp:589
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Скриване на лента с инструменти %1"
@@ -57283,83 +57283,103 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Селекция на еднакви цветове"
 
+#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:36
+msgctxt "(qtundo-format)"
+msgid "Adjust text auto wrap"
+msgstr ""
+
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "Промяна на SvgTextTool"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:261
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
 #, kde-format
 msgid "Text Tool"
 msgstr "Текст"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:397
 #, kde-format
 msgid "Conversion failed"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:602
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
 #, kde-format
 msgid "Find Text"
 msgstr "Намиране на текст"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:605
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:694
 #, kde-format
 msgid "Find:"
 msgstr "Търсене:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:644
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:690
 #, kde-format
 msgid "Find and Replace all"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
 #, kde-format
 msgid "Replace:"
 msgstr "Заместване:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1226
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1289
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1407
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1413
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1292
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1296
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1410
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1414
 #, kde-format
 msgid "SVG Source"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1436
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1562
 #, kde-format
 msgid "Font"
 msgstr "Шрифт"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1453
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
 #, kde-format
 msgid "Text Color"
 msgstr "Цвят на текста"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1468
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
 #, kde-format
 msgid "Sample a Color"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1479
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
 #, kde-format
 msgid "Line height"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1491
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:206
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1612
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1621
+#, fuzzy, kde-format
+#| msgid "Normal"
+msgctxt "Default line height for text"
+msgid "Normal"
+msgstr "Нормално"
+
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1625
+#, fuzzy, kde-format
+#| msgid "100%"
+msgctxt "line height for text"
+msgid "100%"
+msgstr "100%"
+
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1639
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
 #, kde-format
 msgid "Letter Spacing"
 msgstr ""
@@ -57743,32 +57763,90 @@ msgctxt "action"
 msgid "Kerning"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:135
+#. i18n: context: iconText @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:266
+#: plugins/tools/svgtexttool/SvgTextTool.action:273
+#, kde-format
+msgctxt "action"
+msgid "Legacy Hard Wrap"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:268
+#, kde-format
+msgctxt "action"
+msgid ""
+"Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
+"are explicitly positioned, but the line height may be slightly inaccurate."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:276
+#: plugins/tools/svgtexttool/SvgTextTool.action:283
+#, kde-format
+msgctxt "action"
+msgid "SVG Hard Wrap"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:278
+#, kde-format
+msgctxt "action"
+msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:286
+#: plugins/tools/svgtexttool/SvgTextTool.action:293
+#, kde-format
+msgctxt "action"
+msgid "SVG Auto Wrap with Fixed Width"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:288
+#, kde-format
+msgctxt "action"
+msgid ""
+"Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
+"defining the text width."
+msgstr ""
+
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:149
 #, kde-format
 msgid "Create new texts with..."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:172
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:186
 #, kde-format
 msgid "Anchor text to the left."
 msgstr "Закотвяне на текста в дясно"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:181
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:195
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "Закотвяне на текста в средата"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:190
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:204
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "Закотвяне на текста в ляво"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:234
 #, kde-format
 msgid "Edit Text"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:256
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:270
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -57789,12 +57867,18 @@ msgstr "&Форматиране"
 msgid "&Weight"
 msgstr ""
 
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:81
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:63
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:107
+#, kde-format
+msgid "Text W&rapping"
+msgstr ""
+
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:87
 #, kde-format
 msgid "Font Settings"
 msgstr ""
 
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:90
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:96
 #, kde-format
 msgid "Formatting"
 msgstr "Форматиране"
@@ -59379,197 +59463,3 @@ msgstr "Мащабиране"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Референтни изображения"
-
-#~ msgid "Drag an image into the window to open"
-#~ msgstr "Завлечете изображение в прозореца, за да го отворите"
-
-#~ msgid "New File"
-#~ msgstr "Нов файл"
-
-#~ msgid "Recent Documents"
-#~ msgstr "Скорошни документи"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "Наклоняване по Х"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "Наклоняване по Y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "Мащабиране"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "Възстановяване на преобразуванията"
-
-#, fuzzy
-#~| msgid ""
-#~| "<html><head/><body><p><span style=\" font-weight:600;\">Split a layer "
-#~| "according to color</span></p><p>Creates a new layer for every color in "
-#~| "the active layer.</p></body></html>"
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
-#~ "Animated exports are <span style=\" font-weight:600;\">always</span> "
-#~ "flattened regardless of this setting.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Разделя слоевете "
-#~ "според цвета</span></p><p>Създава нов слой за всеки цвят в активния слой."
-#~ "</p></body></html>"
-
-#~ msgctxt "paleteuse dither option name"
-#~ msgid "none"
-#~ msgstr "без"
-
-#~ msgctxt "paleteuse diff mode option name"
-#~ msgid "none"
-#~ msgstr "без"
-
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "&Филтър:"
-
-#~ msgctxt "floating on-canvas message"
-#~ msgid ""
-#~ "Cannot open audio: \"%1\"\n"
-#~ "Error: %2"
-#~ msgstr ""
-#~ "Не може да се отвори аудио файлът:  \"%1\"\n"
-#~ "Грешка: %2"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "Отваряне на аудио..."
-
-#~ msgid "Choose a video file"
-#~ msgstr "Изберете видео файл"
-
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
-#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">This video contains "
-#~ "more than 100 frames. Loading too many frames can overload your computer. "
-#~ "Use a</span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;"
-#~ "\"> </span><a href=\"https://kdenlive.org\"><span style=\" font-"
-#~ "size:16pt; font-weight:400; text-decoration: underline; color:#2980b9;"
-#~ "\">video editor </span></a><span style=\" font-size:16pt; font-"
-#~ "weight:400; color:#ff692e;\">instead!</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">ПРЕДУПРЕЖДЕНИЕ: </span><span "
-#~ "style=\" font-size:16pt; font-weight:400; color:#ff692e;\">Това видео "
-#~ "съдържа повече от 100 кадъра. Зареждането на прекомерно много кадри може "
-#~ "да претовари  компютъра. Вместо това използвайте</span><span style=\" "
-#~ "font-size:16pt; font-weight:400; color:#ff1500;\"> </span><a href="
-#~ "\"https://kdenlive.org\"><span style=\" font-size:16pt; font-weight:400; "
-#~ "text-decoration: underline; color:#2980b9;\">редактор за видео</span></"
-#~ "a><span style=\" font-size:16pt; font-weight:400; color:#ff692e;\">!</"
-#~ "span></p></body></html>"
-
-#~ msgid "FFMpeg"
-#~ msgstr "FFMpeg"
-
-#~ msgid "Export:"
-#~ msgstr "Експортиране:"
-
-#~ msgid "&Video"
-#~ msgstr "&Видео"
-
-#, fuzzy
-#~| msgctxt "suffix for \"seconds\""
-#~| msgid " sec"
-#~ msgid " sec"
-#~ msgstr " сек"
-
-#~ msgid "Start merging time"
-#~ msgstr "Начало на сливане"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The amount of time every stroke should be apart from its previous stroke "
-#~ "to be classified in one group"
-#~ msgstr ""
-#~ "Времето, през което всяко очертаване трябва да бъде отделено от "
-#~ "предишното, за да да бъдат класифицирани в една група"
-
-#~ msgid "Split Strokes"
-#~ msgstr "Разделяне на очертания"
-
-#~ msgid "0 px"
-#~ msgstr "0 px"
-
-#~ msgid "0 s"
-#~ msgstr "0 s"
-
-#~ msgid "1000"
-#~ msgstr "1000"
-
-#~ msgid "30 px"
-#~ msgstr "30 px"
-
-#~ msgid "3 s"
-#~ msgstr "3 s"
-
-#~ msgid "%1 s"
-#~ msgstr "%1 s"
-
-#~ msgctxt "option name"
-#~ msgid "Filter"
-#~ msgstr "Филтър"
-
-#~ msgid "Mirrored"
-#~ msgstr "Огледално завъртване извършено"
-
-#~ msgid "Not mirrored"
-#~ msgstr "Огледално  не е извършено"
-
-#~ msgid "Align the brush preview outline to the pixel grid"
-#~ msgstr ""
-#~ "Изравняване на контура на визуализацията на четката с пикселната мрежа"
-
-#~ msgid " s"
-#~ msgstr " s"
-
-#~ msgid ""
-#~ "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on "
-#~ "another free program called FFmpeg to turn frame-by-frame animations into "
-#~ "video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-#~ "i><br><br>            To learn more about setting up Krita for rendering "
-#~ "animations, <a href=\"https://docs.krita.org/en/reference_manual/"
-#~ "render_animation.html#setting-up-krita-for-exporting-animations\">please "
-#~ "visit this section of our User Manual.</a>"
-#~ msgstr ""
-#~ "<b>Krita не може да намери FFmpeg!</b><br>             <i>Krita зависи "
-#~ "от  FFmpeg, за да генерира анимация кадър по кадър във видео файл. (<a "
-#~ "href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-#~ "i><br><br>            За да научите повече как да настроите Krita да "
-#~ "създава анимации, <a href=\"https://docs.krita.org/en/reference_manual/"
-#~ "render_animation.html#setting-up-krita-for-exporting-animations\">моля, "
-#~ "посетете тази глава в нашето ръководство за потребителя.</a>"
-
-#~ msgid "Colu&mns:"
-#~ msgstr "Ко&лони:"
-
-#~ msgid "&Rows:"
-#~ msgstr "&Редове:"
-
-#~ msgid "HSV Sliders to Show"
-#~ msgstr "Показване на плъзгачи на HSV"

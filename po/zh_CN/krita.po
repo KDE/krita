@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-01 00:43+0000\n"
-"PO-Revision-Date: 2023-07-30 07:09\n"
+"POT-Creation-Date: 2023-08-03 00:44+0000\n"
+"PO-Revision-Date: 2023-08-02 12:39\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -12815,7 +12815,7 @@ msgstr "工具(&T)"
 msgid "Scripts"
 msgstr "脚本"
 
-#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:64
+#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
 #, kde-format
 msgid "Setti&ngs"
 msgstr "设置(&N)"
@@ -12828,7 +12828,7 @@ msgstr "帮助(&H)"
 
 #: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
 #, kde-format
 msgid "File"
 msgstr "文件"
@@ -16228,47 +16228,47 @@ msgstr ""
 "此图像包含在 Krita 4.x 中创建的矢量文字对象。它们将在保存时转换为 Krita 5 格"
 "式。转换后的文字对象将不再兼容 Krita 4.x。"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3867
+#: libs/flake/text/KoSvgTextShape.cpp:3924
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3869
-#: libs/flake/text/KoSvgTextShape.cpp:3877
+#: libs/flake/text/KoSvgTextShape.cpp:3926
+#: libs/flake/text/KoSvgTextShape.cpp:3934
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 文字形状"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3875
+#: libs/flake/text/KoSvgTextShape.cpp:3932
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3889
-#: libs/flake/text/KoSvgTextShape.cpp:3904
+#: libs/flake/text/KoSvgTextShape.cpp:3946
+#: libs/flake/text/KoSvgTextShape.cpp:3961
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
 msgstr "<text>请替换此段文字为你的文字。</text>"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:139
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:144
 #, kde-format
 msgid "More than one 'text' node found!"
 msgstr "找到多个 \"文字\" 节点！"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:148
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:153
 #, kde-format
 msgid "Unknown node of type '%1' found!"
 msgstr "找到类型为“%1”的未知节点！"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:154
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:159
 #, kde-format
 msgid "No 'text' node found!"
 msgstr "找不到 \"文字\" 节点！"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:362
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:747
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:367
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:809
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "写入 SVG 文字元素时发生未知错误"
@@ -16552,7 +16552,7 @@ msgstr "默认"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1571
 #, kde-format
 msgid "Size"
 msgstr "大小"
@@ -19339,10 +19339,10 @@ msgstr "本地资源"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:1007
-#: libs/ui/KisApplication.cpp:1010 libs/ui/KisApplication.cpp:1026
-#: libs/ui/KisApplication.cpp:1058 libs/ui/KisApplication.cpp:1072
-#: libs/ui/KisApplication.cpp:1100 libs/ui/KisDocument.cpp:969
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:1011
+#: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
+#: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
+#: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
 #: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
@@ -19390,7 +19390,7 @@ msgstr "本地资源"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1226
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22435,7 +22435,7 @@ msgstr "图层属性"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1482
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1611
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -25614,7 +25614,7 @@ msgstr "前景色"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1461
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1587
 #, kde-format
 msgid "Background Color"
 msgstr "背景色"
@@ -28077,39 +28077,39 @@ msgstr "上移"
 msgid "Pan Down"
 msgstr "下移"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:38
+#: libs/ui/input/kis_rotate_canvas_action.cpp:41
 #, kde-format
 msgid "Rotate Canvas"
 msgstr "旋转画布视图"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:39
+#: libs/ui/input/kis_rotate_canvas_action.cpp:42
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr "这些快捷键可以对画布视图进行旋转。"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:42
+#: libs/ui/input/kis_rotate_canvas_action.cpp:45
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Rotate Mode"
 msgstr "进入旋转模式"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:43
+#: libs/ui/input/kis_rotate_canvas_action.cpp:46
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:40
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr "进入跳跃式旋转模式"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:44
+#: libs/ui/input/kis_rotate_canvas_action.cpp:47
 #, kde-format
 msgid "Rotate Left"
 msgstr "向左旋转"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:45
+#: libs/ui/input/kis_rotate_canvas_action.cpp:48
 #, kde-format
 msgid "Rotate Right"
 msgstr "向右旋转"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:46
+#: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Reset Rotation"
 msgstr "重置旋转"
@@ -29666,20 +29666,20 @@ msgstr "无法找到 MIME 类型，请尝试使用 -mimetype 选项"
 msgid "Failed to render animation frames!"
 msgstr "动画帧处理失败。"
 
-#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:879
+#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:883
 #, kde-format
 msgid "File layer"
 msgstr "文件图层"
 
 #: libs/ui/KisApplication.cpp:672 libs/ui/KisApplication.cpp:677
-#: libs/ui/KisApplication.cpp:873 libs/ui/KisApplication.cpp:887
-#: libs/ui/KisApplication.cpp:892
+#: libs/ui/KisApplication.cpp:877 libs/ui/KisApplication.cpp:891
+#: libs/ui/KisApplication.cpp:896
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita：警告"
 
-#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:888
+#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:892
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "无法将 %1 添加为文件图层：该文件不存在。"
@@ -29713,32 +29713,32 @@ msgstr ""
 "无法添加文件图层：没有已打开的图像。\n"
 "您可以使用 --new-image 参数新建一个图像，也可以打开一个已有图像。"
 
-#: libs/ui/KisApplication.cpp:874
+#: libs/ui/KisApplication.cpp:878
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "无法打开图像 %1"
 
-#: libs/ui/KisApplication.cpp:893
+#: libs/ui/KisApplication.cpp:897
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "无法添加文件图层：没有已打开的图像。"
 
-#: libs/ui/KisApplication.cpp:1008
+#: libs/ui/KisApplication.cpp:1012
 #, kde-format
 msgid "No template found for: %1"
 msgstr "找不到适用于 %1 的模板"
 
-#: libs/ui/KisApplication.cpp:1011
+#: libs/ui/KisApplication.cpp:1015
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "适用于 %1 的模板过多"
 
-#: libs/ui/KisApplication.cpp:1027
+#: libs/ui/KisApplication.cpp:1031
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "模板 %1 加载失败。"
 
-#: libs/ui/KisApplication.cpp:1059
+#: libs/ui/KisApplication.cpp:1063
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29753,7 +29753,7 @@ msgstr ""
 "\n"
 "请重新启动 Krita 使更改生效。"
 
-#: libs/ui/KisApplication.cpp:1073
+#: libs/ui/KisApplication.cpp:1077
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29764,7 +29764,7 @@ msgstr ""
 "\n"
 "请确保没有其他程序正在使用该文件，然后重试。"
 
-#: libs/ui/KisApplication.cpp:1101
+#: libs/ui/KisApplication.cpp:1105
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "您想要清除设置文件吗？"
@@ -30442,13 +30442,13 @@ msgid "Wor&kspace"
 msgstr "工作区(&K)"
 
 #: libs/ui/KisMainWindow.cpp:587
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "显示%1工具栏"
 
 #: libs/ui/KisMainWindow.cpp:589
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "隐藏%1工具栏"
@@ -33751,7 +33751,7 @@ msgstr "按照设置值扩大或缩小选区"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
-msgstr "遇到最暗或者最不透明像素时停止扩大选区"
+msgstr "最深/最不透明颜色作为填充边界"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
@@ -33762,18 +33762,18 @@ msgstr "按照设置值模糊选区"
 #: libs/ui/widgets/kis_selection_options.cc:242
 #, kde-format
 msgid "Select regions found from the active layer"
-msgstr "对活动图层进行采样并建立选区"
+msgstr "当前图层"
 
 #: libs/ui/widgets/kis_selection_options.cc:244
 #, kde-format
 msgid "Select regions found from the merging of all layers"
-msgstr "对所有图层的合并结果进行采样并建立选区"
+msgstr "所有图层"
 
 #: libs/ui/widgets/kis_selection_options.cc:246
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
-msgstr "对带有指定颜色标签的图层进行采样并建立选区"
+msgstr "带有指定颜色标签的图层"
 
 #: libs/ui/widgets/kis_selection_options.cc:254
 #, kde-format
@@ -33797,7 +33797,7 @@ msgstr "采样图层"
 #, kde-format
 msgctxt "The 'adjustments' section label in selection tools options"
 msgid "Adjustments"
-msgstr "选区调整"
+msgstr "边缘微调"
 
 #: libs/ui/widgets/kis_selection_options.cc:459
 #, kde-format
@@ -38373,7 +38373,7 @@ msgstr "树状缩进"
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
-msgstr "图层混合信息样式"
+msgstr "图层名称栏混合信息"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:373
 #, kde-format
@@ -38384,10 +38384,10 @@ msgid ""
 "Balanced: Show both opacity and blending mode if either are changed.\n"
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
-"无：不显示额外信息。\n"
+"无：不显示混合信息。\n"
 "简洁：不透明度、混合模式被更改后，仅显示被更改项。\n"
 "平衡：不透明度、混合模式其中之一被更改后，同时显示两者。\n"
-"完整：不透明度、混合模式无论是否更改，总是显示。"
+"完整：不透明度、混合模式无论是否更改，始终显示。"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
@@ -38423,7 +38423,7 @@ msgstr "图层混合信息文字不透明度"
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
-msgstr "额外信息同行显示"
+msgstr "显示为一行"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:414
 #, kde-format
@@ -40085,8 +40085,7 @@ msgstr "色相环外观："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, fuzzy, kde-format
-#| msgid "Static"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Always shows full saturation and full "
 "brightness colors."
@@ -40095,8 +40094,7 @@ msgstr "静态：始终显示全饱和、全亮度颜色"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
-#, fuzzy, kde-format
-#| msgid "Dynamic"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Shows colors depending on the current "
 "color saturation and brightness."
@@ -55973,7 +55971,7 @@ msgctxt ""
 "The 'use selection as boundary' checkbox in fill tool to use selection "
 "borders as boundary when filling"
 msgid "Use selection as boundary"
-msgstr "填充区域受选区限制"
+msgstr "选区被视作填充边界"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:566
 #, kde-format
@@ -56046,7 +56044,7 @@ msgstr "填充与您点击位置颜色相似的所有区域"
 #: plugins/tools/basictools/kis_tool_fill.cc:620
 #, kde-format
 msgid "Fill all regions until a specific boundary color"
-msgstr "填充所有区域，直至遇到指定的边界颜色"
+msgstr "自定义边界颜色"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:621
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
@@ -56120,14 +56118,14 @@ msgstr "对带有指定颜色标签的图层进行采样并进行填充"
 #: plugins/tools/basictools/kis_tool_fill.cc:635
 #, kde-format
 msgid "Dragging will fill regions of any color"
-msgstr "填充任意颜色的区域"
+msgstr "任意颜色"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:636
 #, kde-format
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
 "(useful for filling line-art)"
-msgstr "仅填充与拖动开始处颜色相似的区域 (适用于填充线稿)"
+msgstr "拖动开始处的相似色 (适用于填充线稿)"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:638
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
@@ -56157,19 +56155,19 @@ msgstr "采样图层"
 #, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
-msgstr "填充界限"
+msgstr "填充边界"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:689
 #, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
-msgstr "填充区域调整"
+msgstr "边缘微调"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:698
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
-msgstr "拖动式填充模式"
+msgstr "拖动填充有效区域"
 
 #: plugins/tools/basictools/kis_tool_fill.h:234
 #, kde-format
@@ -57189,7 +57187,7 @@ msgctxt ""
 "The 'use selection as boundary' checkbox in contiguous selection tool to use "
 "selection borders as boundary when filling"
 msgid "Use selection as boundary"
-msgstr "采样区域受选区限制"
+msgstr "当前选区被视作采样边界"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
 #, kde-format
@@ -57206,12 +57204,12 @@ msgstr "羽化半径："
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
-msgstr "选择与您点击位置颜色相似的所有区域"
+msgstr "相连颜色区域"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
 #, kde-format
 msgid "Select all regions until a specific boundary color"
-msgstr "选择所有区域，直至遇到指定的边界颜色"
+msgstr "自定义边界颜色"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
@@ -57242,7 +57240,7 @@ msgstr "设置在建立新选区时是否将活动选区的轮廓视作选区边
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
 msgid "Selection extent"
-msgstr "选区范围"
+msgstr "选区边界"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:95
 #, kde-format
@@ -57346,7 +57344,7 @@ msgstr "色差阈值："
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
-msgstr "选区范围"
+msgstr "选区边界"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:57
 #, kde-format
@@ -57562,83 +57560,103 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "相似颜色选区工具"
 
+#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:36
+msgctxt "(qtundo-format)"
+msgid "Adjust text auto wrap"
+msgstr ""
+
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "SVG 文字工具更改"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:261
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
 #, kde-format
 msgid "Text Tool"
 msgstr "文字工具"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:397
 #, kde-format
 msgid "Conversion failed"
 msgstr "转换失败"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:602
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
 #, kde-format
 msgid "Find Text"
 msgstr "查找文字"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:605
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:694
 #, kde-format
 msgid "Find:"
 msgstr "查找："
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:644
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:690
 #, kde-format
 msgid "Find and Replace all"
 msgstr "查找并替换全部"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
 #, kde-format
 msgid "Replace:"
 msgstr "替换："
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1226
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "文字已被修改。您想要放弃更改吗？"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1289
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1407
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1413
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "可视编辑器"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1292
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1296
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1410
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1414
 #, kde-format
 msgid "SVG Source"
 msgstr "SVG 源代码"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1436
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1562
 #, kde-format
 msgid "Font"
 msgstr "字体"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1453
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
 #, kde-format
 msgid "Text Color"
 msgstr "文字颜色"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1468
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
 #, kde-format
 msgid "Sample a Color"
 msgstr "拾取颜色"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1479
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
 #, kde-format
 msgid "Line height"
 msgstr "行高"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1491
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:206
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1612
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1621
+#, fuzzy, kde-format
+#| msgid "Normal"
+msgctxt "Default line height for text"
+msgid "Normal"
+msgstr "正常"
+
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1625
+#, fuzzy, kde-format
+#| msgid "100%"
+msgctxt "line height for text"
+msgid "100%"
+msgstr "100%"
+
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1639
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
 #, kde-format
 msgid "Letter Spacing"
 msgstr "字符间距"
@@ -58022,32 +58040,90 @@ msgctxt "action"
 msgid "Kerning"
 msgstr "字偶间距调整"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:135
+#. i18n: context: iconText @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:266
+#: plugins/tools/svgtexttool/SvgTextTool.action:273
+#, kde-format
+msgctxt "action"
+msgid "Legacy Hard Wrap"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:268
+#, kde-format
+msgctxt "action"
+msgid ""
+"Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
+"are explicitly positioned, but the line height may be slightly inaccurate."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:276
+#: plugins/tools/svgtexttool/SvgTextTool.action:283
+#, kde-format
+msgctxt "action"
+msgid "SVG Hard Wrap"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:278
+#, kde-format
+msgctxt "action"
+msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:286
+#: plugins/tools/svgtexttool/SvgTextTool.action:293
+#, kde-format
+msgctxt "action"
+msgid "SVG Auto Wrap with Fixed Width"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:288
+#, kde-format
+msgctxt "action"
+msgid ""
+"Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
+"defining the text width."
+msgstr ""
+
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:149
 #, kde-format
 msgid "Create new texts with..."
 msgstr "新建文字的字体设置："
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:172
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:186
 #, kde-format
 msgid "Anchor text to the left."
 msgstr "左对齐文字"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:181
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:195
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "居中文字。"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:190
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:204
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "右对齐文字"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:234
 #, kde-format
 msgid "Edit Text"
 msgstr "编辑选中文字"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:256
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:270
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -58068,12 +58144,18 @@ msgstr "格式(&F)"
 msgid "&Weight"
 msgstr "粗细(&W)"
 
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:81
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:63
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:107
+#, kde-format
+msgid "Text W&rapping"
+msgstr ""
+
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:87
 #, kde-format
 msgid "Font Settings"
 msgstr "字体设置"
 
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:90
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:96
 #, kde-format
 msgid "Formatting"
 msgstr "格式设置"
@@ -58454,7 +58536,7 @@ msgctxt ""
 "The 'use selection as boundary' checkbox in enclose and fill tool to use "
 "selection borders as boundary when filling"
 msgid "Use selection as boundary"
-msgstr "采样区域受选区限制"
+msgstr "当前选区被视作填充边界"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:470
 #, kde-format
@@ -58517,7 +58599,7 @@ msgstr "采样图层"
 #, kde-format
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
-msgstr "目标区域"
+msgstr "填充区域"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:571
 #, kde-format
@@ -58529,13 +58611,13 @@ msgstr "填充颜色"
 #, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
-msgstr "填充界限"
+msgstr "填充边界"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:594
 #, kde-format
 msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
-msgstr "填充区域调整"
+msgstr "边缘微调"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:848
 #, kde-format

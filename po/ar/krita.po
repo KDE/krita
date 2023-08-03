@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-01 00:43+0000\n"
+"POT-Creation-Date: 2023-08-03 00:44+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -13407,7 +13407,7 @@ msgstr "أ&دوات"
 msgid "Scripts"
 msgstr "سكربتات"
 
-#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:64
+#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
 #, kde-format
 msgid "Setti&ngs"
 msgstr "إ&عدادات"
@@ -13420,7 +13420,7 @@ msgstr "م&ساعدة"
 
 #: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
 #, kde-format
 msgid "File"
 msgstr "ملفّ"
@@ -16936,47 +16936,47 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3867
+#: libs/flake/text/KoSvgTextShape.cpp:3924
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "نص"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3869
-#: libs/flake/text/KoSvgTextShape.cpp:3877
+#: libs/flake/text/KoSvgTextShape.cpp:3926
+#: libs/flake/text/KoSvgTextShape.cpp:3934
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "شكل SVG نصّيّ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3875
+#: libs/flake/text/KoSvgTextShape.cpp:3932
 #, kde-format
 msgid "SVG Text"
 msgstr "‏SVG نصّيّ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3889
-#: libs/flake/text/KoSvgTextShape.cpp:3904
+#: libs/flake/text/KoSvgTextShape.cpp:3946
+#: libs/flake/text/KoSvgTextShape.cpp:3961
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:139
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:144
 #, kde-format
 msgid "More than one 'text' node found!"
 msgstr "عُثر على أكثر من عقدة ’text‘ واحدة!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:148
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:153
 #, kde-format
 msgid "Unknown node of type '%1' found!"
 msgstr "عُثر على نوع مجهول ’%1‘ من العقد!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:154
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:159
 #, kde-format
 msgid "No 'text' node found!"
 msgstr "لم يُعثر على عقدة ’text‘!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:362
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:747
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:367
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:809
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "خطأ مجهول أثناء كتابة عنصر SVG النّصّيّ"
@@ -17263,7 +17263,7 @@ msgstr "مبدئي"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1571
 #, kde-format
 msgid "Size"
 msgstr "المقاس"
@@ -20176,10 +20176,10 @@ msgstr "يحمّل حزم الموارد..."
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:1007
-#: libs/ui/KisApplication.cpp:1010 libs/ui/KisApplication.cpp:1026
-#: libs/ui/KisApplication.cpp:1058 libs/ui/KisApplication.cpp:1072
-#: libs/ui/KisApplication.cpp:1100 libs/ui/KisDocument.cpp:969
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:1011
+#: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
+#: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
+#: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
 #: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
@@ -20227,7 +20227,7 @@ msgstr "يحمّل حزم الموارد..."
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1226
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -23407,7 +23407,7 @@ msgstr "خصائص الطّبقة"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1482
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1611
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -26694,7 +26694,7 @@ msgstr "لون المقدّمة"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1461
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1587
 #, kde-format
 msgid "Background Color"
 msgstr "لون الخلفيّة"
@@ -29196,39 +29196,39 @@ msgstr ""
 msgid "Pan Down"
 msgstr "لأسفل"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:38
+#: libs/ui/input/kis_rotate_canvas_action.cpp:41
 #, kde-format
 msgid "Rotate Canvas"
 msgstr "دوّر رقعة الرّسم"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:39
+#: libs/ui/input/kis_rotate_canvas_action.cpp:42
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr "يدوّر إجراء <i>دوّر رقعة الرّسم</i> رقعةَ الرّسم."
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:42
+#: libs/ui/input/kis_rotate_canvas_action.cpp:45
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Rotate Mode"
 msgstr "وضع التّدوير"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:43
+#: libs/ui/input/kis_rotate_canvas_action.cpp:46
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:40
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr "أهمل وضع التّدوير"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:44
+#: libs/ui/input/kis_rotate_canvas_action.cpp:47
 #, kde-format
 msgid "Rotate Left"
 msgstr "دوّر لليسار"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:45
+#: libs/ui/input/kis_rotate_canvas_action.cpp:48
 #, kde-format
 msgid "Rotate Right"
 msgstr "دوّر لليمين"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:46
+#: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Reset Rotation"
 msgstr "صفّر التّدوير"
@@ -30903,20 +30903,20 @@ msgstr "لم يُعثر على نوع MIME، جرّب استخدام خيار -m
 msgid "Failed to render animation frames!"
 msgstr "فشل تصيير إطارات الحركة!"
 
-#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:879
+#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:883
 #, kde-format
 msgid "File layer"
 msgstr "طبقة ملفّ"
 
 #: libs/ui/KisApplication.cpp:672 libs/ui/KisApplication.cpp:677
-#: libs/ui/KisApplication.cpp:873 libs/ui/KisApplication.cpp:887
-#: libs/ui/KisApplication.cpp:892
+#: libs/ui/KisApplication.cpp:877 libs/ui/KisApplication.cpp:891
+#: libs/ui/KisApplication.cpp:896
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "كريتا: تحذير"
 
-#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:888
+#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:892
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
@@ -30942,33 +30942,33 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:874
+#: libs/ui/KisApplication.cpp:878
 #, fuzzy, kde-format
 #| msgid "Could not find %1"
 msgid "Couldn't open file %1"
 msgstr "تعذر العثور على %1"
 
-#: libs/ui/KisApplication.cpp:893
+#: libs/ui/KisApplication.cpp:897
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1008
+#: libs/ui/KisApplication.cpp:1012
 #, kde-format
 msgid "No template found for: %1"
 msgstr "لم يُعثر على قالب ل‍: %1"
 
-#: libs/ui/KisApplication.cpp:1011
+#: libs/ui/KisApplication.cpp:1015
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "عُُثر على العديد من القوالب ل‍: %1"
 
-#: libs/ui/KisApplication.cpp:1027
+#: libs/ui/KisApplication.cpp:1031
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "فشل تحميل القالب %1."
 
-#: libs/ui/KisApplication.cpp:1059
+#: libs/ui/KisApplication.cpp:1063
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30978,7 +30978,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1073
+#: libs/ui/KisApplication.cpp:1077
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30989,7 +30989,7 @@ msgstr ""
 "\n"
 "رجاءً تحقّق من عدم استخدام أيّ برنامج آخر للملفّ وجرّب مجدّدًا."
 
-#: libs/ui/KisApplication.cpp:1101
+#: libs/ui/KisApplication.cpp:1105
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "أتريد مسح ملفّ الإعدادات؟"
@@ -31705,13 +31705,13 @@ msgid "Wor&kspace"
 msgstr "م&ساحة العمل"
 
 #: libs/ui/KisMainWindow.cpp:587
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "اعرض شريط أدوات %1"
 
 #: libs/ui/KisMainWindow.cpp:589
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "أخفِ شريط أدوات %1"
@@ -59831,6 +59831,11 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "أداة التّحديد بالمتشابهات"
 
+#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:36
+msgctxt "(qtundo-format)"
+msgid "Adjust text auto wrap"
+msgstr ""
+
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
 #, fuzzy
 #| msgctxt "(qtundo-format)"
@@ -59839,79 +59844,93 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "تغيير إزاحة النّصّ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:261
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
 #, kde-format
 msgid "Text Tool"
 msgstr "أداة النصوص"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:385
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:397
 #, kde-format
 msgid "Conversion failed"
 msgstr "فشل التّحويل"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:602
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
 #, kde-format
 msgid "Find Text"
 msgstr "العثور على نصّ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:605
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:694
 #, kde-format
 msgid "Find:"
 msgstr "ابحث عن:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:644
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:690
 #, kde-format
 msgid "Find and Replace all"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
 #, kde-format
 msgid "Replace:"
 msgstr "استبدل بِ‍:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1149
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1226
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1289
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1407
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1413
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "نصّ غنيّ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1292
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1296
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1410
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1414
 #, kde-format
 msgid "SVG Source"
 msgstr "مصدر SVG"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1436
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1562
 #, kde-format
 msgid "Font"
 msgstr "الخطّ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1453
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
 #, kde-format
 msgid "Text Color"
 msgstr "لون النّصّ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1468
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
 #, fuzzy, kde-format
 #| msgid "Select a color"
 msgid "Sample a Color"
 msgstr "اختر لونًا"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1479
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
 #, kde-format
 msgid "Line height"
 msgstr "ارتفاع السّطر"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1491
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:206
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1612
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1621
+#, fuzzy, kde-format
+#| msgid "Normal"
+msgctxt "Default line height for text"
+msgid "Normal"
+msgstr "عاديّ"
+
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1625
+#, kde-format
+msgctxt "line height for text"
+msgid "100%"
+msgstr ""
+
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1639
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
 #, kde-format
 msgid "Letter Spacing"
 msgstr "تباعد الأحرف"
@@ -60297,35 +60316,93 @@ msgctxt "action"
 msgid "Kerning"
 msgstr "تجانب"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:135
+#. i18n: context: iconText @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:266
+#: plugins/tools/svgtexttool/SvgTextTool.action:273
+#, kde-format
+msgctxt "action"
+msgid "Legacy Hard Wrap"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:268
+#, kde-format
+msgctxt "action"
+msgid ""
+"Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
+"are explicitly positioned, but the line height may be slightly inaccurate."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:276
+#: plugins/tools/svgtexttool/SvgTextTool.action:283
+#, kde-format
+msgctxt "action"
+msgid "SVG Hard Wrap"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:278
+#, kde-format
+msgctxt "action"
+msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
+msgstr ""
+
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:286
+#: plugins/tools/svgtexttool/SvgTextTool.action:293
+#, kde-format
+msgctxt "action"
+msgid "SVG Auto Wrap with Fixed Width"
+msgstr ""
+
+#. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
+#: plugins/tools/svgtexttool/SvgTextTool.action:288
+#, kde-format
+msgctxt "action"
+msgid ""
+"Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
+"defining the text width."
+msgstr ""
+
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:149
 #, fuzzy, kde-format
 #| msgid "Create new document"
 msgid "Create new texts with..."
 msgstr "أنشئ مستندًا جديدًا"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:172
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:186
 #, kde-format
 msgid "Anchor text to the left."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:181
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:195
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Anchor at Middle"
 msgid "Anchor text to the middle."
 msgstr "اربط بالمنتصف"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:190
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:204
 #, kde-format
 msgid "Anchor text to the right."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:234
 #, kde-format
 msgid "Edit Text"
 msgstr "حرّر النّصّ"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:256
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:270
 #, fuzzy, kde-format
 #| msgid "Edit Text"
 msgctxt "@title:window"
@@ -60347,12 +60424,19 @@ msgstr "&هيء"
 msgid "&Weight"
 msgstr "ال&وزن"
 
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:81
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:63
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:107
+#, fuzzy, kde-format
+#| msgid "Text editing"
+msgid "Text W&rapping"
+msgstr "تحرير النّصوص"
+
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:87
 #, kde-format
 msgid "Font Settings"
 msgstr "إعدادات الخطّ"
 
-#: plugins/tools/svgtexttool/svgtexttool.xmlgui:90
+#: plugins/tools/svgtexttool/svgtexttool.xmlgui:96
 #, kde-format
 msgid "Formatting"
 msgstr "تهيئة"
@@ -65602,9 +65686,6 @@ msgstr "الصّور المرجع"
 #~| msgid "Intersection"
 #~ msgid "Autocorrection"
 #~ msgstr "التّقاطعات"
-
-#~ msgid "Text editing"
-#~ msgstr "تحرير النّصوص"
 
 #, fuzzy
 #~| msgid "Direction:"

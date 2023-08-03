@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-01 02:42+0000\n"
-"PO-Revision-Date: 2023-07-28 09:49+0200\n"
+"POT-Creation-Date: 2023-08-03 03:10+0000\n"
+"PO-Revision-Date: 2023-08-02 06:39+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16182,25 +16182,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3867
+#: libs/flake/text/KoSvgTextShape.cpp:3924
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3869
-#: libs/flake/text/KoSvgTextShape.cpp:3877
+#: libs/flake/text/KoSvgTextShape.cpp:3926
+#: libs/flake/text/KoSvgTextShape.cpp:3934
 #, kde-format
 msgid "SVG Text Shape"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3875
+#: libs/flake/text/KoSvgTextShape.cpp:3932
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3889
-#: libs/flake/text/KoSvgTextShape.cpp:3904
+#: libs/flake/text/KoSvgTextShape.cpp:3946
+#: libs/flake/text/KoSvgTextShape.cpp:3961
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -19268,10 +19268,10 @@ msgstr "ლოკალური რესურსები"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:1007
-#: libs/ui/KisApplication.cpp:1010 libs/ui/KisApplication.cpp:1026
-#: libs/ui/KisApplication.cpp:1058 libs/ui/KisApplication.cpp:1072
-#: libs/ui/KisApplication.cpp:1100 libs/ui/KisDocument.cpp:969
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:1011
+#: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
+#: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
+#: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
 #: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
@@ -27740,39 +27740,39 @@ msgstr "პანორამა მაღლა"
 msgid "Pan Down"
 msgstr "პანორამა დაბლა"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:38
+#: libs/ui/input/kis_rotate_canvas_action.cpp:41
 #, kde-format
 msgid "Rotate Canvas"
 msgstr "ტილოს შემობრუნება"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:39
+#: libs/ui/input/kis_rotate_canvas_action.cpp:42
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr ""
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:42
+#: libs/ui/input/kis_rotate_canvas_action.cpp:45
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Rotate Mode"
 msgstr ""
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:43
+#: libs/ui/input/kis_rotate_canvas_action.cpp:46
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:40
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr ""
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:44
+#: libs/ui/input/kis_rotate_canvas_action.cpp:47
 #, kde-format
 msgid "Rotate Left"
 msgstr "მარცხნივ შებრუნება"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:45
+#: libs/ui/input/kis_rotate_canvas_action.cpp:48
 #, kde-format
 msgid "Rotate Right"
 msgstr "მარჯვნივ შებრუნება"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:46
+#: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Reset Rotation"
 msgstr ""
@@ -29236,20 +29236,20 @@ msgstr ""
 msgid "Failed to render animation frames!"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:879
+#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:883
 #, kde-format
 msgid "File layer"
 msgstr "ფაილის ფენა"
 
 #: libs/ui/KisApplication.cpp:672 libs/ui/KisApplication.cpp:677
-#: libs/ui/KisApplication.cpp:873 libs/ui/KisApplication.cpp:887
-#: libs/ui/KisApplication.cpp:892
+#: libs/ui/KisApplication.cpp:877 libs/ui/KisApplication.cpp:891
+#: libs/ui/KisApplication.cpp:896
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: გაფრთხილება"
 
-#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:888
+#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:892
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
@@ -29275,32 +29275,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:874
+#: libs/ui/KisApplication.cpp:878
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:893
+#: libs/ui/KisApplication.cpp:897
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1008
+#: libs/ui/KisApplication.cpp:1012
 #, kde-format
 msgid "No template found for: %1"
 msgstr "%1-სთვის შაბლონი ვერ ვიპოვე"
 
-#: libs/ui/KisApplication.cpp:1011
+#: libs/ui/KisApplication.cpp:1015
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "ნაპოვნია მეტისმეტად ბევრი შაბლონი %1-სთვის"
 
-#: libs/ui/KisApplication.cpp:1027
+#: libs/ui/KisApplication.cpp:1031
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "შაბლონის ('%1') ჩატვირთვის შეცდომა."
 
-#: libs/ui/KisApplication.cpp:1059
+#: libs/ui/KisApplication.cpp:1063
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29310,7 +29310,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1073
+#: libs/ui/KisApplication.cpp:1077
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29318,7 +29318,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1101
+#: libs/ui/KisApplication.cpp:1105
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr ""
@@ -39371,8 +39371,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, fuzzy, kde-format
-#| msgid "Static"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Always shows full saturation and full "
 "brightness colors."
@@ -39381,8 +39380,7 @@ msgstr "სტატიკური"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
-#, fuzzy, kde-format
-#| msgid "Dynamic"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Shows colors depending on the current "
 "color saturation and brightness."
@@ -41991,12 +41989,12 @@ msgstr ""
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:38
 #, kde-format
 msgid "Manage Resource Libraries..."
-msgstr ""
+msgstr "რესურსის ბიბლიოთეკების მართვა..."
 
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:42
 #, kde-format
 msgid "Manage Resources..."
-msgstr ""
+msgstr "რესურსების მართვა..."
 
 #: plugins/extensions/resourcemanager/resourcemanager.xmlgui:5
 #, kde-format
@@ -42007,19 +42005,19 @@ msgstr "&რესურსები"
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:86
 #, kde-format
 msgid "Import a resource library"
-msgstr ""
+msgstr "რესურსის ბიბლიოთეკის შემოტანა"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnToggle)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:106
 #, kde-format
 msgid "Delete a resource library"
-msgstr ""
+msgstr "რესურსის ბიბლიოთეკის წაშლა"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:126
 #, kde-format
 msgid "Create a resource library"
-msgstr ""
+msgstr "რესურსის ბიბლიოთეკის შექმნა"
 
 #. i18n: ectx: property (text), widget (QLabel, author)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -42104,7 +42102,7 @@ msgstr "(256 x 256)"
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:341
 #, kde-format
 msgid "Save to:"
-msgstr ""
+msgstr "შენახვა მისამართზე:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEmbedTags)
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:396
@@ -42462,37 +42460,37 @@ msgstr "ჟესტები"
 #: plugins/extensions/spensettings/wdg_spensettings.ui:89
 #, kde-format
 msgid "Swipe Up"
-msgstr ""
+msgstr "ზემოთ აუსვით"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:99
 #, kde-format
 msgid "Swipe Down"
-msgstr ""
+msgstr "ქვემოთ ჩამოუსვით"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:106
 #, kde-format
 msgid "Swipe Right"
-msgstr ""
+msgstr "მარჯვნივ გაუსვით"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:113
 #, kde-format
 msgid "Swipe Left"
-msgstr ""
+msgstr "მარცხნვ გაუსვით"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:120
 #, kde-format
 msgid "Circle Clockwise"
-msgstr ""
+msgstr "წრე საათის ისრის მიმართულებით"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:127
 #, kde-format
 msgid "Circle Counterclockwise"
-msgstr ""
+msgstr "წრე საათის ისრის საწინააღმდეგოდ"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:154
@@ -43023,7 +43021,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:75
 #, kde-format
 msgid "&Average"
-msgstr ""
+msgstr "&საშუალო"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioMin)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:82
@@ -43113,13 +43111,13 @@ msgstr ""
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:71
 #, kde-format
 msgid "         Input:"
-msgstr ""
+msgstr "         შეყვანა:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelOut)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:97
 #, kde-format
 msgid "         Output:"
-msgstr ""
+msgstr "         გამოყვანა:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLogarithmic)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:330
@@ -43139,7 +43137,7 @@ msgstr "არხი:"
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:385
 #, kde-format
 msgid "Driver channel"
-msgstr ""
+msgstr "დრაივერის არხი"
 
 #. i18n: context: text @ Action (krita_filter_height to normal), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_height to normal), Actions (Filters), ActionCollection (Krita)
@@ -43604,7 +43602,7 @@ msgstr "საბაზისო"
 #, kde-format
 msgctxt "Color palette shade"
 msgid "Bright"
-msgstr ""
+msgstr "კაშკაშა"
 
 #: plugins/filters/indexcolors/indexcolors.cpp:66
 #, kde-format
@@ -44744,7 +44742,7 @@ msgstr "თანამდებობა"
 #, kde-format
 msgctxt "Start position of the gradient"
 msgid "Start:"
-msgstr ""
+msgstr "დასაწყისი:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelEndPosition)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:263
@@ -54388,7 +54386,7 @@ msgstr ""
 
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:20
 msgid "Fonts:"
-msgstr ""
+msgstr "ფონტები:"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
 msgid "Scope"
@@ -56502,7 +56500,7 @@ msgid "Line height"
 msgstr "ხაზის სიმაღლე"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1491
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:206
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:212
 #, kde-format
 msgid "Letter Spacing"
 msgstr "დაშორება სომბოლოებს შორის"
@@ -56886,32 +56884,32 @@ msgctxt "action"
 msgid "Kerning"
 msgstr "კერნინგი"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:135
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:141
 #, kde-format
 msgid "Create new texts with..."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:172
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:178
 #, kde-format
 msgid "Anchor text to the left."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:181
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:187
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:190
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:196
 #, kde-format
 msgid "Anchor text to the right."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:226
 #, kde-format
 msgid "Edit Text"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:256
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:262
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

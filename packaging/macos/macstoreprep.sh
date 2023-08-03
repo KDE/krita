@@ -322,7 +322,8 @@ rsync -prult --delete "${KRITADMG_MOUNT}/krita.app/" "krita.app"
 hdiutil detach "${KRITADMG_MOUNT}"
 
 # attach provisioning profile
-cp "${KIS_PROVISION}" "${KRITADMG_WDIR}/krita.app/Contents/"
+cp -X "${KIS_PROVISION}" "${KRITADMG_WDIR}/krita.app/Contents/"
+chmod 644 "${KRITADMG_WDIR}/krita.app/Contents/${KIS_PROVISION}"
 
 # clean krita version string (app store format does not allow dashes
 KIS_VERSION="$(${KRITADMG_WDIR}/krita.app/Contents/MacOS/krita_version 2> /dev/null | awk '{print $1}')"

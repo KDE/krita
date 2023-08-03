@@ -886,120 +886,15 @@ bool KoSvgTextChunkShape::loadSvg(const QDomElement &e, SvgLoadingContext &conte
     return true;
 }
 
-namespace {
-
-QString cleanUpString(QString text) {
-    text.replace(QRegExp("[\\r\\n\u2028]"), "");
-    text.replace(QRegExp(" {2,}"), " ");
-    return text;
-}
-
-enum Result {
-    FoundNothing,
-    FoundText,
-    FoundSpace
-};
-
-Result hasPreviousSibling(QDomNode node)
-{
-    while (!node.isNull()) {
-        if (node.isElement()) {
-            QDomElement element = node.toElement();
-            if (element.tagName() == "text") break;
-        }
-
-
-        while (!node.previousSibling().isNull()) {
-            node = node.previousSibling();
-
-            while (!node.lastChild().isNull()) {
-                node = node.lastChild();
-            }
-
-            if (node.isText()) {
-                QDomText textNode = node.toText();
-                const QString text = cleanUpString(textNode.data());
-
-                if (!text.isEmpty()) {
-
-                    // if we are the leading whitespace, we should report that
-                    // we are the last
-
-                    if (text == " ") {
-                        return hasPreviousSibling(node) == FoundNothing ? FoundNothing : FoundSpace;
-                    }
-
-                    return text[text.size() - 1] != ' ' ? FoundText : FoundSpace;
-                }
-            }
-        }
-        node = node.parentNode();
-    }
-
-    return FoundNothing;
-}
-
-Result hasNextSibling(QDomNode node)
-{
-    while (!node.isNull()) {
-        while (!node.nextSibling().isNull()) {
-            node = node.nextSibling();
-
-            while (!node.firstChild().isNull()) {
-                node = node.firstChild();
-            }
-
-            if (node.isText()) {
-                QDomText textNode = node.toText();
-                const QString text = cleanUpString(textNode.data());
-
-                // if we are the trailing whitespace, we should report that
-                // we are the last
-                if (text == " ") {
-                    return hasNextSibling(node) == FoundNothing ? FoundNothing : FoundSpace;
-                }
-
-                if (!text.isEmpty()) {
-                    return text[0] != ' ' ? FoundText : FoundSpace;
-                }
-            }
-        }
-        node = node.parentNode();
-    }
-
-    return FoundNothing;
-}
-}
-
 bool KoSvgTextChunkShape::loadSvgTextNode(const QDomText &text, SvgLoadingContext &context)
 {
     SvgGraphicsContext *gc = context.currentGC();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(gc, false);
 
     s->loadContextBasedProperties(gc);
-
-    QString data = cleanUpString(text.data());
-
-    const Result leftBorder = hasPreviousSibling(text);
-    const Result rightBorder = hasNextSibling(text);
-
-    if (data.startsWith(' ') && leftBorder == FoundNothing) {
-        data.remove(0, 1);
-    }
-
-    if (data.endsWith(' ') && rightBorder != FoundText) {
-        data.remove(data.size() - 1, 1);
-    }
-
-    if (data == " " && (leftBorder == FoundNothing || rightBorder == FoundNothing)) {
-        data = "";
-    }
-
-    //ENTER_FUNCTION() << text.data() << "-->" << data;
-
     s->text = text.data();
 
-    return !data.isEmpty();
+    return true;
 }
 
 void KoSvgTextChunkShape::simplifyFillStrokeInheritance()

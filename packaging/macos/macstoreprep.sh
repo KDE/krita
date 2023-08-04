@@ -329,6 +329,17 @@ chmod 644 "${KRITADMG_WDIR}/krita.app/Contents/${KIS_PROVISION}"
 KIS_VERSION="$(${KRITADMG_WDIR}/krita.app/Contents/MacOS/krita_version 2> /dev/null | awk '{print $1}')"
 KIS_VERSION=${KIS_VERSION%%-*}
 
+# try to fix permissions
+for f in $(find ${KRITADMG_WDIR} -not -perm +044); do
+    chmod +r ${f}
+done
+
+rootfiles="$(find ${KRITADMG_WDIR} -user root -perm +400 -and -not -perm +044)"
+if [[ -n ${rootfiles} ]]; then
+    echo "files \n ${rootfiles} \n cannot be read by non-root users!"
+    echo "submission will fail, please fix and relaunch script"
+fi
+
 # replace signature
 findEntitlementsFile
 if [[ -z ${KIS_ENTITLEMENTS} ]]; then

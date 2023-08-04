@@ -86,7 +86,7 @@ enum LineEdgeBehaviour {
 };
 
 struct CharacterResult {
-    QPointF finalPosition;
+    QPointF finalPosition; ///< the final position, taking into account both CSS and SVG positioning considerations.
     qreal rotate = 0.0;
     bool hidden = false; // whether the character will be drawn.
     // we can't access characters that aren't part of a typographic character
@@ -95,9 +95,9 @@ struct CharacterResult {
     // and it's suggested to have it per-typographic character.
     // https://github.com/w3c/svgwg/issues/537
     bool addressable = true; // whether the character is not discarded for various reasons.
-    bool middle = false; // whether the character is the second of last of a
-                         // typographic character.
-    bool anchored_chunk = false; // whether this is the start of a new chunk.
+    bool middle = false; ///< whether the character is the second of last of a
+                         ///< typographic character.
+    bool anchored_chunk = false; ///< whether this is the start of a new chunk.
 
     QPainterPath path;
     QImage image{nullptr};
@@ -108,7 +108,9 @@ struct CharacterResult {
 
     QRectF boundingBox;
     int visualIndex = -1;
-    QPointF cssPosition = QPointF();
+    QPointF cssPosition = QPointF(); ///< the position in accordance with the CSS specs, as opossed to the SVG spec.
+    QPointF baselineOffset = QPointF(); ///< The computed baseline offset, will be applied
+                                        ///< when calculating the line-offset during line breaking.
     QPointF advance;
     BreakType breakType = NoBreak;
     LineEdgeBehaviour lineEnd = NoChange;
@@ -119,9 +121,9 @@ struct CharacterResult {
     bool textLengthApplied = false;
     bool overflowWrap = false;
 
-    qreal halfLeading;
-    qreal ascent;
-    qreal descent;
+    qreal halfLeading; ///< Leading for both sides, can be either negative or positive.
+    qreal ascent; ///< Ascender, in scanline coordinates
+    qreal descent;///< Descender, in scanline coordinates
     QFont::Style fontStyle = QFont::StyleNormal;
     int fontWeight = 400;
 
@@ -329,9 +331,13 @@ public:
                             qreal parentFontSize,
                             QPointF superScript,
                             QPointF subScript,
-                            QVector<CharacterResult> &result, QVector<LineBox> lineBoxes,
+                            QVector<CharacterResult> &result,
                             int &currentIndex,
                             qreal res,
+                            bool isHorizontal);
+    void handleLineBoxAlignment(const KoShape *rootShape,
+                            QVector<CharacterResult> &result, QVector<LineBox> lineBoxes,
+                            int &currentIndex,
                             bool isHorizontal);
     void computeTextDecorations(const KoShape *rootShape,
                                 const QVector<CharacterResult>& result,
@@ -1217,8 +1223,8 @@ void KoSvgTextShape::relayout() const
         }
         charResult.boundingBox = ftTF.mapRect(bbox);
         charResult.halfLeading = ftTF.map(QPointF(charResult.halfLeading, charResult.halfLeading)).x();
-        charResult.ascent = isHorizontal? charResult.boundingBox.top(): charResult.boundingBox.left();
-        charResult.descent = isHorizontal? charResult.boundingBox.bottom(): charResult.boundingBox.right();
+        charResult.ascent = isHorizontal? charResult.boundingBox.top(): charResult.boundingBox.right();
+        charResult.descent = isHorizontal? charResult.boundingBox.bottom(): charResult.boundingBox.left();
 
         if (!charResult.path.isEmpty()) {
             charResult.boundingBox |= charResult.path.boundingRect();
@@ -1272,6 +1278,9 @@ void KoSvgTextShape::relayout() const
     globalIndex = 0;
     d->resolveTransforms(this, globalIndex, isHorizontal, false, resolvedTransforms, collapseChars);
 
+    // Compute baseline alignment.
+    globalIndex = 0;
+    d->computeFontMetrics(this, QMap<int, int>(), 0, QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal);
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms[0].absolutePos();
 
@@ -1284,7 +1293,7 @@ void KoSvgTextShape::relayout() const
     }
     // Handle baseline alignment.
     globalIndex = 0;
-    d->computeFontMetrics(this, QMap<int, int>(), 0, QPointF(), QPointF(), result, d->lineBoxes, globalIndex, finalRes, isHorizontal);
+    d->handleLineBoxAlignment(this, result, d->lineBoxes, globalIndex, isHorizontal);
 
     if (inlineSize.isAuto && d->shapesInside.isEmpty()) {
         debugFlake << "Starting with SVG 1.1 specific portion";
@@ -1678,6 +1687,45 @@ QList<QPainterPath> KoSvgTextShape::Private::getShapes(QList<KoShape *> shapesIn
     }
     return shapes;
 }
+/**
+ * @brief calculateLineHeight
+ * calculate the total ascent and descent (including baseline-offset) of a charResult
+ * and optionally only return it if it is larger than the provided ascent and descent
+ * variable.
+ * This is necessary for proper line-height calculation.
+ * @param cr - char result with the data.
+ * @param ascent - output ascent variable.
+ * @param descent - output descent variable.
+ * @param isHorizontal - whether it is horizontal.
+ * @param compare - whether to only return the value if it is larger than the relative ascent or descent.
+ */
+void calculateLineHeight(CharacterResult cr, double &ascent, double &descent, bool isHorizontal, bool compare = false) {
+    double offset = isHorizontal? cr.baselineOffset.y(): cr.baselineOffset.x();
+    double offsetAsc = 0.0;
+    double offsetDsc = 0.0;
+    if (cr.ascent <= 0) {
+        offsetAsc = cr.ascent - cr.halfLeading;
+        offsetDsc = cr.descent + cr.halfLeading;
+    } else {
+        offsetAsc = cr.ascent + cr.halfLeading;
+        offsetDsc = cr.descent - cr.halfLeading;
+    }
+    offsetAsc += offset;
+    offsetDsc += offset;
+
+    if (!compare) {
+        ascent = offsetAsc;
+        descent = offsetDsc;
+    } else {
+        if (cr.ascent <= 0) {
+            ascent = qMin(offsetAsc, ascent);
+            descent = qMax(offsetDsc, descent);
+        } else {
+            ascent = qMax(offsetAsc, ascent);
+            descent = qMin(offsetDsc, descent);
+        }
+    }
+}
 
 /**
  * @brief addWordToLine
@@ -1688,7 +1736,8 @@ void addWordToLine(QVector<CharacterResult> &result,
                    QPointF &currentPos,
                    QVector<int> &wordIndices,
                    LineBox &currentLine,
-                   bool ltr)
+                   bool ltr,
+                   bool isHorizontal)
 {
     QPointF lineAdvance = currentPos;
 
@@ -1713,28 +1762,16 @@ void addWordToLine(QVector<CharacterResult> &result,
             }
 
             // Ensure that the first non-collapsed result will always set the line-top and bottom.
-            if (cr.ascent <= 0) {
-                currentLine.actualLineTop = cr.ascent-cr.halfLeading;
-                currentLine.actualLineBottom = cr.descent+cr.halfLeading;
-            } else {
-                currentLine.actualLineTop = cr.ascent+cr.halfLeading;
-                currentLine.actualLineBottom = cr.descent-cr.halfLeading;
-            }
+            calculateLineHeight(cr, currentLine.actualLineTop, currentLine.actualLineBottom, isHorizontal, false);
+        } else {
+            calculateLineHeight(cr, currentLine.actualLineTop, currentLine.actualLineBottom, isHorizontal, true);
         }
         cr.cssPosition = currentPos;
         currentPos += cr.advance;
         lineAdvance = currentPos;
 
         result[j] = cr;
-        currentChunk.boundingBox |= cr.boundingBox.translated(cr.cssPosition);
-
-        if (cr.ascent <= 0) {
-            currentLine.actualLineTop = qMin(cr.ascent-cr.halfLeading, currentLine.actualLineTop);
-            currentLine.actualLineBottom = qMax(cr.descent+cr.halfLeading, currentLine.actualLineBottom);
-        } else {
-            currentLine.actualLineTop = qMax(cr.ascent+cr.halfLeading, currentLine.actualLineTop);
-            currentLine.actualLineBottom = qMin(cr.descent-cr.halfLeading, currentLine.actualLineBottom);
-        }
+        currentChunk.boundingBox |= cr.boundingBox.translated(cr.cssPosition + cr.baselineOffset);
     }
     currentPos = lineAdvance;
     currentChunk.chunkIndices += wordIndices;
@@ -1768,18 +1805,13 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
         QVector<int> chunkIndices = currentLine.chunks[0].chunkIndices;
         if (chunkIndices.size() > 0) {
             CharacterResult cr = result[chunkIndices.first()];
-            if (cr.ascent <= 0) {
-                currentLine.actualLineTop = cr.ascent-cr.halfLeading;
-                currentLine.actualLineBottom = cr.descent+cr.halfLeading;
-            } else {
-                currentLine.actualLineTop = cr.ascent+cr.halfLeading;
-                currentLine.actualLineBottom = cr.descent-cr.halfLeading;
-            }
+            calculateLineHeight(cr, currentLine.actualLineTop, currentLine.actualLineBottom, writingMode == KoSvgText::HorizontalTB, false);
         }
     }
 
     qreal expectedLineTop = currentLine.actualLineTop > 0? qMax(currentLine.expectedLineTop, currentLine.actualLineTop):
                                                        qMin(currentLine.expectedLineTop, currentLine.actualLineTop);
+
     if (writingMode == KoSvgText::HorizontalTB) {
         currentLine.baselineTop = QPointF(0, currentLine.actualLineTop);
         currentLine.baselineBottom = QPointF(0, currentLine.actualLineBottom);
@@ -1787,17 +1819,17 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
         lineTop = -currentLine.baselineTop;
         lineBottom = currentLine.baselineBottom;
     } else if (writingMode == KoSvgText::VerticalLR) {
-        currentLine.baselineTop = QPointF(-currentLine.actualLineTop, 0);
-        currentLine.baselineBottom = QPointF(-currentLine.actualLineBottom, 0);
-        correctionOffset = QPointF(-expectedLineTop, 0);
-        // Note: while Vertical LR goes left-to-right in its lines, its lines themselves are
-        // oriented with the top pointed in the positive x direction.
-        lineTop = currentLine.baselineTop;
-        lineBottom = -currentLine.baselineBottom;
-    } else {
         currentLine.baselineTop = QPointF(currentLine.actualLineTop, 0);
         currentLine.baselineBottom = QPointF(currentLine.actualLineBottom, 0);
         correctionOffset = QPointF(expectedLineTop, 0);
+        // Note: while Vertical LR goes left-to-right in its lines, its lines themselves are
+        // oriented with the top pointed in the positive x direction.
+        lineBottom = currentLine.baselineTop;
+        lineTop = -currentLine.baselineBottom;
+    } else {
+        currentLine.baselineTop = QPointF(-currentLine.actualLineTop, 0);
+        currentLine.baselineBottom = QPointF(-currentLine.actualLineBottom, 0);
+        correctionOffset = QPointF(-expectedLineTop, 0);
         lineTop = currentLine.baselineTop;
         lineBottom = -currentLine.baselineBottom;
     }
@@ -1809,6 +1841,7 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
         Q_FOREACH(LineChunk chunk, currentLine.chunks) {
             Q_FOREACH (int j, chunk.chunkIndices) {
                 result[j].cssPosition += lineTop;
+                result[j].cssPosition += result[j].baselineOffset;
                 result[j].finalPosition = result.at(j).cssPosition;
             }
             chunk.length.translate(lineTop);
@@ -1819,6 +1852,7 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
         Q_FOREACH(LineChunk chunk, currentLine.chunks) {
             Q_FOREACH (int j, chunk.chunkIndices) {
                 result[j].cssPosition -= correctionOffset;
+                result[j].cssPosition +=  result[j].baselineOffset;
                 result[j].finalPosition = result.at(j).cssPosition;
             }
             chunk.length.translate(-correctionOffset);
@@ -2116,10 +2150,10 @@ QVector<LineBox> KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &
                 if (qRound((abs(lineLength) - inlineSize.customValue)) > 0) {
                     softBreak = true;
                 } else {
-                    addWordToLine(result, currentPos, wordIndices, currentLine, ltr);
+                    addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);
                 }
             } else {
-                addWordToLine(result, currentPos, wordIndices, currentLine, ltr);
+                addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);
             }
         }
 
@@ -2157,7 +2191,7 @@ QVector<LineBox> KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &
                         if (wordLength <= inlineSize.customValue) {
                             partialWord.append(i);
                         } else {
-                            addWordToLine(result, currentPos, partialWord, currentLine, ltr);
+                            addWordToLine(result, currentPos, partialWord, currentLine, ltr, isHorizontal);
 
                             finalizeLine(result,
                                          currentPos,
@@ -2180,7 +2214,7 @@ QVector<LineBox> KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &
                     wordIndices = partialWord;
                 }
             }
-            addWordToLine(result, currentPos, wordIndices, currentLine, ltr);
+            addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);
         }
 
         if (charResult.breakType == HardBreak) {
@@ -2203,7 +2237,7 @@ QVector<LineBox> KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &
 
         if (currentLine.lastLine) {
             if (!wordIndices.isEmpty()) {
-                addWordToLine(result, currentPos, wordIndices, currentLine, ltr);
+                addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);
             }
             finalizeLine(result,
                          currentPos,
@@ -2507,8 +2541,8 @@ QVector<QLineF> findLineBoxesForFirstPos(QPainterPath shape, QPointF firstPos, Q
 void getEstimatedHeight(QVector<CharacterResult> &result, int index, QRectF &wordBox, QRectF boundingBox, KoSvgText::WritingMode writingMode) {
     bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
     QPointF totalAdvance = wordBox.bottomRight() - wordBox.topLeft();
-    qreal maxAscent = isHorizontal? fabs(wordBox.top()): fabs(wordBox.right());
-    qreal maxDescent = isHorizontal? fabs(wordBox.bottom()): fabs(wordBox.left());
+    qreal maxAscent = isHorizontal? wordBox.top(): wordBox.right();
+    qreal maxDescent = isHorizontal? wordBox.bottom(): wordBox.left();
 
     for (int i=index; i<result.size(); i++) {
         if (!result.at(i).addressable || result.at(i).hidden) {
@@ -2519,16 +2553,15 @@ void getEstimatedHeight(QVector<CharacterResult> &result, int index, QRectF &wor
                 (totalAdvance.y() > boundingBox.height() && !isHorizontal)) {
             break;
         }
-        maxAscent = qMax(fabs(result.at(i).ascent-result.at(i).halfLeading), maxAscent);
-        maxDescent = qMax(fabs(result.at(i).descent+result.at(i).halfLeading), maxDescent);
+        calculateLineHeight(result.at(i), maxAscent, maxDescent, isHorizontal, true);
     }
     if (writingMode == KoSvgText::HorizontalTB) {
-        wordBox.setTop(-maxAscent);
+        wordBox.setTop(maxAscent);
         wordBox.setBottom(maxDescent);
     } else {
         // vertical lr has top at the right even though block flow is also to the right.
         wordBox.setRight(maxAscent);
-        wordBox.setLeft(-maxDescent);
+        wordBox.setLeft(maxDescent);
     }
 }
 
@@ -2601,10 +2634,10 @@ QVector<LineBox> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProper
              && !(currentLine.isEmpty() && wordIndices.isEmpty()));
         if (!doNotCountAdvance) {
             if (wordIndices.isEmpty()) {
-                wordBox = charResult.boundingBox;
+                wordBox = charResult.boundingBox.translated(charResult.baselineOffset);
                 wordAdvance = charResult.advance;
             } else {
-                wordBox |= charResult.boundingBox.translated(wordAdvance);
+                wordBox |= charResult.boundingBox.translated(wordAdvance+charResult.baselineOffset);
                 wordAdvance += charResult.advance;
             }
         }
@@ -2642,7 +2675,7 @@ QVector<LineBox> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProper
                     }
                 } else {
                     currentLine.currentChunk = i;
-                    addWordToLine(result, currentPos, wordIndices, currentLine, ltr);
+                    addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);
                     break;
                 }
             }
@@ -2722,7 +2755,7 @@ QVector<LineBox> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProper
                 currentLine.justifyLine = align == KoSvgText::AlignJustify;
                 currentPos = currentLine.chunk().length.p1() + indent;
                 lineOffset = currentPos;
-                addWordToLine(result, currentPos, wordIndices, currentLine, ltr);
+                addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);
             } else {
                 currentLine = LineBox();
                 Q_FOREACH (const int j, wordIndices) {
@@ -2867,7 +2900,6 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     QPointF superScript,
     QPointF subScript,
     QVector<CharacterResult> &result,
-    QVector<LineBox> lineBoxes,
     int &currentIndex,
     qreal res,
     bool isHorizontal)
@@ -2891,7 +2923,8 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     } else if (baselineShiftMode == KoSvgText::ShiftSub) {
         baselineShiftTotal = isHorizontal ? subScript : QPointF(-subScript.y(), subScript.x());
     } else if (baselineShiftMode == KoSvgText::ShiftPercentage) {
-        baselineShiftTotal = isHorizontal ? QPointF(0, baselineShift) : QPointF(-baselineShift, 0);
+        // Positive baseline-shift goes up in the inline-direction, which is up in horizontal and right in vertical.
+        baselineShiftTotal = isHorizontal ? QPointF(0, -baselineShift) : QPointF(baselineShift, 0);
     }
 
     QVector<int> lengths;
@@ -3052,7 +3085,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     }
 
     Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-        computeFontMetrics(child, baselineTable, fontSize, newSuperScript, newSubScript, result, lineBoxes, currentIndex, res, isHorizontal);
+        computeFontMetrics(child, baselineTable, fontSize, newSuperScript, newSubScript, result, currentIndex, res, isHorizontal);
     }
 
     KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.property(KoSvgTextProperties::AlignmentBaselineId).toInt());
@@ -3079,17 +3112,9 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     }
 
     const int offset = parentBaselineTable.value(baselineAdjust, 0) - baselineTable.value(baselineAdjust, 0);
-    QPointF shift;
-    if (baselineAdjust == KoSvgText::BaselineTextTop) {
-        qreal height;
-        shift = relevantLine.baselineTop;
-        for (int k = i; k < j; k++) {
-            height  = qMax(height, result[k].boundingBox.height());
-        }
-        shift += isHorizontal? QPointF(0, height):QPointF(height, 0);
-    } else if (baselineAdjust == KoSvgText::BaselineTextBottom) {
-        shift = relevantLine.baselineBottom;
-    } else {
+    QPointF shift = QPointF();
+
+    if (baselineAdjust != KoSvgText::BaselineTextTop && baselineAdjust != KoSvgText::BaselineTextBottom) {
         if (isHorizontal) {
             shift = QPointF(0, offset * -freetypePixelsToPt);
         } else {
@@ -3098,6 +3123,51 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     }
 
     shift += baselineShiftTotal;
+
+    for (int k = i; k < j; k++) {
+        result[k].baselineOffset += shift;
+    }
+
+    currentIndex = j;
+}
+
+void KoSvgTextShape::Private::handleLineBoxAlignment(const KoShape *rootShape,
+                        QVector<CharacterResult> &result, QVector<LineBox> lineBoxes,
+                        int &currentIndex,
+                            bool isHorizontal) {
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
+
+    const int i = currentIndex;
+    const int j = qMin(i + chunkShape->layoutInterface()->numChars(true), result.size());
+
+    KoSvgTextProperties properties = chunkShape->textProperties();
+    KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.property(KoSvgTextProperties::AlignmentBaselineId).toInt());
+
+    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+        handleLineBoxAlignment(child, result, lineBoxes, currentIndex, isHorizontal);
+    }
+    LineBox relevantLine;
+    Q_FOREACH(LineBox lineBox, lineBoxes) {
+        Q_FOREACH(LineChunk chunk, lineBox.chunks) {
+            if (chunk.chunkIndices.contains(i)) {
+                relevantLine = lineBox;
+            }
+        }
+    }
+    QPointF shift = QPointF();
+    if (baselineAdjust == KoSvgText::BaselineTextTop) {
+        // The height calculation here is to remove the shifted-part height
+        // from the top of the line.
+        qreal height;
+        shift = relevantLine.baselineTop;
+        for (int k = i; k < j; k++) {
+            height  = qMax(height, result[k].boundingBox.height());
+        }
+        shift += isHorizontal? QPointF(0, height):QPointF(height, 0);
+    } else if (baselineAdjust == KoSvgText::BaselineTextBottom) {
+        shift = relevantLine.baselineBottom;
+    }
 
     for (int k = i; k < j; k++) {
         CharacterResult cr = result[k];

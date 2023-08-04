@@ -10,6 +10,7 @@
 #include <QMap>
 
 #include <QElapsedTimer>
+#include <QWaitCondition>>
 
 #include "kis_canvas2.h"
 #include "KisCanvasAnimationState.h"

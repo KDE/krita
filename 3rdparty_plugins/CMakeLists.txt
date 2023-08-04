@@ -103,7 +103,7 @@ elseif (MSVC)
 endif ()
 
 if (WIN32)
-   set(PATCH_COMMAND myptch)
+   set(PATCH_COMMAND patch)
 endif()
 
 if (APPLE)

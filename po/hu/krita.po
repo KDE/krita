@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-03 00:44+0000\n"
+"POT-Creation-Date: 2023-08-04 00:43+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -31993,11 +31993,6 @@ msgstr "Nyelv:"
 #: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid "English news is always up to date."
-msgstr ""
-
-#: libs/ui/KisWelcomePageWidget.cpp:428
-#, kde-format
-msgid "Get your Krita Supporter Badge here!"
 msgstr ""
 
 #: libs/ui/KisWelcomePageWidget.cpp:656

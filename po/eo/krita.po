@@ -42,8 +42,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-03 00:44+0000\n"
-"PO-Revision-Date: 2023-08-01 23:56+0100\n"
+"POT-Creation-Date: 2023-08-04 00:43+0000\n"
+"PO-Revision-Date: 2023-08-03 06:41+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -31346,11 +31346,6 @@ msgstr "Lingvo"
 msgid "English news is always up to date."
 msgstr "Anglaj novaĵoj ĉiam estas ĝisdatigitaj."
 
-#: libs/ui/KisWelcomePageWidget.cpp:428
-#, kde-format
-msgid "Get your Krita Supporter Badge here!"
-msgstr "Akiru vian Krita Subtenantan Insignon ĉi tie!"
-
 #: libs/ui/KisWelcomePageWidget.cpp:656
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
@@ -58286,7 +58281,7 @@ msgstr "Simila Kolora Elekta Ilo"
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
-msgstr ""
+msgstr "Alĝustigi aŭtovolvadon de teksto"
 
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
 msgctxt "(qtundo-format)"
@@ -58365,15 +58360,13 @@ msgstr "Linia alteco"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1612
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1621
-#, fuzzy, kde-format
-#| msgid "Normal"
+#, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Normala"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1625
-#, fuzzy, kde-format
-#| msgid "100%"
+#, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr "100%"
@@ -58772,7 +58765,7 @@ msgstr "Kerning"
 #, kde-format
 msgctxt "action"
 msgid "Legacy Hard Wrap"
-msgstr ""
+msgstr "Hereda Fiksa Volvado"
 
 #. i18n: context: toolTip @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:268
@@ -58782,6 +58775,9 @@ msgid ""
 "Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
 "are explicitly positioned, but the line height may be slightly inaccurate."
 msgstr ""
+"Uzi heredan fiks-volvan reĝimon (saman kiel Krita 5.1 kaj pli frue). Ĉiuj "
+"linioj estas eksplicite poziciigitaj, sed la linia alteco povas esti iomete "
+"malpreciza."
 
 #. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -58871,7 +58867,7 @@ msgstr "&Pezo"
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:107
 #, kde-format
 msgid "Text W&rapping"
-msgstr ""
+msgstr "Teksta V&olvado"
 
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:87
 #, kde-format
@@ -60470,3 +60466,6 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
+
+#~ msgid "Get your Krita Supporter Badge here!"
+#~ msgstr "Akiru vian Krita Subtenantan Insignon ĉi tie!"

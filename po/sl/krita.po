@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-03 00:44+0000\n"
+"POT-Creation-Date: 2023-08-04 00:43+0000\n"
 "PO-Revision-Date: 2023-08-01 10:31+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -31340,11 +31340,6 @@ msgstr "Jezik"
 msgid "English news is always up to date."
 msgstr "Angleške novice so vedno posodobljene."
 
-#: libs/ui/KisWelcomePageWidget.cpp:428
-#, kde-format
-msgid "Get your Krita Supporter Badge here!"
-msgstr "Pridobite svojo značko podpornika Krite tukaj!"
-
 #: libs/ui/KisWelcomePageWidget.cpp:656
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
@@ -60527,3 +60522,6 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
+
+#~ msgid "Get your Krita Supporter Badge here!"
+#~ msgstr "Pridobite svojo značko podpornika Krite tukaj!"

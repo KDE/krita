@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-03 00:44+0000\n"
+"POT-Creation-Date: 2023-08-04 00:43+0000\n"
 "PO-Revision-Date: 2023-08-01 13:34+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -31095,11 +31095,6 @@ msgstr "語言"
 msgid "English news is always up to date."
 msgstr "英文新聞永遠是最更新的。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:428
-#, kde-format
-msgid "Get your Krita Supporter Badge here!"
-msgstr "在此取得您的 Krita 支持者徽章！"
-
 #: libs/ui/KisWelcomePageWidget.cpp:656
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
@@ -59729,6 +59724,9 @@ msgstr "縮放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "參考圖工具"
+
+#~ msgid "Get your Krita Supporter Badge here!"
+#~ msgstr "在此取得您的 Krita 支持者徽章！"
 
 #~ msgid "Drag an image into the window to open"
 #~ msgstr "將影像拖進視窗即可開啟"

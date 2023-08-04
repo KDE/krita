@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-03 00:44+0000\n"
+"POT-Creation-Date: 2023-08-04 00:43+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -31063,11 +31063,6 @@ msgstr "พอดีกับหน้า"
 #: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid "English news is always up to date."
-msgstr ""
-
-#: libs/ui/KisWelcomePageWidget.cpp:428
-#, kde-format
-msgid "Get your Krita Supporter Badge here!"
 msgstr ""
 
 #: libs/ui/KisWelcomePageWidget.cpp:656

@@ -52,8 +52,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-03 00:44+0000\n"
-"PO-Revision-Date: 2023-08-01 08:19+0200\n"
+"POT-Creation-Date: 2023-08-04 00:43+0000\n"
+"PO-Revision-Date: 2023-08-03 07:28+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -31362,11 +31362,6 @@ msgstr "Språk"
 msgid "English news is always up to date."
 msgstr "Nyheter på engelska är alltid aktuella."
 
-#: libs/ui/KisWelcomePageWidget.cpp:428
-#, kde-format
-msgid "Get your Krita Supporter Badge here!"
-msgstr "Skaffa ditt eget Krita supportermärke här!"
-
 #: libs/ui/KisWelcomePageWidget.cpp:656
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
@@ -58323,7 +58318,7 @@ msgstr "Liknande färgmarkeringsverktyg"
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
-msgstr ""
+msgstr "Justera automatisk radbrytning av text"
 
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
 msgctxt "(qtundo-format)"
@@ -58402,15 +58397,13 @@ msgstr "Radhöjd"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1612
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1621
-#, fuzzy, kde-format
-#| msgid "Normal"
+#, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Normal"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1625
-#, fuzzy, kde-format
-#| msgid "100%"
+#, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr "100 %"
@@ -58811,7 +58804,7 @@ msgstr "Kerning"
 #, kde-format
 msgctxt "action"
 msgid "Legacy Hard Wrap"
-msgstr ""
+msgstr "Äldre hård radbrytning"
 
 #. i18n: context: toolTip @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:268
@@ -58821,6 +58814,8 @@ msgid ""
 "Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
 "are explicitly positioned, but the line height may be slightly inaccurate."
 msgstr ""
+"Använd äldre hård radbrytning (samma som Krita 5.1 och tidigare). Varje rad "
+"placeras explicit, men radhöjden kan vara något felaktig."
 
 #. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -58831,14 +58826,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "SVG Hard Wrap"
-msgstr ""
+msgstr "SVG hård radbrytning"
 
 #. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:278
 #, kde-format
 msgctxt "action"
 msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
-msgstr ""
+msgstr "Använd SVG CSS `white-space: pre` hård radbrytning"
 
 #. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -58849,7 +58844,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "SVG Auto Wrap with Fixed Width"
-msgstr ""
+msgstr "SVG automatisk radbrytning med fast bredd"
 
 #. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:288
@@ -58859,6 +58854,8 @@ msgid ""
 "Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
 "defining the text width."
 msgstr ""
+"Använd SVG CSS `white-space: pre` hård radbrytning, med `inline-size` som "
+"definierar textbredden."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:149
 #, kde-format
@@ -58908,10 +58905,9 @@ msgstr "&Vikt"
 
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:63
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:107
-#, fuzzy, kde-format
-#| msgid "Text editing"
+#, kde-format
 msgid "Text W&rapping"
-msgstr "Textredigering"
+msgstr "&Radbrytning av text"
 
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:87
 #, kde-format
@@ -60512,6 +60508,9 @@ msgstr "Zoomverktyg"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referensbildverktyg"
+
+#~ msgid "Get your Krita Supporter Badge here!"
+#~ msgstr "Skaffa ditt eget Krita supportermärke här!"
 
 #~ msgid "&Canvas"
 #~ msgstr "&Duk"

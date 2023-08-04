@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-03 00:44+0000\n"
+"POT-Creation-Date: 2023-08-04 00:43+0000\n"
 "PO-Revision-Date: 2023-06-06 00:31-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -31619,11 +31619,6 @@ msgstr "言語"
 msgid "English news is always up to date."
 msgstr "英語のお知らせが更新されています"
 
-#: libs/ui/KisWelcomePageWidget.cpp:428
-#, kde-format
-msgid "Get your Krita Supporter Badge here!"
-msgstr "あなたの支援者の証はここにあります!"
-
 #: libs/ui/KisWelcomePageWidget.cpp:656
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
@@ -61048,6 +61043,9 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
+
+#~ msgid "Get your Krita Supporter Badge here!"
+#~ msgstr "あなたの支援者の証はここにあります!"
 
 #~ msgid "Drag an image into the window to open"
 #~ msgstr "ウィンドウに画像をドラッグして開く"

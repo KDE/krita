@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-03 00:44+0000\n"
-"PO-Revision-Date: 2023-08-01 16:42+0200\n"
+"POT-Creation-Date: 2023-08-04 00:43+0000\n"
+"PO-Revision-Date: 2023-08-03 10:29+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -9000,7 +9000,7 @@ msgid ""
 "if already disabled"
 msgstr ""
 "Desactiva el contorn del pinzell, o activa la forma del contorn del pinzell "
-"utilitzat prèviament si ja està desactivat."
+"utilitzat prèviament si ja està desactivat"
 
 #. i18n: context: text @ Action (selection_tool_mode_add), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (selection_tool_mode_add), Actions (Painting), ActionCollection (Krita)
@@ -17775,6 +17775,7 @@ msgstr ""
 "La imatge conté metadades <b>Exif</b> i múltiples capes. Només es desaran "
 "les metadades <b>en la primera capa</b>."
 
+# skip-rule: punctuation-period-no
 #: libs/impex/FillLayerTypeCheck.h:92
 #, kde-format
 msgctxt "image conversion warning"
@@ -20479,6 +20480,7 @@ msgstr ""
 "Cal que el FFmpeg tingui almenys la versió 4.2+ perquè funcioni la "
 "transparència en els GIF"
 
+# skip-rule: punctuation-period-no
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
 #, kde-format
 msgctxt "ffmpeg warning checks"
@@ -21945,7 +21947,7 @@ msgstr "Ubicació del FFmpeg:"
 #: libs/ui/animation/wdg_animationrenderer.ui:249
 #, kde-format
 msgid "FFmpeg version:"
-msgstr "Versió del FFmpeg: "
+msgstr "Versió del FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -26474,7 +26476,7 @@ msgstr "Usa el color de fons i l'opacitat per a crear una capa ràster de fons."
 msgid "As &raster layer"
 msgstr "Com a capa &ràster"
 
-# skip-rule: rst-link0italic,rst-italic2
+# skip-rule: rst-link0italic,rst-italic2,punctuation-period-no
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:567
 #, kde-format
@@ -27773,7 +27775,7 @@ msgid ""
 "hardware-dependent"
 msgstr ""
 "La quantitat de suavitzat que haurà de fer el Krita per al sensor de "
-"velocitat. Aquest valor depèn molt del maquinari."
+"velocitat. Aquest valor depèn molt del maquinari"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTabletTest)
 #: libs/ui/forms/wdgtabletsettings.ui:220
@@ -29327,7 +29329,7 @@ msgstr "La capa està bloquejada"
 #: libs/ui/kis_node_manager.cpp:455 libs/ui/kis_node_manager.cpp:480
 #, kde-format
 msgid "Layer \"%1\" is locked"
-msgstr "La capa «%1» està bloquejada."
+msgstr "La capa «%1» està bloquejada"
 
 #: libs/ui/kis_node_manager.cpp:508
 msgctxt "(qtundo-format)"
@@ -31434,11 +31436,6 @@ msgstr "Idioma"
 msgid "English news is always up to date."
 msgstr "Les notícies en anglès sempre estan actualitzades."
 
-#: libs/ui/KisWelcomePageWidget.cpp:428
-#, kde-format
-msgid "Get your Krita Supporter Badge here!"
-msgstr "Obteniu aquí el distintiu de col·laborador amb el Krita!"
-
 #: libs/ui/KisWelcomePageWidget.cpp:656
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
@@ -32497,7 +32494,7 @@ msgid ""
 "selection instead"
 msgstr ""
 "La selecció amb formes no accepta completament el mode d'ajust cíclic. En el "
-"seu lloc, useu el mode de selecció amb píxels."
+"seu lloc, useu el mode de selecció amb píxels"
 
 #: libs/ui/tool/kis_selection_tool_helper.cpp:346
 #, kde-format
@@ -44377,12 +44374,14 @@ msgstr "Lluminositat (ITU-R BT.&601)"
 msgid "&Average"
 msgstr "Mitj&ana"
 
+# skip-rule: punctuation-period-no
 #. i18n: ectx: property (text), widget (QRadioButton, radioMin)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:82
 #, kde-format
 msgid "&Min"
 msgstr "&Mín."
 
+# skip-rule: punctuation-period-no
 #. i18n: ectx: property (text), widget (QRadioButton, radioMax)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:89
 #, kde-format
@@ -50280,7 +50279,7 @@ msgid ""
 "Using a predictor can improve the compression (mostly for LZW and deflate.)"
 msgstr ""
 "Usant un predictor es pot millorar la compressió (principalment per a LZW i "
-"«deflate»)."
+"«deflate»)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkPhotoshop)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:79
@@ -53020,7 +53019,7 @@ msgid ""
 msgstr ""
 "La lluminositat de la imatge de la punta de pinzell que s'usa com a "
 "correcció de la claredat per al color del pintat. El canal alfa de la imatge "
-"de la punta del pinzell s'usa com a l'alfa del traç final."
+"de la punta del pinzell s'usa com a l'alfa del traç final"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:35
 #, kde-format
@@ -53031,7 +53030,7 @@ msgid ""
 msgstr ""
 "La punta de pinzell mapa el seu valor al degradat actualment seleccionat. El "
 "canal alfa de la imatge de la punta del pinzell s'usa com a l'alfa del traç "
-"final."
+"final"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
 #, kde-format
@@ -58551,7 +58550,7 @@ msgstr "Eina de selecció de colors similars"
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
-msgstr ""
+msgstr "Ajust automàtic de l'ajust de text"
 
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
 msgctxt "(qtundo-format)"
@@ -58630,15 +58629,13 @@ msgstr "Alçada de la línia"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1612
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1621
-#, fuzzy, kde-format
-#| msgid "Normal"
+#, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Normal"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1625
-#, fuzzy, kde-format
-#| msgid "100%"
+#, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr "100%"
@@ -59037,7 +59034,7 @@ msgstr "Entre les lletres"
 #, kde-format
 msgctxt "action"
 msgid "Legacy Hard Wrap"
-msgstr ""
+msgstr "Ajust intens antic"
 
 #. i18n: context: toolTip @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:268
@@ -59047,6 +59044,9 @@ msgid ""
 "Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
 "are explicitly positioned, but the line height may be slightly inaccurate."
 msgstr ""
+"Fa servir el mode d'ajust intens antic (el mateix que el Krita 5.1 i "
+"anteriors). Cada línia es posiciona explícitament, però l'alçada de la línia "
+"pot ser lleugerament imprecisa."
 
 #. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59057,14 +59057,15 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "SVG Hard Wrap"
-msgstr ""
+msgstr "Ajust intens de SVG"
 
+# skip-rule: t-acc_obe
 #. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:278
 #, kde-format
 msgctxt "action"
 msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
-msgstr ""
+msgstr "Usa el mode d'ajust intens CSS `white-space: pre` de SVG."
 
 #. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59075,8 +59076,9 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "SVG Auto Wrap with Fixed Width"
-msgstr ""
+msgstr "Ajust automàtic de SVG amb amplada fixa"
 
+# skip-rule: t-acc_obe
 #. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:288
 #, kde-format
@@ -59085,6 +59087,8 @@ msgid ""
 "Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
 "defining the text width."
 msgstr ""
+"Usa el mode d'ajust CSS `white-space: pre-wrap` de SVG, amb `inline-size` "
+"definint l'amplada del text."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:149
 #, kde-format
@@ -59136,7 +59140,7 @@ msgstr "&Gruix"
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:107
 #, kde-format
 msgid "Text W&rapping"
-msgstr ""
+msgstr "A&just del text"
 
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:87
 #, kde-format
@@ -59720,6 +59724,7 @@ msgstr ""
 msgid "Clean up: "
 msgstr "Neteja: "
 
+# skip-rule: punctuation-period-no
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:127
 #, kde-format
 msgctxt "@info:tooltip"
@@ -59728,7 +59733,7 @@ msgid ""
 "the closed contours. 0% - no effect, 100% - max effect"
 msgstr ""
 "La màscara intentarà eliminar parts dels traços clau que estan situats fora "
-"dels contorns tancats. 0%: sense efecte, 100%: efecte màx."
+"dels contorns tancats. 0%: sense efecte, 100%: efecte màx"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdates)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:23
@@ -60744,59 +60749,5 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
 
-#~ msgid "Drag an image into the window to open"
-#~ msgstr "Arrossegueu una imatge fins a la finestra per a obrir-la"
-
-#~ msgid "New File"
-#~ msgstr "Fitxer nou"
-
-#~ msgid "Recent Documents"
-#~ msgstr "Documents recents"
-
-#~ msgid ""
-#~ "⚠ Unsupported color space.\n"
-#~ "Only \"RGB/Alpha 8-bit\" is supported."
-#~ msgstr ""
-#~ "⚠ Espai de color no acceptat.\n"
-#~ "Només s'accepta «RGB/Alpha de 8 bits»."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "Inclina X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "Inclina Y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "Escala"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "Reinicia les transformacions"
-
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
-#~ "Animated exports are <span style=\" font-weight:600;\">always</span> "
-#~ "flattened regardless of this setting.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Nota:</span> Les "
-#~ "exportacions d'animacions <span style=\" font-weight:600;\">sempre</span> "
-#~ "s'aplanaran independentment d'aquesta configuració.</p></body></html>"
-
-#~ msgctxt "paletegen status mode option name"
-#~ msgid "Difference"
-#~ msgstr "Diferència"
-
-#~ msgctxt "paleteuse dither option name"
-#~ msgid "none"
-#~ msgstr "Cap"
-
-#~ msgctxt "paleteuse diff mode option name"
-#~ msgid "none"
-#~ msgstr "Cap"
-
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "&Filtre:"
+#~ msgid "Get your Krita Supporter Badge here!"
+#~ msgstr "Obteniu aquí el distintiu de col·laborador amb el Krita!"

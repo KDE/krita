@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-03 00:44+0000\n"
+"POT-Creation-Date: 2023-08-04 00:43+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -31599,11 +31599,6 @@ msgstr "Teanga"
 #: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid "English news is always up to date."
-msgstr ""
-
-#: libs/ui/KisWelcomePageWidget.cpp:428
-#, kde-format
-msgid "Get your Krita Supporter Badge here!"
 msgstr ""
 
 #: libs/ui/KisWelcomePageWidget.cpp:656

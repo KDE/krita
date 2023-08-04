@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-03 00:44+0000\n"
+"POT-Creation-Date: 2023-08-04 00:43+0000\n"
 "PO-Revision-Date: 2023-07-28 17:15+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -31460,11 +31460,6 @@ msgstr "Lingua"
 msgid "English news is always up to date."
 msgstr "Le novità in lingua inglese sono sempre aggiornate."
 
-#: libs/ui/KisWelcomePageWidget.cpp:428
-#, kde-format
-msgid "Get your Krita Supporter Badge here!"
-msgstr "Scarica qui il tuo tesserino di sostenitore Krita!"
-
 #: libs/ui/KisWelcomePageWidget.cpp:656
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
@@ -60815,6 +60810,9 @@ msgstr "Strumento Ingrandimento"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Strumento Immagini di riferimento"
+
+#~ msgid "Get your Krita Supporter Badge here!"
+#~ msgstr "Scarica qui il tuo tesserino di sostenitore Krita!"
 
 #~ msgid "Drag an image into the window to open"
 #~ msgstr "Trascina un'immagine nella finestra da aprire"

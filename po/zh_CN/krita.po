@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-03 00:44+0000\n"
+"POT-Creation-Date: 2023-08-04 00:43+0000\n"
 "PO-Revision-Date: 2023-08-02 12:39\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -31092,11 +31092,6 @@ msgstr "语言"
 msgid "English news is always up to date."
 msgstr "英文资讯内容更加及时和齐全。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:428
-#, kde-format
-msgid "Get your Krita Supporter Badge here!"
-msgstr "获取 Krita 支持者徽章"
-
 #: libs/ui/KisWelcomePageWidget.cpp:656
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
@@ -59730,3 +59725,6 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
+
+#~ msgid "Get your Krita Supporter Badge here!"
+#~ msgstr "获取 Krita 支持者徽章"

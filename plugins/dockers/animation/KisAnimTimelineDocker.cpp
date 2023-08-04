@@ -506,7 +506,7 @@ void KisAnimTimelineDocker::updatePlaybackStatistics()
     const bool shouldDropFrames = cfg.animationDropFrames();
 
     QAction *action = m_d->titlebar->btnDropFrames->defaultAction();
-    const bool droppingFrames = shouldDropFrames && framesDropped > 0.05;
+    const bool droppingFrames = framesDropped > 0.05;
     action->setIcon(KisIconUtils::loadIcon(droppingFrames ? "droppedframes" : "dropframe"));
 
     QString actionText;

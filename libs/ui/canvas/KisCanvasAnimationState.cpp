@@ -90,11 +90,8 @@ public:
     CanvasPlaybackEnvironment(int originFrame, KisCanvasAnimationState* parent = nullptr)
         : QObject(parent)
         , m_originFrame(originFrame)
-        , m_statsTimer(new QTimer(this))
     {
         connect(&m_cancelTrigger, SIGNAL(output()), parent, SIGNAL(sigCancelPlayback()));
-        connect(m_statsTimer, SIGNAL(timeout()), SIGNAL(sigPlaybackStatisticsUpdated()));
-        m_statsTimer->setInterval(1000);
     }
 
     ~CanvasPlaybackEnvironment() {
@@ -174,9 +171,6 @@ public:
                     canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
                     &m_cancelTrigger, SLOT(tryFire()));
         }
-
-        m_statsTimer->start();
-        Q_EMIT sigPlaybackStatisticsUpdated();
     }
 
     void restore() {
@@ -212,7 +206,6 @@ private:
     KisCanvas2* m_canvas;
 
     KisTimeSpan m_playbackRange;
-    QTimer *m_statsTimer;
 };
 
 // Needed for QObject definition outside of header file.
@@ -225,8 +218,8 @@ public:
         : canvas(p_canvas)
         , displayProxy( new KisFrameDisplayProxy(p_canvas) )
         , playbackEnvironment( nullptr )
-        , playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
     {
+        m_statsTimer.setInterval(1000);
     }
 
     KisCanvas2 *canvas;
@@ -235,7 +228,8 @@ public:
     QScopedPointer<QFileInfo> media; // TODO: Should we just get this from the document instead?
     QScopedPointer<CanvasPlaybackEnvironment> playbackEnvironment;
 
-    KisSignalCompressor playbackStatisticsCompressor;
+    QTimer m_statsTimer;
+
 };
 
 KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
@@ -262,6 +256,8 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
 
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioTracksChanged, this, &KisCanvasAnimationState::setupAudioTracks);
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioLevelChanged, this, &KisCanvasAnimationState::sigAudioLevelChanged);
+    connect(&m_d->m_statsTimer, SIGNAL(timeout()), this, SIGNAL(sigPlaybackStatisticsUpdated()));
+
     setupAudioTracks();
 }
 
@@ -359,6 +355,10 @@ void KisCanvasAnimationState::setPlaybackState(PlaybackState p_state)
             }
 
             m_d->playbackEnvironment->prepare(m_d->canvas);
+
+            m_d->m_statsTimer.start();
+            Q_EMIT sigPlaybackStatisticsUpdated();
+
         } else {
             if (m_d->playbackEnvironment) {
                 m_d->playbackEnvironment->restore();
@@ -367,6 +367,9 @@ void KisCanvasAnimationState::setPlaybackState(PlaybackState p_state)
             if (m_d->state == STOPPED) {
                 m_d->playbackEnvironment.reset();
             }
+
+            m_d->m_statsTimer.stop();
+            Q_EMIT sigPlaybackStatisticsUpdated();
         }
 
         emit sigPlaybackStateChanged(m_d->state);

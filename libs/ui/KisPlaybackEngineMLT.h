@@ -43,24 +43,24 @@ Q_SIGNALS:
     void sigChangeActiveCanvasFrame(int p_frame);
 
 public Q_SLOTS:
-    virtual void seek(int frameIndex, SeekOptionFlags flags = SEEK_FINALIZE | SEEK_PUSH_AUDIO) override;
+    void seek(int frameIndex, SeekOptionFlags flags = SEEK_FINALIZE | SEEK_PUSH_AUDIO) override;
 
-    virtual void setPlaybackSpeedPercent(int value) override;
-    virtual void setPlaybackSpeedNormalized(double value) override;
+    void setPlaybackSpeedPercent(int value) override;
+    void setPlaybackSpeedNormalized(double value) override;
 
-    virtual void setMute(bool val) override;
-    virtual bool isMute() override;
+    void setMute(bool val) override;
+    bool isMute() override;
 
-    virtual bool supportsAudio() override { return true; }
-    virtual bool supportsVariablePlaybackSpeed() override { return true; }
+    bool supportsAudio() override { return true; }
+    bool supportsVariablePlaybackSpeed() override { return true; }
 
     void setDropFramesMode(bool value) override;
 
     PlaybackStats playbackStatistics() const override;
 
 protected Q_SLOTS:
-    virtual void setCanvas(KoCanvasBase* canvas) override;
-    virtual void unsetCanvas() override;
+    void setCanvas(KoCanvasBase* canvas) override;
+    void unsetCanvas() override;
     void canvasDestroyed(QObject *canvas);
 
     /**

@@ -9,6 +9,8 @@
 
 #include <QMap>
 
+#include <QElapsedTimer>
+
 #include "kis_canvas2.h"
 #include "KisCanvasAnimationState.h"
 #include "kis_image_animation_interface.h"
@@ -24,6 +26,9 @@
 #include <mlt++/MltFilter.h>
 #include <mlt-7/framework/mlt_service.h>
 
+#include "KisRollingMeanAccumulatorWrapper.h"
+#include "KisRollingSumAccumulatorWrapper.h"
+
 #ifdef Q_OS_ANDROID
 #include <KisAndroidFileProxy.h>
 #endif
@@ -32,7 +37,32 @@
 
 const float SCRUB_AUDIO_SECONDS = 0.128f;
 
+struct KisPlaybackEngineMLT::FrameWaitingInterface {
+    bool renderingAllowed {false};
+    bool waitingForFrame {false};
+    QMutex renderingControlMutex;
+    QWaitCondition renderingWaitCondition;
+};
 
+namespace {
+
+struct FrameRenderingStats
+{
+    static constexpr int frameStatsWindow = 50;
+
+    KisRollingMeanAccumulatorWrapper averageFrameDuration {frameStatsWindow};
+    KisRollingSumAccumulatorWrapper droppedFramesCount {frameStatsWindow};
+    int lastRenderedFrame {-1};
+    QElapsedTimer timeSinceLastFrame;
+
+    void reset() {
+        averageFrameDuration.reset(frameStatsWindow);
+        droppedFramesCount.reset(frameStatsWindow);
+        lastRenderedFrame = -1;
+    }
+};
+
+}
 /**
  *  This static funciton responds to MLT consumer requests for frames. This may
  *  continue to be called even when playback is stopped due to it running
@@ -43,7 +73,32 @@ static void mltOnConsumerFrameShow(mlt_consumer c, void* p_self, mlt_frame p_fra
     Mlt::Frame frame(p_frame);
     Mlt::Consumer consumer(c);
     const int position = frame.get_position();
+
+    KisPlaybackEngineMLT::FrameWaitingInterface *iface = self->frameWaitingInterface();
+
+    /**
+     * This function is called from the non-gui thread owned by MLT,
+     * so we should wait until the frame would be really rendered.
+     * This way MLT will have information about frame rendering speed
+     * and will be able to drop frames accordingly.
+     *
+     * NOTE: we cannot use BlockingQueuedConnection here because it
+     * would deadlock on any stream property change, when the the GUI
+     * thread would call consumer->stop().
+     *
+     */
+    QMutexLocker l(&iface->renderingControlMutex);
+
+    if (!iface->renderingAllowed) return;
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!iface->waitingForFrame);
+    iface->waitingForFrame = true;
+
     self->sigChangeActiveCanvasFrame(position);
+
+    while (iface->renderingAllowed && iface->waitingForFrame) {
+        iface->renderingWaitCondition.wait(&iface->renderingControlMutex);
+    }
 }
 
 //=====
@@ -141,6 +196,10 @@ struct KisPlaybackEngineMLT::Private {
         return canvasProducers[activeCanvas()];
     }
 
+    bool dropFrames() const {
+        return m_self->dropFrames();
+    }
+
 private:
     KisPlaybackEngineMLT* m_self;
 
@@ -163,6 +222,9 @@ public:
 
     double playbackSpeed;
     bool mute;
+
+    FrameWaitingInterface frameWaitingInterface;
+    FrameRenderingStats frameStats;
 };
 
 //=====
@@ -178,6 +240,13 @@ public:
         : m_d(p_d)
     {
         KIS_ASSERT(p_d);
+
+
+        {
+            QMutexLocker l(&m_d->frameWaitingInterface.renderingControlMutex);
+            m_d->frameWaitingInterface.renderingAllowed = false;
+            m_d->frameWaitingInterface.renderingWaitCondition.wakeAll();
+        }
 
         m_d->pushConsumer->stop();
         m_d->pushConsumer->purge();
@@ -200,12 +269,23 @@ public:
             KisCanvasAnimationState* animationState = m_d->activeCanvas()->animationState();
             KIS_SAFE_ASSERT_RECOVER_RETURN(animationState);
 
+            {
+                QMutexLocker l(&m_d->frameWaitingInterface.renderingControlMutex);
+                m_d->frameWaitingInterface.renderingAllowed = true;
+                m_d->frameWaitingInterface.waitingForFrame = false;
+
+                m_d->frameWaitingInterface.renderingWaitCondition.wakeAll();
+            }
+
+            m_d->frameStats.reset();
+
             if (m_d->activePlaybackMode() == PLAYBACK_PUSH) {
                 m_d->pushConsumer->set("volume", m_d->mute ? 0.0 : animationState->currentVolume());
                 m_d->pushConsumer->start();
             } else {
                 m_d->pullConsumer->connect_producer(*m_d->activeProducer());
                 m_d->pullConsumer->set("volume", m_d->mute ? 0.0 : animationState->currentVolume());
+                m_d->pullConsumer->set("real_time", m_d->dropFrames() ? 1 : 0);
                 m_d->pullConsumer->start();
             }
 
@@ -392,7 +472,23 @@ void KisPlaybackEngineMLT::throttledShowFrame(const int frame)
 {
     if (activeCanvas() && activeCanvas()->animationState() &&
             m_d->activePlaybackMode() == PLAYBACK_PULL ) {
+
+        if (m_d->frameStats.lastRenderedFrame < 0) {
+            m_d->frameStats.timeSinceLastFrame.start();
+        } else {
+            const int droppedFrames = qMax(0, frame - m_d->frameStats.lastRenderedFrame - 1);
+            m_d->frameStats.averageFrameDuration(m_d->frameStats.timeSinceLastFrame.restart());
+            m_d->frameStats.droppedFramesCount(droppedFrames);
+        }
+        m_d->frameStats.lastRenderedFrame = frame;
+
         activeCanvas()->animationState()->showFrame(frame);
+    }
+
+    {
+        QMutexLocker l(&m_d->frameWaitingInterface.renderingControlMutex);
+        m_d->frameWaitingInterface.waitingForFrame = false;
+        m_d->frameWaitingInterface.renderingWaitCondition.wakeAll();
     }
 }
 
@@ -411,6 +507,19 @@ void KisPlaybackEngineMLT::setAudioVolume(qreal volumeNormalized)
         m_d->pullConsumer->set("volume", volumeNormalized);
         m_d->pushConsumer->set("volume", volumeNormalized);
     }
+}
+
+KisPlaybackEngineMLT::FrameWaitingInterface *KisPlaybackEngineMLT::frameWaitingInterface()
+{
+    return &m_d->frameWaitingInterface;
+}
+
+void KisPlaybackEngineMLT::setDropFramesMode(bool value)
+{
+    // restart playback if it was active
+    StopAndResume r(m_d.data(), false);
+
+    KisPlaybackEngine::setDropFramesMode(value);
 }
 
 void KisPlaybackEngineMLT::setPlaybackSpeedPercent(int value)
@@ -440,7 +549,25 @@ bool KisPlaybackEngineMLT::isMute()
 
 KisPlaybackEngine::PlaybackStats KisPlaybackEngineMLT::playbackStatistics() const
 {
-    return {};
+    KisPlaybackEngine::PlaybackStats stats;
+
+    if (activeCanvas() && activeCanvas()->animationState() &&
+        m_d->activePlaybackMode() == PLAYBACK_PULL ) {
+
+        const int droppedFrames = m_d->frameStats.droppedFramesCount.rollingSum();
+        const int totalFrames =
+            m_d->frameStats.droppedFramesCount.rollingCount() +
+            droppedFrames;
+
+        stats.droppedFramesPortion = qreal(droppedFrames) / totalFrames;
+        stats.expectedFps = qreal(activeCanvas()->image()->animationInterface()->framerate()) * m_d->playbackSpeed;
+
+        const qreal avgTimePerFrame = m_d->frameStats.averageFrameDuration.rollingMeanSafe();
+        stats.realFps = !qFuzzyIsNull(avgTimePerFrame) ? 1000.0 / avgTimePerFrame : 0.0;
+
+    }
+
+    return stats;
 }
 
 

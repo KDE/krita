@@ -54,6 +54,8 @@ public Q_SLOTS:
     virtual bool supportsAudio() override { return true; }
     virtual bool supportsVariablePlaybackSpeed() override { return true; }
 
+    void setDropFramesMode(bool value) override;
+
     PlaybackStats playbackStatistics() const override;
 
 protected Q_SLOTS:
@@ -87,6 +89,10 @@ protected Q_SLOTS:
      * @param volume (normalized)
      */
     void setAudioVolume(qreal volumeNormalized);
+
+public:
+    struct FrameWaitingInterface;
+    FrameWaitingInterface* frameWaitingInterface();
 
 private:
     /**

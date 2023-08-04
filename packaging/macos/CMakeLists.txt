@@ -35,14 +35,6 @@ set(DEV_SANDBOX_ENTITLEMENTS "
     </array>
 ")
 
-set(ENTITLEMENTS "${GENERAL_ENTITLEMENTS}")
-configure_file(entitlements.plist.template ${CMAKE_CURRENT_BINARY_DIR}/entitlements.plist)
-
-
-set(ENTITLEMENTS "${GENERAL_ENTITLEMENTS} ${SANDBOX_ENTITLEMENTS}")
-configure_file(entitlements.plist.template ${CMAKE_CURRENT_BINARY_DIR}/macStore-entitlements.plist)
-
-configure_file(sandboxdev_sub-entitlements.plist ${CMAKE_CURRENT_BINARY_DIR}/sandboxdev_sub-entitlements.plist COPYONLY)
 
 # Debugging in a full sandboxed bundle is slow, instead we sign the krita
 # binary using this set of entitlements, which gives permission to the entire

@@ -47,7 +47,7 @@ fi
 if [[ -z "${KIS_BUILD_DIR}" ]]; then
     KIS_BUILD_DIR=${BUILDROOT}/kisbuild
 fi
-KIS_ENTITLEMENTS_DIR="${KIS_BUILD_DIR}/packaging/macos/"
+KIS_ENTITLEMENTS_DIR="${KIS_SRC_DIR}/packaging/macos/"
 # we look for the provisioning file in the script the directory was called
 KIS_PROVISION="$(get_absolute_path ".")/embedded.provisionprofile"
 

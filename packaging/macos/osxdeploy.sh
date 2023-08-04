@@ -684,7 +684,7 @@ krita_deploy () {
 batch_codesign() {
     local entitlements="${1}"
     if [[ -z "${1}" ]]; then
-        entitlements="${KIS_BUILD_DIR}/packaging/macos/entitlements.plist"
+        entitlements="${KIS_SRC_DIR}/packaging/macos/entitlements.plist"
     fi
     xargs -P4 -I FILE codesign --options runtime --timestamp -f -s "${CODE_SIGNATURE}" --entitlements "${entitlements}" FILE
 }

@@ -25,8 +25,6 @@ set(SANDBOX_ENTITLEMENTS "
     <true/>
     <key>com.apple.security.files.bookmarks.document-scope</key>
     <true/>
-    <key>ITSAppUsesNonExemptEncryption</key>
-    <false/>
 ")
 
 set(DEV_SANDBOX_ENTITLEMENTS "

@@ -45,6 +45,7 @@ public:
     void mouseReleaseEvent(KoPointerEvent *event) override;
 
     void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
 
     /// reimplemented from KoToolBase
     void activate(const QSet<KoShape *> &shapes) override;
@@ -96,6 +97,7 @@ private:
 
     QPointer<SvgTextEditor> m_editor;
     QPushButton *m_edit {nullptr};
+    QPointF m_lastMousePos;
     DragMode m_dragging {DragMode::None};
     std::unique_ptr<KoInteractionStrategy> m_interactionStrategy;
     bool m_isOverInlineSizeHandle {false};

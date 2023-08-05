@@ -453,6 +453,8 @@ static inline Qt::CursorShape lineToCursor(const QLineF line, const KoCanvasBase
 
 void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
 {
+    m_lastMousePos = event->point;
+
     QRectF updateRect = m_hoveredShapeHighlightRect.boundingRect();
 
     if (m_dragging == DragMode::Create || m_dragging == DragMode::InlineSizeHandle) {
@@ -521,6 +523,14 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void SvgTextTool::keyPressEvent(QKeyEvent *event)
 {
+    if (m_interactionStrategy
+        && (event->key() == Qt::Key_Control || event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift
+            || event->key() == Qt::Key_Meta)) {
+        m_interactionStrategy->handleMouseMove(m_lastMousePos, event->modifiers());
+        event->accept();
+        return;
+    }
+
     if (m_dragging == DragMode::Create || m_dragging == DragMode::InlineSizeHandle) {
         if (event->key() == Qt::Key_Escape) {
             m_dragging = DragMode::None;
@@ -529,7 +539,6 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
             useCursor(Qt::ArrowCursor);
             event->accept();
         } else {
-            // FIXME: Send modifier key updates to interactionStrategy?
             event->ignore();
         }
     } else if (event->key()==Qt::Key_Enter || event->key()==Qt::Key_Return) {
@@ -540,6 +549,17 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
+void SvgTextTool::keyReleaseEvent(QKeyEvent *event)
+{
+    if (m_interactionStrategy
+        && (event->key() == Qt::Key_Control || event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift
+            || event->key() == Qt::Key_Meta)) {
+        m_interactionStrategy->handleMouseMove(m_lastMousePos, event->modifiers());
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
 
 void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {

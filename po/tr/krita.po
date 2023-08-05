@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-04 00:43+0000\n"
+"POT-Creation-Date: 2023-08-05 00:43+0000\n"
 "PO-Revision-Date: 2023-08-03 12:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -16225,7 +16225,7 @@ msgstr "%1 html'e kaydedilemez"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:123
-#: libs/ui/flake/kis_shape_layer.cc:524
+#: libs/ui/flake/kis_shape_layer.cc:549
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -16266,25 +16266,25 @@ msgstr ""
 "metin nesnesi Krita 5 biçimine dönüştürülür ve Krita 4.x ile uyumlu olmaktan "
 "çıkar."
 
-#: libs/flake/text/KoSvgTextShape.cpp:3924
+#: libs/flake/text/KoSvgTextShape.cpp:3982
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3926
-#: libs/flake/text/KoSvgTextShape.cpp:3934
+#: libs/flake/text/KoSvgTextShape.cpp:3984
+#: libs/flake/text/KoSvgTextShape.cpp:3992
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Metin Şekli"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3932
+#: libs/flake/text/KoSvgTextShape.cpp:3990
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3946
-#: libs/flake/text/KoSvgTextShape.cpp:3961
+#: libs/flake/text/KoSvgTextShape.cpp:4004
+#: libs/flake/text/KoSvgTextShape.cpp:4019
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16696,8 +16696,6 @@ msgstr "Boyut"
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:395
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
@@ -22535,6 +22533,7 @@ msgstr "Katman Özellikleri"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1611
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
@@ -34072,7 +34071,6 @@ msgid "Smooths the edges of the selection"
 msgstr "Seçimin kenarlarını yumuşatır"
 
 #: libs/ui/widgets/kis_selection_options.cc:235
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
 #, kde-format
 msgid "Grow or shrink the selection by the set amount"
 msgstr "Seçimi, küme miktarı kadar büyüt veya küçült"
@@ -34085,7 +34083,6 @@ msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr "En karanlık veya en mat piksellerde büyümeyi durdur"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr "Seçimi, küme miktarı kadar bulanıklaştır"
@@ -56719,7 +56716,7 @@ msgid "Fill all regions until a specific boundary color"
 msgstr "Tüm bölgeleri belirli bir sınır rengine dek doldur"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:621
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
 #, kde-format
 msgid "Boundary color"
 msgstr "Sınır rengi"
@@ -57892,30 +57889,19 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Seçimi sınır olarak kullan"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
-#, kde-format
-msgctxt "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-msgid "Grow: "
-msgstr "Büyüt: "
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
-#, kde-format
-msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
-msgid "Feather: "
-msgstr "Yumuşat: "
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr "Tıklanan bölgenin rengine benzer bölgeleri seç"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, kde-format
 msgid "Select all regions until a specific boundary color"
 msgstr "Belirli bir sınır rengine dek tüm bölgeleri seç"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:237
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:249
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
@@ -57924,7 +57910,8 @@ msgstr ""
 "Seçimin renk benzerlik toleransını ayarla. Eşiği artırmak, benzer renklerin "
 "seçim aralığını artırır."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:394
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
@@ -57933,7 +57920,7 @@ msgstr ""
 "Seçimin mat kısmının kapsamını ayarla. Yaymayı azaltmak, renk benzerliğine "
 "bağlı olarak seçim alanlarının matlığını azaltır."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:410
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
@@ -57942,7 +57929,7 @@ msgstr ""
 "Yeni bir seçim yaparken, etkin seçimin konturunun bir sınır olarak işlenip "
 "işlenmeyeceğini ayarla"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
 #, kde-format
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
@@ -58029,31 +58016,39 @@ msgstr "Dikdörtgen Seç"
 msgid "Rectangular Selection Tool"
 msgstr "Dikdörtgen Seçim Aracı"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:87
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, kde-format
 msgid "Similar Color Selection"
 msgstr "Benzer Renk Seçimi"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:137
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:429
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:196
 msgctxt "(qtundo-format)"
 msgid "Select Similar Color"
 msgstr "Benzer Renk Seç"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:461
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:233
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "Eşik: "
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:472
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
+#, fuzzy, kde-format
+#| msgctxt "The 'spread' spinbox prefix in fill tool options"
+#| msgid "Spread: "
+msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
+msgid "Spread: "
+msgstr "Yay: "
+
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, kde-format
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
 msgstr "Seçim kapsamı"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:57
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
 #, kde-format
 msgid "Similar Color Selection Tool"
 msgstr "Benzer Renk Seçim Aracı"
@@ -60465,6 +60460,15 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
+
+#~ msgctxt ""
+#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
+#~ msgid "Grow: "
+#~ msgstr "Büyüt: "
+
+#~ msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
+#~ msgid "Feather: "
+#~ msgstr "Yumuşat: "
 
 #~ msgid "Get your Krita Supporter Badge here!"
 #~ msgstr "Krita Destekçi Rozetinizi Alın!"

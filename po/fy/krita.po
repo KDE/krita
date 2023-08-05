@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-04 00:43+0000\n"
+"POT-Creation-Date: 2023-08-05 00:43+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -16518,7 +16518,7 @@ msgstr ""
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:123
-#: libs/ui/flake/kis_shape_layer.cc:524
+#: libs/ui/flake/kis_shape_layer.cc:549
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -16556,27 +16556,27 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3924
+#: libs/flake/text/KoSvgTextShape.cpp:3982
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3926
-#: libs/flake/text/KoSvgTextShape.cpp:3934
+#: libs/flake/text/KoSvgTextShape.cpp:3984
+#: libs/flake/text/KoSvgTextShape.cpp:3992
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "Tekst foarm"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3932
+#: libs/flake/text/KoSvgTextShape.cpp:3990
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "Tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3946
-#: libs/flake/text/KoSvgTextShape.cpp:3961
+#: libs/flake/text/KoSvgTextShape.cpp:4004
+#: libs/flake/text/KoSvgTextShape.cpp:4019
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16987,8 +16987,6 @@ msgstr "Grutte"
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:395
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
@@ -22902,6 +22900,7 @@ msgstr "Laacheigenskippen"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1611
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
@@ -34095,7 +34094,6 @@ msgid "Smooths the edges of the selection"
 msgstr "Linedikte fan aktive seleksje ynstelle"
 
 #: libs/ui/widgets/kis_selection_options.cc:235
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
 #, fuzzy, kde-format
 msgid "Grow or shrink the selection by the set amount"
 msgstr "Seleksje ferlytsje mei"
@@ -34108,7 +34106,6 @@ msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:239
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr ""
@@ -56875,7 +56872,7 @@ msgid "Fill all regions until a specific boundary color"
 msgstr "Mei eftergrûnkleur opfolje"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:621
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
 #, fuzzy, kde-format
 msgid "Boundary color"
 msgstr "Eftergrûnkleur:"
@@ -58041,53 +58038,41 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Seleksje omkaderje mei"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
-#, fuzzy, kde-format
-#| msgid "Grow"
-msgctxt "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-msgid "Grow: "
-msgstr "Groeie"
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
-#, fuzzy, kde-format
-#| msgid "Feather..."
-msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
-msgid "Feather: "
-msgstr "Doezelje..."
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, fuzzy, kde-format
 msgid "Select all regions until a specific boundary color"
 msgstr "Mei eftergrûnkleur opfolje"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:237
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:249
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:394
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:410
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
 #, fuzzy, kde-format
 #| msgid "Rendering Intent"
 msgctxt ""
@@ -58180,26 +58165,33 @@ msgstr "Selektearje in rjochthoekich gebiet"
 msgid "Rectangular Selection Tool"
 msgstr "Rjochthoeke-seleksje"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:87
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, fuzzy, kde-format
 msgid "Similar Color Selection"
 msgstr "Lykweardige seleksje"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:137
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:429
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:196
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Similar Color"
 msgstr "Selektearje lykweardige kleuren"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:461
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:233
 #, fuzzy, kde-format
 #| msgid "Threshold: "
 msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "Drompel: "
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:472
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
+#, fuzzy, kde-format
+#| msgid "Opacity: "
+msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
+msgid "Spread: "
+msgstr "Dekking:"
+
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, fuzzy, kde-format
 #| msgid "Rendering Intent"
 msgctxt ""
@@ -58207,7 +58199,7 @@ msgctxt ""
 msgid "Selection extent"
 msgstr "Rendearingmetoade"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:57
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
 #, fuzzy, kde-format
 msgid "Similar Color Selection Tool"
 msgstr "Lykweardige seleksje"
@@ -60649,6 +60641,19 @@ msgstr "Zoomark"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referinsje-ôfbylding:"
+
+#, fuzzy
+#~| msgid "Grow"
+#~ msgctxt ""
+#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
+#~ msgid "Grow: "
+#~ msgstr "Groeie"
+
+#, fuzzy
+#~| msgid "Feather..."
+#~ msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
+#~ msgid "Feather: "
+#~ msgstr "Doezelje..."
 
 #, fuzzy
 #~| msgid "Image Size"

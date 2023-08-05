@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-04 00:43+0000\n"
+"POT-Creation-Date: 2023-08-05 00:43+0000\n"
 "PO-Revision-Date: 2023-02-14 11:07-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -16244,7 +16244,7 @@ msgstr "não há como salvar %1 para html"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:123
-#: libs/ui/flake/kis_shape_layer.cc:524
+#: libs/ui/flake/kis_shape_layer.cc:549
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -16285,25 +16285,25 @@ msgstr ""
 "o documento, o objeto de texto será convertido para o formato do Krita 5 que "
 "não será mais compatível com o Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3924
+#: libs/flake/text/KoSvgTextShape.cpp:3982
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3926
-#: libs/flake/text/KoSvgTextShape.cpp:3934
+#: libs/flake/text/KoSvgTextShape.cpp:3984
+#: libs/flake/text/KoSvgTextShape.cpp:3992
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma de texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3932
+#: libs/flake/text/KoSvgTextShape.cpp:3990
 #, kde-format
 msgid "SVG Text"
 msgstr "Texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3946
-#: libs/flake/text/KoSvgTextShape.cpp:3961
+#: libs/flake/text/KoSvgTextShape.cpp:4004
+#: libs/flake/text/KoSvgTextShape.cpp:4019
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16716,8 +16716,6 @@ msgstr "Tamanho"
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:395
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
@@ -22636,6 +22634,7 @@ msgstr "Propriedades da Camada"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1611
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
@@ -34351,7 +34350,6 @@ msgid "Smooths the edges of the selection"
 msgstr "Definir a largura da linha da seleção atual"
 
 #: libs/ui/widgets/kis_selection_options.cc:235
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
 #, fuzzy, kde-format
 #| msgid "Grow/shrink selection: "
 msgid "Grow or shrink the selection by the set amount"
@@ -34365,7 +34363,6 @@ msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr "Parar expansão no pixel mais escuro e/ou mais opaco"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr "Embaçar a seleção pela quantidade definida"
@@ -57352,7 +57349,7 @@ msgid "Fill all regions until a specific boundary color"
 msgstr "Preencher a área com a cor de fundo"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:621
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
 #, fuzzy, kde-format
 #| msgid "Background color"
 msgid "Boundary color"
@@ -58540,34 +58537,20 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Usar seleção como limite:"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
-#, fuzzy, kde-format
-#| msgctxt "Grow as in deform brush engine"
-#| msgid "Grow"
-msgctxt "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-msgid "Grow: "
-msgstr "Crescer"
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
-#, fuzzy, kde-format
-#| msgid "Feather radius:"
-msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
-msgid "Feather: "
-msgstr "Raio da passagem:"
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
 #, fuzzy, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr "Seleciona regiões de cores similares a da região clicada"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Select all regions until a specific boundary color"
 msgstr "Preencher a área com a cor de fundo"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:237
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:249
 #, fuzzy, kde-format
 msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
@@ -58576,7 +58559,8 @@ msgstr ""
 "Define a tolerância de cores similares a da seleção. O aumento limiar "
 "aumenta a variedade de cores similares a serem selecionadas."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:394
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
 #, fuzzy, kde-format
 msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
@@ -58585,7 +58569,7 @@ msgstr ""
 "Define a extensão da área opaca da seleção. Diminuir o alcance diminui a "
 "opacidade das áreas de acordo com a similaridade das cores."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:410
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
 #, fuzzy, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
@@ -58593,7 +58577,7 @@ msgid ""
 msgstr ""
 "Quando marcada, usa bordas de seleção como limite ao criar nova seleção"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
 #, fuzzy, kde-format
 #| msgid "Rendering Intent"
 msgctxt ""
@@ -58681,24 +58665,32 @@ msgstr "Retângulo da seleção"
 msgid "Rectangular Selection Tool"
 msgstr "Ferramenta de seleção retangular"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:87
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, kde-format
 msgid "Similar Color Selection"
 msgstr "Seleção de cores semelhantes"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:137
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:429
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:196
 msgctxt "(qtundo-format)"
 msgid "Select Similar Color"
 msgstr "Seleção de cores semelhantes"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:461
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:233
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "Limiar: "
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:472
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
+#, fuzzy, kde-format
+#| msgctxt "The 'spread' spinbox prefix in fill tool options"
+#| msgid "Spread: "
+msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
+msgid "Spread: "
+msgstr "Espalhar:"
+
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, fuzzy, kde-format
 #| msgid "Rendering Intent"
 msgctxt ""
@@ -58706,7 +58698,7 @@ msgctxt ""
 msgid "Selection extent"
 msgstr "Tentativa de Desenho"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:57
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
 #, kde-format
 msgid "Similar Color Selection Tool"
 msgstr "Ferramenta de seleção de cores semelhantes"
@@ -61150,6 +61142,20 @@ msgstr "Ferramenta Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta Imagens de Referência"
+
+#, fuzzy
+#~| msgctxt "Grow as in deform brush engine"
+#~| msgid "Grow"
+#~ msgctxt ""
+#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
+#~ msgid "Grow: "
+#~ msgstr "Crescer"
+
+#, fuzzy
+#~| msgid "Feather radius:"
+#~ msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
+#~ msgid "Feather: "
+#~ msgstr "Raio da passagem:"
 
 #~ msgid "Get your Krita Supporter Badge here!"
 #~ msgstr "Obtenha seu distintivo de suporte ao Krita aqui!"

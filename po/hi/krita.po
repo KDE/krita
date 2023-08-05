@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-04 00:43+0000\n"
+"POT-Creation-Date: 2023-08-05 00:43+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -16286,7 +16286,7 @@ msgstr "%1 को एचटीएमएल मे्ं सहेज नही�
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:123
-#: libs/ui/flake/kis_shape_layer.cc:524
+#: libs/ui/flake/kis_shape_layer.cc:549
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -16324,25 +16324,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3924
+#: libs/flake/text/KoSvgTextShape.cpp:3982
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "पाठ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3926
-#: libs/flake/text/KoSvgTextShape.cpp:3934
+#: libs/flake/text/KoSvgTextShape.cpp:3984
+#: libs/flake/text/KoSvgTextShape.cpp:3992
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "एसवीजी पाठ आकृति"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3932
+#: libs/flake/text/KoSvgTextShape.cpp:3990
 #, kde-format
 msgid "SVG Text"
 msgstr "एसवीजी पाठ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3946
-#: libs/flake/text/KoSvgTextShape.cpp:3961
+#: libs/flake/text/KoSvgTextShape.cpp:4004
+#: libs/flake/text/KoSvgTextShape.cpp:4019
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16750,8 +16750,6 @@ msgstr "आकार"
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:395
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
@@ -22543,6 +22541,7 @@ msgstr "परत गुण"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1611
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
@@ -33641,7 +33640,6 @@ msgid "Smooths the edges of the selection"
 msgstr "वास्तविक चयन की लाइन चौड़ाई सेट करें"
 
 #: libs/ui/widgets/kis_selection_options.cc:235
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
 #, fuzzy, kde-format
 #| msgid "Grow/shrink selection: "
 msgid "Grow or shrink the selection by the set amount"
@@ -33655,7 +33653,6 @@ msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:239
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr ""
@@ -56184,7 +56181,7 @@ msgid "Fill all regions until a specific boundary color"
 msgstr "पृष्ठभूमि रंग से क्षेत्र भरें"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:621
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
 #, fuzzy, kde-format
 #| msgid "Background color"
 msgid "Boundary color"
@@ -57327,55 +57324,42 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "सीमा के रूप में चयन का प्रयोग करें :"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
-#, fuzzy, kde-format
-#| msgctxt "Grow as in deform brush engine"
-#| msgid "Grow"
-msgctxt "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-msgid "Grow: "
-msgstr "बढ़त"
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
-#, fuzzy, kde-format
-#| msgid "Feather..."
-msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
-msgid "Feather: "
-msgstr "पंख..."
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Select all regions until a specific boundary color"
 msgstr "पृष्ठभूमि रंग से क्षेत्र भरें"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:237
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:249
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:394
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:410
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
 #, fuzzy, kde-format
 #| msgid "Rendering Intent"
 msgctxt ""
@@ -57463,18 +57447,18 @@ msgstr "चतुर्भुजीय क्षेत्र चुनें"
 msgid "Rectangular Selection Tool"
 msgstr "चतुर्भुजीय चयन औज़ार"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:87
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, kde-format
 msgid "Similar Color Selection"
 msgstr "समान रंग चयन"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:137
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:429
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:196
 msgctxt "(qtundo-format)"
 msgid "Select Similar Color"
 msgstr "समान रंग चुनें"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:461
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:233
 #, fuzzy, kde-format
 #| msgctxt "Threshold label in Magnetic Selection's Tool options"
 #| msgid "Threshold: "
@@ -57482,7 +57466,14 @@ msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "देहलीज : "
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:472
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
+#, fuzzy, kde-format
+#| msgid "Spread:"
+msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
+msgid "Spread: "
+msgstr "फैलाव :"
+
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, fuzzy, kde-format
 #| msgid "Rendering Intent"
 msgctxt ""
@@ -57490,7 +57481,7 @@ msgctxt ""
 msgid "Selection extent"
 msgstr "रेंडरिंग इंटेंट"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:57
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
 #, kde-format
 msgid "Similar Color Selection Tool"
 msgstr "समान रंग चयन औज़ार"
@@ -59911,6 +59902,20 @@ msgstr "ज़ूम औज़ार"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "संदर्भ छवि औज़ार"
+
+#, fuzzy
+#~| msgctxt "Grow as in deform brush engine"
+#~| msgid "Grow"
+#~ msgctxt ""
+#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
+#~ msgid "Grow: "
+#~ msgstr "बढ़त"
+
+#, fuzzy
+#~| msgid "Feather..."
+#~ msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
+#~ msgid "Feather: "
+#~ msgstr "पंख..."
 
 #~ msgid "Drag an image into the window to open"
 #~ msgstr "खोलने के लिए छवि को विंडो में खींचें"

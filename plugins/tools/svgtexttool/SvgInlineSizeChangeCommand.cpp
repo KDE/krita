@@ -97,9 +97,10 @@ bool changeTextShapeInlineSize(KoSvgTextShape *const shape, const double newInli
 
 void SvgInlineSizeChangeCommand::applyInlineSize(double inlineSize)
 {
-    m_shape->update();
+    QRectF updateRect = m_shape->boundingRect();
     if (changeTextShapeInlineSize(m_shape, inlineSize)) {
-        m_shape->update();
+        updateRect |= m_shape->boundingRect();
+        m_shape->updateAbsolute(updateRect);
     }
 }
 

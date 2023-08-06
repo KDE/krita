@@ -34,6 +34,8 @@ public:
     explicit SvgTextTool(KoCanvasBase *canvas);
     ~SvgTextTool() override;
     /// reimplemented from KoToolBase
+    QRectF decorationsRect() const override;
+    /// reimplemented from KoToolBase
     void paint(QPainter &gc, const KoViewConverter &converter) override;
     /// reimplemented from KoToolBase
     void mousePressEvent(KoPointerEvent *event) override;

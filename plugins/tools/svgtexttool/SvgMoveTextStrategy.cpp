@@ -37,6 +37,7 @@ void SvgMoveTextStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Keyb
     }
 
     SvgMoveTextCommand(m_shape, m_finalPosition, m_initialPosition).redo();
+    tool()->repaintDecorations();
 }
 
 KUndo2Command *SvgMoveTextStrategy::createCommand()
@@ -50,6 +51,7 @@ KUndo2Command *SvgMoveTextStrategy::createCommand()
 void SvgMoveTextStrategy::cancelInteraction()
 {
     SvgMoveTextCommand(m_shape, m_finalPosition, m_initialPosition).undo();
+    tool()->repaintDecorations();
 }
 
 void SvgMoveTextStrategy::finishInteraction(Qt::KeyboardModifiers /*modifiers*/)

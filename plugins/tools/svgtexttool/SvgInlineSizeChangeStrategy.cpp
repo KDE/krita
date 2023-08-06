@@ -43,10 +43,8 @@ SvgInlineSizeChangeStrategy::SvgInlineSizeChangeStrategy(KoToolBase *tool,
 
 void SvgInlineSizeChangeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers /*modifiers*/)
 {
-    QRectF updateRect = m_shape->boundingRect();
     QTransform invTransform{};
     if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(m_shape)) {
-        updateRect |= info->boundingRect();
         invTransform = info->absTransform.inverted();
     }
 
@@ -80,12 +78,7 @@ void SvgInlineSizeChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
     SvgInlineSizeChangeCommand(m_shape, newInlineSize, m_initialInlineSize).redo();
 
     m_finalInlineSize = newInlineSize;
-
-    updateRect |= m_shape->boundingRect();
-    if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(m_shape)) {
-        updateRect |= info->boundingRect();
-    }
-    tool()->canvas()->updateCanvas(kisGrowRect(updateRect, 100));
+    tool()->repaintDecorations();
 }
 
 KUndo2Command *SvgInlineSizeChangeStrategy::createCommand()
@@ -102,6 +95,7 @@ void SvgInlineSizeChangeStrategy::cancelInteraction()
         return;
     }
     SvgInlineSizeChangeCommand(m_shape, m_finalInlineSize, m_initialInlineSize).undo();
+    tool()->repaintDecorations();
 }
 
 void SvgInlineSizeChangeStrategy::finishInteraction(Qt::KeyboardModifiers /*modifiers*/)

@@ -1815,28 +1815,27 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
     if (writingMode == KoSvgText::HorizontalTB) {
         currentLine.baselineTop = QPointF(0, currentLine.actualLineTop);
         currentLine.baselineBottom = QPointF(0, currentLine.actualLineBottom);
-        correctionOffset = QPointF(0, expectedLineTop);
+        correctionOffset = QPointF(0, expectedLineTop) - currentLine.baselineTop;
         lineTop = -currentLine.baselineTop;
         lineBottom = currentLine.baselineBottom;
     } else if (writingMode == KoSvgText::VerticalLR) {
         currentLine.baselineTop = QPointF(currentLine.actualLineTop, 0);
         currentLine.baselineBottom = QPointF(currentLine.actualLineBottom, 0);
-        correctionOffset = QPointF(expectedLineTop, 0);
+        correctionOffset = QPointF(expectedLineTop, 0) - currentLine.baselineTop;
         // Note: while Vertical LR goes left-to-right in its lines, its lines themselves are
         // oriented with the top pointed in the positive x direction.
         lineBottom = currentLine.baselineTop;
         lineTop = -currentLine.baselineBottom;
     } else {
-        currentLine.baselineTop = QPointF(-currentLine.actualLineTop, 0);
-        currentLine.baselineBottom = QPointF(-currentLine.actualLineBottom, 0);
-        correctionOffset = QPointF(-expectedLineTop, 0);
-        lineTop = currentLine.baselineTop;
-        lineBottom = -currentLine.baselineBottom;
+        currentLine.baselineTop = QPointF(currentLine.actualLineTop, 0);
+        currentLine.baselineBottom = QPointF(currentLine.actualLineBottom, 0);
+        correctionOffset = QPointF(-expectedLineTop, 0) + currentLine.baselineTop;
+        lineTop = -currentLine.baselineTop;
+        lineBottom = currentLine.baselineBottom;
     }
     bool returnDescent = firstLine;
     QPointF offset = lineTop + lineBottom;
 
-    correctionOffset -= currentLine.baselineTop;
     if (!returnDescent) {
         Q_FOREACH(LineChunk chunk, currentLine.chunks) {
             Q_FOREACH (int j, chunk.chunkIndices) {
@@ -3165,17 +3164,22 @@ void KoSvgTextShape::Private::handleLineBoxAlignment(const KoShape *rootShape,
         }
     }
     QPointF shift = QPointF();
-    if (baselineAdjust == KoSvgText::BaselineTextTop) {
-        // The height calculation here is to remove the shifted-part height
-        // from the top of the line.
-        qreal height;
-        shift = relevantLine.baselineTop;
+    if (baselineAdjust == KoSvgText::BaselineTextTop || baselineAdjust == KoSvgText::BaselineTextBottom) {
+        double ascent = 0.0;
+        double descent = 0.0;
         for (int k = i; k < j; k++) {
-            height  = qMax(height, result[k].boundingBox.height());
+            // The height calculation here is to remove the shifted-part height
+            // from the top (or bottom) of the line.
+            calculateLineHeight(result[k], ascent, descent, isHorizontal, true);
         }
-        shift += isHorizontal? QPointF(0, height):QPointF(height, 0);
-    } else if (baselineAdjust == KoSvgText::BaselineTextBottom) {
-        shift = relevantLine.baselineBottom;
+
+        if (baselineAdjust == KoSvgText::BaselineTextTop) {
+            shift = relevantLine.baselineTop;
+            shift -= isHorizontal? QPointF(0, ascent):QPointF(ascent, 0);
+        } else if (baselineAdjust == KoSvgText::BaselineTextBottom) {
+            shift = relevantLine.baselineBottom;
+            shift -= isHorizontal? QPointF(0, descent):QPointF(descent, 0);
+        }
     }
 
     for (int k = i; k < j; k++) {

@@ -28,7 +28,7 @@
 # Marce Villarino <mvillarino@kde-espana.es>, 2013.
 # Miguel Branco <mgl.branco@gmail.com>, 2012.
 # Adrian Chaves Fernandez <adriyetichaves@gmail.com>, 2012, 2015, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020, 2023.
 #
 # --- kritalibs
 # translation of koffice.po to galician
@@ -79,8 +79,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-05 00:43+0000\n"
-"PO-Revision-Date: 2020-01-12 12:14+0100\n"
+"POT-Creation-Date: 2023-08-06 00:44+0000\n"
+"PO-Revision-Date: 2023-08-05 13:01+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -88,7 +88,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.04.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -21229,7 +21229,7 @@ msgstr "Miniatura"
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:305
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:615
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
@@ -35990,7 +35990,7 @@ msgstr "Renomear a predefinición de pincel"
 msgid "Detach Brush Editor"
 msgstr "Mostrar o editor de pinceis"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:548
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:550
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
@@ -51672,7 +51672,7 @@ msgid ""
 "artifacts get introduced. <br/>Note: A quality of 100 switches to lossless "
 "compression similar to (but often more efficient than) PNG.</p>"
 msgstr ""
-"<p>Axustar a calidade da imaxe. Canto menor é a calidade, máis distorsións "
+"<p>Axustar a calidade da imaxe. Canto menor é a calidade, máis defectos "
 "produce a compresión.<br/>Nota: unha calidade de 100 activa a compresión sen "
 "perdas, similar a PNG (pero a miúdo máis eficiente).</p>"
 

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-05 00:43+0000\n"
+"POT-Creation-Date: 2023-08-06 00:44+0000\n"
 "PO-Revision-Date: 2023-08-01 13:34+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -19760,7 +19760,7 @@ msgstr "縮圖"
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:305
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:615
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
@@ -33658,7 +33658,7 @@ msgstr "重新命名筆刷預設"
 msgid "Detach Brush Editor"
 msgstr "在獨立視窗顯示筆刷編輯器"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:548
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:550
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"

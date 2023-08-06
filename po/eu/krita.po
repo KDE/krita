@@ -14,18 +14,17 @@
 # Translation for karbonTools.po to Euskara/Basque (eu).
 #
 # Ion Gaztañaga <igaztanaga@gmail.com>, 2005.
-# Marcos  <marcos@euskalgnu.org>, 2005.
+# Marcos <marcos@euskalgnu.org>, 2005.
 # Hizkuntza Politika Sailburuordetza <hizpol@ej-gv.es>, 2013.
-# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2013, 2018.
+# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2013, 2018, 2020, 2021, 2022, 2023..
 # Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2013.
-# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2013, 2020, 2021, 2022, 2023.
 # Alex Gabilondo <alexgabi@disroot.org>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-05 00:43+0000\n"
-"PO-Revision-Date: 2023-02-10 21:36+0100\n"
+"POT-Creation-Date: 2023-08-06 00:44+0000\n"
+"PO-Revision-Date: 2023-08-05 20:41+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -33,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 23.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1999,20 +1998,20 @@ msgid "Bristle frottis"
 msgstr "Zurda-aukerak"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Bristles_hairy.kpp"
 msgid "Bristles hairy"
-msgstr "Zurda-aukerak"
+msgstr "Zurdak iletsuak"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Bristles_mix.kpp"
 msgid "Bristles mix"
-msgstr "Zurda-aukerak"
+msgstr "Zurdak nahasketa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2020,7 +2019,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Bristles_textured.kpp"
 msgid "Bristles textured"
-msgstr ""
+msgstr "Zurdak ehunduna"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2031,21 +2030,20 @@ msgid "Bristles wet"
 msgstr "Zurda hezeak"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Brush mode"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Brush_dotted.kpp"
 msgid "Brush dotted"
-msgstr "Pintzel modua"
+msgstr "Pintzel puntuduna"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Brush_textured.kpp"
 msgid "Brush textured"
-msgstr "T_Testura 2"
+msgstr "Pintzel ehundua"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2056,39 +2054,36 @@ msgid "Clone tool"
 msgstr "Klonatzeko tresna"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Curves opacity"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Curve_curvy.kpp"
 msgid "Curve curvy"
-msgstr "Kurben opakutasuna"
-
-#. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Curve"
-msgctxt ""
-"./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-"Curve_ink.kpp"
-msgid "Curve ink"
-msgstr "Kurba"
+msgstr "Kurba bihurgunetsua"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-"Curve_recurvy.kpp"
-msgid "Curve recurvy"
-msgstr ""
+"Curve_ink.kpp"
+msgid "Curve ink"
+msgstr "Kurba tinta"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
-#| msgid "Curves opacity"
+msgctxt ""
+"./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
+"Curve_recurvy.kpp"
+msgid "Curve recurvy"
+msgstr "Kurba bihurgunetsua"
+
+#. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Curve_smooth.kpp"
 msgid "Curve smooth"
-msgstr "Kurben opakutasuna"
+msgstr "Kurba leuna"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2144,7 +2139,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "FX_glow_add.kpp"
 msgid "FX glow add"
-msgstr ""
+msgstr "FX distira gehitzea"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2160,25 +2155,23 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "FX_splat_starfield.kpp"
 msgid "FX splat starfield"
-msgstr ""
+msgstr "FX plast izar-eremua"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Fill background"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Fill_block.kpp"
 msgid "Fill block"
-msgstr "Bete atzeko planoa"
+msgstr "Betegarria blokea"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Fill Special"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Fill_circle.kpp"
 msgid "Fill circle"
-msgstr "Betegarri berezia"
+msgstr "Betegarria zirkulua"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2750,58 +2743,52 @@ msgid "Spray splat"
 msgstr "Espraiaren forma"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Tangent Normal"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_basic.kpp"
 msgid "Tangent normal basic"
-msgstr "Tangentearen normala"
+msgstr "Tangentearen normala oinarrizkoa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Tangent Encoding"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_drawing_angle.kpp"
 msgid "Tangent normal drawing angle"
-msgstr "Tangentearen kodetzea"
+msgstr "Tangentearen normala marrazteko angelua"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Tangent Normal"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_hairy.kpp"
 msgid "Tangent normal hairy"
-msgstr "Tangentearen normala"
+msgstr "Tangentearen normala iletsua"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Tangent Normal"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_pixel.kpp"
 msgid "Tangent normal pixel"
-msgstr "Tangentearen normala"
+msgstr "Tangentearen normala pixela"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Tangent Normal"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_y_inverted.kpp"
 msgid "Tangent normal y inverted"
-msgstr "Tangentearen normala"
+msgstr "Tangentearen normala y alderantzizkoa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Texture"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Texture_fuzzy.kpp"
 msgid "Texture fuzzy"
-msgstr "Ehundura"
+msgstr "Ehundura lausoa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2817,15 +2804,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Texture_leaves_fuzzy.kpp"
 msgid "Texture leaves fuzzy"
-msgstr ""
+msgstr "Ehundura hostoak lausoa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Textured_tilt.kpp"
 msgid "Textured tilt"
-msgstr "Objektuaren propietateak"
+msgstr "Ehunduna makurdura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2833,7 +2820,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "ink_precision_03.kpp"
 msgid "ink precision 03"
-msgstr "tintaren doitasuna 03"
+msgstr "tinta doitasuna 03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2841,7 +2828,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/pixel1."
 "kpp"
 msgid "pixel1"
-msgstr "Pixela1"
+msgstr "pixel1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2910,7 +2897,7 @@ msgstr "VFX margoa"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/01_canvas.png"
 msgid "01 canvas"
-msgstr "01 oihala"
+msgstr "01 mihisea"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2918,7 +2905,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/02_rough-"
 "canvas.png"
 msgid "02 rough-canvas"
-msgstr "02 oihal-latza"
+msgstr "02 mihise-latza"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3567,12 +3554,12 @@ msgid "bristles circle sparse"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "bristles_circle_variable.svg"
 msgid "bristles circle variable"
-msgstr "Aldagai erabilgarriak"
+msgstr "zurdak zirkulu aldagarria"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3583,11 +3570,11 @@ msgid "A -2 Sparkle 3"
 msgstr "A -2 distira 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk.png"
 msgid "chalk"
-msgstr "Klera-pintzela"
+msgstr "klariona"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3595,7 +3582,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "chalk_round_hard.png"
 msgid "chalk round hard"
-msgstr ""
+msgstr "klariona biribil gogorra"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3603,7 +3590,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk_sparse."
 "png"
 msgid "chalk sparse"
-msgstr ""
+msgstr "klariona urria"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3687,7 +3674,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/leaves-"
 "scattered.svg"
 msgid "leaves-scattered"
-msgstr ""
+msgstr "hostoak-sakabanatuta"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -8470,11 +8457,10 @@ msgstr "Kendu hautatutako argazkia"
 
 #. i18n: context: text @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:291
-#, fuzzy, kde-format
-#| msgid "Sample a Color"
+#, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color"
-msgstr "Hartu kolore baten lagina"
+msgstr "Hartu pantailako kolore baten &lagina"
 
 #. i18n: context: toolTip @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -8488,18 +8474,17 @@ msgstr "Hartu pantailako kolore baten lagina"
 
 #. i18n: context: iconText @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:294
-#, fuzzy, kde-format
-#| msgid "Sample a Color"
+#, kde-format
 msgctxt "action"
 msgid "Sample Screen Color"
-msgstr "Hartu kolore baten lagina"
+msgstr "Hartu pantailako kolore baten lagina"
 
 #. i18n: context: text @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:301
 #, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color (Sample Real Canvas)"
-msgstr ""
+msgstr "&Hartu pantailako kolore baten lagina (Lagina mihise errealetik)"
 
 #. i18n: context: toolTip @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:303
@@ -8509,13 +8494,15 @@ msgid ""
 "Sample a color from the screen while sampling a real color from the canvas "
 "if the cursor is over it"
 msgstr ""
+"Hartu pantailako kolore baten lagina, kurtsorea haren gainean badago, "
+"mihiseko kolore erreal baten lagina hartu bitartean"
 
 #. i18n: context: iconText @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:304
 #, kde-format
 msgctxt "action"
 msgid "Sample Screen Color (Sample Real Canvas)"
-msgstr ""
+msgstr "Hartu pantailako kolore lagina (Lagina mihise errealetik)"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:311
@@ -8649,84 +8636,68 @@ msgstr "Egin pintzelaren kolorea horiago"
 #. i18n: context: text @ Action (increase_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_opacity), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:418 krita/krita.action:421
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase opacity"
+#, kde-format
 msgctxt "action"
 msgid "Increase Opacity"
 msgstr "Handiagotu opakutasuna"
 
 #. i18n: context: toolTip @ Action (increase_opacity), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:420
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase opacity"
+#, kde-format
 msgctxt "action"
 msgid "Increase brush Opacity"
-msgstr "Handiagotu opakutasuna"
+msgstr "Handiagotu pintzelaren opakutasuna"
 
 #. i18n: context: text @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:430 krita/krita.action:433
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease opacity"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Opacity"
 msgstr "Txikiagotu opakutasuna"
 
 #. i18n: context: toolTip @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:432
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease opacity"
+#, kde-format
 msgctxt "action"
 msgid "Decrease brush Opacity"
-msgstr "Txikiagotu opakutasuna"
+msgstr "Txikiagotu pintzelaren opakutasuna"
 
 #. i18n: context: text @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:442 krita/krita.action:445
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Value HSV"
-#| msgid "Increase Value"
+#, kde-format
 msgctxt "action"
 msgid "Increase Flow"
-msgstr "Handiagotu balioa"
+msgstr "Handiagotu isuria"
 
 #. i18n: context: toolTip @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:444
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Increase brush Flow"
-msgstr "Handiagotu pintzelaren neurria"
+msgstr "Handiagotu pintzelaren isuria"
 
 #. i18n: context: text @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:454 krita/krita.action:457
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Value HSV"
-#| msgid "Decrease Value"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Flow"
-msgstr "Txikiagotu balioa"
+msgstr "Txikiagotu isuria"
 
 #. i18n: context: toolTip @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:456
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Decrease brush Flow"
-msgstr "Txikiagotu pintzelaren neurria"
+msgstr "Txikiagotu pintzelaren isuria"
 
 #. i18n: context: text @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
@@ -8860,11 +8831,10 @@ msgstr ""
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:550 krita/krita.action:553
-#, fuzzy, kde-format
-#| msgid "Current brush preset"
+#, kde-format
 msgctxt "action"
 msgid "Select brush preset"
-msgstr "Uneko pintzel-aurrehautaketa"
+msgstr "Hautatu pintzelaren aurrezarpena"
 
 #. i18n: context: toolTip @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:552
@@ -9109,11 +9079,10 @@ msgstr "Trukatu aurrealdeko eta atzealdeko koloreak"
 #. i18n: context: text @ Action (toggle_brush_outline), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_brush_outline), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:755 krita/krita.action:758
-#, fuzzy, kde-format
-#| msgid "Tilt Outline"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Brush Outline"
-msgstr "Makurduraren ingerada"
+msgstr "Txandakatu pintzelaren ingerada"
 
 #. i18n: context: toolTip @ Action (toggle_brush_outline), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:757
@@ -9123,6 +9092,8 @@ msgid ""
 "Disable the brush outline, or enable the previously used brush outline shape "
 "if already disabled"
 msgstr ""
+"Ezgaitu pintzelaren ingerada, edo gaitu aurretik erabilitako pintzelaren "
+"ingeradaren forma dagoeneko ezgaituta badago"
 
 #. i18n: context: text @ Action (selection_tool_mode_add), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (selection_tool_mode_add), Actions (Painting), ActionCollection (Krita)
@@ -9370,12 +9341,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:940
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Show Global Selection Mask"
+#, kde-format
 msgctxt "action"
 msgid "Show Global Selection Mask"
-msgstr "&Erakutsi hautapen maskara orokorra"
+msgstr "Erakutsi hautapen maskara globala"
 
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
@@ -10753,16 +10722,10 @@ msgstr "Fotogramak baztertzea"
 
 #. i18n: context: toolTip @ Action (drop_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2009
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Drop Frames\n"
-#| "Enable to preserve playback timing."
+#, kde-format
 msgctxt "action"
 msgid "Drop Frames, enable to preserve playback timing."
-msgstr ""
-"Fotogramak baztertu\n"
-"Gaitu, atzera-jotzeko denbora manten dadin."
+msgstr "Fotogramak baztertu, gaitu atzera-jotzeko denbora mantentzeko."
 
 #. i18n: context: text @ Action (pin_to_timeline), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2018
@@ -11331,37 +11294,31 @@ msgstr "Aktibatu aurrez hautatutako geruza"
 
 #. i18n: context: text @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2500
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Group Layer"
+#, kde-format
 msgctxt "action"
 msgid "Add &Group Layer"
-msgstr "&Talde geruza"
+msgstr "Gehitu &talde geruza"
 
 #. i18n: context: toolTip @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2502
-#, fuzzy, kde-format
-#| msgctxt "@title:dialog"
-#| msgid "Add a new group"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Group Layer"
 msgstr "Gehitu talde berri bat"
 
 #. i18n: context: iconText @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2503
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Group Layer"
-msgstr "&Talde-geruza"
+msgstr "Talde-geruza"
 
 #. i18n: context: text @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2512
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Clone Layer"
+#, kde-format
 msgctxt "action"
 msgid "Add &Clone Layer"
-msgstr "&Klon geruza"
+msgstr "Gehitu &Klonatzeko geruza"
 
 #. i18n: context: toolTip @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2514
@@ -16979,7 +16936,7 @@ msgstr "Opakutasuna"
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:55
 #, kde-format
 msgid "Flow"
-msgstr "Fluxua"
+msgstr "Isuria"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAngle)
 #. i18n: ectx: property (text), widget (QLabel, label_7)
@@ -20083,7 +20040,7 @@ msgstr "Koadro txikia"
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:305
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:615
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
@@ -20696,10 +20653,7 @@ msgid "spline"
 msgstr "Spline"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:106
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Not Applicable, used where there's no colorants or gamma curve found"
-#| msgid "N/A"
+#, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "E/E"
@@ -20707,28 +20661,24 @@ msgstr "E/E"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
-msgstr ""
+msgstr "Ez da «FFmpeg» bitarrik hornitu..."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
+"«FFmpeg» gutxienez 4.2+ bertsiokoa izan behar da GIF gardentasuna ibil dadin"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#| "animated gif images cannot have a framerate higher than 50. The framerate "
-#| "will be reduced to 50 frames per second.</p></body></html>"
+#, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
 "Animated GIF images cannot have a framerate higher than 50. The framerate "
 "will be reduced to 50 frames per second"
 msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Abisua:</span> "
-"animatutako gif irudiek ezin dute fotograma-emaria 50 baino handiagoa izan. "
-"Fotograma-emaria segundoko 50 fotogramara murriztuko da.</p></body></html>"
+"Animatutako GIF irudiek ezin dute fotograma-emaria 50 baino handiagoa izan. "
+"Fotograma-emaria segundoko 50 fotogramara murriztuko da"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
@@ -20742,18 +20692,17 @@ msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
+"Eman diguzun «FFmpeg» konprimatua dagoela ematen du. Mesedez, aurrena, saia "
+"zaitez «FFmpeg» artxibotik erauzten."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
-#, fuzzy, kde-format
-#| msgid ""
-#| "The location of FFmpeg is invalid. Please select the correct location of "
-#| "the FFmpeg executable on your system."
+#, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
-"«FFmpeg»en kokalekua baliogabea da. Mesedez, hautatu «FFmpeg»ren "
-"exekutagarriaren kokaleku zuzena zure sisteman."
+"Eman diguzun «FFmpeg» baliogabea dela ematen du. Mesedez, hautatu zure "
+"sistemako «FFmpeg» exekutagarriaren kokaleku zuzena."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
 #, kde-format
@@ -20993,12 +20942,12 @@ msgstr "FFMpeg baliogabea!"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
 #, kde-format
 msgid "No FFMpeg found!"
-msgstr "Ez da «FFMpeg»erik aurkitu!"
+msgstr "Ez da «FFMpeg»rik aurkitu!"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:658
 #, kde-format
 msgid "Your FFMpeg version does not support this format"
-msgstr "Zure FFMpeg bertsioak ez du formatu hau onartzen"
+msgstr "Zure «FFMpeg»ren bertsioak ez du formatu hori onartzen"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
 #, kde-format
@@ -21038,7 +20987,7 @@ msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "
 "arg2: progress frame number, arg3: totalFrameCount."
 msgid "Creating desired %1 file: %2/%3 frames."
-msgstr "Nahi duzun %1 fitxategia sortzen: %2/%3 fotograma."
+msgstr "Desio duzun %1 fitxategia sortzen: %2/%3 fotograma."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/animation/video_export_options_dialog.ui:13
@@ -21117,10 +21066,9 @@ msgstr "HDR metadatuak..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/video_export_options_dialog.ui:249
-#, fuzzy, kde-format
-#| msgid "Bitrate (MBit/s)"
+#, kde-format
 msgid "Bitrate (MBit/s):"
-msgstr "Bit emaria (MBit/s)"
+msgstr "Bit emaria (MBit/s):"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
@@ -21148,10 +21096,9 @@ msgstr "Gardentasunaren diferentzia"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/animation/video_export_options_dialog.ui:300
-#, fuzzy, kde-format
-#| msgid "Auto-generate 8bit Palette"
+#, kde-format
 msgid "Auto-generate 8bit Palette:"
-msgstr "Automatikoki sortu 8 biteko paleta"
+msgstr "Automatikoki sortu 8 biteko paleta:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
@@ -21175,7 +21122,7 @@ msgstr "Diferentzia modua:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, gifReserveTransparent)
 #: libs/ui/animation/video_export_options_dialog.ui:347
-#, no-c-format, kde-format
+#, fuzzy, no-c-format, kde-format
 msgid ""
 "<html><head/><body><p>GIF format supports up to 256 colors per frame/image. "
 "This option enables transparency at the cost of 1 color, thus only 255 "
@@ -21192,6 +21139,12 @@ msgid ""
 "you need partial transparency, consider APNG or WEBP.</span><br/></p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>GIF formatuak fotograma/irudiko 256 kolore arte "
+"onartzen ditu. Aukera honek gardentasuna gaitzen du kolore bat galtzearen "
+"truk, beraz GIFetan aukera hori gaituta 255 kolore erabiliko dira. Aukera "
+"hori ezgaituta zure GIFetarako 256 koloreen osotasuna ematen dizu, irteerako "
+"kalitate hobea.</p><p><span style=\" font-style:italic;\">1. oharra: ..."
+"hemendik jarraitu... xalba"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifReserveTransparent)
 #: libs/ui/animation/video_export_options_dialog.ui:350
@@ -21219,23 +21172,19 @@ msgstr "Irudiaren kalitatea:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:457
-#, fuzzy, kde-format
-#| msgid "Custom Options:"
+#, kde-format
 msgid "Custom options"
-msgstr "Aukera pertsonalizatuak:"
+msgstr "Neurrira ipinitako aukerak"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:466
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add any ffmpeg filtering options here. It will be put between source and "
-#| "destination streams of the ffmpeg"
+#, kde-format
 msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
 "destination streams of the FFmpeg instance"
 msgstr ""
-"Gehitu hemen «ffmpeg» iragazteko aukerak. «ffmpeg» Sorburu eta helburu datu-"
-"korronteen artean ipiniko da"
+"Gehitu hemen «FFmpeg»ren iragazteko aukerak. «FFmpeg» instantziaren sorburu "
+"eta helburu korronteen artean ipiniko da"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -21528,92 +21477,67 @@ msgid "text"
 msgstr "testua"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "paletegen status mode option name"
-#| msgid "Global/Full"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Global/Full"
 msgstr "Globala/Betea"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:94
-#, fuzzy, kde-format
-#| msgid "Difference"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Difference"
 msgstr "Diferentzia"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:95
-#, fuzzy, kde-format
-#| msgctxt "paletegen status mode option name"
-#| msgid "Per Single Frame"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Per Single Frame"
-msgstr "Fotogramako"
+msgstr "Fotograma bakoitzeko"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:97
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "none"
 msgstr "bat ere ez"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:98
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "bayer"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "bayer"
 msgstr "bayer"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "floyd_steinberg"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "floyd_steinberg"
 msgstr "floyd_steinberg"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:100
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "heckbert"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "heckbert"
 msgstr "heckbert"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:101
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "sierra2"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2"
 msgstr "sierra2"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:102
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "sierra2_4a"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2_4a"
 msgstr "sierra2_4a"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "none"
 msgstr "bat ere ez"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "paleteuse diff mode option name"
-#| msgid "rectangle"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
 msgstr "laukizuzena"
@@ -21626,11 +21550,10 @@ msgid "kbps"
 msgstr "kbps"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:292
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
-msgstr "Ireki"
+msgstr "OpenH264"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:293
 #, kde-format
@@ -21847,10 +21770,9 @@ msgstr "Orokorra"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:40
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgid "Video file:"
-msgstr "Bideo FPS:"
+msgstr "Bideo fitxategia:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
@@ -21897,21 +21819,20 @@ msgid ""
 "Use ffmpeg to detect similar frames and reduce the total number of frames "
 "imported."
 msgstr ""
+"Erabili «ffmeg» antzeko fotogramak hauteman eta inportatutako fotograma "
+"kopuru osoa murrizteko."
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionFilterDuplicates)
 #: libs/ui/animation/VideoImportDialog.ui:273
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add duplicate frame"
+#, kde-format
 msgid "Filter duplicate frames"
-msgstr "Gehitu fotograma bikoiztua"
+msgstr "Iragazi bikoiztutako fotogramak"
 
 #. i18n: ectx: property (text), widget (QLabel, sensitivityLabel)
 #: libs/ui/animation/VideoImportDialog.ui:297
-#, fuzzy, kde-format
-#| msgid "Sensitivity:"
+#, kde-format
 msgid "Sensitivity"
-msgstr "Sentikortasuna:"
+msgstr "Sentikortasuna"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, sensitivitySpinbox)
 #: libs/ui/animation/VideoImportDialog.ui:315
@@ -21921,6 +21842,9 @@ msgid ""
 "which frames are added to Krita.\n"
 "The higher the sensitivity, the more frames are added to Krita."
 msgstr ""
+"Bikoiztutako fotogramen iragazkiaren sentikortasuna  zenbaterainokoa\n"
+"izan behar duen «Krita»ra zein fotograma gehitu zehazterakoan.\n"
+"Sentikortasun handiagoarekin, «Krita»ra fotograma gehiago gehituko dira."
 
 #. i18n: ectx: property (text), widget (QLabel, importDocumentLabel)
 #: libs/ui/animation/VideoImportDialog.ui:325
@@ -22077,17 +22001,15 @@ msgstr "Iragazkia:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
 #: libs/ui/animation/VideoImportDialog.ui:601
-#, fuzzy, kde-format
-#| msgid "FFMpeg:"
+#, kde-format
 msgid "FFmpeg"
-msgstr "FFMpeg:"
+msgstr "FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:607
-#, fuzzy, kde-format
-#| msgid "FFMpeg Path:"
+#, kde-format
 msgid "FFmpeg path:"
-msgstr "FFMpeg bide-izena:"
+msgstr "«FFmpeg»ren bide-izena:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:634
@@ -22190,10 +22112,9 @@ msgstr "Errendatu honela:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
 #: libs/ui/animation/wdg_animationrenderer.ui:210
-#, fuzzy, kde-format
-#| msgid "Select the ffmpeg render options."
+#, kde-format
 msgid "Select the FFmpeg render options."
-msgstr "Aukeratu ffmpeg errendatze aukerak."
+msgstr "Aukeratu «FFmpeg»ren errendatze aukerak."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, labelExportTo)
@@ -22211,17 +22132,15 @@ msgstr "Barneratu audioa"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
-#, fuzzy, kde-format
-#| msgid "Image location:"
+#, kde-format
 msgid "FFmpeg location:"
-msgstr "Irudi-kokalekua:"
+msgstr "«FFmpeg»ren kokalekua:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
-#, fuzzy, kde-format
-#| msgid "FFMpeg Version: None"
+#, kde-format
 msgid "FFmpeg version:"
-msgstr "FFMpeg bertsioa: Bat ere ez"
+msgstr "«FFmpeg»ren bertsioa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -23993,9 +23912,9 @@ msgstr "Krita-ren webgunea"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1069
-#, fuzzy, kde-format
+#, kde-format
 msgid "Recent Images"
-msgstr "Irudia bereizi"
+msgstr "Azkenaldiko irudiak"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
 #: libs/ui/forms/KisWelcomePage.ui:1093
@@ -24299,9 +24218,7 @@ msgstr "Egileak"
 
 #. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Translators"
+#, kde-format
 msgid "Translators"
 msgstr "Itzultzaileak"
 
@@ -24605,10 +24522,9 @@ msgstr "Koloremetria absolutua"
 #: libs/ui/forms/wdgcolorsettings.ui:222
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:67
 #: libs/ui/widgets/kis_color_space_selector.cc:55
-#, fuzzy, kde-format
-#| msgid "No profile"
+#, kde-format
 msgid "Import profile"
-msgstr "Profilik ez"
+msgstr "Inportatu profila"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgcolorsettings.ui:243
@@ -24652,12 +24568,10 @@ msgstr "Puntu-beltza orekatzea"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorSpaces)
 #: libs/ui/forms/wdgcolorspaceselector.ui:39
-#, fuzzy, kde-format
-#| msgctxt "EXIF: misc (model name or model number)"
-#| msgid "Model:"
+#, kde-format
 msgctxt "Color model"
 msgid "Model:"
-msgstr "Modeloa:"
+msgstr "Eredua:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorModels)
 #: libs/ui/forms/wdgcolorspaceselector.ui:56
@@ -24668,8 +24582,7 @@ msgstr "Sakonera:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfiles)
 #: libs/ui/forms/wdgcolorspaceselector.ui:73
-#, fuzzy, kde-format
-#| msgid "Profile:"
+#, kde-format
 msgid "Profile:"
 msgstr "Profila:"
 
@@ -24693,13 +24606,7 @@ msgstr "Kolore-eremu arakatzailea"
 
 #. i18n: ectx: property (text), widget (QLabel, lbl_descriptionwidget)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-#| "\"><span style=\" font-weight:600; text-decoration: underline; color:"
-#| "#006e28;\">Color Spaces</span></a> determine how colors are encoded in "
-#| "your files. Different color spaces have different properties and are used "
-#| "for different purposes.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
 "\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
@@ -24709,7 +24616,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
 "\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
-"\">Kolore-eremuak</span></a>, koloreak zure fitxategietan nola kodetzen "
+"\">Kolore-eremuek</span></a>, koloreak zure fitxategietan nola kodetzen "
 "diren zehazten du. Kolore-eremu ezberdinek propietate ezberdinak dituzte eta "
 "helburu ezberdinetarako erabiltzen dira.</p></body></html>"
 
@@ -24780,15 +24687,7 @@ msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
 #: libs/ui/forms/wdgconvertcolorspace.ui:73
-#, fuzzy, kde-format
-#| msgid ""
-#| "Within and outside gamut; same as Absolute\n"
-#| "Colorimetric. White point changed to result in\n"
-#| "neutral grays.\n"
-#| "\n"
-#| "If adequate table is present in profile,\n"
-#| "then, it is used. Else reverts to perceptual\n"
-#| "intent."
+#, kde-format
 msgid ""
 "Within and outside gamut; same as Absolute\n"
 "Colorimetric. White point changed to result in\n"
@@ -24797,10 +24696,9 @@ msgid ""
 "then, it is used. Else reverts to perceptual\n"
 "intent."
 msgstr ""
-"Kolore-gamaren barruan eta kanpoan; koloremetria\n"
+"Kolore-gamaren barruan eta kanpoan; kolorimetria\n"
 "absolutuaren berdina. Puntu zuria aldatu egiten da\n"
 "gris neutroak lortzeko.\n"
-"\n"
 "Profilean taula egokia agertzen bada, hura erabiltzen\n"
 "da. Bestela, pertzepzio-saiakerara\n"
 "itzultzen da."
@@ -24813,17 +24711,7 @@ msgstr "Grafikoentzat eta diagramentzat onena"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
 #: libs/ui/forms/wdgconvertcolorspace.ui:96
-#, fuzzy, kde-format
-#| msgid ""
-#| "Hue and saturation maintained with lightness\n"
-#| "sacrificed to maintain saturation. White point\n"
-#| "changed to result in neutral grays. Intended for\n"
-#| "business graphics (make it colorful charts,\n"
-#| "graphs, overheads, ...)\n"
-#| "\n"
-#| "If adequate table is present in profile,\n"
-#| "then, it is used. Else reverts to perceptual\n"
-#| "intent."
+#, kde-format
 msgid ""
 "Hue and saturation maintained with lightness\n"
 "sacrificed to maintain saturation. White point\n"
@@ -24839,7 +24727,6 @@ msgstr ""
 "Puntu zuria aldatu egiten da gris neutroak lortzeko. Enpresen\n"
 "grafikoetarako pentsatuta dago (diagrama koloretsuak, grafikoak,\n"
 "gardenkiak...).\n"
-"\n"
 "Profilean taula egokia agertzen bada, hura erabiltzen da.\n"
 "Bestela, pertzepzio-saiakerara itzultzen da."
 
@@ -25016,7 +24903,7 @@ msgstr ""
 #: libs/ui/forms/wdgdisplaysettings.ui:204
 #, kde-format
 msgid "Use large pixmap cache"
-msgstr ""
+msgstr "Erabili pixel-mapa handiko cachea"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
 #: libs/ui/forms/wdgdisplaysettings.ui:218
@@ -25056,9 +24943,9 @@ msgstr "Hobetsitako irteerako formatua:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:283
-#, fuzzy, kde-format
+#, kde-format
 msgid "Canvas Decorations"
-msgstr "No&rabidea:"
+msgstr "Mihisearen apaindurak"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgdisplaysettings.ui:289
@@ -25650,7 +25537,7 @@ msgstr "Tresna-barra&n"
 #: libs/ui/forms/wdggeneralsettings.ui:682
 #, kde-format
 msgid "Brush Flow Mode (needs restart):"
-msgstr "Pintzela irristatzeko modua (berrabiatu beharra dago):"
+msgstr "Pintzela isurtzeko modua (berrabiatu beharra dago):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFlowMode)
 #: libs/ui/forms/wdggeneralsettings.ui:690
@@ -29282,11 +29169,10 @@ msgid "Brush Opacity: %1%"
 msgstr "Opakutasuna: "
 
 #: libs/ui/kis_canvas_controls_manager.cpp:319
-#, fuzzy, kde-format
-#| msgid "Flow:"
+#, kde-format
 msgctxt "Brush Option Flow"
 msgid "Flow: %1%"
-msgstr "Emaria:"
+msgstr "Emaria: %%1"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:347
 #, fuzzy, kde-format
@@ -34278,7 +34164,7 @@ msgstr "Berrizendatu pintzelaren aurrehautaketa"
 msgid "Detach Brush Editor"
 msgstr "Bereizi pintzel-editorea"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:548
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:550
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
@@ -39728,15 +39614,12 @@ msgid "[NOT FOUND]"
 msgstr "[EZ DA AURKITU]"
 
 #: plugins/dockers/recorder/recorder_export.cpp:105
-#, fuzzy, kde-format
-#| msgid ""
-#| "FFMpeg executable location couldn't be detected, please install it or "
-#| "select its location manually"
+#, kde-format
 msgid ""
 "FFmpeg executable location couldn't be detected, please install it or select "
 "its location manually"
 msgstr ""
-"Ezin izan du «FFMpeg» exekutagarriaren kokalekua antzeman, mesedez, "
+"Ezin izan du «FFmpeg» exekutagarriaren kokalekua antzeman, mesedez, "
 "instalatu edo hautatu eskuz bere kokalekua"
 
 #: plugins/dockers/recorder/recorder_export.cpp:169
@@ -39745,12 +39628,10 @@ msgid "Abort encoding the timelapse video?"
 msgstr "Denbora azkartutako bideoa kodetzea bertan behera utzi?"
 
 #: plugins/dockers/recorder/recorder_export.cpp:241
-#, fuzzy, kde-format
-#| msgctxt "Status for the export of the video record"
-#| msgid "Starting FFMpeg..."
+#, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting FFmpeg..."
-msgstr "FFMpeg abiarazten..."
+msgstr "«FFmpeg» abiarazten..."
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
 #: plugins/dockers/recorder/recorder_export.cpp:343
@@ -39793,10 +39674,9 @@ msgid "No frames to browse."
 msgstr "Ez dago esportatu beharreko fotogramarik"
 
 #: plugins/dockers/recorder/recorder_export.cpp:522
-#, fuzzy, kde-format
-#| msgid "Select FFMpeg Executable File"
+#, kde-format
 msgid "Select FFmpeg Executable File"
-msgstr "Hautatu FFMpeg fitxategi exekutagarria"
+msgstr "Hautatu «FFmpeg» fitxategi exekutagarria"
 
 #: plugins/dockers/recorder/recorder_export.cpp:568
 #, kde-format
@@ -39949,10 +39829,9 @@ msgstr "seg."
 
 #. i18n: ectx: property (text), widget (QLabel, labelFfmpegLocation)
 #: plugins/dockers/recorder/recorder_export.ui:587
-#, fuzzy, kde-format
-#| msgid "FFMpeg:"
+#, kde-format
 msgid "FFmpeg:"
-msgstr "FFMpeg:"
+msgstr "FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkResize)
 #: plugins/dockers/recorder/recorder_export.ui:624
@@ -45723,10 +45602,9 @@ msgstr ""
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:595
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:697
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:796
-#, fuzzy, kde-format
-#| msgid "Declination"
+#, kde-format
 msgid "Inclination:"
-msgstr "Deklinazioa"
+msgstr "Inklinazioa:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lightSourceGroupBox2)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:526
@@ -46070,14 +45948,14 @@ msgid "A circular-arrow"
 msgstr "Gezi zirkular bat"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:539
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gearhead"
-msgstr "Makineria"
+msgstr "Engranajea"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:541
-#, fuzzy, kde-format
+#, kde-format
 msgid "A gearhead"
-msgstr "Makineria"
+msgstr "Engranaje bat"
 
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigCommand.cpp:21
 msgctxt "(qtundo-format)"
@@ -46825,9 +46703,7 @@ msgid "Sine Wave"
 msgstr "Uhin sinusoidala"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "Screentone Pattern - Trianular Wave Lines"
-#| msgid "Triangular Wave"
+#, kde-format
 msgctxt "Screentone Pattern - Triangular Wave Lines"
 msgid "Triangular Wave"
 msgstr "Uhin triangeluarra"
@@ -46878,12 +46754,14 @@ msgstr "Birzamatu aurre-ezarpena"
 msgctxt "SeExpr variable"
 msgid "Normalized X axis coordinate of the image from its top-left corner"
 msgstr ""
+"Irudiaren X ardatz normalizatuaren koordenatua bere goi-ezker izkinatik"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:54
 #, kde-format
 msgctxt "SeExpr variable"
 msgid "Normalized Y axis coordinate of the image from its top-left corner"
 msgstr ""
+"Irudiaren Y ardatz normalizatuaren koordenatua bere goi-ezker izkinatik"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:55
 #, kde-format
@@ -47210,18 +47088,14 @@ msgstr "Irudiaren distira eta koloretasuna bereizmen betean egongo dira."
 
 #: plugins/impex/heif/HeifExport.cpp:544
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
-#, fuzzy, kde-format
-#| msgctxt "Colorspace name"
-#| msgid "Rec 2100 HLG"
+#, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec 2100 HLG"
 
 #: plugins/impex/heif/HeifExport.cpp:544
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:177
-#, fuzzy, kde-format
-#| msgctxt "Colorspace name"
-#| msgid "Rec 2100 PQ"
+#, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec 2100 PQ"
@@ -47248,9 +47122,7 @@ msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:553
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
-#, fuzzy, kde-format
-#| msgctxt "Colorspace option plus transfer function name"
-#| msgid "Keep colorants, encode PQ"
+#, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Mantendu koloratzaileak, kodetu PQ"
@@ -47267,12 +47139,10 @@ msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:558
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:201
-#, fuzzy, kde-format
-#| msgctxt "Colorspace option plus transfer function name"
-#| msgid "Keep colorants, encode HLG"
+#, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
-msgstr "Mantendu koloratzaileak, kodetu PQ"
+msgstr "Mantendu koloratzaileak, kodetu HLG"
 
 #: plugins/impex/heif/HeifExport.cpp:559
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:203
@@ -47285,9 +47155,7 @@ msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:563
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:208
-#, fuzzy, kde-format
-#| msgctxt "Colorspace option plus transfer function name"
-#| msgid "Keep colorants, encode SMPTE ST 428"
+#, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Mantendu koloratzaileak, kodetu SMPTE ST 428"
@@ -47815,39 +47683,35 @@ msgstr "Animazioak 240 FPS baino gehiagoko fotograma-emaria adierazten du."
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (only for low quality)"
-msgstr "Lehenetsia (bakarrik kalitate baxurako)"
+msgstr "Lehenetsia (kalitate baxurako bakarrik)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:20
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
-#, fuzzy, kde-format
-#| msgid "No Scaling"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "No downsampling"
-msgstr "Eskalatzerik gabe"
+msgstr "Lagin murrizketarik ez"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:21
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
-#, fuzzy, kde-format
-#| msgid "No Scaling"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "2x2 downsampling"
-msgstr "Eskalatzerik gabe"
+msgstr "2x2 lagin murrizketa"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:22
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:28
-#, fuzzy, kde-format
-#| msgid "No Scaling"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "4x4 downsampling"
-msgstr "Eskalatzerik gabe"
+msgstr "4x4 lagin murrizketa"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:23
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
-#, fuzzy, kde-format
-#| msgid "No Scaling"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "8x8 downsampling"
-msgstr "Eskalatzerik gabe"
+msgstr "8x8 lagin murrizketa"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
@@ -47874,7 +47738,7 @@ msgstr "Eskalatzerik gabe"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (encoder chooses)"
-msgstr "Lehenetsia (kodetzaileak erabakitzen du)"
+msgstr "Lehenetsia (kodetzaileak aukeratzen du)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:34
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:40
@@ -48255,11 +48119,10 @@ msgstr "Parametro modularrak"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:351
-#, fuzzy, kde-format
-#| msgid "Color channels in color"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Color channel resampling"
-msgstr "Kolorearen kolore-kanalak"
+msgstr "Kolore kanalaren birlaginketa"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, resampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:358
@@ -48269,13 +48132,15 @@ msgid ""
 "downsampled before compression, and upsampled to original size in the "
 "decoder."
 msgstr ""
+"Birlaginketa aukerak ezartzen ditu. Gaituta badago, irudiaren kolore-"
+"kanalei, konpresio aurretik, lagin murrizketa egiten zaie, eta kodetzailean "
+"laginak jatorrizko neurrira gehitzen dira."
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:365
-#, fuzzy, kde-format
-#| msgid "Alpha Plane Compression"
+#, kde-format
 msgid "Alpha channel resampling"
-msgstr "Alfa planoaren konpresioa"
+msgstr "Alfa kanalaren birlaginketa"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, extraChannelResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:372
@@ -48284,6 +48149,9 @@ msgid ""
 "Sets resampling option. If enabled, the image's alpha channel is downsampled "
 "before compression, and upsampled to original size in the decoder."
 msgstr ""
+"Birlaginketa aukerak ezartzen ditu. Gaituta badago, irudiaren alfa-kanalari, "
+"konpresio aurretik, lagin murrizketa egiten zaio, eta kodetzailean laginak "
+"jatorrizko neurrira gehitzen dira."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhotonNoise)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:379
@@ -49631,10 +49499,10 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:453
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Demosaicing"
-msgstr "Lerroartea"
+msgstr "Koloreak berreraikitzea"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:461
 #, kde-format
@@ -53874,10 +53742,9 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:91
-#, fuzzy, kde-format
-#| msgid "Deform amount:"
+#, kde-format
 msgid "Clustering amount: "
-msgstr "Deformazio kopurua:"
+msgstr "Taldekatze kopurua: "
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:95
 #, kde-format
@@ -53908,6 +53775,8 @@ msgid ""
 "Set how many times should the curve repeat from the center to the border of "
 "the spray area."
 msgstr ""
+"Ezarri zenbat aldiz errepikatu behar den kurba, erdigunetik esprai-eremuaren "
+"ertzeraino."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:176
 #, kde-format
@@ -53920,8 +53789,7 @@ msgid "Shape dynamics"
 msgstr "Formaren dinamika"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgid "Spray Shape"
 msgstr "Espraiaren forma"
 
@@ -54036,8 +53904,7 @@ msgstr "Kopurua:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, countRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:203
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgctxt ""
 "Check box to indicate that the user should set the exact number of particles "
 "in the spray engine"
@@ -54098,11 +53965,10 @@ msgstr "Gaussena"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:357
-#, fuzzy, kde-format
-#| msgid "Faster"
+#, kde-format
 msgctxt "Clustering based distribution in spray engine"
 msgid "Cluster"
-msgstr "Azkarrago"
+msgstr "Pila"
 
 #. i18n: ectx: property (text), widget (QCheckBox, centerBiasedPolarDistanceBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:407
@@ -54112,7 +53978,7 @@ msgctxt ""
 "where particles are biased towards the center of the spray area in the spray "
 "engine"
 msgid "Center-biased spread (legacy)"
-msgstr ""
+msgstr "Erdigunerako joerako hedatzea (herentzia)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/spray/wdgsprayoptions.ui:432
@@ -56831,23 +56697,18 @@ msgid "Magnetism:"
 msgstr "Magnetismoa:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:465
-#, fuzzy, kde-format
-#| msgid "Snap Single:"
+#, kde-format
 msgid "Snap to Single Line"
-msgstr "Atxiki bakarra:"
+msgstr "Atxiki lerro bakarrera"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:468
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Make it only snap to a single assistant, prevents snapping mess while "
-#| "using the infinite assistants."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Make it only snap to a single assistant line, prevents snapping mess while "
 "using the infinite assistants."
 msgstr ""
-"Laguntzaile bakarrera atxikitzen uzten dio, laguntzaile mugagabeak "
+"Lerro laguntzaile bakarrera atxikitzen uzten dio, laguntzaile mugagabeak "
 "erabiltzean atxikitze nahasmena gertatzea saihesten du."
 
 #: plugins/tools/basictools/kis_tool_brush.cc:473
@@ -56906,10 +56767,9 @@ msgstr "Eskala: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:534
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:449
-#, fuzzy, kde-format
-#| msgid "Encoding options"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "Kodetzeko aukerak"
+msgstr "Erabili neurrira ipinitako nahasteko aukerak"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:549
 #, kde-format
@@ -56984,17 +56844,15 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr "Ezarri geruzaren opakutasun eredu nagusia"
+msgstr "Ezarri betegarrirako neurrira ipinitako opakutasun bat"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:617
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "Ezarri geruza konbinatzeko modua"
+msgstr "Ezarri betegarrirako neurrira ipinitako nahasteko modu bat"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:619
 #, kde-format
@@ -58328,9 +58186,7 @@ msgid "Threshold: "
 msgstr "Atalasea: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
 msgid "Spread: "
 msgstr "Zabaldu: "
@@ -58640,15 +58496,13 @@ msgstr "Lerroaren altuera"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1612
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1621
-#, fuzzy, kde-format
-#| msgid "Normal"
+#, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Arrunta"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1625
-#, fuzzy, kde-format
-#| msgid "100%"
+#, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr "% 100"

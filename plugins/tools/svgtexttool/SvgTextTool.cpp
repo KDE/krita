@@ -379,7 +379,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
             QPainterPath path;
             path.addRect(shape->boundingRect());
             handlePainter.drawPath(path);
-            if (m_isOverAnchorPoint) {
+            if (m_highlightItem == HighlightItem::Anchor) {
                 handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
             }
             handlePainter.drawHandleCircle(shape->absoluteTransformation().map(QPointF()), KoToolBase::handleRadius());
@@ -389,7 +389,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
             handlePainter.setHandleStyle(KisHandleStyle::secondarySelection());
             handlePainter.drawConnectionLine(info->baselineLine());
             handlePainter.drawConnectionLine(info->nonEditLine());
-            if (m_isOverInlineSizeHandle) {
+            if (m_highlightItem == HighlightItem::InlineSizeHandle) {
                 handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
             }
             handlePainter.drawConnectionLine(info->editLine());
@@ -409,23 +409,16 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
     KoSvgTextShape *selectedShape = this->selectedShape();
 
     if (selectedShape) {
-        if (m_isOverAnchorPoint) {
+        if (m_highlightItem == HighlightItem::Anchor) {
             m_interactionStrategy.reset(new SvgMoveTextStrategy(this, selectedShape, event->point));
             m_dragging = DragMode::Move;
             event->accept();
             return;
-        }
-
-        m_isOverInlineSizeHandle = false;
-        if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(selectedShape)) {
-            const QPolygonF zone = info->editLineGrabRect(grabSensitivityInPt());
-            if (zone.containsPoint(event->point, Qt::OddEvenFill)) {
-                m_isOverInlineSizeHandle = true;
-                m_interactionStrategy.reset(new SvgInlineSizeChangeStrategy(this, selectedShape, event->point));
-                m_dragging = DragMode::InlineSizeHandle;
-                event->accept();
-                return;
-            }
+        } else if (m_highlightItem == HighlightItem::InlineSizeHandle) {
+            m_interactionStrategy.reset(new SvgInlineSizeChangeStrategy(this, selectedShape, event->point));
+            m_dragging = DragMode::InlineSizeHandle;
+            event->accept();
+            return;
         }
     }
 
@@ -477,34 +470,29 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
         m_interactionStrategy->handleMouseMove(event->point, event->modifiers());
         event->accept();
     } else {
+        m_highlightItem = HighlightItem::None;
         KoSvgTextShape *const selectedShape = this->selectedShape();
         Qt::CursorShape cursor = Qt::ArrowCursor;
         if (selectedShape) {
             const qreal sensitivity = grabSensitivityInPt();
-            {
-                const QPointF anchor = selectedShape->absoluteTransformation().map(QPointF());
-                const QRectF anchorZone = kisGrowRect(QRectF(anchor, anchor), sensitivity);
-                m_isOverAnchorPoint = anchorZone.contains(event->point);
-            }
 
-            if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(selectedShape)) {
+            const QPointF anchor = selectedShape->absoluteTransformation().map(QPointF());
+            const QRectF anchorZone = kisGrowRect(QRectF(anchor, anchor), sensitivity);
+            if (anchorZone.contains(event->point)) {
+                m_highlightItem = HighlightItem::Anchor;
+                cursor = Qt::SizeAllCursor;
+            } else if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(selectedShape)) {
                 const QPolygonF zone = info->editLineGrabRect(sensitivity);
                 if (zone.containsPoint(event->point, Qt::OddEvenFill)) {
-                    m_isOverInlineSizeHandle = true;
+                    m_highlightItem = HighlightItem::InlineSizeHandle;
                     cursor = lineToCursor(info->baselineLine(), canvas());
                 }
-            }
-
-            // Anchor point overrides the inline size handle.
-            if (m_isOverAnchorPoint) {
-                m_isOverInlineSizeHandle = false;
-                cursor = Qt::SizeAllCursor;
             }
         }
         useCursor(cursor);
 
         KoSvgTextShape *hoveredShape = dynamic_cast<KoSvgTextShape *>(canvas()->shapeManager()->shapeAt(event->point));
-        if (hoveredShape && !m_isOverInlineSizeHandle && !m_isOverAnchorPoint) {
+        if (hoveredShape && m_highlightItem == HighlightItem::None) {
             m_hoveredShapeHighlightRect = {};
             if (hoveredShape->shapesInside().isEmpty()) {
                 m_hoveredShapeHighlightRect.addRect(hoveredShape->boundingRect());

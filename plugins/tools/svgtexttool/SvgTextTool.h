@@ -97,14 +97,18 @@ private:
         InlineSizeHandle,
         Move,
     };
+    enum class HighlightItem {
+        None = 0,
+        InlineSizeHandle,
+        Anchor,
+    };
 
     QPointer<SvgTextEditor> m_editor;
     QPushButton *m_edit {nullptr};
     QPointF m_lastMousePos;
     DragMode m_dragging {DragMode::None};
     std::unique_ptr<KoInteractionStrategy> m_interactionStrategy;
-    bool m_isOverInlineSizeHandle {false};
-    bool m_isOverAnchorPoint {false};
+    HighlightItem m_highlightItem {HighlightItem::None};
     QFontComboBox *m_defFont {nullptr};
     QComboBox *m_defPointSize {nullptr};
     QButtonGroup *m_defAlignment {nullptr};

@@ -93,6 +93,7 @@ private:
         None = 0,
         Create,
         InlineSizeHandle,
+        Move,
     };
 
     QPointer<SvgTextEditor> m_editor;
@@ -101,6 +102,7 @@ private:
     DragMode m_dragging {DragMode::None};
     std::unique_ptr<KoInteractionStrategy> m_interactionStrategy;
     bool m_isOverInlineSizeHandle {false};
+    bool m_isOverAnchorPoint {false};
     QFontComboBox *m_defFont {nullptr};
     QComboBox *m_defPointSize {nullptr};
     QButtonGroup *m_defAlignment {nullptr};

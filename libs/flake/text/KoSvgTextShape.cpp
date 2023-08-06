@@ -2987,14 +2987,23 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
                 baselineTable.insert(KoSvgText::BaselineMiddle, baselineTable.value(KoSvgText::BaselineCentral));
             }
         } else {
+            baseline = 0;
             hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_ROMAN, dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineAlphabetic, baseline);
+
+            baseline = 0;
             hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_MATH, dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineMathematical, baseline);
+
+            baseline = 0;
             hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_HANGING, dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineHanging, baseline);
+
+            baseline = 0;
             hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL, dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineCentral, baseline);
+
+            baseline = 0;
             hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT, dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineIdeographic, baseline);
             if (isHorizontal) {
@@ -3098,7 +3107,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
         if (isHorizontal) {
             baselineAdjust = KoSvgText::BaselineAlphabetic;
         } else {
-            baselineAdjust = KoSvgText::BaselineMiddle;
+            baselineAdjust = KoSvgText::BaselineCentral;
         }
     }
 

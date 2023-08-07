@@ -2956,6 +2956,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     KoSvgText::Baseline dominantBaseline = KoSvgText::Baseline(properties.property(KoSvgTextProperties::DominantBaselineId).toInt());
 
     hb_position_t baseline = 0;
+    KoSvgText::Baseline defaultBaseline = isHorizontal? KoSvgText::BaselineAlphabetic: KoSvgText::BaselineCentral;
     if (dominantBaseline == KoSvgText::BaselineResetSize && parentFontSize > 0) {
         baselineTable = parentBaselineTable;
         qreal multiplier = 1.0 / parentFontSize * fontSize;
@@ -2967,44 +2968,56 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
         baselineTable = parentBaselineTable;
         dominantBaseline = KoSvgText::BaselineAuto;
     } else {
+        QMap<hb_ot_layout_baseline_tag_t, KoSvgText::Baseline> baselineList;
+        baselineList.insert(HB_OT_LAYOUT_BASELINE_TAG_ROMAN, KoSvgText::BaselineAlphabetic);
+        baselineList.insert(HB_OT_LAYOUT_BASELINE_TAG_MATH, KoSvgText::BaselineMathematical);
+        baselineList.insert(HB_OT_LAYOUT_BASELINE_TAG_HANGING, KoSvgText::BaselineHanging);
+        baselineList.insert(HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_CENTRAL, KoSvgText::BaselineCentral);
+        baselineList.insert(HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT, KoSvgText::BaselineIdeographic);
+
         if (hb_version_atleast(4, 0, 0)) {
-            hb_ot_layout_get_baseline_with_fallback(font.data(), HB_OT_LAYOUT_BASELINE_TAG_ROMAN, dir, script, HB_TAG_NONE, &baseline);
-            baselineTable.insert(KoSvgText::BaselineAlphabetic, baseline);
-            hb_ot_layout_get_baseline_with_fallback(font.data(), HB_OT_LAYOUT_BASELINE_TAG_MATH, dir, script, HB_TAG_NONE, &baseline);
-            baselineTable.insert(KoSvgText::BaselineMathematical, baseline);
-            hb_ot_layout_get_baseline_with_fallback(font.data(), HB_OT_LAYOUT_BASELINE_TAG_HANGING, dir, script, HB_TAG_NONE, &baseline);
-            baselineTable.insert(KoSvgText::BaselineHanging, baseline);
-            hb_ot_layout_get_baseline_with_fallback(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL, dir, script, HB_TAG_NONE, &baseline);
-            baselineTable.insert(KoSvgText::BaselineCentral, baseline);
-            hb_ot_layout_get_baseline_with_fallback(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT, dir, script, HB_TAG_NONE, &baseline);
-            baselineTable.insert(KoSvgText::BaselineIdeographic, baseline);
+            hb_position_t origin = 0;
+            hb_ot_layout_get_baseline_with_fallback(font.data(), baselineList.key(defaultBaseline), dir, script, HB_TAG_NONE, &origin);
+            Q_FOREACH(hb_ot_layout_baseline_tag_t tag, baselineList.keys()) {
+                hb_ot_layout_get_baseline_with_fallback(font.data(), tag, dir, script, HB_TAG_NONE, &baseline);
+                baselineTable.insert(baselineList.value(tag), baseline - origin);
+            }
+
             if (isHorizontal) {
                 hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
                 baselineTable.insert(KoSvgText::BaselineMiddle, static_cast<int>((baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5));
-
             } else {
                 baselineTable.insert(KoSvgText::BaselineMiddle, baselineTable.value(KoSvgText::BaselineCentral));
             }
         } else {
-            baseline = 0;
-            hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_ROMAN, dir, script, HB_TAG_NONE, &baseline);
-            baselineTable.insert(KoSvgText::BaselineAlphabetic, baseline);
+            hb_position_t origin = 0;
+            if (!isHorizontal) {
+                // we'll need to calculate the central baseline manually, because there's no opentype tag associated with it, and
+                // the harfbuzz tag is specific to HB 4.0 and up.
 
-            baseline = 0;
-            hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_MATH, dir, script, HB_TAG_NONE, &baseline);
-            baselineTable.insert(KoSvgText::BaselineMathematical, baseline);
+                hb_position_t over = 0.0;
+                hb_position_t under = 0.0;
+                bool hasOver = hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_TOP_OR_RIGHT, dir, script, HB_TAG_NONE, &over);
+                bool hasUnder = hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT, dir, script, HB_TAG_NONE, &under);
+                if (!hasOver || !hasUnder) {
+                    hb_font_extents_t font_extents;
+                    hb_font_get_extents_for_direction (font.data(), dir, &font_extents);
+                    if (!hasOver) { over = font_extents.ascender;}
+                    if (!hasUnder) { under = font_extents.descender;}
+                }
+                origin = (over + under) / 2;
+            }
 
-            baseline = 0;
-            hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_HANGING, dir, script, HB_TAG_NONE, &baseline);
-            baselineTable.insert(KoSvgText::BaselineHanging, baseline);
+            Q_FOREACH(hb_ot_layout_baseline_tag_t tag, baselineList.keys()) {
+                if (baselineList.value(tag) == defaultBaseline) {
+                    baselineTable.insert(defaultBaseline, 0);
+                } else {
+                    baseline = 0;
+                    hb_ot_layout_get_baseline(font.data(), tag, dir, script, HB_TAG_NONE, &baseline);
+                    baselineTable.insert(baselineList.value(tag), baseline-origin);
+                }
+            }
 
-            baseline = 0;
-            hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL, dir, script, HB_TAG_NONE, &baseline);
-            baselineTable.insert(KoSvgText::BaselineCentral, baseline);
-
-            baseline = 0;
-            hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT, dir, script, HB_TAG_NONE, &baseline);
-            baselineTable.insert(KoSvgText::BaselineIdeographic, baseline);
             if (isHorizontal) {
                 hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
                 baselineTable.insert(KoSvgText::BaselineMiddle, static_cast<int>((baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5));
@@ -3103,11 +3116,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     }
     if (baselineAdjust == KoSvgText::BaselineAuto || baselineAdjust == KoSvgText::BaselineUseScript) {
         // UseScript got deprecated in CSS-Inline-3.
-        if (isHorizontal) {
-            baselineAdjust = KoSvgText::BaselineAlphabetic;
-        } else {
-            baselineAdjust = KoSvgText::BaselineCentral;
-        }
+        baselineAdjust = defaultBaseline;
     }
 
     LineBox relevantLine;

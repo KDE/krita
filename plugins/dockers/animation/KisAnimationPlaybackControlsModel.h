@@ -12,12 +12,18 @@
 #include <lager/state.hpp>
 #include <lager/extra/qt.hpp>
 
+class KisPlaybackEngine;
+class KisCanvasAnimationState;
 
 class KisAnimationPlaybackControlsModel : public QObject
 {
     Q_OBJECT
 public:
     KisAnimationPlaybackControlsModel();
+
+    void connectAnimationState(KisCanvasAnimationState *state);
+    void connectPlaybackEngine(KisPlaybackEngine *engine);
+
 private:
     lager::state<bool, lager::automatic_tag> m_dropFramesMode;
     lager::state<qreal, lager::automatic_tag> m_playbackSpeed;

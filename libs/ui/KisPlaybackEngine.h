@@ -86,10 +86,6 @@ public Q_SLOTS:
     virtual void previousUnfilteredKeyframe();
     virtual void nextUnfilteredKeyframe();
 
-    // Playback speed controls...
-    virtual void setPlaybackSpeedPercent(int value) = 0;
-    virtual void setPlaybackSpeedNormalized(double value) = 0;
-
     // Audio controls...
     virtual void setMute(bool val) = 0;
     virtual bool isMute() = 0;

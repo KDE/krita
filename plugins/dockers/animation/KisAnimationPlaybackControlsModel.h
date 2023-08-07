@@ -20,9 +20,12 @@ public:
     KisAnimationPlaybackControlsModel();
 private:
     lager::state<bool, lager::automatic_tag> m_dropFramesMode;
+    lager::state<qreal, lager::automatic_tag> m_playbackSpeed;
 
 public:
     LAGER_QT_CURSOR(bool, dropFramesMode);
+    LAGER_QT_CURSOR(qreal, playbackSpeed);
+    LAGER_QT_CURSOR(int, playbackSpeedDenorm);
 };
 
 #endif // KISANIMATIONPLAYBACKCONTROLSMODEL_H

@@ -230,6 +230,7 @@ public:
 
     QTimer m_statsTimer;
 
+    qreal playbackSpeed {1.0};
 };
 
 KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
@@ -300,6 +301,19 @@ boost::optional<int> KisCanvasAnimationState::playbackOrigin()
 KisFrameDisplayProxy *KisCanvasAnimationState::displayProxy()
 {
     return m_d->displayProxy.data();
+}
+
+void KisCanvasAnimationState::setPlaybackSpeed(qreal value)
+{
+    if (!qFuzzyCompare(value, m_d->playbackSpeed)) {
+        m_d->playbackSpeed = value;
+        Q_EMIT sigPlaybackSpeedChanged(value);
+    }
+}
+
+qreal KisCanvasAnimationState::playbackSpeed() const
+{
+    return m_d->playbackSpeed;
 }
 
 void KisCanvasAnimationState::showFrame(int frame, bool finalize)

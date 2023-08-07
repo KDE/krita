@@ -424,6 +424,11 @@ void KisPlaybackEngineMLT::setCanvas(KoCanvasBase *p_canvas)
             }
         });
 
+        connect(animationState, &KisCanvasAnimationState::sigPlaybackSpeedChanged, this, [this](qreal value){
+            m_d->sigSetPlaybackSpeed->start(value);
+        });
+        m_d->playbackSpeed = animationState->playbackSpeed();
+
         connect(animationState, &KisCanvasAnimationState::sigAudioLevelChanged, this, &KisPlaybackEngineMLT::setAudioVolume);
 
         auto image = activeCanvas()->image();
@@ -521,16 +526,6 @@ void KisPlaybackEngineMLT::setDropFramesMode(bool value)
     StopAndResume r(m_d.data(), false);
 
     KisPlaybackEngine::setDropFramesMode(value);
-}
-
-void KisPlaybackEngineMLT::setPlaybackSpeedPercent(int value)
-{
-    setPlaybackSpeedNormalized(static_cast<double>(value) / 100.0);
-}
-
-void KisPlaybackEngineMLT::setPlaybackSpeedNormalized(double value)
-{
-    m_d->sigSetPlaybackSpeed->start(value);
 }
 
 void KisPlaybackEngineMLT::setMute(bool val)

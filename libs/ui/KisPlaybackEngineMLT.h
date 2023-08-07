@@ -45,9 +45,6 @@ Q_SIGNALS:
 public Q_SLOTS:
     void seek(int frameIndex, SeekOptionFlags flags = SEEK_FINALIZE | SEEK_PUSH_AUDIO) override;
 
-    void setPlaybackSpeedPercent(int value) override;
-    void setPlaybackSpeedNormalized(double value) override;
-
     void setMute(bool val) override;
     bool isMute() override;
 

@@ -23,8 +23,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-06 00:44+0000\n"
-"PO-Revision-Date: 2023-08-05 20:41+0200\n"
+"POT-Creation-Date: 2023-08-07 00:44+0000\n"
+"PO-Revision-Date: 2023-08-06 18:44+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -3677,11 +3677,11 @@ msgid "leaves-scattered"
 msgstr "hostoak-sakabanatuta"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/oil_bristle.png"
 msgid "oil bristle"
-msgstr "Zurda-aukerak"
+msgstr "olio zurdak"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16473,25 +16473,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3982
+#: libs/flake/text/KoSvgTextShape.cpp:3995
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Testua"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3984
-#: libs/flake/text/KoSvgTextShape.cpp:3992
+#: libs/flake/text/KoSvgTextShape.cpp:3997
+#: libs/flake/text/KoSvgTextShape.cpp:4005
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG testu forma"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3990
+#: libs/flake/text/KoSvgTextShape.cpp:4003
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG testua"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4004
-#: libs/flake/text/KoSvgTextShape.cpp:4019
+#: libs/flake/text/KoSvgTextShape.cpp:4017
+#: libs/flake/text/KoSvgTextShape.cpp:4032
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -31569,8 +31569,7 @@ msgstr ""
 "Sakatu %1, itzultzeko."
 
 #: libs/ui/KisViewManager.cpp:1368
-#, fuzzy, kde-format
-#| msgid "Open Resource Folder"
+#, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Ireki baliabideen karpeta"
@@ -31600,7 +31599,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
-msgstr ""
+msgstr "Ireki aplikazioaren kokaleku &pribatu batean"
 
 #: libs/ui/KisViewManager.cpp:1506 libs/ui/KisViewManager.cpp:1524
 #, kde-format
@@ -32199,9 +32198,9 @@ msgstr "Gehitu zarata itzalari"
 #. i18n: ectx: property (title), widget (QGroupBox, grpMain)
 #: libs/ui/layerstyles/wdgdropshadow.ui:21
 #: libs/ui/layerstyles/wdglayerstyles.ui:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Drop Shadow"
-msgstr "Itzala"
+msgstr "Itzala eman"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLayerKnocksOutDropShadow)
 #: libs/ui/layerstyles/wdgdropshadow.ui:40
@@ -32499,8 +32498,7 @@ msgstr "Trazua"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
 #: libs/ui/layerstyles/wdglayerstyles.ui:156
-#, fuzzy, kde-format
-#| msgid "Save &As..."
+#, kde-format
 msgctxt "Save as new layer style..."
 msgid "&Save as..."
 msgstr "Gorde &honela..."
@@ -32747,10 +32745,9 @@ msgstr ""
 "«MyPaint»eko pintzel motorra ez dago erabilgarri kolore-eremu honetarako"
 
 #: libs/ui/tool/kis_tool_paint.cc:571
-#, fuzzy, kde-format
-#| msgid "Brush size"
+#, kde-format
 msgid "Brush Size: %1 px"
-msgstr "Pintzelaren tamaina"
+msgstr "Pintzelaren neurria: %1 px"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:113
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
@@ -32837,32 +32834,28 @@ msgid "Icon Size"
 msgstr "Ikonoen neurria"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:144
-#, fuzzy, kde-format
-#| msgid "Layout"
+#, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Antolamendua"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "Automatikoa"
+msgstr "&Automatikoa"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Left to right"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
-msgstr "Ezkerretik eskuinera"
+msgstr "E&zkerretik eskuinera"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:161
-#, fuzzy, kde-format
-#| msgid "Right to left"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
-msgstr "Eskuinetik ezkerrera"
+msgstr "E&skuinetik ezkerrera"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format
@@ -33171,13 +33164,12 @@ msgid "Distribute segments evenly"
 msgstr "Segmentuak modu uniformean banatu"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:159
-#, fuzzy, kde-format
-#| msgid "Line color"
+#, kde-format
 msgctxt ""
 "Button to link both end colors of a stop handle in the segment gradient "
 "editor"
 msgid "Link colors"
-msgstr "Lerroaren kolorea"
+msgstr "Koloreak estekatu"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:224
 #, kde-format
@@ -33187,11 +33179,10 @@ msgid "Segment #%1"
 msgstr "%1 zk. segmentua"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:255
-#, fuzzy, kde-format
-#| msgid "Stop: "
+#, kde-format
 msgctxt "Text that indicates the selected stop in the segment gradient editor"
 msgid "Stop #%1"
-msgstr "Gelditu: "
+msgstr "Gelditu #%1"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:299
 #, kde-format
@@ -33387,38 +33378,30 @@ msgid "Estimated Gamma cannot be retrieved for YCbCr."
 msgstr "Gamma zenbatetsia ezin da YCrCb-rako berreskuratu."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:384
-#, fuzzy, kde-format
-#| msgid "&About %1"
+#, kde-format
 msgctxt "About <Profilename>"
 msgid "About %1/%2"
-msgstr "%1(e)(r)i buruz"
+msgstr "%1/%2(e)(r)i buruz"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:386
-#, fuzzy, kde-format
-#| msgctxt "ICC profile version"
-#| msgid "ICC Version: "
+#, kde-format
 msgctxt "ICC profile version"
 msgid "ICC Version: %1"
-msgstr "ICC bertsioa:"
+msgstr "ICC bertsioa: %1"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:389
-#, fuzzy, kde-format
-#| msgid "Min Luminance: %1"
+#, kde-format
 msgctxt "Who made the profile?"
 msgid "Manufacturer: %1"
-msgstr "Luminantzia min.: %1"
+msgstr "Fabrikatzailea: %1"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:394
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "What is the copyright? These are from embedded strings from the icc "
-#| "profile, so they default to english."
-#| msgid "Copyright: "
+#, kde-format
 msgctxt ""
 "What is the copyright? These are from embedded strings from the icc profile, "
 "so they default to english."
 msgid "Copyright: %1"
-msgstr "Copyright: "
+msgstr "Copyright: %1"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:402
 #, kde-format
@@ -33953,8 +33936,7 @@ msgid "No Label"
 msgstr "Etiketarik ez"
 
 #: libs/ui/widgets/kis_color_space_selector.cc:217
-#, fuzzy, kde-format
-#| msgid "Select a Colorspace"
+#, kde-format
 msgid "Select a Color Space"
 msgstr "Hautatu kolore-eremu bat"
 
@@ -34001,10 +33983,9 @@ msgid "No configuration options"
 msgstr "Konfiguratzeko aukerarik ez"
 
 #: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
-#, fuzzy, kde-format
-#| msgid "The file %1 does not exist."
+#, kde-format
 msgid "The clipboard is empty or does not have an image in it."
-msgstr "%1 fitxategia ez da existitzen."
+msgstr "Arbela hutsik dago edo ez du barnean irudirik."
 
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:42
 #, kde-format
@@ -34177,37 +34158,31 @@ msgstr "Motor honetarako aurreikusterik ez"
 
 #: libs/ui/widgets/kis_selection_options.cc:179
 #: plugins/tools/basictools/kis_tool_fill.cc:562
-#, fuzzy, kde-format
-#| msgid "Anti-aliasing"
+#, kde-format
 msgctxt "The anti-alias checkbox in fill tool options"
 msgid "Anti-aliasing"
 msgstr "Ertzak leuntzea"
 
 #: libs/ui/widgets/kis_selection_options.cc:184
-#, fuzzy, kde-format
-#| msgctxt "Grow as in deform brush engine"
-#| msgid "Grow"
+#, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in selection tools options"
 msgid "Grow: "
-msgstr "Handitu"
+msgstr "Handitu: "
 
 #: libs/ui/widgets/kis_selection_options.cc:198
-#, fuzzy, kde-format
-#| msgid "Feather radius:"
+#, kde-format
 msgctxt "The 'feather' spinbox prefix in selection tools options"
 msgid "Feather: "
-msgstr "Lumaren erradioa:"
+msgstr "Luma: "
 
 #: libs/ui/widgets/kis_selection_options.cc:217
-#, fuzzy, kde-format
-#| msgid "Pixel Selection"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Pixel Selection"
 msgstr "Pixel hautapena"
 
 #: libs/ui/widgets/kis_selection_options.cc:219
-#, fuzzy, kde-format
-#| msgid "Vector Selection"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Vector Selection"
 msgstr "Bektore hautapena"
@@ -34289,24 +34264,22 @@ msgid ""
 msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:254
-#, fuzzy, kde-format
-#| msgid "Mode"
+#, kde-format
 msgctxt "The 'mode' section label in selection tools options"
 msgid "Mode"
 msgstr "Modua"
 
 #: libs/ui/widgets/kis_selection_options.cc:261
-#, fuzzy, kde-format
-#| msgid "Action"
+#, kde-format
 msgctxt "The 'action' section label in selection tools options"
 msgid "Action"
 msgstr "Ekintza"
 
 #: libs/ui/widgets/kis_selection_options.cc:268
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
-msgstr "Hobespenak"
+msgstr "Erreferentzia"
 
 #: libs/ui/widgets/kis_selection_options.cc:277
 #, fuzzy, kde-format
@@ -34450,8 +34423,7 @@ msgstr "Tonu argiak berrezartzea"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:62
-#, fuzzy, kde-format
-#| msgid "Method:"
+#, kde-format
 msgctxt "Contrast enhancement method used in auto levels"
 msgid "Method:"
 msgstr "Metodoa:"
@@ -34461,7 +34433,7 @@ msgstr "Metodoa:"
 #, kde-format
 msgctxt "Use same black and white points for all the channels in auto levels"
 msgid "Adjust monochromatic contrast"
-msgstr ""
+msgstr "Egokitu kontraste monokromatikoa"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxShadowsAndLightsMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:75
@@ -34492,22 +34464,19 @@ msgstr "Tonu argiak:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:97
-#, fuzzy, kde-format
-#| msgid "Random offset:"
+#, kde-format
 msgctxt ""
 "Maximum distance the black/white points can be moved from their relative "
 "extremes in auto levels"
 msgid "Maximum offset:"
-msgstr "Ausazko jatorri-aldaketa"
+msgstr "Gehieneko Jatorri-aldaketa:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:107
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color history"
+#, kde-format
 msgctxt "Output color used for the shadows in auto levels"
 msgid "Shadows color:"
-msgstr "Erakutsi kolore-historia"
+msgstr "Itzalen kolorea:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:114
@@ -34528,8 +34497,7 @@ msgstr "Tarteko tonuak"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:163
-#, fuzzy, kde-format
-#| msgid "Method:"
+#, kde-format
 msgctxt "Midtones enhancement method used in auto levels"
 msgid "Method:"
 msgstr "Metodoa:"
@@ -34558,17 +34526,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:189
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgctxt "Output color used for the midtones in auto levels"
 msgid "Color:"
 msgstr "Kolorea:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:202
-#, fuzzy, kde-format
-#| msgctxt "Amount in Unsharp mask filter"
-#| msgid "Amount:"
+#, kde-format
 msgctxt ""
 "How much the midtone point used in auto levels is close to the center of the "
 "histogram (0%) or to the point selected in the method (100%)"
@@ -34948,15 +34913,13 @@ msgid "Select a directory to load..."
 msgstr "Hautatu zamatu beharreko direktorio bat..."
 
 #: libs/widgets/kis_palette_view.cpp:106
-#, fuzzy, kde-format
-#| msgid "Default"
+#, kde-format
 msgctxt "Name for default swatch group"
 msgid "Default"
 msgstr "Lehenetsia"
 
 #: libs/widgets/kis_palette_view.cpp:120
-#, fuzzy, kde-format
-#| msgid "Color"
+#, kde-format
 msgctxt "Prefix of a color swatch default name, as in Color 1"
 msgid "Color"
 msgstr "Kolorea"
@@ -35139,10 +35102,9 @@ msgid "Luma:"
 msgstr "Luma:"
 
 #: libs/widgets/KisTagSelectionWidget.cpp:60
-#, fuzzy, kde-format
-#| msgid "Remove from this tag"
+#, kde-format
 msgid "Remove from tag"
-msgstr "Kendu etiketa honetatik"
+msgstr "Kendu etiketatik"
 
 #: libs/widgets/KoColorSetWidget.cpp:78
 #, kde-format
@@ -35398,17 +35360,14 @@ msgid "Tool Options"
 msgstr "Tresna-aukerak"
 
 #: libs/widgets/KoZoomMode.cpp:14
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "View"
+#, kde-format
 msgid "Fit View"
-msgstr "Ikuspegia"
+msgstr "Egokitu ikuspegia"
 
 #: libs/widgets/KoZoomMode.cpp:15
-#, fuzzy, kde-format
-#| msgid "Fit Page Width"
+#, kde-format
 msgid "Fit View Width"
-msgstr "Doitu orri-zabalerari"
+msgstr "Egokitu ikuspegiaren zabalera"
 
 #: libs/widgets/KoZoomMode.cpp:17
 #, kde-format
@@ -35418,19 +35377,17 @@ msgstr "Benetako pixelak"
 #: libs/widgets/KoZoomMode.cpp:21
 #, kde-format
 msgid "Fit Text Width"
-msgstr "Doitu orriaren zabalera"
+msgstr "Egokitu testuaren zabalera"
 
 #: libs/widgets/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgid "Fit Page Height"
+#, kde-format
 msgid "Fit View Height"
-msgstr "Doitu orriaren altuera"
+msgstr "Egokitu ikuspegiaren altuera"
 
 #: libs/widgets/KoZoomWidget.cpp:124
-#, fuzzy, kde-format
-#| msgid "Pixelize"
+#, kde-format
 msgid "Pixel Size"
-msgstr "Pixelatu"
+msgstr "Pixel tamaina"
 
 #: libs/widgets/KoZoomWidget.cpp:128
 #, kde-format
@@ -37000,10 +36957,9 @@ msgstr "Gaitu erregela bertikala"
 
 #. i18n: ectx: property (text), widget (QCheckBox, fixedLengthCheckbox)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:117
-#, fuzzy, kde-format
-#| msgid "Fixed angle"
+#, kde-format
 msgid "Fixed Length"
-msgstr "Angelu finkoa"
+msgstr "Zabalera finkoa"
 
 #. i18n: ectx: property (text), widget (QLabel, globalColorLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:160
@@ -37113,10 +37069,9 @@ msgid "Density: "
 msgstr "Dentsitatea: "
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1548
-#, fuzzy, kde-format
-#| msgid "Subdivision:"
+#, kde-format
 msgid "Subdivisions: "
-msgstr "Azpizatiketa:"
+msgstr "Azpizatiketak: "
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1552
 #, fuzzy, kde-format
@@ -37481,10 +37436,9 @@ msgid "YCbCr/F32 Histogram"
 msgstr "YCbCr/F32 histograma"
 
 #: plugins/dockers/advancedcolorselector/kis_color_history.cpp:26
-#, fuzzy, kde-format
-#| msgid "Clear color history"
+#, kde-format
 msgid "Clear all color history"
-msgstr "Garbitu koloreen historiala"
+msgstr "Garbitu koloreen historia osoa"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_ng_dock.cpp:24
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:43
@@ -37503,9 +37457,9 @@ msgid "Change to a Horizontal Layout"
 msgstr "Aldatu antolamendu horizontal batera"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hide Shade Selector"
-msgstr "Forma-hautatzailea"
+msgstr "Ezkutatu itzal hautatzailea"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:56
 #, kde-format
@@ -37625,10 +37579,9 @@ msgstr "Erakutsi kolore-hautatzailea"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:97
-#, fuzzy, kde-format
-#| msgid "Color &Model Type: "
+#, kde-format
 msgid "Color Model Type"
-msgstr "Kolore ere&du mota:"
+msgstr "Kolore eredu mota"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lumaCoefficientBox)
 #. i18n: ectx: property (title), widget (QGroupBox, lumaCoefficientGroupbox)
@@ -37743,10 +37696,9 @@ msgstr "hemen ez dira sartzen itzal-hautatzaileak egindako kolore-aldaketak"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:392
-#, fuzzy, kde-format
-#| msgid "Background color change"
+#, kde-format
 msgid "Background color changes"
-msgstr "Atzeko planoko kolore aldaketa"
+msgstr "Atzeko planoko kolore aldaketak"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnForeground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:405
@@ -38118,11 +38070,10 @@ msgid "Animation Timeline"
 msgstr "Animazioaren denbora-lerroa"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
-#, fuzzy, kde-format
-#| msgid "Import Bundles..."
+#, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
-msgstr "Inportatu fardelak..."
+msgstr "Inportatu audioa..."
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, kde-format
@@ -38131,18 +38082,16 @@ msgid "Remove audio"
 msgstr "Kendu audioa"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "Mute"
+#, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Isilarazi"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
-msgstr "Zutabea:"
+msgstr "Bolumena: "
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
 #, fuzzy, kde-format
@@ -38647,16 +38596,14 @@ msgid "Select a Directory"
 msgstr "Hautatu direktorio bat"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
-#, fuzzy, kde-format
-#| msgid "Export Composition"
+#, kde-format
 msgid "Exporting Compositions..."
-msgstr "Esportatu konposizioa"
+msgstr "Konposizioa esportatzea..."
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
-#, fuzzy, kde-format
-#| msgid "Export Composition"
+#, kde-format
 msgid "Exporting composition: %1..."
-msgstr "Esportatu konposizioa"
+msgstr "Konposizioa esportatzea: %1..."
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
 #, kde-format
@@ -38691,10 +38638,9 @@ msgid "Digital Colors Mixer"
 msgstr "Kolore digitalen nahastailea"
 
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:142
-#, fuzzy, kde-format
-#| msgid "Reset to default"
+#, kde-format
 msgid "Return to default settings"
-msgstr "Berrezarri lehenetsira"
+msgstr "Itzuli ezarpen lehenetsira"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnMaskNew)
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:52
@@ -38928,11 +38874,9 @@ msgid "Grid and Guides"
 msgstr "Sareta eta gidak"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
-#, fuzzy
-#| msgid "Update color"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
-msgstr "Eguneratu kolorea"
+msgstr "Eguneratu histograma"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -38981,11 +38925,10 @@ msgid "Tree Indentation"
 msgstr "Orientazioa"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:371
-#, fuzzy, kde-format
-#| msgid "Blending Mode"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
-msgstr "Nahaste-modua"
+msgstr "Nahaste informazio estiloa"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:373
 #, kde-format
@@ -38998,32 +38941,28 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:378
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Bat ere ez"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:379
-#, fuzzy, kde-format
-#| msgid "Simple"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Sinplea"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:380
-#, fuzzy, kde-format
-#| msgid "Color Balance"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
-msgstr "Kolore oreka"
+msgstr "Orekatua"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:381
-#, fuzzy, kde-format
-#| msgid "Details"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
-msgstr "Xehetasunak"
+msgstr "Zehaztua"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:394
 #, fuzzy, kde-format
@@ -39033,12 +38972,10 @@ msgid "Blending info text opacity"
 msgstr "Lerroaren opakutasuna"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:412
-#, fuzzy, kde-format
-#| msgctxt "spline filtering"
-#| msgid "spline"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
-msgstr "Spline"
+msgstr "Lerro barruan"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:414
 #, kde-format
@@ -39049,10 +38986,10 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:426
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "&Batu beheko geruzarekin"
+msgstr "Geruzak hautatzeko kontrol-laukia"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:427
 #, kde-format
@@ -39435,50 +39372,41 @@ msgid "Pin navigation controls"
 msgstr "Iltzatu nabigatzeko aginteak"
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Ezkutatu geruzen koadro txikien laster-leihoa"
+msgstr "Eguneratu ikuspegi orokorreko koadro txikia"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "@title:dialog"
-#| msgid "Add a new Colorset Entry"
+#, kde-format
 msgid "Add a new color swatch"
-msgstr "Gehitu kolore-multzo sarrera berri bat"
+msgstr "Gehitu kolore-lagin berri bat"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRemove)
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:105
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove swatch or group"
-msgstr "&Margolariaren tresnak"
+msgstr "Kendu lagina edo taldea"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:70
-#, fuzzy, kde-format
-#| msgctxt "Button to edit the selected stop color in the stop gradient editor"
-#| msgid "Edit stop"
+#, kde-format
 msgid "Edit swatch or group"
-msgstr "Editatu geldiunea"
+msgstr "Editatu lagina edo taldea"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:71
-#, fuzzy, kde-format
-#| msgid "Remove current palette"
+#, kde-format
 msgid "Edit current palette"
-msgstr "Kendu uneko paleta"
+msgstr "Editatu uneko paleta"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:72
-#, fuzzy, kde-format
-#| msgid "Remove current palette"
+#, kde-format
 msgid "Save current palette"
-msgstr "Kendu uneko paleta"
+msgstr "Gorde uneko paleta"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:125
-#, fuzzy, kde-format
-#| msgid "Add a new palette"
+#, kde-format
 msgid "Load a palette"
-msgstr "Gehitu paleta berri bat"
+msgstr "Zamatu paleta bat"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:226
 #, kde-format
@@ -39486,10 +39414,10 @@ msgid "Export Palette"
 msgstr "Esportatu paleta"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:239
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
-msgstr "Esposizioa"
+msgstr "Paleta ondo esportatu da"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:400
 #, kde-format
@@ -39512,10 +39440,9 @@ msgstr "Gehitu aurreko planoko kolorea"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLock)
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:139
-#, fuzzy, kde-format
-#| msgid "Remove current palette"
+#, kde-format
 msgid "Lock the current palette."
-msgstr "Kendu uneko paleta"
+msgstr "Giltzatu uneko paleta."
 
 #: plugins/dockers/presetdocker/presetdocker_dock.cpp:25
 #, kde-format
@@ -39546,14 +39473,14 @@ msgid "Bubble Up on Repeated Use"
 msgstr ""
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:206
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set Number of Brushes Shown"
-msgstr "Errenkada kopurua"
+msgstr "Ezarri erakutsitako pintzel kopurua"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:207
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of Brushes Shown:"
-msgstr "Errenkada kopurua"
+msgstr "Erakutsitako pintzel kopurua:"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:309
 #, kde-format
@@ -39817,15 +39744,13 @@ msgstr "Ezin da fitxategia ireki"
 #: plugins/dockers/recorder/recorder_export.ui:537
 #, kde-format
 msgid "Setup ffmpeg executable location"
-msgstr "Ezarri ffmpeg exekutagarriaren kokalekua"
+msgstr "Ezarri «ffmpeg» exekutagarriaren kokalekua"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinFirstFrameSec)
 #: plugins/dockers/recorder/recorder_export.ui:559
-#, fuzzy, kde-format
-#| msgctxt "Contraction of \"second\" for interval"
-#| msgid " sec."
+#, kde-format
 msgid " sec."
-msgstr "seg."
+msgstr " seg."
 
 #. i18n: ectx: property (text), widget (QLabel, labelFfmpegLocation)
 #: plugins/dockers/recorder/recorder_export.ui:587
@@ -39881,11 +39806,10 @@ msgstr "Kendu grabaketak"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRenderTimeTitle)
 #: plugins/dockers/recorder/recorder_export.ui:1026
-#, fuzzy, kde-format
-#| msgid "Render as:"
+#, kde-format
 msgctxt "How long it took to render the video"
 msgid "Render time:"
-msgstr "Errendatu honela:"
+msgstr "Errendatzeko denbora:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRestart)
 #: plugins/dockers/recorder/recorder_export.ui:1053
@@ -40468,11 +40392,10 @@ msgid "Add Scene Before"
 msgstr "Gehitu eszena aurretik"
 
 #: plugins/dockers/storyboarddocker/StoryboardView.cpp:303
-#, fuzzy, kde-format
-#| msgid "Duplicate Segment"
+#, kde-format
 msgctxt "Duplicate current scene from storyboard docker"
 msgid "Duplicate Scene"
-msgstr "Bikoiztu segmentua"
+msgstr "Bikoiztu eszena"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:28
@@ -40610,10 +40533,9 @@ msgstr "Zutabeak"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:145
-#, fuzzy, kde-format
-#| msgid "SVG Template Path:"
+#, kde-format
 msgid "SVG Template"
-msgstr "SVG txantiloien bide-izena:"
+msgstr "SVG txantiloia"
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
@@ -40649,9 +40571,7 @@ msgid "Mode"
 msgstr "Modua"
 
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:156
-#, fuzzy, kde-format
-#| msgctxt "resource type"
-#| msgid "Symbol Libraries"
+#, kde-format
 msgid "Symbol Libraries"
 msgstr "Ikurren liburutegiak"
 
@@ -40710,10 +40630,9 @@ msgstr "Ukimen zamaketaria"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
-#, fuzzy, kde-format
-#| msgid "Color Mode"
+#, kde-format
 msgid "Color Model"
-msgstr "Kolore modua"
+msgstr "Kolore-eredua"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:42
@@ -40724,17 +40643,16 @@ msgstr "Hautatzailearen itxura"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Always shows full saturation and full "
 "brightness colors."
 msgid "Static"
-msgstr "Egoera"
+msgstr "Estatikoa"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Shows colors depending on the current "
 "color saturation and brightness."
@@ -40743,10 +40661,9 @@ msgstr "Dinamikoa"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
-#, fuzzy, kde-format
-#| msgid "Dynamics settings"
+#, kde-format
 msgid "Dynamic + Static Edge"
-msgstr "Ezarpen dinamikoak"
+msgstr "Ertz dinamikoa + estatikoa"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpQuickSettingsMenu)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:109
@@ -40763,24 +40680,21 @@ msgstr "Aurrezarpen gogokoak"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, btnFavoriteSelectors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
-#, fuzzy, kde-format
-#| msgid "&Select..."
+#, kde-format
 msgid "Select..."
-msgstr "&Hautatu..."
+msgstr "Hautatu..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
-#, fuzzy, kde-format
-#| msgid "Select a Colorspace"
+#, kde-format
 msgid "Selection Color Space:"
-msgstr "Hautatu kolore-eremu bat"
+msgstr "Hautapenaren kolore-eremua:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
-#, fuzzy, kde-format
-#| msgid "Layers/Masks"
+#, kde-format
 msgid "Layer/Mask"
-msgstr "Geruzak/maskarak"
+msgstr "Geruza/maskara"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProofColors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
@@ -40808,10 +40722,9 @@ msgstr "Talde-neurria"
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:221
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:539
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Patches"
-msgstr "Kolo&re adabakiak"
+msgstr "Kolore adabakiak"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -40819,8 +40732,7 @@ msgstr "Kolo&re adabakiak"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:560
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:767
-#, fuzzy, kde-format
-#| msgid "Orientation:"
+#, kde-format
 msgid "Orientation:"
 msgstr "Orientazioa:"
 
@@ -40830,10 +40742,9 @@ msgstr "Orientazioa:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:260
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:582
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:789
-#, fuzzy, kde-format
-#| msgid "Hori&zontal"
+#, kde-format
 msgid "hori&zontal"
-msgstr "Hori&zontala"
+msgstr "hori&zontala"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryVertical)
@@ -40841,8 +40752,7 @@ msgstr "Hori&zontala"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:270
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:592
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:799
-#, fuzzy, kde-format
-#| msgid "&Vertical"
+#, kde-format
 msgid "&vertical"
 msgstr "&Bertikala"
 
@@ -40874,10 +40784,9 @@ msgstr "Bertikalki"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:302
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:641
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:848
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Scrolling:"
-msgstr "Tartea:"
+msgstr "Kiribiltzea:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -40885,12 +40794,9 @@ msgstr "Tartea:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:322
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:651
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:858
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatche.gpl"
-#| msgid "Swatches"
+#, kde-format
 msgid "Patches"
-msgstr "Laginak"
+msgstr "Adabakiak"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #. i18n: ectx: property (text), widget (QLabel, label_15)
@@ -40932,46 +40838,39 @@ msgstr "Iterazioak"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
-#, fuzzy, kde-format
-#| msgid "Line Count: "
+#, kde-format
 msgid "Line Count:"
-msgstr "Lerro kopurua: "
+msgstr "Lerro kopurua:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:465
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgid "Line Height:"
 msgstr "Lerroaren altuera:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:726
-#, fuzzy, kde-format
-#| msgctxt "left mouse button"
-#| msgid "left button"
+#, kde-format
 msgid "Clear Button"
-msgstr "ezkerreko botoia"
+msgstr "Garbitzeko botoia"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:752
-#, fuzzy, kde-format
-#| msgid "Colors from Image"
+#, kde-format
 msgid "Colors fro&m Image"
-msgstr "Irudiko koloreak"
+msgstr "Irudi&ko koloreak"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
-#, fuzzy, kde-format
-#| msgid "Auto updates"
+#, kde-format
 msgid "Auto Update"
-msgstr "Eguneratze automatikoak"
+msgstr "Eguneratze automatikoa"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRange)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:38
-#, fuzzy, kde-format
-#| msgid "&Range:"
+#, kde-format
 msgid "Range:"
-msgstr "Ba&rrutia:"
+msgstr "Barrutia:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOffset)
 #. i18n: ectx: property (text), widget (QLabel, labelOffset)
@@ -40993,24 +40892,21 @@ msgstr "Azaldu:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbSlider)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
-#, fuzzy, kde-format
-#| msgid "Slider widget"
+#, kde-format
 msgid "S&lider"
-msgstr "Graduatzaile-trepeta"
+msgstr "Graduatzai&lea"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Pa&tches"
-msgstr "Kolo&re adabakiak"
+msgstr "Kolore a&dabakiak"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Preview:"
-msgstr "Aurrebista"
+msgstr "Aurreikusi:"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:4
@@ -41043,11 +40939,10 @@ msgstr "ezkutatu itzal-hautatzailea"
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:19
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:20
-#, fuzzy, kde-format
-#| msgid "hide shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show shade selector"
-msgstr "ezkutatu itzal-hautatzailea"
+msgstr "Erakutsi itzal hautatzailea"
 
 #. i18n: context: toolTip @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
@@ -41055,12 +40950,10 @@ msgstr "ezkutatu itzal-hautatzailea"
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:29
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:30
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show MyPaint shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show MyPaint selector"
-msgstr "Erakutsi MyPaint itzal-hautatzailea"
+msgstr "Erakutsi MyPaint hautatzailea"
 
 #. i18n: context: text @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
@@ -41068,12 +40961,10 @@ msgstr "Erakutsi MyPaint itzal-hautatzailea"
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:47
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:50
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color lighter"
+#, kde-format
 msgctxt "action"
 msgid "Make color lighter"
-msgstr "Argitu pintzelaren kolorea"
+msgstr "Kolorea argitu"
 
 #. i18n: context: toolTip @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:49
@@ -41090,12 +40981,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:57
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color darker"
+#, kde-format
 msgctxt "action"
 msgid "Make color darker"
-msgstr "Ilundu pintzelaren kolorea"
+msgstr "Kolorea ilundu"
 
 #. i18n: context: toolTip @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:59
@@ -41112,12 +41001,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:67
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:70
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Saturation HSY"
-#| msgid "Increase Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Increase color saturation"
-msgstr "Handiagotu asetasuna"
+msgstr "Handiagotu kolore asetasuna"
 
 #. i18n: context: toolTip @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:69
@@ -41132,12 +41019,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:77
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:80
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Saturation HSY"
-#| msgid "Decrease Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Decrease color saturation"
-msgstr "Txikiagotu asetasuna"
+msgstr "Txikiagotu kolore asetasuna"
 
 #. i18n: context: toolTip @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:79
@@ -41191,16 +41076,15 @@ msgid "Shift hue of the selected color counter-clockwise"
 msgstr "Aldatu pintzelaren kolore tonua erlojuren aurkako noranzkoan"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:48
-#, fuzzy, kde-format
-#| msgid "Wide Gamut Selector"
+#, kde-format
 msgid "Wide Gamut Color Selector"
-msgstr "Gama zabalaren hautatzailea"
+msgstr "Gama zabaleko kolore hautatzailea"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
-msgstr "Konfigurazioa:"
+msgstr "Konfiguratu..."
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
@@ -41246,13 +41130,11 @@ msgstr ""
 "txostenera"
 
 #: plugins/extensions/buginfo/DlgCrashLog.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "Caption of the dialog with Krita usage log for bug reports"
-#| msgid "Krita Usage Log: please paste this information to the bug report"
+#, kde-format
 msgctxt "Caption of the dialog with crash log for bug reports"
 msgid "Krita Crash Log: please paste this information to the bug report"
 msgstr ""
-"Krita erabileraren egunkaria: mesedez, itsatsi informazioa hori akats-"
+"Krita kraskadura egunkaria: mesedez, itsatsi informazioa hori akats-"
 "txostenera"
 
 #: plugins/extensions/buginfo/DlgKritaLog.cpp:23
@@ -41508,17 +41390,15 @@ msgid "Resources Cache Database Explorer"
 msgstr "Baliabideen cache datu-base esploratzailea"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
-#, fuzzy, kde-format
-#| msgid "Versions"
+#, kde-format
 msgid "Version"
-msgstr "Bertsioak"
+msgstr "Bertsioa"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgid "File name"
-msgstr "Berrizendatu"
+msgstr "Fitxategi-izena"
 
 #. i18n: ectx: property (text), widget (QLabel, colorComment_2)
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
@@ -41533,22 +41413,19 @@ msgid "Display Name"
 msgstr "Bistaratzeko izena"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version"
 msgstr "Datu-base bertsioa"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:149
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version"
 msgstr "Krita bertsioa"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:150
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgid "Upgrade date"
-msgstr "Eguneratu"
+msgstr "Bertsio-berritze data"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
@@ -41570,24 +41447,21 @@ msgstr "Eskema-informazioa"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
-#, fuzzy, kde-format
-#| msgid "Capitalization:"
+#, kde-format
 msgid "Initialization"
-msgstr "Maiuskulaz:"
+msgstr "Hasieratzea"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version:"
-msgstr "Datu-base bertsioa"
+msgstr "Datu-base bertsioa:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version:"
-msgstr "Krita bertsioa"
+msgstr "Krita bertsioa:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSchema)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
@@ -42090,11 +41964,10 @@ msgstr "Bestelakoak"
 
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #: plugins/extensions/metadataeditor/editors/exif.ui:379
-#, fuzzy, kde-format
-#| msgid "D&istance range:"
+#, kde-format
 msgctxt "EXIF: autofocus"
 msgid "D&istance range:"
-msgstr "Distantzia tartea:"
+msgstr "D&istantzia tartea:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSubjectDistanceRange)
 #: plugins/extensions/metadataeditor/editors/exif.ui:390
@@ -43193,12 +43066,9 @@ msgid "Comment"
 msgstr "Iruzkina"
 
 #: plugins/extensions/qmic/kis_qmic_interface.cpp:233
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Gmic filter"
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
-msgstr "Gmic iragazkia"
+msgstr "G'MIC iragazkia"
 
 #: plugins/extensions/qmic/QMic.cpp:54
 #, kde-format
@@ -43309,10 +43179,9 @@ msgid "The resource bundle name cannot be empty."
 msgstr "Baliabide-fardelaren izena ezin da hutsik utzi."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:381
-#, fuzzy, kde-format
-#| msgid "The resource bundle name cannot be empty."
+#, kde-format
 msgid "The save location cannot be empty."
-msgstr "Baliabide-fardelaren izena ezin da hutsik utzi."
+msgstr "Gordetzeko kokalekua ezin da hutsik egon."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:392
 #, kde-format
@@ -43467,8 +43336,7 @@ msgid "Import Resources and Resource Libraries"
 msgstr "Inportatu baliabideak eta baliabide-liburutegiak"
 
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:38
-#, fuzzy, kde-format
-#| msgid "Manage Resources Libraries..."
+#, kde-format
 msgid "Manage Resource Libraries..."
 msgstr "Kudeatu baliabide-liburutegiak..."
 
@@ -44008,9 +43876,9 @@ msgstr "Uhinaren luzera:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWaveletScales)
 #: plugins/extensions/waveletdecompose/wdg_waveletdecompose.ui:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Wavelet scales:"
-msgstr "Uhinaren luzera:"
+msgstr "Uhintxo eskalak:"
 
 #. i18n: context: text @ Action (krita_filter_asc-cdl), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_asc-cdl), Actions (Filters), ActionCollection (Krita)
@@ -44021,11 +43889,10 @@ msgstr "Uhinaren luzera:"
 #: plugins/filters/asccdl/asccdl.action:7
 #: plugins/filters/asccdl/asccdl.action:9
 #: plugins/filters/asccdl/asccdl.action:10
-#, fuzzy, kde-format
-#| msgid "&Slope, Offset, Power..."
+#, kde-format
 msgctxt "action"
 msgid "Slope, Offset, Power Filter"
-msgstr "&Malda, jatorri-aldaketa, potentzia..."
+msgstr "Malda, jatorri-aldaketa, potentzia iragazkia"
 
 #: plugins/filters/asccdl/kis_asccdl_filter.cpp:31
 #, kde-format
@@ -44308,11 +44175,10 @@ msgstr "Kolore lagingailua:"
 #: plugins/filters/colorsfilters/colorsfilters.action:7
 #: plugins/filters/colorsfilters/colorsfilters.action:9
 #: plugins/filters/colorsfilters/colorsfilters.action:10
-#, fuzzy, kde-format
-#| msgid "&Cross-channel adjustment curves..."
+#, kde-format
 msgctxt "action"
 msgid "Cross-channel adjustment Filter"
-msgstr "&Kanal arteko doikuntza kurbak..."
+msgstr "Kanal arteko doikuntza iragazkia"
 
 #: plugins/filters/colorsfilters/colorsfilters.cpp:77
 #, kde-format
@@ -44378,9 +44244,7 @@ msgid "Value"
 msgstr "Balioa"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:229
-#, fuzzy, kde-format
-#| msgctxt "Lightness value in Lab color model"
-#| msgid "Lightness"
+#, kde-format
 msgid "Lightness"
 msgstr "Argitasuna"
 
@@ -44399,16 +44263,14 @@ msgid "Intensity"
 msgstr "Intentsitatea"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:232
-#, fuzzy, kde-format
-#| msgid "Yellow-Blue:"
+#, kde-format
 msgid "Yellow-Blue"
-msgstr "Hori-Urdina:"
+msgstr "Hori-Urdina"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:233
-#, fuzzy, kde-format
-#| msgid "Green-Red:"
+#, kde-format
 msgid "Green-Red"
-msgstr "Berde-Gorria:"
+msgstr "Berde-Gorria"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:254
 #, kde-format
@@ -45002,10 +44864,9 @@ msgstr "Aldatu iragazkia"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScreenGenerator)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:49
-#, fuzzy, kde-format
-#| msgid "Generator"
+#, kde-format
 msgid "Screen Generator"
-msgstr "Sorgailua"
+msgstr "Pantaila sortzailea"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPostprocessing)
 #. i18n: ectx: attribute (title), widget (QWidget, tabPostProcessing)
@@ -45192,25 +45053,22 @@ msgid "Alpha Steps"
 msgstr "Alfa-urratsak"
 
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
-#, fuzzy, kde-format
-#| msgid ""
-#| "The current configuration was created for a different colorspace and "
-#| "cannot be used. All curves will be reset."
+#, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "
 "be used.\n"
 "The channels will be reset."
 msgstr ""
-"Uneko konfigurazioa beste kolore-eremu baterako sortu zen eta ezin da "
-"erabili. Kurba guztiak berrezarriko dira."
+"Uneko konfigurazioa kolore-eremu ezberdin baterako sortu zen eta ezin da "
+"erabili.\n"
+"Kanalak berrezarri egingo dira."
 
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:621
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:672
-#, fuzzy, kde-format
-#| msgid "&Auto Levels"
+#, kde-format
 msgctxt "@title:window"
 msgid "Auto Levels"
-msgstr "Maila &automatikoak"
+msgstr "Maila automatikoak"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgThreshold)
 #. i18n: ectx: property (windowTitle), widget (QWidget, LevelsConfigWidget)
@@ -45223,10 +45081,9 @@ msgstr "Mailak"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLightnessMode)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:49
-#, fuzzy, kde-format
-#| msgid "Lightness Only:"
+#, kde-format
 msgid "Modify lightness only"
-msgstr "Distira bakarrik:"
+msgstr "Aldatu distira bakarrik"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAllChannelsMode)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:71
@@ -45236,8 +45093,7 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetAll)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:108
-#, fuzzy, kde-format
-#| msgid "Reset Channel"
+#, kde-format
 msgid "Reset channel"
 msgstr "Berrezarri kanala"
 
@@ -45249,45 +45105,39 @@ msgstr "<b>Sarrerako mailak</b>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLinearHistogram)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:158
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color history"
+#, kde-format
 msgid "Show linear histogram"
-msgstr "Erakutsi kolore historia"
+msgstr "Erakutsi histograma lineala"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLogarithmicHistogram)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:180
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color history"
+#, kde-format
 msgid "Show logarithmic histogram"
-msgstr "Erakutsi kolore historia"
+msgstr "Erakutsi histograma logaritmikoa"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonScaleHistogramToFit)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:201
 #, kde-format
 msgid "Scale the histogram to fit"
-msgstr ""
+msgstr "Eskalatu histograma egokitzeko"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonScaleHistogramToCutLongPeaks)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:214
 #, kde-format
 msgid "Scale the histogram to cut long peaks "
-msgstr ""
+msgstr "Eskalatu histograma gailur luzeak mozteko"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAutoLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:240
-#, fuzzy, kde-format
-#| msgid "Apply result to alpha channel"
+#, kde-format
 msgid "Apply auto levels to this channel"
-msgstr "Aplikatu emaitza alfa kanalari"
+msgstr "Aplikatu maila automatikoak kanal honi"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetInputLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:250
-#, fuzzy, kde-format
-#| msgid "Reset Filters"
+#, kde-format
 msgid "Reset input levels"
-msgstr "Berrezarri iragazkiak"
+msgstr "Berrezarri sarrera mailak"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:404
@@ -45297,28 +45147,25 @@ msgstr "<b>Irteerako mailak</b>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetOutputLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:427
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reset output levels"
-msgstr "Irteera"
+msgstr "Berrezarri irteera mailak"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3_2)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:524
-#, fuzzy, kde-format
-#| msgid "All Channels"
+#, kde-format
 msgid "<b>All Channels</b>"
-msgstr "Kanal guztiak"
+msgstr "<b>Kanal guztiak</b>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAutoLevelsAllChannels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:575
-#, fuzzy, kde-format
-#| msgid "Apply result to alpha channel"
+#, kde-format
 msgid "Apply auto levels to all the channels"
-msgstr "Aplikatu emaitza alfa kanalari"
+msgstr "Aplikatu maila automatikoak kanal guztiei"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetAllChannels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:585
-#, fuzzy, kde-format
-#| msgid "Reset All Channels"
+#, kde-format
 msgid "Reset all channels"
 msgstr "Berrezarri kanal guztiak"
 
@@ -47670,7 +47517,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
-msgstr ""
+msgstr "JPEG-XL geruza izen luzera baliogabea"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:887
 #, kde-format
@@ -47782,11 +47629,10 @@ msgid "Modular mode (e.g. for lossless images)"
 msgstr "Modu modularra (adib. galerarik gabeko irudietarako)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:64
-#, fuzzy, kde-format
-#| msgid "Vertical border:"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Scanline order"
-msgstr "Ertz bertikala:"
+msgstr "Eskaneatutako lerro ordena"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:65
 #, fuzzy, kde-format
@@ -47796,17 +47642,16 @@ msgid "Center-first order"
 msgstr "Erdiko puntua"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:89
-#, fuzzy, kde-format
-#| msgid "X resolution:"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
-msgstr "X bereizmena:"
+msgstr "64x64 bereizmen txikiago pasa"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512x512 + 64x64 lower resolution passes"
-msgstr ""
+msgstr "512x512 + 64x64 bereizmen txikiago pasatzen da"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:101
 #, kde-format
@@ -47839,16 +47684,13 @@ msgid "Zero"
 msgstr "Zero"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:110
-#, fuzzy, kde-format
-#| msgid "Left"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Left"
 msgstr "Ezkerrean"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:111
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Top"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top"
 msgstr "Goian"
@@ -47872,23 +47714,19 @@ msgid "Gradient"
 msgstr "Gradientea"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:115
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Brush Smoothing"
-#| msgid "Weighted"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Weighted"
 msgstr "Haztatua"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:116
-#, fuzzy, kde-format
-#| msgid "Top Right"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top right"
 msgstr "Goian eskuinean"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:117
-#, fuzzy, kde-format
-#| msgid "Top Left"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top left"
 msgstr "Goian ezkerrean"
@@ -47937,11 +47775,10 @@ msgid "Use all predictors"
 msgstr "Erabili iragarle denak"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:172
-#, fuzzy, kde-format
-#| msgid "Save as %1"
+#, kde-format
 msgctxt "Color space option"
 msgid "Save as is"
-msgstr "Gorde %1 gisa"
+msgstr "Gorde dagoen bezala"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:174
 #, kde-format
@@ -47950,6 +47787,8 @@ msgid ""
 "The image will be stored without conversion, the ICC profile will be "
 "converted to CICP or embedded if it was not possible."
 msgstr ""
+"Irudia bihurketarik gabe gordeko da, ICC profila CICPra bihurtuko da edo "
+"ezinezkoa balitz kapsulatu egingo da."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:37
@@ -47973,17 +47812,15 @@ msgstr "Kodetzeko aukerak"
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
-#, fuzzy, kde-format
-#| msgid "If this is not enabled, only the first frame will be saved."
+#, kde-format
 msgid "If this is not enabled, the image will be saved losslessly."
-msgstr "Hau gaitzen ez bada, lehenengo fotograma gordeko da bakarrik."
+msgstr "Hau gaitzen ez bada, irudia galerarik gabe gordeko da."
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:59
-#, fuzzy, kde-format
-#| msgid "Lossless encoding"
+#, kde-format
 msgid "Lossy encoding"
-msgstr "Galerarik gabeko kodetzea"
+msgstr "Galera dun kodetzea"
 
 #. i18n: ectx: property (text), widget (QLabel, lblHighQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:77
@@ -48097,10 +47934,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:239
-#, fuzzy, kde-format
-#| msgid "Flatten the &image"
+#, kde-format
 msgid "Flatten the image"
-msgstr "Berdindu &irudia"
+msgstr "Irudia lautu"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:256
@@ -48109,13 +47945,14 @@ msgid ""
 "Applications like Google Chrome expect HDR images to store their color "
 "profile as CICP values. You can adjust the ICC profile conversion below."
 msgstr ""
+"Google Chrome gisako aplikazioek HDR irudiek haien kolore profilak CICP "
+"balio gisa gordetzea espero dute. ICC profil bihurketa behean doitu dezakezu."
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:345
-#, fuzzy, kde-format
-#| msgid "Modular parameters"
+#, kde-format
 msgid "Encoder parameters"
-msgstr "Parametro modularrak"
+msgstr "Kodetzailearen parametroak"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:351
@@ -48861,11 +48698,10 @@ msgid "Could not save image profile."
 msgstr "Ezin izan du irudi-profila gorde."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:560
-#, fuzzy, kde-format
-#| msgid "Could not add layer to image."
+#, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save softproofing color profile."
-msgstr "Ezin izan zaio geruza gehitu irudiari."
+msgstr "Ezin izan da software zuzendutako kolore profila gorde."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:595
 #, kde-format
@@ -49226,10 +49062,9 @@ msgstr "Sinatu egilearen datuekin"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDownsample)
 #: plugins/impex/png/kis_wdg_options_png.ui:214
-#, fuzzy, kde-format
-#| msgid "Force convert to sRGB"
+#, kde-format
 msgid "Force convert to 8 bits/channel"
-msgstr "Behartu sRGBra bihurtzea"
+msgstr "Behartu bihurketa kanaleko 8 bitera (8 bit/kanal)"
 
 #: plugins/impex/psd/psd_export.cc:56
 #, kde-format
@@ -50389,11 +50224,10 @@ msgid "None"
 msgstr "Bat ere ez"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:49
-#, fuzzy, kde-format
-#| msgid "Segment Color"
+#, kde-format
 msgctxt "WebP preprocessing filters"
 msgid "Segment-smooth"
-msgstr "Segmentuaren kolorea"
+msgstr "Segmentu-leuna"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:52
 #, kde-format
@@ -51004,27 +50838,21 @@ msgid "Overlay Mode"
 msgstr "Gainjartze modua"
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:47
-#, fuzzy, kde-format
-#| msgid ""
-#| "Paints on the current layer\n"
-#| "            but uses all layers that are currently visible for smudge "
-#| "input\n"
-#| "            NOTE: This mode is only able to work correctly with a fully "
-#| "opaque background"
+#, kde-format
 msgid ""
 "Paints on the current layer\n"
 "but uses all layers that are currently visible for smudge input\n"
 "NOTE: This mode is only able to work correctly with a fully opaque background"
 msgstr ""
-"Uneko geruzan pintatzen du, baina\n"
-"unean ikusgai dauden geruza guztiak erabiltzen ditu sarrera lausotzeko\n"
-"            OHARRA: modu honek behar bezala funtzionatzeko atzeko planoak "
-"opakoa izan behar du."
+"Uneko geruzan margotzen du,\n"
+"baina unean ikusgai dauden geruza guztiak erabiltzen ditu orban sarrerarako\n"
+"OHARRA: Modu honek ondo ibiltzeko atzeko plano opaku bat behar du"
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:56
 #, kde-format
 msgid "Disabled: overlay mode is not supported in Lightness mode of the brush"
 msgstr ""
+"Ezgaituta: gainjartze modua ez da onartzen pintzelaren argitasun moduan"
 
 #: plugins/paintops/colorsmudge/KisSmudgeRadiusOptionData.cpp:11
 #, kde-format
@@ -51757,19 +51585,19 @@ msgstr "Zurda-luzeraren pisua:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/paintops/hairy/wdgInkOptions.ui:222
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ink Depletion Curve Weight:"
-msgstr "Tintaren agortze-kurbaren pisua"
+msgstr "Tinta agortzeko kurbaren pisua:"
 
 #: plugins/paintops/hatching/hatching_paintop_plugin.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hatching"
-msgstr "Itzaleztatzeko pintzela"
+msgstr "Itzaleztadura"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hatching Angle"
-msgstr "Itzaleztatzeko pintzela"
+msgstr "Itzaleztadura angelua"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:128
 #: plugins/paintops/hatching/KisHatchingStandardOptionData.h:36
@@ -52750,7 +52578,7 @@ msgstr " ms"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:70
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1 ms"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, kde-format
@@ -53159,38 +52987,33 @@ msgid "repeat"
 msgstr "errepikatu"
 
 #: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "MyPaint option name"
 msgid "Basic"
 msgstr "Oinarrizkoa"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
-#, fuzzy, kde-format
-#| msgid "CPU Limit:"
+#, kde-format
 msgid "Y limit: "
-msgstr "PUZ muga:"
+msgstr "Y muga: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "Suffix: “Every x min”"
-#| msgid " min"
+#, kde-format
 msgid "X min: "
-msgstr " min"
+msgstr "X min: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:40
 #, kde-format
 msgid "X max: "
-msgstr ""
+msgstr "X max: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Random Sensor Active, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
 msgstr ""
-"Ausazko sentsore aktiboa, hausnartu bat-bateko aurreikuspegia desgaitzea"
+"Ausazko sentsorea aktibo %1 aukeran, hausnartu bat-bateko aurreikuspegia "
+"ezgaitzea"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
 #, kde-format
@@ -53334,18 +53157,14 @@ msgid "Direction Filter"
 msgstr "Norabide iragazkia"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:86
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Pixel"
+#, kde-format
 msgid "Snap To Pixel"
-msgstr "Atxikitze pixel"
+msgstr "Atxiki pixelera"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:96
-#, fuzzy, kde-format
-#| msgctxt "Context: dynamic sensors"
-#| msgid "PressureIn"
+#, kde-format
 msgid "Pressure Gain"
-msgstr "Sarrerako presioa"
+msgstr "Presio irabazia"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:106
 #, kde-format
@@ -53427,10 +53246,9 @@ msgstr ""
 "Ausazko jatorri-aldaketa , hausnartu bat-bateko aurreikuspegia desgaitzea"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:250
-#, fuzzy, kde-format
-#| msgid "dabs per basic radius"
+#, kde-format
 msgid "Dabs Per Basic Radius"
-msgstr "pintzelkadak oinarrizko erradioko"
+msgstr "Pintzelkada oinarrizko erradioko"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:259
 #, kde-format
@@ -53445,18 +53263,17 @@ msgstr "Pintzelkada segundoko"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:278
 #, kde-format
 msgid "Opaque Linearize"
-msgstr "Opakutasunari lerro forma ematea"
+msgstr "Opakua lerro forma ematea"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:287
 #, kde-format
 msgid "Opaque Multiply"
-msgstr "Opakutasuna biderkatzea"
+msgstr "Opakua biderkatu"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:296
-#, fuzzy, kde-format
-#| msgid "slow tracking per dab"
+#, kde-format
 msgid "Slow tracking per dab"
-msgstr "moteldu segimendua pintzelkadaka"
+msgstr "Jarraipen motela pintzelkadako"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:305
 #, kde-format
@@ -53466,39 +53283,32 @@ msgstr "Jarraipen motela"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:314
 #, kde-format
 msgid "Tracking Noise"
-msgstr "Zarataren jarraipena"
+msgstr "Jarraipen zarata"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:323
 #, kde-format
 msgid "Smudge"
-msgstr "Orbandu"
+msgstr "Orban"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:341
 #, fuzzy, kde-format
 msgid "Smudge Radius Log"
-msgstr "zirriborro-erradioa"
+msgstr "Orban erradio "
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Smudge Length Multiplier"
-msgstr "Orbantze luzera"
+msgstr "Orban luzera biderkatzailea"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Smudge_rake.kpp"
-#| msgid "Smudge rake"
+#, kde-format
 msgid "Smudge Bucket"
-msgstr "Orban eskuarea"
+msgstr "Orban pertza"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparency"
+#, kde-format
 msgid "Smudge Transparency"
-msgstr "Gardentasuna"
+msgstr "Orban gardentasuna"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
@@ -56840,7 +56650,7 @@ msgstr "Ezarri eredu biraketa"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
-msgstr ""
+msgstr "Ezarri nahasteko neurrira ipinitako aukerak pintzelenak erabili ordez"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519

@@ -689,8 +689,6 @@ void KisPart::setCurrentSession(KisSessionResourceSP session)
 
 void KisPart::upgradeToPlaybackEngineMLT(KoCanvasBase* canvas)
 {
-    ENTER_FUNCTION();
-
 #ifdef HAVE_MLT
 
     // TODO: This is a slightly hacky workaround to loading the MLT engine over itself,
@@ -707,7 +705,11 @@ void KisPart::upgradeToPlaybackEngineMLT(KoCanvasBase* canvas)
 
 void KisPart::setPlaybackEngine(KisPlaybackEngine *p_playbackEngine)
 {
-    d->playbackEngine.reset(p_playbackEngine);
+    // make sure that the old engine is still alive until the end
+    // of the emitted signal
+    QScopedPointer backup(p_playbackEngine);
+    d->playbackEngine.swap(backup);
+
     emit playbackEngineChanged(p_playbackEngine);
 }
 

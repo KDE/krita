@@ -1837,7 +1837,7 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
     QPointF offset = lineTop + lineBottom;
 
     if (!returnDescent) {
-        Q_FOREACH(LineChunk chunk, currentLine.chunks) {
+        for (LineChunk &chunk : currentLine.chunks) {
             Q_FOREACH (int j, chunk.chunkIndices) {
                 result[j].cssPosition += lineTop;
                 result[j].cssPosition += result[j].baselineOffset;
@@ -1848,7 +1848,7 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
         }
     } else {
         offset = lineBottom - correctionOffset;
-        Q_FOREACH(LineChunk chunk, currentLine.chunks) {
+        for (LineChunk &chunk : currentLine.chunks) {
             Q_FOREACH (int j, chunk.chunkIndices) {
                 result[j].cssPosition -= correctionOffset;
                 result[j].cssPosition +=  result[j].baselineOffset;

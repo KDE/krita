@@ -93,7 +93,6 @@ public Q_SLOTS:
     void updateFrameRegister();
 
     void handleFrameRateChange();
-    void handlePlaybackSpeedChange(double normalizedSpeed);
 
 private Q_SLOTS:
     void slotUpdateIcons();

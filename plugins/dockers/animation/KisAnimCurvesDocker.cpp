@@ -53,6 +53,9 @@
 #include "KisPart.h"
 #include "KisPlaybackEngine.h"
 #include <QItemSelection>
+#include "KisAnimationPlaybackControlsModel.h"
+#include "KisWidgetConnectionUtils.h"
+
 
 KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
     KisUtilityTitleBar(new QLabel(i18n("Animation Curves"), parent), parent)
@@ -251,6 +254,7 @@ struct KisAnimCurvesDocker::Private
     KisMainWindow *mainWindow;
     QPointer<KisCanvas2> canvas;
     KisSignalAutoConnectionsStore canvasConnections;
+    KisAnimationPlaybackControlsModel controlsModel;
 };
 
 KisAnimCurvesDocker::KisAnimCurvesDocker()
@@ -338,6 +342,11 @@ KisAnimCurvesDocker::KisAnimCurvesDocker()
     connect(m_d->curvesView, SIGNAL(activeDataChanged(QModelIndex)), this, SLOT(slotActiveNodeUpdate(QModelIndex)));
     connect(m_d->titlebar->sbValueRegister, SIGNAL(valueChanged(double)), this, SLOT(slotValueRegisterChanged(double)));
 
+    {
+        using namespace KisWidgetConnectionUtils;
+        connectControl(m_d->titlebar->sbSpeed, &m_d->controlsModel, "playbackSpeedDenorm");
+    }
+
     // Watch for KisPlaybackEngine changes and initialize current one..
     connect(KisPart::instance(), &KisPart::playbackEngineChanged, this, &KisAnimCurvesDocker::setPlaybackEngine);
     setPlaybackEngine(KisPart::instance()->playbackEngine());
@@ -358,7 +367,6 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
         m_d->titlebar->transport->disconnect(m_d->canvas->animationState());
         m_d->titlebar->transport->setPlaying(false);
         m_d->titlebar->sbFrameRegister->disconnect(m_d->canvas->animationState());
-        m_d->titlebar->sbSpeed->disconnect(m_d->canvas->animationState());
 
         if (m_d->canvas->image()) {
             m_d->canvas->image()->animationInterface()->disconnect(this);
@@ -399,7 +407,6 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
             KisSignalsBlocker blocker(m_d->titlebar->sbStartFrame,
                                       m_d->titlebar->sbEndFrame,
                                       m_d->titlebar->sbFrameRate,
-                                      m_d->titlebar->sbSpeed,
                                       m_d->titlebar->sbFrameRegister,
                                       m_d->titlebar->sbValueRegister);
 
@@ -407,7 +414,6 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
             m_d->titlebar->sbStartFrame->setValue(animinterface->documentPlaybackRange().start());
             m_d->titlebar->sbEndFrame->setValue(animinterface->documentPlaybackRange().end());
             m_d->titlebar->sbFrameRate->setValue(animinterface->framerate());
-            m_d->titlebar->sbSpeed->setValue(100);
             m_d->titlebar->sbFrameRegister->setValue(animinterface->currentTime());
 
             QModelIndex activeIndex = m_d->curvesView->currentIndex();
@@ -445,6 +451,8 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
         });
 
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()), this, SLOT(handleFrameRateChange()));
+
+        m_d->controlsModel.connectAnimationState(m_d->canvas->animationState());
     }
 }
 
@@ -529,16 +537,9 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
         action = actionManager->createAction("drop_frames");
         m_d->titlebar->btnDropFrames->setDefaultAction(action);
         m_d->titlebar->btnDropFrames->setIconSize(QSize(22, 22));
-        connect(action, &KisAction::triggered, [](bool dropFrames){
-            KisConfig cfg(false);
-            if (dropFrames != cfg.animationDropFrames()) {
-                cfg.setAnimationDropFrames(dropFrames);
-                //updatePlaybackStatistics();
-            }
-        });
 
-        KisConfig config(true);
-        action->setChecked(config.animationDropFrames());
+        using namespace KisWidgetConnectionUtils;
+        connectControl(action, &m_d->controlsModel, "dropFramesMode");
     }
 }
 
@@ -555,7 +556,8 @@ void KisAnimCurvesDocker::setPlaybackEngine(KisPlaybackEngine *playbackEngine)
     connect(m_d->titlebar->transport, SIGNAL(skipForward()), playbackEngine, SLOT(nextKeyframe()));
 
     connect(m_d->titlebar->sbFrameRegister, SIGNAL(valueChanged(int)), playbackEngine, SLOT(seek(int)));
-    connect(m_d->titlebar->sbSpeed, SIGNAL(valueChanged(int)), playbackEngine, SLOT(setPlaybackSpeedPercent(int)));
+
+    m_d->controlsModel.connectPlaybackEngine(playbackEngine);
 }
 
 void KisAnimCurvesDocker::addKeyframeCommandToParent(const QString &channelIdentity, KUndo2Command* parentCMD)
@@ -638,11 +640,6 @@ void KisAnimCurvesDocker::handleFrameRateChange()
 
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
     m_d->titlebar->sbFrameRate->setValue(animInterface->framerate());
-}
-
-void KisAnimCurvesDocker::handlePlaybackSpeedChange(double normalizedSpeed)
-{
-    m_d->titlebar->sbSpeed->setValue(normalizedSpeed * 100);
 }
 
 void KisAnimCurvesDocker::slotUpdateIcons()

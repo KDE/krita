@@ -391,7 +391,6 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
             KisSignalsBlocker blocker(m_d->titlebar->sbStartFrame,
                                       m_d->titlebar->sbEndFrame,
                                       m_d->titlebar->sbFrameRate,
-                                      m_d->titlebar->sbSpeed,
                                       m_d->titlebar->frameRegister);
 
             KisImageAnimationInterface *animinterface = m_d->canvas->image()->animationInterface();
@@ -461,11 +460,7 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
 
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()), SLOT(handleFrameRateChange()));
 
-        connect(m_d->canvas->animationState(), &KisCanvasAnimationState::sigPlaybackSpeedChanged,
-                &m_d->controlsModel, &KisAnimationPlaybackControlsModel::setplaybackSpeed);
-        connect(&m_d->controlsModel, &KisAnimationPlaybackControlsModel::playbackSpeedChanged,
-                m_d->canvas->animationState(), &KisCanvasAnimationState::setPlaybackSpeed);
-        m_d->controlsModel.setplaybackSpeed(m_d->canvas->animationState()->playbackSpeed());
+        m_d->controlsModel.connectAnimationState(m_d->canvas->animationState());
     }
 }
 
@@ -533,6 +528,13 @@ void KisAnimTimelineDocker::updatePlaybackStatistics()
             .arg(i18n("Real FPS:\t%1", QString::number(realFps, 'f', 1)))
             .arg(i18n("Frames dropped:\t%1\%", QString::number(framesDropped * 100, 'f', 1)));
     }
+
+    /**
+     * NOTE: we update stats on the **action**, but not on the
+     * button itself, so the stats will automatically propagate
+     * to all the buttons that use this action, including the
+     * one in the curves docker
+     */
     action->setToolTip(actionText);
 }
 
@@ -679,11 +681,7 @@ void KisAnimTimelineDocker::setPlaybackEngine(KisPlaybackEngine *playbackEngine)
 
     connect(m_d->titlebar->frameRegister, SIGNAL(valueChanged(int)), playbackEngine, SLOT(seek(int)));
 
-    m_d->controlsModel.setdropFramesMode(playbackEngine->dropFrames());
-    connect(&m_d->controlsModel, SIGNAL(dropFramesModeChanged(bool)),
-            playbackEngine, SLOT(setDropFramesMode(bool)));
-    connect(playbackEngine, &KisPlaybackEngine::sigDropFramesModeChanged,
-            &m_d->controlsModel, &KisAnimationPlaybackControlsModel::setdropFramesMode);
+    m_d->controlsModel.connectPlaybackEngine(playbackEngine);
 }
 
 void KisAnimTimelineDocker::setAutoKey(bool value)

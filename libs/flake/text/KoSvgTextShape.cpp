@@ -418,26 +418,26 @@ void KoSvgTextShape::paintComponent(QPainter &painter) const
     if (!d->result.isEmpty()) {
         d->paintPaths(painter, this->outline(), this, d->result, chunk, currentIndex);
     }
-    /* Debug
+#if 0 // Debug
     Q_FOREACH (KoShape *child, this->shapes()) {
-        const KoSvgTextChunkShape *textPathChunk = dynamic_cast<const
-    KoSvgTextChunkShape*>(child); if (textPathChunk) { painter.save();
+        const KoSvgTextChunkShape *textPathChunk = dynamic_cast<const KoSvgTextChunkShape *>(child);
+        if (textPathChunk) {
+            painter.save();
             painter.setPen(Qt::magenta);
             painter.setOpacity(0.5);
             if (textPathChunk->layoutInterface()->textPath()) {
-                QPainterPath p =
-    textPathChunk->layoutInterface()->textPath()->outline(); p =
-    textPathChunk->layoutInterface()->textPath()->transformation().map(p);
+                QPainterPath p = textPathChunk->layoutInterface()->textPath()->outline();
+                p = textPathChunk->layoutInterface()->textPath()->transformation().map(p);
                 painter.strokePath(p, QPen(Qt::green));
                 painter.drawPoint(p.pointAtPercent(0));
-                painter.drawPoint(p.pointAtPercent(p.percentAtLength(p.length()*0.5)));
+                painter.drawPoint(p.pointAtPercent(p.percentAtLength(p.length() * 0.5)));
                 painter.drawPoint(p.pointAtPercent(1.0));
             }
             painter.restore();
         }
     }
-    */
-    /* Debug
+#endif
+#if 0 // Debug
     Q_FOREACH (KoShape *shapeInside, d->shapesInside) {
         QPainterPath p = shapeInside->outline();
         p = shapeInside->transformation().map(p);
@@ -448,10 +448,10 @@ void KoSvgTextShape::paintComponent(QPainter &painter) const
         p = shapeInside->transformation().map(p);
         painter.strokePath(p, QPen(Qt::red));
     }
-    //*/
-    /*
-    Q_FOREACH(LineBox lineBox, d->lineBoxes) {
-        Q_FOREACH(LineChunk chunk, lineBox.chunks) {
+#endif
+#if 0 // Debug
+    Q_FOREACH (LineBox lineBox, d->lineBoxes) {
+        Q_FOREACH (LineChunk chunk, lineBox.chunks) {
             painter.setBrush(QBrush(Qt::transparent));
             painter.setPen(QColor(0, 128, 255, 80));
             painter.drawLine(chunk.length);
@@ -459,7 +459,7 @@ void KoSvgTextShape::paintComponent(QPainter &painter) const
             painter.drawRect(chunk.boundingBox);
         }
     }
-    //*/
+#endif
 
     painter.restore();
 }
@@ -3761,32 +3761,32 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                         (!clipRect.contains(boundingRect) &&
                          !clipRect.intersects(boundingRect))) continue;
 
-                    /* Debug
+#if 0 // Debug
                     painter.save();
                     painter.setBrush(Qt::transparent);
-                    QPen pen (QColor(0, 0, 0, 50));
-                    pen.setWidthF(72./xRes);
+                    QPen pen(QColor(0, 0, 0, 50));
+                    pen.setWidthF(72. / xRes);
                     painter.setPen(pen);
                     painter.drawPolygon(tf.map(result.at(i).path.boundingRect()));
-                    QColor penColor = result.at(i).anchored_chunk?
-                                             result.at(i).isHanging? Qt::red:
-                    Qt::magenta: result.at(i).lineEnd==NoChange? Qt::cyan:
-                    Qt::yellow; pen.setColor(penColor);
-                    pen.setWidthF(72./xRes);
+                    QColor penColor = result.at(i).anchored_chunk ? result.at(i).isHanging ? Qt::red : Qt::magenta
+                        : result.at(i).lineEnd == NoChange        ? Qt::cyan
+                                                                  : Qt::yellow;
+                    pen.setColor(penColor);
+                    pen.setWidthF(72. / xRes);
                     painter.setPen(pen);
                     painter.drawPolygon(tf.map(result.at(i).boundingBox));
-                    if (result.at(i).breakType == SoftBreak){
+                    if (result.at(i).breakType == SoftBreak) {
                         painter.setPen(Qt::blue);
                         painter.drawPoint(tf.mapRect(result.at(i).boundingBox).center());
                     }
-                    if (result.at(i).breakType == HardBreak){
+                    if (result.at(i).breakType == HardBreak) {
                         painter.setPen(Qt::red);
                         painter.drawPoint(tf.mapRect(result.at(i).boundingBox).center());
                     }
                     painter.setPen(Qt::red);
                     painter.drawPoint(result.at(i).finalPosition);
                     painter.restore();
-                    //*/
+#endif
                     /**
                      * There's an annoying problem here that officially speaking
                      * the chunks need to be unified into one single path before

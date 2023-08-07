@@ -279,6 +279,7 @@ struct KisAnimTimelineDocker::Private
     KisAnimTimelineDockerTitlebar *titlebar;
 
     QPointer<KisCanvas2> canvas;
+    KisPlaybackEngine *playbackEngine {nullptr};
 
     KisSignalAutoConnectionsStore canvasConnections;
     KisMainWindow *mainWindow;
@@ -496,7 +497,7 @@ void KisAnimTimelineDocker::updatePlaybackStatistics()
     bool isPlaying = false;
 
     {
-        KisPlaybackEngine::PlaybackStats stats = KisPart::instance()->playbackEngine()->playbackStatistics();
+        KisPlaybackEngine::PlaybackStats stats = m_d->playbackEngine->playbackStatistics();
         effectiveFps = stats.expectedFps;
         realFps = stats.realFps;
         framesDropped = stats.droppedFramesPortion;
@@ -574,68 +575,68 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
     action = actionManager->createAction("toggle_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, &KisAction::triggered, this, [this](bool){
-        KisPart::instance()->playbackEngine()->playPause();
+        m_d->playbackEngine->playPause();
     });
 
     action = actionManager->createAction("stop_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, &KisAction::triggered, this, [this](bool){
-        KisPart::instance()->playbackEngine()->stop();
+        m_d->playbackEngine->stop();
     });
 
     action = actionManager->createAction("previous_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, &KisAction::triggered, this, [this](bool){
-        KisPart::instance()->playbackEngine()->previousFrame();
+        m_d->playbackEngine->previousFrame();
     });
 
     action = actionManager->createAction("next_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, &KisAction::triggered, this, [this](bool){
-        KisPart::instance()->playbackEngine()->nextFrame();
+        m_d->playbackEngine->nextFrame();
     });
 
     action = actionManager->createAction("previous_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [](bool){
-        KisPart::instance()->playbackEngine()->previousKeyframe();
+    connect(action, &KisAction::triggered, this, [this](bool){
+        m_d->playbackEngine->previousKeyframe();
     });
 
     action = actionManager->createAction("next_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [](bool){
-        KisPart::instance()->playbackEngine()->nextKeyframe();
+    connect(action, &KisAction::triggered, this, [this](bool){
+        m_d->playbackEngine->nextKeyframe();
     });
 
     action = actionManager->createAction("previous_matching_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [](bool){
-        KisPart::instance()->playbackEngine()->previousMatchingKeyframe();
+    connect(action, &KisAction::triggered, this, [this](bool){
+        m_d->playbackEngine->previousMatchingKeyframe();
     });
 
     action = actionManager->createAction("next_matching_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [](bool){
-        KisPart::instance()->playbackEngine()->nextMatchingKeyframe();
+    connect(action, &KisAction::triggered, this, [this](bool){
+        m_d->playbackEngine->nextMatchingKeyframe();
     });
 
     action = actionManager->createAction("previous_unfiltered_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [](bool){
-        KisPart::instance()->playbackEngine()->previousUnfilteredKeyframe();
+    connect(action, &KisAction::triggered, this, [this](bool){
+        m_d->playbackEngine->previousUnfilteredKeyframe();
     });
 
     action = actionManager->createAction("next_unfiltered_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [](bool){
-        KisPart::instance()->playbackEngine()->nextUnfilteredKeyframe();
+    connect(action, &KisAction::triggered, this, [this](bool){
+        m_d->playbackEngine->nextUnfilteredKeyframe();
     });
 
     action = actionManager->createAction("first_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, &KisAction::triggered, this, [this](bool){
        if (m_d->canvas) {
-           KisPart::instance()->playbackEngine()->firstFrame();
+           m_d->playbackEngine->firstFrame();
        }
     });
 
@@ -643,7 +644,7 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, &KisAction::triggered, this, [this](bool){
        if (m_d->canvas) {
-           KisPart::instance()->playbackEngine()->lastFrame();
+           m_d->playbackEngine->lastFrame();
        }
     });
 
@@ -682,6 +683,8 @@ void KisAnimTimelineDocker::setPlaybackEngine(KisPlaybackEngine *playbackEngine)
     connect(m_d->titlebar->frameRegister, SIGNAL(valueChanged(int)), playbackEngine, SLOT(seek(int)));
 
     m_d->controlsModel.connectPlaybackEngine(playbackEngine);
+
+    m_d->playbackEngine = playbackEngine;
 }
 
 void KisAnimTimelineDocker::setAutoKey(bool value)

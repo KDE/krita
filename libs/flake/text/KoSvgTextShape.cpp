@@ -100,7 +100,8 @@ struct CharacterResult {
     bool anchored_chunk = false; ///< whether this is the start of a new chunk.
 
     QPainterPath path;
-    QImage image{nullptr};
+    QImage image;
+    QRectF imageDrawRect;
 
     QVector<QPainterPath> colorLayers;
     QVector<QBrush> colorLayerColors;
@@ -1022,10 +1023,14 @@ void KoSvgTextShape::relayout() const
         // Check whether we need to synthesize bold by emboldening the glyph:
         emboldenGlyphIfNeeded(currentGlyph, charResult);
 
-        /// The matrix for Italic (oblique) synthesis of outline glyphs.
+        /// The matrix for Italic (oblique) synthesis of outline glyphs, or for
+        /// adjusting the bounding box of bitmap glyphs.
         QTransform glyphObliqueTf;
         /// The combined offset * italic * ftTf transform for outline glyphs.
         QTransform outlineGlyphTf;
+
+        /// The scaling factor for color bitmap glyphs, otherwise always 1.0
+        qreal bitmapScale = 1.0;
 
         if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
             outlineGlyphTf = QTransform::fromTranslate(currentGlyph.x_offset, currentGlyph.y_offset);
@@ -1073,6 +1078,8 @@ void KoSvgTextShape::relayout() const
                     FT_Get_Transform(currentGlyph.ftface, &matrix, &delta);
                     constexpr qreal FACTOR_16 = 1.0 / 65536.0;
                     bitmapTf.setMatrix(matrix.xx * FACTOR_16, matrix.xy * FACTOR_16, 0, matrix.yx * FACTOR_16, matrix.yy * FACTOR_16, 0, 0, 0, 1);
+                    KIS_SAFE_ASSERT_RECOVER_NOOP(bitmapTf.m11() == bitmapTf.m22());
+                    bitmapScale = bitmapTf.m11();
                     QPointF anchor(-currentGlyph.ftface->glyph->bitmap_left, currentGlyph.ftface->glyph->bitmap_top);
                     bitmapTf = QTransform::fromTranslate(-anchor.x(), -anchor.y()) * bitmapTf
                         * QTransform::fromTranslate(anchor.x(), anchor.y());
@@ -1103,9 +1110,11 @@ void KoSvgTextShape::relayout() const
                 QPoint shearAt;
                 if (isHorizontal) {
                     shearTf.shear(-SLANT_BITMAP, 0);
+                    glyphObliqueTf.shear(SLANT_BITMAP, 0);
                     shearAt = QPoint(0, currentGlyph.ftface->glyph->bitmap_top);
                 } else {
                     shearTf.shear(0, SLANT_BITMAP);
+                    glyphObliqueTf.shear(0, -SLANT_BITMAP);
                     shearAt = QPoint(charResult.image.width() / 2, 0);
                 }
                 // We need to shear around the baseline, hence the translation.
@@ -1196,10 +1205,6 @@ void KoSvgTextShape::relayout() const
 
         bool usePixmap = !charResult.image.isNull() && charResult.path.isEmpty();
 
-        QRectF bbox;
-
-
-
         if (usePixmap) {
             const int width = charResult.image.width();
             const int height = charResult.image.height();
@@ -1209,19 +1214,28 @@ void KoSvgTextShape::relayout() const
             if (!isHorizontal) {
                 bboxPixel.moveLeft(-(bboxPixel.width() / 2));
             }
-            bbox = QRectF(bboxPixel.topLeft() * ftFontUnit, bboxPixel.size() * ftFontUnit);
-        } else if (isHorizontal) {
+            charResult.imageDrawRect = ftTF.mapRect(QRectF(bboxPixel.topLeft() * ftFontUnit, bboxPixel.size() * ftFontUnit));
+        }
+
+        QRectF bbox;
+        if (isHorizontal) {
             bbox = QRectF(0,
-                          charResult.descent,
+                          charResult.descent * bitmapScale,
                           ftTF.inverted().map(charResult.advance).x(),
-                          (charResult.ascent - charResult.descent));
+                          (charResult.ascent - charResult.descent) * bitmapScale);
             bbox = glyphObliqueTf.mapRect(bbox);
         } else {
             hb_font_t_up font(hb_ft_font_create_referenced(currentGlyph.ftface));
-            bbox = QRectF(charResult.descent, 0, charResult.ascent - charResult.descent, ftTF.inverted().map(charResult.advance).y());
+            bbox = QRectF(charResult.descent * bitmapScale,
+                          0,
+                          (charResult.ascent - charResult.descent) * bitmapScale,
+                          ftTF.inverted().map(charResult.advance).y());
             bbox = glyphObliqueTf.mapRect(bbox);
         }
         charResult.boundingBox = ftTF.mapRect(bbox);
+        if (usePixmap) {
+            charResult.boundingBox |= charResult.imageDrawRect;
+        }
         charResult.halfLeading = ftTF.map(QPointF(charResult.halfLeading, charResult.halfLeading)).x();
         charResult.ascent = isHorizontal? charResult.boundingBox.top(): charResult.boundingBox.right();
         charResult.descent = isHorizontal? charResult.boundingBox.bottom(): charResult.boundingBox.left();
@@ -3767,7 +3781,11 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                     QPen pen(QColor(0, 0, 0, 50));
                     pen.setWidthF(72. / xRes);
                     painter.setPen(pen);
-                    painter.drawPolygon(tf.map(result.at(i).path.boundingRect()));
+                    if (!result.at(i).image.isNull()) {
+                        painter.drawPolygon(tf.map(result.at(i).imageDrawRect));
+                    } else {
+                        painter.drawPolygon(tf.map(result.at(i).path.boundingRect()));
+                    }
                     QColor penColor = result.at(i).anchored_chunk ? result.at(i).isHanging ? Qt::red : Qt::magenta
                         : result.at(i).lineEnd == NoChange        ? Qt::cyan
                                                                   : Qt::yellow;
@@ -3823,14 +3841,14 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                             fillPainter.maskPainter()->translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
                             fillPainter.maskPainter()->rotate(qRadiansToDegrees(result.at(i).rotate));
                             fillPainter.maskPainter()->setCompositionMode(QPainter::CompositionMode_Plus);
-                            fillPainter.maskPainter()->drawImage(result.at(i).boundingBox, result.at(i).image);
+                            fillPainter.maskPainter()->drawImage(result.at(i).imageDrawRect, result.at(i).image);
                             fillPainter.maskPainter()->restore();
                         } else {
                             painter.save();
                             painter.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
                             painter.rotate(qRadiansToDegrees(result.at(i).rotate));
                             painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
-                            painter.drawImage(result.at(i).boundingBox, result.at(i).image);
+                            painter.drawImage(result.at(i).imageDrawRect, result.at(i).image);
                             painter.restore();
                         }
                     }

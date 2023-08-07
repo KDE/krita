@@ -20,7 +20,7 @@ public:
 
 private:
     const bool m_lockedAngleMode;
-    const bool m_angleOffset;
+    const int m_angleOffset;
 };
 
 #endif // KISDYNAMICSENSORDRAWINGANGLE_H

@@ -100,7 +100,7 @@ private:
     enum class HighlightItem {
         None = 0,
         InlineSizeHandle,
-        Anchor,
+        MoveBorder,
     };
 
     QPointer<SvgTextEditor> m_editor;

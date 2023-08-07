@@ -379,7 +379,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
             QPainterPath path;
             path.addRect(shape->boundingRect());
             handlePainter.drawPath(path);
-            if (m_highlightItem == HighlightItem::Anchor) {
+            if (m_highlightItem == HighlightItem::MoveBorder) {
                 handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
             }
             handlePainter.drawHandleCircle(shape->absoluteTransformation().map(QPointF()), KoToolBase::handleRadius());
@@ -409,7 +409,7 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
     KoSvgTextShape *selectedShape = this->selectedShape();
 
     if (selectedShape) {
-        if (m_highlightItem == HighlightItem::Anchor) {
+        if (m_highlightItem == HighlightItem::MoveBorder) {
             m_interactionStrategy.reset(new SvgMoveTextStrategy(this, selectedShape, event->point));
             m_dragging = DragMode::Move;
             event->accept();
@@ -476,10 +476,10 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
         if (selectedShape) {
             const qreal sensitivity = grabSensitivityInPt();
 
-            const QPointF anchor = selectedShape->absoluteTransformation().map(QPointF());
-            const QRectF anchorZone = kisGrowRect(QRectF(anchor, anchor), sensitivity);
-            if (anchorZone.contains(event->point)) {
-                m_highlightItem = HighlightItem::Anchor;
+            const QPolygonF textOutline = selectedShape->absoluteTransformation().map(selectedShape->outlineRect());
+            const QRectF moveBorderRegion = kisGrowRect(selectedShape->boundingRect(), sensitivity);
+            if (moveBorderRegion.contains(event->point) && !textOutline.containsPoint(event->point, Qt::OddEvenFill)) {
+                m_highlightItem = HighlightItem::MoveBorder;
                 cursor = Qt::SizeAllCursor;
             } else if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(selectedShape)) {
                 const QPolygonF zone = info->editLineGrabRect(sensitivity);

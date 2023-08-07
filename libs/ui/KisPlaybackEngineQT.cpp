@@ -22,84 +22,28 @@
 
 #include <QFileInfo>
 
-// =====
-
-/** @brief Base class for different types of playback.
- * 
- * When `KisPlaybackEngineQT` supported audio (through QtMultimedia) it was
- * useful to have separate playback methods for non-audio and audio situations.
- */
-class PlaybackDriver : public QObject {
-    Q_OBJECT
-public:
-    PlaybackDriver( class KisPlaybackEngineQT* engine, QObject* parent = nullptr );
-    ~PlaybackDriver();
-
-    virtual void setPlaybackState(PlaybackState state) = 0;
-
-    virtual void setFrame(int) {}
-
-    /** @brief Optionally return which frame the playback driver thinks we should render.
-     * 
-     * This is mostly useful when the driver itself dictates the frame to be shown.
-     * However, in other cases (for example, when `drop frames` is off and we must wait)
-     * we don't rely on this method.
-    */
-    virtual boost::optional<int> desiredFrame() { return boost::none; }
-
-    virtual void setVolume(qreal) {}
-
-    virtual void setSpeed(qreal) {}
-    virtual double speed() = 0;
-
-    virtual void setFramerate(int rate) {}
-
-    virtual void setDropFrames(bool) {}
-    virtual bool dropFrames() { return true; }
-
-    virtual void setTimerDuration(int) {}
-    virtual int timerDuration() { return 1000 / 24; }
-
-    KisPlaybackEngineQT* engine() { return m_engine; }
-
-Q_SIGNALS:
-    void throttledShowFrame();
-
-private:
-    KisPlaybackEngineQT* m_engine;
-};
-
-PlaybackDriver::PlaybackDriver( KisPlaybackEngineQT* engine, QObject* parent )
-    : QObject(parent)
-    , m_engine(engine)
-{
-    KIS_ASSERT(engine);
-}
-
-PlaybackDriver::~PlaybackDriver()
-{
-}
-
-// =====
+namespace {
 
 /** @brief A simple QTimer-based playback method for situations when audio is not 
  * used (and thus audio-video playback synchronization is not a concern).
  */
-class LoopDrivenPlayback : public PlaybackDriver {
+class PlaybackDriver : public QObject
+{
     Q_OBJECT
 public:
-    LoopDrivenPlayback(KisPlaybackEngineQT* engine, QObject* parent = nullptr);
-    ~LoopDrivenPlayback();
+    PlaybackDriver(QObject* parent = nullptr);
+    ~PlaybackDriver();
 
-    virtual void setPlaybackState( PlaybackState newState ) override;
+    void setPlaybackState(PlaybackState newState);
 
-    virtual void setFramerate(int rate) override;
-    virtual void setSpeed(qreal speed) override;
-    virtual double speed() override;
-    virtual void setDropFrames(bool drop) override;
-    virtual bool dropFrames() override;
-    virtual void setTimerDuration(int timeMS) override;
-    virtual int timerDuration() override;
+    void setFramerate(int rate);
+    void setSpeed(qreal speed);
+    double speed();
+    void setDropFrames(bool drop);
+    bool dropFrames();
+
+Q_SIGNALS:
+    void throttledShowFrame();
 
 private:
     void updatePlaybackLoopInterval(const int& in_fps, const qreal& in_speed);
@@ -111,8 +55,8 @@ private:
     bool m_dropFrames;
 };
 
-LoopDrivenPlayback::LoopDrivenPlayback(KisPlaybackEngineQT *engine, QObject *parent)
-    : PlaybackDriver(engine, parent)
+PlaybackDriver::PlaybackDriver(QObject *parent)
+    : QObject(parent)
     , m_speed(1.0)
     , m_fps(24)
     , m_dropFrames(true)
@@ -120,11 +64,11 @@ LoopDrivenPlayback::LoopDrivenPlayback(KisPlaybackEngineQT *engine, QObject *par
     connect( &m_playbackLoop, SIGNAL(timeout()), this, SIGNAL(throttledShowFrame()) );
 }
 
-LoopDrivenPlayback::~LoopDrivenPlayback()
+PlaybackDriver::~PlaybackDriver()
 {
 }
 
-void LoopDrivenPlayback::setPlaybackState(PlaybackState newState) {
+void PlaybackDriver::setPlaybackState(PlaybackState newState) {
     switch (newState) {
     case PlaybackState::PLAYING:
         m_playbackLoop.start();
@@ -137,45 +81,36 @@ void LoopDrivenPlayback::setPlaybackState(PlaybackState newState) {
     }
 }
 
-void LoopDrivenPlayback::setFramerate(int rate) {
+void PlaybackDriver::setFramerate(int rate) {
     KIS_SAFE_ASSERT_RECOVER_RETURN(rate > 0);
     m_fps = rate;
     updatePlaybackLoopInterval(m_fps, m_speed);
 }
 
-void LoopDrivenPlayback::setSpeed(qreal speed) {
+void PlaybackDriver::setSpeed(qreal speed) {
     KIS_SAFE_ASSERT_RECOVER_RETURN(speed > 0.f);
     m_speed = speed;
     updatePlaybackLoopInterval(m_fps, m_speed);
 }
 
-double LoopDrivenPlayback::speed()
+double PlaybackDriver::speed()
 {
     return m_speed;
 }
 
-void LoopDrivenPlayback::setDropFrames(bool drop) {
+void PlaybackDriver::setDropFrames(bool drop) {
     m_dropFrames = drop;
 }
 
-bool LoopDrivenPlayback::dropFrames() {
+bool PlaybackDriver::dropFrames() {
     return m_dropFrames;
 }
 
-void LoopDrivenPlayback::setTimerDuration(int timeMS)
-{
-    KIS_ASSERT(timeMS > 0);
-    m_playbackLoop.setInterval(timeMS);
-}
-
-int LoopDrivenPlayback::timerDuration()
-{
-    return m_playbackLoop.interval();
-}
-
-void LoopDrivenPlayback::updatePlaybackLoopInterval(const int &in_fps, const qreal &in_speed) {
+void PlaybackDriver::updatePlaybackLoopInterval(const int &in_fps, const qreal &in_speed) {
     int loopMS = qRound( 1000.f / (qreal(in_fps) * in_speed));
     m_playbackLoop.setInterval(loopMS);
+}
+
 }
 
 // ======
@@ -246,7 +181,6 @@ void KisPlaybackEngineQT::seek(int frameIndex, SeekOptionFlags flags)
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(frameIndex >= 0);
 
-    m_d->driver->setFrame(frameIndex);
     if (displayProxy->activeFrame() != frameIndex) {
         displayProxy->displayFrame(frameIndex, flags & SEEK_FINALIZE);
     }
@@ -329,20 +263,7 @@ void KisPlaybackEngineQT::throttledDriverCallback()
 
     m_d->measure->droppedFramesStat(extraFrames);
 
-    // If we have an audio-driver or otherwise external playback driver: we will only go to what the driver determines to be the desired frame...
-    if (m_d->driver->desiredFrame()) {
-        const int desiredFrame = m_d->driver->desiredFrame().get();
-        const int targetFrame = frameWrap(desiredFrame, startFrame, endFrame );
-
-        if (currentFrame != targetFrame) {
-            displayProxy->displayFrame(targetFrame, false);
-        }
-
-        // We've wrapped, let's do whatever correction we can...
-        if (targetFrame != desiredFrame) {
-            m_d->driver->setFrame(targetFrame);
-        }
-    } else { // Otherwise, we just advance the frame ourselves based on the displayProxy's active frame.
+    { // just advance the frame ourselves based on the displayProxy's active frame.
         int targetFrame = currentFrame + 1 + extraFrames;
 
         targetFrame = frameWrap(targetFrame, startFrame, endFrame);
@@ -519,7 +440,7 @@ void KisPlaybackEngineQT::recreateDriver(boost::optional<QFileInfo> file)
     if (!activeCanvas())
         return;
 
-    m_d->driver.reset(new LoopDrivenPlayback(this));
+    m_d->driver.reset(new PlaybackDriver());
 }
 
 

@@ -224,7 +224,7 @@ kis_ExternalProject_Add_with_separate_builds_apple(
 
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     GIT_REPOSITORY https://gitlab.freedesktop.org/amyspark/libvpx.git
-    GIT_TAG amyspark/add-ci
+    GIT_TAG meson
 
     WORKING_DIRECTORY <BINARY_DIR>
 

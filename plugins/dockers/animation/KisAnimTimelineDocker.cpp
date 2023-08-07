@@ -88,9 +88,6 @@ KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
         sbSpeed->setSuffix(" %");
         sbSpeed->setToolTip(i18n("Preview playback speed"));
 
-        bool supportsVariablePlaybackSpeed = KisPart::instance()->playbackEngine() && KisPart::instance()->playbackEngine()->supportsVariablePlaybackSpeed();
-        sbSpeed->setEnabled(supportsVariablePlaybackSpeed);
-
         widgetAreaLayout->addWidget(sbSpeed);
     }
 
@@ -308,6 +305,11 @@ KisAnimTimelineDocker::KisAnimTimelineDocker()
         }
     });
 
+    {
+        using namespace KisWidgetConnectionUtils;
+        connectControl(m_d->titlebar->sbSpeed, &m_d->controlsModel, "playbackSpeedDenorm");
+    }
+
     // Watch for KisPlaybackEngine changes and initialize current one..
     connect(KisPart::instance(), &KisPart::playbackEngineChanged, this, &KisAnimTimelineDocker::setPlaybackEngine);
     setPlaybackEngine(KisPart::instance()->playbackEngine());
@@ -396,7 +398,6 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
             m_d->titlebar->sbStartFrame->setValue(animinterface->documentPlaybackRange().start());
             m_d->titlebar->sbEndFrame->setValue(animinterface->documentPlaybackRange().end());
             m_d->titlebar->sbFrameRate->setValue(animinterface->framerate());
-            m_d->titlebar->sbSpeed->setValue(100);
             m_d->titlebar->frameRegister->setValue(animinterface->currentTime());
             
             m_d->titlebar->btnAudioMenu->setEnabled(true); // Menu is disabled until a canvas is loaded.
@@ -459,6 +460,12 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
         });
 
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()), SLOT(handleFrameRateChange()));
+
+        connect(m_d->canvas->animationState(), &KisCanvasAnimationState::sigPlaybackSpeedChanged,
+                &m_d->controlsModel, &KisAnimationPlaybackControlsModel::setplaybackSpeed);
+        connect(&m_d->controlsModel, &KisAnimationPlaybackControlsModel::playbackSpeedChanged,
+                m_d->canvas->animationState(), &KisCanvasAnimationState::setPlaybackSpeed);
+        m_d->controlsModel.setplaybackSpeed(m_d->canvas->animationState()->playbackSpeed());
     }
 }
 
@@ -671,7 +678,6 @@ void KisAnimTimelineDocker::setPlaybackEngine(KisPlaybackEngine *playbackEngine)
     connect(m_d->titlebar->transport, SIGNAL(skipForward()), playbackEngine, SLOT(nextKeyframe()));
 
     connect(m_d->titlebar->frameRegister, SIGNAL(valueChanged(int)), playbackEngine, SLOT(seek(int)));
-    connect(m_d->titlebar->sbSpeed, SIGNAL(valueChanged(int)), playbackEngine, SLOT(setPlaybackSpeedPercent(int)));
 
     m_d->controlsModel.setdropFramesMode(playbackEngine->dropFrames());
     connect(&m_d->controlsModel, SIGNAL(dropFramesModeChanged(bool)),
@@ -699,10 +705,3 @@ void KisAnimTimelineDocker::handleFrameRateChange()
 
     m_d->titlebar->sbFrameRate->setValue(animInterface->framerate());
 }
-
-void KisAnimTimelineDocker::handlePlaybackSpeedChange(double normalizedPlaybackSpeed)
-{
-    m_d->titlebar->sbSpeed->setValue(normalizedPlaybackSpeed * 100);
-}
-
-

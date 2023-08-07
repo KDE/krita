@@ -252,17 +252,6 @@ void KisPlaybackEngineQT::seek(int frameIndex, SeekOptionFlags flags)
     }
 }
 
-void KisPlaybackEngineQT::setPlaybackSpeedPercent(int percentage)
-{
-    setPlaybackSpeedNormalized(qreal(percentage) / 100.f);
-}
-
-void KisPlaybackEngineQT::setPlaybackSpeedNormalized(double value)
-{
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->driver);
-    m_d->driver->setSpeed(value);
-}
-
 void KisPlaybackEngineQT::setDropFramesMode(bool value)
 {
     KisPlaybackEngine::setDropFramesMode(value);
@@ -461,6 +450,14 @@ void KisPlaybackEngineQT::setCanvas(KoCanvasBase *p_canvas)
 
                 m_d->driver->setPlaybackState(state);
             });
+
+            connect(animationState, &KisCanvasAnimationState::sigPlaybackSpeedChanged, this, [this](qreal value){
+                if (!m_d->driver)
+                    return;
+
+                m_d->driver->setSpeed(value);
+            });
+            m_d->driver->setSpeed(animationState->playbackSpeed());
         }
 
         { // Display proxy connections

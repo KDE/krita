@@ -35,9 +35,6 @@ public:
 
     void seek(int frameIndex, SeekOptionFlags flags = SEEK_FINALIZE | SEEK_PUSH_AUDIO) override;
 
-    void setPlaybackSpeedPercent(int percentage) override;
-    void setPlaybackSpeedNormalized(double value) override;
-
     void setMute(bool) override {}
     bool isMute() override { return true; }
 

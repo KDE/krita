@@ -64,12 +64,16 @@ public:
 
     class KisFrameDisplayProxy *displayProxy();
 
+    void setPlaybackSpeed(qreal value);
+    qreal playbackSpeed() const;
+
 public Q_SLOTS:
     void showFrame(int frame, bool finalize = false);
 
 Q_SIGNALS:
     void sigPlaybackStateChanged(PlaybackState state);
     void sigPlaybackStatisticsUpdated();
+    void sigPlaybackSpeedChanged(qreal value);
     void sigFrameChanged();
     void sigPlaybackMediaChanged();
     void sigAudioLevelChanged(qreal value);

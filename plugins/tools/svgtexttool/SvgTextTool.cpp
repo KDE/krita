@@ -476,16 +476,20 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
         if (selectedShape) {
             const qreal sensitivity = grabSensitivityInPt();
 
-            const QPolygonF textOutline = selectedShape->absoluteTransformation().map(selectedShape->outlineRect());
-            const QRectF moveBorderRegion = kisGrowRect(selectedShape->boundingRect(), sensitivity);
-            if (moveBorderRegion.contains(event->point) && !textOutline.containsPoint(event->point, Qt::OddEvenFill)) {
-                m_highlightItem = HighlightItem::MoveBorder;
-                cursor = Qt::SizeAllCursor;
-            } else if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(selectedShape)) {
+            if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(selectedShape)) {
                 const QPolygonF zone = info->editLineGrabRect(sensitivity);
                 if (zone.containsPoint(event->point, Qt::OddEvenFill)) {
                     m_highlightItem = HighlightItem::InlineSizeHandle;
                     cursor = lineToCursor(info->baselineLine(), canvas());
+                }
+            }
+
+            if (m_highlightItem == HighlightItem::None) {
+                const QPolygonF textOutline = selectedShape->absoluteTransformation().map(selectedShape->outlineRect());
+                const QRectF moveBorderRegion = kisGrowRect(selectedShape->boundingRect(), sensitivity);
+                if (moveBorderRegion.contains(event->point) && !textOutline.containsPoint(event->point, Qt::OddEvenFill)) {
+                    m_highlightItem = HighlightItem::MoveBorder;
+                    cursor = Qt::SizeAllCursor;
                 }
             }
         }

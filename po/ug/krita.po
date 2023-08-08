@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-07 00:44+0000\n"
+"POT-Creation-Date: 2023-08-08 00:44+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -16711,28 +16711,28 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3995
+#: libs/flake/text/KoSvgTextShape.cpp:4004
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "تېكىست"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3997
-#: libs/flake/text/KoSvgTextShape.cpp:4005
+#: libs/flake/text/KoSvgTextShape.cpp:4006
+#: libs/flake/text/KoSvgTextShape.cpp:4014
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "تېكىست شەكلى"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4003
+#: libs/flake/text/KoSvgTextShape.cpp:4012
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " تېكىست:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4017
-#: libs/flake/text/KoSvgTextShape.cpp:4032
+#: libs/flake/text/KoSvgTextShape.cpp:4026
+#: libs/flake/text/KoSvgTextShape.cpp:4041
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -38064,131 +38064,131 @@ msgstr "يېشىل:"
 msgid "Bluer/Yellower: "
 msgstr "سېرىق"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:58
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:257
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:261
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation Curves"
 msgstr "ھەرىكەتچان"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:67
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:67
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:70
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:70
 #, fuzzy, kde-format
 msgid "Frame register"
 msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:83
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:84
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:87
 #, fuzzy, kde-format
 #| msgid "Speed"
 msgctxt "preview playback speed percentage prefix"
 msgid "Speed: "
 msgstr "سۈرئىتى"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:85
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:86
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:88
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:89
 #, kde-format
 msgid "Preview playback speed"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:128
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:131
 #, kde-format
 msgctxt "Value (Keep short!)"
 msgid "Val:"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:168
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
 #, fuzzy, kde-format
 msgid "Onion skins menu"
 msgstr "ئۇزۇنلۇق كەڭلىك نىسبىتى:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:173
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:176
 #, fuzzy, kde-format
 #| msgid "ISO studio tungsten"
 msgid "Audio menu"
 msgstr "ISO سۈرەتكە ئېلىش چىرىغى"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:184
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation settings menu"
 msgstr "ھەرىكەتچان"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:196
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
 #, fuzzy, kde-format
 msgid "Clip Start: "
 msgstr "يۇلتۇز"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:200
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
 #, kde-format
 msgid "Clip End: "
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:205
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
 #, fuzzy, kde-format
 msgid "Frame Rate: "
 msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:277
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:281
 #, fuzzy, kde-format
 #| msgid "Operation"
 msgid "Channel Operations"
 msgstr "مەشغۇلات"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:278
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:282
 #, fuzzy, kde-format
 #| msgid "Operation"
 msgid "Layer Operations"
 msgstr "مەشغۇلات"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:281
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:285
 #, fuzzy, kde-format
 #| msgid "Rectangle"
 msgid "Reset Channel"
 msgstr "تىك تۆت بۇلۇڭ"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:287
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:291
 #, fuzzy, kde-format
 #| msgid "Channels"
 msgid "Reset All Channels"
 msgstr "قانال"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:481
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:489
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:488
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:496
 #, fuzzy, kde-format
 msgid "Linear interpolation."
 msgstr "يۆنىلىش"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:495
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:503
 #, fuzzy, kde-format
 msgid "Bezier curve interpolation."
 msgstr "يۆنىلىش"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:502
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:510
 #, fuzzy, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "يۆنىلىش"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:509
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:517
 #, fuzzy, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "يۆنىلىش"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:516
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:524
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:523
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:531
 #, fuzzy, kde-format
 #| msgid "Zoom to Selection"
 msgid "Zoom view to fit curve."
@@ -38233,8 +38233,8 @@ msgid "Adjust Keyframe"
 msgid_plural "Adjust %1 Keyframes"
 msgstr[0] "ئىسىم قىستۇر"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:290
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:57
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:292
 #, fuzzy, kde-format
 msgid "Animation Timeline"
 msgstr "قۇر كەڭلىكى:"
@@ -38281,22 +38281,22 @@ msgstr ""
 msgid "AutoKey Duplicate"
 msgstr "كۆچۈر"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:509
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:520
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:517
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:528
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:518
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:529
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:519
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:530
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""

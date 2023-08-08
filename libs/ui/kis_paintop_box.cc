@@ -553,17 +553,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
 
 KisPaintopBox::~KisPaintopBox()
 {
-    KisConfig cfg(false);
-    QMapIterator<TabletToolID, TabletToolData> iter(m_tabletToolMap);
-    while (iter.hasNext()) {
-        iter.next();
-        if ((iter.key().pointer) == QTabletEvent::Eraser) {
-            cfg.writeEntry(QString("LastEraser_%1").arg(iter.key().uniqueTabletId), iter.value().preset->name());
-        }
-        else {
-            cfg.writeEntry(QString("LastPreset_%1").arg(iter.key().uniqueTabletId), iter.value().preset->name());
-        }
-    }
+    updatePresetConfig();
+
     // Do not delete the widget, since it is global to the application, not owned by the view
     m_presetsEditor->setPaintOpSettingsWidget(0);
     qDeleteAll(m_paintopOptionWidgets);
@@ -1539,3 +1530,21 @@ void KisPaintopBox::findDefaultPresets()
     m_eraserName = "a) Eraser Circle";
     m_defaultPresetName = "b) Basic-5 Size Opacity";
 }
+
+void KisPaintopBox::updatePresetConfig()
+{
+    KisConfig cfg(false);
+    QMapIterator<TabletToolID, TabletToolData> iter(m_tabletToolMap);
+    while (iter.hasNext()) {
+        iter.next();
+        if ((iter.key().pointer) == QTabletEvent::Eraser) {
+            cfg.writeEntry(QString("LastEraser_%1").arg(iter.key().uniqueTabletId),
+                           iter.value().preset->name());
+        }
+        else {
+            cfg.writeEntry(QString("LastPreset_%1").arg(iter.key().uniqueTabletId),
+                           iter.value().preset->name());
+        }
+    }
+}
+

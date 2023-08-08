@@ -325,6 +325,8 @@ KisViewManager::KisViewManager(QWidget *parent, KisKActionCollection *_actionCol
 
     connect(KisPart::instance(), SIGNAL(sigViewAdded(KisView*)), SLOT(slotViewAdded(KisView*)));
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(slotViewRemoved(KisView*)));
+    connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)),
+            d->controlFrame.paintopBox(), SLOT(updatePresetConfig()));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotUpdateAuthorProfileActions()));
     connect(KisConfigNotifier::instance(), SIGNAL(pixelGridModeChanged()), SLOT(slotUpdatePixelGridAction()));

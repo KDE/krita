@@ -166,7 +166,9 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
     }
     FcPatternAddInteger(p.data(), FC_WEIGHT, FcWeightFromOpenType(weight));
     FcPatternAddInteger(p.data(), FC_WIDTH, width);
-    FcPatternAddBool(p.data(), FC_OUTLINE, true);
+
+    double pixelSize = size*(qMin(xRes, yRes)/72.0);
+    FcPatternAddDouble(p.data(), FC_PIXEL_SIZE, pixelSize);
 
     FcConfigSubstitute(nullptr, p.data(), FcMatchPattern);
     FcDefaultSubstitute(p.data());
@@ -203,7 +205,9 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         QString fileName;
         int fontIndex;
 
+
         static std::optional<FontEntry> get(const FcPattern *p) {
+
             FcChar8 *fileValue{};
             if (FcPatternGetString(p, FC_FILE, 0, &fileValue) != FcResultMatch) {
                 debugFlake << "Failed to get font file for" << p;
@@ -249,6 +253,18 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         // Parse over the fonts and graphemes and try to see if we can get the
         // best match for a given grapheme.
         for (int i = 0; i < fontSet->nfont; i++) {
+
+            double fontsize = 0.0;
+            FcBool isScalable = false;
+            FcPatternGetBool(fontSet->fonts[i], FC_SCALABLE, 0, &isScalable);
+            FcPatternGetDouble(fontSet->fonts[i], FC_PIXEL_SIZE, 0, &fontsize);
+            if (!isScalable && pixelSize != fontsize) {
+                // For some reason, FC will sometimes consider a smaller font pixel-size
+                // to be more relevant to the requested pattern than a bigger one. This
+                // skips those fonts, but it does mean that such pixel fonts would not
+                // be used for fallback.
+                continue;
+            }
             if (FcPatternGetCharSet(fontSet->fonts[i], FC_CHARSET, 0, &set) == FcResultMatch) {
                 int index = 0;
                 Q_FOREACH (const QString &grapheme, graphemes) {

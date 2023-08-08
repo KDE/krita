@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-07 02:59+0000\n"
+"POT-Creation-Date: 2023-08-08 02:35+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -16655,28 +16655,28 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3995
+#: libs/flake/text/KoSvgTextShape.cpp:4004
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Szöveg"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3997
-#: libs/flake/text/KoSvgTextShape.cpp:4005
+#: libs/flake/text/KoSvgTextShape.cpp:4006
+#: libs/flake/text/KoSvgTextShape.cpp:4014
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "Szöveg alakzat"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4003
+#: libs/flake/text/KoSvgTextShape.cpp:4012
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " Szöveg:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4017
-#: libs/flake/text/KoSvgTextShape.cpp:4032
+#: libs/flake/text/KoSvgTextShape.cpp:4026
+#: libs/flake/text/KoSvgTextShape.cpp:4041
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -38231,131 +38231,131 @@ msgstr "Zöld:"
 msgid "Bluer/Yellower: "
 msgstr "Sárga"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:58
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:257
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:261
 #, fuzzy, kde-format
 #| msgid "&Paint Layer"
 msgid "Animation Curves"
 msgstr "Réteg &nyomtatása"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:67
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:67
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:70
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:70
 #, fuzzy, kde-format
 msgid "Frame register"
 msgstr "Tóth Csanád,Kiszel Kristóf,Úr Balázs"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:83
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:84
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:87
 #, fuzzy, kde-format
 #| msgid "Speed"
 msgctxt "preview playback speed percentage prefix"
 msgid "Speed: "
 msgstr "Sebesség"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:85
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:86
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:88
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:89
 #, kde-format
 msgid "Preview playback speed"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:128
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:131
 #, kde-format
 msgctxt "Value (Keep short!)"
 msgid "Val:"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:168
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
 #, fuzzy, kde-format
 msgid "Onion skins menu"
 msgstr "Arányok kényszerítése"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:173
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:176
 #, fuzzy, kde-format
 #| msgid "ISO studio tungsten"
 msgid "Audio menu"
 msgstr "ISO stúdió izzólámpa"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:184
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation settings menu"
 msgstr "Animált"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:196
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
 #, fuzzy, kde-format
 msgid "Clip Start: "
 msgstr "Kezdés"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:200
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
 #, kde-format
 msgid "Clip End: "
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:205
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
 #, fuzzy, kde-format
 msgid "Frame Rate: "
 msgstr "Tóth Csanád,Kiszel Kristóf,Úr Balázs"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:277
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:281
 #, fuzzy, kde-format
 msgid "Channel Operations"
 msgstr "Követési beállítások módosítása"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:278
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:282
 #, fuzzy, kde-format
 msgid "Layer Operations"
 msgstr "Követési beállítások módosítása"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:281
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:285
 #, fuzzy, kde-format
 #| msgid "Rectangle"
 msgid "Reset Channel"
 msgstr "Téglalap"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:287
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:291
 #, fuzzy, kde-format
 #| msgid "All Channels"
 msgid "Reset All Channels"
 msgstr "Minden csatorna"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:481
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:489
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:488
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:496
 #, fuzzy, kde-format
 #| msgid "Bilinear interpolation"
 msgid "Linear interpolation."
 msgstr "Bilineáris interpoláció"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:495
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:503
 #, fuzzy, kde-format
 #| msgid "Bilinear interpolation"
 msgid "Bezier curve interpolation."
 msgstr "Bilineáris interpoláció"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:502
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:510
 #, fuzzy, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "Bilineáris interpoláció"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:509
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:517
 #, fuzzy, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "Bilineáris interpoláció"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:516
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:524
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:523
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:531
 #, fuzzy, kde-format
 #| msgid "Zoom to All"
 msgid "Zoom view to fit curve."
@@ -38402,8 +38402,8 @@ msgid_plural "Adjust %1 Keyframes"
 msgstr[0] "Név beszúrása"
 msgstr[1] "Név beszúrása"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:290
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:57
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:292
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation Timeline"
@@ -38454,22 +38454,22 @@ msgstr "Fekete másolása"
 msgid "AutoKey Duplicate"
 msgstr "Duplikálás"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:509
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:520
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:517
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:528
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:518
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:529
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:519
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:530
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""

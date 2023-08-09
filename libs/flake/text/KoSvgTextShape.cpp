@@ -4020,6 +4020,9 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
 
         painter.save();
 
+        QFont font(QFont(), painter.device());
+        font.setPointSizeF(16.0);
+
         if (shapeGlobalClipRect.isValid()) {
             for (int i = currentIndex; i < j; i++) {
                 if (result.at(i).addressable && !result.at(i).hidden) {
@@ -4043,6 +4046,17 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
                     pen.setColor(penColor);
                     painter.setPen(pen);
                     painter.drawPolygon(tf.map(result.at(i).boundingBox));
+
+                    const QPointF center = tf.mapRect(result.at(i).boundingBox).center();
+                    QString text = "#";
+                    text += QString::number(i);
+                    painter.setWorldMatrixEnabled(false);
+                    painter.setPen(Qt::red);
+                    painter.drawText(QRectF(painter.transform().map(center), QSizeF(0, 64)).adjusted(-128, 0, 128, 0),
+                                     Qt::AlignHCenter | Qt::AlignTop,
+                                     text);
+                    painter.setWorldMatrixEnabled(true);
+
                     pen.setWidth(6);
                     const BreakType breakType = result.at(i).breakType;
                     if (breakType == SoftBreak || breakType == HardBreak) {
@@ -4054,7 +4068,7 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
                         penColor.setAlpha(128);
                         pen.setColor(penColor);
                         painter.setPen(pen);
-                        painter.drawPoint(tf.mapRect(result.at(i).boundingBox).center());
+                        painter.drawPoint(center);
                     }
                     penColor = Qt::red;
                     penColor.setAlpha(192);

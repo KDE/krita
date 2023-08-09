@@ -324,30 +324,40 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
 {
     if (!isActivated()) return;
 
+    KoSvgTextShape *shape = selectedShape();
+
     gc.setTransform(converter.documentToView(), true);
 
-    KisHandlePainterHelper handlePainter(&gc);
+    {
+        KisHandlePainterHelper handlePainter(&gc);
 
-    if (m_dragging) {
-        QPolygonF poly(QRectF(m_dragStart, m_dragEnd));
-        handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
-        handlePainter.drawRubberLine(poly);
+        if (m_dragging) {
+            QPolygonF poly(QRectF(m_dragStart, m_dragEnd));
+            handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
+            handlePainter.drawRubberLine(poly);
+        }
+
+        if (shape) {
+            handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
+            QPainterPath path;
+            path.addRect(shape->boundingRect());
+            handlePainter.drawPath(path);
+            handlePainter.drawHandleCircle(shape->absoluteTransformation().map(QPointF()), KoToolBase::handleRadius());
+        }
+
+        if (!m_hoveredShapeHighlightRect.isEmpty()) {
+            handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandlesWithSolidOutline());
+            QPainterPath path;
+            path.addPath(m_hoveredShapeHighlightRect);
+            handlePainter.drawPath(path);
+        }
     }
 
-    KoSvgTextShape *shape = selectedShape();
-    if (shape) {
-        handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
-        QPainterPath path;
-        path.addRect(shape->boundingRect());
-        handlePainter.drawPath(path);
-        handlePainter.drawHandleCircle(shape->absoluteTransformation().map(QPointF()), KoToolBase::handleRadius());
-    }
-
-    if (!m_hoveredShapeHighlightRect.isEmpty()) {
-        handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandlesWithSolidOutline());
-        QPainterPath path;
-        path.addPath(m_hoveredShapeHighlightRect);
-        handlePainter.drawPath(path);
+    // Paint debug outline
+    static const bool debugEnabled = !qEnvironmentVariableIsEmpty("KRITA_DEBUG_TEXTTOOL");
+    if (debugEnabled && shape) {
+        gc.setTransform(shape->absoluteTransformation(), true);
+        shape->paintDebug(gc);
     }
 }
 

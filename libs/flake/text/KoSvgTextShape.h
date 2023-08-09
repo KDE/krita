@@ -38,6 +38,8 @@ public:
     void paintComponent(QPainter &painter) const override;
     void paintStroke(QPainter &painter) const override;
 
+    void paintDebug(QPainter &painter) const;
+
     /**
      * Reset the text shape into initial shape, removing all the child shapes
      * and precalculated layouts. This method is used by text-updating code to

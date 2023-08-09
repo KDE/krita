@@ -358,6 +358,12 @@ public:
                     QPainterPath &chunk,
                     int &currentIndex);
     QList<KoShape *> collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex);
+    void paintDebug(QPainter &painter,
+                    const QPainterPath &outlineRect,
+                    const KoShape *rootShape,
+                    const QVector<CharacterResult> &result,
+                    QPainterPath &chunk,
+                    int &currentIndex);
 };
 
 KoSvgTextShape::KoSvgTextShape()
@@ -471,6 +477,17 @@ void KoSvgTextShape::paintStroke(QPainter &painter) const
 {
     Q_UNUSED(painter);
     // do nothing! everything is painted in paintComponent()
+}
+
+void KoSvgTextShape::paintDebug(QPainter &painter) const
+{
+    QPainterPath chunk;
+    int currentIndex = 0;
+    if (!d->result.isEmpty()) {
+        QPainterPath rootBounds;
+        rootBounds.addRect(this->outline().boundingRect());
+        d->paintDebug(painter, rootBounds, this, d->result, chunk, currentIndex);
+    }
 }
 
 QList<KoShape *> KoSvgTextShape::textOutline() const
@@ -3777,36 +3794,6 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                         (!clipRect.contains(boundingRect) &&
                          !clipRect.intersects(boundingRect))) continue;
 
-#if 0 // Debug
-                    painter.save();
-                    painter.setBrush(Qt::transparent);
-                    QPen pen(QColor(0, 0, 0, 50));
-                    pen.setWidthF(72. / xRes);
-                    painter.setPen(pen);
-                    if (!result.at(i).image.isNull()) {
-                        painter.drawPolygon(tf.map(result.at(i).imageDrawRect));
-                    } else {
-                        painter.drawPolygon(tf.map(result.at(i).path.boundingRect()));
-                    }
-                    QColor penColor = result.at(i).anchored_chunk ? result.at(i).isHanging ? Qt::red : Qt::magenta
-                        : result.at(i).lineEnd == NoChange        ? Qt::cyan
-                                                                  : Qt::yellow;
-                    pen.setColor(penColor);
-                    pen.setWidthF(72. / xRes);
-                    painter.setPen(pen);
-                    painter.drawPolygon(tf.map(result.at(i).boundingBox));
-                    if (result.at(i).breakType == SoftBreak) {
-                        painter.setPen(Qt::blue);
-                        painter.drawPoint(tf.mapRect(result.at(i).boundingBox).center());
-                    }
-                    if (result.at(i).breakType == HardBreak) {
-                        painter.setPen(Qt::red);
-                        painter.drawPoint(tf.mapRect(result.at(i).boundingBox).center());
-                    }
-                    painter.setPen(Qt::red);
-                    painter.drawPoint(result.at(i).finalPosition);
-                    painter.restore();
-#endif
                     /**
                      * There's an annoying problem here that officially speaking
                      * the chunks need to be unified into one single path before
@@ -4013,6 +4000,83 @@ QList<KoShape *> KoSvgTextShape::Private::collectPaths(const KoShape *rootShape,
         shapes.append(shape);
     }
     return shapes;
+}
+
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
+void KoSvgTextShape::Private::paintDebug(QPainter &painter,
+                                         const QPainterPath &rootOutline,
+                                         const KoShape *rootShape,
+                                         const QVector<CharacterResult> &result,
+                                         QPainterPath &chunk,
+                                         int &currentIndex)
+{
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
+
+    if (chunkShape->isTextNode()) {
+        const int j = currentIndex + chunkShape->layoutInterface()->numChars(true);
+
+        const QRect shapeGlobalClipRect = painter.transform().mapRect(chunkShape->outlineRect()).toAlignedRect();
+
+        painter.save();
+
+        if (shapeGlobalClipRect.isValid()) {
+            for (int i = currentIndex; i < j; i++) {
+                if (result.at(i).addressable && !result.at(i).hidden) {
+                    const QTransform tf = result.at(i).finalTransform();
+
+#if 1 // Debug: draw character bounding boxes
+                    painter.setBrush(Qt::transparent);
+                    QPen pen(QColor(0, 0, 0, 50));
+                    pen.setCosmetic(true);
+                    pen.setWidth(2);
+                    painter.setPen(pen);
+                    if (!result.at(i).image.isNull()) {
+                        painter.drawPolygon(tf.map(result.at(i).imageDrawRect));
+                    } else {
+                        painter.drawPolygon(tf.map(result.at(i).path.boundingRect()));
+                    }
+                    QColor penColor = result.at(i).anchored_chunk ? result.at(i).isHanging ? Qt::red : Qt::magenta
+                        : result.at(i).lineEnd == NoChange        ? Qt::cyan
+                                                                  : Qt::yellow;
+                    penColor.setAlpha(192);
+                    pen.setColor(penColor);
+                    painter.setPen(pen);
+                    painter.drawPolygon(tf.map(result.at(i).boundingBox));
+                    pen.setWidth(6);
+                    const BreakType breakType = result.at(i).breakType;
+                    if (breakType == SoftBreak || breakType == HardBreak) {
+                        if (breakType == SoftBreak) {
+                            penColor = Qt::blue;
+                        } else if (breakType == HardBreak) {
+                            penColor = Qt::red;
+                        }
+                        penColor.setAlpha(128);
+                        pen.setColor(penColor);
+                        painter.setPen(pen);
+                        painter.drawPoint(tf.mapRect(result.at(i).boundingBox).center());
+                    }
+                    penColor = Qt::red;
+                    penColor.setAlpha(192);
+                    pen.setColor(penColor);
+                    painter.setPen(pen);
+                    painter.drawPoint(result.at(i).finalPosition);
+#endif
+                }
+            }
+        }
+        painter.restore();
+        chunk = QPainterPath();
+        currentIndex = j;
+    } else {
+        Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+            /**
+             * We pass the root outline to make sure that all gradient and
+             * object-size-related decorations are rendered correctly.
+             */
+            paintDebug(painter, rootOutline, child, result, chunk, currentIndex);
+        }
+    }
 }
 
 bool KoSvgTextShape::isRootTextNode() const

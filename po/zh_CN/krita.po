@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-08 02:35+0000\n"
+"POT-Creation-Date: 2023-08-09 02:28+0000\n"
 "PO-Revision-Date: 2023-08-02 12:43\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16194,25 +16194,25 @@ msgstr ""
 "此图像包含在 Krita 4.x 中创建的矢量文字对象。它们将在保存时转换为 Krita 5 格"
 "式。转换后的文字对象将不再兼容 Krita 4.x。"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4004
+#: libs/flake/text/KoSvgTextShape.cpp:4024
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4006
-#: libs/flake/text/KoSvgTextShape.cpp:4014
+#: libs/flake/text/KoSvgTextShape.cpp:4026
+#: libs/flake/text/KoSvgTextShape.cpp:4034
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 文字形状"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4012
+#: libs/flake/text/KoSvgTextShape.cpp:4032
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4026
-#: libs/flake/text/KoSvgTextShape.cpp:4041
+#: libs/flake/text/KoSvgTextShape.cpp:4046
+#: libs/flake/text/KoSvgTextShape.cpp:4061
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"

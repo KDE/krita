@@ -48,6 +48,13 @@ void KisTextureTile::setTextureParameters()
     f->glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 }
 
+void KisTextureTile::restoreTextureParameters()
+{
+    // QPainter::drawText relies on this.
+    // Ref: https://bugreports.qt.io/browse/QTBUG-65496
+    f->glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+}
+
 inline QRectF relativeRect(const QRect &br /* baseRect */,
                            const QRect &cr /* childRect */,
                            const KisGLTexturesInfo *texturesInfo)
@@ -99,6 +106,8 @@ KisTextureTile::KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *
                  m_texturesInfo->height, 0,
                  m_texturesInfo->format,
                  m_texturesInfo->type, fd);
+
+    restoreTextureParameters();
 
     setNeedsMipmapRegeneration();
 }
@@ -329,6 +338,8 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
     //     qDebug() << "    " << ppVar(m_preparedLodPlane);
     //     qDebug() << "    " << ppVar(patchLevelOfDetail);
     // }
+
+    restoreTextureParameters();
 
     if (!patchLevelOfDetail) {
         setNeedsMipmapRegeneration();

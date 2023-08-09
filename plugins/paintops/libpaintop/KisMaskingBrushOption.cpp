@@ -116,28 +116,24 @@ public:
 
     void updatePreserveMode()
     {
-        if (!m_preserveMode.get()) return;
+        if (!m_preserveMode.get() || !m_originalBrushInfo) return;
 
-        if (!m_originallyLoadedBrush || !m_originallyLoadedMasterSize) {
+        if (m_originalBrushInfo->brush != m_maskingData->brush ||
+            !qFuzzyCompare(m_originalBrushInfo->masterSize, m_masterBrushSize.get()) ||
+            !qFuzzyCompare(m_originalBrushInfo->commonSize, m_commonBrushSizeData.get())) {
 
-            m_originallyLoadedBrush = std::nullopt;
-            m_originallyLoadedMasterSize = std::nullopt;
+            m_originalBrushInfo = std::nullopt;
             m_preserveMode.set(false);
-        }
-
-        if (*m_originallyLoadedBrush != m_maskingData->brush ||
-            !qFuzzyCompare(*m_originallyLoadedMasterSize, m_masterBrushSize.get())) {
-
-                m_originallyLoadedBrush = std::nullopt;
-                m_originallyLoadedMasterSize = std::nullopt;
-                m_preserveMode.set(false);
         }
     }
 
     void startPreserveMode()
     {
-        m_originallyLoadedBrush = m_maskingData->brush;
-        m_originallyLoadedMasterSize = m_masterBrushSize.get();
+        m_originalBrushInfo =
+            {m_maskingData->brush,
+             m_masterBrushSize.get(),
+             m_commonBrushSizeData.get()};
+
         m_preserveMode.set(true);
     }
 
@@ -150,8 +146,13 @@ public:
     }
 
 private:
-    std::optional<BrushData> m_originallyLoadedBrush;
-    std::optional<qreal> m_originallyLoadedMasterSize;
+    struct OriginalBrushInfo {
+        BrushData brush;
+        qreal masterSize;
+        qreal commonSize;
+    };
+
+    std::optional<OriginalBrushInfo> m_originalBrushInfo;
     lager::reader<BrushData> m_maskingBrushCursor;
 
 };

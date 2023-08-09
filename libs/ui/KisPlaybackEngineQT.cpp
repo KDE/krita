@@ -145,12 +145,11 @@ struct FrameMeasure {
 struct KisPlaybackEngineQT::Private {
 public:
     Private(KisPlaybackEngineQT* p_self)
-        : driver(nullptr)
+        : driver(new PlaybackDriver())
     {
     }
 
     ~Private() {
-        driver.reset();
     }
 
     QScopedPointer<PlaybackDriver> driver;
@@ -224,8 +223,7 @@ KisPlaybackEngine::PlaybackStats KisPlaybackEngineQT::playbackStatistics() const
 
 void KisPlaybackEngineQT::throttledDriverCallback()
 {
-    if (!m_d->driver)
-        return;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->driver);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas()->animationState());
     KisFrameDisplayProxy* displayProxy = activeCanvas()->animationState()->displayProxy();
@@ -287,13 +285,15 @@ void KisPlaybackEngineQT::setCanvas(KoCanvasBase *p_canvas)
     struct StopAndResume {
         StopAndResume(KisPlaybackEngineQT* p_self)
             : m_self(p_self) {
-            if (m_self->m_d->driver) {
-                m_self->m_d->driver->setPlaybackState(PlaybackState::STOPPED);
-            }
+            KIS_SAFE_ASSERT_RECOVER_RETURN(m_self->m_d->driver);
+
+            m_self->m_d->driver->setPlaybackState(PlaybackState::STOPPED);
         }
 
         ~StopAndResume() {
-            if (m_self->activeCanvas() &&  m_self->m_d->driver) {
+            KIS_SAFE_ASSERT_RECOVER_RETURN(m_self->m_d->driver);
+
+            if (m_self->activeCanvas()) {
                 m_self->m_d->driver->setPlaybackState(m_self->activeCanvas()->animationState()->playbackState());
             }
         }
@@ -347,21 +347,11 @@ void KisPlaybackEngineQT::setCanvas(KoCanvasBase *p_canvas)
         KisCanvasAnimationState* animationState = activeCanvas()->animationState();
         KIS_ASSERT(animationState);
 
-        recreateDriver(animationState->mediaInfo());
-
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->driver);
 
         { // Animation State Connections
-            connect(animationState, &KisCanvasAnimationState::sigPlaybackMediaChanged, this, [this]() {
-                KisCanvasAnimationState* animationState2 = activeCanvas()->animationState();
-                if (animationState2) {
-                    recreateDriver(animationState2->mediaInfo());
-                }
-            });
-
             connect(animationState, &KisCanvasAnimationState::sigPlaybackStateChanged, this, [this](PlaybackState state){
-                if (!m_d->driver)
-                    return;
+                KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->driver);
 
                 if (state == PLAYING) {
                     m_d->measure.reset(new FrameMeasure);
@@ -373,9 +363,7 @@ void KisPlaybackEngineQT::setCanvas(KoCanvasBase *p_canvas)
             });
 
             connect(animationState, &KisCanvasAnimationState::sigPlaybackSpeedChanged, this, [this](qreal value){
-                if (!m_d->driver)
-                    return;
-
+                KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->driver);
                 m_d->driver->setSpeed(value);
             });
             m_d->driver->setSpeed(animationState->playbackSpeed());
@@ -423,25 +411,11 @@ void KisPlaybackEngineQT::setCanvas(KoCanvasBase *p_canvas)
         connect(m_d->driver.data(), SIGNAL(throttledShowFrame()), this, SLOT(throttledDriverCallback()));
 
     }
-    else {
-        recreateDriver(boost::none);
-    }
 }
 
 void KisPlaybackEngineQT::unsetCanvas()
 {
     setCanvas(nullptr);
 }
-
-void KisPlaybackEngineQT::recreateDriver(boost::optional<QFileInfo> file)
-{
-    m_d->driver.reset();
-
-    if (!activeCanvas())
-        return;
-
-    m_d->driver.reset(new PlaybackDriver());
-}
-
 
 #include "KisPlaybackEngineQT.moc"

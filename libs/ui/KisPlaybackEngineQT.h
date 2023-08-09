@@ -62,9 +62,6 @@ protected:
     void unsetCanvas() override;
 
 private:
-    void recreateDriver(boost::optional<QFileInfo> file);
-
-private:
     struct Private;
     QScopedPointer<Private> m_d;
 };

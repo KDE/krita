@@ -414,6 +414,10 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 
         f->glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
                         0, format, type, checkers.data());
+
+        // QPainter::drawText relies on this.
+        // Ref: https://bugreports.qt.io/browse/QTBUG-65496
+        f->glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
     }
     else {
         dbgUI << "OpenGL: Tried to generate checker texture before OpenGL was initialized.";

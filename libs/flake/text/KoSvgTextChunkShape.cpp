@@ -524,11 +524,11 @@ QPainterPath KoSvgTextChunkShape::outline() const
             KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
             KIS_SAFE_ASSERT_RECOVER_BREAK(chunkShape);
 
-            result |= chunkShape->outline();
+            result.addPath(chunkShape->outline());
         }
     }
 
-    return result.simplified();
+    return result;
 }
 
 void KoSvgTextChunkShape::paintComponent(QPainter &painter) const

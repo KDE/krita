@@ -303,6 +303,46 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
             QFile::encodeName(QStandardPaths::writableLocation(QStandardPaths::CacheLocation)));
 #endif
 
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+
+    // APPIMAGE SOUND ADDITIONS
+    // MLT needs a few environment variables set to properly function in an appimage context.
+    // The following code should be configured to **only** run when we detect that Krita is being
+    // run within an appimage. Checking for the presence of an APPDIR path env variable seems to be
+    // enough to filter out this step for non-appimage krita builds.
+    const bool isInAppimage = qEnvironmentVariableIsSet("APPIMAGE");
+    if (isInAppimage) {
+        QByteArray appimageMountDir = qgetenv("APPDIR");
+
+        {   // MLT
+            //Plugins Path is where mlt should expect to find its plugin libraries.
+            qputenv("MLT_REPOSITORY", appimageMountDir + QFile::encodeName("/usr/lib/mlt/"));
+            qputenv("MLT_DATA", appimageMountDir + QFile::encodeName("/usr/share/mlt/"));
+            qputenv("MLT_ROOT_DIR", appimageMountDir + QFile::encodeName("/usr/"));
+            qputenv("MLT_PROFILES_PATH", appimageMountDir + QFile::encodeName("/usr/share/mlt/profiles/"));
+            qputenv("MLT_PRESETS_PATH", appimageMountDir + QFile::encodeName("/usr/share/mlt/presets/"));
+        }
+
+        {
+            /**
+             * Since we package our own fontconfig into AppImage we should explicitly add
+             * system configuration file into the search list. Otherwise it will not be found.
+             *
+             * Please note that FONTCONFIG_PATH should be set **before** we create our first
+             * instance of QApplication for openGL probing, because it will make fontconfig
+             * to be loaded before this environment variable set.
+             */
+            if (qgetenv("FONTCONFIG_PATH").isEmpty()) {
+                const QString defaultFontsConfig = "/etc/fonts/fonts.conf";
+                const QFileInfo info(defaultFontsConfig);
+                if (info.exists()) {
+                    qputenv("FONTCONFIG_PATH", QFile::encodeName(QDir::toNativeSeparators(info.absolutePath())));
+                }
+            }
+        }
+    }
+#endif
+
     const QDir configPath(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation));
     QSettings kritarc(configPath.absoluteFilePath("kritadisplayrc"), QSettings::IniFormat);
 
@@ -382,25 +422,6 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
         // NOTE: This line helps also fontconfig have a user-accessible location on Android (see the commit).
         qputenv("XDG_DATA_DIRS", QFile::encodeName(root + "share") + ":" + originalXdgDataDirs);
-
-        // APPIMAGE SOUND ADDITIONS
-        // MLT needs a few environment variables set to properly function in an appimage context.
-        // The following code should be configured to **only** run when we detect that Krita is being
-        // run within an appimage. Checking for the presence of an APPDIR path env variable seems to be
-        // enough to filter out this step for non-appimage krita builds.
-        const bool isInAppimage = qEnvironmentVariableIsSet("APPIMAGE");
-        if (isInAppimage) {
-            QByteArray appimageMountDir = qgetenv("APPDIR");
-
-            {   // MLT
-                //Plugins Path is where mlt should expect to find its plugin libraries.
-                qputenv("MLT_REPOSITORY", appimageMountDir + QFile::encodeName("/usr/lib/mlt/"));
-                qputenv("MLT_DATA", appimageMountDir + QFile::encodeName("/usr/share/mlt/"));
-                qputenv("MLT_ROOT_DIR", appimageMountDir + QFile::encodeName("/usr/"));
-                qputenv("MLT_PROFILES_PATH", appimageMountDir + QFile::encodeName("/usr/share/mlt/profiles/"));
-                qputenv("MLT_PRESETS_PATH", appimageMountDir + QFile::encodeName("/usr/share/mlt/presets/"));
-            }
-        }
     }
 #else
     qputenv("XDG_DATA_DIRS", QFile::encodeName(QDir(root + "share").absolutePath()));

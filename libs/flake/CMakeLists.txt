@@ -195,6 +195,11 @@ set(kritaflake_SRCS
     text/KoSvgTextProperties.cpp
     text/KoSvgTextChunkShape.cpp
     text/KoSvgTextShape.cpp
+    text/KoSvgTextShape_p_glyphs.cpp
+    text/KoSvgTextShape_p_layout.cpp
+    text/KoSvgTextShape_p_output.cpp
+    text/KoSvgTextShapeLayoutFunc_inShape.cpp
+    text/KoSvgTextShapeLayoutFunc_lines.cpp
     text/KoSvgTextShapeMarkupConverter.cpp
     text/KoFontRegistry.cpp
     text/KoCssTextUtils.cpp

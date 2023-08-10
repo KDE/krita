@@ -71,13 +71,13 @@
 
 using raqm_t_up = KisLibraryResourcePointer<raqm_t, raqm_destroy>;
 
-enum BreakType {
+enum class BreakType {
     NoBreak,
     SoftBreak,
     HardBreak
 };
 
-enum LineEdgeBehaviour {
+enum class LineEdgeBehaviour {
     NoChange, ///< Do nothing special.
     Collapse, ///< Collapse if first or last in line.
     HangBehaviour, ///< Hang at the start or end of line.
@@ -113,9 +113,9 @@ struct CharacterResult {
     QPointF baselineOffset = QPointF(); ///< The computed baseline offset, will be applied
                                         ///< when calculating the line-offset during line breaking.
     QPointF advance;
-    BreakType breakType = NoBreak;
-    LineEdgeBehaviour lineEnd = NoChange;
-    LineEdgeBehaviour lineStart = NoChange;
+    BreakType breakType = BreakType::NoBreak;
+    LineEdgeBehaviour lineEnd = LineEdgeBehaviour::NoChange;
+    LineEdgeBehaviour lineStart = LineEdgeBehaviour::NoChange;
     bool justifyBefore = false;///< Justification Opportunity precedes this character.
     bool justifyAfter = false; ///< Justification Opportunity follows this character.
     bool isHanging = false;
@@ -786,33 +786,39 @@ void KoSvgTextShape::relayout() const
                 cr.justifyAfter = canJustify.second;
                 cr.overflowWrap = overflowWrap;
                 if (lineBreaks[start + i] == LINEBREAK_MUSTBREAK) {
-                    cr.breakType = HardBreak;
-                    cr.lineEnd = Collapse;
-                    cr.lineStart = Collapse;
+                    cr.breakType = BreakType::HardBreak;
+                    cr.lineEnd = LineEdgeBehaviour::Collapse;
+                    cr.lineStart = LineEdgeBehaviour::Collapse;
                 } else if (lineBreaks[start + i] == LINEBREAK_ALLOWBREAK && wrap != KoSvgText::NoWrap) {
-                    cr.breakType = SoftBreak;
+                    cr.breakType = BreakType::SoftBreak;
                     if (KoCssTextUtils::collapseLastSpace(text.at(start + i), collapse)) {
-                        cr.lineEnd = Collapse;
-                        cr.lineStart = Collapse;
+                        cr.lineEnd = LineEdgeBehaviour::Collapse;
+                        cr.lineStart = LineEdgeBehaviour::Collapse;
                     }
                 }
 
                 if ((wordBreakStrictness == KoSvgText::WordBreakBreakAll ||
                      linebreakStrictness == KoSvgText::LineBreakAnywhere)
                         && wrap != KoSvgText::NoWrap) {
-                    if (graphemeBreaks[start + i] == GRAPHEMEBREAK_BREAK && cr.breakType == NoBreak) {
-                        cr.breakType = SoftBreak;
+                    if (graphemeBreaks[start + i] == GRAPHEMEBREAK_BREAK && cr.breakType == BreakType::NoBreak) {
+                        cr.breakType = BreakType::SoftBreak;
                     }
                 }
-                if (cr.lineStart != Collapse && hang.testFlag(KoSvgText::HangFirst)) {
-                    cr.lineStart = KoCssTextUtils::characterCanHang(text.at(start + i), KoSvgText::HangFirst) ? HangBehaviour : cr.lineEnd;
+                if (cr.lineStart != LineEdgeBehaviour::Collapse && hang.testFlag(KoSvgText::HangFirst)) {
+                    cr.lineStart = KoCssTextUtils::characterCanHang(text.at(start + i), KoSvgText::HangFirst)
+                        ? LineEdgeBehaviour::HangBehaviour
+                        : cr.lineEnd;
                 }
-                if (cr.lineEnd != Collapse) {
+                if (cr.lineEnd != LineEdgeBehaviour::Collapse) {
                     if (hang.testFlag(KoSvgText::HangLast)) {
-                        cr.lineEnd = KoCssTextUtils::characterCanHang(text.at(start + i), KoSvgText::HangLast) ? HangBehaviour : cr.lineEnd;
+                        cr.lineEnd = KoCssTextUtils::characterCanHang(text.at(start + i), KoSvgText::HangLast)
+                            ? LineEdgeBehaviour::HangBehaviour
+                            : cr.lineEnd;
                     }
                     if (hang.testFlag(KoSvgText::HangEnd)) {
-                        LineEdgeBehaviour edge = hang.testFlag(KoSvgText::HangForce) ? ForceHang : ConditionallyHang;
+                        LineEdgeBehaviour edge = hang.testFlag(KoSvgText::HangForce)
+                            ? LineEdgeBehaviour::ForceHang
+                            : LineEdgeBehaviour::ConditionallyHang;
                         cr.lineEnd = KoCssTextUtils::characterCanHang(text.at(start + i), KoSvgText::HangEnd) ? edge : cr.lineEnd;
                     }
                 }
@@ -1282,13 +1288,13 @@ void KoSvgTextShape::relayout() const
 
             }
         } else {
-            if (result[firstCluster].breakType != HardBreak) {
+            if (result[firstCluster].breakType != BreakType::HardBreak) {
                 result[firstCluster].breakType = result.at(i).breakType;
             }
-            if (result[firstCluster].lineStart == NoChange) {
+            if (result[firstCluster].lineStart == LineEdgeBehaviour::NoChange) {
                 result[firstCluster].lineStart = result.at(i).lineStart;
             }
-            if (result[firstCluster].lineEnd == NoChange) {
+            if (result[firstCluster].lineEnd == LineEdgeBehaviour::NoChange) {
                 result[firstCluster].lineEnd = result.at(i).lineEnd;
             }
             if (result[i].anchored_chunk) {
@@ -1779,13 +1785,13 @@ void addWordToLine(QVector<CharacterResult> &result,
     Q_FOREACH (const int j, wordIndices) {
         CharacterResult cr = result.at(j);
         if (currentChunk.boundingBox.isEmpty() && j == wordIndices.first()) {
-            if (result.at(j).lineStart == Collapse) {
+            if (result.at(j).lineStart == LineEdgeBehaviour::Collapse) {
                 result[j].addressable = false;
                 result[j].hidden = true;
                 continue;
             }
             cr.anchored_chunk = true;
-            if (result.at(j).lineStart == HangBehaviour && currentLine.firstLine) {
+            if (result.at(j).lineStart == LineEdgeBehaviour::HangBehaviour && currentLine.firstLine) {
                 if (ltr) {
                     currentPos -= cr.advance;
                 } else {
@@ -1909,10 +1915,10 @@ void handleCollapseAndHang(QVector<CharacterResult> &result,
         it.toBack();
         while (it.hasPrevious()) {
             int lastIndex = it.previous();
-            if (result.at(lastIndex).lineEnd == Collapse) {
+            if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::Collapse) {
                 result[lastIndex].addressable = false;
                 result[lastIndex].hidden = true;
-            } else if (result.at(lastIndex).lineEnd == ForceHang && inlineSize) {
+            } else if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::ForceHang && inlineSize) {
                 QPointF pos = endPos;
                 if (!ltr) {
                     pos -= result.at(lastIndex).advance;
@@ -1920,7 +1926,7 @@ void handleCollapseAndHang(QVector<CharacterResult> &result,
                 result[lastIndex].cssPosition = pos;
                 result[lastIndex].finalPosition = pos;
                 result[lastIndex].isHanging = true;
-            } else if (result.at(lastIndex).lineEnd == HangBehaviour && inlineSize && atEnd) {
+            } else if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::HangBehaviour && inlineSize && atEnd) {
                 QPointF pos = endPos;
                 if (!ltr) {
                     pos -= result.at(lastIndex).advance;
@@ -1929,7 +1935,7 @@ void handleCollapseAndHang(QVector<CharacterResult> &result,
                 result[lastIndex].finalPosition = pos;
                 result[lastIndex].isHanging = true;
             }
-            if (result.at(lastIndex).lineEnd != Collapse) {
+            if (result.at(lastIndex).lineEnd != LineEdgeBehaviour::Collapse) {
                 break;
             }
         }
@@ -2008,7 +2014,7 @@ void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
             shift = ltr ? shift - result.at(j).advance : shift;
             result[j].cssPosition = shift;
             result[j].finalPosition = result.at(j).cssPosition;
-        } else if (result.at(j).lineEnd != NoChange) {
+        } else if (result.at(j).lineEnd != LineEdgeBehaviour::NoChange) {
             QPointF shift = aEndPos;
             shift = ltr ? shift : shift - result.at(j).advance;
             result[j].cssPosition = shift;
@@ -2160,7 +2166,7 @@ QVector<LineBox> KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &
         }
         bool softBreak = false; ///< Whether to do a softbreak;
         bool doNotCountAdvance =
-            ((charResult.lineEnd != NoChange)
+            ((charResult.lineEnd != LineEdgeBehaviour::NoChange)
              && !(currentLine.isEmpty() && wordIndices.isEmpty()));
         if (!doNotCountAdvance) {
             if (wordIndices.isEmpty()) {
@@ -2172,7 +2178,7 @@ QVector<LineBox> KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &
         wordIndices.append(index);
         currentLine.lastLine = !it.hasNext();
 
-        if (charResult.breakType != NoBreak || currentLine.lastLine) {
+        if (charResult.breakType != BreakType::NoBreak || currentLine.lastLine) {
             qreal lineLength = isHorizontal ? (currentPos - startPos + wordAdvance).x()
                                             : (currentPos - startPos + wordAdvance).y();
             if (!inlineSize.isAuto) {
@@ -2249,7 +2255,7 @@ QVector<LineBox> KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &
             addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);
         }
 
-        if (charResult.breakType == HardBreak) {
+        if (charResult.breakType == BreakType::HardBreak) {
             finalizeLine(result,
                          currentPos,
                          currentLine,
@@ -2662,7 +2668,7 @@ QVector<LineBox> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProper
 
         bool softBreak = false; ///< Whether to break a line.
         bool doNotCountAdvance =
-            ((charResult.lineEnd != NoChange)
+            ((charResult.lineEnd != LineEdgeBehaviour::NoChange)
              && !(currentLine.isEmpty() && wordIndices.isEmpty()));
         if (!doNotCountAdvance) {
             if (wordIndices.isEmpty()) {
@@ -2679,7 +2685,7 @@ QVector<LineBox> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProper
             currentLine.justifyLine = alignLast == KoSvgText::AlignJustify;
         }
 
-        if (charResult.breakType != NoBreak || currentLine.lastLine) {
+        if (charResult.breakType != BreakType::NoBreak || currentLine.lastLine) {
             if (currentLine.chunks.isEmpty() || currentLine.lastLine) {
                 softBreak = true;
             }
@@ -2796,7 +2802,7 @@ QVector<LineBox> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProper
             }
         }
 
-        if (charResult.breakType == HardBreak) {
+        if (charResult.breakType == BreakType::HardBreak) {
             finalizeLine(result, currentPos, currentLine, lineOffset, anchor, writingMode, ltr, true, true);
             lineBoxes.append(currentLine);
             currentLine = LineBox();
@@ -4040,8 +4046,8 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
                         painter.drawPolygon(tf.map(result.at(i).path.boundingRect()));
                     }
                     QColor penColor = result.at(i).anchored_chunk ? result.at(i).isHanging ? Qt::red : Qt::magenta
-                        : result.at(i).lineEnd == NoChange        ? Qt::cyan
-                                                                  : Qt::yellow;
+                        : result.at(i).lineEnd == LineEdgeBehaviour::NoChange ? Qt::cyan
+                                                                              : Qt::yellow;
                     penColor.setAlpha(192);
                     pen.setColor(penColor);
                     painter.setPen(pen);
@@ -4059,10 +4065,10 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
 
                     pen.setWidth(6);
                     const BreakType breakType = result.at(i).breakType;
-                    if (breakType == SoftBreak || breakType == HardBreak) {
-                        if (breakType == SoftBreak) {
+                    if (breakType == BreakType::SoftBreak || breakType == BreakType::HardBreak) {
+                        if (breakType == BreakType::SoftBreak) {
                             penColor = Qt::blue;
-                        } else if (breakType == HardBreak) {
+                        } else if (breakType == BreakType::HardBreak) {
                             penColor = Qt::red;
                         }
                         penColor.setAlpha(128);

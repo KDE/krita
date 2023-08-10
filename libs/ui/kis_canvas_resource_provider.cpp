@@ -309,6 +309,9 @@ void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVarian
     case(KoCanvasResource::CurrentKritaNode) :
         emit sigNodeChanged(currentNode());
         break;
+    case(KoCanvasResource::CurrentEffectiveCompositeOp) :
+        emit sigCompositeOpChanged();
+        break;
     case (KoCanvasResource::Opacity):
     {
         emit sigOpacityChanged(res.toDouble());
@@ -339,7 +342,6 @@ void KisCanvasResourceProvider::setEraserMode(bool value)
 {
     m_resourceManager->setResource(KoCanvasResource::EraserMode,
                                    QVariant::fromValue(value));
-    emit sigEraserModeToggled(value);
 }
 
 void KisCanvasResourceProvider::slotPainting()

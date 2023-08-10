@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-09 00:44+0000\n"
+"POT-Creation-Date: 2023-08-10 00:44+0000\n"
 "PO-Revision-Date: 2023-03-12 19:06+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -15873,13 +15873,13 @@ msgid "Workspaces"
 msgstr "Рабочие пространства"
 
 # BUGME: "критическая ошибка"? --aspotashev
-#: krita/main.cc:527
+#: krita/main.cc:548
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Фатальная ошибка"
 
-#: krita/main.cc:528
+#: krita/main.cc:549
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15888,14 +15888,14 @@ msgstr ""
 "Krita не поддерживает платформу Wayland. Чтобы обеспечить работу Krita на "
 "Wayland, используйте компонент XWayland. Krita закрывается."
 
-#: krita/main.cc:646 libs/ui/KisApplication.cpp:412
+#: krita/main.cc:667 libs/ui/KisApplication.cpp:412
 #: libs/ui/KisApplication.cpp:683
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Предупреждение Krita"
 
-#: krita/main.cc:647
+#: krita/main.cc:668
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15906,12 +15906,12 @@ msgstr ""
 "Это не рекомендуется. Не сообщайте об ошибках.\n"
 "Обновите систему до поддерживаемой версии Windows: Windows 7, 8, 8.1 или 10."
 
-#: krita/main.cc:669 krita/main.cc:674
+#: krita/main.cc:690 krita/main.cc:695
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Поддержка графических планшетов Krita"
 
-#: krita/main.cc:670
+#: krita/main.cc:691
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15922,7 +15922,7 @@ msgstr ""
 "Ink Pen. Если используется планшет для рисования, убедитесь, что драйвер "
 "планшета установлен правильно."
 
-#: krita/main.cc:675
+#: krita/main.cc:696
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -33028,7 +33028,7 @@ msgstr ""
 "Предпочитаемый формат вывода не поддерживается доступными средствами "
 "визуализации"
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:844
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:848
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr ""
@@ -53232,7 +53232,7 @@ msgid "Auto Spacing"
 msgstr "Автоматические интервалы"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:210
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211
 #, kde-format
 msgid "Brush Tip"
 msgstr "Кончик кисти"
@@ -53706,7 +53706,7 @@ msgstr ""
 "ПРЕДУПРЕЖДЕНИЕ: зависимый размер маскированной кисти стал слишком велик (%1 "
 "пикс.). Его значение уменьшено до %2 пикс."
 
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:179
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:180
 #, kde-format
 msgid "Blending Mode:"
 msgstr "Режим наложения:"

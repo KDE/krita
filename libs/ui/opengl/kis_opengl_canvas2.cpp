@@ -123,7 +123,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(KisConfigNotifier::instance(), SIGNAL(pixelGridModeChanged()), SLOT(slotPixelGridModeChanged()));
 
-    connect(canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEraserModeToggled(bool)), SLOT(slotUpdateCursorColor()));
+    connect(canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigCompositeOpChanged()), SLOT(slotUpdateCursorColor()));
     connect(canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigPaintOpPresetChanged(KisPaintOpPresetSP)), SLOT(slotUpdateCursorColor()));
 
     slotConfigChanged();

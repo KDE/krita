@@ -64,7 +64,7 @@ KisToolLine::KisToolLine(KoCanvasBase * canvas)
 
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
 
-    connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEraserModeToggled(bool)), SLOT(resetCursorStyle()));
+    connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigCompositeOpChanged()), SLOT(resetCursorStyle()));
 }
 
 KisToolLine::~KisToolLine()

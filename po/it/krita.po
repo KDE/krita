@@ -20,7 +20,7 @@
 # Simone Solinas <ksolsim@gmail.com>, 2008, 2009, 2010, 2011.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2022, 2023.
 # Luigi Toscano <luigi.toscano@tiscali.it>, 2015.
-# Valter Mura <valtermura@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Valter Mura <valtermura@gmail.com>
 #
 # Per i motivi/sfumature, vedere il seguente collegamento:
 # http://craik.shef.ac.uk/cpt-city/ggr/
@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-09 02:28+0000\n"
-"PO-Revision-Date: 2023-07-28 17:15+0200\n"
+"POT-Creation-Date: 2023-08-10 02:25+0000\n"
+"PO-Revision-Date: 2023-08-05 12:39+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 23.07.80\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -15788,13 +15788,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Spazi di lavoro"
 
-#: krita/main.cc:527
+#: krita/main.cc:548
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Errore fatale"
 
-#: krita/main.cc:528
+#: krita/main.cc:549
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15803,14 +15803,14 @@ msgstr ""
 "Krita non supporta la piattaforma Wayland. Usa XWayland per eseguire Krita "
 "su Wayland. Krita verrà ora chiuso."
 
-#: krita/main.cc:646 libs/ui/KisApplication.cpp:412
+#: krita/main.cc:667 libs/ui/KisApplication.cpp:412
 #: libs/ui/KisApplication.cpp:683
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Attenzione"
 
-#: krita/main.cc:647
+#: krita/main.cc:668
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15821,12 +15821,12 @@ msgstr ""
 "Questo non è consigliato. Non segnalare alcun errore.\n"
 "Aggiorna a una versione supportata: Windows 7, 8, 8.1 o 10."
 
-#: krita/main.cc:669 krita/main.cc:674
+#: krita/main.cc:690 krita/main.cc:695
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Supporto di Krita per tavolette grafiche"
 
-#: krita/main.cc:670
+#: krita/main.cc:691
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15837,7 +15837,7 @@ msgstr ""
 "con penna Windows Ink. Se possiedi una tavoletta per disegno, assicurati che "
 "il suo driver sia correttamente installato."
 
-#: krita/main.cc:675
+#: krita/main.cc:696
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16981,7 +16981,7 @@ msgstr ""
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:126
 #, kde-format
 msgid "Nearest Neighbor"
-msgstr "Più vicino"
+msgstr "Vicino più prossimo"
 
 #: libs/image/kis_filter_strategy.h:94
 #, kde-format
@@ -32401,7 +32401,7 @@ msgstr ""
 msgid "Preferred output format is not supported by available renderers"
 msgstr "Le rese disponibili non supportano il formato di output preferito"
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:844
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:848
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr ""
@@ -40603,8 +40603,7 @@ msgstr "Aspetto anello delle tonalità:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, fuzzy, kde-format
-#| msgid "Static"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Always shows full saturation and full "
 "brightness colors."
@@ -40613,8 +40612,7 @@ msgstr "Statico"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
-#, fuzzy, kde-format
-#| msgid "Dynamic"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Shows colors depending on the current "
 "color saturation and brightness."
@@ -52434,7 +52432,7 @@ msgid "Auto Spacing"
 msgstr "Spaziatura automatica"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:210
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211
 #, kde-format
 msgid "Brush Tip"
 msgstr "Punta del pennello"
@@ -52910,7 +52908,7 @@ msgstr ""
 "ATTENZIONE: la dimensione relativa al pennello con maschera è cresciuta "
 "troppo (%1 pixel). Il suo valore è stato ridotto a %2 pixel."
 
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:179
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:180
 #, kde-format
 msgid "Blending Mode:"
 msgstr "Metodo di fusione:"

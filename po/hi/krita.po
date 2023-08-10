@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-09 02:28+0000\n"
+"POT-Creation-Date: 2023-08-10 02:25+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -15843,13 +15843,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "कार्यक्षेत्र"
 
-#: krita/main.cc:527
+#: krita/main.cc:548
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "गंभीर त्रुटि"
 
-#: krita/main.cc:528
+#: krita/main.cc:549
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15858,14 +15858,14 @@ msgstr ""
 "क्रिता को वैलैंड प्लेटफॉर्म समर्थन नहीं है। वैलैंड पर क्रिता को चलाने के लिए XWayland का "
 "उपयोग करें। क्रिता अब बंद होगा।"
 
-#: krita/main.cc:646 libs/ui/KisApplication.cpp:412
+#: krita/main.cc:667 libs/ui/KisApplication.cpp:412
 #: libs/ui/KisApplication.cpp:683
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "क्रिता : चेतावनी"
 
-#: krita/main.cc:647
+#: krita/main.cc:668
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15876,12 +15876,12 @@ msgstr ""
 "यह अनुशंसित नहीं है। किसी भी त्रुटी की सूचना न दें।\n"
 "कृपया विंडोज़ के समर्थित संस्करण में अद्यतन करें : विंडोज़ ७, ८, ८.१ या १०।"
 
-#: krita/main.cc:669 krita/main.cc:674
+#: krita/main.cc:690 krita/main.cc:695
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "क्रिता टॅबलेट समर्थन"
 
-#: krita/main.cc:670
+#: krita/main.cc:691
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15892,7 +15892,7 @@ msgstr ""
 "हैं। यदि आपके पास एक चित्रकारी का टैबलेट है, तो कृपया सुनिश्चित करें कि टैबलेट के ड्राइवर "
 "ठीक से स्थापित हुएं हैं।"
 
-#: krita/main.cc:675
+#: krita/main.cc:696
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -32103,7 +32103,7 @@ msgstr ""
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:844
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:848
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr ""
@@ -51705,7 +51705,7 @@ msgid "Auto Spacing"
 msgstr "स्वचालित अंतरालन"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:210
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211
 #, kde-format
 msgid "Brush Tip"
 msgstr "ब्रुश की नोक"
@@ -52145,7 +52145,7 @@ msgid ""
 "value has been cropped to %2 pixels."
 msgstr ""
 
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:179
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:180
 #, kde-format
 msgid "Blending Mode:"
 msgstr "सम्मिश्रण मोड :"

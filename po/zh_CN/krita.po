@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-09 02:28+0000\n"
+"POT-Creation-Date: 2023-08-10 02:25+0000\n"
 "PO-Revision-Date: 2023-08-02 12:43\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -15705,13 +15705,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "工作区"
 
-#: krita/main.cc:527
+#: krita/main.cc:548
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "严重错误"
 
-#: krita/main.cc:528
+#: krita/main.cc:549
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15720,14 +15720,14 @@ msgstr ""
 "Krita 不支持 Wayland 环境。请使用 XWayland 来在 Wayland 环境下运行 Krita。"
 "Krita 现在将会关闭。"
 
-#: krita/main.cc:646 libs/ui/KisApplication.cpp:412
+#: krita/main.cc:667 libs/ui/KisApplication.cpp:412
 #: libs/ui/KisApplication.cpp:683
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita：警告"
 
-#: krita/main.cc:647
+#: krita/main.cc:668
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15738,12 +15738,12 @@ msgstr ""
 "我们不建议这样做。请不要报告此使用场景下的程序缺陷。\n"
 "请升级到下列支持的 Windows 版本: Windows 7、8、8.1 或10。"
 
-#: krita/main.cc:669 krita/main.cc:674
+#: krita/main.cc:690 krita/main.cc:695
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita 数位板支持"
 
-#: krita/main.cc:670
+#: krita/main.cc:691
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15753,7 +15753,7 @@ msgstr ""
 "无法加载 WinTab 驱动，也没有发现 Windows Ink 设备。如果数位板已经连接，请确保"
 "已经正确安装了它的驱动程序。"
 
-#: krita/main.cc:675
+#: krita/main.cc:696
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -32020,7 +32020,7 @@ msgstr "首选渲染器不支持请求的表面格式。已选择另一个渲染
 msgid "Preferred output format is not supported by available renderers"
 msgstr "可用渲染器不支持首选输出格式"
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:844
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:848
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "OpenColorIO 已被禁用：图像的色彩空间不受支持"
@@ -51535,7 +51535,7 @@ msgid "Auto Spacing"
 msgstr "自动间距"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:210
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211
 #, kde-format
 msgid "Brush Tip"
 msgstr "笔尖"
@@ -52004,7 +52004,7 @@ msgid ""
 "value has been cropped to %2 pixels."
 msgstr "警告：蒙版笔刷的依赖尺寸过大 (%1 像素)。它的数值已被截断为 %2 像素。"
 
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:179
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:180
 #, kde-format
 msgid "Blending Mode:"
 msgstr "混合模式："

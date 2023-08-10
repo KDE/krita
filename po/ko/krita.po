@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-09 02:28+0000\n"
+"POT-Creation-Date: 2023-08-10 02:25+0000\n"
 "PO-Revision-Date: 2023-07-24 21:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -16618,13 +16618,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "작업 공간"
 
-#: krita/main.cc:527
+#: krita/main.cc:548
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "치명적 오류"
 
-#: krita/main.cc:528
+#: krita/main.cc:549
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -16633,14 +16633,14 @@ msgstr ""
 "Krita에서는 Wayland 플랫폼을 지원하지 않습니다. Wayland에서 Krita를 실행하려"
 "면 XWayland를 사용하십시오. Krita를 종료합니다."
 
-#: krita/main.cc:646 libs/ui/KisApplication.cpp:412
+#: krita/main.cc:667 libs/ui/KisApplication.cpp:412
 #: libs/ui/KisApplication.cpp:683
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: 경고"
 
-#: krita/main.cc:647
+#: krita/main.cc:668
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16651,12 +16651,12 @@ msgstr ""
 "실행을 추천하지 않습니다. 버그를 보고하지 마십시오.\n"
 "지원하는 Windows 버전을 사용하십시오: Windows 7, 8, 8.1, 10."
 
-#: krita/main.cc:669 krita/main.cc:674
+#: krita/main.cc:690 krita/main.cc:695
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita 태블릿 지원"
 
-#: krita/main.cc:670
+#: krita/main.cc:691
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16666,7 +16666,7 @@ msgstr ""
 "WinTab 드라이버를 불러올 수 없으며 Windows 잉크 펜 장치를 찾을 수 없습니다. "
 "그래픽 태블릿이 있다면 드라이버 설치 상태를 확인하십시오."
 
-#: krita/main.cc:675
+#: krita/main.cc:696
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -33350,7 +33350,7 @@ msgstr ""
 msgid "Preferred output format is not supported by available renderers"
 msgstr "사용 가능한 렌더러에서 선호하는 출력 형식을 지원하지 않음"
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:844
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:848
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "OpenColorIO가 비활성화됨: 이미지 색 공간이 지원되지 않습니다"
@@ -53365,7 +53365,7 @@ msgid "Auto Spacing"
 msgstr "자동 간격"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:210
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211
 #, kde-format
 msgid "Brush Tip"
 msgstr "브러시 끝"
@@ -53838,7 +53838,7 @@ msgid ""
 "value has been cropped to %2 pixels."
 msgstr ""
 
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:179
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:180
 #, kde-format
 msgid "Blending Mode:"
 msgstr "혼합 모드:"

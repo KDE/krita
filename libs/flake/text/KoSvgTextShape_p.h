@@ -1,0 +1,329 @@
+/*
+ *  SPDX-FileCopyrightText: 2017 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
+#ifndef KO_SVG_TEXT_SHAPE_P_H
+#define KO_SVG_TEXT_SHAPE_P_H
+
+#include "KoSvgTextShape.h"
+
+#include "KoSvgText.h"
+
+#include <kis_assert.h>
+
+#include <QFont>
+#include <QImage>
+#include <QLineF>
+#include <QPainterPath>
+#include <QPointF>
+#include <QRectF>
+#include <QVector>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+class KoPathShape;
+struct raqm_glyph_t;
+
+enum class BreakType {
+    NoBreak,
+    SoftBreak,
+    HardBreak
+};
+
+enum class LineEdgeBehaviour {
+    NoChange, ///< Do nothing special.
+    Collapse, ///< Collapse if first or last in line.
+    HangBehaviour, ///< Hang at the start or end of line.
+    ForceHang, ///< Force hanging at the end of line.
+    ConditionallyHang ///< Only hang if necessary.
+};
+
+struct CharacterResult {
+    QPointF finalPosition; ///< the final position, taking into account both CSS and SVG positioning considerations.
+    qreal rotate = 0.0;
+    bool hidden = false; // whether the character will be drawn.
+    // we can't access characters that aren't part of a typographic character
+    // so we're setting 'middle' to true and addressable to 'false'.
+    // The original svg specs' notion of addressable character relies on utf16,
+    // and it's suggested to have it per-typographic character.
+    // https://github.com/w3c/svgwg/issues/537
+    bool addressable = true; // whether the character is not discarded for various reasons.
+    bool middle = false; ///< whether the character is the second of last of a
+                         ///< typographic character.
+    bool anchored_chunk = false; ///< whether this is the start of a new chunk.
+
+    QPainterPath path;
+    QImage image;
+    QRectF imageDrawRect;
+
+    QVector<QPainterPath> colorLayers;
+    QVector<QBrush> colorLayerColors;
+    QVector<bool> replaceWithForeGroundColor;
+
+    QRectF boundingBox;
+    int visualIndex = -1;
+    QPointF cssPosition = QPointF(); ///< the position in accordance with the CSS specs, as opossed to the SVG spec.
+    QPointF baselineOffset = QPointF(); ///< The computed baseline offset, will be applied
+                                        ///< when calculating the line-offset during line breaking.
+    QPointF advance;
+    BreakType breakType = BreakType::NoBreak;
+    LineEdgeBehaviour lineEnd = LineEdgeBehaviour::NoChange;
+    LineEdgeBehaviour lineStart = LineEdgeBehaviour::NoChange;
+    bool justifyBefore = false;///< Justification Opportunity precedes this character.
+    bool justifyAfter = false; ///< Justification Opportunity follows this character.
+    bool isHanging = false;
+    bool textLengthApplied = false;
+    bool overflowWrap = false;
+
+    qreal halfLeading; ///< Leading for both sides, can be either negative or positive.
+    qreal ascent; ///< Ascender, in scanline coordinates
+    qreal descent;///< Descender, in scanline coordinates
+    QFont::Style fontStyle = QFont::StyleNormal;
+    int fontWeight = 400;
+
+    KoSvgText::TextAnchor anchor = KoSvgText::AnchorStart;
+    KoSvgText::Direction direction = KoSvgText::DirectionLeftToRight;
+
+    QTransform finalTransform() const {
+        QTransform tf =
+            QTransform::fromTranslate(finalPosition.x(), finalPosition.y());
+        tf.rotateRadians(rotate);
+        return tf;
+    }
+};
+
+struct LineChunk {
+    QLineF length;
+    QVector<int> chunkIndices;
+    QRectF boundingBox;
+};
+
+/**
+ * @brief The LineBox struct
+ *
+ * The line box struct is to simplify keeping track of lines inside the wrapping
+ * functions. It somewhat corresponds to CSS line boxes, with the caveat that formally,
+ * a line split in two in CSS/SVG would be two line boxes, while we instead have two
+ * line chunks in a single line box. This is necessary to ensure we can calculate the
+ * same line height for boxes split by a shape.
+ *
+ * CSS-Inline-3 defines Line Boxes here: https://www.w3.org/TR/css-inline-3/#line-box
+ * CSS-Text-3 briefly talks about them here: https://www.w3.org/TR/css-text-3/#bidi-linebox
+ * SVG-2 chapter text talks about them here: https://svgwg.org/svg2-draft/text.html#TextLayoutAutoNotes
+ *
+ * What is important to us is that all the above specifications, when they talk about Bidi-reordering,
+ * agree that the order is dependant on the paragraph/block level direction, and is not affected by
+ * the inline content changing direction. Which is good, because that'd make things super hard.
+ */
+struct LineBox {
+
+    LineBox() {
+    }
+
+    LineBox(QPointF start, QPointF end) {
+        LineChunk chunk;
+        chunk.length =  QLineF(start, end);
+        chunks.append(chunk);
+        currentChunk = 0;
+    }
+
+    LineBox(QVector<QLineF> lineWidths, bool ltr, QPointF indent) {
+        textIndent = indent;
+        if (ltr) {
+            Q_FOREACH(QLineF line, lineWidths) {
+                LineChunk chunk;
+                chunk.length = line;
+                chunks.append(chunk);
+                currentChunk = 0;
+            }
+        } else {
+            Q_FOREACH(QLineF line, lineWidths) {
+                LineChunk chunk;
+                chunk.length = QLineF(line.p2(), line.p1());
+                chunks.insert(0, chunk);
+                currentChunk = 0;
+            }
+        }
+    }
+
+    QVector<LineChunk> chunks;
+    int currentChunk = -1;
+
+    qreal expectedLineTop = 0;
+    qreal actualLineTop = 0;
+    qreal actualLineBottom = 0;
+
+    QPointF baselineTop = QPointF();
+    QPointF baselineBottom = QPointF();
+
+    QPointF textIndent = QPointF();
+    bool firstLine = false;
+    bool lastLine = false;
+    bool lineFinalized = false;
+    bool justifyLine = false;
+
+    LineChunk chunk() {
+        return chunks.value(currentChunk);
+    }
+
+    void setCurrentChunk(LineChunk chunk) {
+        currentChunk = qMax(currentChunk, 0);
+        if (currentChunk < chunks.size()) {
+            chunks[currentChunk] = chunk;
+        } else {
+            chunks.append(chunk);
+        }
+    }
+
+    void clearAndAdjust(bool isHorizontal, QPointF current, QPointF indent) {
+        actualLineBottom = 0;
+        actualLineTop = 0;
+        LineChunk chunk;
+        textIndent = indent;
+        QLineF length = chunks.at(currentChunk).length;
+        if (isHorizontal) {
+            length.setP1(QPointF(length.p1().x(), current.y()));
+            length.setP2(QPointF(length.p2().x(), current.y()));
+        } else {
+            length.setP1(QPointF(current.x(), length.p1().y()));
+            length.setP2(QPointF(current.x(), length.p2().y()));
+        }
+        chunks.clear();
+        currentChunk = 0;
+        chunk.length = length;
+        chunks.append(chunk);
+        firstLine = false;
+    }
+
+    void setCurrentChunkForPos(QPointF pos, bool isHorizontal) {
+        for (int i=0; i<chunks.size(); i++) {
+            LineChunk chunk = chunks.at(i);
+            if (isHorizontal) {
+                if ((pos.x() < qMax(chunk.length.p1().x(), chunk.length.p2().x())) &&
+                        (pos.x() >= qMin(chunk.length.p1().x(), chunk.length.p2().x()))) {
+                        currentChunk = i;
+                        break;
+                }
+            } else {
+                if ((pos.y() < qMax(chunk.length.p1().y(), chunk.length.p2().y())) &&
+                        (pos.y() >= qMin(chunk.length.p1().y(), chunk.length.p2().y()))) {
+                        currentChunk = i;
+                        break;
+                }
+            }
+        }
+    }
+
+    bool isEmpty() {
+        if (chunks.isEmpty()) return true;
+        return chunks.at(currentChunk).chunkIndices.isEmpty();
+    }
+};
+
+class KoSvgTextShape::Private
+{
+public:
+    // NOTE: the cache data is shared between all the instances of
+    //       the shape, though it will be reset locally if the
+    //       accessing thread changes
+
+    Private() = default;
+
+    Private(const Private &rhs) {
+        Q_FOREACH (KoShape *shape, rhs.shapesInside) {
+            KoShape *clonedShape = shape->cloneShape();
+            KIS_ASSERT_RECOVER(clonedShape) { continue; }
+
+            shapesInside.append(clonedShape);
+        }
+        Q_FOREACH (KoShape *shape, rhs.shapesSubtract) {
+            KoShape *clonedShape = shape->cloneShape();
+            KIS_ASSERT_RECOVER(clonedShape) { continue; }
+
+            shapesSubtract.append(clonedShape);
+        }
+        textRendering = rhs.textRendering;
+        yRes = rhs.yRes;
+        xRes = rhs.xRes;
+        result = rhs.result;
+        lineBoxes = rhs.lineBoxes;
+    };
+
+    TextRendering textRendering = Auto;
+    int xRes = 72;
+    int yRes = 72;
+    QList<KoShape*> shapesInside;
+    QList<KoShape*> shapesSubtract;
+
+    QVector<CharacterResult> result;
+    QVector<LineBox> lineBoxes;
+
+    void relayout(const KoSvgTextShape *q);
+
+    bool loadGlyph(const QTransform &ftTF,
+                   const QMap<int, KoSvgText::TabSizeInfo> &tabSizeInfo,
+                   FT_Int32 faceLoadFlags,
+                   bool isHorizontal,
+                   int i,
+                   raqm_glyph_t &currentGlyph,
+                   QMap<int, int> &logicalToVisual,
+                   CharacterResult &charResult,
+                   QPointF &totalAdvanceFTFontCoordinates) const;
+
+    void clearAssociatedOutlines(const KoShape *rootShape);
+    void resolveTransforms(const KoShape *rootShape, int &currentIndex, bool isHorizontal, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars);
+
+    void applyTextLength(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal);
+    static void applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal);
+    static qreal
+    characterResultOnPath(CharacterResult &cr, qreal length, qreal offset, bool isHorizontal, bool isClosed);
+    static QPainterPath stretchGlyphOnPath(const QPainterPath &glyph,
+                                           const QPainterPath &path,
+                                           bool isHorizontal,
+                                           qreal offset,
+                                           bool isClosed);
+    static void applyTextPath(const KoShape *rootShape, QVector<CharacterResult> &result, bool isHorizontal);
+    void computeFontMetrics(const KoShape *rootShape,
+                            const QMap<int, int> &parentBaselineTable,
+                            qreal parentFontSize,
+                            QPointF superScript,
+                            QPointF subScript,
+                            QVector<CharacterResult> &result,
+                            int &currentIndex,
+                            qreal res,
+                            bool isHorizontal);
+    void handleLineBoxAlignment(const KoShape *rootShape,
+                            QVector<CharacterResult> &result, QVector<LineBox> lineBoxes,
+                            int &currentIndex,
+                            bool isHorizontal);
+    void computeTextDecorations(const KoShape *rootShape,
+                                const QVector<CharacterResult>& result,
+                                const QMap<int, int>& logicalToVisual,
+                                qreal minimumDecorationThickness,
+                                KoPathShape *textPath,
+                                qreal textPathoffset,
+                                bool side,
+                                int &currentIndex,
+                                bool isHorizontal,
+                                bool ltr,
+                                bool wrapping);
+    void paintPaths(QPainter &painter,
+                    const QPainterPath &outlineRect,
+                    const KoShape *rootShape,
+                    const QVector<CharacterResult> &result,
+                    QPainterPath &chunk,
+                    int &currentIndex);
+    QList<KoShape *> collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex);
+    void paintDebug(QPainter &painter,
+                    const QPainterPath &outlineRect,
+                    const KoShape *rootShape,
+                    const QVector<CharacterResult> &result,
+                    QPainterPath &chunk,
+                    int &currentIndex);
+};
+
+#endif // KO_SVG_TEXT_SHAPE_P_H

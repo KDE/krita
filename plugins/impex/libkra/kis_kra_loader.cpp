@@ -789,16 +789,18 @@ void KisKraLoader::loadAnimationMetadataFromXML(const QDomElement &element, KisI
     {
         int initialFrameNumber = -1;
         QDomElement exportElement = rootElement.firstChildElement("export-settings");
-        if (KisDomUtils::loadValue(exportElement, "sequenceFilePath", &string)) {
-            animation->setExportSequenceFilePath(string);
-        }
+        if (!exportElement.isNull()) {
+            if (KisDomUtils::loadValue(exportElement, "sequenceFilePath", &string)) {
+                animation->setExportSequenceFilePath(string);
+            }
 
-        if (KisDomUtils::loadValue(exportElement, "sequenceBaseName", &string)) {
-            animation->setExportSequenceBaseName(string);
-        }
+            if (KisDomUtils::loadValue(exportElement, "sequenceBaseName", &string)) {
+                animation->setExportSequenceBaseName(string);
+            }
 
-        if (KisDomUtils::loadValue(exportElement, "sequenceInitialFrameNumber", &initialFrameNumber)) {
-            animation->setExportInitialFrameNumber(initialFrameNumber);
+            if (KisDomUtils::loadValue(exportElement, "sequenceInitialFrameNumber", &initialFrameNumber)) {
+                animation->setExportInitialFrameNumber(initialFrameNumber);
+            }
         }
     }
 

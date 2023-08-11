@@ -76,6 +76,20 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
             loadFlags |= FT_LOAD_TARGET_LIGHT;
         }
     }
+    const auto loadFlagsForFace = [loadFlags, isHorizontal](FT_Face face) -> FT_Int32 {
+        FT_Int32 faceLoadFlags = loadFlags;
+        if (FT_HAS_COLOR(face)) {
+            faceLoadFlags |= FT_LOAD_COLOR;
+        }
+        if (!isHorizontal && FT_HAS_VERTICAL(face)) {
+            faceLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
+        }
+        if (!FT_IS_SCALABLE(face)) {
+            // This is needed for the CBDT version of Noto Color Emoji
+            faceLoadFlags &= ~FT_LOAD_NO_BITMAP;
+        }
+        return faceLoadFlags;
+    };
 
     // Whenever the freetype docs talk about a 26.6 floating point unit, they
     // mean a 1/64 value.
@@ -289,18 +303,8 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
 
             for (int i = 0; i < lengths.size(); i++) {
                 length = lengths.at(i);
-                FT_Int32 faceLoadFlags = loadFlags;
                 const FT_FaceUP &face = faces.at(static_cast<size_t>(i));
-                if (FT_HAS_COLOR(face)) {
-                    faceLoadFlags |= FT_LOAD_COLOR;
-                }
-                if (!isHorizontal && FT_HAS_VERTICAL(face)) {
-                    faceLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
-                }
-                if (!FT_IS_SCALABLE(face)) {
-                    // This is needed for the CBDT version of Noto Color Emoji
-                    faceLoadFlags &= ~FT_LOAD_NO_BITMAP;
-                }
+                const FT_Int32 faceLoadFlags = loadFlagsForFace(face.data());
                 if (start == 0) {
                     raqm_set_freetype_face(layout.data(), face.data());
                     raqm_set_freetype_load_flags(layout.data(), faceLoadFlags);
@@ -429,17 +433,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         }
         CharacterResult charResult = result[cluster];
 
-        FT_Int32 faceLoadFlags = loadFlags;
-        if (!isHorizontal && FT_HAS_VERTICAL(currentGlyph.ftface)) {
-            faceLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
-        }
-        if (FT_HAS_COLOR(currentGlyph.ftface)) {
-            faceLoadFlags |= FT_LOAD_COLOR;
-        }
-        if (!FT_IS_SCALABLE(currentGlyph.ftface)) {
-            // This is needed for the CBDT version of Noto Color Emoji
-            faceLoadFlags &= ~FT_LOAD_NO_BITMAP;
-        }
+        const FT_Int32 faceLoadFlags = loadFlagsForFace(currentGlyph.ftface);
 
         debugFlake << "glyph" << i << "cluster" << cluster << currentGlyph.index << text.at(cluster).unicode();
 

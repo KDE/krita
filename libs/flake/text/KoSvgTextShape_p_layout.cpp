@@ -54,10 +54,9 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     KoSvgText::AutoValue inlineSize = q->textProperties().propertyOrDefault(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
     QString lang = q->textProperties().property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
 
-    bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
+    const bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
 
     FT_Int32 loadFlags = 0;
-
     if (this->textRendering == GeometricPrecision || this->textRendering == Auto) {
         // without load_no_hinting, the advance and offset will be rounded
         // to nearest pixel, which we don't want as we're using the vector
@@ -77,19 +76,20 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
             loadFlags |= FT_LOAD_TARGET_LIGHT;
         }
     }
+
     // Whenever the freetype docs talk about a 26.6 floating point unit, they
     // mean a 1/64 value.
     const qreal ftFontUnit = 64.0;
     const qreal ftFontUnitFactor = 1 / ftFontUnit;
-    QTransform ftTF = QTransform::fromScale(ftFontUnitFactor, -ftFontUnitFactor);
     const qreal finalRes = qMin(this->xRes, this->yRes);
     const qreal scaleToPT = 72. / finalRes;
     const qreal scaleToPixel = finalRes / 72.;
-    QTransform dpiScale = QTransform::fromScale(scaleToPT, scaleToPT);
-    ftTF *= dpiScale;
+    const QTransform dpiScale = QTransform::fromScale(scaleToPT, scaleToPT);
+    const QTransform ftTF = QTransform::fromScale(ftFontUnitFactor, -ftFontUnitFactor) * dpiScale;
+
     // Some fonts have a faulty underline thickness,
     // so we limit the minimum to be a single pixel wide.
-    qreal minimumDecorationThickness = scaleToPT;
+    const qreal minimumDecorationThickness = scaleToPT;
 
     // First, get text. We use the subChunks because that handles bidi for us.
     // SVG 1.1 suggests that each time the xy position of a piece of text
@@ -99,8 +99,9 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     // get generated later. https://github.com/w3c/svgwg/issues/631
     // https://github.com/w3c/svgwg/issues/635
 
-    bool first = false;
-    QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> textChunks = q->layoutInterface()->collectSubChunks(false, first);
+    bool _ignore = false;
+    const QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> textChunks =
+        q->layoutInterface()->collectSubChunks(false, _ignore);
     QString text;
     Q_FOREACH (const KoSvgTextChunkShapeLayoutInterface::SubChunk &chunk, textChunks) {
         text.append(chunk.text);

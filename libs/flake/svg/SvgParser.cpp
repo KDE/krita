@@ -1780,8 +1780,8 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
     }
 
 
-    if (!m_context.currentGC()->textProperties.hasProperty(KoSvgTextProperties::KraTextVersionId) ||
-         m_context.currentGC()->textProperties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 2) {
+    if (m_context.currentGC()->textProperties.hasProperty(KoSvgTextProperties::KraTextVersionId) &&
+        m_context.currentGC()->textProperties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 2) {
 
         static const KoID warning("warn_text_version_1",
                                   i18nc("warning while loading SVG text",

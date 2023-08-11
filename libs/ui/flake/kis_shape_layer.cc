@@ -546,11 +546,10 @@ QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QSt
         errKrita << "Parsing error in contents.svg! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
         << " Error message: " << errorMsg << endl;
-        errKrita << i18n("Parsing error in the main document at line %1, column %2\nError message: %3"
-                         , errorLine , errorColumn , errorMsg);
 
         if (errors) {
-            *errors  << QString("Parsing error in the main document at line %1, column %2\nError message: %3").arg(errorLine).arg(errorColumn).arg(errorMsg);
+            *errors << i18n("Parsing error in the main document at line %1, column %2\nError message: %3"
+                         , errorLine , errorColumn , errorMsg);
         }
         return QList<KoShape*>();
     }

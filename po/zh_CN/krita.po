@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-10 00:44+0000\n"
+"POT-Creation-Date: 2023-08-11 00:43+0000\n"
 "PO-Revision-Date: 2023-08-02 12:39\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16228,25 +16228,25 @@ msgstr ""
 "此图像包含在 Krita 4.x 中创建的矢量文字对象。它们将在保存时转换为 Krita 5 格"
 "式。转换后的文字对象将不再兼容 Krita 4.x。"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4024
+#: libs/flake/text/KoSvgTextShape.cpp:268
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4026
-#: libs/flake/text/KoSvgTextShape.cpp:4034
+#: libs/flake/text/KoSvgTextShape.cpp:270
+#: libs/flake/text/KoSvgTextShape.cpp:278
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 文字形状"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4032
+#: libs/flake/text/KoSvgTextShape.cpp:276
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4046
-#: libs/flake/text/KoSvgTextShape.cpp:4061
+#: libs/flake/text/KoSvgTextShape.cpp:290
+#: libs/flake/text/KoSvgTextShape.cpp:305
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -57555,6 +57555,14 @@ msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
 msgstr ""
 
+#: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:23
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Move left"
+msgctxt "(qtundo-format)"
+msgid "Move text"
+msgstr "左移"
+
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
@@ -57646,7 +57654,7 @@ msgid "100%"
 msgstr "100%"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1639
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:213
 #, kde-format
 msgid "Letter Spacing"
 msgstr "字符间距"
@@ -58088,32 +58096,32 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:149
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:142
 #, kde-format
 msgid "Create new texts with..."
 msgstr "新建文字的字体设置："
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:186
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:179
 #, kde-format
 msgid "Anchor text to the left."
 msgstr "左对齐文字"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:195
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:188
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "居中文字。"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:204
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:197
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "右对齐文字"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:234
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:227
 #, kde-format
 msgid "Edit Text"
 msgstr "编辑选中文字"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:270
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:263
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

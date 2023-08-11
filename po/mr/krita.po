@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-10 00:44+0000\n"
+"POT-Creation-Date: 2023-08-11 00:43+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -16695,28 +16695,28 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:4024
+#: libs/flake/text/KoSvgTextShape.cpp:268
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "मजकूर"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4026
-#: libs/flake/text/KoSvgTextShape.cpp:4034
+#: libs/flake/text/KoSvgTextShape.cpp:270
+#: libs/flake/text/KoSvgTextShape.cpp:278
 #, fuzzy, kde-format
 #| msgid "Type and Shape"
 msgid "SVG Text Shape"
 msgstr "प्रकार व आकार"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4032
+#: libs/flake/text/KoSvgTextShape.cpp:276
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " मजकूर :"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4046
-#: libs/flake/text/KoSvgTextShape.cpp:4061
+#: libs/flake/text/KoSvgTextShape.cpp:290
+#: libs/flake/text/KoSvgTextShape.cpp:305
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -59355,6 +59355,12 @@ msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
 msgstr ""
 
+#: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:23
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Move text"
+msgstr "निवड नाही"
+
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -59451,7 +59457,7 @@ msgid "100%"
 msgstr "100%"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1639
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:213
 #, fuzzy, kde-format
 #| msgid "Line spacing"
 msgid "Letter Spacing"
@@ -59905,32 +59911,32 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:149
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:142
 #, fuzzy, kde-format
 msgid "Create new texts with..."
 msgstr "अलिकडील दस्तऐवज"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:186
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:179
 #, fuzzy, kde-format
 msgid "Anchor text to the left."
 msgstr "सामर्थ्य :"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:195
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:188
 #, fuzzy, kde-format
 msgid "Anchor text to the middle."
 msgstr "सामर्थ्य :"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:204
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:197
 #, fuzzy, kde-format
 msgid "Anchor text to the right."
 msgstr "सामर्थ्य :"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:234
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:227
 #, fuzzy, kde-format
 msgid "Edit Text"
 msgstr "मजकूर"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:270
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:263
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-10 00:44+0000\n"
+"POT-Creation-Date: 2023-08-11 00:43+0000\n"
 "PO-Revision-Date: 2023-08-05 10:03+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -16293,25 +16293,25 @@ msgstr ""
 "la dokumenton, la tekstobjekto estos konvertita al Krita 5-formato kiu ne "
 "plu kongruos kun Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4024
+#: libs/flake/text/KoSvgTextShape.cpp:268
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Teksto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4026
-#: libs/flake/text/KoSvgTextShape.cpp:4034
+#: libs/flake/text/KoSvgTextShape.cpp:270
+#: libs/flake/text/KoSvgTextShape.cpp:278
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Teksto Formo"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4032
+#: libs/flake/text/KoSvgTextShape.cpp:276
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Teksto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4046
-#: libs/flake/text/KoSvgTextShape.cpp:4061
+#: libs/flake/text/KoSvgTextShape.cpp:290
+#: libs/flake/text/KoSvgTextShape.cpp:305
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -58276,6 +58276,14 @@ msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
 msgstr "Alĝustigi aŭtovolvadon de teksto"
 
+#: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:23
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Move left"
+msgctxt "(qtundo-format)"
+msgid "Move text"
+msgstr "Movu maldekstren"
+
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
@@ -58365,7 +58373,7 @@ msgid "100%"
 msgstr "100%"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1639
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:213
 #, kde-format
 msgid "Letter Spacing"
 msgstr "Literinterspaco"
@@ -58812,32 +58820,32 @@ msgstr ""
 "Uzi CSS `white-space: pre-wrap` volvoreĝimon de SVG, kun `inline-size` "
 "difinante la tekstan larĝecon."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:149
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:142
 #, kde-format
 msgid "Create new texts with..."
 msgstr "Krei novajn tekstojn kun..."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:186
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:179
 #, kde-format
 msgid "Anchor text to the left."
 msgstr "Ankri tekston maldekstre."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:195
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:188
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "Ankri tekston al la mezo."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:204
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:197
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "Ankri tekston dekstren."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:234
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:227
 #, kde-format
 msgid "Edit Text"
 msgstr "Redakti Tekston"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:270
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:263
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

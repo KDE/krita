@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-10 00:44+0000\n"
+"POT-Creation-Date: 2023-08-11 00:43+0000\n"
 "PO-Revision-Date: 2004-07-06 17:18+0100\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -16404,26 +16404,26 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:4024
+#: libs/flake/text/KoSvgTextShape.cpp:268
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Testun"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4026
-#: libs/flake/text/KoSvgTextShape.cpp:4034
+#: libs/flake/text/KoSvgTextShape.cpp:270
+#: libs/flake/text/KoSvgTextShape.cpp:278
 #, fuzzy, kde-format
 msgid "SVG Text Shape"
 msgstr "Siâp :"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4032
+#: libs/flake/text/KoSvgTextShape.cpp:276
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "Testun:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4046
-#: libs/flake/text/KoSvgTextShape.cpp:4061
+#: libs/flake/text/KoSvgTextShape.cpp:290
+#: libs/flake/text/KoSvgTextShape.cpp:305
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -57499,6 +57499,12 @@ msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
 msgstr ""
 
+#: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:23
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Move text"
+msgstr "Dim detholiad"
+
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -57591,7 +57597,7 @@ msgid "100%"
 msgstr "100"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1639
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:213
 #, fuzzy, kde-format
 msgid "Letter Spacing"
 msgstr "Bylchu : "
@@ -58036,32 +58042,32 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:149
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:142
 #, fuzzy, kde-format
 msgid "Create new texts with..."
 msgstr "Creuir dogfen wag"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:186
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:179
 #, fuzzy, kde-format
 msgid "Anchor text to the left."
 msgstr "&Canran :"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:195
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:188
 #, fuzzy, kde-format
 msgid "Anchor text to the middle."
 msgstr "&Canran :"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:204
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:197
 #, fuzzy, kde-format
 msgid "Anchor text to the right."
 msgstr "&Canran :"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:234
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:227
 #, fuzzy, kde-format
 msgid "Edit Text"
 msgstr "Ychwanegu Testun"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:270
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:263
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

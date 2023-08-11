@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-10 00:44+0000\n"
+"POT-Creation-Date: 2023-08-11 00:43+0000\n"
 "PO-Revision-Date: 2023-08-05 08:47+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -16375,25 +16375,25 @@ msgstr ""
 "зберігатимете документ, текстовий об'єкт буде перетворено у формат Krita 5, "
 "який є несумісним із подальшим редагуванням у Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4024
+#: libs/flake/text/KoSvgTextShape.cpp:268
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4026
-#: libs/flake/text/KoSvgTextShape.cpp:4034
+#: libs/flake/text/KoSvgTextShape.cpp:270
+#: libs/flake/text/KoSvgTextShape.cpp:278
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Форма-текст SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4032
+#: libs/flake/text/KoSvgTextShape.cpp:276
 #, kde-format
 msgid "SVG Text"
 msgstr "Текст SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:4046
-#: libs/flake/text/KoSvgTextShape.cpp:4061
+#: libs/flake/text/KoSvgTextShape.cpp:290
+#: libs/flake/text/KoSvgTextShape.cpp:305
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -59086,6 +59086,14 @@ msgstr ""
 "Коригувати автоматичне перенесення тексту\n"
 "коригування автоматичного перенесення тексту"
 
+#: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:23
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Move left"
+msgctxt "(qtundo-format)"
+msgid "Move text"
+msgstr "Пересунути ліворуч"
+
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
@@ -59177,7 +59185,7 @@ msgid "100%"
 msgstr "100%"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1639
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:213
 #, kde-format
 msgid "Letter Spacing"
 msgstr "Інтервал між літерами"
@@ -59625,32 +59633,32 @@ msgstr ""
 "Використовувати режим перенесення у CSS SVG `white-space: pre-wrap` із "
 "визначенням ширини тексту за допомогою `inline-size`."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:149
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:142
 #, kde-format
 msgid "Create new texts with..."
 msgstr "Створити текст з такими параметрами…"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:186
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:179
 #, kde-format
 msgid "Anchor text to the left."
 msgstr "Прив'язати текст ліворуч."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:195
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:188
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "Прив'язати текст посередині."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:204
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:197
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "Прив'язати текст праворуч."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:234
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:227
 #, kde-format
 msgid "Edit Text"
 msgstr "Редагувати текст"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:270
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:263
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

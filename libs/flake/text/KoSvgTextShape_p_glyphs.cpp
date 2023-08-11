@@ -273,6 +273,11 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
 
                     QPainterPath p = convertFromFreeTypeOutline(currentGlyph.ftface->glyph);
                     p = outlineGlyphTf.map(p);
+                    if (charResult.visualIndex > -1) {
+                        // This is for glyph clusters, i.e. complex emoji. Do it
+                        // like how we handle unicode combining marks.
+                        p = p.translated(charResult.advance);
+                    }
                     charResult.colorLayers.append(p);
                     charResult.colorLayerColors.append(layerColor);
                     charResult.replaceWithForeGroundColor.append(isForeGroundColor);

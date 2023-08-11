@@ -75,6 +75,7 @@ void KisToolBrush::activate(const QSet<KoShape*> &shapes)
     KisToolFreehand::activate(shapes);
     connect(&m_signalMapper, SIGNAL(mapped(int)), SLOT(slotSetSmoothingType(int)), Qt::UniqueConnection);
 
+    optionWidgets(); // Ensure m_chkAssistant is initialized.
     QAction *toggleaction = action("toggle_assistant");
     connect(toggleaction, SIGNAL(triggered(bool)), m_chkAssistant, SLOT(toggle()), Qt::UniqueConnection);
 

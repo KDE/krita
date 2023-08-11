@@ -71,8 +71,11 @@ KisImportExportErrorCode KisSVGImport::convert(KisDocument *document, QIODevice 
                                                &fragmentSize,
                                                &warnings, &errors);
 
-    qDebug() << "errors" << errors;
+    if (!warnings.isEmpty()) {
+        doc->setWarningMessage(warnings.join('\n'));
+    }
     if (!errors.isEmpty()) {
+        doc->setErrorMessage(errors.join('\n'));
         return ImportExportCodes::FileFormatIncorrect;
     }
 

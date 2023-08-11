@@ -348,6 +348,18 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
                     const QPointF center = tf.mapRect(result.at(i).boundingBox).center();
                     QString text = "#";
                     text += QString::number(i);
+                    {
+                        // Find the range of this typographic character
+                        int end = i + 1;
+                        while (end < result.size() && result[end].middle) {
+                            end++;
+                        }
+                        end--;
+                        if (end != i) {
+                            text += "~";
+                            text += QString::number(end);
+                        }
+                    }
                     painter.setWorldMatrixEnabled(false);
                     painter.setPen(Qt::red);
                     painter.drawText(QRectF(painter.transform().map(center), QSizeF(0, 64)).adjusted(-128, 0, 128, 0),

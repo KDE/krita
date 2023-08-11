@@ -163,6 +163,24 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         }
     }
 
+
+    // 3. Resolve character positioning.
+    // According to SVG 2.0 algorithm, you'd first put everything into a css-compatible-renderer,
+    // so, apply https://www.w3.org/TR/css-text-3/#order and then the rest of the SVG 2 text algorithm.
+    // However, SVG 1.1 requires Textchunks to have separate shaping (and separate bidi), so you need to
+    // resolve the transforms first to find the absolutely positioned chunks, but because that relies on
+    // white-space collapse, we need to do that first, and then apply the collapse.
+    QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
+    if (!resolvedTransforms.empty()) {
+        // Ensure the first entry defaults to 0.0 for x and y, otherwise textAnchoring
+        // will not work for text that has been bidi-reordered.
+        resolvedTransforms[0].xPos = 0.0;
+        resolvedTransforms[0].yPos = 0.0;
+    }
+    globalIndex = 0;
+    bool wrapped = !(inlineSize.isAuto && q->shapesInside().isEmpty());
+    this->resolveTransforms(q, text, result, globalIndex, isHorizontal, wrapped, false, resolvedTransforms, collapseChars);
+
     QMap<int, KoSvgText::TabSizeInfo> tabSizeInfo;
 
     // pass everything to a css-compatible text-layout algortihm.
@@ -429,7 +447,6 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         raqm_glyph_t currentGlyph = glyphs[i];
         KIS_ASSERT(currentGlyph.cluster <= INT32_MAX);
         const int cluster = static_cast<int>(currentGlyph.cluster);
-        result[cluster].addressable = !collapseChars.at(cluster);
         if (!result[cluster].addressable) {
             continue;
         }
@@ -455,18 +472,13 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     }
 
     // fix it so that characters that are in the 'middle' due to either being
-    // surrogates or part of a ligature, are marked as such.
-    // Also ensure that anchored chunks get set to the first addressable non-middle characters.
+    // surrogates or part of a ligature, are marked as such. Also set the css
+    // position so that anchoring will work correctly later.
     int firstCluster = 0;
-    bool setAnchoredChunk = false;
     for (int i = 0; i < result.size(); i++) {
-        if (result[i].addressable && result.at(i).visualIndex != -1) {
+        result[i].middle = result.at(i).visualIndex == -1;
+        if (result[i].addressable && !result.at(i).middle) {
             firstCluster = i;
-            if (setAnchoredChunk) {
-                result[i].anchored_chunk = true;
-                setAnchoredChunk = false;
-
-            }
         } else {
             if (result[firstCluster].breakType != BreakType::HardBreak) {
                 result[firstCluster].breakType = result.at(i).breakType;
@@ -477,39 +489,24 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
             if (result[firstCluster].lineEnd == LineEdgeBehaviour::NoChange) {
                 result[firstCluster].lineEnd = result.at(i).lineEnd;
             }
-            if (result[i].anchored_chunk) {
-                setAnchoredChunk = true;
-            }
-            result[i].middle = true;
-            result[i].addressable = false;
+            result[i].cssPosition = result.at(firstCluster).cssPosition;
         }
     }
     debugFlake << "Glyphs retreived";
 
-    // 3. Resolve character positioning.
-    QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
-    if (!resolvedTransforms.empty()) {
-        // Ensure the first entry defaults to 0.0 for x and y, otherwise textAnchoring
-        // will not work for text that has been bidi-reordered.
-        resolvedTransforms[0].xPos = 0.0;
-        resolvedTransforms[0].yPos = 0.0;
-    }
-    globalIndex = 0;
-    this->resolveTransforms(q, globalIndex, isHorizontal, false, resolvedTransforms, collapseChars);
-
     // Compute baseline alignment.
     globalIndex = 0;
     this->computeFontMetrics(q, QMap<int, int>(), 0, QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal);
+
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms[0].absolutePos();
-
-
     if (!this->shapesInside.isEmpty()) {
         QList<QPainterPath> shapes = getShapes(this->shapesInside, this->shapesSubtract, q->textProperties());
         this->lineBoxes = flowTextInShapes(q->textProperties(), logicalToVisual, result, shapes);
     } else {
         this->lineBoxes = breakLines(q->textProperties(), logicalToVisual, result, startPos);
     }
+
     // Handle baseline alignment.
     globalIndex = 0;
     this->handleLineBoxAlignment(q, result, this->lineBoxes, globalIndex, isHorizontal);
@@ -519,7 +516,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         debugFlake << "4. Adjust positions: dx, dy";
         // 4. Adjust positions: dx, dy
         QPointF shift = QPointF();
-
+        bool setAnchoredChunk = false;
         for (int i = 0; i < result.size(); i++) {
             if (result.at(i).addressable) {
                 KoSvgText::CharTransformation transform = resolvedTransforms[i];
@@ -531,8 +528,18 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                     charResult.rotate = *transform.rotate;
                 }
                 charResult.finalPosition = charResult.cssPosition + shift;
-                if (transform.startsNewChunk()) {
+
+                // ensure that anchored chunks aren't set in the middle of a ligature.
+                if (setAnchoredChunk) {
                     charResult.anchored_chunk = true;
+                    setAnchoredChunk = false;
+                }
+                if (transform.startsNewChunk()) {
+                    if(charResult.middle) {
+                        setAnchoredChunk = true;
+                    } else {
+                        charResult.anchored_chunk = true;
+                    }
                 }
                 result[i] = charResult;
             }
@@ -561,6 +568,9 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                     shift.setY(*transform.yPos + (delta - charResult.finalPosition.y()));
                 }
                 charResult.finalPosition += shift;
+                if (charResult.middle && i-1 >=0) {
+                        charResult.finalPosition = result.at(i-1).finalPosition;
+                }
 
                 result[i] = charResult;
             }
@@ -637,72 +647,94 @@ void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)
     }
 }
 
-void KoSvgTextShape::Private::resolveTransforms(const KoShape *rootShape, int &currentIndex, bool isHorizontal, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars) {
+/**
+ * @brief KoSvgTextShape::Private::resolveTransforms
+ * This resolves transforms and applies whitespace collapse.
+ */
+void KoSvgTextShape::Private::resolveTransforms(const KoShape *rootShape, QString text, QVector<CharacterResult> &result, int &currentIndex, bool isHorizontal, bool wrapped, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars) {
     const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     QVector<KoSvgText::CharTransformation> local = chunkShape->layoutInterface()->localCharTransformations();
 
-    int i = 0;
-
-    int index = currentIndex;
-    int j = index + chunkShape->layoutInterface()->numChars(true);
-
-    if (chunkShape->layoutInterface()->textPath()) {
-        textInPath = true;
+    if (wrapped) {
+        // Apparantly when there's bidi controls in the text, they participate in line-wrapping,
+        // so we should only resolve the first char and then apply the collapsing of characters.
+        if (!local.isEmpty() && !resolved.empty()) {
+            KoSvgText::CharTransformation newTransform = local.first();
+            newTransform.mergeInParentTransformation(resolved[0]);
+            resolved[0] = newTransform;
+        }
+        for (int i = 0; i < text.size(); i++) {
+            result[i].addressable = !collapsedChars[i];
+        }
     } else {
-        for (int k = index; k < j; k++ ) {
-            if (collapsedChars[k]) {
-                continue;
-            }
 
-            if (i < local.size()) {
-                KoSvgText::CharTransformation newTransform = local.at(i);
-                newTransform.mergeInParentTransformation(resolved[k]);
-                resolved[k] = newTransform;
-                i += 1;
-            } else if (k > 0) {
-                if (resolved[k - 1].rotate) {
-                    resolved[k].rotate = resolved[k - 1].rotate;
+        int i = 0;
+
+        int index = currentIndex;
+        int j = index + chunkShape->layoutInterface()->numChars(true);
+
+        if (chunkShape->layoutInterface()->textPath()) {
+            textInPath = true;
+        } else {
+            for (int k = index; k < j; k++ ) {
+                bool bidi = (text.at(k).unicode() >= 8234 && text.at(k).unicode() <= 8238)
+                        || (text.at(k).unicode() >= 8294 && text.at(k).unicode() <= 8297);
+                bool softHyphen = text.at(k) == QChar::SoftHyphen;
+                if (collapsedChars[k] || bidi || softHyphen) {
+                    result[k].addressable = false;
+                    continue;
+                }
+
+                if (i < local.size()) {
+                    KoSvgText::CharTransformation newTransform = local.at(i);
+                    newTransform.mergeInParentTransformation(resolved[k]);
+                    resolved[k] = newTransform;
+                    i += 1;
+                } else if (k > 0) {
+                    if (resolved[k - 1].rotate) {
+                        resolved[k].rotate = resolved[k - 1].rotate;
+                    }
                 }
             }
         }
-    }
 
-    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-        resolveTransforms(child, currentIndex, isHorizontal, textInPath, resolved, collapsedChars);
+        Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+            resolveTransforms(child, text, result, currentIndex, isHorizontal, false, textInPath, resolved, collapsedChars);
 
-    }
+        }
 
-    if (chunkShape->layoutInterface()->textPath()) {
-        bool first = true;
-        for (int k = index; k < j; k++ ) {
+        if (chunkShape->layoutInterface()->textPath()) {
+            bool first = true;
+            for (int k = index; k < j; k++ ) {
 
-            if (collapsedChars[k]) {
-                continue;
-            }
+                if (!result[k].addressable) {
+                    continue;
+                }
 
-            //  Also unset the first transform on a textPath to avoid breakage with rtl text.
-            if (first) {
+                //  Also unset the first transform on a textPath to avoid breakage with rtl text.
+                if (first) {
+                    if (isHorizontal) {
+                        resolved[k].xPos = 0.0;
+                    } else {
+                        resolved[k].yPos = 0.0;
+                    }
+                    first = false;
+                }
+                // x and y attributes are officially 'ignored' for text on path, though the algorithm
+                // suggests this is only if a child of a path... In reality, not resetting this will
+                // break text-on-path with rtl.
                 if (isHorizontal) {
-                    resolved[k].xPos = 0.0;
+                    resolved[k].yPos.reset();
                 } else {
-                    resolved[k].yPos = 0.0;
+                    resolved[k].xPos.reset();
                 }
-                first = false;
-            }
-            // x and y attributes are officially 'ignored' for text on path, though the algorithm
-            // suggests this is only if a child of a path... In reality, not resetting this will
-            // break text-on-path with rtl.
-            if (isHorizontal) {
-                resolved[k].yPos.reset();
-            } else {
-                resolved[k].xPos.reset();
             }
         }
-    }
 
-    currentIndex = j;
+        currentIndex = j;
+    }
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)

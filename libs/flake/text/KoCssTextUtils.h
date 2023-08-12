@@ -119,6 +119,22 @@ public:
     static bool collapseLastSpace(QChar c, KoSvgText::TextSpaceCollapse collapseMethod);
 
     /**
+     * @brief hangLastSpace
+     * Some versions of CSS-Text 'white-space' or 'text-space-collapse' will
+     * hang the final space depending on the situation.
+     * @param c the character in question.
+     * @param collapseMethod the collapse method
+     * @param wrapMethod the wrap method.
+     * @param force whether said hang is a forced hang or not.
+     * @param nextCharIsHardBreak whether the next char is a line break.
+     * @return
+     */
+    static bool hangLastSpace(const QChar c,
+                              KoSvgText::TextSpaceCollapse collapseMethod,
+                              KoSvgText::TextWrap wrapMethod,
+                              bool &force, bool nextCharIsHardBreak);
+
+    /**
      * @brief characterCanHang
      * The function returns whether the character qualifies for
      * 'hanging-punctuation', using the given hang-type.

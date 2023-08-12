@@ -221,6 +221,37 @@ bool KoCssTextUtils::collapseLastSpace(const QChar c, KoSvgText::TextSpaceCollap
     return collapse;
 }
 
+bool KoCssTextUtils::hangLastSpace(const QChar c,
+                                   KoSvgText::TextSpaceCollapse collapseMethod,
+                                   KoSvgText::TextWrap wrapMethod,
+                                   bool &force,
+                                   bool nextCharIsHardBreak)
+{
+    if (c.isSpace()) {
+        if (collapseMethod == KoSvgText::Collapse || collapseMethod == KoSvgText::PreserveBreaks) {
+            // [css-text-3] white-space is set to normal, nowrap, or pre-line; or
+            // [css-text-4] white-space-collapse is collapse or preserve-breaks:
+            // hang unconditionally.
+            force = true;
+            return true;
+        } else if (collapseMethod == KoSvgText::Preserve && wrapMethod != KoSvgText::NoWrap) {
+            // [css-text-3] white-space is set to pre-wrap; or
+            // [css-text-4] white-space-collapse is preserve and text-wrap is not nowrap:
+            // hang unconditionally, unless followed by a force line break,
+            // in which case conditionally hang.
+
+            if (nextCharIsHardBreak) {
+                force = false;
+            } else {
+                force = true;
+            }
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool KoCssTextUtils::characterCanHang(const QChar c, KoSvgText::HangingPunctuations hangType)
 {
     if (hangType.testFlag(KoSvgText::HangFirst)) {

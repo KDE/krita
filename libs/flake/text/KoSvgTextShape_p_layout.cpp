@@ -231,9 +231,32 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                     cr.lineStart = LineEdgeBehaviour::Collapse;
                 } else if (lineBreaks[start + i] == LINEBREAK_ALLOWBREAK && wrap != KoSvgText::NoWrap) {
                     cr.breakType = BreakType::SoftBreak;
+
                     if (KoCssTextUtils::collapseLastSpace(text.at(start + i), collapse)) {
                         cr.lineEnd = LineEdgeBehaviour::Collapse;
                         cr.lineStart = LineEdgeBehaviour::Collapse;
+                    }
+                }
+                if (cr.lineEnd != LineEdgeBehaviour::Collapse) {
+                    const auto isFollowedByForcedLineBreak = [&]() {
+                        if (result.size() <= start + i + 1) {
+                            // End of the text block, consider it a forced line break
+                            return true;
+                        }
+                        if (lineBreaks[start + i+ 1] == LINEBREAK_MUSTBREAK) {
+                            // Next character is a forced line break
+                            return true;
+                        }
+                        if (resolvedTransforms.at(start + i + 1).startsNewChunk()) {
+                            // Next character is another chunk, consider it a forced line break
+                            return true;
+                        }
+                        return false;
+                    };
+                    bool forceHang = false;
+                    if (KoCssTextUtils::hangLastSpace(text.at(start + i), collapse, wrap, forceHang, isFollowedByForcedLineBreak())) {
+                        cr.lineEnd = forceHang? LineEdgeBehaviour::ForceHang: LineEdgeBehaviour::ConditionallyHang;
+
                     }
                 }
 
@@ -477,14 +500,16 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         if (result[i].addressable && !result.at(i).middle) {
             firstCluster = i;
         } else {
-            if (result[firstCluster].breakType != BreakType::HardBreak) {
-                result[firstCluster].breakType = result.at(i).breakType;
-            }
-            if (result[firstCluster].lineStart == LineEdgeBehaviour::NoChange) {
-                result[firstCluster].lineStart = result.at(i).lineStart;
-            }
-            if (result[firstCluster].lineEnd == LineEdgeBehaviour::NoChange) {
-                result[firstCluster].lineEnd = result.at(i).lineEnd;
+            if (text[firstCluster].isSpace() == text[i].isSpace()) {
+                if (result[firstCluster].breakType != BreakType::HardBreak) {
+                    result[firstCluster].breakType = result.at(i).breakType;
+                }
+                if (result[firstCluster].lineStart == LineEdgeBehaviour::NoChange) {
+                    result[firstCluster].lineStart = result.at(i).lineStart;
+                }
+                if (result[firstCluster].lineEnd == LineEdgeBehaviour::NoChange) {
+                    result[firstCluster].lineEnd = result.at(i).lineEnd;
+                }
             }
             result[i].cssPosition = result.at(firstCluster).cssPosition + result.at(firstCluster).advance;
             result[i].hidden = true;

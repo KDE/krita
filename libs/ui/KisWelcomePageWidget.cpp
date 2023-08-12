@@ -135,6 +135,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     recentDocumentsListView->setSpacing(2);
     recentDocumentsListView->installEventFilter(this);
     recentDocumentsListView->setViewMode(QListView::IconMode);
+    recentDocumentsListView->setSelectionMode(QAbstractItemView::NoSelection);
 
 //    m_recentItemDelegate.reset(new RecentItemDelegate(this));
 //    m_recentItemDelegate->setItemHeight(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH);

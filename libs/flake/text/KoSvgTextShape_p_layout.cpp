@@ -489,7 +489,8 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
             if (result[firstCluster].lineEnd == LineEdgeBehaviour::NoChange) {
                 result[firstCluster].lineEnd = result.at(i).lineEnd;
             }
-            result[i].cssPosition = result.at(firstCluster).cssPosition;
+            result[i].cssPosition = result.at(firstCluster).cssPosition + result.at(firstCluster).advance;
+            result[i].hidden = true;
         }
     }
     debugFlake << "Glyphs retreived";

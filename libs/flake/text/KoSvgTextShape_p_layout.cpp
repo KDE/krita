@@ -107,13 +107,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     // so we limit the minimum to be a single pixel wide.
     const qreal minimumDecorationThickness = scaleToPT;
 
-    // First, get text. We use the subChunks because that handles bidi for us.
-    // SVG 1.1 suggests that each time the xy position of a piece of text
-    // changes, that this should be seperately shaped, but according to SVGWG
-    // issues 631 and 635 noone who actually uses bidi likes this, and it also
-    // complicates the algorithm, so we're not doing that. Anchored Chunks will
-    // get generated later. https://github.com/w3c/svgwg/issues/631
-    // https://github.com/w3c/svgwg/issues/635
+    // First, get text. We use the subChunks because that handles bidi-insertion for us.
 
     bool _ignore = false;
     const QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> textChunks =
@@ -170,6 +164,9 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     // However, SVG 1.1 requires Textchunks to have separate shaping (and separate bidi), so you need to
     // resolve the transforms first to find the absolutely positioned chunks, but because that relies on
     // white-space collapse, we need to do that first, and then apply the collapse.
+    // https://github.com/w3c/svgwg/issues/631 and https://github.com/w3c/svgwg/issues/635
+    // argue shaping across multiple text-chunks is undefined behaviour, but it breaks SVG 1.1 text
+    // to consider it anything but required to have both shaping and bidi-reorder break.
     QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
     if (!resolvedTransforms.empty()) {
         // Ensure the first entry defaults to 0.0 for x and y, otherwise textAnchoring

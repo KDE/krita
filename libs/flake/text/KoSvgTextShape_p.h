@@ -69,12 +69,12 @@ struct CharacterResult {
     QPointF finalPosition; ///< the final position, taking into account both CSS and SVG positioning considerations.
     qreal rotate = 0.0;
     bool hidden = false; // whether the character will be drawn.
-    // we can't access characters that aren't part of a typographic character
-    // so we're setting 'middle' to true and addressable to 'false'.
     // The original svg specs' notion of addressable character relies on utf16,
-    // and it's suggested to have it per-typographic character.
+    // but there's an issue to switch to unicode codepoints proper (that is, utf 32), though it was never applied.
     // https://github.com/w3c/svgwg/issues/537
-    bool addressable = true; // whether the character is not discarded for various reasons.
+    bool addressable = true; ///< whether the character is not discarded for various reasons,
+                             ///< this is necessary for determining to which index a given x/y transform is applied,
+                             ///< and in this code we also use it to determine if a character is considered for line-breaking.
     bool middle = false; ///< whether the character is the second of last of a
                          ///< typographic character.
     bool anchored_chunk = false; ///< whether this is the start of a new chunk.

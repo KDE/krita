@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-11 00:43+0000\n"
+"POT-Creation-Date: 2023-08-12 00:44+0000\n"
 "PO-Revision-Date: 2023-08-02 12:39\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -9242,7 +9242,7 @@ msgstr "显示全局选区蒙版"
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:949 plugins/dockers/logdocker/LogDockerDock.cpp:143
+#: krita/krita.action:949 plugins/dockers/logdocker/LogDockerDock.cpp:145
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -16188,7 +16188,7 @@ msgstr "无法将 %1 保存到 html"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:123
-#: libs/ui/flake/kis_shape_layer.cc:549
+#: libs/ui/flake/kis_shape_layer.cc:551
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -16647,7 +16647,7 @@ msgstr "大小"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:388
+#: plugins/tools/basictools/kis_tool_brush.cc:389
 #: plugins/tools/basictools/kis_tool_fill.cc:568
 #: plugins/tools/basictools/kis_tool_fill.cc:579
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
@@ -17718,7 +17718,7 @@ msgid "File Layer"
 msgstr "文件图层"
 
 #: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:665
-#: plugins/impex/svg/kis_svg_import.cc:90
+#: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "矢量图层"
@@ -19581,7 +19581,7 @@ msgstr "有未保存修改"
 #: libs/resources/KisResourceModel.cpp:154
 #: libs/resources/KisTagResourceModel.cpp:656
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:187
+#: plugins/dockers/logdocker/LogDockerDock.cpp:189
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:860
 #: plugins/impex/webp/kis_wdg_options_webp.ui:791
@@ -21422,7 +21422,7 @@ msgstr "视频动画导入"
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
-#: plugins/dockers/logdocker/LogDockerDock.cpp:119
+#: plugins/dockers/logdocker/LogDockerDock.cpp:121
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:31
@@ -22949,7 +22949,7 @@ msgid "Canvas Input"
 msgstr "画布快捷键"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2093
-#: plugins/dockers/logdocker/LogDockerDock.cpp:191
+#: plugins/dockers/logdocker/LogDockerDock.cpp:193
 #, kde-format
 msgid "Color Management"
 msgstr "色彩管理"
@@ -25097,7 +25097,7 @@ msgstr "(需要重启)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:650
-#: plugins/dockers/logdocker/LogDockerDock.cpp:135
+#: plugins/dockers/logdocker/LogDockerDock.cpp:137
 #, kde-format
 msgid "Tools"
 msgstr "工具"
@@ -38517,84 +38517,84 @@ msgstr "查看或更改图层属性"
 msgid "Delete the layer or mask"
 msgstr "删除图层/蒙版"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:40
+#: plugins/dockers/logdocker/LogDockerDock.cpp:42
 #, kde-format
 msgid "Log Viewer"
 msgstr "日志查看器"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:112
+#: plugins/dockers/logdocker/LogDockerDock.cpp:114
 #, kde-format
 msgid "Log Settings"
 msgstr "日志设置"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:123
+#: plugins/dockers/logdocker/LogDockerDock.cpp:125
 #, kde-format
 msgid "Resource Management"
 msgstr "资源管理"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:127
+#: plugins/dockers/logdocker/LogDockerDock.cpp:129
 #, kde-format
 msgid "Image Core"
 msgstr "图像核心"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:131
+#: plugins/dockers/logdocker/LogDockerDock.cpp:133
 #, kde-format
 msgid "Registries"
 msgstr "注册项"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:139
+#: plugins/dockers/logdocker/LogDockerDock.cpp:141
 #, kde-format
 msgid "Tile Engine"
 msgstr "图块引擎"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:147
+#: plugins/dockers/logdocker/LogDockerDock.cpp:149
 #, kde-format
 msgid "Plugin Management"
 msgstr "插件管理"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:151
+#: plugins/dockers/logdocker/LogDockerDock.cpp:153
 #, kde-format
 msgid "User Interface"
 msgstr "使用界面"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:155
+#: plugins/dockers/logdocker/LogDockerDock.cpp:157
 #, kde-format
 msgid "File loading and saving"
 msgstr "文件加载和保存"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:159
+#: plugins/dockers/logdocker/LogDockerDock.cpp:161
 #, kde-format
 msgid "Mathematics and calculations"
 msgstr "数学运算"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:163
+#: plugins/dockers/logdocker/LogDockerDock.cpp:165
 #, kde-format
 msgid "Image Rendering"
 msgstr "图像渲染"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:167
+#: plugins/dockers/logdocker/LogDockerDock.cpp:169
 #, kde-format
 msgid "Scripting"
 msgstr "脚本处理"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:171
+#: plugins/dockers/logdocker/LogDockerDock.cpp:173
 #, kde-format
 msgid "Input handling"
 msgstr "输入处理"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:175
+#: plugins/dockers/logdocker/LogDockerDock.cpp:177
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, kde-format
 msgid "Actions"
 msgstr "操作"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:179
+#: plugins/dockers/logdocker/LogDockerDock.cpp:181
 #, kde-format
 msgid "Tablet Handling"
 msgstr "数位板处理"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:183
+#: plugins/dockers/logdocker/LogDockerDock.cpp:185
 #, kde-format
 msgid "GPU Canvas"
 msgstr "GPU 画布"
@@ -47686,7 +47686,7 @@ msgstr ""
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
 #: plugins/impex/libkra/kis_kra_loader.cpp:676
-#: plugins/impex/libkra/kis_kra_loader.cpp:1108
+#: plugins/impex/libkra/kis_kra_loader.cpp:1110
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -47839,34 +47839,34 @@ msgstr ""
 "\n"
 "您想要手动指定该文件的位置吗？"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:843
+#: plugins/impex/libkra/kis_kra_loader.cpp:845
 #, kde-format
 msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
 "\"%2\" is deactivated"
 msgstr "发现两个同时处于活动状态的全局选区蒙版。“%1”保持活动，“%2”已被停用"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:898
+#: plugins/impex/libkra/kis_kra_loader.cpp:900
 #, kde-format
 msgid "Layer %1 specifies an unsupported color model: %2."
 msgstr "图层 %1 指定了不支持的色彩模型：%2 。"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:926
+#: plugins/impex/libkra/kis_kra_loader.cpp:928
 #, kde-format
 msgid "Layer %1 has an unsupported type."
 msgstr "图层 %1 包含不支持的类型。"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:961
+#: plugins/impex/libkra/kis_kra_loader.cpp:963
 #, kde-format
 msgid "Layer %1 has an unsupported type: %2."
 msgstr "图层 %1 包含不支持的类型：%2 。"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:968
+#: plugins/impex/libkra/kis_kra_loader.cpp:970
 #, kde-format
 msgid "Failure loading layer %1 of type: %2."
 msgstr "加载类型为 %2 的图层 %1 时失败。"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:992
+#: plugins/impex/libkra/kis_kra_loader.cpp:994
 #, kde-format
 msgid ""
 "Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
@@ -47878,7 +47878,7 @@ msgstr ""
 "请检查图像的效果是否正确。如果图像显示效果异常，可在“配置 Krita->常规->工具-"
 ">CMYK 混合模式”中将该选项设置为旧版的“加色法”"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1103
+#: plugins/impex/libkra/kis_kra_loader.cpp:1105
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -55761,83 +55761,83 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "手绘笔刷笔画"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:177
+#: plugins/tools/basictools/kis_tool_brush.cc:178
 #, kde-format
 msgid "Sample count:"
 msgstr "采样数："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:188
+#: plugins/tools/basictools/kis_tool_brush.cc:189
 #, kde-format
 msgctxt ""
 "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
 msgid "Distance:"
 msgstr "笔画启动距离："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:345
+#: plugins/tools/basictools/kis_tool_brush.cc:346
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "关闭"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:346
+#: plugins/tools/basictools/kis_tool_brush.cc:347
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "基本 - 只平滑笔画棱角"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:347
+#: plugins/tools/basictools/kis_tool_brush.cc:348
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "高级 - 自定义平滑参数"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:348
+#: plugins/tools/basictools/kis_tool_brush.cc:349
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "最强 - 延迟并平均化处理"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:350
+#: plugins/tools/basictools/kis_tool_brush.cc:351
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr "防抖和笔画平滑"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:376
+#: plugins/tools/basictools/kis_tool_brush.cc:377
 #, kde-format
 msgid "Delay:"
 msgstr "延迟："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:381
+#: plugins/tools/basictools/kis_tool_brush.cc:382
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "延迟笔画响应以平滑线条"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:385
+#: plugins/tools/basictools/kis_tool_brush.cc:386
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "笔刷延迟的半径大小"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:392
+#: plugins/tools/basictools/kis_tool_brush.cc:393
 #, kde-format
 msgid "Finish line:"
 msgstr "笔末挑尖："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:405
+#: plugins/tools/basictools/kis_tool_brush.cc:406
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr "稳定各种传感器："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:414
+#: plugins/tools/basictools/kis_tool_brush.cc:415
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "笔末挑尖："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:421
+#: plugins/tools/basictools/kis_tool_brush.cc:422
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "平滑压力值"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:428
+#: plugins/tools/basictools/kis_tool_brush.cc:429
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -55846,38 +55846,38 @@ msgid ""
 msgstr ""
 "勾选后，距离数值将按照视图缩放比例自动缩放，使距离的效果在感官上保持一致。"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:433
+#: plugins/tools/basictools/kis_tool_brush.cc:434
 #, kde-format
 msgid "Scalable Distance"
 msgstr "距离与视图缩放成比例"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:449
+#: plugins/tools/basictools/kis_tool_brush.cc:450
 #: plugins/tools/basictools/kis_tool_line.cc:101
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "吸附到辅助尺"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:451
+#: plugins/tools/basictools/kis_tool_brush.cc:452
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr "此工具在添加辅助尺后才能工作。"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:456
+#: plugins/tools/basictools/kis_tool_brush.cc:457
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "辅助尺磁性"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:462
+#: plugins/tools/basictools/kis_tool_brush.cc:463
 #, kde-format
 msgid "Magnetism:"
 msgstr "吸附力度："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:465
+#: plugins/tools/basictools/kis_tool_brush.cc:466
 #, kde-format
 msgid "Snap to Single Line"
 msgstr "吸附到单一辅助尺"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:468
+#: plugins/tools/basictools/kis_tool_brush.cc:469
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -55885,13 +55885,13 @@ msgid ""
 "using the infinite assistants."
 msgstr "只吸附到单一辅助尺，避免在使用多个辅助尺时吸附失控。"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:473
+#: plugins/tools/basictools/kis_tool_brush.cc:474
 #: plugins/tools/basictools/kis_tool_line.cc:104
 #, kde-format
 msgid "Snap Eraser"
 msgstr "吸附橡皮擦"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:476
+#: plugins/tools/basictools/kis_tool_brush.cc:477
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"

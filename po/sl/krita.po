@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-11 00:43+0000\n"
+"POT-Creation-Date: 2023-08-12 00:44+0000\n"
 "PO-Revision-Date: 2023-08-01 10:31+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -9267,7 +9267,7 @@ msgstr "Pokaži globalno masko izbora"
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:949 plugins/dockers/logdocker/LogDockerDock.cpp:143
+#: krita/krita.action:949 plugins/dockers/logdocker/LogDockerDock.cpp:145
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -16234,7 +16234,7 @@ msgstr "%1 ni mogoče shraniti v html"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:123
-#: libs/ui/flake/kis_shape_layer.cc:549
+#: libs/ui/flake/kis_shape_layer.cc:551
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -16697,7 +16697,7 @@ msgstr "Velikost"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:388
+#: plugins/tools/basictools/kis_tool_brush.cc:389
 #: plugins/tools/basictools/kis_tool_fill.cc:568
 #: plugins/tools/basictools/kis_tool_fill.cc:579
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
@@ -17782,7 +17782,7 @@ msgid "File Layer"
 msgstr "Plast datoteke"
 
 #: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:665
-#: plugins/impex/svg/kis_svg_import.cc:90
+#: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Vektorska plast"
@@ -19651,7 +19651,7 @@ msgstr "Umazano"
 #: libs/resources/KisResourceModel.cpp:154
 #: libs/resources/KisTagResourceModel.cpp:656
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:187
+#: plugins/dockers/logdocker/LogDockerDock.cpp:189
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:860
 #: plugins/impex/webp/kis_wdg_options_webp.ui:791
@@ -21515,7 +21515,7 @@ msgstr "Uvoz video animacije"
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
-#: plugins/dockers/logdocker/LogDockerDock.cpp:119
+#: plugins/dockers/logdocker/LogDockerDock.cpp:121
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:31
@@ -23058,7 +23058,7 @@ msgid "Canvas Input"
 msgstr "Vnos na platno"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2093
-#: plugins/dockers/logdocker/LogDockerDock.cpp:191
+#: plugins/dockers/logdocker/LogDockerDock.cpp:193
 #, kde-format
 msgid "Color Management"
 msgstr "Upravljanje z barvami"
@@ -25241,7 +25241,7 @@ msgstr "(potreben je ponoven zagon)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:650
-#: plugins/dockers/logdocker/LogDockerDock.cpp:135
+#: plugins/dockers/logdocker/LogDockerDock.cpp:137
 #, kde-format
 msgid "Tools"
 msgstr "Orodja"
@@ -38959,84 +38959,84 @@ msgstr "Poglej ali spremeni lastnosti plasti"
 msgid "Delete the layer or mask"
 msgstr "Izbriši plast ali masko"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:40
+#: plugins/dockers/logdocker/LogDockerDock.cpp:42
 #, kde-format
 msgid "Log Viewer"
 msgstr "Zapisnik"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:112
+#: plugins/dockers/logdocker/LogDockerDock.cpp:114
 #, kde-format
 msgid "Log Settings"
 msgstr "Nastavitve beleženja"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:123
+#: plugins/dockers/logdocker/LogDockerDock.cpp:125
 #, kde-format
 msgid "Resource Management"
 msgstr "Upravljanje virov"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:127
+#: plugins/dockers/logdocker/LogDockerDock.cpp:129
 #, kde-format
 msgid "Image Core"
 msgstr "Jedro slike"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:131
+#: plugins/dockers/logdocker/LogDockerDock.cpp:133
 #, kde-format
 msgid "Registries"
 msgstr "Registri"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:139
+#: plugins/dockers/logdocker/LogDockerDock.cpp:141
 #, kde-format
 msgid "Tile Engine"
 msgstr "Pogon tlakovanja"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:147
+#: plugins/dockers/logdocker/LogDockerDock.cpp:149
 #, kde-format
 msgid "Plugin Management"
 msgstr "Upravljanje z vstavki"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:151
+#: plugins/dockers/logdocker/LogDockerDock.cpp:153
 #, kde-format
 msgid "User Interface"
 msgstr "Uporabniški vmesnik"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:155
+#: plugins/dockers/logdocker/LogDockerDock.cpp:157
 #, kde-format
 msgid "File loading and saving"
 msgstr "Nalaganje in shranjevanje datotek"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:159
+#: plugins/dockers/logdocker/LogDockerDock.cpp:161
 #, kde-format
 msgid "Mathematics and calculations"
 msgstr "Matematika in izračuni"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:163
+#: plugins/dockers/logdocker/LogDockerDock.cpp:165
 #, kde-format
 msgid "Image Rendering"
 msgstr "Upodabljanje slik"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:167
+#: plugins/dockers/logdocker/LogDockerDock.cpp:169
 #, kde-format
 msgid "Scripting"
 msgstr "Skriptanje"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:171
+#: plugins/dockers/logdocker/LogDockerDock.cpp:173
 #, kde-format
 msgid "Input handling"
 msgstr "Ravnanje z vnosom"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:175
+#: plugins/dockers/logdocker/LogDockerDock.cpp:177
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, kde-format
 msgid "Actions"
 msgstr "Dejanja"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:179
+#: plugins/dockers/logdocker/LogDockerDock.cpp:181
 #, kde-format
 msgid "Tablet Handling"
 msgstr "Ravnanje s tablicami"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:183
+#: plugins/dockers/logdocker/LogDockerDock.cpp:185
 #, kde-format
 msgid "GPU Canvas"
 msgstr "Platno GPE"
@@ -48247,7 +48247,7 @@ msgstr ""
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
 #: plugins/impex/libkra/kis_kra_loader.cpp:676
-#: plugins/impex/libkra/kis_kra_loader.cpp:1108
+#: plugins/impex/libkra/kis_kra_loader.cpp:1110
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -48407,7 +48407,7 @@ msgstr ""
 "\n"
 "Ali jo želite poiskati ročno?"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:843
+#: plugins/impex/libkra/kis_kra_loader.cpp:845
 #, kde-format
 msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
@@ -48416,27 +48416,27 @@ msgstr ""
 "Najdeni sta dve maski globalnega izbora v aktivnem stanju. »%1« se ohranja "
 "aktivna, »%2« je deaktivirana."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:898
+#: plugins/impex/libkra/kis_kra_loader.cpp:900
 #, kde-format
 msgid "Layer %1 specifies an unsupported color model: %2."
 msgstr "Plast %1 določa nepodprt barvni model: %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:926
+#: plugins/impex/libkra/kis_kra_loader.cpp:928
 #, kde-format
 msgid "Layer %1 has an unsupported type."
 msgstr "Plast %1 ima nepodprto vrsto."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:961
+#: plugins/impex/libkra/kis_kra_loader.cpp:963
 #, kde-format
 msgid "Layer %1 has an unsupported type: %2."
 msgstr "Plast %1 ima nepodprto vrsto: %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:968
+#: plugins/impex/libkra/kis_kra_loader.cpp:970
 #, kde-format
 msgid "Failure loading layer %1 of type: %2."
 msgstr "Napaka pri nalaganju plasti %1 vrste %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:992
+#: plugins/impex/libkra/kis_kra_loader.cpp:994
 #, kde-format
 msgid ""
 "Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
@@ -48449,7 +48449,7 @@ msgstr ""
 "opuščenega »aditivnega« (prištevalnega) načina pod Nastavitve -> Splošno -> "
 "Orodja -> Način mešanja CMYK."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1103
+#: plugins/impex/libkra/kis_kra_loader.cpp:1105
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -56501,83 +56501,83 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "Prostoročna poteza s čopičem"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:177
+#: plugins/tools/basictools/kis_tool_brush.cc:178
 #, kde-format
 msgid "Sample count:"
 msgstr "Število vzorcev:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:188
+#: plugins/tools/basictools/kis_tool_brush.cc:189
 #, kde-format
 msgctxt ""
 "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
 msgid "Distance:"
 msgstr "Razdalja:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:345
+#: plugins/tools/basictools/kis_tool_brush.cc:346
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "Brez"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:346
+#: plugins/tools/basictools/kis_tool_brush.cc:347
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "Osnovno"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:347
+#: plugins/tools/basictools/kis_tool_brush.cc:348
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "Uteženo"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:348
+#: plugins/tools/basictools/kis_tool_brush.cc:349
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "Stabilizator"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:350
+#: plugins/tools/basictools/kis_tool_brush.cc:351
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr "Glajenje čopiča:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:376
+#: plugins/tools/basictools/kis_tool_brush.cc:377
 #, kde-format
 msgid "Delay:"
 msgstr "Zakasnitev:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:381
+#: plugins/tools/basictools/kis_tool_brush.cc:382
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "Zakasnite potezo s čopičem, da bo črta gladkejša"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:385
+#: plugins/tools/basictools/kis_tool_brush.cc:386
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "Polmer, kjer je čopič blokiran"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:392
+#: plugins/tools/basictools/kis_tool_brush.cc:393
 #, kde-format
 msgid "Finish line:"
 msgstr "Ciljna črta:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:405
+#: plugins/tools/basictools/kis_tool_brush.cc:406
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr "Stabiliziraj tipala:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:414
+#: plugins/tools/basictools/kis_tool_brush.cc:415
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "Konec poteze:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:421
+#: plugins/tools/basictools/kis_tool_brush.cc:422
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "Pritisk glajenja"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:428
+#: plugins/tools/basictools/kis_tool_brush.cc:429
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -56588,38 +56588,38 @@ msgstr ""
 "omogoča, da je razdalja vizualno konstantna, ne glede na to, katera raven "
 "povečave je izbrana"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:433
+#: plugins/tools/basictools/kis_tool_brush.cc:434
 #, kde-format
 msgid "Scalable Distance"
 msgstr "Spremenljiva razdalja"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:449
+#: plugins/tools/basictools/kis_tool_brush.cc:450
 #: plugins/tools/basictools/kis_tool_line.cc:101
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Pripni na pomočnike"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:451
+#: plugins/tools/basictools/kis_tool_brush.cc:452
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr "Preden bo to orodje delovalo, morate dodati pomočnike."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:456
+#: plugins/tools/basictools/kis_tool_brush.cc:457
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "Magnetizem pomočnika"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:462
+#: plugins/tools/basictools/kis_tool_brush.cc:463
 #, kde-format
 msgid "Magnetism:"
 msgstr "Magnetizem:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:465
+#: plugins/tools/basictools/kis_tool_brush.cc:466
 #, kde-format
 msgid "Snap to Single Line"
 msgstr "Pripni na eno črto"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:468
+#: plugins/tools/basictools/kis_tool_brush.cc:469
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -56629,13 +56629,13 @@ msgstr ""
 "Naj se pripne samo na eno pomožno črto, preprečuje zmedo pripenjanja pri "
 "uporabi neskončnega števila pomočnikov."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:473
+#: plugins/tools/basictools/kis_tool_brush.cc:474
 #: plugins/tools/basictools/kis_tool_line.cc:104
 #, kde-format
 msgid "Snap Eraser"
 msgstr "Pripni radirko"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:476
+#: plugins/tools/basictools/kis_tool_brush.cc:477
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"

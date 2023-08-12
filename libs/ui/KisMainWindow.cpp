@@ -484,8 +484,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     setCentralWidget(d->widgetStack);
     d->widgetStack->setCurrentIndex(0);
 
-    connect(d->widgetStack, &QStackedWidget::currentChanged, this, &KisMainWindow::setMainWindowLayoutForCurrentMainWidget);
-
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
     connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
     connect(d->documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
@@ -1717,7 +1715,20 @@ void KisMainWindow::switchTab(int index)
 
 void KisMainWindow::showWelcomeScreen(bool show)
 {
-    d->widgetStack->setCurrentIndex(!show);
+    const int currentIndex = show ? 0 : 1;
+    if (d->widgetStack->currentIndex() != currentIndex) {
+        setUpdatesEnabled(false);
+        // These have to be done in different sequence to avoid graphical
+        // layout glitch during the switch.
+        if (show) {
+            setMainWindowLayoutForCurrentMainWidget(currentIndex);
+            d->widgetStack->setCurrentIndex(currentIndex);
+        } else {
+            d->widgetStack->setCurrentIndex(currentIndex);
+            setMainWindowLayoutForCurrentMainWidget(currentIndex);
+        }
+        setUpdatesEnabled(true);
+    }
 }
 
 void KisMainWindow::slotFileNew()

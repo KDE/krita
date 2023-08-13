@@ -177,9 +177,12 @@ public:
      *
      * @param charResult
      * @param faceLoadFlags
+     * @param x_advance Pointer to the X advance to be adjusted if needed.
+     * @param y_advance Pointer to the Y advance to be adjusted if needed.
      * @return std::tuple<QPainterPath, QBrush, bool> {glyphOutline, layerColor, isForeGroundColor}
      */
-    std::tuple<QPainterPath, QBrush, bool> layer(const CharacterResult &charResult, const FT_Int32 faceLoadFlags)
+    std::tuple<QPainterPath, QBrush, bool>
+    layer(const CharacterResult &charResult, const FT_Int32 faceLoadFlags, int *x_advance, int *y_advance)
     {
         QBrush layerColor;
         bool isForeGroundColor = false;
@@ -197,7 +200,7 @@ public:
         }
         if (m_face->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
             // Check whether we need to synthesize bold by emboldening the glyph:
-            emboldenGlyphIfNeeded(m_face, charResult, nullptr, nullptr);
+            emboldenGlyphIfNeeded(m_face, charResult, x_advance, y_advance);
 
             const QPainterPath p = convertFromFreeTypeOutline(m_face->glyph);
             return {p, layerColor, isForeGroundColor};
@@ -246,15 +249,58 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
     const qreal ftFontUnit = 64.0;
     const qreal ftFontUnitFactor = 1 / ftFontUnit;
 
-    {
-        const int cluster = static_cast<int>(currentGlyph.cluster);
+    const int cluster = static_cast<int>(currentGlyph.cluster);
 
-        QPointF spaceAdvance;
-        if (tabSizeInfo.contains(cluster)) {
-            FT_Load_Glyph(currentGlyph.ftface, FT_Get_Char_Index(currentGlyph.ftface, ' '), faceLoadFlags);
-            spaceAdvance = QPointF(currentGlyph.ftface->glyph->advance.x, currentGlyph.ftface->glyph->advance.y);
-        }
+    QPointF spaceAdvance;
+    if (tabSizeInfo.contains(cluster)) {
+        FT_Load_Glyph(currentGlyph.ftface, FT_Get_Char_Index(currentGlyph.ftface, ' '), faceLoadFlags);
+        spaceAdvance = QPointF(currentGlyph.ftface->glyph->advance.x, currentGlyph.ftface->glyph->advance.y);
+    }
 
+    /// The matrix for Italic (oblique) synthesis of outline glyphs, or for
+    /// adjusting the bounding box of bitmap glyphs.
+    QTransform glyphObliqueTf;
+
+    /// The scaling factor for color bitmap glyphs, otherwise always 1.0
+    qreal bitmapScale = 1.0;
+
+    // Try to retrieve CPAL/COLR v0 color layers, this should be preferred over
+    // other glyph formats. Doing this first also allows us to skip loading the
+    // default outline glyph.
+    if (ColorLayersLoader loader{currentGlyph.ftface, currentGlyph.index}) {
+        /// The combined offset * italic * ftTf transform for outline glyphs.
+        QTransform outlineGlyphTf;
+
+        // Calculate the transforms
+        std::tie(outlineGlyphTf, glyphObliqueTf) =
+            calcOutlineGlyphTransform(ftTF, currentGlyph, charResult, isHorizontal);
+
+        const int orig_x_advance = currentGlyph.x_advance;
+        const int orig_y_advance = currentGlyph.y_advance;
+        int new_x_advance{};
+        int new_y_advance{};
+        do {
+            new_x_advance = orig_x_advance;
+            new_y_advance = orig_y_advance;
+            QPainterPath p;
+            QBrush layerColor;
+            bool isForeGroundColor = false;
+            std::tie(p, layerColor, isForeGroundColor) = loader.layer(charResult, faceLoadFlags, &new_x_advance, &new_y_advance);
+            if (!p.isEmpty()) {
+                p = outlineGlyphTf.map(p);
+                if (charResult.visualIndex > -1) {
+                    // This is for glyph clusters, i.e. complex emoji. Do it
+                    // like how we handle unicode combining marks.
+                    p = p.translated(charResult.advance);
+                }
+                charResult.colorLayers.append(p);
+                charResult.colorLayerColors.append(layerColor);
+                charResult.replaceWithForeGroundColor.append(isForeGroundColor);
+            }
+        } while (loader.moveNext());
+        currentGlyph.x_advance = new_x_advance;
+        currentGlyph.y_advance = new_y_advance;
+    } else {
         if (const FT_Error err = FT_Load_Glyph(currentGlyph.ftface, currentGlyph.index, faceLoadFlags)) {
             warnFlake << "Failed to load glyph, freetype error" << err;
             return false;
@@ -263,16 +309,10 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         // Check whether we need to synthesize bold by emboldening the glyph:
         emboldenGlyphIfNeeded(currentGlyph.ftface, charResult, &currentGlyph.x_advance, &currentGlyph.y_advance);
 
-        /// The matrix for Italic (oblique) synthesis of outline glyphs, or for
-        /// adjusting the bounding box of bitmap glyphs.
-        QTransform glyphObliqueTf;
-        /// The combined offset * italic * ftTf transform for outline glyphs.
-        QTransform outlineGlyphTf;
-
-        /// The scaling factor for color bitmap glyphs, otherwise always 1.0
-        qreal bitmapScale = 1.0;
-
         if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
+            /// The combined offset * italic * ftTf transform for outline glyphs.
+            QTransform outlineGlyphTf;
+
             // Calculate the transforms
             std::tie(outlineGlyphTf, glyphObliqueTf) =
                 calcOutlineGlyphTransform(ftTF, currentGlyph, charResult, isHorizontal);
@@ -358,28 +398,9 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                 currentGlyph.ftface->glyph->bitmap_top -= offset.y();
             }
         }
+    }
 
-        // Retreive CPAL/COLR V0 color layers
-        if (ColorLayersLoader loader{currentGlyph.ftface, currentGlyph.index}) {
-            do {
-                QPainterPath p;
-                QBrush layerColor;
-                bool isForeGroundColor = false;
-                std::tie(p, layerColor, isForeGroundColor) = loader.layer(charResult, faceLoadFlags);
-                if (!p.isEmpty()) {
-                    p = outlineGlyphTf.map(p);
-                    if (charResult.visualIndex > -1) {
-                        // This is for glyph clusters, i.e. complex emoji. Do it
-                        // like how we handle unicode combining marks.
-                        p = p.translated(charResult.advance);
-                    }
-                    charResult.colorLayers.append(p);
-                    charResult.colorLayerColors.append(layerColor);
-                    charResult.replaceWithForeGroundColor.append(isForeGroundColor);
-                }
-            } while (loader.moveNext());
-        }
-
+    {
         charResult.visualIndex = i;
         logicalToVisual.insert(cluster, i);
 
@@ -399,7 +420,8 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         }
         charResult.advance += ftTF.map(advance);
 
-        bool usePixmap = !charResult.image.isNull() && charResult.path.isEmpty();
+        const bool usePixmap =
+            !charResult.image.isNull() && charResult.path.isEmpty() && charResult.colorLayers.isEmpty();
 
         if (usePixmap) {
             const int width = charResult.image.width();
@@ -438,6 +460,10 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
 
         if (!charResult.path.isEmpty()) {
             charResult.boundingBox |= charResult.path.boundingRect();
+        } else if (!charResult.colorLayers.isEmpty()) {
+            Q_FOREACH (const QPainterPath &p, charResult.colorLayers) {
+                charResult.boundingBox |= p.boundingRect();
+            }
         }
         totalAdvanceFTFontCoordinates += advance;
         charResult.cssPosition = ftTF.map(totalAdvanceFTFontCoordinates) - charResult.advance;

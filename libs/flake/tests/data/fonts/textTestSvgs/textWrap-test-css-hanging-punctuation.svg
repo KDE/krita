@@ -16,7 +16,7 @@
     
     
     <text id="test1" transform="translate(10,35)" hanging-punctuation="first last" line-height="1.0"
-          font-family="DejaVu Sans" fill="blue" text-anchor="start" font-size="15" inline-size="100">(Lorem ipsum dolor sit amet)
+          font-family="DejaVu Sans" fill="blue" text-anchor="start" font-size="15" inline-size="100">(Lorem ipsum dolor sit amet conseq)
     </text>
     
     <text id="test1rtl" transform="translate(220,35)" hanging-punctuation="first last" line-height="1.0"

@@ -269,13 +269,13 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                 }
                 if (cr.lineStart != LineEdgeBehaviour::Collapse && hang.testFlag(KoSvgText::HangFirst)) {
                     cr.lineStart = KoCssTextUtils::characterCanHang(text.at(start + i), KoSvgText::HangFirst)
-                        ? LineEdgeBehaviour::HangBehaviour
+                        ? LineEdgeBehaviour::ForceHang
                         : cr.lineEnd;
                 }
                 if (cr.lineEnd != LineEdgeBehaviour::Collapse) {
                     if (hang.testFlag(KoSvgText::HangLast)) {
                         cr.lineEnd = KoCssTextUtils::characterCanHang(text.at(start + i), KoSvgText::HangLast)
-                            ? LineEdgeBehaviour::HangBehaviour
+                            ? LineEdgeBehaviour::ForceHang
                             : cr.lineEnd;
                     }
                     if (hang.testFlag(KoSvgText::HangEnd)) {

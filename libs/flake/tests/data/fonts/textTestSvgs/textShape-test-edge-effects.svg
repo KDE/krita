@@ -10,7 +10,7 @@
     <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,110)" />
     <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,220)" />
     <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,330)" />
-    <text id="test1" transform="translate(0,0)" style="shape-inside: url(#simple);hanging-punctuation:first last;"
+    <text id="test1" transform="translate(0,0)" style="shape-inside: url(#simple);hanging-punctuation:first last;text-align:justify-all"
           font-family="DejaVu Sans" fill="blue" font-size="10">(Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque finibus mattis lacus.)
     </text>
     
@@ -33,7 +33,7 @@ adipiscing elit. Quisque finibus mattis lacus.
     <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,110)" />
     <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,220)" />
     <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,330)" />
-    <text id="test1ttb" transform="translate(0,0)" style="shape-inside: url(#simple);hanging-punctuation:first force-end last; writing-mode: vertical-rl;"
+    <text id="test1ttb" transform="translate(0,0)" style="shape-inside: url(#simple);hanging-punctuation:first allow-end last; writing-mode: vertical-rl;text-align:justify-all"
           font-family="Krita_Test_Unicode_Variation_A, DejaVu Sans" fill="blue" font-size="10">&quot;ああああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;.
 &#x82A6;&#x82A6;&#x82A6;ああああああああ&#x82A6;ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;ああ&quot;</text>
     
@@ -55,7 +55,7 @@ adipiscing elit. Quisque finibus mattis lacus.
     <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,110)" />
     <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,220)" />
     <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,330)" />
-    <text id="test1rtl" transform="translate(0,0)" style="shape-inside: url(#simple); direction:rtl;hanging-punctuation:first last;"
+    <text id="test1rtl" transform="translate(0,0)" style="shape-inside: url(#simple); direction:rtl;hanging-punctuation:first last;text-align:justify-all"
           font-family="DejaVu Sans" fill="blue" font-size="10">(داستان SVG 1.1 SE طولا ني است. اللغة العربية المعيارية الحديثة اللغة العربية المعيارية الحديثة abc)
     </text>
     
@@ -77,7 +77,7 @@ adipiscing elit. Quisque finibus mattis lacus.
     <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,110)" />
     <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,220)" />
     <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,330)" />
-    <text id="test1ttb-lr" transform="translate(0,0)" style="shape-inside: url(#simple);hanging-punctuation:first force-end;last;writing-mode: vertical-lr;"
+    <text id="test1ttb-lr" transform="translate(0,0)" style="shape-inside: url(#simple);hanging-punctuation:first force-end;last;writing-mode: vertical-lr;text-align:justify-all"
           font-family="Krita_Test_Unicode_Variation_A, DejaVu Sans" fill="blue" font-size="10">&quot;ああああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;.
 &#x82A6;&#x82A6;&#x82A6;ああああああああ&#x82A6;ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;ああ&quot;</text>
     

@@ -39,9 +39,8 @@ enum class BreakType {
 enum class LineEdgeBehaviour {
     NoChange, ///< Do nothing special.
     Collapse, ///< Collapse if first or last in line.
-    HangBehaviour, ///< Hang at the start or end of line.
-    ForceHang, ///< Force hanging at the end of line.
-    ConditionallyHang ///< Only hang if necessary.
+    ForceHang, ///< Force hanging at the start or end of a line, never measured for justfication.
+    ConditionallyHang ///< Only hang if no space otherwise, only measured for justification if not hanging.
 };
 
 namespace Glyph {

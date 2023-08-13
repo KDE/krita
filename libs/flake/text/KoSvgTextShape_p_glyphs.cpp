@@ -44,14 +44,24 @@ static QString glyphFormatToStr(const FT_Glyph_Format _v)
     return s;
 }
 
-static void emboldenGlyphIfNeeded(raqm_glyph_t &currentGlyph, CharacterResult &charResult)
+/**
+ * @brief Embolden a glyph (synthesize bold) if the font does not have native
+ * bold.
+ *
+ * @param ftface
+ * @param charResult
+ * @param x_advance Pointer to the X advance to be adjusted if needed.
+ * @param y_advance Pointer to the Y advance to be adjusted if needed.
+ */
+static void
+emboldenGlyphIfNeeded(const FT_Face ftface, const CharacterResult &charResult, int *x_advance, int *y_advance)
 {
-    if (charResult.fontWeight >= 600 && !(currentGlyph.ftface->style_flags & FT_STYLE_FLAG_BOLD)) {
+    if (charResult.fontWeight >= 600 && !(ftface->style_flags & FT_STYLE_FLAG_BOLD)) {
         // This code is somewhat inspired by Firefox.
         FT_Pos strength =
-            FT_MulFix(currentGlyph.ftface->units_per_EM, currentGlyph.ftface->size->metrics.y_scale) / 48;
+            FT_MulFix(ftface->units_per_EM, ftface->size->metrics.y_scale) / 48;
 
-        if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_BITMAP) {
+        if (ftface->glyph->format == FT_GLYPH_FORMAT_BITMAP) {
             // This is similar to what FT_GlyphSlot_Embolden does.
 
             // Round down to full pixel.
@@ -61,32 +71,29 @@ static void emboldenGlyphIfNeeded(raqm_glyph_t &currentGlyph, CharacterResult &c
                 strength = 64;
             }
 
-            FT_GlyphSlot_Own_Bitmap(currentGlyph.ftface->glyph);
+            FT_GlyphSlot_Own_Bitmap(ftface->glyph);
 
             // Embolden less vertically than horizontally. Especially if
             // strength is only 1px, don't embolden vertically at all.
             // Otherwise it makes the glyph way too heavy, especially for
             // CJK glyphs in small sizes.
             const FT_Pos strengthY = strength - 64;
-            FT_Bitmap_Embolden(currentGlyph.ftface->glyph->library,
-                                &currentGlyph.ftface->glyph->bitmap,
-                                strength,
-                                strengthY);
+            FT_Bitmap_Embolden(ftface->glyph->library, &ftface->glyph->bitmap, strength, strengthY);
 
-            if (currentGlyph.x_advance != 0) {
-                currentGlyph.x_advance += strength;
+            if (x_advance && *x_advance != 0) {
+                *x_advance += strength;
             }
-            if (currentGlyph.y_advance != 0) {
-                currentGlyph.y_advance -= strengthY;
+            if (y_advance && *y_advance != 0) {
+                *y_advance -= strengthY;
             }
         } else {
-            FT_Outline_Embolden(&currentGlyph.ftface->glyph->outline, strength);
+            FT_Outline_Embolden(&ftface->glyph->outline, strength);
 
-            if (currentGlyph.x_advance != 0) {
-                currentGlyph.x_advance += strength;
+            if (x_advance && *x_advance != 0) {
+                *x_advance += strength;
             }
-            if (currentGlyph.y_advance != 0) {
-                currentGlyph.y_advance -= strength;
+            if (y_advance && *y_advance != 0) {
+                *y_advance -= strength;
             }
         }
     }
@@ -123,7 +130,7 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         }
 
         // Check whether we need to synthesize bold by emboldening the glyph:
-        emboldenGlyphIfNeeded(currentGlyph, charResult);
+        emboldenGlyphIfNeeded(currentGlyph.ftface, charResult, &currentGlyph.x_advance, &currentGlyph.y_advance);
 
         /// The matrix for Italic (oblique) synthesis of outline glyphs, or for
         /// adjusting the bounding box of bitmap glyphs.
@@ -269,7 +276,7 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                 FT_Load_Glyph(currentGlyph.ftface, layerGlyphIndex, faceLoadFlags);
                 if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
                     // Check whether we need to synthesize bold by emboldening the glyph:
-                    emboldenGlyphIfNeeded(currentGlyph, charResult);
+                    emboldenGlyphIfNeeded(currentGlyph.ftface, charResult, nullptr, nullptr);
 
                     QPainterPath p = convertFromFreeTypeOutline(currentGlyph.ftface->glyph);
                     p = outlineGlyphTf.map(p);

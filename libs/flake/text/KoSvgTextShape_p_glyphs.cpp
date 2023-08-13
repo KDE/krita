@@ -18,6 +18,8 @@
 #include <QPainterPath>
 #include <QtMath>
 
+#include <utility>
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_COLOR_H
@@ -99,6 +101,44 @@ emboldenGlyphIfNeeded(const FT_Face ftface, const CharacterResult &charResult, i
     }
 }
 
+/**
+ * @brief Calculate the transformation matrices for an outline glyph, taking
+ * synthesized italic into account.
+ *
+ * @param ftTF FT unit to 1/72 unit
+ * @param currentGlyph
+ * @param charResult
+ * @param isHorizontal
+ * @return std::pair<QTransform, QTransform> {outlineGlyphTf, glyphObliqueTf}
+ */
+static std::pair<QTransform, QTransform> calcOutlineGlyphTransform(const QTransform &ftTF,
+                                                                   const raqm_glyph_t &currentGlyph,
+                                                                   const CharacterResult &charResult,
+                                                                   const bool isHorizontal)
+{
+    QTransform outlineGlyphTf = QTransform::fromTranslate(currentGlyph.x_offset, currentGlyph.y_offset);
+    QTransform glyphObliqueTf;
+
+    // Check whether we need to synthesize italic by shearing the glyph:
+    if (charResult.fontStyle != QFont::StyleNormal && !(currentGlyph.ftface->style_flags & FT_STYLE_FLAG_ITALIC)) {
+        // CSS Fonts Module Level 4, 2.4. Font style: the font-style property:
+        // For `oblique`, "lack of an <angle> represents 14deg".
+        constexpr double SLANT_14DEG = 0.24932800284318069162403993780486;
+        if (isHorizontal) {
+            glyphObliqueTf.shear(SLANT_14DEG, 0);
+        } else {
+            // For vertical mode, CSSWG says:
+            // - Skew around the centre
+            // - Right-side down and left-side up
+            // https://github.com/w3c/csswg-drafts/issues/2869
+            glyphObliqueTf.shear(0, -SLANT_14DEG);
+        }
+        outlineGlyphTf *= glyphObliqueTf;
+    }
+    outlineGlyphTf *= ftTF;
+    return {outlineGlyphTf, glyphObliqueTf};
+}
+
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                                         const QMap<int, KoSvgText::TabSizeInfo> &tabSizeInfo,
@@ -142,26 +182,9 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         qreal bitmapScale = 1.0;
 
         if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
-            outlineGlyphTf = QTransform::fromTranslate(currentGlyph.x_offset, currentGlyph.y_offset);
-
-            // Check whether we need to synthesize italic by shearing the glyph:
-            if (charResult.fontStyle != QFont::StyleNormal
-                && !(currentGlyph.ftface->style_flags & FT_STYLE_FLAG_ITALIC)) {
-                // CSS Fonts Module Level 4, 2.4. Font style: the font-style property:
-                // For `oblique`, "lack of an <angle> represents 14deg".
-                constexpr double SLANT_14DEG = 0.24932800284318069162403993780486;
-                if (isHorizontal) {
-                    glyphObliqueTf.shear(SLANT_14DEG, 0);
-                } else {
-                    // For vertical mode, CSSWG says:
-                    // - Skew around the centre
-                    // - Right-side down and left-side up
-                    // https://github.com/w3c/csswg-drafts/issues/2869
-                    glyphObliqueTf.shear(0, -SLANT_14DEG);
-                }
-                outlineGlyphTf *= glyphObliqueTf;
-            }
-            outlineGlyphTf *= ftTF;
+            // Calculate the transforms
+            std::tie(outlineGlyphTf, glyphObliqueTf) =
+                calcOutlineGlyphTransform(ftTF, currentGlyph, charResult, isHorizontal);
 
             QPainterPath glyph = convertFromFreeTypeOutline(currentGlyph.ftface->glyph);
             glyph = outlineGlyphTf.map(glyph);

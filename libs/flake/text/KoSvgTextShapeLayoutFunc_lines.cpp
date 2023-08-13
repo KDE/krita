@@ -80,7 +80,7 @@ void addWordToLine(QVector<CharacterResult> &result,
                 continue;
             }
             cr.anchored_chunk = true;
-            if (result.at(j).lineStart == LineEdgeBehaviour::HangBehaviour && currentLine.firstLine) {
+            if (result.at(j).lineStart == LineEdgeBehaviour::ForceHang && currentLine.firstLine) {
                 if (ltr) {
                     currentPos -= cr.advance;
                 } else {
@@ -195,7 +195,7 @@ static QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 static void
-handleCollapseAndHang(QVector<CharacterResult> &result, LineChunk chunk, bool inlineSize, bool ltr, bool atEnd)
+handleCollapseAndHang(QVector<CharacterResult> &result, LineChunk chunk, bool ltr, bool isHorizontal)
 {
     QVector<int> lineIndices = chunk.chunkIndices;
     QPointF endPos = chunk.length.p2();
@@ -208,21 +208,26 @@ handleCollapseAndHang(QVector<CharacterResult> &result, LineChunk chunk, bool in
             if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::Collapse) {
                 result[lastIndex].addressable = false;
                 result[lastIndex].hidden = true;
-            } else if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::ForceHang && inlineSize) {
-                QPointF pos = endPos;
-                if (!ltr) {
-                    pos -= result.at(lastIndex).advance;
+            } else if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::ConditionallyHang) {
+                if (ltr) {
+                    QPointF hangPos = result[lastIndex].cssPosition + result[lastIndex].advance;
+                    if (isHorizontal) {
+                        if (hangPos.x() > endPos.x()) {
+                            result[lastIndex].isHanging = true;
+                        }
+                    } else {
+                        if (hangPos.y() > endPos.y()) {
+                            result[lastIndex].isHanging = true;
+                        }
+                    }
+                } else {
+                    QPointF hangPos = result[lastIndex].cssPosition;
+                    if (hangPos.x() < endPos.x()) {
+                        result[lastIndex].isHanging = true;
+                    }
                 }
-                result[lastIndex].cssPosition = pos;
-                result[lastIndex].finalPosition = pos;
-                result[lastIndex].isHanging = true;
-            } else if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::HangBehaviour && inlineSize && atEnd) {
-                QPointF pos = endPos;
-                if (!ltr) {
-                    pos -= result.at(lastIndex).advance;
-                }
-                result[lastIndex].cssPosition = pos;
-                result[lastIndex].finalPosition = pos;
+
+            } else if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::ForceHang) {
                 result[lastIndex].isHanging = true;
             }
             if (result.at(lastIndex).lineEnd != LineEdgeBehaviour::Collapse) {
@@ -252,6 +257,7 @@ static void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
     const QPointF inlineWidth = aStartPos - chunk.length.p2();
     QPointF aEndPos = aStartPos - inlineWidth;
 
+    bool first = true;
     Q_FOREACH (int i, lineIndices) {
         if (!result.at(i).addressable || result.at(i).isHanging) {
             continue;
@@ -259,9 +265,10 @@ static void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
         const qreal pos = isHorizontal ? result.at(i).finalPosition.x() : result.at(i).finalPosition.y();
         const qreal advance = isHorizontal ? result.at(i).advance.x() : result.at(i).advance.y();
 
-        if (i == lineIndices.first()) {
+        if (first) {
             a = qMin(pos, pos + advance);
             b = qMax(pos, pos + advance);
+            first = false;
         } else {
             a = qMin(a, qMin(pos, pos + advance));
             b = qMax(b, qMax(pos, pos + advance));
@@ -296,20 +303,8 @@ static void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
 
     QPointF shiftP = isHorizontal ? QPointF(shift, 0) : QPointF(0, shift);
     Q_FOREACH (int j, lineIndices) {
-        if (!result.at(j).isHanging) {
-            result[j].cssPosition += shiftP;
-            result[j].finalPosition = result.at(j).cssPosition;
-        } else if (result.at(j).anchored_chunk) {
-            QPointF shift = aStartPos;
-            shift = ltr ? shift - result.at(j).advance : shift;
-            result[j].cssPosition = shift;
-            result[j].finalPosition = result.at(j).cssPosition;
-        } else if (result.at(j).lineEnd != LineEdgeBehaviour::NoChange) {
-            QPointF shift = aEndPos;
-            shift = ltr ? shift : shift - result.at(j).advance;
-            result[j].cssPosition = shift;
-            result[j].finalPosition = result.at(j).cssPosition;
-        }
+        result[j].cssPosition += shiftP;
+        result[j].finalPosition = result.at(j).cssPosition;
     }
 }
 
@@ -337,30 +332,47 @@ void finalizeLine(QVector<CharacterResult> &result,
         }
         currentPos = lineOffset;
 
-        handleCollapseAndHang(result, currentChunk, inlineSize, ltr, currentLine.lastLine);
+        handleCollapseAndHang(result, currentChunk, ltr, isHorizontal);
 
         QPointF justifyOffset;
+        QVector<int> before;
+        QVector<int> after;
+
         if (currentLine.justifyLine) {
-            int justificationCount = 0;
+            double hangingGlyphLength = 0.0;
+            QPointF advanceLength; ///< Because we may have collapsed the last glyph, we'll need to recalculate the total advance;
+            bool first = true;
             Q_FOREACH (int j, visualToLogical.values()) {
-                if (!result.at(j).addressable || result.at(j).isHanging) {
+                if (!result.at(j).addressable) {
                     continue;
                 }
-                if (result.at(j).justifyBefore && j!= visualToLogical.values().first()) {
-                    justificationCount += 1;
+                advanceLength += result.at(j).advance;
+                if (result.at(j).isHanging) {
+                    hangingGlyphLength += isHorizontal? result.at(j).advance.x() : result.at(j).advance.y();
+                    continue;
                 }
-                if (result.at(j).justifyAfter && j!= visualToLogical.values().last()) {
-                    justificationCount += 1;
+                bool last = visualToLogical.values().last() == j;
+                if (!last) {
+                    last = result.at(j+1).isHanging;
                 }
+
+                if (result.at(j).justifyBefore && !first) {
+                    before.append(j);
+                }
+                if (result.at(j).justifyAfter && !last) {
+                    after.append(j);
+                }
+                first = false;
             }
 
+            int justificationCount = before.size()+after.size();
             if (justificationCount > 0) {
                 if (isHorizontal) {
-                    qreal val = currentChunk.length.length()-currentChunk.boundingBox.width();
+                    double val = currentChunk.length.length() + hangingGlyphLength - advanceLength.x();
                     val = val / justificationCount;
                     justifyOffset = QPointF(val, 0);
                 } else {
-                    qreal val = currentChunk.length.length()-currentChunk.boundingBox.height();
+                    double val = currentChunk.length.length() + hangingGlyphLength - advanceLength.y();
                     val = val / justificationCount;
                     justifyOffset = QPointF(0, val);
                 }
@@ -368,17 +380,27 @@ void finalizeLine(QVector<CharacterResult> &result,
         }
 
         Q_FOREACH (const int j, visualToLogical.values()) {
-            if (!result.at(j).addressable || result.at(j).isHanging) {
+            if (!result.at(j).addressable) {
                 continue;
             }
-            if (result.at(j).justifyBefore) {
-                currentPos += justifyOffset;
-            }
-            result[j].cssPosition = currentPos;
-            result[j].finalPosition = currentPos;
-            currentPos = currentPos + result.at(j).advance;
-            if (result.at(j).justifyAfter) {
-                currentPos += justifyOffset;
+            if ((result.at(j).isHanging && result.at(j).anchored_chunk)) {
+                if (ltr) {
+                    result[j].cssPosition = currentPos - result.at(j).advance;
+                    result[j].finalPosition = result[j].cssPosition;
+                } else {
+                    result[j].cssPosition = currentPos;
+                    result[j].finalPosition = result[j].cssPosition;
+                }
+            } else {
+                if (before.contains(j)) {
+                    currentPos += justifyOffset;
+                }
+                result[j].cssPosition = currentPos;
+                result[j].finalPosition = currentPos;
+                currentPos = currentPos + result.at(j).advance;
+                if (after.contains(j)) {
+                    currentPos += justifyOffset;
+                }
             }
         }
 

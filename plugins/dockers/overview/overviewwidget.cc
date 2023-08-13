@@ -85,8 +85,16 @@ KisIdleTasksManager::TaskGuard OverviewWidget::registerIdleTask(KisCanvas2 *canv
             KoColorConversionTransformation::Intent renderingIntent =
                 m_canvas->displayColorConverter()->renderingIntent();
 
+            // If the widget is presented on a device with a pixel ratio > 1.0, we must compensate for it
+            // by increasing the thumbnail's resolution. Otherwise it will appear blurry.
+            QSize thumbnailSize = m_previewSize * devicePixelRatioF();
+
+            if ((thumbnailSize.width() > image->width()) || (thumbnailSize.height() > image->height())) {
+                thumbnailSize.scale(image->size(), Qt::KeepAspectRatio);
+            }
+
             KisImageThumbnailStrokeStrategy *strategy =
-                new KisImageThumbnailStrokeStrategy(image->projection(), image->bounds(), m_previewSize, isPixelArt(), profile, renderingIntent, conversionFlags);
+                new KisImageThumbnailStrokeStrategy(image->projection(), image->bounds(), thumbnailSize, isPixelArt(), profile, renderingIntent, conversionFlags);
 
             connect(strategy, SIGNAL(thumbnailUpdated(QImage)), this, SLOT(updateThumbnail(QImage)));
 

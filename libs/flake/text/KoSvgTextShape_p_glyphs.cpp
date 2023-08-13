@@ -320,7 +320,7 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
             QPainterPath glyph = convertFromFreeTypeOutline(currentGlyph.ftface->glyph);
             glyph = outlineGlyphTf.map(glyph);
 
-            if (!charResult.path.isEmpty()) {
+            if (charResult.visualIndex > -1) {
                 // this is for glyph clusters, unicode combining marks are always
                 // added. we could have these as seperate paths, but there's no real
                 // purpose, and the svg standard prefers 'ligatures' to be treated

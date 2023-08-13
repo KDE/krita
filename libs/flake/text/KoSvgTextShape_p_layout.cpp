@@ -1248,7 +1248,7 @@ void KoSvgTextShape::Private::computeTextDecorations( // NOLINT(readability-func
 
             currentFinalPos = charResult.finalPosition;
 
-            QRectF bbox = charResult.path.isEmpty() ? charResult.boundingBox : charResult.path.boundingRect();
+            const QRectF bbox = charResult.boundingBox;
 
             top = isHorizontal ? qMin(top, bbox.top()) : qMax(top, bbox.right());
             bottom = isHorizontal ? qMax(bottom, bbox.bottom()) : qMin(bottom, bbox.left());

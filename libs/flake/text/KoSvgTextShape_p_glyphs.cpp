@@ -139,6 +139,97 @@ static std::pair<QTransform, QTransform> calcOutlineGlyphTransform(const QTransf
     return {outlineGlyphTf, glyphObliqueTf};
 }
 
+/**
+ * @brief Helper class to load CPAL/COLR v0 color layers, functionally based
+ * off the sample code in the freetype docs.
+ */
+class ColorLayersLoader
+{
+public:
+    /**
+     * @brief Construct a ColorLayersLoader object. The first color layer is
+     * selected if there are any.
+     *
+     * @param face
+     * @param baseGlyph
+     */
+    ColorLayersLoader(FT_Face face, FT_UInt baseGlyph)
+        : m_face(face)
+        , m_baseGlyph(baseGlyph)
+    {
+        const unsigned short paletteIndex = 0;
+        if (FT_Palette_Select(m_face, paletteIndex, &m_palette) != 0) {
+            m_palette = nullptr;
+        }
+        m_haveLayers = moveNext();
+    }
+
+    /**
+     * @brief Check whether there are color layers to be loaded.
+     */
+    operator bool() const
+    {
+        return m_haveLayers && m_palette;
+    }
+
+    /**
+     * @brief Load the current glyph layer.
+     *
+     * @param charResult
+     * @param faceLoadFlags
+     * @return std::tuple<QPainterPath, QBrush, bool> {glyphOutline, layerColor, isForeGroundColor}
+     */
+    std::tuple<QPainterPath, QBrush, bool> layer(const CharacterResult &charResult, const FT_Int32 faceLoadFlags)
+    {
+        QBrush layerColor;
+        bool isForeGroundColor = false;
+
+        if (m_layerColorIndex == 0xFFFF) {
+            layerColor = Qt::black;
+            isForeGroundColor = true;
+        } else {
+            const FT_Color color = m_palette[m_layerColorIndex];
+            layerColor = QColor(color.red, color.green, color.blue, color.alpha);
+        }
+        if (const FT_Error err = FT_Load_Glyph(m_face, m_layerGlyphIndex, faceLoadFlags)) {
+            warnFlake << "Failed to load glyph, freetype error" << err;
+            return {};
+        }
+        if (m_face->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
+            // Check whether we need to synthesize bold by emboldening the glyph:
+            emboldenGlyphIfNeeded(m_face, charResult, nullptr, nullptr);
+
+            const QPainterPath p = convertFromFreeTypeOutline(m_face->glyph);
+            return {p, layerColor, isForeGroundColor};
+        } else {
+            warnFlake << "Unsupported glyph format" << glyphFormatToStr(m_face->glyph->format) << "in glyph layers";
+            return {};
+        }
+    }
+
+    /**
+     * @brief Move to the next glyph layer.
+     *
+     * @return true if there are more layers.
+     * @return false if there are no more layers.
+     */
+    bool moveNext()
+    {
+        m_haveLayers =
+            FT_Get_Color_Glyph_Layer(m_face, m_baseGlyph, &m_layerGlyphIndex, &m_layerColorIndex, &m_iterator);
+        return m_haveLayers;
+    }
+
+private:
+    FT_UInt m_layerGlyphIndex{};
+    FT_UInt m_layerColorIndex{};
+    FT_LayerIterator m_iterator{};
+    FT_Color *m_palette{};
+    FT_Face m_face;
+    FT_UInt m_baseGlyph;
+    bool m_haveLayers;
+};
+
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                                         const QMap<int, KoSvgText::TabSizeInfo> &tabSizeInfo,
@@ -268,40 +359,14 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
             }
         }
 
-        // Retreive CPAL/COLR V0 color layers, directly based off the sample
-        // code in the freetype docs.
-        FT_UInt layerGlyphIndex = 0;
-        FT_UInt layerColorIndex = 0;
-        FT_LayerIterator iterator;
-        FT_Color *palette = nullptr;
-        const unsigned short paletteIndex = 0;
-        if (FT_Palette_Select(currentGlyph.ftface, paletteIndex, &palette) != 0) {
-            palette = nullptr;
-        }
-        iterator.p = nullptr;
-        bool haveLayers = FT_Get_Color_Glyph_Layer(currentGlyph.ftface,
-                                                   currentGlyph.index,
-                                                   &layerGlyphIndex,
-                                                   &layerColorIndex,
-                                                   &iterator);
-        if (haveLayers && palette) {
+        // Retreive CPAL/COLR V0 color layers
+        if (ColorLayersLoader loader{currentGlyph.ftface, currentGlyph.index}) {
             do {
+                QPainterPath p;
                 QBrush layerColor;
                 bool isForeGroundColor = false;
-
-                if (layerColorIndex == 0xFFFF) {
-                    layerColor = Qt::black;
-                    isForeGroundColor = true;
-                } else {
-                    FT_Color color = palette[layerColorIndex];
-                    layerColor = QColor(color.red, color.green, color.blue, color.alpha);
-                }
-                FT_Load_Glyph(currentGlyph.ftface, layerGlyphIndex, faceLoadFlags);
-                if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
-                    // Check whether we need to synthesize bold by emboldening the glyph:
-                    emboldenGlyphIfNeeded(currentGlyph.ftface, charResult, nullptr, nullptr);
-
-                    QPainterPath p = convertFromFreeTypeOutline(currentGlyph.ftface->glyph);
+                std::tie(p, layerColor, isForeGroundColor) = loader.layer(charResult, faceLoadFlags);
+                if (!p.isEmpty()) {
                     p = outlineGlyphTf.map(p);
                     if (charResult.visualIndex > -1) {
                         // This is for glyph clusters, i.e. complex emoji. Do it
@@ -311,14 +376,8 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                     charResult.colorLayers.append(p);
                     charResult.colorLayerColors.append(layerColor);
                     charResult.replaceWithForeGroundColor.append(isForeGroundColor);
-                } else {
-                    warnFlake << "Unsupported glyph format" << glyphFormatToStr(currentGlyph.ftface->glyph->format) << "in glyph layers";
                 }
-            } while (FT_Get_Color_Glyph_Layer(currentGlyph.ftface,
-                                              currentGlyph.index,
-                                              &layerGlyphIndex,
-                                              &layerColorIndex,
-                                              &iterator));
+            } while (loader.moveNext());
         }
 
         charResult.visualIndex = i;

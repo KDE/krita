@@ -590,6 +590,16 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                 currentPos = writingMode == KoSvgText::VerticalRL? currentShape.boundingRect().topRight():currentShape.boundingRect().topLeft();
                 lineOffset = currentPos;
             }
+
+            bool lastDitch = false;
+            if (!foundFirst && firstLine && !wordIndices.isEmpty() && !currentShape.isEmpty()) {
+                // Last-ditch attempt to get any kind of positioning to happen.
+                // This typically happens when wrapping has been disabled.
+                wordBox = result[wordIndices.first()].boundingBox.translated(result[wordIndices.first()].baselineOffset);
+                foundFirst = getFirstPosition(currentPos, currentShape, wordBox, lineOffset, writingMode, ltr);
+                lastDitch = true;
+            }
+
             if (foundFirst) {
                 if (needNewLine) {
                     currentLine = LineBox(findLineBoxesForFirstPos(currentShape, currentPos, wordBox, writingMode), ltr, indent);
@@ -603,6 +613,20 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                 currentLine.justifyLine = align == KoSvgText::AlignJustify;
                 currentPos = currentLine.chunk().length.p1() + indent;
                 lineOffset = currentPos;
+
+                if (lastDitch) {
+                    QVector<int> wordNew;
+                    QPointF advance = currentPos;
+                    Q_FOREACH(int i, wordIndices) {
+                        advance += result[i].advance;
+                        if (currentShape.contains(advance)) {
+                            wordNew.append(i);
+                        } else {
+                            result[i].hidden = true;
+                        }
+                        wordIndices = wordNew;
+                    }
+                }
                 addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);
             } else {
                 currentLine = LineBox();

@@ -19,6 +19,8 @@
 #include <QPainter>
 #include <QtMath>
 
+#include <variant>
+
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::paintPaths(QPainter &painter,
@@ -100,14 +102,10 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                      * instability'.
                      */
 
-                    QPainterPath p = tf.map(result.at(i).path);
-                    // if (chunk.intersects(p)) {
-                    //     chunk |= tf.map(result.at(i).path);
-                    // } else {
-                    if (!result.at(i).colorLayers.empty()) {
-                        for (int c = 0; c < result.at(i).colorLayers.size(); c++) {
-                            QBrush color = result.at(i).colorLayerColors.at(c);
-                            bool replace = result.at(i).replaceWithForeGroundColor.at(c);
+                    if (const auto *colorGlyph = std::get_if<Glyph::ColorLayers>(&result.at(i).glyph)) {
+                        for (int c = 0; c < colorGlyph->paths.size(); c++) {
+                            QBrush color = colorGlyph->colors.at(c);
+                            bool replace = colorGlyph->replaceWithForeGroundColor.at(c);
                             // In theory we can use the pattern or gradient as well
                             // for ColorV0 fonts, but ColorV1 fonts can have
                             // gradients, so I am hesitant.
@@ -115,26 +113,24 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                             if (b && replace) {
                                 color = b->brush();
                             }
-                            painter.fillPath(tf.map(result.at(i).colorLayers.at(c)), color);
+                            painter.fillPath(tf.map(colorGlyph->paths.at(c)), color);
                         }
-                    } else {
-                        chunk.addPath(p);
-                    }
-                    //}
-                    if (p.isEmpty() && !result.at(i).image.isNull()) {
-                        if (result.at(i).image.isGrayscale() || result.at(i).image.format() == QImage::Format_Mono) {
+                    } else if (const auto *outlineGlyph = std::get_if<Glyph::Outline>(&result.at(i).glyph)) {
+                        chunk.addPath(tf.map(outlineGlyph->path));
+                    } else if (const auto *bitmapGlyph = std::get_if<Glyph::Bitmap>(&result.at(i).glyph)) {
+                        if (bitmapGlyph->image.isGrayscale() || bitmapGlyph->image.format() == QImage::Format_Mono) {
                             fillPainter.maskPainter()->save();
                             fillPainter.maskPainter()->translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
                             fillPainter.maskPainter()->rotate(qRadiansToDegrees(result.at(i).rotate));
                             fillPainter.maskPainter()->setCompositionMode(QPainter::CompositionMode_Plus);
-                            fillPainter.maskPainter()->drawImage(result.at(i).imageDrawRect, result.at(i).image);
+                            fillPainter.maskPainter()->drawImage(bitmapGlyph->drawRect, bitmapGlyph->image);
                             fillPainter.maskPainter()->restore();
                         } else {
                             painter.save();
                             painter.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
                             painter.rotate(qRadiansToDegrees(result.at(i).rotate));
                             painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
-                            painter.drawImage(result.at(i).imageDrawRect, result.at(i).image);
+                            painter.drawImage(bitmapGlyph->drawRect, bitmapGlyph->image);
                             painter.restore();
                         }
                     }
@@ -253,11 +249,10 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
         for (int i = currentIndex; i < j; i++) {
             if (result.at(i).addressable && !result.at(i).hidden) {
                 const QTransform tf = result.at(i).finalTransform();
-                QPainterPath p = tf.map(result.at(i).path);
-                if (!result.at(i).colorLayers.empty()) {
-                    for (int c = 0; c < result.at(i).colorLayers.size(); c++) {
-                        QBrush color = result.at(i).colorLayerColors.at(c);
-                        bool replace = result.at(i).replaceWithForeGroundColor.at(c);
+                if (const auto *colorGlyph = std::get_if<Glyph::ColorLayers>(&result.at(i).glyph)) {
+                    for (int c = 0; c < colorGlyph->paths.size(); c++) {
+                        QBrush color = colorGlyph->colors.at(c);
+                        bool replace = colorGlyph->replaceWithForeGroundColor.at(c);
                         // In theory we can use the pattern or gradient as well
                         // for ColorV0 fonts, but ColorV1 fonts can have
                         // gradients, so I am hesitant.
@@ -265,14 +260,14 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
                         if (b && replace) {
                             color = b->brush();
                         }
-                        KoPathShape *shape = KoPathShape::createShapeFromPainterPath(tf.map(result.at(i).colorLayers.at(c)));
+                        KoPathShape *shape = KoPathShape::createShapeFromPainterPath(tf.map(colorGlyph->paths.at(c)));
                         shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(color.color())));
                         shape->setZIndex(chunkShape->zIndex());
                         shape->setFillRule(Qt::WindingFill);
                         shapes.append(shape);
                     }
-                } else {
-                    chunk.addPath(p);
+                } else if (const auto *outlineGlyph = std::get_if<Glyph::Outline>(&result.at(i).glyph)) {
+                    chunk.addPath(tf.map(outlineGlyph->path));
                 }
             }
         }
@@ -332,16 +327,16 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
                     pen.setCosmetic(true);
                     pen.setWidth(2);
                     painter.setPen(pen);
-                    if (!result.at(i).image.isNull()) {
-                        painter.drawPolygon(tf.map(result.at(i).imageDrawRect));
-                    } else if (!result.at(i).colorLayers.isEmpty()) {
+                    if (const auto *bitmapGlyph = std::get_if<Glyph::Bitmap>(&result.at(i).glyph)) {
+                        painter.drawPolygon(tf.map(bitmapGlyph->drawRect));
+                    } else if (const auto *colorGlyph = std::get_if<Glyph::ColorLayers>(&result.at(i).glyph)) {
                         QRectF boundingRect;
-                        Q_FOREACH (const QPainterPath &p, result.at(i).colorLayers) {
+                        Q_FOREACH (const QPainterPath &p, colorGlyph->paths) {
                             boundingRect |= p.boundingRect();
                         }
                         painter.drawPolygon(tf.map(boundingRect));
-                    } else {
-                        painter.drawPolygon(tf.map(result.at(i).path.boundingRect()));
+                    } else if (const auto *outlineGlyph = std::get_if<Glyph::Outline>(&result.at(i).glyph)) {
+                        painter.drawPolygon(tf.map(outlineGlyph->path.boundingRect()));
                     }
                     QColor penColor = result.at(i).anchored_chunk ? result.at(i).isHanging ? Qt::red : Qt::magenta
                         : result.at(i).lineEnd == LineEdgeBehaviour::NoChange ? Qt::cyan

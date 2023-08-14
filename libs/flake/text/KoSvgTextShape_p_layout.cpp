@@ -23,6 +23,8 @@
 #include <QPainterPath>
 #include <QtMath>
 
+#include <variant>
+
 #include <graphemebreak.h>
 #include <linebreak.h>
 
@@ -771,7 +773,10 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
                 if (spacingAndGlyphs) {
                     QPointF scale(d.x() != 0 ? (d.x() / cr.advance.x()) + 1 : 1.0, d.y() != 0 ? (d.y() / cr.advance.y()) + 1 : 1.0);
                     QTransform tf = QTransform::fromScale(scale.x(), scale.y());
-                    cr.path = tf.map(cr.path);
+                    // FIXME: What about other glyph formats?
+                    if (auto *outlineGlyph = std::get_if<Glyph::Outline>(&cr.glyph)) {
+                        outlineGlyph->path = tf.map(outlineGlyph->path);
+                    }
                     cr.advance = tf.map(cr.advance);
                     cr.boundingBox = tf.mapRect(cr.boundingBox);
                 }
@@ -1572,10 +1577,12 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
                 if (!cr.middle) {
                     const qreal mid = characterResultOnPath(cr, length, offset, isHorizontal, isClosed);
                     if (!cr.hidden) {
-                        if (stretch && !cr.path.isEmpty()) {
+                        auto *outlineGlyph = std::get_if<Glyph::Outline>(&cr.glyph);
+                        // FIXME: What about other glyph formats?
+                        if (stretch && outlineGlyph) {
                             const QTransform tf = cr.finalTransform();
-                            QPainterPath glyph = stretchGlyphOnPath(tf.map(cr.path), path, isHorizontal, offset, isClosed);
-                            cr.path = glyph;
+                            QPainterPath glyph = stretchGlyphOnPath(tf.map(outlineGlyph->path), path, isHorizontal, offset, isClosed);
+                            outlineGlyph->path = glyph;
                         }
                         const qreal percent = path.percentAtLength(mid);
                         const QPointF pos = path.pointAtPercent(percent);
@@ -1595,9 +1602,10 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
                             const qreal o = (cr.advance.y() * 0.5);
                             cr.finalPosition = pos - (o * vectorT) + (cr.finalPosition.x() * vectorN);
                         }
-                        if (stretch && !cr.path.isEmpty()) {
+                        // FIXME: What about other glyph formats?
+                        if (stretch && outlineGlyph) {
                             const QTransform tf = cr.finalTransform();
-                            cr.path = tf.inverted().map(cr.path);
+                            outlineGlyph->path = tf.inverted().map(outlineGlyph->path);
                         }
                     }
                 }

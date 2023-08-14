@@ -196,6 +196,9 @@ void KisShapeLayerCanvas::setImage(KisImageWSP image)
         m_projection->convertTo(image->colorSpace());
     }
     m_projection->setDefaultBounds(new KisDefaultBounds(image));
+    if (image) {
+        updateCanvas(m_cachedImageRect);
+    }
 }
 
 class KisRepaintShapeLayerLayerJob : public KisSpontaneousJob

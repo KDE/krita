@@ -31,12 +31,12 @@ void calculateLineHeight(CharacterResult cr, double &ascent, double &descent, bo
     double offset = isHorizontal? cr.baselineOffset.y(): cr.baselineOffset.x();
     double offsetAsc = 0.0;
     double offsetDsc = 0.0;
-    if (cr.ascent <= 0) {
-        offsetAsc = cr.ascent - cr.halfLeading;
-        offsetDsc = cr.descent + cr.halfLeading;
+    if (cr.scaledAscent <= 0) {
+        offsetAsc = cr.scaledAscent - cr.scaledHalfLeading;
+        offsetDsc = cr.scaledDescent + cr.scaledHalfLeading;
     } else {
-        offsetAsc = cr.ascent + cr.halfLeading;
-        offsetDsc = cr.descent - cr.halfLeading;
+        offsetAsc = cr.scaledAscent + cr.scaledHalfLeading;
+        offsetDsc = cr.scaledDescent - cr.scaledHalfLeading;
     }
     offsetAsc += offset;
     offsetDsc += offset;
@@ -45,7 +45,7 @@ void calculateLineHeight(CharacterResult cr, double &ascent, double &descent, bo
         ascent = offsetAsc;
         descent = offsetDsc;
     } else {
-        if (cr.ascent <= 0) {
+        if (cr.scaledAscent <= 0) {
             ascent = qMin(offsetAsc, ascent);
             descent = qMax(offsetDsc, descent);
         } else {

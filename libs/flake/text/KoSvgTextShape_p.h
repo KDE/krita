@@ -96,9 +96,12 @@ struct CharacterResult {
     bool textLengthApplied = false;
     bool overflowWrap = false;
 
-    qreal halfLeading; ///< Leading for both sides, can be either negative or positive.
-    qreal ascent; ///< Ascender, in scanline coordinates
-    qreal descent;///< Descender, in scanline coordinates
+    qreal fontHalfLeading; ///< Leading for both sides, can be either negative or positive.
+    int fontAscent; ///< Ascender, in scanline coordinates
+    int fontDescent; ///< Descender, in scanline coordinates
+    qreal scaledHalfLeading{}; ///< Leading for both sides, can be either negative or positive, in pt
+    qreal scaledAscent{}; ///< Ascender, in pt
+    qreal scaledDescent{}; ///< Descender, in pt
     QFont::Style fontStyle = QFont::StyleNormal;
     int fontWeight = 400;
 

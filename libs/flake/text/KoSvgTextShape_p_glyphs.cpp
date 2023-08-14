@@ -468,22 +468,22 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         QRectF bbox;
         if (isHorizontal) {
             bbox = QRectF(0,
-                          charResult.descent * bitmapScale,
+                          charResult.fontDescent * bitmapScale,
                           ftTF.inverted().map(charResult.advance).x(),
-                          (charResult.ascent - charResult.descent) * bitmapScale);
+                          (charResult.fontAscent - charResult.fontDescent) * bitmapScale);
             bbox = glyphObliqueTf.mapRect(bbox);
         } else {
             hb_font_t_up font(hb_ft_font_create_referenced(currentGlyph.ftface));
-            bbox = QRectF(charResult.descent * bitmapScale,
+            bbox = QRectF(charResult.fontDescent * bitmapScale,
                           0,
-                          (charResult.ascent - charResult.descent) * bitmapScale,
+                          (charResult.fontAscent - charResult.fontDescent) * bitmapScale,
                           ftTF.inverted().map(charResult.advance).y());
             bbox = glyphObliqueTf.mapRect(bbox);
         }
         charResult.boundingBox = ftTF.mapRect(bbox);
-        charResult.halfLeading = ftTF.map(QPointF(charResult.halfLeading, charResult.halfLeading)).x();
-        charResult.ascent = isHorizontal? charResult.boundingBox.top(): charResult.boundingBox.right();
-        charResult.descent = isHorizontal? charResult.boundingBox.bottom(): charResult.boundingBox.left();
+        charResult.scaledHalfLeading = ftTF.map(QPointF(charResult.fontHalfLeading, charResult.fontHalfLeading)).x();
+        charResult.scaledAscent = isHorizontal? charResult.boundingBox.top(): charResult.boundingBox.right();
+        charResult.scaledDescent = isHorizontal? charResult.boundingBox.bottom(): charResult.boundingBox.left();
 
         if (bitmapGlyph) {
             charResult.boundingBox |= bitmapGlyph->drawRect;

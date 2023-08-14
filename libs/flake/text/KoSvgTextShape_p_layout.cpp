@@ -378,8 +378,8 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                 }
 
                 for (int j=start; j<start+length; j++) {
-                    result[j].ascent = ascender;
-                    result[j].descent = descender;
+                    result[j].fontAscent = ascender;
+                    result[j].fontDescent = descender;
                     qreal leading = lineGap;
 
                     if (!lineHeight.isNormal) {
@@ -392,7 +392,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                             leading -= (ascender-descender);
                         }
                     }
-                    result[j].halfLeading = leading*0.5;
+                    result[j].fontHalfLeading = leading * 0.5;
                     result[j].fontStyle = style;
                     result[j].fontWeight = properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt();
                 }

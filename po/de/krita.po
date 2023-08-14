@@ -26632,8 +26632,7 @@ msgstr "Automatische Prüfung deaktivieren"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1511
-#, fuzzy, kde-format
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "Erweitert ..."
 
@@ -40994,7 +40993,8 @@ msgid "Snapshot Docker"
 msgstr "Andockbare Dialoge anzeigen"
 
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:70
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "HSY"
 msgid "HSY"
 msgstr "HSY"
 
@@ -41746,7 +41746,8 @@ msgstr "Fa&rbfelder"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Preview:"
 msgid "Preview:"
 msgstr "Vorschau:"
 
@@ -42248,7 +42249,8 @@ msgstr "Versionen"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "File name"
 msgid "File name"
 msgstr "Dateiname"
 

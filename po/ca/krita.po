@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-13 02:22+0000\n"
-"PO-Revision-Date: 2023-08-07 14:13+0200\n"
+"PO-Revision-Date: 2023-08-13 19:17+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -50391,7 +50391,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:121
 #, kde-format
 msgid "Quality/speed trade-off (0 = fast, 6 = slower-better)"
-msgstr "Compensació qualitat/velocitat (0 = ràpid, 6 = més lent-millor)"
+msgstr "Compromís qualitat/velocitat (0 = ràpid, 6 = més lent-millor)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dithering)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:136

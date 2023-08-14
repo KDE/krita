@@ -1,0 +1,107 @@
+From 815a234b814565a7cfb01eb3f41404e295756d6a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Wolthera=20van=20H=C3=B6vell=20tot=20Westerflier?=
+ <griffinvalley@gmail.com>
+Date: Tue, 25 Jul 2023 14:34:32 +0200
+Subject: [PATCH] Add arbitrary run break function.
+
+Sometimes we need the ability to arbitrarily break a run, particularly
+when the text layout has some custom text-positioning functionality,
+like for example SVG text chunks.
+---
+ src/raqm.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ src/raqm.h |  2 ++
+ 2 files changed, 47 insertions(+)
+
+diff --git a/src/raqm.c b/src/raqm.c
+index 633c1f0..144c367 100644
+--- a/src/raqm.c
++++ b/src/raqm.c
+@@ -174,6 +174,7 @@ typedef struct
+   hb_language_t lang;
+   hb_script_t   script;
+   int           spacing_after;
++  bool          arbitrary_break;
+ } _raqm_text_info;
+ 
+ typedef struct _raqm_run raqm_run_t;
+@@ -237,6 +238,7 @@ _raqm_init_text_info (raqm_t *rq)
+     rq->text_info[i].lang = default_lang;
+     rq->text_info[i].script = HB_SCRIPT_INVALID;
+     rq->text_info[i].spacing_after = 0;
++    rq->text_info[i].arbitrary_break = false;
+   }
+ }
+ 
+@@ -271,6 +273,9 @@ _raqm_compare_text_info (_raqm_text_info a,
+ 
+   /* Spacing shouldn't break runs, so we don't compare them here. */
+ 
++  if (b.arbitrary_break == true)
++    return false;
++  
+   return true;
+ }
+ 
+@@ -1257,6 +1262,46 @@ raqm_set_invisible_glyph (raqm_t *rq,
+   return true;
+ }
+ 
++/**
++ * raqm_set_arbitrary_run_break:
++ * @rq: a #raqm_t.
++ * @index: index at which to initiate a run break.
++ * @break_run: whether to initiate a run break.
++ * 
++ * Sometimes runs should be split for arbitrary spec-related
++ * reasons, such as the SVG 1.1 text chunk concept.
++ * 
++ * Setting the arbitrary break to true will ensure that opentype
++ * features like ligatures are not formed across the boundary
++ * indicated by this break.
++ * 
++ * TODO: also have this break bidi-reordering runs.
++ * 
++ * Since: Replace Me
++ */
++bool
++raqm_set_arbitrary_run_break (raqm_t *rq,
++                              size_t index,
++                              bool break_run)
++{
++  if (!rq)
++    return false;
++  if (!rq->text_len)
++    return true;
++  
++  index = _raqm_encoding_to_u32_index (rq, index);
++  
++  if (index >= rq->text_len)
++    return false;
++
++  if (!rq->text_info)
++    return false;
++  
++  rq->text_info[index].arbitrary_break = break_run;
++  
++  return true; 
++}
++
+ static bool
+ _raqm_itemize (raqm_t *rq);
+ 
+diff --git a/src/raqm.h b/src/raqm.h
+index 6fd6089..21cec4c 100644
+--- a/src/raqm.h
++++ b/src/raqm.h
+@@ -173,6 +173,8 @@ RAQM_API bool
+ raqm_set_invisible_glyph (raqm_t *rq,
+                           int gid);
+ 
++RAQM_API bool raqm_set_arbitrary_run_break(raqm_t* rq, size_t index, bool break_run);
++
+ RAQM_API bool
+ raqm_layout (raqm_t *rq);
+ 
+-- 
+2.34.1
+

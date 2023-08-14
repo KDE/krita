@@ -289,6 +289,10 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                     tabSizeInfo.insert(start + i, tabInfo);
                 }
 
+                if (resolvedTransforms.at(start + i).startsNewChunk()) {
+                    raqm_set_arbitrary_run_break(layout.data(), static_cast<size_t>(start + i), true);
+                }
+
                 if (chunk.firstTextInPath && i == 0) {
                     cr.anchored_chunk = true;
                 }

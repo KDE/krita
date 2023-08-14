@@ -11,6 +11,7 @@
 #include "KisSessionManagerDialog.h"
 #include <KisResourceUserOperations.h>
 #include <KisResourceModel.h>
+#include <KisMainWindow.h>
 
 int KisSessionManagerDialog::refreshEventType = -1;
 
@@ -29,6 +30,7 @@ KisSessionManagerDialog::KisSessionManagerDialog(QWidget *parent)
     connect(btnSwitchTo, SIGNAL(clicked()), this, SLOT(slotSwitchSession()));
     connect(btnDelete, SIGNAL(clicked()), this, SLOT(slotDeleteSession()));
     connect(btnClose, SIGNAL(clicked()), this, SLOT(slotClose()));
+    connect(this, SIGNAL(finished(int)), this, SLOT(slotClose()));
 
     m_model = new KisResourceModel(ResourceType::Sessions, this);
     lstSessions->setModel(m_model);
@@ -140,6 +142,10 @@ void KisSessionManagerDialog::slotDeleteSession()
 void KisSessionManagerDialog::slotClose()
 {
     hide();
+    KisMainWindow *w = KisPart::instance()->currentMainwindow();
+    if (w && !w->isVisible()) {
+        w->show();
+    }
 }
 
 void KisSessionManagerDialog::slotModelAboutToBeReset(QModelIndex)

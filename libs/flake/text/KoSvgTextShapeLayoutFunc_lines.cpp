@@ -81,11 +81,7 @@ void addWordToLine(QVector<CharacterResult> &result,
             }
             cr.anchored_chunk = true;
             if (result.at(j).lineStart == LineEdgeBehaviour::ForceHang && currentLine.firstLine) {
-                if (ltr) {
-                    currentPos -= cr.advance;
-                } else {
-                    currentPos += cr.advance;
-                }
+                currentPos -= cr.advance;
                 cr.isHanging = true;
             }
 
@@ -257,20 +253,21 @@ static void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
     qreal a = 0;
     qreal b = 0;
 
-    QPointF aStartPos = chunk.length.p1();
-    const QPointF inlineWidth = aStartPos - chunk.length.p2();
-    QPointF aEndPos = aStartPos - inlineWidth;
-
     bool first = true;
     Q_FOREACH (int i, lineIndices) {
         if (!result.at(i).addressable || (result.at(i).isHanging && result.at(i).anchored_chunk)) {
             continue;
         }
-        const qreal pos = isHorizontal ? result.at(i).finalPosition.x() : result.at(i).finalPosition.y();
+
+        QPointF p = result.at(i).finalPosition;
         QPointF d = result.at(i).advance;
         if (result.at(i).isHanging) {
             d -= chunk.conditionalHangEnd;
+            if (!ltr) {
+                p += chunk.conditionalHangEnd;
+            }
         }
+        const qreal pos = isHorizontal ? p.x() : p.y();
         const qreal advance = isHorizontal ? d.x() : d.y();
 
         if (first) {
@@ -293,11 +290,6 @@ static void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
         }
     }
 
-    if (anchor == KoSvgText::AnchorEnd) {
-        aEndPos = aStartPos;
-        aStartPos = aStartPos + inlineWidth;
-    }
-
     if ((anchor == KoSvgText::AnchorStart && ltr) || (anchor == KoSvgText::AnchorEnd && !ltr)) {
         shift -= a;
 
@@ -305,8 +297,6 @@ static void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
         shift -= b;
 
     } else {
-        aEndPos = (startPos + aEndPos) * 0.5;
-        aStartPos = startPos - aEndPos;
         shift -= ((a + b) * 0.5);
     }
 

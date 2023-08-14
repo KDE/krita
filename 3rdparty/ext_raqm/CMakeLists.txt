@@ -4,8 +4,10 @@ SET(EXTPREFIX_raqm "${EXTPREFIX}" )
 kis_ExternalProject_Add_with_separate_builds_apple(
     ext_raqm
     MESON
-    URL https://github.com/HOST-Oman/libraqm/releases/download/v0.10.0/raqm-0.10.0.tar.xz
-    URL_HASH SHA256=5eb7de71b3d1dca34103860f3e8c55ebc184a3dbdfdd573c21a258e46982f1e6
+    URL https://github.com/HOST-Oman/libraqm/releases/download/v0.10.1/raqm-0.10.1.tar.xz
+    URL_HASH SHA256=4d76a358358d67c5945684f2f10b3b08fb80e924371bf3ebf8b15cd2e321d05d
+
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Add-arbitrary-run-break-function.patch
 
     CONFIGURE_ARGS --prefix=${EXTPREFIX_raqm}
             --default-library=shared

@@ -497,7 +497,7 @@ QVector<LineBox> breakLines(const KoSvgTextProperties &properties,
                 // Sometimes glyphs are a fraction larger than you'd expect, but
                 // not enough to really break the line, so the following is a
                 // bit more stable than a simple compare.
-                if (qRound((abs(lineLength) - inlineSize.customValue)) > 0) {
+                if (abs(lineLength) - inlineSize.customValue > 0.01) {
                     softBreak = true;
                 } else {
                     addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);

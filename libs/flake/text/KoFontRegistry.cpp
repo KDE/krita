@@ -256,7 +256,8 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
                     // Don't worry about matching controls directly,
                     // as they are not important to font-selection (and many
                     // fonts have no glyph entry for these)
-                    if (grapheme.at(0).category() == QChar::Other_Control) {
+                    if (grapheme.at(0).category() == QChar::Other_Control
+                        || grapheme.at(0).category() == QChar::Other_Format) {
                         index += grapheme.size();
                         continue;
                     }

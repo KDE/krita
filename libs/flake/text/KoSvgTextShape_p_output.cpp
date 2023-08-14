@@ -334,6 +334,12 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
                     painter.setPen(pen);
                     if (!result.at(i).image.isNull()) {
                         painter.drawPolygon(tf.map(result.at(i).imageDrawRect));
+                    } else if (!result.at(i).colorLayers.isEmpty()) {
+                        QRectF boundingRect;
+                        Q_FOREACH (const QPainterPath &p, result.at(i).colorLayers) {
+                            boundingRect |= p.boundingRect();
+                        }
+                        painter.drawPolygon(tf.map(boundingRect));
                     } else {
                         painter.drawPolygon(tf.map(result.at(i).path.boundingRect()));
                     }

@@ -25,6 +25,25 @@
 
 #include "KoFontLibraryResourceUtils.h"
 
+
+static unsigned int firstCharUcs4(const QStringView qsv)
+{
+    if (Q_UNLIKELY(qsv.isEmpty())) {
+        return 0;
+    }
+    const QChar high = qsv.first();
+    if (Q_LIKELY(!high.isSurrogate())) {
+        return high.unicode();
+    }
+    if (Q_LIKELY(high.isHighSurrogate() && qsv.length() >= 2)) {
+        const QChar low = qsv[1];
+        if (Q_LIKELY(low.isLowSurrogate())) {
+            return QChar::surrogateToUcs4(high, low);
+        }
+    }
+    return QChar::ReplacementCharacter;
+}
+
 Q_GLOBAL_STATIC(KoFontRegistry, s_instance)
 
 class Q_DECL_HIDDEN KoFontRegistry::Private
@@ -272,8 +291,8 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
                     // Don't worry about matching controls directly,
                     // as they are not important to font-selection (and many
                     // fonts have no glyph entry for these)
-                    if (grapheme.at(0).category() == QChar::Other_Control
-                        || grapheme.at(0).category() == QChar::Other_Format) {
+                    if (const uint first = firstCharUcs4(grapheme); QChar::category(first) == QChar::Other_Control
+                        || QChar::category(first) == QChar::Other_Format) {
                         index += grapheme.size();
                         continue;
                     }

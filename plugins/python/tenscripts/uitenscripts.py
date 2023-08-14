@@ -79,8 +79,7 @@ class UITenScripts(object):
 
         for row in range(self.scriptsLayout.rowCount()-1):
             textField = self.scriptsLayout.itemAt(index + 1).widget()
-            if textField.text():
-                _saved_scripts.append(textField.text())
+            _saved_scripts.append(textField.text())
             index += 3
 
         return _saved_scripts

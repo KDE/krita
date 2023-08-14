@@ -22,6 +22,8 @@
 #include <QRectF>
 #include <QVector>
 
+#include <variant>
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -42,6 +44,27 @@ enum class LineEdgeBehaviour {
     ConditionallyHang ///< Only hang if necessary.
 };
 
+namespace Glyph {
+
+struct Outline {
+    QPainterPath path;
+};
+
+struct Bitmap {
+    QImage image;
+    QRectF drawRect;
+};
+
+struct ColorLayers {
+    QVector<QPainterPath> paths;
+    QVector<QBrush> colors;
+    QVector<bool> replaceWithForeGroundColor;
+};
+
+using Variant = std::variant<std::monostate, Outline, Bitmap, ColorLayers>;
+
+} // namespace Glyph
+
 struct CharacterResult {
     QPointF finalPosition; ///< the final position, taking into account both CSS and SVG positioning considerations.
     qreal rotate = 0.0;
@@ -56,13 +79,7 @@ struct CharacterResult {
                          ///< typographic character.
     bool anchored_chunk = false; ///< whether this is the start of a new chunk.
 
-    QPainterPath path;
-    QImage image;
-    QRectF imageDrawRect;
-
-    QVector<QPainterPath> colorLayers;
-    QVector<QBrush> colorLayerColors;
-    QVector<bool> replaceWithForeGroundColor;
+    Glyph::Variant glyph;
 
     QRectF boundingBox;
     int visualIndex = -1;

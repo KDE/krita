@@ -19,6 +19,7 @@
 #include <QtMath>
 
 #include <utility>
+#include <variant>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -268,6 +269,14 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
     // other glyph formats. Doing this first also allows us to skip loading the
     // default outline glyph.
     if (ColorLayersLoader loader{currentGlyph.ftface, currentGlyph.index}) {
+        Glyph::ColorLayers *colorGlyph = std::get_if<Glyph::ColorLayers>(&charResult.glyph);
+        if (!colorGlyph) {
+            if (!std::holds_alternative<std::monostate>(charResult.glyph)) {
+                warnFlake << "Glyph contains other type than ColorLayers:" << charResult.glyph.index();
+            }
+            colorGlyph = &charResult.glyph.emplace<Glyph::ColorLayers>();
+        }
+
         /// The combined offset * italic * ftTf transform for outline glyphs.
         QTransform outlineGlyphTf;
 
@@ -293,9 +302,9 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                     // like how we handle unicode combining marks.
                     p = p.translated(charResult.advance);
                 }
-                charResult.colorLayers.append(p);
-                charResult.colorLayerColors.append(layerColor);
-                charResult.replaceWithForeGroundColor.append(isForeGroundColor);
+                colorGlyph->paths.append(p);
+                colorGlyph->colors.append(layerColor);
+                colorGlyph->replaceWithForeGroundColor.append(isForeGroundColor);
             }
         } while (loader.moveNext());
         currentGlyph.x_advance = new_x_advance;
@@ -310,6 +319,21 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         emboldenGlyphIfNeeded(currentGlyph.ftface, charResult, &currentGlyph.x_advance, &currentGlyph.y_advance);
 
         if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
+        Glyph::Outline _discard; ///< Storage for discarded outline, must outlive outlineGlyph
+        Glyph::Outline *outlineGlyph = std::get_if<Glyph::Outline>(&charResult.glyph);
+        if (!outlineGlyph) {
+            if (std::holds_alternative<Glyph::ColorLayers>(charResult.glyph)) {
+                // Special case: possibly an empty glyph in the middle of a
+                // combining color glyph, just discard the resulting path.
+                outlineGlyph = &_discard;
+            } else if (!std::holds_alternative<std::monostate>(charResult.glyph)) {
+                warnFlake << "Glyph contains other type than Outline:" << charResult.glyph.index();
+            }
+            if (!outlineGlyph) {
+                outlineGlyph = &charResult.glyph.emplace<Glyph::Outline>();
+            }
+        }
+
             /// The combined offset * italic * ftTf transform for outline glyphs.
             QTransform outlineGlyphTf;
 
@@ -325,9 +349,9 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                 // added. we could have these as seperate paths, but there's no real
                 // purpose, and the svg standard prefers 'ligatures' to be treated
                 // as a single glyph. It simplifies things for us in any case.
-                charResult.path.addPath(glyph.translated(charResult.advance));
+                outlineGlyph->path.addPath(glyph.translated(charResult.advance));
             } else {
-                charResult.path = glyph;
+                outlineGlyph->path = glyph;
             }
         } else {
             QTransform bitmapTf;
@@ -360,8 +384,16 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                 }
             }
 
+            Glyph::Bitmap *bitmapGlyph = std::get_if<Glyph::Bitmap>(&charResult.glyph);
+            if (!bitmapGlyph) {
+                if (!std::holds_alternative<std::monostate>(charResult.glyph)) {
+                    warnFlake << "Glyph contains other type than Bitmap:" << charResult.glyph.index();
+                }
+                bitmapGlyph = &charResult.glyph.emplace<Glyph::Bitmap>();
+            }
+
             // TODO: Handle glyph clusters better...
-            charResult.image = convertFromFreeTypeBitmap(currentGlyph.ftface->glyph);
+            bitmapGlyph->image = convertFromFreeTypeBitmap(currentGlyph.ftface->glyph);
 
             // Check whether we need to synthesize italic by shearing the glyph:
             if (charResult.fontStyle != QFont::StyleNormal
@@ -378,7 +410,7 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                 } else {
                     shearTf.shear(0, SLANT_BITMAP);
                     glyphObliqueTf.shear(0, -SLANT_BITMAP);
-                    shearAt = QPoint(charResult.image.width() / 2, 0);
+                    shearAt = QPoint(bitmapGlyph->image.width() / 2, 0);
                 }
                 // We need to shear around the baseline, hence the translation.
                 bitmapTf = (QTransform::fromTranslate(-shearAt.x(), -shearAt.y()) * shearTf
@@ -386,8 +418,8 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
             }
 
             if (!bitmapTf.isIdentity()) {
-                const QSize srcSize = charResult.image.size();
-                charResult.image = std::move(charResult.image).transformed(
+                const QSize srcSize = bitmapGlyph->image.size();
+                bitmapGlyph->image = std::move(bitmapGlyph->image).transformed(
                     bitmapTf,
                     this->textRendering == OptimizeSpeed ? Qt::FastTransformation : Qt::SmoothTransformation);
 
@@ -415,24 +447,22 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
             } else {
                 advance = isHorizontal ? QPointF(newAdvance, advance.y()) : QPointF(advance.x(), newAdvance);
             }
-            charResult.path = QPainterPath();
-            charResult.image = QImage();
+            charResult.glyph = std::monostate{};
         }
         charResult.advance += ftTF.map(advance);
 
-        const bool usePixmap =
-            !charResult.image.isNull() && charResult.path.isEmpty() && charResult.colorLayers.isEmpty();
+        Glyph::Bitmap *const bitmapGlyph = std::get_if<Glyph::Bitmap>(&charResult.glyph);
 
-        if (usePixmap) {
-            const int width = charResult.image.width();
-            const int height = charResult.image.height();
+        if (bitmapGlyph) {
+            const int width = bitmapGlyph->image.width();
+            const int height = bitmapGlyph->image.height();
             const int left = currentGlyph.ftface->glyph->bitmap_left;
             const int top = currentGlyph.ftface->glyph->bitmap_top - height;
             QRect bboxPixel(left, top, width, height);
             if (!isHorizontal) {
                 bboxPixel.moveLeft(-(bboxPixel.width() / 2));
             }
-            charResult.imageDrawRect = ftTF.mapRect(QRectF(bboxPixel.topLeft() * ftFontUnit, bboxPixel.size() * ftFontUnit));
+            bitmapGlyph->drawRect = ftTF.mapRect(QRectF(bboxPixel.topLeft() * ftFontUnit, bboxPixel.size() * ftFontUnit));
         }
 
         QRectF bbox;
@@ -451,19 +481,20 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
             bbox = glyphObliqueTf.mapRect(bbox);
         }
         charResult.boundingBox = ftTF.mapRect(bbox);
-        if (usePixmap) {
-            charResult.boundingBox |= charResult.imageDrawRect;
-        }
         charResult.halfLeading = ftTF.map(QPointF(charResult.halfLeading, charResult.halfLeading)).x();
         charResult.ascent = isHorizontal? charResult.boundingBox.top(): charResult.boundingBox.right();
         charResult.descent = isHorizontal? charResult.boundingBox.bottom(): charResult.boundingBox.left();
 
-        if (!charResult.path.isEmpty()) {
-            charResult.boundingBox |= charResult.path.boundingRect();
-        } else if (!charResult.colorLayers.isEmpty()) {
-            Q_FOREACH (const QPainterPath &p, charResult.colorLayers) {
+        if (bitmapGlyph) {
+            charResult.boundingBox |= bitmapGlyph->drawRect;
+        } else if (const auto *outlineGlyph = std::get_if<Glyph::Outline>(&charResult.glyph)) {
+            charResult.boundingBox |= outlineGlyph->path.boundingRect();
+        } else if (const auto *colorGlyph = std::get_if<Glyph::ColorLayers>(&charResult.glyph)) {
+            Q_FOREACH (const QPainterPath &p, colorGlyph->paths) {
                 charResult.boundingBox |= p.boundingRect();
             }
+        } else if (!std::holds_alternative<std::monostate>(charResult.glyph)) {
+            warnFlake << "Unhandled glyph type" << charResult.glyph.index();
         }
         totalAdvanceFTFontCoordinates += advance;
         charResult.cssPosition = ftTF.map(totalAdvanceFTFontCoordinates) - charResult.advance;

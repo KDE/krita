@@ -195,7 +195,7 @@ static QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 static void
-handleCollapseAndHang(QVector<CharacterResult> &result, LineChunk chunk, bool ltr, bool isHorizontal)
+handleCollapseAndHang(QVector<CharacterResult> &result, LineChunk &chunk, bool ltr, bool isHorizontal)
 {
     QVector<int> lineIndices = chunk.chunkIndices;
     QPointF endPos = chunk.length.p2();
@@ -214,21 +214,25 @@ handleCollapseAndHang(QVector<CharacterResult> &result, LineChunk chunk, bool lt
                     if (isHorizontal) {
                         if (hangPos.x() > endPos.x()) {
                             result[lastIndex].isHanging = true;
+                            chunk.conditionalHangEnd = hangPos - endPos;
                         }
                     } else {
                         if (hangPos.y() > endPos.y()) {
                             result[lastIndex].isHanging = true;
+                            chunk.conditionalHangEnd = hangPos - endPos;
                         }
                     }
                 } else {
                     QPointF hangPos = result[lastIndex].cssPosition;
                     if (hangPos.x() < endPos.x()) {
                         result[lastIndex].isHanging = true;
+                        chunk.conditionalHangEnd = hangPos - endPos;
                     }
                 }
 
             } else if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::ForceHang) {
                 result[lastIndex].isHanging = true;
+                chunk.conditionalHangEnd = result[lastIndex].advance;
             }
             if (result.at(lastIndex).lineEnd != LineEdgeBehaviour::Collapse) {
                 break;
@@ -259,11 +263,15 @@ static void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
 
     bool first = true;
     Q_FOREACH (int i, lineIndices) {
-        if (!result.at(i).addressable || result.at(i).isHanging) {
+        if (!result.at(i).addressable || (result.at(i).isHanging && result.at(i).anchored_chunk)) {
             continue;
         }
         const qreal pos = isHorizontal ? result.at(i).finalPosition.x() : result.at(i).finalPosition.y();
-        const qreal advance = isHorizontal ? result.at(i).advance.x() : result.at(i).advance.y();
+        QPointF d = result.at(i).advance;
+        if (result.at(i).isHanging) {
+            d -= chunk.conditionalHangEnd;
+        }
+        const qreal advance = isHorizontal ? d.x() : d.y();
 
         if (first) {
             a = qMin(pos, pos + advance);
@@ -274,6 +282,7 @@ static void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
             b = qMax(b, qMax(pos, pos + advance));
         }
     }
+
 
     if (anchor == KoSvgText::AnchorStart) {
         const qreal indent = isHorizontal ? textIndent.x() : textIndent.y();
@@ -339,7 +348,7 @@ void finalizeLine(QVector<CharacterResult> &result,
         QVector<int> after;
 
         if (currentLine.justifyLine) {
-            double hangingGlyphLength = 0.0;
+            double hangingGlyphLength = isHorizontal? currentChunk.conditionalHangEnd.x(): currentChunk.conditionalHangEnd.y();
             QPointF advanceLength; ///< Because we may have collapsed the last glyph, we'll need to recalculate the total advance;
             bool first = true;
             Q_FOREACH (int j, visualToLogical.values()) {
@@ -348,7 +357,9 @@ void finalizeLine(QVector<CharacterResult> &result,
                 }
                 advanceLength += result.at(j).advance;
                 if (result.at(j).isHanging) {
-                    hangingGlyphLength += isHorizontal? result.at(j).advance.x() : result.at(j).advance.y();
+                    if (result.at(j).anchored_chunk) {
+                        hangingGlyphLength += isHorizontal? result.at(j).advance.x(): result.at(j).advance.y();
+                    }
                     continue;
                 }
                 bool last = visualToLogical.values().last() == j;

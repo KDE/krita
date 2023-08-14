@@ -119,6 +119,7 @@ struct LineChunk {
     QLineF length;
     QVector<int> chunkIndices;
     QRectF boundingBox;
+    QPointF conditionalHangEnd = QPointF();
 };
 
 /**

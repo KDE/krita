@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-13 02:22+0000\n"
+"POT-Creation-Date: 2023-08-15 02:25+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -23812,22 +23812,22 @@ msgstr ""
 msgid "OK"
 msgstr "&Okee"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:71
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:73
 #, fuzzy, kde-format
 msgid "Create session"
 msgstr "Foarm oanmeitsje"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:72
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:74
 #, fuzzy, kde-format
 msgid "Session name:"
 msgstr "Stylname ynfiere:"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:92
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:94
 #, fuzzy, kde-format
 msgid "Rename session"
 msgstr "Foarmen oanmeitsje"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:93
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:95
 #, fuzzy, kde-format
 msgid "New name:"
 msgstr "Namme:"

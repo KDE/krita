@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-13 02:22+0000\n"
+"POT-Creation-Date: 2023-08-15 02:25+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -23566,22 +23566,22 @@ msgstr ""
 msgid "OK"
 msgstr "Đượ&c"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:71
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:73
 #, fuzzy, kde-format
 msgid "Create session"
 msgstr "Tạo đường"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:72
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:74
 #, fuzzy, kde-format
 msgid "Session name:"
 msgstr "Chế độ chọn:"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:92
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:94
 #, fuzzy, kde-format
 msgid "Rename session"
 msgstr "Tạo mẫu"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:93
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:95
 #, fuzzy, kde-format
 msgid "New name:"
 msgstr "Tên:"

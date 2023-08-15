@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-13 02:22+0000\n"
+"POT-Creation-Date: 2023-08-15 02:25+0000\n"
 "PO-Revision-Date: 2022-10-02 19:59+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -24719,7 +24719,7 @@ msgstr ""
 msgid "OK"
 msgstr "ك"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:71
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:73
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Create shape"
@@ -24727,20 +24727,20 @@ msgstr "ك"
 msgid "Create session"
 msgstr "إنشاء الشّكل"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:72
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:74
 #, fuzzy, kde-format
 #| msgid "Section name:"
 msgid "Session name:"
 msgstr "اسم القسم:"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:92
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:94
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rename Section"
 msgid "Rename session"
 msgstr "تغيير اسم القسم"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:93
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:95
 #, fuzzy, kde-format
 #| msgid "New Name:"
 msgid "New name:"

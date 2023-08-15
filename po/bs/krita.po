@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-13 02:22+0000\n"
+"POT-Creation-Date: 2023-08-15 02:25+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -24304,27 +24304,27 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:71
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:73
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Create shape"
 msgid "Create session"
 msgstr "Kreiraj oblik"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:72
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:74
 #, fuzzy, kde-format
 #| msgid "Section name:"
 msgid "Session name:"
 msgstr "Inme sekcije:"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:92
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:94
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rename Section"
 msgid "Rename session"
 msgstr "Preimenovanje sekcije"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:93
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:95
 #, fuzzy, kde-format
 #| msgid "New Name:"
 msgid "New name:"

@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-13 02:22+0000\n"
+"POT-Creation-Date: 2023-08-15 02:25+0000\n"
 "PO-Revision-Date: 2011-01-17 21:35+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -23906,23 +23906,23 @@ msgstr ""
 msgid "OK"
 msgstr "&I va"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:71
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:73
 #, fuzzy, kde-format
 msgid "Create session"
 msgstr "Ahiver cogne"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:72
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:74
 #, fuzzy, kde-format
 #| msgid "Selection mode:"
 msgid "Session name:"
 msgstr "Môde di tchoes:"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:92
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:94
 #, fuzzy, kde-format
 msgid "Rename session"
 msgstr "Ahiver des cognes"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:93
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:95
 #, fuzzy, kde-format
 msgid "New name:"
 msgstr "No:"

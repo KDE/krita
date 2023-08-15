@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-13 02:22+0000\n"
+"POT-Creation-Date: 2023-08-15 02:25+0000\n"
 "PO-Revision-Date: 2021-07-04 00:31+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -24534,22 +24534,22 @@ msgstr "Ignorar a gravação automática, abrindo o ficheiro principal"
 msgid "OK"
 msgstr "OK"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:71
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:73
 #, kde-format
 msgid "Create session"
 msgstr "Criar uma sessão"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:72
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:74
 #, kde-format
 msgid "Session name:"
 msgstr "Nome da sessão:"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:92
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:94
 #, kde-format
 msgid "Rename session"
 msgstr "Mudar o nome da sessão"
 
-#: libs/ui/dialogs/KisSessionManagerDialog.cpp:93
+#: libs/ui/dialogs/KisSessionManagerDialog.cpp:95
 #, kde-format
 msgid "New name:"
 msgstr "Novo nome:"

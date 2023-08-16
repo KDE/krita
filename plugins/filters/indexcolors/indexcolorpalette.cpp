@@ -44,10 +44,22 @@ LabColor IndexColorPalette::getNearestIndex(LabColor clr) const
     for(int i = 0; i < numColors(); ++i)
         diffs[i] = similarity(colors[i], clr);
 
-    int primaryColor = 0;
+    int primaryColor = -1;
+    float maxDiff = std::numeric_limits<float>::min();
     for(int i = 0; i < numColors(); ++i)
-        if(diffs[i] > diffs[primaryColor])
+        if(diffs[i] > maxDiff) {
             primaryColor = i;
+            maxDiff = diffs[primaryColor];
+        }
+
+    KIS_SAFE_ASSERT_RECOVER (primaryColor >= 0) {
+        LabColor color;
+        color.L = 0;
+        color.a = 0;
+        color.b = 0;
+
+        return color;
+    }
 
     return colors[primaryColor];
 }

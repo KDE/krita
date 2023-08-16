@@ -145,14 +145,14 @@ void KisHalftoneConfigPageWidget::configuration(KisHalftoneFilterConfigurationSP
 
 void KisHalftoneConfigPageWidget::setGenerator(const QString & generatorId, KisFilterConfigurationSP config)
 {
-    if (m_generatorWidget) {
+    if (m_generatorWidget && m_currentGeneratorId != generatorId) {
         ui()->widgetGeneratorContainer->layout()->removeWidget(m_generatorWidget);
         delete m_generatorWidget;
         m_generatorWidget = nullptr;
     }
 
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->get(generatorId);
-    if (generator) {
+    if (generator && !m_generatorWidget) {
         KisConfigWidget *generatorWidget = generator->createConfigurationWidget(this, m_paintDevice, false);
         if (generatorWidget) {
             ui()->widgetGeneratorContainer->layout()->addWidget(generatorWidget);
@@ -163,19 +163,24 @@ void KisHalftoneConfigPageWidget::setGenerator(const QString & generatorId, KisF
                 generatorWidget->setCanvasResourcesInterface(m_canvasResourcesInterface);
             }
 
-            if (config) {
-                generatorWidget->setConfiguration(config);
-            } else {
-                KisFilterConfigurationSP generatorConfig =
-                    generator->defaultConfiguration(KisGlobalResourcesInterface::instance());
-                if (generatorId == "screentone") {
-                    generatorConfig->setProperty("rotation", 45.0);
-                    generatorConfig->setProperty("contrast", 50.0);
-                }
-                generatorWidget->setConfiguration(generatorConfig);
-            }
             m_generatorWidget = generatorWidget;
             connect(generatorWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(signal_configurationUpdated()));
+        }
+    }
+
+    m_currentGeneratorId = generatorId;
+
+    if (m_generatorWidget) {
+        if (config) {
+            m_generatorWidget->setConfiguration(config);
+        } else {
+            KisFilterConfigurationSP generatorConfig =
+                    generator->defaultConfiguration(KisGlobalResourcesInterface::instance());
+            if (generatorId == "screentone") {
+                generatorConfig->setProperty("rotation", 45.0);
+                generatorConfig->setProperty("contrast", 50.0);
+            }
+            m_generatorWidget->setConfiguration(generatorConfig);
         }
     }
 }

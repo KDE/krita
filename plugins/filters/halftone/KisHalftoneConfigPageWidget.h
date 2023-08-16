@@ -45,6 +45,7 @@ private:
     const KisPaintDeviceSP m_paintDevice;
     QStringList m_generatorIds;
     KisConfigWidget *m_generatorWidget;
+    QString m_currentGeneratorId;
     KisViewManager *m_view;
     KoCanvasResourcesInterfaceSP m_canvasResourcesInterface;
 

@@ -52,6 +52,7 @@
 #include <KoShapeFillWrapper.h>
 #include "KoCanvasResourceProvider.h"
 #include <KoPathShape.h>
+#include <KoPathSegment.h>
 
 #include "KisHandlePainterHelper.h"
 #include <commands/KoKeepShapesSelectedCommand.h>
@@ -68,6 +69,14 @@ static bool debugEnabled()
 SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
 {
+    m_base_cursor = QCursor(QPixmap(":/tool_text_basic.xpm"), 7, 7);
+    m_text_inline_horizontal = QCursor(QPixmap(":/tool_text_inline_horizontal.xpm"), 7, 7);
+    m_text_inline_vertical = QCursor(QPixmap(":/tool_text_inline_vertical.xpm"), 7, 7);
+    m_text_on_path = QCursor(QPixmap(":/tool_text_on_path.xpm"), 7, 7);
+    m_text_in_shape = QCursor(QPixmap(":/tool_text_in_shape.xpm"), 7, 7);
+    m_ibeam_horizontal = QCursor(QPixmap(":/tool_text_i_beam_horizontal.xpm"), 11, 11);
+    m_ibeam_vertical = QCursor(QPixmap(":/tool_text_i_beam_vertical.xpm"), 11, 11);
+    m_ibeam_horizontal_done = QCursor(QPixmap(":/tool_text_i_beam_horizontal_done.xpm"), 5, 11);
 }
 
 SvgTextTool::~SvgTextTool()
@@ -81,7 +90,7 @@ SvgTextTool::~SvgTextTool()
 void SvgTextTool::activate(const QSet<KoShape *> &shapes)
 {
     KoToolBase::activate(shapes);
-    useCursor(Qt::ArrowCursor);
+    useCursor(m_base_cursor);
     auto uploadColorToResourceManager = [this](KoShape *shape) {
         m_originalColor = canvas()->resourceManager()->foregroundColor();
         KoShapeFillWrapper wrapper(shape, KoFlake::Fill);
@@ -471,18 +480,58 @@ static inline Qt::CursorShape lineToCursor(const QLineF line, const KoCanvasBase
     return angleToCursor(QVector2D(wdgLine.p2() - wdgLine.p1()).normalized());
 }
 
+// badly copied from KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
+// should this be generalized? If so, where?
+static inline KoPathSegment segmentAtPoint(const QPointF &point, KoPathShape *shape, QRectF grabRoi)
+{
+    // the max allowed distance from a segment
+    const qreal distanceThreshold = 0.5 * KisAlgebra2D::maxDimension(grabRoi);
+    KoPathSegment segment;
+
+    // convert document point to shape coordinates
+    const QPointF p = shape->documentToShape(point);
+    // our region of interest, i.e. a region around our mouse position
+    const QRectF roi = shape->documentToShape(grabRoi);
+
+    qreal minDistance = std::numeric_limits<qreal>::max();
+
+    // check all segments of this shape which intersect the region of interest
+    const QList<KoPathSegment> segments = shape->segmentsAt(roi);
+
+    foreach (const KoPathSegment &s, segments) {
+        const qreal nearestPointParam = s.nearestPoint(p);
+        const QPointF nearestPoint = s.pointAt(nearestPointParam);
+        const qreal distance = kisDistance(p, nearestPoint);
+
+        // are we within the allowed distance ?
+        if (distance > distanceThreshold)
+            continue;
+        // are we closer to the last closest point ?
+        if (distance < minDistance) {
+            segment = s;
+        }
+    }
+    return segment;
+}
+
 void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
 {
     m_lastMousePos = event->point;
+    m_hoveredShapeHighlightRect = QPainterPath();
+
 
     if (m_interactionStrategy) {
         m_interactionStrategy->handleMouseMove(event->point, event->modifiers());
+        if (m_dragging == DragMode::Create) {
+            useCursor(m_text_inline_horizontal);
+        }
         event->accept();
     } else {
         m_highlightItem = HighlightItem::None;
         KoSvgTextShape *const selectedShape = this->selectedShape();
-        Qt::CursorShape cursor = Qt::ArrowCursor;
+        QCursor cursor = m_base_cursor;
         if (selectedShape) {
+            cursor = m_ibeam_horizontal_done;
             const qreal sensitivity = grabSensitivityInPt();
 
             if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(selectedShape)) {
@@ -502,7 +551,6 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
                 }
             }
         }
-        useCursor(cursor);
 
         KoSvgTextShape *hoveredShape = dynamic_cast<KoSvgTextShape *>(canvas()->shapeManager()->shapeAt(event->point));
         if (hoveredShape && m_highlightItem == HighlightItem::None) {
@@ -513,13 +561,34 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
                 Q_FOREACH(KoShape *shape, hoveredShape->shapesInside()) {
                     KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
                     if (path) {
-                        m_hoveredShapeHighlightRect.addPath(hoveredShape->transformation().map(path->transformation().map(path->outline())));
+                        m_hoveredShapeHighlightRect.addPath(hoveredShape->absoluteTransformation().map(path->absoluteTransformation().map(path->outline())));
                     }
                 }
             }
-        } else {
-            m_hoveredShapeHighlightRect = QPainterPath();
+            // Todo: replace with something a little less hacky.
+            if (hoveredShape->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt() == 0) {
+                cursor = m_ibeam_horizontal;
+            } else {
+                cursor = m_ibeam_vertical;
+            }
+        } else if(m_highlightItem == HighlightItem::None) {
+            KoPathShape *shape = dynamic_cast<KoPathShape *>(canvas()->shapeManager()->shapeAt(event->point));
+            if (shape) {
+                if (shape->subpathCount() > 0) {
+                    if (shape->isClosedSubpath(0)) {
+                        cursor = m_text_in_shape;
+                    }
+                }
+                KoPathSegment segment = segmentAtPoint(event->point, shape, handleGrabRect(event->point));
+                if (segment.isValid()) {
+                    cursor = m_text_on_path;
+                }
+                m_hoveredShapeHighlightRect.addPath(shape->absoluteTransformation().map(shape->outline()));
+            } else {
+                m_hoveredShapeHighlightRect = QPainterPath();
+            }
         }
+        useCursor(cursor);
         event->ignore();
     }
 
@@ -536,6 +605,7 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
         }
         m_interactionStrategy = nullptr;
         m_dragging = DragMode::None;
+        useCursor(m_base_cursor);
         event->accept();
     } else if (m_editor) {
         showEditor();

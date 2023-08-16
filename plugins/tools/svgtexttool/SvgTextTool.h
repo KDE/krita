@@ -118,7 +118,18 @@ private:
     QPainterPath m_hoveredShapeHighlightRect;
     boost::optional<KoColor> m_originalColor { boost::none };
 
+
     Ui_WdgSvgTextOptionWidget optionUi;
+
+    QCursor m_base_cursor;
+    QCursor m_text_inline_horizontal;
+    QCursor m_text_inline_vertical;
+    QCursor m_text_on_path;
+    QCursor m_text_in_shape;
+    QCursor m_ibeam_vertical;
+    QCursor m_ibeam_horizontal;
+    QCursor m_ibeam_horizontal_done;
+
 };
 
 #endif

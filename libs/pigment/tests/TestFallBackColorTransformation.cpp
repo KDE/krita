@@ -58,4 +58,4 @@ void TestFallBackColorTransformation::parametersForward()
   delete fallback;
 }
 
-QTEST_GUILESS_MAIN(TestFallBackColorTransformation)
+SIMPLE_TEST_MAIN(TestFallBackColorTransformation)

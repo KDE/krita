@@ -169,6 +169,61 @@ void KisSignalCompressorTest::testIdleChecks()
     }
 }
 
+#include <kis_signal_compressor_with_param.h>
+
+void KisSignalCompressorTest::testDestructionAfterEmit_data()
+{
+    QTest::addColumn<KisSignalCompressor::Mode>("mode");
+    QTest::addColumn<Qt::ConnectionType>("connectionType");
+    QTest::addColumn<bool>("expectToDeliver");
+
+    QTest::newRow("active_direct") << KisSignalCompressor::FIRST_ACTIVE << Qt::DirectConnection << true;
+    QTest::newRow("inactive_direct") << KisSignalCompressor::FIRST_INACTIVE << Qt::DirectConnection << false;
+    QTest::newRow("active_queued") << KisSignalCompressor::FIRST_ACTIVE << Qt::QueuedConnection << false;
+    QTest::newRow("inactive_queued") << KisSignalCompressor::FIRST_INACTIVE << Qt::QueuedConnection << false;
+}
+
+Q_DECLARE_METATYPE(KisSignalCompressor::Mode)
+
+void KisSignalCompressorTest::testDestructionAfterEmit()
+{
+    QFETCH(KisSignalCompressor::Mode, mode);
+    QFETCH(Qt::ConnectionType, connectionType);
+    QFETCH(bool, expectToDeliver);
+
+    bool objectIsValid = false;
+    bool somethingDelivered = false;
+
+    auto signalDeliveryCheck = [&] {
+        /**
+         * The signal should be delivered only when both, the compressor
+         * and the proxy are alive
+         */
+        KIS_ASSERT(objectIsValid);
+        somethingDelivered = true;
+    };
+
+    for (int i = 0; i < 100; i++) {
+        somethingDelivered = false;
+        objectIsValid = true;
+        {
+            QScopedPointer<SignalToFunctionProxy> proxy(new SignalToFunctionProxy(signalDeliveryCheck));
+            KisSignalCompressor compressor(5, mode);
+            connect(&compressor, SIGNAL(timeout()), proxy.data(), SLOT(start()), connectionType);
+            compressor.start();
+        }
+        objectIsValid = false;
+        QCOMPARE(somethingDelivered, expectToDeliver);
+
+        /**
+         * We have destroyed both the compressor and the proxy, wait if
+         * Qt will deliver us something (it shouldn't actually)
+         */
+        QTest::qWait(15);
+    }
+
+}
+
 SIMPLE_TEST_MAIN(KisSignalCompressorTest)
 
 #include "KisSignalCompressorTest.moc"

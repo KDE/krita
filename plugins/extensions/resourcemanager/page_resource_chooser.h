@@ -39,11 +39,15 @@ public:
     QPixmap imageToIcon(const QImage &img, Qt::AspectRatioMode aspectRatioMode);
     QList<int> getSelectedResourcesIds();
     void updateCount(bool);
+    void updateResources(QString resourceType, int count);
+
 
 private:
     Ui::PageResourceChooser *m_ui;
     WdgResourcePreview *m_wdgResourcePreview;
     QList<int> m_selectedResourcesIds;
+    QList<QString> m_existingResources;
+    QMap<QString, QList<QPair<QString, QImage>>> m_existingResourcesImageMap;
 
     KoResourceBundleSP m_bundle;
     ListViewMode m_mode;

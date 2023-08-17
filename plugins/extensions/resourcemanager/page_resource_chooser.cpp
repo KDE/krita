@@ -18,6 +18,7 @@
 #include <KisTagFilterResourceProxyModel.h>
 #include "KisResourceItemListWidget.h"
 #include "ResourceListViewModes.h"
+#include "KisGlobalResourcesInterface.h"
 
 
 #define ICON_SIZE 128
@@ -64,6 +65,70 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
     } else {
         slotViewDetails();
     }
+
+    if (m_bundle) {
+
+        m_bundleStorage = new KisBundleStorage(m_bundle->filename());
+
+        QStringList resourceTypes = QStringList() << ResourceType::Brushes << ResourceType::PaintOpPresets << ResourceType::Gradients << ResourceType::GamutMasks;
+        #if defined HAVE_SEEXPR
+        resourceTypes << ResourceType::SeExprScripts;
+        #endif
+        resourceTypes << ResourceType::Patterns << ResourceType::Palettes << ResourceType::Workspaces;
+
+
+        for (int i = 0; i < resourceTypes.size(); i++) {
+            QSharedPointer<KisResourceStorage::ResourceIterator> iter = m_bundleStorage->resources(resourceTypes[i]);
+            KisResourcesInterfaceSP resourcesInterface = KisGlobalResourcesInterface::instance();
+            auto resourceSourceAdapter = resourcesInterface->source<KoResource>(resourceTypes[i]);
+            while (iter->hasNext()) {
+                iter->next();
+                KoResourceSP res = resourceSourceAdapter.bestMatch(iter->resource()->md5Sum(false), iter->resource()->filename(), iter->resource()->name());
+                if (!res.isNull()) {
+//                     qDebug() << "res id: " << res->resourceId();
+                    m_selectedResourcesIds.append(res->resourceId());
+                }
+            }
+        }
+
+
+        QString standarizedResourceType = ResourceType::Brushes;
+
+        KisResourceModel model(standarizedResourceType);
+        for (int i = 0; i < model.rowCount(); i++) {
+            QModelIndex idx = model.index(i, 0);
+            QString filename = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();
+            int id = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
+
+            QImage image = (model.data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail)).value<QImage>();
+            QString name = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+
+            Qt::AspectRatioMode scalingAspectRatioMode = Qt::IgnoreAspectRatio;
+            if (image.height() == 1) { // affects mostly gradients, which are very long but only 1px tall
+                scalingAspectRatioMode = Qt::IgnoreAspectRatio;
+            }
+
+            QListWidgetItem *item = new QListWidgetItem(image.isNull() ? QPixmap() : imageToIcon(image, scalingAspectRatioMode), name);
+            item->setData(Qt::UserRole, id);
+
+            if (m_selectedResourcesIds.contains(id)) {
+                m_resourceItemWidget->addItem(item);
+            }
+        }
+
+        m_resourceItemWidget->sortItems();
+    }
+
+}
+
+void PageResourceChooser::updateResources(QString resourceType, int count)
+{
+    DlgCreateBundle *wizard = qobject_cast<DlgCreateBundle*>(this->wizard());
+    if (wizard) {
+        wizard->m_count[resourceType] = count;
+        qDebug() << resourceType << ": " << count;
+    }
+    emit countUpdated();
 
 }
 
@@ -148,24 +213,36 @@ void PageResourceChooser::slotresourceTypeSelected(int idx)
         }
     } else {
         m_resourceItemWidget->clear();
-//         m_bundleStorage = new KisBundleStorage(m_bundle->filename());
-//
-//
-//         QSharedPointer<KisResourceStorage::ResourceIterator> iter = m_bundleStorage->resources(m_wdgResourcePreview->getCurrentResourceType());
-//         while (iter->hasNext()) {
-//             iter->next();
-//
-//             QImage image = iter->resource()->image();
-//             QString name = iter->resource()->name();
-//
-//             Qt::AspectRatioMode scalingAspectRatioMode = Qt::IgnoreAspectRatio;
-//             if (image.height() == 1) { // affects mostly gradients, which are very long but only 1px tall
-//                 scalingAspectRatioMode = Qt::IgnoreAspectRatio;
-//             }
-//             QListWidgetItem *item = new QListWidgetItem(image.isNull() ? QPixmap() : imageToIcon(image, scalingAspectRatioMode), name);
-//             //item->setData(Qt::UserRole, id);
-//             m_resourceItemWidget->addItem(item);
-//         }
+
+        QString resourceType = m_wdgResourcePreview->getCurrentResourceType();
+        QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
+
+        KisResourceModel model(standarizedResourceType);
+        for (int i = 0; i < model.rowCount(); i++) {
+            QModelIndex idx = model.index(i, 0);
+            QString filename = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();
+            int id = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
+
+            if (resourceType == ResourceType::Gradients) {
+                if (filename == "Foreground to Transparent" || filename == "Foreground to Background") {
+                    continue;
+                }
+            }
+
+            QImage image = (model.data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail)).value<QImage>();
+            QString name = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+
+            Qt::AspectRatioMode scalingAspectRatioMode = Qt::IgnoreAspectRatio;
+            if (image.height() == 1) { // affects mostly gradients, which are very long but only 1px tall
+                scalingAspectRatioMode = Qt::IgnoreAspectRatio;
+            }
+            QListWidgetItem *item = new QListWidgetItem(image.isNull() ? QPixmap() : imageToIcon(image, scalingAspectRatioMode), name);
+            item->setData(Qt::UserRole, id);
+
+            if (m_selectedResourcesIds.contains(id)) {
+                m_resourceItemWidget->addItem(item);
+            }
+        }
     }
 
     m_resourceItemWidget->sortItems();
@@ -207,7 +284,6 @@ void PageResourceChooser::updateCount(bool flag)
     DlgCreateBundle *wizard = qobject_cast<DlgCreateBundle*>(this->wizard());
     if (wizard) {
         flag == true? wizard->m_count[m_wdgResourcePreview->getCurrentResourceType()] += 1 : wizard->m_count[m_wdgResourcePreview->getCurrentResourceType()] -= 1;
-        // qDebug() << m_wdgResourcePreview->getCurrentResourceType() << ": " << wizard->m_count[m_wdgResourcePreview->getCurrentResourceType()];
     }
 
     emit countUpdated();

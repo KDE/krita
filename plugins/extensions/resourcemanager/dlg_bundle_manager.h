@@ -60,6 +60,9 @@ private Q_SLOTS:
 
     void slotModelAboutToBeReset();
     void slotModelReset();
+    void slotRowsRemoved(const QModelIndex &parent, int first, int last);
+    void slotRowsInserted(const QModelIndex &parent, int first, int last);
+
     void currentCellSelectedChanged(QModelIndex current, QModelIndex previous);
 
 private:

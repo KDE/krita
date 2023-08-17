@@ -13,6 +13,9 @@
 
 #include <KoDialog.h>
 #include <KoResourceBundle.h>
+#include "KisBundleStorage.h"
+#include <KisResourceStorage.h>
+
 
 namespace Ui
 {
@@ -45,6 +48,7 @@ public Q_SLOTS:
     // new
     void updateTitle(int id);
 
+
 private:
 
     QWidget *m_page;
@@ -67,6 +71,10 @@ private:
     PageMetadataInfo *m_pageMetadataInfo;
     PageBundleSaver *m_pageBundleSaver;
 
+    KisBundleStorage *m_bundleStorage;
+    KisResourceStorageSP m_resourceStorage;
+    QString m_storageID;
+    bool m_storageAdded;
 };
 
 #endif // KOBUNDLECREATIONWIDGET_H

@@ -27,6 +27,7 @@
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <dlg_embed_tags.h>
+#include "KisGlobalResourcesInterface.h"
 
 #include <kis_config.h>
 
@@ -42,13 +43,13 @@ PageTagChooser::PageTagChooser(KoResourceBundleSP bundle, QWidget *parent) :
     KoDocumentInfo info;
     info.updateParameters();
 
-    WdgTagPreview* tabBrushes = new WdgTagPreview(ResourceType::Brushes);
-    WdgTagPreview* tabBrushPresets = new WdgTagPreview(ResourceType::PaintOpPresets);
-    WdgTagPreview* tabGradients = new WdgTagPreview(ResourceType::Gradients);
-    WdgTagPreview* tabGamutMasks = new WdgTagPreview(ResourceType::GamutMasks);
-    WdgTagPreview* tabPatterns = new WdgTagPreview(ResourceType::Patterns);
-    WdgTagPreview* tabPalettes = new WdgTagPreview(ResourceType::Palettes);
-    WdgTagPreview* tabWorkspaces = new WdgTagPreview(ResourceType::Workspaces);
+    WdgTagPreview* tabBrushes = new WdgTagPreview(ResourceType::Brushes, m_bundle);
+    WdgTagPreview* tabBrushPresets = new WdgTagPreview(ResourceType::PaintOpPresets, m_bundle);
+    WdgTagPreview* tabGradients = new WdgTagPreview(ResourceType::Gradients, m_bundle);
+    WdgTagPreview* tabGamutMasks = new WdgTagPreview(ResourceType::GamutMasks, m_bundle);
+    WdgTagPreview* tabPatterns = new WdgTagPreview(ResourceType::Patterns, m_bundle);
+    WdgTagPreview* tabPalettes = new WdgTagPreview(ResourceType::Palettes, m_bundle);
+    WdgTagPreview* tabWorkspaces = new WdgTagPreview(ResourceType::Workspaces, m_bundle);
 
     m_ui->tabWidget->addTab(tabBrushes, i18n("Brushes"));
     m_ui->tabWidget->addTab(tabBrushPresets, i18n("Brush Presets"));
@@ -73,6 +74,30 @@ PageTagChooser::PageTagChooser(KoResourceBundleSP bundle, QWidget *parent) :
     connect(tabPatterns, SIGNAL(tagsRemoved(KisTagSP)), this, SLOT(removeSelected(KisTagSP)));
     connect(tabPalettes, SIGNAL(tagsRemoved(KisTagSP)), this, SLOT(removeSelected(KisTagSP)));
     connect(tabWorkspaces, SIGNAL(tagsRemoved(KisTagSP)), this, SLOT(removeSelected(KisTagSP)));
+
+    if (m_bundle) {
+        m_bundleStorage = new KisBundleStorage(m_bundle->filename());
+
+        QStringList resourceTypes = QStringList() << ResourceType::Brushes << ResourceType::PaintOpPresets << ResourceType::Gradients << ResourceType::GamutMasks;
+        #if defined HAVE_SEEXPR
+        resourceTypes << ResourceType::SeExprScripts;
+        #endif
+        resourceTypes << ResourceType::Patterns << ResourceType::Palettes << ResourceType::Workspaces;
+
+        for (int i = 0; i < resourceTypes.size(); i++) {
+            QSharedPointer<KisResourceStorage::TagIterator> tagIter = m_bundleStorage->tags(resourceTypes[i]);
+            KisTagModel *tagModel = new KisTagModel(resourceTypes[i]);
+
+            while (tagIter->hasNext()) {
+                tagIter->next();
+                KisTagSP tag = tagModel->tagForUrl(tagIter->tag()->url());
+//                 qDebug() << "tag id: " << tag->id();
+                m_selectedTagIds.append(tag->id());
+            }
+        }
+
+
+    }
 }
 
 PageTagChooser::~PageTagChooser()

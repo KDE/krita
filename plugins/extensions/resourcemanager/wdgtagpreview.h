@@ -4,6 +4,7 @@
 #include "KisTagSelectionWidget.h"
 #include "KoID.h"
 #include <KisTag.h>
+#include <KoResourceBundle.h>
 
 #include <QWidget>
 
@@ -24,7 +25,7 @@ Q_SIGNALS:
     void tagsRemoved(KisTagSP tagSP);
 
 public:
-    explicit WdgTagPreview(QString resourceType, QWidget *parent = nullptr);
+    explicit WdgTagPreview(QString resourceType, KoResourceBundleSP bundle = nullptr, QWidget *parent = nullptr);
     ~WdgTagPreview();
 
 public Q_SLOTS:
@@ -38,6 +39,7 @@ private:
     KisWdgTagSelectionControllerBundleTags *m_tagsController;
     KisTagSelectionWidget* m_wdgResourcesTags;
     QLayout* m_layout {nullptr};
+    KoResourceBundleSP m_bundle;
 };
 
 #endif // WDGTAGPREVIEW_H

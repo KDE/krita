@@ -236,6 +236,19 @@ void KisWdgTagSelectionControllerBundleTags::slotAddTag(KoID custom)
     emit tagAdded(custom);
 }
 
+void KisWdgTagSelectionControllerBundleTags::addTag(KoID custom)
+{
+    if (!m_selectedTagsByResourceType.contains(m_resourceType)) {
+        m_selectedTagsByResourceType.insert(m_resourceType, QList<KoID>());
+    }
+    if (!m_selectedTagsByResourceType[m_resourceType].contains(custom)) {
+        m_selectedTagsByResourceType[m_resourceType].append(custom);
+        updateView();
+    }
+
+    emit tagAdded(custom);
+}
+
 void KisWdgTagSelectionControllerBundleTags::updateView()
 {
     typedef QPair<QString, QString> resourceTypePair;

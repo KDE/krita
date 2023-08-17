@@ -19,7 +19,6 @@
 #include <QItemSelectionModel>
 #include <QStringLiteral>
 
-
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <KoIcon.h>
@@ -34,7 +33,7 @@
 #include <kis_config.h>
 #include <KisResourceLocator.h>
 #include <KisKineticScroller.h>
-#include <KisCursorOverrideLock.h>
+#include "KisBundleStorage.h"
 
 #include <KisMainWindow.h>
 #include <KisPart.h>
@@ -172,10 +171,11 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
 
     QItemSelectionModel* selectionModel = m_ui->listView->selectionModel();
     connect(selectionModel, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
-    //connect(m_ui->listView, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
 
     connect(KisStorageModel::instance(), &KisStorageModel::modelAboutToBeReset, this, &DlgBundleManager::slotModelAboutToBeReset);
     connect(KisStorageModel::instance(), &KisStorageModel::modelReset, this, &DlgBundleManager::slotModelReset);
+    connect(KisStorageModel::instance(), &KisStorageModel::rowsRemoved, this, &DlgBundleManager::slotRowsRemoved);
+    connect(KisStorageModel::instance(), &KisStorageModel::rowsInserted, this, &DlgBundleManager::slotRowsInserted);
 
     updateToggleButton(m_proxyModel->data(m_ui->listView->currentIndex(), Qt::UserRole + KisStorageModel::Active).toBool());
 }
@@ -269,6 +269,79 @@ void DlgBundleManager::createBundle()
     dlg->exec();
 }
 
+void DlgBundleManager::editBundle()
+{
+    KoFileDialog dlg(this, KoFileDialog::OpenFiles, i18n("Choose the bundle to edit"));
+    dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
+    dlg.setMimeTypeFilters(
+                {"application/x-krita-bundle", "image/x-adobe-brushlibrary", "application/x-photoshop-style-library"});
+    dlg.setCaption(i18n("Select the bundle"));
+
+
+    Q_FOREACH(const QString &filename, dlg.filenames()) {
+        if (!filename.isEmpty()) {
+
+            {
+                KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(filename);
+                KIS_ASSERT(!storage.isNull());
+
+                if (!storage->valid()) {
+                    qApp->restoreOverrideCursor();
+                    qWarning() << "Attempted to edit an invalid bundle!" << filename;
+                    QMessageBox::warning(this,
+                                         i18nc("@title:window", "Krita"),
+                                         i18n("Could not load bundle %1.", filename));
+                    qApp->setOverrideCursor(Qt::BusyCursor);
+                    continue;
+                }
+            }
+
+//             QFileInfo oldFileInfo(filename);
+//
+//             QString newDir = KoResourcePaths::getAppDataLocation();
+//             QString newName = oldFileInfo.fileName();
+//             const QString newLocation = QStringLiteral("%1/Temp_%2").arg(newDir, newName);
+//
+//             QFileInfo newFileInfo(newLocation);
+//             QFile::copy(filename, newLocation);
+
+            KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(filename);
+            if (storage.isNull()){continue;}
+            if (storage->valid()) {
+                if (!KisResourceLocator::instance()->hasStorage(filename)) {
+                    if (!KisResourceLocator::instance()->addStorage(filename, storage)) {
+                        qWarning() << "Could not add bundle to the storages" << filename;
+                    }
+                }
+
+                KoResourceBundle *bundle = new KoResourceBundle(filename);
+                bool importedBundle = bundle->load();
+
+                KoResourceBundleSP bundleSP(bundle);
+                DlgCreateBundle* dlgBC = new DlgCreateBundle(bundleSP, this);
+                int response = dlgBC->exec();
+
+
+                if (response == KoDialog::Rejected) {
+
+//                     if (KisResourceLocator::instance()->hasStorage(filename)) {
+//
+//                         qDebug() << "delete";
+//                         bool removed = KisResourceLocator::instance()->removeStorage(filename);
+//                         qDebug() << removed << " :Bundle Manager removed";
+// //                         bool returned = QFile::remove(newLocation);
+// //                         qDebug() << returned << " :Bundle Manager QFile::remove";
+//                         KIS_SAFE_ASSERT_RECOVER(!KisResourceLocator::instance()->hasStorage(filename));
+//                         qDebug() << removed << " :Bundle Manager finished";
+//
+//                     }
+                }
+
+            }
+        }
+    }
+}
+
 void DlgBundleManager::toggleBundle()
 {
     QModelIndex idx = m_ui->listView->currentIndex();
@@ -312,6 +385,18 @@ void DlgBundleManager::slotModelAboutToBeReset()
     ENTER_FUNCTION();
     lastIndex = QPersistentModelIndex(m_proxyModel->mapToSource(m_ui->listView->currentIndex()));
     ENTER_FUNCTION() << ppVar(lastIndex) << ppVar(lastIndex.isValid());
+}
+
+void DlgBundleManager::slotRowsRemoved(const QModelIndex &parent, int start, int end)
+{
+    ENTER_FUNCTION();
+    m_proxyModel->removeRows(start, end - start + 1, parent);
+}
+
+void DlgBundleManager::slotRowsInserted(const QModelIndex &parent, int start, int end)
+{
+    ENTER_FUNCTION();
+    m_proxyModel->insertRows(start, end - start + 1, parent);
 }
 
 void DlgBundleManager::slotModelReset()

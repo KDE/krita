@@ -60,12 +60,13 @@ public:
 
     void updateView();
     void setResourceType(const QString& resourceType);
+    void addTag(KoID tag);
 
 Q_SIGNALS:
     void tagAdded(KoID tag);
     void tagRemoved(KoID tag);
 
-private Q_SLOTS:
+public Q_SLOTS:
     void slotRemoveTag(KoID tag);
     void slotAddTag(KoID tag);
 

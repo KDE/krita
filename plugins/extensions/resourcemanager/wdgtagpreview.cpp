@@ -9,13 +9,15 @@
 #include <KisTagModelProvider.h>
 #include <KisWrappableHBoxLayout.h>
 #include <KisTagSelectionWidget.h>
+#include "KisBundleStorage.h"
 
 
-WdgTagPreview::WdgTagPreview(QString resourceType, QWidget *parent) :
+WdgTagPreview::WdgTagPreview(QString resourceType, KoResourceBundleSP bundle, QWidget *parent) :
     QWidget(parent),
     m_ui(new Ui::WdgTagPreview),
     m_resourceType(resourceType),
-    m_tagsController(0)
+    m_tagsController(0),
+    m_bundle(bundle)
 {
     m_ui->setupUi(this);
 
@@ -39,7 +41,16 @@ WdgTagPreview::WdgTagPreview(QString resourceType, QWidget *parent) :
         if (name == "All" || name == "All Untagged") continue;
         KisTagLabel *label = new KisTagLabel(name);
         m_layout->addWidget(label);
-        }
+    }
+
+    KisBundleStorage *bundleStorage = new KisBundleStorage(m_bundle->filename());
+
+    QSharedPointer<KisResourceStorage::TagIterator> tagIter = bundleStorage->tags(m_resourceType);
+    while (tagIter->hasNext()) {
+        tagIter->next();
+        KoID custom = KoID(tagIter->tag()->url(), tagIter->tag()->name());
+        m_tagsController->addTag(custom);
+    }
 }
 
 WdgTagPreview::~WdgTagPreview()

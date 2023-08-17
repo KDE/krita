@@ -5,6 +5,8 @@
 #include <KoResourceBundle.h>
 #include "KisTagSelectionWidget.h"
 #include <KisTag.h>
+#include "KisBundleStorage.h"
+
 
 namespace Ui {
 class PageTagChooser;
@@ -34,6 +36,7 @@ private:
     KoResourceBundleSP m_bundle;
 
     QList<int> m_selectedTagIds;
+    KisBundleStorage *m_bundleStorage;
 };
 
 #endif // PAGE_TAG_CHOOSER_H

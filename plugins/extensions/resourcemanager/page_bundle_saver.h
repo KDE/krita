@@ -3,6 +3,7 @@
 
 #include <QWizardPage>
 #include <KoResourceBundle.h>
+#include "KisBundleStorage.h"
 
 
 namespace Ui {
@@ -32,8 +33,11 @@ private:
     Ui::PageBundleSaver *m_ui;
     KoResourceBundleSP m_bundle;
     QMap<QString, int> m_count;
+    QSet<QString> m_loaded_tags;
+    QMap<QString, int> m_loaded_count;
     QString m_resourceCount;
     QString m_tags;
+    KisBundleStorage *m_bundleStorage;
 };
 
 #endif // PAGE_BUNDLE_SAVER_H

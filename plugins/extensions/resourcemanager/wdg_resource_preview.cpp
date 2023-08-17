@@ -8,7 +8,9 @@
 #include <QMenuBar>
 #include <QPainter>
 #include <QLabel>
+#include <QCompleter>
 #include <QToolButton>
+#include <QLineEdit>
 
 #include <kis_action.h>
 #include <kis_action_manager.h>

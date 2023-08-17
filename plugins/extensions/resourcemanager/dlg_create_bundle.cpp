@@ -43,7 +43,10 @@
 #include <KisGlobalResourcesInterface.h>
 #include <KisResourceTypeModel.h>
 #include "KisBundleStorage.h"
-
+#include <KisResourceLocator.h>
+#include <KisResourceStorage.h>
+#include <QUuid>
+#include <KisStorageModel.h>
 #include <wdgtagselection.h>
 
 
@@ -53,11 +56,12 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
     : QWizard(parent)
     , m_ui(new Ui::WdgDlgCreateBundle)
     , m_bundle(bundle)
+    , m_storageAdded(false)
 {
     m_ui->setupUi(this);
+    setWizardStyle(QWizard::ClassicStyle);
 
-    // new
-    WdgSide *wdgSide = new WdgSide();
+    WdgSide *wdgSide = new WdgSide(m_bundle);
 
     m_pageResourceChooser = new PageResourceChooser(m_bundle);
     m_pageTagChooser = new PageTagChooser(m_bundle);
@@ -80,6 +84,33 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
         QModelIndex idx = resourceTypesModel.index(i, 0);
         QString resourceType = resourceTypesModel.data(idx, Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
         m_count.insert(resourceType, 0);
+    }
+
+    if (m_bundle) {
+        m_bundleStorage = new KisBundleStorage(m_bundle->filename());
+
+        QStringList resourceTypes = QStringList() << ResourceType::Brushes << ResourceType::PaintOpPresets << ResourceType::Gradients << ResourceType::GamutMasks;
+        #if defined HAVE_SEEXPR
+        resourceTypes << ResourceType::SeExprScripts;
+        #endif
+        resourceTypes << ResourceType::Patterns << ResourceType::Palettes << ResourceType::Workspaces;
+
+        for (int i = 0; i < resourceTypes.size(); i++) {
+            QSharedPointer<KisResourceStorage::ResourceIterator> iter = m_bundleStorage->resources(resourceTypes[i]);
+            int count = 0;
+            while (iter->hasNext()) {
+                iter->next();
+                count++;
+            }
+            m_count[resourceTypes[i]] = count;
+
+            QSharedPointer<KisResourceStorage::TagIterator> tagIter = m_bundleStorage->tags(resourceTypes[i]);
+            while (tagIter->hasNext()) {
+                tagIter->next();
+                m_tags.insert(tagIter->tag()->name());
+            }
+        }
+
     }
 
     connect(m_pageResourceChooser, SIGNAL(countUpdated()), m_pageBundleSaver, SLOT(onCountUpdated()));
@@ -340,7 +371,26 @@ void DlgCreateBundle::accept()
 
 void DlgCreateBundle::reject()
 {
-    saveToConfiguration(true);
+    if (!m_bundle) {
+        saveToConfiguration(true);
+    }
+
+    if (m_bundle) {
+//         QFileInfo oldFileInfo(m_bundle->filename());
+//
+//         QString newDir = KoResourcePaths::getAppDataLocation();
+//         QString newName = oldFileInfo.fileName();
+//         const QString newLocation = QStringLiteral("%1/Temp_%2").arg(newDir, newName);
+//
+//         if (KisResourceLocator::instance()->hasStorage(newLocation)) {
+//             qDebug() << "delete";
+//             bool removed = KisResourceLocator::instance()->removeStorage(newLocation);
+//             QFile::remove(newLocation);
+//             KIS_SAFE_ASSERT_RECOVER(!KisResourceLocator::instance()->hasStorage(newLocation));
+//             qDebug() << removed;
+//         }
+    }
+
     QWizard::reject();
 }
 

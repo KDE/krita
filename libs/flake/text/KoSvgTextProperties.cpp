@@ -1048,6 +1048,7 @@ QStringList KoSvgTextProperties::supportedXmlAttributes()
                << "kerning"
                << "letter-spacing"
                << "word-spacing"
+               << "xml:space"
                << "xml:lang";
     return attributes;
 }

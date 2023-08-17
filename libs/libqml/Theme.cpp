@@ -347,6 +347,9 @@ QString Theme::themePath(const QString &id)
     QString qml = QStandardPaths::locate(QStandardPaths::AppDataLocation,
                                          QString("krita/qmlthemes/%1/theme.qml").arg(id));
     if (qml.isEmpty()) {
+        qml = QStandardPaths::locate(QStandardPaths::AppDataLocation, QString("qmlthemes/%1/theme.qml").arg(id));
+    }
+    if (qml.isEmpty()) {
             qml = KoResourcePaths::getApplicationRoot() + QString("/share/krita/qmlthemes/%1/theme.qml").arg(id);
     }
     return qml;

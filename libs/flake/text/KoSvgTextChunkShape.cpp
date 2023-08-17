@@ -43,6 +43,8 @@ v *  GNU General Public License for more details.
 
 #include <FlakeDebug.h>
 
+#include <QRegularExpression>
+
 namespace {
 
 const QString BIDI_CONTROL_LRE = "\u202a";
@@ -892,7 +894,17 @@ bool KoSvgTextChunkShape::loadSvgTextNode(const QDomText &text, SvgLoadingContex
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(gc, false);
 
     s->loadContextBasedProperties(gc);
-    s->text = text.data();
+
+    // In theory, the XML spec requires XML parsers to normalize line endings to
+    // LF. However, QXmlInputSource + QXmlSimpleReader do not do this, so we can
+    // end up with CR in the text. The SVG spec explicitly calls out that all
+    // newlines in SVG are to be represented by a single LF (U+000A) character,
+    // so we can replace all CRLF and CR into LF here for simplicity.
+    static const QRegularExpression s_regexCrlf(R"==((?:\r\n|\r(?!\n)))==");
+    QString content = text.data();
+    content.replace(s_regexCrlf, QStringLiteral("\n"));
+
+    s->text = std::move(content);
 
     return true;
 }

@@ -102,11 +102,14 @@ void KisASCCDLTransformation::transform(const quint8 *src, quint8 *dst, qint32 n
 {
     QVector<float> normalised(m_cs->channelCount());
     const int pixelSize = m_cs->pixelSize();
+    const int alphaPos = m_cs->alphaPos();
+    const int channelCount = m_cs->channelCount();
+
     while (nPixels--) {
         m_cs->normalisedChannelsValue(src, normalised);
 
-        for (uint c=0; c<m_cs->channelCount(); c++){
-            if (m_cs->channels().at(c)->channelType()!=KoChannelInfo::ALPHA) {
+        for (uint c = 0; c < channelCount; c++){
+            if (c != alphaPos) {
                 normalised[c] = qPow( (normalised.at(c)*m_slope.at(c))+m_offset.at(c), m_power.at(c));
             }
         }

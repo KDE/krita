@@ -508,7 +508,7 @@ void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
     QBitArray targetChannelFlags = channelFlags;
     int selectedChannels = 0;
     const KoColorSpace *projectionCs = m_image->projection()->colorSpace();
-    QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+    const QList<KoChannelInfo*> channelInfo = projectionCs->channels();
 
     if (targetChannelFlags.size() != channelInfo.size()) {
         targetChannelFlags = QBitArray();

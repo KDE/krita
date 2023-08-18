@@ -86,7 +86,9 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
         channelFlip[0] = false;
     }
 
-    int displayPosition = device->colorSpace()->channels().at(0)->displayPosition();
+    const QList<KoChannelInfo*> channels = device->colorSpace()->channels();
+
+    int displayPosition = channels.at(0)->displayPosition();
     channelOrder[displayPosition] = qMax(i/2,0);
 
     i = config->getInt("greenSwizzle", 2);
@@ -97,7 +99,7 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
         channelFlip[1] = false;
     }
 
-    displayPosition = device->colorSpace()->channels().at(1)->displayPosition();
+    displayPosition = channels.at(1)->displayPosition();
     channelOrder[displayPosition] = qMax(i/2,0);
 
     i = config->getInt("blueSwizzle", 4);
@@ -108,7 +110,7 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
         channelFlip[2] = false;
     }
 
-    displayPosition = device->colorSpace()->channels().at(2)->displayPosition();
+    displayPosition = channels.at(2)->displayPosition();
     channelOrder[displayPosition] = qMax(i / 2, 0);
 
     KisEdgeDetectionKernel::convertToNormalMap(device,

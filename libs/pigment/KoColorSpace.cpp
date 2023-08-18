@@ -189,10 +189,12 @@ QPolygonF KoColorSpace::gamutXYY() const
 QPolygonF KoColorSpace::estimatedTRCXYY() const
 {
     if (d->TRCXYY.empty()){
+        const QList<KoChannelInfo *> channelInfo = this->channels();
+
         qreal max = 1.0;
         if ((colorModelId().id()=="CMYKA" || colorModelId().id()=="LABA") && colorDepthId().id()=="F32") {
             //boundaries for cmyka/laba have trouble getting the max values for Float, and are pretty awkward in general.
-            max = this->channels()[0]->getUIMax();
+            max = channelInfo[0]->getUIMax();
         }
         const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F32");
         quint8 *data = new quint8[pixelSize()];
@@ -209,7 +211,7 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
             if (colorModelId().id()!="CMYKA") {
                 for (int j = 0; j <= segments; j++) {
                     channelValuesF.fill(0.0);
-                    channelValuesF[channels()[i]->displayPosition()] = ((max/segments)*(segments-j));
+                    channelValuesF[channelInfo[i]->displayPosition()] = ((max/segments)*(segments-j));
 
                     if (colorModelId().id()!="XYZA") { //no need for conversion when using xyz.
                         fromNormalisedChannelsValue(data, channelValuesF);

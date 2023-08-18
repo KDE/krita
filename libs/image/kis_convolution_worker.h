@@ -77,7 +77,7 @@ protected:
             painterChannelFlags = QBitArray(src->colorSpace()->channelCount(), true);
         }
         Q_ASSERT(static_cast<quint32>(painterChannelFlags.size()) == src->colorSpace()->channelCount());
-        QList<KoChannelInfo *> channelInfo = src->colorSpace()->channels();
+        const QList<KoChannelInfo *> channelInfo = src->colorSpace()->channels();
         QList<KoChannelInfo *> convChannelList;
 
         for (qint32 c = 0; c < channelInfo.count(); ++c) {

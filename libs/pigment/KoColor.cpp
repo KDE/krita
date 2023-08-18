@@ -687,7 +687,7 @@ QDebug operator<<(QDebug dbg, const KoColor &color)
 {
     dbg.nospace() << "KoColor (" << color.colorSpace()->id();
 
-    QList<KoChannelInfo*> channels = color.colorSpace()->channels();
+    const QList<KoChannelInfo*> channels = color.colorSpace()->channels();
     for (auto it = channels.constBegin(); it != channels.constEnd(); ++it) {
 
         KoChannelInfo *ch = (*it);

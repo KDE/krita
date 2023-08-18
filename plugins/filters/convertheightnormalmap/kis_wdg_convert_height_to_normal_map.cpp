@@ -34,8 +34,10 @@ KisWdgConvertHeightToNormalMap::KisWdgConvertHeightToNormalMap(QWidget *parent, 
     ui->cmbGreen->addItems(swizzle);
     ui->cmbBlue->addItems(swizzle);
 
+    const QList<KoChannelInfo*> channels = m_cs->channels();
+
     for (int c = 0; c < (int)m_cs->channelCount(); c++) {
-        ui->cmbChannel->addItem(m_cs->channels().at(c)->name());
+        ui->cmbChannel->addItem(channels.at(c)->name());
     }
 
     ui->btnAspect->setKeepAspectRatio(false);

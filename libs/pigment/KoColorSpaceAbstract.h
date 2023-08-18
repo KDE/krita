@@ -172,9 +172,8 @@ public:
 
     void convertChannelToVisualRepresentation(const quint8 *src, quint8 *dst, quint32 nPixels, const qint32 selectedChannelIndex) const override
     {
-        const QList<KoChannelInfo *> channels = this->channels();
+        const int alphaPos = _CSTrait::alpha_pos;
 
-        qint32 selectedChannelPos = channels[selectedChannelIndex]->pos();
         for (uint pixelIndex = 0; pixelIndex < nPixels; ++pixelIndex) {
 
             const quint8 *srcPtr = src + pixelIndex * _CSTrait::pixelSize;
@@ -186,11 +185,10 @@ public:
             typename _CSTrait::channels_type commonChannel = srcPixel[selectedChannelIndex];
 
             for (uint channelIndex = 0; channelIndex < _CSTrait::channels_nb; ++channelIndex) {
-                KoChannelInfo *channel = channels.at(channelIndex);
 
-                if (channel->channelType() == KoChannelInfo::COLOR) {
+                if (channelIndex != alphaPos) {
                     dstPixel[channelIndex] = commonChannel;
-                } else if (channel->channelType() == KoChannelInfo::ALPHA) {
+                } else {
                     dstPixel[channelIndex] = srcPixel[channelIndex];
                 }
             }

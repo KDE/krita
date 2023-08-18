@@ -39,7 +39,7 @@ QVariant ChannelModel::data(const QModelIndex& index, int role) const
         const KoColorSpace *cs = rootLayer->colorSpace();
         if (cs->channelCount() != m_channelCount) return QVariant();
 
-        QList<KoChannelInfo*> channels = cs->channels();
+        const QList<KoChannelInfo*> channels = cs->channels();
 
         int channelIndex = index.row();
 
@@ -105,7 +105,7 @@ bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int 
         const KoColorSpace *cs = rootLayer->colorSpace();
         if (cs->channelCount() != m_channelCount) return false;
 
-        QList<KoChannelInfo*> channels = cs->channels();
+        const QList<KoChannelInfo*> channels = cs->channels();
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(index.row() <= channels.count(), false);
 
         int channelIndex = index.row();
@@ -136,7 +136,7 @@ void ChannelModel::rowActivated(const QModelIndex &index)
         const KoColorSpace* cs = rootLayer->colorSpace();
         if (cs->channelCount() != m_channelCount) return;
 
-        QList<KoChannelInfo*> channels = cs->channels();
+        const QList<KoChannelInfo*> channels = cs->channels();
         Q_ASSERT(index.row() <= channels.count());
 
         int channelIndex = index.row();

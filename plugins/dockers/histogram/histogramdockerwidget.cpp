@@ -79,7 +79,7 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
         }
 
         unsigned int nChannels = cs->channelCount();
-        QList<KoChannelInfo *> channels = cs->channels();
+        const QList<KoChannelInfo *> channels = cs->channels();
         unsigned int highest = 0;
         //find the most populous bin in the histogram to scale it properly
         for (int chan = 0; chan < channels.size(); chan++) {

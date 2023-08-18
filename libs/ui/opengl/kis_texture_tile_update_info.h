@@ -157,10 +157,9 @@ public:
 
         // XXX: if the paint colorspace is rgb, we should do the channel swizzling in
         //      the display shader
-        if (!channelFlags.isEmpty() && selectedChannelIndex >= 0 && selectedChannelIndex < m_patchColorSpace->channels().size()) {
+        if (!channelFlags.isEmpty() && selectedChannelIndex >= 0 && selectedChannelIndex < m_patchColorSpace->channelCount()) {
             DataBuffer conversionCache(m_patchColorSpace->pixelSize(), m_pool);
 
-            QList<KoChannelInfo*> channelInfo = m_patchColorSpace->channels();
             quint32 numPixels = m_patchRect.width() * m_patchRect.height();
 
             KisConfig cfg(true);

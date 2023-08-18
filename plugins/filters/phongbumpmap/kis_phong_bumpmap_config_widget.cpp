@@ -64,7 +64,7 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
     l->addWidget(m_page);
 
     /* fill in the channel chooser */
-    QList<KoChannelInfo *> channels = m_device->colorSpace()->channels();
+    const QList<KoChannelInfo *> channels = m_device->colorSpace()->channels();
     for (quint8 ch = 0; ch < m_device->colorSpace()->colorChannelCount(); ch++)
         m_page->heightChannelComboBox->addItem(channels.at(ch)->name());
     

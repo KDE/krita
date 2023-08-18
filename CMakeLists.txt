@@ -1176,6 +1176,21 @@ set_package_properties(libunibreak PROPERTIES
 ##
 ## Build vendored libraries
 ##
+
+# Allow specification of a directory with pre-downloaded
+# requirements. This download directory is used for 3rdparty_vendor
+# download
+
+if(DEFINED ENV{EXTERNALS_DOWNLOAD_DIR})
+    set(EXTERNALS_DOWNLOAD_DIR $ENV{EXTERNALS_DOWNLOAD_DIR})
+endif()
+
+if(NOT IS_DIRECTORY ${EXTERNALS_DOWNLOAD_DIR})
+    message(WARNING "No externals download dir set, default location inside build tree is used. Use -DEXTERNALS_DOWNLOAD_DIR to override")
+else()
+    file(TO_CMAKE_PATH "${EXTERNALS_DOWNLOAD_DIR}" EXTERNALS_DOWNLOAD_DIR)
+endif()
+
 add_subdirectory(3rdparty_vendor)
 
 

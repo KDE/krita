@@ -50,8 +50,10 @@ struct Q_DECL_HIDDEN InlineSizeInfo {
     /// Bottom coord along the block-flow direction (left for h-rl, right for h-lr)
     double bottom;
     VisualAnchor anchor;
-    /// Transformation from shape to document with the writing-mode transformation prepended
-    QTransform absTransform;
+    /// Transformation from inline-size editor (writing-mode transformation) to shape
+    QTransform editorTransform;
+    /// Transformation from shape local to document
+    QTransform shapeTransform;
 
     [[nodiscard]] static inline std::optional<InlineSizeInfo> fromShape(KoSvgTextShape *const shape)
     {
@@ -118,7 +120,7 @@ struct Q_DECL_HIDDEN InlineSizeInfo {
         // We piggyback on the shape transformation that we already need to
         // deal with to also handle the different orientations of writing-mode.
         const QRectF outline = shape->outlineRect();
-        QTransform absTransform = shape->absoluteTransformation();
+        QTransform editorTransform;
         switch (writingMode) {
         case KoSvgText::WritingMode::HorizontalTB:
         default:
@@ -126,20 +128,28 @@ struct Q_DECL_HIDDEN InlineSizeInfo {
             bottom = outline.bottom();
             break;
         case KoSvgText::WritingMode::VerticalRL:
-            absTransform.rotate(90.0);
+            editorTransform.rotate(90.0);
             top = -outline.right();
             bottom = -outline.left();
             break;
         case KoSvgText::WritingMode::VerticalLR:
-            absTransform.rotate(-90.0);
-            absTransform.scale(-1.0, 1.0);
+            editorTransform.rotate(-90.0);
+            editorTransform.scale(-1.0, 1.0);
             top = outline.left();
             bottom = outline.right();
             break;
         }
         top -= 2.0;
         bottom += 4.0;
-        InlineSizeInfo ret{inlineSize, baseline, left, right, top, bottom, anchor, absTransform};
+        InlineSizeInfo ret{inlineSize,
+                           baseline,
+                           left,
+                           right,
+                           top,
+                           bottom,
+                           anchor,
+                           editorTransform,
+                           shape->absoluteTransformation()};
         return {ret};
     }
 
@@ -161,14 +171,25 @@ private:
 
 public:
     /**
+     * @brief Gets a shape-local line representing the first line baseline. This
+     * always goes from left to right by the inline-base direction, then mapped
+     * by the editor transformation.
+     * @return QLineF
+     */
+    [[nodiscard]] inline QLineF baselineLineLocal() const
+    {
+        return editorTransform.map(QLineF{left, baseline, right, baseline});
+    }
+
+    /**
      * @brief Gets a line representing the first line baseline. This always
      * goes from left to right by the inline-base direction, then mapped by the
-     * shape transformation.
+     * editor and the shape transformation.
      * @return QLineF
      */
     [[nodiscard]] inline QLineF baselineLine() const
     {
-        return absTransform.map(QLineF{left, baseline, right, baseline});
+        return shapeTransform.map(baselineLineLocal());
     }
 
     [[nodiscard]] inline Side editLineSide() const
@@ -183,26 +204,36 @@ public:
         }
     }
 
-    [[nodiscard]] inline QLineF editLine() const
+    [[nodiscard]] inline QLineF editLineLocal() const
     {
         switch (editLineSide()) {
         case Side::LeftOrTop:
-            return absTransform.map(leftLineRaw());
+            return editorTransform.map(leftLineRaw());
         case Side::RightOrBottom:
         default:
-            return absTransform.map(rightLineRaw());
+            return editorTransform.map(rightLineRaw());
+        }
+    }
+
+    [[nodiscard]] inline QLineF editLine() const
+    {
+        return shapeTransform.map(editLineLocal());
+    }
+
+    [[nodiscard]] inline QLineF nonEditLineLocal() const
+    {
+        switch (editLineSide()) {
+        case Side::LeftOrTop:
+            return editorTransform.map(rightLineRaw());
+        case Side::RightOrBottom:
+        default:
+            return editorTransform.map(leftLineRaw());
         }
     }
 
     [[nodiscard]] inline QLineF nonEditLine() const
     {
-        switch (editLineSide()) {
-        case Side::LeftOrTop:
-            return absTransform.map(rightLineRaw());
-        case Side::RightOrBottom:
-        default:
-            return absTransform.map(leftLineRaw());
-        }
+        return shapeTransform.map(nonEditLineLocal());
     }
 
     [[nodiscard]] inline QPolygonF editLineGrabRect(double grabThreshold) const
@@ -219,12 +250,12 @@ public:
         }
         const QRectF rect{editLine.x1() - grabThreshold, top, grabThreshold * 2, bottom - top};
         const QPolygonF poly(rect);
-        return absTransform.map(poly);
+        return shapeTransform.map(editorTransform.map(poly));
     }
 
     [[nodiscard]] inline QRectF boundingRect() const
     {
-        return absTransform.mapRect(boundingRectRaw());
+        return shapeTransform.mapRect(editorTransform.mapRect(boundingRectRaw()));
     }
 };
 

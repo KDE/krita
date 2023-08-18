@@ -45,7 +45,7 @@ void SvgInlineSizeChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
 {
     QTransform invTransform{};
     if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(m_shape)) {
-        invTransform = info->absTransform.inverted();
+        invTransform = (info->editorTransform * info->shapeTransform).inverted();
     }
 
     double newInlineSize = 0.0;

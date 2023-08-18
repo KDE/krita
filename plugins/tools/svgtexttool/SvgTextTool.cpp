@@ -369,35 +369,35 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
     }
 
     KoSvgTextShape *shape = selectedShape();
+    if (shape) {
+        KisHandlePainterHelper handlePainter =
+            KoShape::createHandlePainterHelperView(&gc, shape, converter, handleRadius());
 
-    gc.setTransform(converter.documentToView(), true);
-
-    {
-        KisHandlePainterHelper handlePainter(&gc);
-
-        if (shape) {
-            if (m_dragging != DragMode::InlineSizeHandle) {
-                handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
-                QPainterPath path;
-                path.addRect(shape->boundingRect());
-                handlePainter.drawPath(path);
-                if (m_highlightItem == HighlightItem::MoveBorder) {
-                    handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
-                }
-                handlePainter.drawHandleCircle(shape->absoluteTransformation().map(QPointF()), KoToolBase::handleRadius());
+        if (m_dragging != DragMode::InlineSizeHandle) {
+            handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
+            QPainterPath path;
+            path.addRect(shape->boundingRect());
+            handlePainter.drawPath(shape->absoluteTransformation().inverted().map(path));
+            if (m_highlightItem == HighlightItem::MoveBorder) {
+                handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
             }
-
-            if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape)) {
-                handlePainter.setHandleStyle(KisHandleStyle::secondarySelection());
-                handlePainter.drawConnectionLine(info->baselineLine());
-                handlePainter.drawConnectionLine(info->nonEditLine());
-                if (m_highlightItem == HighlightItem::InlineSizeHandle) {
-                    handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
-                }
-                handlePainter.drawConnectionLine(info->editLine());
-            }
+            handlePainter.drawHandleCircle(QPointF(), KoToolBase::handleRadius());
         }
 
+        if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape)) {
+            handlePainter.setHandleStyle(KisHandleStyle::secondarySelection());
+            handlePainter.drawConnectionLine(info->baselineLineLocal());
+            handlePainter.drawConnectionLine(info->nonEditLineLocal());
+            if (m_highlightItem == HighlightItem::InlineSizeHandle) {
+                handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
+            }
+            handlePainter.drawConnectionLine(info->editLineLocal());
+        }
+    }
+
+    gc.setTransform(converter.documentToView(), true);
+    {
+        KisHandlePainterHelper handlePainter(&gc);
         if (!m_hoveredShapeHighlightRect.isEmpty()) {
             handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandlesWithSolidOutline());
             QPainterPath path;

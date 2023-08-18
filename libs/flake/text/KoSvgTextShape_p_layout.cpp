@@ -392,18 +392,33 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                         ascender = FT_MulFix(os2Table->sTypoAscender, yscale);
                         descender = FT_MulFix(os2Table->sTypoDescender, yscale);
                         lineGap = FT_MulFix(os2Table->sTypoLineGap, yscale);
+                    }
 
-                    } else {
-                        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &ascender)) {
-                            ascender = face.data()->ascender;
+                    constexpr unsigned USE_TYPO_METRICS = 1u << 7;
+                    if (!os2Table || os2Table->version == 0xFFFFU || !(os2Table->fsSelection & USE_TYPO_METRICS)) {
+                        hb_position_t altAscender = 0;
+                        hb_position_t altDescender = 0;
+                        hb_position_t altLineGap = 0;
+                        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &altAscender)) {
+                            altAscender = face.data()->ascender;
                         }
-                        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &descender)) {
-                            descender = face.data()->descender;
+                        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &altDescender)) {
+                            altDescender = face.data()->descender;
                         }
-                        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_LINE_GAP, &lineGap)) {
-                            lineGap = face.data()->height - (ascender-descender);
+                        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_LINE_GAP, &altLineGap)) {
+                            altLineGap = face.data()->height - (altAscender-altDescender);
                         }
-                   }
+
+                        // Some fonts have sTypo metrics that are too small compared
+                        // to the HHEA values which make the default line height too
+                        // tight (e.g. Microsoft JhengHei, Source Han Sans), so we
+                        // compare them and take the ones that are larger.
+                        if (!os2Table || (altAscender - altDescender + altLineGap) > (ascender - descender + lineGap)) {
+                            ascender = altAscender;
+                            descender = altDescender;
+                            lineGap = altLineGap;
+                        }
+                    }
                 } else {
                     hb_font_extents_t fontExtends;
                     hb_font_get_extents_for_direction (font.data(), HB_DIRECTION_TTB, &fontExtends);

@@ -95,8 +95,6 @@ PageTagChooser::PageTagChooser(KoResourceBundleSP bundle, QWidget *parent) :
                 m_selectedTagIds.append(tag->id());
             }
         }
-
-
     }
 }
 

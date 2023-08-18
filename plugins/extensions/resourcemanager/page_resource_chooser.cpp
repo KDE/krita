@@ -66,6 +66,8 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
         slotViewDetails();
     }
 
+    m_resourceItemWidget->clear();
+
     if (m_bundle) {
 
         m_bundleStorage = new KisBundleStorage(m_bundle->filename());

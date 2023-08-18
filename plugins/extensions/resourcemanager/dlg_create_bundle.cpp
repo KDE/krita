@@ -119,17 +119,29 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
 
 void DlgCreateBundle::updateTitle(int id)
 {
-    QString title = i18n("Create Resource Bundle");
+    if (!m_bundle) {
+        QString title = i18n("Create Resource Bundle");
 
-    switch(currentId()) {
+        switch(currentId()) {
         case 1: title = i18n("Choose Resources"); break;
         case 2: title = i18n("Choose Tags"); break;
         case 3: title = i18n("Enter Bundle Details"); break;
         case 4: title = i18n("Enter Save Location"); break;
-    }
+        }
 
-    connect(m_pageResourceChooser, SIGNAL(countUpdated()), m_pageBundleSaver, SLOT(onCountUpdated()));
-    connect(m_pageTagChooser, SIGNAL(tagsUpdated()), m_pageBundleSaver, SLOT(onTagsUpdated()));
+        setWindowTitle(title);
+    } else {
+        QString title = i18n("Edit Resource Bundle");
+        
+        switch(currentId()) {
+        case 1: title = i18n("Edit Resources"); break;
+        case 2: title = i18n("Edit Tags"); break;
+        case 3: title = i18n("Edit Bundle Details"); break;
+        case 4: title = i18n("Edit Save Location"); break;
+        }
+
+        setWindowTitle(title);
+    }
 }
 
 DlgCreateBundle::~DlgCreateBundle()
@@ -137,29 +149,28 @@ DlgCreateBundle::~DlgCreateBundle()
     delete m_ui;
 }
 
-void DlgCreateBundle::updateTitle(int id)
-{
-    QString title = i18n("Create Resource Bundle");
-
-    switch(currentId()) {
-        case 1: title = i18n("Choose Resources"); break;
-        case 2: title = i18n("Choose Tags"); break;
-        case 3: title = i18n("Enter Bundle Details"); break;
-        case 4: title = i18n("Enter Save Location"); break;
-    }
-
-    setWindowTitle(title);
-}
-
-QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags) const
+QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags, QString resourceType) const
 {
     QVector<KisTagSP> tagsToEmbed;
-
+    /*
     Q_FOREACH(KisTagSP tag, resourceTags) {
         if (m_selectedTagIds.contains(tag->id())) {
             tagsToEmbed << tag;
         }
+    }*/
+
+    KisTagModel *tagModel = new KisTagModel(resourceType);
+
+    for (int i = 0; i < tagModel->rowCount(); i++) {
+        QModelIndex idx = tagModel->index(i, 0);
+        int id = tagModel->data(idx, Qt::UserRole + KisAllTagsModel::Id).toInt();
+        QString url = tagModel->data(idx, Qt::UserRole + KisAllTagsModel::Url).toString();
+        if (m_selectedTagIds.contains(id)) {
+            KisTagSP tag = tagModel->tagForUrl(url);
+            tagsToEmbed << tag;
+        }
     }
+
     return tagsToEmbed;
 }
 
@@ -218,23 +229,25 @@ bool DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle)
 
         m_selectedTagIds = m_pageTagChooser->selectedTagIds();
 
-        QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id));
+        QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id), res->resourceType().first);
         bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5Sum(), res->resourceId(), prettyFilename);
 
-        QList<KoResourceLoadResult> linkedResources = res->linkedResources(KisGlobalResourcesInterface::instance());
-        Q_FOREACH(KoResourceLoadResult linkedResource, linkedResources) {
-            // we have requested linked resources, how can it be an embedded one?
-            KIS_SAFE_ASSERT_RECOVER(linkedResource.type() != KoResourceLoadResult::EmbeddedResource) { continue; }
+        if (!m_bundle) {
+            QList<KoResourceLoadResult> linkedResources = res->linkedResources(KisGlobalResourcesInterface::instance());
+            Q_FOREACH(KoResourceLoadResult linkedResource, linkedResources) {
+                // we have requested linked resources, how can it be an embedded one?
+                KIS_SAFE_ASSERT_RECOVER(linkedResource.type() != KoResourceLoadResult::EmbeddedResource) { continue; }
 
-            KoResourceSP resource = linkedResource.resource();
+                KoResourceSP resource = linkedResource.resource();
 
-            if (!resource) {
-                qWarning() << "WARNING: DlgCreateBundle::putResourcesInTheBundle couldn't fetch a linked resource" << linkedResource.signature();
-                continue;
-            }
+                if (!resource) {
+                    qWarning() << "WARNING: DlgCreateBundle::putResourcesInTheBundle couldn't fetch a linked resource" << linkedResource.signature();
+                    continue;
+                }
 
-            if (!allResourcesIds.contains(resource->resourceId())) {
-                allResourcesIds.append(resource->resourceId());
+                if (!allResourcesIds.contains(resource->resourceId())) {
+                    allResourcesIds.append(resource->resourceId());
+                }
             }
         }
     }
@@ -254,7 +267,11 @@ void DlgCreateBundle::putMetaDataInTheBundle(KoResourceBundleSP bundle) const
     bundle->setMetaData(KisResourceStorage::s_meta_license, m_pageMetadataInfo->license());
     bundle->setMetaData(KisResourceStorage::s_meta_website, m_pageMetadataInfo->website());
 
-    bundle->setThumbnail(m_pageMetadataInfo->previewImage());
+    if (m_bundle) {
+        bundle->setThumbnail(m_pageMetadataInfo->thumbnail());
+    } else {
+        bundle->setThumbnail(m_pageMetadataInfo->previewImage());
+    }
 
     // For compatibility
     bundle->setMetaData("email", m_pageMetadataInfo->email());
@@ -331,7 +348,7 @@ void DlgCreateBundle::accept()
     else {
         QFileInfo fileInfo(filename);
 
-        if (fileInfo.exists() && !m_bundle) {
+        if (fileInfo.exists()) {
             m_pageMetadataInfo->showWarning();
 
             QMessageBox msgBox(this);
@@ -363,7 +380,22 @@ void DlgCreateBundle::accept()
                 return;
             }
         } else {
-            KIS_SAFE_ASSERT_RECOVER(!m_bundle) { warnKrita << "Updating a bundle is not implemented yet"; };
+            saveToConfiguration(false);
+
+            m_bundle.reset(new KoResourceBundle(filename));
+            putMetaDataInTheBundle(m_bundle);
+            if (!putResourcesInTheBundle(m_bundle)) {
+                return;
+            }
+            if (!m_bundle->save()) {
+                m_pageBundleSaver->showWarning();
+                QMessageBox::critical(this,
+                    i18nc("@title:window", "Krita"),
+                    i18n("Could not open '%1' for saving.", filename));
+                m_bundle.reset();
+                return;
+            }
+//             KIS_SAFE_ASSERT_RECOVER(!m_bundle) { warnKrita << "Updating a bundle is not implemented yet"; };
         }
         QWizard::accept();
     }
@@ -373,22 +405,6 @@ void DlgCreateBundle::reject()
 {
     if (!m_bundle) {
         saveToConfiguration(true);
-    }
-
-    if (m_bundle) {
-//         QFileInfo oldFileInfo(m_bundle->filename());
-//
-//         QString newDir = KoResourcePaths::getAppDataLocation();
-//         QString newName = oldFileInfo.fileName();
-//         const QString newLocation = QStringLiteral("%1/Temp_%2").arg(newDir, newName);
-//
-//         if (KisResourceLocator::instance()->hasStorage(newLocation)) {
-//             qDebug() << "delete";
-//             bool removed = KisResourceLocator::instance()->removeStorage(newLocation);
-//             QFile::remove(newLocation);
-//             KIS_SAFE_ASSERT_RECOVER(!KisResourceLocator::instance()->hasStorage(newLocation));
-//             qDebug() << removed;
-//         }
     }
 
     QWizard::reject();

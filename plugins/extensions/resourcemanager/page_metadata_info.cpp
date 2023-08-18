@@ -15,7 +15,18 @@ PageMetadataInfo::PageMetadataInfo(KoResourceBundleSP bundle, QWidget *parent) :
     KoDocumentInfo info;
     info.updateParameters();
 
-    if (bundle) {
+    if (m_bundle) {
+        m_ui->editAuthor->setText(m_bundle->metaData(KisResourceStorage::s_meta_author, info.authorInfo("creator")));
+        m_ui->editEmail->setText(m_bundle->metaData(KisResourceStorage::s_meta_email, info.authorInfo("email")));
+        m_ui->editWebsite->setText(m_bundle->metaData(KisResourceStorage::s_meta_website, "http://"));
+        m_ui->editLicense->setText(m_bundle->metaData(KisResourceStorage::s_meta_license, "CC-BY-SA"));
+        QString fileName = QFileInfo(m_bundle->filename()).baseName();
+        m_ui->editBundleName->setText(fileName);
+        m_ui->editDescription->document()->setPlainText(m_bundle->metaData(KisResourceStorage::s_meta_description, "New Bundle"));
+        QImage img = m_bundle->image();
+        img = img.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        m_thumbnail = img;
+        m_ui->lblPreview->setPixmap(QPixmap::fromImage(img));
     } else {
         KisConfig cfg(true);
 
@@ -75,6 +86,11 @@ QString PageMetadataInfo::description() const
 QString PageMetadataInfo::previewImage() const
 {
     return m_previewImage;
+}
+
+QImage PageMetadataInfo::thumbnail() const
+{
+    return m_thumbnail;
 }
 
 void PageMetadataInfo::getPreviewImage()

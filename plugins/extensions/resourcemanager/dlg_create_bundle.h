@@ -40,8 +40,7 @@ private Q_SLOTS:
 
     // old
     void saveToConfiguration(bool full);
-    void slotEmbedTags();
-    QVector<KisTagSP> getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags) const;
+    QVector<KisTagSP> getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags, QString resourceType) const;
 
 public Q_SLOTS:
 

@@ -24,6 +24,7 @@ public:
     QString license() const;
     QString description() const;
     QString previewImage() const;
+    QImage thumbnail() const;
     void showWarning();
     void removeWarning();
 
@@ -34,6 +35,7 @@ private Q_SLOTS:
 private:
     Ui::PageMetadataInfo *m_ui;
     QString m_previewImage;
+    QImage m_thumbnail;
     KoResourceBundleSP m_bundle;
 };
 

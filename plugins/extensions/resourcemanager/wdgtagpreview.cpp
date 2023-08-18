@@ -21,6 +21,8 @@ WdgTagPreview::WdgTagPreview(QString resourceType, KoResourceBundleSP bundle, QW
 {
     m_ui->setupUi(this);
 
+    m_resourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
+
     m_wdgResourcesTags = new KisTagSelectionWidget(this, false);
     m_ui->verticalLayout_2->addWidget(m_wdgResourcesTags);
 
@@ -43,13 +45,15 @@ WdgTagPreview::WdgTagPreview(QString resourceType, KoResourceBundleSP bundle, QW
         m_layout->addWidget(label);
     }
 
-    KisBundleStorage *bundleStorage = new KisBundleStorage(m_bundle->filename());
+    if (m_bundle) {
+        KisBundleStorage *bundleStorage = new KisBundleStorage(m_bundle->filename());
 
-    QSharedPointer<KisResourceStorage::TagIterator> tagIter = bundleStorage->tags(m_resourceType);
-    while (tagIter->hasNext()) {
-        tagIter->next();
-        KoID custom = KoID(tagIter->tag()->url(), tagIter->tag()->name());
-        m_tagsController->addTag(custom);
+        QSharedPointer<KisResourceStorage::TagIterator> tagIter = bundleStorage->tags(m_resourceType);
+        while (tagIter->hasNext()) {
+            tagIter->next();
+            KoID custom = KoID(tagIter->tag()->url(), tagIter->tag()->name());
+            m_tagsController->addTag(custom);
+        }
     }
 }
 
@@ -63,7 +67,7 @@ void WdgTagPreview::onTagAdded(KoID custom)
     KisTagModel* model = new KisTagModel(m_resourceType);
     KisTagSP tagSP = model->tagForUrl(custom.id());
 
-        for (int i = m_layout->count() - 1; i >= 0; --i) {
+    for (int i = m_layout->count() - 1; i >= 0; --i) {
         KisTagLabel *label = qobject_cast<KisTagLabel*>(m_layout->itemAt(i)->widget());
         if (label && label->getText() == tagSP->name()) {
             m_layout->removeWidget(label);

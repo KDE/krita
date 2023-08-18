@@ -5,7 +5,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "OverviewThumbnailStrokeStrategy.h"
+#include "KisImageThumbnailStrokeStrategy.h"
 
 #include <kis_paint_device.h>
 #include <kis_painter.h>
@@ -21,13 +21,14 @@ const qreal oversample = 2.;
 const int thumbnailTileDim = 128;
 
 
-OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisPaintDeviceSP device,
-                                                                 const QRect& rect,
-                                                                 const QSize& thumbnailSize,
-                                                                 bool isPixelArt,
-                                                                 const KoColorProfile *profile,
-                                                                 KoColorConversionTransformation::Intent renderingIntent,
-                                                                 KoColorConversionTransformation::ConversionFlags conversionFlags)
+KisImageThumbnailStrokeStrategyBase::
+KisImageThumbnailStrokeStrategyBase(KisPaintDeviceSP device,
+                                    const QRect& rect,
+                                    const QSize& thumbnailSize,
+                                    bool isPixelArt,
+                                    const KoColorProfile *profile,
+                                    KoColorConversionTransformation::Intent renderingIntent,
+                                    KoColorConversionTransformation::ConversionFlags conversionFlags)
     : KisIdleTaskStrokeStrategy(QLatin1String("OverviewThumbnail"), kundo2_i18n("Update overview thumbnail")),
       m_device(device),
       m_rect(rect),
@@ -39,13 +40,14 @@ OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisPaintDeviceS
 {
 }
 
-OverviewThumbnailStrokeStrategy::~OverviewThumbnailStrokeStrategy()
+KisImageThumbnailStrokeStrategyBase::~KisImageThumbnailStrokeStrategyBase()
 {
 }
 
-void OverviewThumbnailStrokeStrategy::initStrokeCallback()
+void KisImageThumbnailStrokeStrategyBase::initStrokeCallback()
 {
     using KritaUtils::addJobConcurrent;
+    using KritaUtils::addJobSequential;
     KisIdleTaskStrokeStrategy::initStrokeCallback();
 
     const QRect imageRect = m_device->defaultBounds()->bounds();
@@ -69,26 +71,28 @@ void OverviewThumbnailStrokeStrategy::initStrokeCallback()
             KisPainter::copyAreaOptimized(tileRect.topLeft(), thumbnailTile, m_thumbnailDevice, tileRect);
         });
     }
+
+    addJobSequential(jobs, [this] () {
+        KoDummyUpdaterHolder updaterHolder;
+        qreal xscale = m_thumbnailSize.width() / (qreal)m_thumbnailOversampledSize.width();
+        qreal yscale = m_thumbnailSize.height() / (qreal)m_thumbnailOversampledSize.height();
+        QString algorithm = m_isPixelArt ? "Box" : "Bilinear";
+        KisTransformWorker worker(m_thumbnailDevice, xscale, yscale, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                  updaterHolder.updater(), KisFilterStrategyRegistry::instance()->value(algorithm));
+        worker.run();
+
+        reportThumbnailGenerationCompleted(m_thumbnailDevice, QRect(QPoint(0,0), m_thumbnailSize));
+    });
+
     runnableJobsInterface()->addRunnableJobs(jobs);
 }
 
-void OverviewThumbnailStrokeStrategy::finishStrokeCallback()
+void KisImageThumbnailStrokeStrategy::reportThumbnailGenerationCompleted(KisPaintDeviceSP device, const QRect &rect)
 {
     QImage overviewImage;
-
-    KoDummyUpdaterHolder updaterHolder;
-    qreal xscale = m_thumbnailSize.width() / (qreal)m_thumbnailOversampledSize.width();
-    qreal yscale = m_thumbnailSize.height() / (qreal)m_thumbnailOversampledSize.height();
-    QString algorithm = m_isPixelArt ? "Box" : "Bilinear";
-    KisTransformWorker worker(m_thumbnailDevice, xscale, yscale, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                              updaterHolder.updater(), KisFilterStrategyRegistry::instance()->value(algorithm));
-    worker.run();
-
-    overviewImage = m_thumbnailDevice->convertToQImage(m_profile,
-                                                       QRect(QPoint(0,0), m_thumbnailSize),
-                                                       m_renderingIntent,
-                                                       m_conversionFlags);
+    overviewImage = device->convertToQImage(m_profile,
+                                            rect,
+                                            m_renderingIntent,
+                                            m_conversionFlags);
     emit thumbnailUpdated(overviewImage);
-
-    KisIdleTaskStrokeStrategy::finishStrokeCallback();
 }

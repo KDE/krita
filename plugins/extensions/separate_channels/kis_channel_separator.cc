@@ -81,7 +81,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
     quint32 numberOfChannels = src->channelCount();
     const KoColorSpace * srcCs  = src->colorSpace();
-    QList<KoChannelInfo *> channels = srcCs->channels();
+    const QList<KoChannelInfo *> channels = srcCs->channels();
     vKisPaintDeviceSP paintDevices;
 
     QRect rect = src->exactBounds();

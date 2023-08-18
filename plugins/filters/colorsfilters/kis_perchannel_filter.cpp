@@ -90,9 +90,10 @@ void KisPerChannelConfigWidget::updateChannelControls()
     default:
         //Hack Alert: should be changed to float
         if (m_dev->colorSpace()->colorModelId() == LABAColorModelID || m_dev->colorSpace()->colorModelId() == CMYKAColorModelID) {
-            if (m_dev->colorSpace()->channels().length() > m_activeVChannel) {
-                min = m_dev->colorSpace()->channels()[m_activeVChannel]->getUIMin();
-                max = m_dev->colorSpace()->channels()[m_activeVChannel]->getUIMax();
+            if (m_dev->colorSpace()->channelCount() > m_activeVChannel) {
+                const QList<KoChannelInfo*> channels = m_dev->colorSpace()->channels();
+                min = channels[m_activeVChannel]->getUIMin();
+                max = channels[m_activeVChannel]->getUIMax();
             } else {
                 // it must be "Hue", "Saturation" or other "channel" that isn't actually accessible in the color space
                 min = 0;

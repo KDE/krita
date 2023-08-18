@@ -77,7 +77,7 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
     m_d->spinBoxList.clear();
     m_d->doubleSpinBoxList.clear();
 
-    QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_d->cs->channels());
+    const QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_d->cs->channels());
     Q_FOREACH (KoChannelInfo* channel, channels) {
         QString inputLabel = channel->name() + ":";
         QLabel *inlb = new QLabel(this);

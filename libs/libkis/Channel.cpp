@@ -58,13 +58,16 @@ bool Channel::visible() const
     if (!d->node || !d->channel) return false;
     if (!d->node->inherits("KisLayer")) return false;
 
-    for (uint i = 0; i < d->node->colorSpace()->channelCount(); ++i) {
-        if (d->node->colorSpace()->channels()[i] == d->channel) {
+    const QList<KoChannelInfo *> channelInfo = d->node->colorSpace()->channels();
+
+    for (uint i = 0; i < channelInfo.size(); ++i) {
+        if (channelInfo[i] == d->channel) {
             KisLayerSP layer = qobject_cast<KisLayer*>(d->node.data());
             const QBitArray& flags = layer->channelFlags();
             return flags.isEmpty() || flags.testBit(i);
         }
     }
+
     return false;
 }
 
@@ -73,14 +76,16 @@ void Channel::setVisible(bool value)
     if (!d->node || !d->channel) return;
     if (!d->node->inherits("KisLayer")) return;
 
+    const QList<KoChannelInfo *> channelInfo = d->node->colorSpace()->channels();
+
     KisLayerSP layer = qobject_cast<KisLayer*>(d->node.data());
     QBitArray flags = layer->channelFlags();
     if (flags.isEmpty()) {
-        flags.fill(1, d->node->colorSpace()->channelCount());
+        flags.fill(1, channelInfo.size());
     }
 
-    for (uint i = 0; i < d->node->colorSpace()->channelCount(); ++i) {
-        if (d->node->colorSpace()->channels()[i] == d->channel) {
+    for (uint i = 0; i < channelInfo.size(); ++i) {
+        if (channelInfo[i] == d->channel) {
             flags.setBit(i, value);
             layer->setChannelFlags(flags);
             break;

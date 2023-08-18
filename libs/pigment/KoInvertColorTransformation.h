@@ -30,7 +30,7 @@ public:
         , m_chanCount(cs->channelCount())
     {
         // Only invert COLOR channels
-        QList<KoChannelInfo *> channels = cs->channels();
+        const QList<KoChannelInfo *> channels = cs->channels();
         for(quint8 i = 0; i < m_chanCount; i++){
             if(channels.at(i)->channelType() == KoChannelInfo::COLOR)
                 m_channels.append(i);

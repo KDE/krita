@@ -48,16 +48,17 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
         return;
     }
 
+    const QList<KoChannelInfo*> channels = device->colorSpace()->channels();
     KoChannelInfo *m_heightChannel = 0;
 
-    Q_FOREACH (KoChannelInfo* channel, device->colorSpace()->channels()) {
+    Q_FOREACH (KoChannelInfo* channel, channels) {
         if (userChosenHeightChannel == channel->name()) {
             m_heightChannel = channel;
         }
     }
 
     if (!m_heightChannel) {
-        m_heightChannel = device->colorSpace()->channels().first();
+        m_heightChannel = channels.first();
     }
     KIS_ASSERT_RECOVER_RETURN(m_heightChannel);
 
@@ -86,7 +87,7 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     const quint32   bytesToFillBumpmapArea   = pixelsOfOutputArea * pixelSize;
     QVector<quint8> bumpmap(bytesToFillBumpmapArea);
     quint8         *bumpmapDataPointer       = bumpmap.data();
-    quint32         ki                       = KoChannelInfo::displayPositionToChannelIndex(m_heightChannel->displayPosition(), device->colorSpace()->channels());
+    quint32         ki                       = KoChannelInfo::displayPositionToChannelIndex(m_heightChannel->displayPosition(), channels);
     PhongPixelProcessor tileRenderer(pixelsOfInputArea, config);
 
 
@@ -94,9 +95,9 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
 
     //===============RENDER=================
 
-    QVector<PtrToDouble> toDoubleFuncPtr(device->colorSpace()->channels().count());
+    QVector<PtrToDouble> toDoubleFuncPtr(channels.count());
     KisMathToolbox mathToolbox;
-    if (!mathToolbox.getToDoubleChannelPtr(device->colorSpace()->channels(), toDoubleFuncPtr)) {
+    if (!mathToolbox.getToDoubleChannelPtr(channels, toDoubleFuncPtr)) {
         return;
     }
 
@@ -111,7 +112,7 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
         for (qint32 srcRow = 0; srcRow < inputArea.height(); ++srcRow) {
             do {
                 const quint8 *data = iterator->oldRawData();
-                tileRenderer.realheightmap[curPixel] = toDoubleFuncPtr[ki](data, device->colorSpace()->channels()[ki]->pos());
+                tileRenderer.realheightmap[curPixel] = toDoubleFuncPtr[ki](data, channels[ki]->pos());
                 curPixel++;
             }
             while (iterator->nextPixel());
@@ -142,7 +143,7 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
         for (qint32 srcRow = 0; srcRow < inputArea.height(); ++srcRow) {
             do {
                 const quint8 *data = iterator->oldRawData();
-                tileRenderer.realheightmap[curPixel] = toDoubleFuncPtr[ki](data, device->colorSpace()->channels()[ki]->pos());
+                tileRenderer.realheightmap[curPixel] = toDoubleFuncPtr[ki](data, channels[ki]->pos());
                 QVector <float> current_pixel_values(4);
                 device->colorSpace()->normalisedChannelsValue(data, current_pixel_values );
 

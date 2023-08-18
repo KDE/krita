@@ -109,7 +109,7 @@ void KisFilterColorToAlpha::processImpl(KisPaintDeviceSP device,
     QVector<int> channelIndex;
     KoChannelInfo::enumChannelValueType valueType = KoChannelInfo::OTHER;
 
-    QList<KoChannelInfo*> channels = cs->channels();
+    const QList<KoChannelInfo*> channels = cs->channels();
 
     for (int i = 0; i < channels.size(); i++) {
         const KoChannelInfo *info = channels[i];

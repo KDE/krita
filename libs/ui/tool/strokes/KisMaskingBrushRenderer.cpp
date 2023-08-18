@@ -36,16 +36,15 @@ KisMaskingBrushRenderer::KisMaskingBrushRenderer(KisPaintDeviceSP dstDevice, con
 
     KoChannelInfo::enumChannelValueType alphaChannelType = KoChannelInfo::UINT8;
     int alphaChannelOffset = -1;
+    int alphaPos = dstCs->alphaPos();
 
-    QList<KoChannelInfo *> channels = dstCs->channels();
-    for (int i = 0; i < pixelSize; i++) {
-        if (channels[i]->channelType() == KoChannelInfo::ALPHA) {
-            // TODO: check correctness for 16bits!
-            alphaChannelOffset = channels[i]->pos()/* * channels[i]->size()*/;
-            alphaChannelType = channels[i]->channelValueType();
-            break;
-        }
+    KIS_SAFE_ASSERT_RECOVER (alphaPos >= 0) {
+        alphaPos = 0;
     }
+
+    const QList<KoChannelInfo *> channels = dstCs->channels();
+    alphaChannelOffset = channels[alphaPos]->pos()/* * channels[i]->size()*/;
+    alphaChannelType = channels[alphaPos]->channelValueType();
 
     KIS_SAFE_ASSERT_RECOVER (alphaChannelOffset >= 0) {
         alphaChannelOffset = 0;

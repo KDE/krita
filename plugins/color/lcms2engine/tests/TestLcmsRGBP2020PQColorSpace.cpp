@@ -69,7 +69,7 @@ void testRoundTrip(const KoColorSpace *srcCS, const KoColorSpace *dstCS, SourceT
     QVector<float> result(4);
     srcCS->normalisedChannelsValue(srcColor.data(), result);
 
-    QList<KoChannelInfo*> channels = srcCS->channels();
+    const QList<KoChannelInfo*> channels = srcCS->channels();
 
     // 5% tolerance for CMYK, 4% for 8-bit, and 1% for everything else
     const float tolerance =

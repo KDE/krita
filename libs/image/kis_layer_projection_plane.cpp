@@ -73,14 +73,7 @@ void KisLayerProjectionPlane::applyImpl(KisPainter *painter, const QRect &rect, 
         } else if(allColorFlagsAreUnset) {
             channelFlags = dstCS->channelFlags(false, alphaFlagIsSet);
         } else {
-            //TODO: convert the cannel flags properly
-            //      for now just the alpha channel bit is copied and the other channels are left alone
-            for (quint32 i=0; i < dstCS->channelCount(); ++i) {
-                if (dstCS->channels()[i]->channelType() == KoChannelInfo::ALPHA) {
-                    channelFlags.setBit(i, alphaFlagIsSet);
-                    break;
-                }
-            }
+            channelFlags.setBit(dstCS->alphaPos(), alphaFlagIsSet);
         }
     }
 

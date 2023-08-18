@@ -129,10 +129,11 @@ QVector<float> ManagedColor::components() const
 
 QVector<float> ManagedColor::componentsOrdered() const
 {
+    const QList<KoChannelInfo *> channelInfo = d->color.colorSpace()->channels();
     QVector<float> valuesUnsorted = components();
-    QVector<float> values(d->color.colorSpace()->channelCount());
+    QVector<float> values(channelInfo.size());
     for (int i=0; i<values.size();i++) {
-        int location = KoChannelInfo::displayPositionToChannelIndex(i, d->color.colorSpace()->channels());
+        int location = KoChannelInfo::displayPositionToChannelIndex(i, channelInfo);
         values[location] = valuesUnsorted[i];
     }
     return values;

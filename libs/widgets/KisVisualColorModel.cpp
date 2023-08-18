@@ -381,7 +381,7 @@ void KisVisualColorModel::slotLoadACSConfig()
 
 void KisVisualColorModel::loadColorSpace(const KoColorSpace *cs)
 {
-    QList<KoChannelInfo *> channelList = cs->channels();
+    const QList<KoChannelInfo *> channelList = cs->channels();
     int cCount = 0;
 
     for (int i = 0; i < channelList.size(); i++) {

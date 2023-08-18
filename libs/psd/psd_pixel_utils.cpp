@@ -632,7 +632,7 @@ void writePixelDataCommonImpl(QIODevice &io,
 
         quint8 *alphaPlanePtr = 0;
 
-        QList<KoChannelInfo *> origChannels = colorSpace->channels();
+        const QList<KoChannelInfo *> origChannels = colorSpace->channels();
         Q_FOREACH (KoChannelInfo *ch, KoChannelInfo::displayOrderSorted(origChannels)) {
             int channelIndex = KoChannelInfo::displayPositionToChannelIndex(ch->displayPosition(), origChannels);
 

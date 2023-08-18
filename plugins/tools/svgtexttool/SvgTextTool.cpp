@@ -373,11 +373,11 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
         KisHandlePainterHelper handlePainter =
             KoShape::createHandlePainterHelperView(&gc, shape, converter, handleRadius());
 
-        if (m_dragging != DragMode::InlineSizeHandle) {
+        if (m_dragging != DragMode::InlineSizeHandle && m_dragging != DragMode::Move) {
             handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
             QPainterPath path;
-            path.addRect(shape->boundingRect());
-            handlePainter.drawPath(shape->absoluteTransformation().inverted().map(path));
+            path.addRect(shape->outlineRect());
+            handlePainter.drawPath(path);
         }
 
         if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape)) {

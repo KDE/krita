@@ -162,7 +162,7 @@ void LabU8ColorSpace::convertChannelToVisualRepresentation(const quint8 *src, qu
         for (uint channelIndex = 0; channelIndex < ColorSpaceTraits::channels_nb; ++channelIndex) {
             if (channelIndex != ColorSpaceTraits::alpha_pos) {
                 if (channelIndex == ColorSpaceTraits::L_pos) {
-                    ColorSpaceTraits::channels_type c = ColorSpaceTraits::parent::nativeArray((src + (pixelIndex * ColorSpaceTraits::pixelSize)))[selectedChannelIndex];
+                    ColorSpaceTraits::channels_type c = ColorSpaceTraits::nativeArray((src + (pixelIndex * ColorSpaceTraits::pixelSize)))[selectedChannelIndex];
                     switch (selectedChannelIndex) {
                     case ColorSpaceTraits::L_pos:
                         break;
@@ -179,13 +179,13 @@ void LabU8ColorSpace::convertChannelToVisualRepresentation(const quint8 *src, qu
                         c = ColorSpaceTraits::math_trait::unitValueL * (qreal)c / ColorSpaceTraits::math_trait::unitValue;
                         break;
                     }
-                    ColorSpaceTraits::parent::nativeArray(dst + (pixelIndex * ColorSpaceTraits::pixelSize))[channelIndex] = c;
+                    ColorSpaceTraits::nativeArray(dst + (pixelIndex * ColorSpaceTraits::pixelSize))[channelIndex] = c;
                 } else {
-                    ColorSpaceTraits::parent::nativeArray(dst + (pixelIndex * ColorSpaceTraits::pixelSize))[channelIndex] = ColorSpaceTraits::math_trait::halfValueAB;
+                    ColorSpaceTraits::nativeArray(dst + (pixelIndex * ColorSpaceTraits::pixelSize))[channelIndex] = ColorSpaceTraits::math_trait::halfValueAB;
                 }
             } else {
-                ColorSpaceTraits::parent::nativeArray((dst + (pixelIndex * ColorSpaceTraits::pixelSize)))[channelIndex] =
-                    ColorSpaceTraits::parent::nativeArray((src + (pixelIndex * ColorSpaceTraits::pixelSize)))[channelIndex];
+                ColorSpaceTraits::nativeArray((dst + (pixelIndex * ColorSpaceTraits::pixelSize)))[channelIndex] =
+                    ColorSpaceTraits::nativeArray((src + (pixelIndex * ColorSpaceTraits::pixelSize)))[channelIndex];
             }
         }
     }
@@ -196,8 +196,8 @@ void LabU8ColorSpace::convertChannelToVisualRepresentation(const quint8 *src, qu
     for (uint pixelIndex = 0; pixelIndex < nPixels; ++pixelIndex) {
         for (uint channelIndex = 0; channelIndex < ColorSpaceTraits::channels_nb; ++channelIndex) {
             if (selectedChannels.testBit(channelIndex)) {
-                ColorSpaceTraits::parent::nativeArray((dst + (pixelIndex * ColorSpaceTraits::pixelSize)))[channelIndex] =
-                    ColorSpaceTraits::parent::nativeArray((src + (pixelIndex * ColorSpaceTraits::pixelSize)))[channelIndex];
+                ColorSpaceTraits::nativeArray((dst + (pixelIndex * ColorSpaceTraits::pixelSize)))[channelIndex] =
+                    ColorSpaceTraits::nativeArray((src + (pixelIndex * ColorSpaceTraits::pixelSize)))[channelIndex];
             } else {
                 ColorSpaceTraits::channels_type v;
                 switch (channelIndex) {
@@ -212,7 +212,7 @@ void LabU8ColorSpace::convertChannelToVisualRepresentation(const quint8 *src, qu
                     v = ColorSpaceTraits::math_trait::zeroValue;
                     break;
                 }
-                ColorSpaceTraits::parent::nativeArray((dst + (pixelIndex * ColorSpaceTraits::pixelSize)))[channelIndex] = v;
+                ColorSpaceTraits::nativeArray((dst + (pixelIndex * ColorSpaceTraits::pixelSize)))[channelIndex] = v;
             }
         }
     }

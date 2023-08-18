@@ -11,7 +11,6 @@
 #include "KoColorModelStandardIds.h"
 #include "KoColorSpace.h"
 
-namespace {
 struct KisQVectorOfQImageStaticRegistrar {
     KisQVectorOfQImageStaticRegistrar() {
         qRegisterMetaType<QVector<QImage>>("QVector<QImage>");
@@ -19,7 +18,6 @@ struct KisQVectorOfQImageStaticRegistrar {
     }
 };
 static KisQVectorOfQImageStaticRegistrar __registrar1;
-}
 
 void KisChannelsThumbnailsStrokeStrategy::reportThumbnailGenerationCompleted(KisPaintDeviceSP device, const QRect &rect)
 {

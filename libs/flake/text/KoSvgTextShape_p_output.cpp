@@ -391,6 +391,16 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
                         painter.setPen(pen);
                         painter.drawPoint(center);
                     }
+                    //ligature carets
+                    penColor = Qt::darkGreen;
+                    penColor.setAlpha(192);
+                    pen.setColor(penColor);
+                    painter.setPen(pen);
+                    QVector<QPointF> offset = result.at(i).cursorInfo.offsets;
+                    for (int j=0; j<offset.size(); j++) {
+                        painter.drawPoint(tf.map(offset.at(j)));
+                    }
+                    // Finalpos
                     penColor = Qt::red;
                     penColor.setAlpha(192);
                     pen.setColor(penColor);

@@ -115,6 +115,12 @@ public:
 
     void setResolution(qreal xRes, qreal yRes) override;
 
+    int nextPos(int pos);
+    int previousPos(int pos);
+    QPainterPath cursorForPos(int pos);
+    QPainterPath selectionBoxes(int pos, int anchor);
+    int posForPoint(QPointF point);
+
 protected:
     /**
      * Show if the shape is a root of the text hierarchy. Always true for

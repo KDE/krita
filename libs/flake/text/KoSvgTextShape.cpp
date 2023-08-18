@@ -87,6 +87,77 @@ void KoSvgTextShape::setResolution(qreal xRes, qreal yRes)
     }
 }
 
+int KoSvgTextShape::nextPos(int pos)
+{
+    if (d->cursorPos.isEmpty()) {
+        return -1;
+    }
+    return qMin(pos + 1, d->cursorPos.size() - 1);
+}
+
+int KoSvgTextShape::previousPos(int pos)
+{
+    if (d->cursorPos.isEmpty()) {
+        return -1;
+    }
+    return qMax(pos - 1, 0);
+}
+
+QPainterPath KoSvgTextShape::cursorForPos(int pos)
+{
+    QPainterPath p;
+
+    if (d->result.isEmpty() || d->cursorPos.isEmpty() || pos < 0 || pos >= d->cursorPos.size()) {
+        return p;
+    }
+
+    CursorPos cursorPos = d->cursorPos.at(pos);
+
+    CharacterResult res = d->result.at(cursorPos.cluster);
+
+    const QTransform tf = res.finalTransform();
+    QLineF caret = res.cursorInfo.caret;
+    if (cursorPos.offset > 0 && cursorPos.offset-1 < res.cursorInfo.offsets.size()) {
+        caret.translate(res.cursorInfo.offsets.at(cursorPos.offset-1));
+    }
+
+    p.moveTo(tf.map(caret.p1()));
+    p.lineTo(tf.map(caret.p2()));
+
+    return p;
+}
+
+QPainterPath KoSvgTextShape::selectionBoxes(int pos, int anchor)
+{
+    int start = qMin(pos, anchor);
+    int end = qMax(pos, anchor);
+
+    if (start == end || start < 0 || end >= d->cursorPos.size()) {
+        return QPainterPath();
+    }
+
+    QPainterPath p;
+    p.setFillRule(Qt::WindingFill);
+    for (int i = start; i < end; i++) {
+        CharacterResult res = d->result.at(d->cursorPos.at(i).cluster);
+        const QTransform tf = res.finalTransform();
+        p.addPolygon(tf.map(res.boundingBox));
+    }
+
+    return p;
+}
+
+int KoSvgTextShape::posForPoint(QPointF point)
+{
+    for (int i=0; i<d->result.size(); i++) {
+        QRectF rect = d->result.at(i).finalTransform().mapRect(d->result.at(i).boundingBox);
+        if (rect.contains(point)) {
+                return i;
+        }
+    }
+    return -1;
+}
+
 void KoSvgTextShape::paintComponent(QPainter &painter) const
 {
     painter.save();

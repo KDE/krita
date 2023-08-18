@@ -551,6 +551,9 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                     result[firstCluster].lineEnd = result.at(i).lineEnd;
                 }
             }
+            if (graphemeBreaks[i] == GRAPHEMEBREAK_BREAK && result[i].addressable) {
+                result[firstCluster].cursorInfo.graphemeIndices.append(i);
+            }
             result[i].cssPosition = result.at(firstCluster).cssPosition + result.at(firstCluster).advance;
             result[i].hidden = true;
         }
@@ -682,19 +685,62 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
 
     // 9. return result.
     debugFlake << "9. return result.";
-    this->result = result;
     globalIndex = 0;
+    QVector<CursorPos> cursorPos;
     Q_FOREACH (const KoSvgTextChunkShapeLayoutInterface::SubChunk &chunk, textChunks) {
         KoSvgText::AssociatedShapeWrapper wrapper = chunk.format.associatedShapeWrapper();
         const int j = chunk.text.size();
         for (int i = globalIndex; i < globalIndex + j; i++) {
             if (result.at(i).addressable && !result.at(i).hidden) {
+
+                if (result.at(i).anchored_chunk && !cursorPos.isEmpty()) {
+                    // add a position for the previous 'line' whenever we detect an anchored chunk.
+                    CursorPos pos;
+                    pos.cluster = cursorPos.last().cluster;
+                    pos.index = i;
+                    result[pos.cluster].cursorInfo.graphemeIndices.append(i);
+                    result[pos.cluster].cursorInfo.offsets.append(result[pos.cluster].advance);
+                    int size = result.at(i).cursorInfo.graphemeIndices.size();
+                    pos.offset = size+1;
+                    cursorPos.append(pos);
+                }
+
+                CursorPos pos;
+                pos.cluster = i;
+                pos.offset = 0;
+                pos.index = i;
+                cursorPos.append(pos);
+                QVector<QPointF> positions;
+                int graphemes = result.at(i).cursorInfo.graphemeIndices.size();
+                for (int k = 0; k < graphemes; k++) {
+                    CursorPos pos;
+                    pos.cluster = i;
+                    pos.index = result.at(i).cursorInfo.graphemeIndices.at(k);
+                    pos.offset = k+1;
+                    cursorPos.append(pos);
+                    positions.append((k+1) * result.at(i).advance/(graphemes+1));
+                }
+                if (result.at(i).cursorInfo.offsets.size() < positions.size()) {
+                    result[i].cursorInfo.offsets = positions;
+                }
+
                 const QTransform tf = result.at(i).finalTransform();
                 wrapper.addCharacterRect(tf.mapRect(result.at(i).boundingBox));
             }
         }
         globalIndex += j;
     }
+    if (!cursorPos.isEmpty()) {
+        CursorPos pos;
+        pos.cluster = cursorPos.last().cluster;
+        result[pos.cluster].cursorInfo.graphemeIndices.append(cursorPos.last().index+1);
+        result[pos.cluster].cursorInfo.offsets.append(result[pos.cluster].advance);
+        pos.offset = result[pos.cluster].cursorInfo.graphemeIndices.size();
+        pos.index = cursorPos.last().index+1;
+        cursorPos.append(pos);
+    }
+    this->result = result;
+    this->cursorPos = cursorPos;
 }
 
 void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)

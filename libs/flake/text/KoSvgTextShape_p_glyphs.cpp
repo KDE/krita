@@ -493,6 +493,52 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
     // Try to load the glyph
     std::tie(glyphObliqueTf, bitmapScale) = loadGlyphOnly(ftTF, faceLoadFlags, isHorizontal, currentGlyph, charResult);
 
+    if (charResult.visualIndex == -1) {
+        hb_font_t_up font(hb_ft_font_create_referenced(currentGlyph.ftface));
+        CursorInfo cursorInfo;
+        qreal lineHeight = (charResult.fontAscent-charResult.fontDescent) * bitmapScale;
+        if (isHorizontal) {
+            hb_position_t run = 0;
+            hb_position_t rise = 1;
+            hb_position_t offset = 0;
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_CARET_RUN, &run);
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_CARET_RISE, &rise);
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_CARET_OFFSET, &offset);
+            qreal slope = 0;
+            if (run != 0 && rise !=0) {
+                slope = double(run)/double(rise);
+            }
+            QLineF caret(QPointF(), QPointF(lineHeight*slope, lineHeight));
+            caret.translate(-QPointF(-offset, -charResult.fontDescent* bitmapScale));
+            cursorInfo.caret = ftTF.map(glyphObliqueTf.map(caret));
+
+            QVector<QPointF> positions;
+            hb_position_t *carets = nullptr;
+            hb_direction_t dir = charResult.direction == KoSvgText::DirectionLeftToRight? HB_DIRECTION_LTR: HB_DIRECTION_RTL;
+            uint num_carets = hb_ot_layout_get_ligature_carets(font.data(), dir, currentGlyph.index, 0, nullptr, carets);
+            for (uint i=0; i<num_carets; i++) {
+                QPointF pos(carets[i], 0);
+                positions.append(ftTF.map(pos));
+            }
+            cursorInfo.offsets = positions;
+        } else {
+            hb_position_t run = 1;
+            hb_position_t rise = 0;
+            hb_position_t offset = 0;
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_CARET_RUN, &run);
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_CARET_RISE, &rise);
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_CARET_OFFSET, &offset);
+            qreal slope = 0;
+            if (run != 0 && rise !=0) {
+                slope = double(rise)/double(run);
+            }
+            QLineF caret(QPointF(), QPointF(lineHeight, lineHeight*slope));
+            caret.translate(-QPointF(-charResult.fontDescent* bitmapScale, -offset));
+            cursorInfo.caret = ftTF.map(glyphObliqueTf.map(caret));
+        }
+        charResult.cursorInfo = cursorInfo;
+    }
+
     {
         QPointF advance(currentGlyph.x_advance, currentGlyph.y_advance);
         if (tabSizeInfo.contains(cluster)) {
@@ -549,7 +595,6 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                           (charResult.fontAscent - charResult.fontDescent) * bitmapScale);
             bbox = glyphObliqueTf.mapRect(bbox);
         } else {
-            hb_font_t_up font(hb_ft_font_create_referenced(currentGlyph.ftface));
             bbox = QRectF(charResult.fontDescent * bitmapScale,
                           0,
                           (charResult.fontAscent - charResult.fontDescent) * bitmapScale,

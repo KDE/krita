@@ -43,6 +43,18 @@ enum class LineEdgeBehaviour {
     ConditionallyHang ///< Only hang if no space otherwise, only measured for justification if not hanging.
 };
 
+struct CursorInfo {
+    QLineF caret; ///< Caret for this characterResult
+    QVector<int> graphemeIndices; ///< The text-string indices of graphemes starting here, starting grapheme is not present.
+    QVector<QPointF> offsets; ///< The advance offsets for each grapheme index.
+};
+
+struct CursorPos {
+    int cluster; ///< Which character result this position belongs in.
+    int index; ///< Which grapheme this position belongs with.
+    int offset; ///< Which offset this position belongs with.
+};
+
 namespace Glyph {
 
 struct Outline {
@@ -104,6 +116,8 @@ struct CharacterResult {
     QRectF lineHeightBox; ///< The box representing the line height of this char
     QFont::Style fontStyle = QFont::StyleNormal;
     int fontWeight = 400;
+
+    CursorInfo cursorInfo;
 
     KoSvgText::TextAnchor anchor = KoSvgText::AnchorStart;
     KoSvgText::Direction direction = KoSvgText::DirectionLeftToRight;
@@ -282,6 +296,8 @@ public:
 
     QVector<CharacterResult> result;
     QVector<LineBox> lineBoxes;
+
+    QVector<CursorPos> cursorPos;
 
     void relayout(const KoSvgTextShape *q);
 

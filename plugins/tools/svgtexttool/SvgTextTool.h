@@ -16,6 +16,7 @@
 #include <QFontComboBox>
 #include <QPointer>
 #include <QDoubleSpinBox>
+#include <QTimer>
 
 #include "SvgTextEditor.h"
 
@@ -24,6 +25,7 @@
 class KoSelection;
 class SvgTextEditor;
 class KoSvgTextShape;
+class KoSvgTextCursor;
 class KoInteractionStrategy;
 
 class SvgTextTool : public KoToolBase
@@ -93,6 +95,8 @@ private Q_SLOTS:
      */
     void storeDefaults();
 
+    void updateCursor(QRectF updateRect);
+
 private:
     enum class DragMode {
         None = 0,
@@ -114,6 +118,8 @@ private:
 
     QButtonGroup *m_defAlignment {nullptr};
     KConfigGroup m_configGroup;
+    KoSvgTextCursor *m_textCursor{nullptr};
+
 
     QPainterPath m_hoveredShapeHighlightRect;
     boost::optional<KoColor> m_originalColor { boost::none };

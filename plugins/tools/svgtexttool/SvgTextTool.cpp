@@ -9,6 +9,7 @@
 #include "KoSvgTextProperties.h"
 #include "KoSvgTextShape.h"
 #include "KoSvgTextShapeMarkupConverter.h"
+#include "KoSvgTextCursor.h"
 #include "SvgCreateTextStrategy.h"
 #include "SvgInlineSizeChangeCommand.h"
 #include "SvgInlineSizeChangeStrategy.h"
@@ -85,6 +86,7 @@ SvgTextTool::~SvgTextTool()
         m_editor->close();
     }
     delete m_defAlignment;
+    delete m_textCursor;
 }
 
 void SvgTextTool::activate(const QSet<KoShape *> &shapes)
@@ -317,6 +319,13 @@ void SvgTextTool::storeDefaults()
     m_configGroup.writeEntry("defaultLetterSpacing", optionUi.defLetterSpacing->value());
 }
 
+void SvgTextTool::updateCursor(QRectF updateRect)
+{
+    if (canvas()) {
+        canvas()->updateCanvas(updateRect);
+    }
+}
+
 QFont SvgTextTool::defaultFont() const
 {
     int size = QFontDatabase::standardSizes().at(optionUi.defPointSize->currentIndex() > -1 ? optionUi.defPointSize->currentIndex() : 0);
@@ -405,6 +414,11 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
             handlePainter.drawPath(path);
         }
     }
+    if (shape) {
+        if (m_textCursor) {
+            m_textCursor->paintDecorations(gc, qApp->palette().color(QPalette::Highlight));
+        }
+    }
 
     // Paint debug outline
     if (debugEnabled() && shape) {
@@ -447,10 +461,19 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
 
         if (hoveredShape) {
             canvas()->shapeManager()->selection()->select(hoveredShape);
+            m_textCursor = new KoSvgTextCursor(nullptr, hoveredShape
+                                               , QApplication::style()->pixelMetric(QStyle::PM_TextCursorWidth)
+                                               , QApplication::cursorFlashTime());
+            connect(m_textCursor, SIGNAL(decorationsChanged(QRectF)), SLOT(updateCursor(QRectF)));
+            m_textCursor->setPosToPoint(event->point);
         } else {
             m_interactionStrategy.reset(new SvgCreateTextStrategy(this, event->point));
             m_dragging = DragMode::Create;
             event->accept();
+        }
+    } else if (hoveredShape == selectedShape){
+        if (m_textCursor) {
+            m_textCursor->setPosToPoint(event->point);
         }
     }
 
@@ -621,6 +644,19 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
         m_interactionStrategy->handleMouseMove(m_lastMousePos, event->modifiers());
         event->accept();
         return;
+    }
+
+    if (m_textCursor) {
+        bool select = event->modifiers().testFlag(Qt::ShiftModifier);
+        if (event->key() == Qt::Key_Right) {
+            m_textCursor->moveCursor(true, !select);
+            event->accept();
+
+        } else if (event->key() == Qt::Key_Left) {
+            m_textCursor->moveCursor(false, !select);
+            event->accept();
+
+        }
     }
 
     if (m_interactionStrategy) {

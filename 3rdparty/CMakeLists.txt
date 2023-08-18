@@ -66,6 +66,10 @@ include (KritaExternalProject)
 
 # allow specification of a directory with pre-downloaded
 # requirements
+if(DEFINED ENV{EXTERNALS_DOWNLOAD_DIR})
+    set(EXTERNALS_DOWNLOAD_DIR $ENV{EXTERNALS_DOWNLOAD_DIR})
+endif()
+
 if(NOT IS_DIRECTORY ${EXTERNALS_DOWNLOAD_DIR})
     message(FATAL_ERROR "No externals download dir set. Use -DEXTERNALS_DOWNLOAD_DIR")
 else()

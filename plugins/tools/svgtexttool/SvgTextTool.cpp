@@ -378,10 +378,6 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
             QPainterPath path;
             path.addRect(shape->boundingRect());
             handlePainter.drawPath(shape->absoluteTransformation().inverted().map(path));
-            if (m_highlightItem == HighlightItem::MoveBorder) {
-                handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
-            }
-            handlePainter.drawHandleCircle(QPointF(), KoToolBase::handleRadius());
         }
 
         if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape)) {
@@ -393,6 +389,13 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
             }
             handlePainter.drawConnectionLine(info->editLineLocal());
         }
+
+        if (m_highlightItem == HighlightItem::MoveBorder) {
+            handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
+        } else {
+            handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
+        }
+        handlePainter.drawHandleCircle(QPointF(), KoToolBase::handleRadius());
     }
 
     gc.setTransform(converter.documentToView(), true);

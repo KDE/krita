@@ -76,6 +76,71 @@ void KoSvgTextCursor::moveCursor(bool forward, bool moveAnchor)
     updateCursor();
 }
 
+void KoSvgTextCursor::insertText(QString text)
+{
+    qDebug() << d->pos << text;
+    if (d->shape) {
+        //TODO: don't break when the position is zero...
+        QRectF updateRect = d->shape->boundingRect();
+        if (d->anchor != d->pos) {
+            int start = qMin(d->anchor, d->pos);
+            int length = qMax(d->anchor, d->pos) - start;
+            if (d->shape->removeText(start, length)) {
+                d->pos = start;
+                d->anchor = d->pos;
+            }
+        }
+        if (d->shape->insertText(d->pos, text)) {
+            d->pos += 1;
+            d->anchor = d->pos;
+            updateCursor();
+        }
+        d->shape->updateAbsolute( updateRect| d->shape->boundingRect());
+
+
+    }
+}
+
+void KoSvgTextCursor::removeLast()
+{
+    qDebug() << "remove" << d->pos;
+    if (d->shape) {
+        QRectF updateRect = d->shape->boundingRect();
+        if (d->anchor != d->pos) {
+            int start = qMin(d->anchor, d->pos);
+            int length = qMax(d->anchor, d->pos) - start;
+            if (d->shape->removeText(start, length)) {
+                d->pos = start;
+            }
+        }
+        if (d->shape->removeText(d->pos - 1, 1)) {
+            d->pos -= 1;
+            d->anchor = d->pos;
+            updateCursor();
+        }
+        d->shape->updateAbsolute( updateRect| d->shape->boundingRect());
+    }
+}
+
+void KoSvgTextCursor::removeNext()
+{
+    qDebug() << "delete" << d->pos;
+    if (d->shape) {
+        QRectF updateRect = d->shape->boundingRect();
+        if (d->anchor != d->pos) {
+            int start = qMin(d->anchor, d->pos);
+            int length = qMax(d->anchor, d->pos) - start;
+            if (d->shape->removeText(start, length)) {
+                d->pos = start;
+            }
+        }
+        d->shape->removeText(d->pos, 1);
+        d->anchor = d->pos;
+        d->shape->updateAbsolute( updateRect| d->shape->boundingRect());
+        updateCursor();
+    }
+}
+
 void KoSvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
 {
     gc.save();

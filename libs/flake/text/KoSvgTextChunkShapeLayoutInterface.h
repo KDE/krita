@@ -145,6 +145,10 @@ public:
      */
     virtual QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations() = 0;
 
+    virtual void insertText(int index, QString text) = 0;
+
+    virtual void removeText(int index, int length) = 0;
+
     /**
      * A QTextLayout-compatible representation of a single leaf of
      * KoSvgTextChunkShape subtree

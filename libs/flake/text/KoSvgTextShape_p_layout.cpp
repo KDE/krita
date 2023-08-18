@@ -733,10 +733,10 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     if (!cursorPos.isEmpty()) {
         CursorPos pos;
         pos.cluster = cursorPos.last().cluster;
-        result[pos.cluster].cursorInfo.graphemeIndices.append(cursorPos.last().index+1);
+        result[pos.cluster].cursorInfo.graphemeIndices.append(text.size());
         result[pos.cluster].cursorInfo.offsets.append(result[pos.cluster].advance);
         pos.offset = result[pos.cluster].cursorInfo.graphemeIndices.size();
-        pos.index = cursorPos.last().index+1;
+        pos.index = text.size();
         cursorPos.append(pos);
     }
     this->result = result;

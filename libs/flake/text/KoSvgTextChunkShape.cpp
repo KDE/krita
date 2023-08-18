@@ -236,17 +236,21 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         int result = -1;
         int numCharsPassed = 0;
 
-        Q_FOREACH (KoShape *shape, q->shapes()) {
-            KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(chunkShape, 0);
+        if (isTextNode() && q == child) {
+            result = pos - numCharsPassed;
+        } else {
+            Q_FOREACH (KoShape *shape, q->shapes()) {
+                KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(chunkShape, 0);
 
-            if (chunkShape == child) {
-                result = pos + numCharsPassed;
-                break;
-            } else {
-                numCharsPassed += chunkShape->layoutInterface()->numChars();
+                if (chunkShape == child) {
+                    result = pos - numCharsPassed;
+                    break;
+                } else {
+                    numCharsPassed += chunkShape->layoutInterface()->numChars(true);
+                }
+
             }
-
         }
 
         return result;
@@ -462,6 +466,23 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
     QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations() override
     {
         return q->s->textDecorations;
+    }
+
+    void insertText(int start, QString text) override
+    {
+        if (!q->shapeCount()) {
+            if (start >= q->s->text.size()) {
+                q->s->text.append(text);
+            } else {
+                q->s->text.insert(start, text);
+            }
+        }
+    }
+    void removeText(int start, int length) override
+    {
+        if (isTextNode()) {
+            q->s->text.remove(start, length);
+        }
     }
 
 private:

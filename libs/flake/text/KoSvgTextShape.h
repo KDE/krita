@@ -121,6 +121,9 @@ public:
     QPainterPath selectionBoxes(int pos, int anchor);
     int posForPoint(QPointF point);
 
+    bool insertText(int pos, QString text);
+    bool removeText(int pos, int length);
+
 protected:
     /**
      * Show if the shape is a root of the text hierarchy. Always true for

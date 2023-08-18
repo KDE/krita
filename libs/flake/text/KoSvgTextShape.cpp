@@ -13,6 +13,7 @@
 #include <klocalizedstring.h>
 
 #include "KoSvgTextProperties.h"
+#include "KoSvgTextChunkShapeLayoutInterface.h"
 #include <KoDocumentResourceManager.h>
 #include <KoShapeContainer_p.h>
 #include <KoShapeController.h>
@@ -156,6 +157,88 @@ int KoSvgTextShape::posForPoint(QPointF point)
         }
     }
     return -1;
+}
+
+KoSvgTextChunkShape *findTextChunkForIndex(KoShape *rootShape, int &currentIndex, int sought)
+{
+    KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape *>(rootShape);
+
+    if (!chunkShape) {
+        return nullptr;
+    }
+
+    if (!chunkShape->shapeCount()) {
+        int length = chunkShape->layoutInterface()->numChars(true);
+        if (sought >= currentIndex && sought < currentIndex + length) {
+            qDebug() << "found shape" << currentIndex << sought << chunkShape->shapeCount();
+            return chunkShape;
+        } else {
+            currentIndex += length;
+        }
+    } else {
+        Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+            KoSvgTextChunkShape *shape = findTextChunkForIndex(child, currentIndex, sought);
+            if (shape) {
+                return shape;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+bool KoSvgTextShape::insertText(int pos, QString text)
+{
+    bool succes = false;
+    int currentIndex = 0;
+    int index = 0;
+    CursorPos cursorPos;
+    if (pos > -1 && !d->cursorPos.isEmpty()) {
+
+        cursorPos = d->cursorPos.at(qMin(pos, d->cursorPos.size()-1));
+        index = cursorPos.index;
+
+        // hack to ensure large indices always get their strings appended at the end.
+        int totalSize = this->layoutInterface()->numChars(true);
+        if (index >= totalSize) {
+            index = totalSize-1;
+        }
+    }
+    KoSvgTextChunkShape *chunkShape = findTextChunkForIndex(this, currentIndex, index);
+    if (!this->shapeCount() && !chunkShape) {
+        chunkShape = this;
+    }
+    if (chunkShape) {
+        int offset = chunkShape->layoutInterface()->relativeCharPos(chunkShape, cursorPos.index);
+        chunkShape->layoutInterface()->insertText(offset, text);
+        notifyChanged();
+        shapeChangedPriv(ContentChanged);
+        succes = true;
+    }
+    return succes;
+}
+
+bool KoSvgTextShape::removeText(int pos, int length)
+{
+    bool succes = false;
+    if (pos < -1 || d->cursorPos.isEmpty()) {
+        return succes;
+    }
+    CursorPos cursorPos = d->cursorPos.at(qMin(pos, d->cursorPos.size()-1));
+    int index = cursorPos.index;
+    int currentIndex = 0;
+    KoSvgTextChunkShape *chunkShape = findTextChunkForIndex(this, currentIndex, index);
+    if (!this->shapeCount() && !chunkShape) {
+        chunkShape = this;
+    }
+    if (chunkShape) {
+        int offset = chunkShape->layoutInterface()->relativeCharPos(chunkShape, index);
+        chunkShape->layoutInterface()->removeText(offset, length);
+        notifyChanged();
+        shapeChangedPriv(ContentChanged);
+        succes = true;
+    }
+    return succes;
 }
 
 void KoSvgTextShape::paintComponent(QPainter &painter) const

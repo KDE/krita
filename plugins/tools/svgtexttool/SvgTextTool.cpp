@@ -465,14 +465,18 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
                                                , QApplication::style()->pixelMetric(QStyle::PM_TextCursorWidth)
                                                , QApplication::cursorFlashTime());
             connect(m_textCursor, SIGNAL(decorationsChanged(QRectF)), SLOT(updateCursor(QRectF)));
+            this->setTextMode(true);
             m_textCursor->setPosToPoint(event->point);
         } else {
             m_interactionStrategy.reset(new SvgCreateTextStrategy(this, event->point));
             m_dragging = DragMode::Create;
+            //m_textCursor = nullptr;
+            //this->setTextMode(false);
             event->accept();
         }
     } else if (hoveredShape == selectedShape){
         if (m_textCursor) {
+            this->setTextMode(true);
             m_textCursor->setPosToPoint(event->point);
         }
     }
@@ -655,7 +659,15 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
         } else if (event->key() == Qt::Key_Left) {
             m_textCursor->moveCursor(false, !select);
             event->accept();
-
+        } else if (event->key() == Qt::Key_Backspace) {
+            m_textCursor->removeLast();
+            event->accept();
+        } else if (event->key() == Qt::Key_Delete) {
+            m_textCursor->removeNext();
+            event->accept();
+        } else if (!event->text().isEmpty()) {
+            m_textCursor->insertText(event->text());
+            event->accept();
         }
     }
 

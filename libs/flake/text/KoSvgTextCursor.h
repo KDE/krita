@@ -26,6 +26,10 @@ public:
 
     void moveCursor(bool forward, bool moveAnchor = true);
 
+    void insertText(QString text);
+    void removeLast();
+    void removeNext();
+
     void paintDecorations(QPainter &gc, QColor selectionColor);
 Q_SIGNALS:
     void decorationsChanged(QRectF);

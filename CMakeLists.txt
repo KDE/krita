@@ -63,6 +63,10 @@ if (POLICY CMP0071)
     cmake_policy(SET CMP0071 NEW)
 endif()
 
+if (POLICY CMP0135)
+    cmake_policy(SET CMP0135 NEW)
+endif()
+
 if (APPLE)
     add_subdirectory(packaging/macos)
     set(MACOSX_RPATH TRUE)

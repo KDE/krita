@@ -35,6 +35,7 @@ public:
         , lineCountPortrait(70)
     { }
 
+    void loadFonts();
     void rebuildFontCache();
 
     QString id;
@@ -192,17 +193,22 @@ void Theme::setFonts(const QVariantMap& newValue)
     }
 }
 
-QFont Theme::font(const QString& name)
+void Theme::Private::loadFonts()
 {
-    if(!d->fontsAdded) {
-        QDir fontDir(d->basePath + '/' + d->fontPath);
+    if (!fontsAdded) {
+        QDir fontDir(basePath + '/' + fontPath);
         QStringList entries = fontDir.entryList(QDir::Files);
         QFontDatabase db;
         Q_FOREACH(QString entry, entries) {
-            d->addedFonts.append(db.addApplicationFont(fontDir.absoluteFilePath(entry)));
+            addedFonts.append(db.addApplicationFont(fontDir.absoluteFilePath(entry)));
         }
-        d->fontsAdded = true;
+        fontsAdded = true;
     }
+}
+
+QFont Theme::font(const QString& name)
+{
+    d->loadFonts();
 
     if (d->fontMap.isEmpty()) {
         d->rebuildFontCache();
@@ -319,6 +325,7 @@ bool Theme::eventFilter(QObject* target, QEvent* event)
 
 void Theme::Private::rebuildFontCache()
 {
+    loadFonts();
     fontMap.clear();
     QFontDatabase db;
     for(QVariantMap::iterator itr = fonts.begin(); itr != fonts.end(); ++itr)

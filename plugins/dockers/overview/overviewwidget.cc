@@ -21,7 +21,7 @@
 #include <kis_signal_compressor.h>
 #include <kis_config.h>
 #include <QApplication>
-#include "OverviewThumbnailStrokeStrategy.h"
+#include "KisImageThumbnailStrokeStrategy.h"
 #include <kis_display_color_converter.h>
 #include <KisMainWindow.h>
 #include "KisIdleTasksManager.h"
@@ -85,8 +85,8 @@ KisIdleTasksManager::TaskGuard OverviewWidget::registerIdleTask(KisCanvas2 *canv
             KoColorConversionTransformation::Intent renderingIntent =
                 m_canvas->displayColorConverter()->renderingIntent();
 
-            OverviewThumbnailStrokeStrategy *strategy =
-                new OverviewThumbnailStrokeStrategy(image->projection(), image->bounds(), m_previewSize, isPixelArt(), profile, renderingIntent, conversionFlags);
+            KisImageThumbnailStrokeStrategy *strategy =
+                new KisImageThumbnailStrokeStrategy(image->projection(), image->bounds(), m_previewSize, isPixelArt(), profile, renderingIntent, conversionFlags);
 
             connect(strategy, SIGNAL(thumbnailUpdated(QImage)), this, SLOT(updateThumbnail(QImage)));
 

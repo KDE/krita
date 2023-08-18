@@ -197,7 +197,6 @@ void KisToolLineHelper::movePointsTo(const QPointF &startPoint, const QPointF &e
             ++it;
         }
     }
-    adjustPointsToDDA(m_d->linePoints);
 }
 
 void KisToolLineHelper::end()

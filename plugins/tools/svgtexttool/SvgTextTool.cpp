@@ -193,6 +193,7 @@ QWidget *SvgTextTool::createOptionWidget()
     connect(optionUi.defLetterSpacing, SIGNAL(valueChanged(double)), SLOT(storeDefaults()));
 
     connect(optionUi.btnEdit, SIGNAL(clicked(bool)), SLOT(showEditor()));
+    connect(optionUi.btnEditSvg, SIGNAL(clicked(bool)), SLOT(showEditorSvgSource()));
 
     return optionWidget;
 }
@@ -244,6 +245,16 @@ void SvgTextTool::showEditor()
 #endif
         m_editor->show();
     }
+}
+
+void SvgTextTool::showEditorSvgSource()
+{
+    KoSvgTextShape *shape = selectedShape();
+    if (!shape) {
+        return;
+    }
+    shape->setRichTextPreferred(false);
+    showEditor();
 }
 
 void SvgTextTool::textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs, bool richTextUpdated)

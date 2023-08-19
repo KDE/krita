@@ -59,6 +59,12 @@
 using SvgInlineSizeHelper::InlineSizeInfo;
 
 
+static bool debugEnabled()
+{
+    static const bool debugEnabled = !qEnvironmentVariableIsEmpty("KRITA_DEBUG_TEXTTOOL");
+    return debugEnabled;
+}
+
 SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
 {
@@ -137,6 +143,10 @@ QWidget *SvgTextTool::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();
     optionUi.setupUi(optionWidget);
+
+    if (!debugEnabled()) {
+        optionUi.groupBoxDebug->hide();
+    }
 
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
 
@@ -388,10 +398,11 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
     }
 
     // Paint debug outline
-    static const bool debugEnabled = !qEnvironmentVariableIsEmpty("KRITA_DEBUG_TEXTTOOL");
-    if (debugEnabled && shape) {
+    if (debugEnabled() && shape) {
         gc.setTransform(shape->absoluteTransformation(), true);
-        shape->paintDebug(gc);
+        if (optionUi.chkDbgCharBbox->isChecked()) {
+            shape->paintDebug(gc);
+        }
     }
 }
 

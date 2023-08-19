@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-15 00:43+0000\n"
+"POT-Creation-Date: 2023-08-19 00:43+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -30113,6 +30113,13 @@ msgctxt ""
 msgid "Waiting for saving to complete..."
 msgstr "TAsvir tiklash filtrini qoʻllash..."
 
+#: libs/ui/KisImageThumbnailStrokeStrategy.cpp:32
+#, fuzzy
+#| msgid "Import Image"
+msgctxt "(qtundo-format)"
+msgid "Update overview thumbnail"
+msgstr "Rasmni import qilish"
+
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
 msgid "An unspecified error occurred."
@@ -34833,7 +34840,7 @@ msgstr "&Hammasini tanlash"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
-#: plugins/dockers/channeldocker/channeldocker_dock.cpp:28
+#: plugins/dockers/channeldocker/channeldocker_dock.cpp:30
 #, fuzzy, kde-format
 msgctxt "Channel as in Color Channels"
 msgid "Channels"
@@ -38718,13 +38725,6 @@ msgstr "Koʻrib chiqish"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr ""
-
-#: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgid "Import Image"
-msgctxt "(qtundo-format)"
-msgid "Update overview thumbnail"
-msgstr "Rasmni import qilish"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, fuzzy, kde-format
@@ -43318,7 +43318,7 @@ msgstr "&Foiz:"
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:72
 #: plugins/filters/blur/wdgblur.ui:33
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:49
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:51
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:40
 #, fuzzy, kde-format
 msgid "Vertical Radius:"
@@ -43328,7 +43328,7 @@ msgstr "Uskuna:"
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:82
 #: plugins/filters/blur/wdgblur.ui:124
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:44
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:46
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:35
 #, fuzzy, kde-format
 msgid "Horizontal Radius:"
@@ -43597,7 +43597,7 @@ msgid ""
 "be used. All curves will be reset."
 msgstr ""
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:160
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
 #, fuzzy, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "&Ranglarni moslash..."

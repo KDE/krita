@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-15 00:43+0000\n"
-"PO-Revision-Date: 2023-08-04 08:06+0200\n"
+"POT-Creation-Date: 2023-08-19 00:43+0000\n"
+"PO-Revision-Date: 2023-08-18 19:12+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -30273,6 +30273,11 @@ msgctxt ""
 msgid "Waiting for saving to complete..."
 msgstr "Čakanje na shranjevanje za dokončanje ..."
 
+#: libs/ui/KisImageThumbnailStrokeStrategy.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Update overview thumbnail"
+msgstr "Posodobi splošno ogledno sličico"
+
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
 msgid "An unspecified error occurred."
@@ -35269,7 +35274,7 @@ msgstr "Izberite ime datoteke ..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
-#: plugins/dockers/channeldocker/channeldocker_dock.cpp:28
+#: plugins/dockers/channeldocker/channeldocker_dock.cpp:30
 #, kde-format
 msgctxt "Channel as in Color Channels"
 msgid "Channels"
@@ -39254,11 +39259,6 @@ msgstr "Pregled"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Pripni kontrolnike za krmarjenje"
-
-#: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-msgctxt "(qtundo-format)"
-msgid "Update overview thumbnail"
-msgstr "Posodobi splošno ogledno sličico"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -43885,7 +43885,7 @@ msgstr "Osemkotnik (8)"
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:72
 #: plugins/filters/blur/wdgblur.ui:33
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:49
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:51
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:40
 #, kde-format
 msgid "Vertical Radius:"
@@ -43895,7 +43895,7 @@ msgstr "Navpični polmer:"
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:82
 #: plugins/filters/blur/wdgblur.ui:124
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:44
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:46
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:35
 #, kde-format
 msgid "Horizontal Radius:"
@@ -44164,7 +44164,7 @@ msgstr ""
 "Trenutna prilagoditev je bila ustvarjena za drug barvni prostor in je ni "
 "mogoče uporabiti. Vse krivulje bodo ponastavljene."
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:160
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "Krivulje prilagoditev &barv ..."
@@ -58097,9 +58097,7 @@ msgid "Threshold: "
 msgstr "Prag: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
 msgid "Spread: "
 msgstr "Širjenje: "
@@ -58331,12 +58329,9 @@ msgid "Adjust text auto wrap"
 msgstr "Prilagodite samodejno oblivanje besedila"
 
 #: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:23
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Move left"
 msgctxt "(qtundo-format)"
 msgid "Move text"
-msgstr "Premakni levo"
+msgstr "Premakni besedilo"
 
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
 msgctxt "(qtundo-format)"
@@ -60528,12 +60523,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgctxt ""
-#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-#~ msgid "Grow: "
-#~ msgstr "Razširi: "
-
-#~ msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
-#~ msgid "Feather: "
-#~ msgstr "Operjanje: "

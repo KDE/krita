@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-15 00:43+0000\n"
+"POT-Creation-Date: 2023-08-19 00:43+0000\n"
 "PO-Revision-Date: 2023-08-11 13:32+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -30265,6 +30265,11 @@ msgctxt ""
 msgid "Waiting for saving to complete..."
 msgstr "Kaydetmenin tamamlanması bekleniyor..."
 
+#: libs/ui/KisImageThumbnailStrokeStrategy.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Update overview thumbnail"
+msgstr "Genel görünüm küçük görsellerini güncelle"
+
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
 msgid "An unspecified error occurred."
@@ -35239,7 +35244,7 @@ msgstr "Dosya adı seç..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
-#: plugins/dockers/channeldocker/channeldocker_dock.cpp:28
+#: plugins/dockers/channeldocker/channeldocker_dock.cpp:30
 #, kde-format
 msgctxt "Channel as in Color Channels"
 msgid "Channels"
@@ -39198,11 +39203,6 @@ msgstr "Genel Görünüm"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Dolaşım denetimlerini sabitle"
-
-#: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-msgctxt "(qtundo-format)"
-msgid "Update overview thumbnail"
-msgstr "Genel görünüm küçük görsellerini güncelle"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -43823,7 +43823,7 @@ msgstr "Sekizgen (8)"
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:72
 #: plugins/filters/blur/wdgblur.ui:33
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:49
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:51
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:40
 #, kde-format
 msgid "Vertical Radius:"
@@ -43833,7 +43833,7 @@ msgstr "Dikey Yarıçap:"
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:82
 #: plugins/filters/blur/wdgblur.ui:124
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:44
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:46
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:35
 #, kde-format
 msgid "Horizontal Radius:"
@@ -44102,7 +44102,7 @@ msgstr ""
 "Geçerli yapılandırma farklı bir renk uzayı için oluşturuldu ve "
 "kullanılamıyor. Tüm eğriler sıfırlanacak."
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:160
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "&Renk Ayarlama Eğrileri..."

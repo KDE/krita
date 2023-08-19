@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-15 00:43+0000\n"
+"POT-Creation-Date: 2023-08-19 00:43+0000\n"
 "PO-Revision-Date: 2023-08-11 09:30+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -30683,6 +30683,11 @@ msgctxt ""
 msgid "Waiting for saving to complete..."
 msgstr "Очікуємо на завершення дії зі збереження…"
 
+#: libs/ui/KisImageThumbnailStrokeStrategy.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Update overview thumbnail"
+msgstr "Оновити мініатюру огляду"
+
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
 msgid "An unspecified error occurred."
@@ -35733,7 +35738,7 @@ msgstr "Виберіть назву файла…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
-#: plugins/dockers/channeldocker/channeldocker_dock.cpp:28
+#: plugins/dockers/channeldocker/channeldocker_dock.cpp:30
 #, kde-format
 msgctxt "Channel as in Color Channels"
 msgid "Channels"
@@ -39819,11 +39824,6 @@ msgstr "Огляд"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Пришпилити керування навігацією"
-
-#: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-msgctxt "(qtundo-format)"
-msgid "Update overview thumbnail"
-msgstr "Оновити мініатюру огляду"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -44484,7 +44484,7 @@ msgstr "Восьмикутна (8)"
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:72
 #: plugins/filters/blur/wdgblur.ui:33
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:49
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:51
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:40
 #, kde-format
 msgid "Vertical Radius:"
@@ -44494,7 +44494,7 @@ msgstr "Вертикальний радіус:"
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:82
 #: plugins/filters/blur/wdgblur.ui:124
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:44
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:46
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:35
 #, kde-format
 msgid "Horizontal Radius:"
@@ -44763,7 +44763,7 @@ msgstr ""
 "Поточні налаштування було створено для іншого простору кольорів. Ними не "
 "можна скористатися. Для усіх кривих буде відновлено початкові форми."
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:160
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "Криві коригування &кольору…"

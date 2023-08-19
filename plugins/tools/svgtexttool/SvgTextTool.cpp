@@ -136,19 +136,14 @@ KisPopupWidgetInterface *SvgTextTool::popupWidget()
 QWidget *SvgTextTool::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();
-    QGridLayout *layout = new QGridLayout(optionWidget);
+    optionUi.setupUi(optionWidget);
+
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
 
-    QGroupBox *defsOptions = new QGroupBox(i18n("Create new texts with..."));
-    QVBoxLayout *defOptionsLayout = new QVBoxLayout(defsOptions);
-
-    m_defFont = new QFontComboBox();
     QString storedFont = m_configGroup.readEntry<QString>("defaultFont", QApplication::font().family());
-    m_defFont->setCurrentFont(QFont(storedFont));
-    defOptionsLayout->addWidget(m_defFont);
-    m_defPointSize = new QComboBox();
+    optionUi.defFont->setCurrentFont(QFont(storedFont));
     Q_FOREACH (int size, QFontDatabase::standardSizes()) {
-        m_defPointSize->addItem(QString::number(size)+" pt");
+        optionUi.defPointSize->addItem(QString::number(size)+" pt");
     }
     int storedSize = m_configGroup.readEntry<int>("defaultSize", QApplication::font().pointSize());
 #ifdef Q_OS_ANDROID
@@ -164,69 +159,40 @@ QWidget *SvgTextTool::createOptionWidget()
     if (QFontDatabase::standardSizes().contains(storedSize)) {
         sizeIndex = QFontDatabase::standardSizes().indexOf(storedSize);
     }
-    m_defPointSize->setCurrentIndex(sizeIndex);
+    optionUi.defPointSize->setCurrentIndex(sizeIndex);
 
     int checkedAlignment = m_configGroup.readEntry<int>("defaultAlignment", 0);
 
     m_defAlignment = new QButtonGroup();
-    QHBoxLayout *alignButtons = new QHBoxLayout();
-    alignButtons->addWidget(m_defPointSize);
-    QToolButton *alignLeft = new QToolButton();
-    alignLeft->setIcon(KisIconUtils::loadIcon("format-justify-left"));
-    alignLeft->setCheckable(true);
-    alignLeft->setAutoRaise(true);
+    optionUi.alignLeft->setIcon(KisIconUtils::loadIcon("format-justify-left"));
+    m_defAlignment->addButton(optionUi.alignLeft, 0);
 
-    alignLeft->setToolTip(i18n("Anchor text to the left."));
-    m_defAlignment->addButton(alignLeft, 0);
-    alignButtons->addWidget(alignLeft);
+    optionUi.alignCenter->setIcon(KisIconUtils::loadIcon("format-justify-center"));
+    m_defAlignment->addButton(optionUi.alignCenter, 1);
 
-    QToolButton *alignCenter = new QToolButton();
-    alignCenter->setIcon(KisIconUtils::loadIcon("format-justify-center"));
-    alignCenter->setCheckable(true);
-    alignCenter->setAutoRaise(true);
-    m_defAlignment->addButton(alignCenter, 1);
-    alignCenter->setToolTip(i18n("Anchor text to the middle."));
-
-    alignButtons->addWidget(alignCenter);
-
-    QToolButton *alignRight = new QToolButton();
-    alignRight->setIcon(KisIconUtils::loadIcon("format-justify-right"));
-    alignRight->setCheckable(true);
-    alignRight->setAutoRaise(true);
-    m_defAlignment->addButton(alignRight, 2);
-    alignRight->setToolTip(i18n("Anchor text to the right."));
-    alignButtons->addWidget(alignRight);
+    optionUi.alignRight->setIcon(KisIconUtils::loadIcon("format-justify-right"));
+    m_defAlignment->addButton(optionUi.alignRight, 2);
 
     m_defAlignment->setExclusive(true);
     if (checkedAlignment<1) {
-        alignLeft->setChecked(true);
+        optionUi.alignLeft->setChecked(true);
     } else if (checkedAlignment==1) {
-        alignCenter->setChecked(true);
+        optionUi.alignCenter->setChecked(true);
     } else if (checkedAlignment==2) {
-        alignRight->setChecked(true);
+        optionUi.alignRight->setChecked(true);
     } else {
-        alignLeft->setChecked(true);
+        optionUi.alignLeft->setChecked(true);
     }
 
     double storedLetterSpacing = m_configGroup.readEntry<double>("defaultLetterSpacing", 0.0);
-    m_defLetterSpacing = new QDoubleSpinBox();
-    m_defLetterSpacing->setToolTip(i18n("Letter Spacing"));
-    m_defLetterSpacing->setRange(-20.0, 20.0);
-    m_defLetterSpacing->setSingleStep(0.5);
-    m_defLetterSpacing->setValue(storedLetterSpacing);
-    alignButtons->addWidget(m_defLetterSpacing);
+    optionUi.defLetterSpacing->setValue(storedLetterSpacing);
 
-    defOptionsLayout->addLayout(alignButtons);
-    layout->addWidget(defsOptions);
     connect(m_defAlignment, SIGNAL(buttonClicked(int)), this, SLOT(storeDefaults()));
-    connect(m_defFont, SIGNAL(currentFontChanged(QFont)), this, SLOT(storeDefaults()));
-    connect(m_defPointSize, SIGNAL(currentIndexChanged(int)), this, SLOT(storeDefaults()));
-    connect(m_defLetterSpacing, SIGNAL(valueChanged(double)), SLOT(storeDefaults()));
+    connect(optionUi.defFont, SIGNAL(currentFontChanged(QFont)), this, SLOT(storeDefaults()));
+    connect(optionUi.defPointSize, SIGNAL(currentIndexChanged(int)), this, SLOT(storeDefaults()));
+    connect(optionUi.defLetterSpacing, SIGNAL(valueChanged(double)), SLOT(storeDefaults()));
 
-    m_edit = new QPushButton(optionWidget);
-    m_edit->setText(i18n("Edit Text"));
-    connect(m_edit, SIGNAL(clicked(bool)), SLOT(showEditor()));
-    layout->addWidget(m_edit);
+    connect(optionUi.btnEdit, SIGNAL(clicked(bool)), SLOT(showEditor()));
 
     return optionWidget;
 }
@@ -295,8 +261,8 @@ void SvgTextTool::slotTextEditorClosed()
 
 QString SvgTextTool::generateDefs(const QString &extraProperties)
 {
-    QString font = m_defFont->currentFont().family();
-    QString size = QString::number(QFontDatabase::standardSizes().at(m_defPointSize->currentIndex() > -1 ? m_defPointSize->currentIndex() : 0));
+    QString font = optionUi.defFont->currentFont().family();
+    QString size = QString::number(QFontDatabase::standardSizes().at(optionUi.defPointSize->currentIndex() > -1 ? optionUi.defPointSize->currentIndex() : 0));
 
     QString textAnchor = "middle";
     if (m_defAlignment->button(0)->isChecked()) {
@@ -307,7 +273,7 @@ QString SvgTextTool::generateDefs(const QString &extraProperties)
     }
 
     QString fontColor = canvas()->resourceManager()->foregroundColor().toQColor().name();
-    QString letterSpacing = QString::number(m_defLetterSpacing->value());
+    QString letterSpacing = QString::number(optionUi.defLetterSpacing->value());
 
     return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ; fill:%3 ;  text-anchor:%4; letter-spacing:%5;%6\n  }\n </style>\n</defs>").arg(font, size, fontColor, textAnchor, letterSpacing, extraProperties);
 }
@@ -315,16 +281,16 @@ QString SvgTextTool::generateDefs(const QString &extraProperties)
 void SvgTextTool::storeDefaults()
 {
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
-    m_configGroup.writeEntry("defaultFont", m_defFont->currentFont().family());
-    m_configGroup.writeEntry("defaultSize", QFontDatabase::standardSizes().at(m_defPointSize->currentIndex() > -1 ? m_defPointSize->currentIndex() : 0));
+    m_configGroup.writeEntry("defaultFont", optionUi.defFont->currentFont().family());
+    m_configGroup.writeEntry("defaultSize", QFontDatabase::standardSizes().at(optionUi.defPointSize->currentIndex() > -1 ? optionUi.defPointSize->currentIndex() : 0));
     m_configGroup.writeEntry("defaultAlignment", m_defAlignment->checkedId());
-    m_configGroup.writeEntry("defaultLetterSpacing", m_defLetterSpacing->value());
+    m_configGroup.writeEntry("defaultLetterSpacing", optionUi.defLetterSpacing->value());
 }
 
 QFont SvgTextTool::defaultFont() const
 {
-    int size = QFontDatabase::standardSizes().at(m_defPointSize->currentIndex() > -1 ? m_defPointSize->currentIndex() : 0);
-    QFont font = m_defFont->currentFont();
+    int size = QFontDatabase::standardSizes().at(optionUi.defPointSize->currentIndex() > -1 ? optionUi.defPointSize->currentIndex() : 0);
+    QFont font = optionUi.defFont->currentFont();
     font.setPointSize(size);
     return font;
 }

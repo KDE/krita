@@ -8,6 +8,8 @@
 #ifndef SVG_TEXT_TOOL
 #define SVG_TEXT_TOOL
 
+#include "ui_WdgSvgTextOptionWidget.h"
+
 #include <KConfigGroup>
 #include <KoToolBase.h>
 #include <QPushButton>
@@ -104,19 +106,18 @@ private:
     };
 
     QPointer<SvgTextEditor> m_editor;
-    QPushButton *m_edit {nullptr};
     QPointF m_lastMousePos;
     DragMode m_dragging {DragMode::None};
     std::unique_ptr<KoInteractionStrategy> m_interactionStrategy;
     HighlightItem m_highlightItem {HighlightItem::None};
-    QFontComboBox *m_defFont {nullptr};
-    QComboBox *m_defPointSize {nullptr};
+
     QButtonGroup *m_defAlignment {nullptr};
-    QDoubleSpinBox *m_defLetterSpacing {nullptr};
     KConfigGroup m_configGroup;
 
     QPainterPath m_hoveredShapeHighlightRect;
     boost::optional<KoColor> m_originalColor { boost::none };
+
+    Ui_WdgSvgTextOptionWidget optionUi;
 };
 
 #endif

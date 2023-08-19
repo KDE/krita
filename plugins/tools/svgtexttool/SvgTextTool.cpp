@@ -399,10 +399,17 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
 
     // Paint debug outline
     if (debugEnabled() && shape) {
-        gc.setTransform(shape->absoluteTransformation(), true);
+        using Element = KoSvgTextShape::DebugElement;
+        KoSvgTextShape::DebugElements el{};
         if (optionUi.chkDbgCharBbox->isChecked()) {
-            shape->paintDebug(gc);
+            el |= Element::CharBbox;
         }
+        if (optionUi.chkDbgLineBox->isChecked()) {
+            el |= Element::LineBox;
+        }
+
+        gc.setTransform(shape->absoluteTransformation(), true);
+        shape->paintDebug(gc, el);
     }
 }
 

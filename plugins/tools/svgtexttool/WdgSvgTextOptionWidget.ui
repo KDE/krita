@@ -126,6 +126,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QCheckBox" name="chkDbgLineBox">
+        <property name="text">
+         <string>Show line boxes</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

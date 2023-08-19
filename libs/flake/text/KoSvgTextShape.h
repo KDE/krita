@@ -13,6 +13,8 @@
 #include <KoSvgTextChunkShape.h>
 #include <SvgShape.h>
 
+#include <QFlags>
+
 class KoSvgTextProperties;
 
 #define KoSvgTextShape_SHAPEID "KoSvgTextShapeID"
@@ -38,7 +40,12 @@ public:
     void paintComponent(QPainter &painter) const override;
     void paintStroke(QPainter &painter) const override;
 
-    void paintDebug(QPainter &painter) const;
+    enum class DebugElement {
+        CharBbox = 1 << 0,
+        LineBox = 1 << 1,
+    };
+    Q_DECLARE_FLAGS(DebugElements, DebugElement);
+    void paintDebug(QPainter &painter, DebugElements elements) const;
 
     /**
      * Reset the text shape into initial shape, removing all the child shapes
@@ -121,6 +128,8 @@ private:
     class Private;
     QScopedPointer<Private> d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoSvgTextShape::DebugElements)
 
 class KoSvgTextShapeFactory : public KoShapeFactoryBase
 {

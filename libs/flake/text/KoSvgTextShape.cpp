@@ -136,17 +136,6 @@ void KoSvgTextShape::paintComponent(QPainter &painter) const
         painter.strokePath(p, QPen(Qt::red));
     }
 #endif
-#if 0 // Debug
-    Q_FOREACH (LineBox lineBox, d->lineBoxes) {
-        Q_FOREACH (LineChunk chunk, lineBox.chunks) {
-            painter.setBrush(QBrush(Qt::transparent));
-            painter.setPen(QColor(0, 128, 255, 80));
-            painter.drawLine(chunk.length);
-            painter.setPen(QColor(255, 128, 0, 80));
-            painter.drawRect(chunk.boundingBox);
-        }
-    }
-#endif
 
     painter.restore();
 }
@@ -157,14 +146,33 @@ void KoSvgTextShape::paintStroke(QPainter &painter) const
     // do nothing! everything is painted in paintComponent()
 }
 
-void KoSvgTextShape::paintDebug(QPainter &painter) const
+void KoSvgTextShape::paintDebug(QPainter &painter, const DebugElements elements) const
 {
-    QPainterPath chunk;
-    int currentIndex = 0;
-    if (!d->result.isEmpty()) {
-        QPainterPath rootBounds;
-        rootBounds.addRect(this->outline().boundingRect());
-        d->paintDebug(painter, rootBounds, this, d->result, chunk, currentIndex);
+    if (elements & DebugElement::CharBbox) {
+        QPainterPath chunk;
+        int currentIndex = 0;
+        if (!d->result.isEmpty()) {
+            QPainterPath rootBounds;
+            rootBounds.addRect(this->outline().boundingRect());
+            d->paintDebug(painter, rootBounds, this, d->result, chunk, currentIndex);
+        }
+    }
+
+    if (elements & DebugElement::LineBox) {
+        Q_FOREACH (LineBox lineBox, d->lineBoxes) {
+            Q_FOREACH (const LineChunk &chunk, lineBox.chunks) {
+                QPen pen;
+                pen.setCosmetic(true);
+                pen.setWidth(2);
+                painter.setBrush(QBrush(Qt::transparent));
+                pen.setColor(QColor(0, 128, 255, 128));
+                painter.setPen(pen);
+                painter.drawLine(chunk.length);
+                pen.setColor(QColor(255, 128, 0, 128));
+                painter.setPen(pen);
+                painter.drawRect(chunk.boundingBox);
+            }
+        }
     }
 }
 

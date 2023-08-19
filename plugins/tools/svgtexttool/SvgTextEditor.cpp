@@ -1085,18 +1085,6 @@ void SvgTextEditor::setSettings()
     }
     textSettings.lwScripts->setModel(writingSystemsModel);
 
-    m_currentEditorMode = (EditorMode)cfg.readEntry("EditorMode", (int)EditorMode::Both);
-    switch (m_currentEditorMode) {
-    case EditorMode::RichText:
-        textSettings.radioRichText->setChecked(true);
-        break;
-    case EditorMode::SvgSource:
-        textSettings.radioSvgSource->setChecked(true);
-        break;
-    case EditorMode::Both:
-        textSettings.radioBoth->setChecked(true);
-    }
-
     QColor background = cfg.readEntry("colorEditorBackground", qApp->palette().window().color());
     textSettings.colorEditorBackground->setColor(background);
     textSettings.colorEditorForeground->setColor(cfg.readEntry("colorEditorForeground", qApp->palette().text().color()));
@@ -1132,16 +1120,6 @@ void SvgTextEditor::setSettings()
             }
         }
         cfg.writeEntry("selectedWritingSystems", writingSystems.join(','));
-
-        if (textSettings.radioRichText->isChecked()) {
-            cfg.writeEntry("EditorMode", (int)EditorMode::RichText);
-        }
-        else if (textSettings.radioSvgSource->isChecked()) {
-            cfg.writeEntry("EditorMode", (int)EditorMode::SvgSource);
-        }
-        else  if (textSettings.radioBoth->isChecked()) {
-            cfg.writeEntry("EditorMode", (int)EditorMode::Both);
-        }
 
         cfg.writeEntry("colorEditorBackground", textSettings.colorEditorBackground->color());
         cfg.writeEntry("colorEditorForeground", textSettings.colorEditorForeground->color());
@@ -1394,25 +1372,14 @@ void SvgTextEditor::applySettings()
 {
     KConfigGroup cfg(KSharedConfig::openConfig(), "SvgTextTool");
 
-    m_currentEditorMode = (EditorMode)cfg.readEntry("EditorMode", (int)EditorMode::Both);
-
     QWidget *richTab = m_textEditorWidget.richTab;
     QWidget *svgTab = m_textEditorWidget.svgTab;
 
     m_page->setUpdatesEnabled(false);
     m_textEditorWidget.textTab->clear();
 
-    switch (m_currentEditorMode) {
-    case EditorMode::RichText:
-        m_textEditorWidget.textTab->addTab(richTab, i18n("Rich text"));
-        break;
-    case EditorMode::SvgSource:
-        m_textEditorWidget.textTab->addTab(svgTab, i18n("SVG Source"));
-        break;
-    case EditorMode::Both:
-        m_textEditorWidget.textTab->addTab(richTab, i18n("Rich text"));
-        m_textEditorWidget.textTab->addTab(svgTab, i18n("SVG Source"));
-    }
+    m_textEditorWidget.textTab->addTab(richTab, i18n("Rich text"));
+    m_textEditorWidget.textTab->addTab(svgTab, i18n("SVG Source"));
 
     m_syntaxHighlighter->setFormats();
 
@@ -1661,15 +1628,11 @@ void SvgTextEditor::enableSvgTextActions(bool enable)
 }
 
 bool SvgTextEditor::isRichTextEditorTabActive() {
-    return m_currentEditorMode == EditorMode::RichText 
-        || (m_currentEditorMode == EditorMode::Both 
-            && m_textEditorWidget.textTab->currentIndex() == Editor::Richtext);
+    return m_textEditorWidget.textTab->currentIndex() == Editor::Richtext;
 }
 
 bool SvgTextEditor::isSvgSourceEditorTabActive() {
-    return m_currentEditorMode == EditorMode::SvgSource 
-        || (m_currentEditorMode == EditorMode::Both 
-            && m_textEditorWidget.textTab->currentIndex() == Editor::SVGsource);
+    return m_textEditorWidget.textTab->currentIndex() == Editor::SVGsource;
 }
 
 void SvgTextEditor::slotCloseEditor()

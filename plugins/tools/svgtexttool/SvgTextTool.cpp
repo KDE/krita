@@ -351,7 +351,7 @@ QRectF SvgTextTool::decorationsRect() const
         rect |= kisGrowRect(QRectF(anchor, anchor), handleRadius());
 
         if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape)) {
-            rect |= info->boundingRect();
+            rect |= kisGrowRect(info->boundingRect(), handleRadius() * 2);
         }
     }
 
@@ -388,6 +388,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
                 handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
             }
             handlePainter.drawConnectionLine(info->editLineLocal());
+            handlePainter.drawGradientHandle(info->editLineLocal().p1(), KoToolBase::handleRadius() * 0.75);
         }
 
         if (m_highlightItem == HighlightItem::MoveBorder) {

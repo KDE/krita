@@ -139,7 +139,6 @@ struct Q_DECL_HIDDEN InlineSizeInfo {
             bottom = outline.right();
             break;
         }
-        top -= 2.0;
         bottom += 4.0;
         InlineSizeInfo ret{inlineSize,
                            baseline,
@@ -248,7 +247,10 @@ public:
             editLine = rightLineRaw();
             break;
         }
-        const QRectF rect{editLine.x1() - grabThreshold, top, grabThreshold * 2, bottom - top};
+        const QRectF rect{editLine.x1() - grabThreshold,
+                          top - grabThreshold,
+                          grabThreshold * 2,
+                          bottom - top + grabThreshold * 2};
         const QPolygonF poly(rect);
         return shapeTransform.map(editorTransform.map(poly));
     }

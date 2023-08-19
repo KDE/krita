@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-15 02:25+0000\n"
+"POT-Creation-Date: 2023-08-19 02:23+0000\n"
 "PO-Revision-Date: 2023-08-06 18:44+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -30455,6 +30455,13 @@ msgctxt ""
 msgid "Waiting for saving to complete..."
 msgstr "Gordetzea osatzeko zain..."
 
+#: libs/ui/KisImageThumbnailStrokeStrategy.cpp:32
+#, fuzzy
+#| msgid "Update preview"
+msgctxt "(qtundo-format)"
+msgid "Update overview thumbnail"
+msgstr "Eguneratu aurrebista"
+
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
 msgid "An unspecified error occurred."
@@ -35323,7 +35330,7 @@ msgstr "Hautatu fitxategi-izena..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
-#: plugins/dockers/channeldocker/channeldocker_dock.cpp:28
+#: plugins/dockers/channeldocker/channeldocker_dock.cpp:30
 #, kde-format
 msgctxt "Channel as in Color Channels"
 msgid "Channels"
@@ -39283,13 +39290,6 @@ msgstr "Ikuspegi orokorra"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Iltzatu nabigatzeko aginteak"
-
-#: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgid "Update preview"
-msgctxt "(qtundo-format)"
-msgid "Update overview thumbnail"
-msgstr "Eguneratu aurrebista"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -43930,7 +43930,7 @@ msgstr "Oktagonoa (8)"
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:72
 #: plugins/filters/blur/wdgblur.ui:33
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:49
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:51
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:40
 #, kde-format
 msgid "Vertical Radius:"
@@ -43940,7 +43940,7 @@ msgstr "Erradio bertikala:"
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:82
 #: plugins/filters/blur/wdgblur.ui:124
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:44
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:46
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:35
 #, kde-format
 msgid "Horizontal Radius:"
@@ -44209,7 +44209,7 @@ msgstr ""
 "Uneko konfigurazioa beste kolore-eremu baterako sortu zen eta ezin da "
 "erabili. Kurba guztiak berrezarriko dira."
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:160
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "&Kolorea doitzeko kurbak..."

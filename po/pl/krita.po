@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-15 02:25+0000\n"
+"POT-Creation-Date: 2023-08-19 02:23+0000\n"
 "PO-Revision-Date: 2022-12-11 07:39+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -30458,6 +30458,13 @@ msgctxt ""
 msgid "Waiting for saving to complete..."
 msgstr "Oczekiwanie na ukończenie zapisywania..."
 
+#: libs/ui/KisImageThumbnailStrokeStrategy.cpp:32
+#, fuzzy
+#| msgid "Update preview"
+msgctxt "(qtundo-format)"
+msgid "Update overview thumbnail"
+msgstr "Uaktualnij podgląd"
+
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
 msgid "An unspecified error occurred."
@@ -35485,7 +35492,7 @@ msgstr "Wybierz nazwę pliku..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
-#: plugins/dockers/channeldocker/channeldocker_dock.cpp:28
+#: plugins/dockers/channeldocker/channeldocker_dock.cpp:30
 #, kde-format
 msgctxt "Channel as in Color Channels"
 msgid "Channels"
@@ -39477,13 +39484,6 @@ msgstr "Przegląd"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Przypnij przyciski poruszania się"
-
-#: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgid "Update preview"
-msgctxt "(qtundo-format)"
-msgid "Update overview thumbnail"
-msgstr "Uaktualnij podgląd"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -44180,7 +44180,7 @@ msgstr "Ośmiokąt (8)"
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:72
 #: plugins/filters/blur/wdgblur.ui:33
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:49
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:51
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:40
 #, kde-format
 msgid "Vertical Radius:"
@@ -44190,7 +44190,7 @@ msgstr "Promień pionowy:"
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:82
 #: plugins/filters/blur/wdgblur.ui:124
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:44
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:46
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:35
 #, kde-format
 msgid "Horizontal Radius:"
@@ -44459,7 +44459,7 @@ msgstr ""
 "Bieżące ustawienia zostały stworzone dla innej przestrzeni barw i nie można "
 "ich użyć. Wszystkie krzywe zostaną wyzerowane."
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:160
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "Krzywe &regulacji barwy..."

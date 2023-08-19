@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-15 02:25+0000\n"
+"POT-Creation-Date: 2023-08-19 02:23+0000\n"
 "PO-Revision-Date: 2023-07-24 21:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -31255,6 +31255,13 @@ msgctxt ""
 msgid "Waiting for saving to complete..."
 msgstr "저장이 완료되기를 기다리는 중..."
 
+#: libs/ui/KisImageThumbnailStrokeStrategy.cpp:32
+#, fuzzy
+#| msgid "Update preview"
+msgctxt "(qtundo-format)"
+msgid "Update overview thumbnail"
+msgstr "미리 보기 업데이트"
+
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
 msgid "An unspecified error occurred."
@@ -36267,7 +36274,7 @@ msgstr "선택한 파일 이름..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
-#: plugins/dockers/channeldocker/channeldocker_dock.cpp:28
+#: plugins/dockers/channeldocker/channeldocker_dock.cpp:30
 #, fuzzy, kde-format
 #| msgid "Channels"
 msgctxt "Channel as in Color Channels"
@@ -40211,13 +40218,6 @@ msgstr "미리 보기"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "탐색 컨트롤 고정"
-
-#: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgid "Update preview"
-msgctxt "(qtundo-format)"
-msgid "Update overview thumbnail"
-msgstr "미리 보기 업데이트"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, fuzzy, kde-format
@@ -44950,7 +44950,7 @@ msgstr "팔각형"
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:72
 #: plugins/filters/blur/wdgblur.ui:33
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:49
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:51
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:40
 #, kde-format
 msgid "Vertical Radius:"
@@ -44960,7 +44960,7 @@ msgstr "수직 반지름:"
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:82
 #: plugins/filters/blur/wdgblur.ui:124
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:44
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:46
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:35
 #, kde-format
 msgid "Horizontal Radius:"
@@ -45235,7 +45235,7 @@ msgstr ""
 "현재 설정은 다른 색 공간용으로 만들어져 사용할 수 없습니다. 모든 곡선이 초기"
 "화됩니다."
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:160
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "색상 조정 곡선(&C)..."

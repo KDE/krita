@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-15 02:25+0000\n"
+"POT-Creation-Date: 2023-08-19 02:23+0000\n"
 "PO-Revision-Date: 2023-06-06 00:31-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -30484,6 +30484,11 @@ msgctxt ""
 msgid "Waiting for saving to complete..."
 msgstr "保存が完了するのを待っています..."
 
+#: libs/ui/KisImageThumbnailStrokeStrategy.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Update overview thumbnail"
+msgstr ""
+
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
 msgid "An unspecified error occurred."
@@ -35476,7 +35481,7 @@ msgstr "ファイル名を選択..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
-#: plugins/dockers/channeldocker/channeldocker_dock.cpp:28
+#: plugins/dockers/channeldocker/channeldocker_dock.cpp:30
 #, kde-format
 msgctxt "Channel as in Color Channels"
 msgid "Channels"
@@ -39461,11 +39466,6 @@ msgstr "キャンバスプレビュー"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "ピンナビゲーションを制御"
-
-#: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-msgctxt "(qtundo-format)"
-msgid "Update overview thumbnail"
-msgstr ""
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -44254,7 +44254,7 @@ msgstr "八角形"
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:72
 #: plugins/filters/blur/wdgblur.ui:33
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:49
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:51
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:40
 #, kde-format
 msgid "Vertical Radius:"
@@ -44264,7 +44264,7 @@ msgstr "垂直方向の半径:"
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/filters/blur/wdg_gaussian_blur.ui:82
 #: plugins/filters/blur/wdgblur.ui:124
-#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:44
+#: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:46
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:35
 #, kde-format
 msgid "Horizontal Radius:"
@@ -44537,7 +44537,7 @@ msgstr ""
 "現在の設定は別の色空間用に作成されたもので、使用できません。すべてのカーブが"
 "リセットされます。"
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:160
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "カラー補正カーブ(&C)..."

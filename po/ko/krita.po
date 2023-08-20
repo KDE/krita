@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-19 00:43+0000\n"
+"POT-Creation-Date: 2023-08-20 00:44+0000\n"
 "PO-Revision-Date: 2023-07-24 21:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17146,25 +17146,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:268
+#: libs/flake/text/KoSvgTextShape.cpp:276
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "텍스트"
 
-#: libs/flake/text/KoSvgTextShape.cpp:270
 #: libs/flake/text/KoSvgTextShape.cpp:278
+#: libs/flake/text/KoSvgTextShape.cpp:286
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 텍스트 모양"
 
-#: libs/flake/text/KoSvgTextShape.cpp:276
+#: libs/flake/text/KoSvgTextShape.cpp:284
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 텍스트"
 
-#: libs/flake/text/KoSvgTextShape.cpp:290
-#: libs/flake/text/KoSvgTextShape.cpp:305
+#: libs/flake/text/KoSvgTextShape.cpp:298
+#: libs/flake/text/KoSvgTextShape.cpp:313
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17474,7 +17474,7 @@ msgstr "기본값"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1571
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1538
 #, kde-format
 msgid "Size"
 msgstr "크기"
@@ -20345,7 +20345,7 @@ msgstr "로컬 리소스"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1226
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -23506,7 +23506,7 @@ msgstr "레이어 속성"
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1611
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -26796,7 +26796,7 @@ msgstr "전경색"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1587
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1554
 #, kde-format
 msgid "Background Color"
 msgstr "배경색"
@@ -42436,7 +42436,7 @@ msgstr "파일 이름"
 
 #. i18n: ectx: property (text), widget (QLabel, colorComment_2)
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:196
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
 #, kde-format
 msgid "Comment"
 msgstr "설명"
@@ -47285,7 +47285,7 @@ msgstr "연결선"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColor)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:100
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:76
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:25
 #, kde-format
 msgid "Colors"
 msgstr "색상"
@@ -55631,11 +55631,11 @@ msgstr "글꼴 사용"
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldValue)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldComment)
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:357
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:94
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:122
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:150
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:178
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:206
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:43
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:71
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:99
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:127
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:155
 #, kde-format
 msgid "Bold"
 msgstr "굵게"
@@ -55646,11 +55646,11 @@ msgstr "굵게"
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicValue)
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicComment)
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:358
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:101
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:129
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:157
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:185
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:213
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:50
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:78
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:106
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:134
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:162
 #, kde-format
 msgid "Italic"
 msgstr "기울임꼴"
@@ -59597,62 +59597,61 @@ msgstr "모두 바꾸기"
 msgid "Replace:"
 msgstr "바꾸기:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1226
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "텍스트를 변경했습니다. 변경 사항을 버리시겠습니까?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1407
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1413
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1381
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "서식 있는 텍스트"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1410
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1414
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
 #, kde-format
 msgid "SVG Source"
 msgstr "SVG 원본"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1562
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1529
 #, kde-format
 msgid "Font"
 msgstr "글꼴"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1546
 #, kde-format
 msgid "Text Color"
 msgstr "글자색"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1561
 #, kde-format
 msgid "Sample a Color"
 msgstr "색상 표본 추출"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1575
 #, kde-format
 msgid "Line height"
 msgstr "줄 높이"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1612
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1621
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1588
 #, fuzzy, kde-format
 #| msgid "Normal"
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "표준"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1625
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1592
 #, fuzzy, kde-format
 #| msgid "100%"
 msgctxt "line height for text"
 msgid "100%"
 msgstr "100%"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1639
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:213
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1606
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
 #, kde-format
 msgid "Letter Spacing"
 msgstr "문자 간격"
@@ -60099,32 +60098,7 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:142
-#, kde-format
-msgid "Create new texts with..."
-msgstr "다음으로 새 텍스트 생성..."
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:179
-#, kde-format
-msgid "Anchor text to the left."
-msgstr "텍스트를 왼쪽에 고정합니다."
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:188
-#, kde-format
-msgid "Anchor text to the middle."
-msgstr "텍스트를 가운데에 고정합니다."
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:197
-#, kde-format
-msgid "Anchor text to the right."
-msgstr "텍스트를 오른쪽에 고정합니다."
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:227
-#, kde-format
-msgid "Edit Text"
-msgstr "텍스트 편집"
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:263
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:240
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -60185,81 +60159,96 @@ msgstr "SVG"
 msgid "Vertical Text Layout"
 msgstr "수직 텍스트 레이아웃"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:25
+#. i18n: ectx: property (text), widget (QPushButton, btnEdit)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:21
 #, kde-format
-msgid "Editor Mode"
-msgstr "편집기 모드"
+msgid "Edit Text"
+msgstr "텍스트 편집"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:31
+#. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:28
 #, kde-format
-msgid "Note: the Rich Text editor only supports a subset of SVG."
-msgstr "참고: 서식 있는 텍스트 편집기는 SVG의 일부 기능만 지원합니다."
+msgid "Create new texts with..."
+msgstr "다음으로 새 텍스트 생성..."
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioRichText)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:41
+#. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:42
 #, kde-format
-msgid "Rich Te&xt Only"
-msgstr "서식 있는 텍스트만(&X)"
+msgid "Anchor text to the left."
+msgstr "텍스트를 왼쪽에 고정합니다."
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioBoth)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:48
+#. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:55
 #, kde-format
-msgid "Both"
-msgstr "모두"
+msgid "Anchor text to the middle."
+msgstr "텍스트를 가운데에 고정합니다."
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioSvgSource)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:55
+#. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:68
 #, kde-format
-msgid "S&VG Source Only"
-msgstr "SVG 소스만(&V)"
+msgid "Anchor text to the right."
+msgstr "텍스트를 오른쪽에 고정합니다."
+
+#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:102
+#, fuzzy, kde-format
+#| msgid "SVG Source"
+msgid "Edit SVG Source"
+msgstr "SVG 원본"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
+#, fuzzy, kde-format
+#| msgctxt "Open the folder when the new created video is placed"
+#| msgid "Show in folder"
+msgid "Show line boxes"
+msgstr "포함하는 폴더 열기"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:84
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, kde-format
 msgid "Keyword"
 msgstr "키워드"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:112
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
 #, kde-format
 msgid "Element"
 msgstr "요소"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:140
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
 #, kde-format
 msgid "Attribute"
 msgstr "속성"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:168
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
 #, kde-format
 msgctxt "The Value label used by SVG Text Tool"
 msgid "Value"
 msgstr "명도"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:224
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:173
 #, kde-format
 msgid "Editor text color"
 msgstr "편집기 글자색"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:234
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:183
 #, kde-format
 msgid "Editor background:"
 msgstr "편집기 배경색:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:260
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:209
 #, kde-format
 msgid "Fonts"
 msgstr "글꼴"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:266
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:215
 #, kde-format
 msgid ""
 "<html><head/><body><p>Which writing system should the fonts chooser show the "
@@ -61784,6 +61773,21 @@ msgstr "확대/축소 도구"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "참조 이미지 도구"
+
+#~ msgid "Editor Mode"
+#~ msgstr "편집기 모드"
+
+#~ msgid "Note: the Rich Text editor only supports a subset of SVG."
+#~ msgstr "참고: 서식 있는 텍스트 편집기는 SVG의 일부 기능만 지원합니다."
+
+#~ msgid "Rich Te&xt Only"
+#~ msgstr "서식 있는 텍스트만(&X)"
+
+#~ msgid "Both"
+#~ msgstr "모두"
+
+#~ msgid "S&VG Source Only"
+#~ msgstr "SVG 소스만(&V)"
 
 #, fuzzy
 #~| msgctxt "Grow as in deform brush engine"

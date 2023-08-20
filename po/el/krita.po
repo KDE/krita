@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-19 00:43+0000\n"
+"POT-Creation-Date: 2023-08-20 00:44+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -16742,28 +16742,28 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:268
+#: libs/flake/text/KoSvgTextShape.cpp:276
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Κείμενο"
 
-#: libs/flake/text/KoSvgTextShape.cpp:270
 #: libs/flake/text/KoSvgTextShape.cpp:278
+#: libs/flake/text/KoSvgTextShape.cpp:286
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "Text Shape"
 
-#: libs/flake/text/KoSvgTextShape.cpp:276
+#: libs/flake/text/KoSvgTextShape.cpp:284
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " Κείμενο:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:290
-#: libs/flake/text/KoSvgTextShape.cpp:305
+#: libs/flake/text/KoSvgTextShape.cpp:298
+#: libs/flake/text/KoSvgTextShape.cpp:313
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17077,7 +17077,7 @@ msgstr "προκαθορισμένο"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1571
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1538
 #, kde-format
 msgid "Size"
 msgstr "Μέγεθος"
@@ -20128,7 +20128,7 @@ msgstr "Αρχεία πηγής:"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1226
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -23262,7 +23262,7 @@ msgstr "Ιδιότητες στρώματος"
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1611
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -26543,7 +26543,7 @@ msgstr "Χρώμα προσκηνίου"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1587
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1554
 #, kde-format
 msgid "Background Color"
 msgstr "Χρώμα φόντου"
@@ -41975,7 +41975,7 @@ msgstr "Όνομα αρχείου"
 
 #. i18n: ectx: property (text), widget (QLabel, colorComment_2)
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:196
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
 #, fuzzy, kde-format
 #| msgid "Comments"
 msgid "Comment"
@@ -47025,7 +47025,7 @@ msgstr "Σημείο σύνδεσης"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColor)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:100
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:76
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:25
 #, kde-format
 msgid "Colors"
 msgstr "Χρώματα"
@@ -55294,11 +55294,11 @@ msgstr "Ορισμός γραμματοσειράς"
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldValue)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldComment)
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:357
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:94
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:122
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:150
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:178
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:206
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:43
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:71
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:99
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:127
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:155
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Bold"
@@ -55311,11 +55311,11 @@ msgstr "Έντονα"
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicValue)
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicComment)
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:358
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:101
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:129
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:157
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:185
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:213
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:50
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:78
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:106
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:134
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:162
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Italic"
@@ -59597,14 +59597,13 @@ msgstr ""
 msgid "Replace:"
 msgstr "Αντικατάσταση"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1226
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1407
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1413
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1381
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
@@ -59612,50 +59611,50 @@ msgstr ""
 msgid "Rich text"
 msgstr "Πλάγια"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1410
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1414
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
 #, fuzzy, kde-format
 #| msgid "Source"
 msgid "SVG Source"
 msgstr "Πηγή"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1562
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1529
 #, kde-format
 msgid "Font"
 msgstr "Γραμματοσειρά"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1546
 #, fuzzy, kde-format
 msgid "Text Color"
 msgstr "Εργαλείο γραμμής"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1561
 #, fuzzy, kde-format
 msgid "Sample a Color"
 msgstr "Επιλογή αδιαφανούς"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1575
 #, fuzzy, kde-format
 msgid "Line height"
 msgstr "Ύψος εκτύπωσης:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1612
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1621
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1588
 #, fuzzy, kde-format
 #| msgid "Normal"
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Κανονική"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1625
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1592
 #, fuzzy, kde-format
 #| msgid "100%"
 msgctxt "line height for text"
 msgid "100%"
 msgstr "100%"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1639
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:213
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1606
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
 #, fuzzy, kde-format
 #| msgid "Line Spacing"
 msgid "Letter Spacing"
@@ -60108,32 +60107,7 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:142
-#, fuzzy, kde-format
-msgid "Create new texts with..."
-msgstr "Πρόσφατα έγγραφα"
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:179
-#, fuzzy, kde-format
-msgid "Anchor text to the left."
-msgstr "Δύναμη:"
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:188
-#, fuzzy, kde-format
-msgid "Anchor text to the middle."
-msgstr "Δύναμη:"
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:197
-#, fuzzy, kde-format
-msgid "Anchor text to the right."
-msgstr "Δύναμη:"
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:227
-#, fuzzy, kde-format
-msgid "Edit Text"
-msgstr "Κείμενο"
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:263
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:240
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -60200,53 +60174,64 @@ msgstr "HSV"
 msgid "Vertical Text Layout"
 msgstr "Κατακόρυφη διάτμηση"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:25
+#. i18n: ectx: property (text), widget (QPushButton, btnEdit)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:21
 #, fuzzy, kde-format
-#| msgid "Edit Mode"
-msgid "Editor Mode"
-msgstr "Λειτουργία επεξεργασίας"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:31
-#, kde-format
-msgid "Note: the Rich Text editor only supports a subset of SVG."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioRichText)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:41
-#, fuzzy, kde-format
-msgid "Rich Te&xt Only"
+msgid "Edit Text"
 msgstr "Κείμενο"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioBoth)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:48
-#, kde-format
-msgid "Both"
-msgstr ""
+#. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:28
+#, fuzzy, kde-format
+msgid "Create new texts with..."
+msgstr "Πρόσφατα έγγραφα"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioSvgSource)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:55
+#. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:42
+#, fuzzy, kde-format
+msgid "Anchor text to the left."
+msgstr "Δύναμη:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:55
+#, fuzzy, kde-format
+msgid "Anchor text to the middle."
+msgstr "Δύναμη:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:68
+#, fuzzy, kde-format
+msgid "Anchor text to the right."
+msgstr "Δύναμη:"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:102
 #, fuzzy, kde-format
 #| msgid "Source"
-msgid "S&VG Source Only"
+msgid "Edit SVG Source"
 msgstr "Πηγή"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
+#, fuzzy, kde-format
+msgid "Show line boxes"
+msgstr "Πλάτος γραμμής"
+
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:84
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, fuzzy, kde-format
 #| msgid "Keywords:"
 msgid "Keyword"
 msgstr "Λέξεις κλειδιά:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:112
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
 #, fuzzy, kde-format
 msgid "Element"
 msgstr "Τοποθέτηση"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:140
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Distribute shapes"
@@ -60254,7 +60239,7 @@ msgid "Attribute"
 msgstr "Κατανομή σχημάτων"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:168
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
 #, fuzzy, kde-format
 #| msgid "Value"
 msgctxt "The Value label used by SVG Text Tool"
@@ -60262,7 +60247,7 @@ msgid "Value"
 msgstr "Τιμή"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:224
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:173
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Set Text Color"
@@ -60270,21 +60255,21 @@ msgid "Editor text color"
 msgstr "Ορισμός χρώματος κειμένου"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:234
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:183
 #, fuzzy, kde-format
 #| msgid "Color background"
 msgid "Editor background:"
 msgstr "Χρώμα φόντου"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:260
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:209
 #, fuzzy, kde-format
 #| msgid "Font"
 msgid "Fonts"
 msgstr "Γραμματοσειρά"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:266
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:215
 #, kde-format
 msgid ""
 "<html><head/><body><p>Which writing system should the fonts chooser show the "
@@ -61813,6 +61798,20 @@ msgstr "Εστίαση όλων"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Εικόνες αναφοράς"
+
+#, fuzzy
+#~| msgid "Edit Mode"
+#~ msgid "Editor Mode"
+#~ msgstr "Λειτουργία επεξεργασίας"
+
+#, fuzzy
+#~ msgid "Rich Te&xt Only"
+#~ msgstr "Κείμενο"
+
+#, fuzzy
+#~| msgid "Source"
+#~ msgid "S&VG Source Only"
+#~ msgstr "Πηγή"
 
 #, fuzzy
 #~| msgid "Grow"

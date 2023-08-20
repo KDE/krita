@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-19 00:43+0000\n"
+"POT-Creation-Date: 2023-08-20 00:44+0000\n"
 "PO-Revision-Date: 2023-08-11 10:45+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -16293,25 +16293,25 @@ msgstr ""
 "la dokumenton, la tekstobjekto estos konvertita al Krita 5-formato kiu ne "
 "plu kongruos kun Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:268
+#: libs/flake/text/KoSvgTextShape.cpp:276
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Teksto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:270
 #: libs/flake/text/KoSvgTextShape.cpp:278
+#: libs/flake/text/KoSvgTextShape.cpp:286
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Teksto Formo"
 
-#: libs/flake/text/KoSvgTextShape.cpp:276
+#: libs/flake/text/KoSvgTextShape.cpp:284
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Teksto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:290
-#: libs/flake/text/KoSvgTextShape.cpp:305
+#: libs/flake/text/KoSvgTextShape.cpp:298
+#: libs/flake/text/KoSvgTextShape.cpp:313
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16618,7 +16618,7 @@ msgstr "norma"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1571
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1538
 #, kde-format
 msgid "Size"
 msgstr "Grandeco"
@@ -19480,7 +19480,7 @@ msgstr "Lokaj Rimedoj"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1226
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22557,7 +22557,7 @@ msgstr "Ecoj de Ebeno"
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1611
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -25795,7 +25795,7 @@ msgstr "Malfona Koloro"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1587
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1554
 #, kde-format
 msgid "Background Color"
 msgstr "Fona Koloro"
@@ -41228,7 +41228,7 @@ msgstr "Dosiernomo"
 
 #. i18n: ectx: property (text), widget (QLabel, colorComment_2)
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:196
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
 #, kde-format
 msgid "Comment"
 msgstr "Komento"
@@ -46051,7 +46051,7 @@ msgstr "Konektilaj Linioj"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColor)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:100
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:76
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:25
 #, kde-format
 msgid "Colors"
 msgstr "Koloroj"
@@ -54401,11 +54401,11 @@ msgstr "Uzi tiparon"
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldValue)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldComment)
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:357
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:94
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:122
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:150
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:178
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:206
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:43
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:71
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:99
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:127
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:155
 #, kde-format
 msgid "Bold"
 msgstr "Grasa"
@@ -54416,11 +54416,11 @@ msgstr "Grasa"
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicValue)
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicComment)
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:358
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:101
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:129
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:157
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:185
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:213
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:50
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:78
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:106
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:134
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:162
 #, kde-format
 msgid "Italic"
 msgstr "Kursiva"
@@ -58317,60 +58317,59 @@ msgstr "Trovi kaj Anstataŭigi ĉiujn"
 msgid "Replace:"
 msgstr "Anstataŭigi:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1226
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Vi modifis la tekston. Ĉu forĵeti ŝanĝojn?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1407
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1413
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1381
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Riĉa teksto"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1410
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1414
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
 #, kde-format
 msgid "SVG Source"
 msgstr "SVG Fonto"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1562
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1529
 #, kde-format
 msgid "Font"
 msgstr "Tiparo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1546
 #, kde-format
 msgid "Text Color"
 msgstr "Teksta Koloro"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1561
 #, kde-format
 msgid "Sample a Color"
 msgstr "Provi Koloron"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1575
 #, kde-format
 msgid "Line height"
 msgstr "Linia alteco"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1612
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1621
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1588
 #, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Normala"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1625
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1592
 #, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr "100%"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1639
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:213
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1606
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
 #, kde-format
 msgid "Letter Spacing"
 msgstr "Literinterspaco"
@@ -58817,32 +58816,7 @@ msgstr ""
 "Uzi CSS `white-space: pre-wrap` volvoreĝimon de SVG, kun `inline-size` "
 "difinante la tekstan larĝecon."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:142
-#, kde-format
-msgid "Create new texts with..."
-msgstr "Krei novajn tekstojn kun..."
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:179
-#, kde-format
-msgid "Anchor text to the left."
-msgstr "Ankri tekston maldekstre."
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:188
-#, kde-format
-msgid "Anchor text to the middle."
-msgstr "Ankri tekston al la mezo."
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:197
-#, kde-format
-msgid "Anchor text to the right."
-msgstr "Ankri tekston dekstren."
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:227
-#, kde-format
-msgid "Edit Text"
-msgstr "Redakti Tekston"
-
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:263
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:240
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -58902,81 +58876,96 @@ msgstr "SVG"
 msgid "Vertical Text Layout"
 msgstr "Vertikala Teksta Aranĝo"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:25
+#. i18n: ectx: property (text), widget (QPushButton, btnEdit)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:21
 #, kde-format
-msgid "Editor Mode"
-msgstr "Redaktila Reĝimo"
+msgid "Edit Text"
+msgstr "Redakti Tekston"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:31
+#. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:28
 #, kde-format
-msgid "Note: the Rich Text editor only supports a subset of SVG."
-msgstr "Noto: la redaktilo de Riĉa Teksto nur subtenas subaron de SVG."
+msgid "Create new texts with..."
+msgstr "Krei novajn tekstojn kun..."
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioRichText)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:41
+#. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:42
 #, kde-format
-msgid "Rich Te&xt Only"
-msgstr "Riĉa Te&ksto Nur"
+msgid "Anchor text to the left."
+msgstr "Ankri tekston maldekstre."
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioBoth)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:48
+#. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:55
 #, kde-format
-msgid "Both"
-msgstr "Ambaŭ"
+msgid "Anchor text to the middle."
+msgstr "Ankri tekston al la mezo."
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioSvgSource)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:55
+#. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:68
 #, kde-format
-msgid "S&VG Source Only"
-msgstr "S&VG Fonto Nur"
+msgid "Anchor text to the right."
+msgstr "Ankri tekston dekstren."
+
+#. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:102
+#, fuzzy, kde-format
+#| msgid "SVG Source"
+msgid "Edit SVG Source"
+msgstr "SVG Fonto"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
+#, fuzzy, kde-format
+#| msgctxt "Open the folder when the new created video is placed"
+#| msgid "Show in folder"
+msgid "Show line boxes"
+msgstr "Montri en dosierujo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:84
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, kde-format
 msgid "Keyword"
 msgstr "Ŝlosilvorto"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:112
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
 #, kde-format
 msgid "Element"
 msgstr "Elemento"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:140
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
 #, kde-format
 msgid "Attribute"
 msgstr "Atributo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:168
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
 #, kde-format
 msgctxt "The Value label used by SVG Text Tool"
 msgid "Value"
 msgstr "Valoro"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:224
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:173
 #, kde-format
 msgid "Editor text color"
 msgstr "Redaktila tekstokoloro"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:234
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:183
 #, kde-format
 msgid "Editor background:"
 msgstr "Fono de la redaktilo:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:260
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:209
 #, kde-format
 msgid "Fonts"
 msgstr "Tiparoj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:266
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:215
 #, kde-format
 msgid ""
 "<html><head/><body><p>Which writing system should the fonts chooser show the "
@@ -60466,3 +60455,18 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
+
+#~ msgid "Editor Mode"
+#~ msgstr "Redaktila Reĝimo"
+
+#~ msgid "Note: the Rich Text editor only supports a subset of SVG."
+#~ msgstr "Noto: la redaktilo de Riĉa Teksto nur subtenas subaron de SVG."
+
+#~ msgid "Rich Te&xt Only"
+#~ msgstr "Riĉa Te&ksto Nur"
+
+#~ msgid "Both"
+#~ msgstr "Ambaŭ"
+
+#~ msgid "S&VG Source Only"
+#~ msgstr "S&VG Fonto Nur"

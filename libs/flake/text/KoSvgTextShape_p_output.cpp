@@ -346,6 +346,16 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
                     painter.setPen(pen);
                     painter.drawPolygon(tf.map(result.at(i).boundingBox));
 
+                    penColor.setAlpha(96);
+                    pen.setColor(penColor);
+                    pen.setWidth(1);
+                    pen.setStyle(Qt::DotLine);
+                    painter.setPen(pen);
+                    painter.drawPolygon(tf.map(result.at(i).lineHeightBox));
+
+                    pen.setWidth(2);
+                    pen.setStyle(Qt::SolidLine);
+
                     const QPointF center = tf.mapRect(result.at(i).boundingBox).center();
                     QString text = "#";
                     text += QString::number(i);

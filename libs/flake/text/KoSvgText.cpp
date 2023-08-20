@@ -1005,6 +1005,13 @@ LineHeightInfo parseLineHeight(const QString &value, const SvgLoadingContext &co
         }
     }
 
+    // Negative line-height is invalid
+    if (!lineHeight.isNormal && lineHeight.value < 0) {
+        lineHeight.isNormal = true;
+        lineHeight.isNumber = false;
+        lineHeight.value = 0;
+    }
+
     return lineHeight;
 }
 

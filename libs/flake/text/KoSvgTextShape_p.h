@@ -101,6 +101,7 @@ struct CharacterResult {
     qreal scaledHalfLeading{}; ///< Leading for both sides, can be either negative or positive, in pt
     qreal scaledAscent{}; ///< Ascender, in pt
     qreal scaledDescent{}; ///< Descender, in pt
+    QRectF lineHeightBox; ///< The box representing the line height of this char
     QFont::Style fontStyle = QFont::StyleNormal;
     int fontWeight = 400;
 

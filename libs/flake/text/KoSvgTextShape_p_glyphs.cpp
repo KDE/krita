@@ -503,6 +503,11 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         charResult.scaledHalfLeading = ftTF.map(QPointF(charResult.fontHalfLeading, charResult.fontHalfLeading)).x();
         charResult.scaledAscent = isHorizontal? charResult.boundingBox.top(): charResult.boundingBox.right();
         charResult.scaledDescent = isHorizontal? charResult.boundingBox.bottom(): charResult.boundingBox.left();
+        if (isHorizontal) {
+            charResult.lineHeightBox = charResult.boundingBox.adjusted(0, -charResult.scaledHalfLeading, 0, charResult.scaledHalfLeading);
+        } else {
+            charResult.lineHeightBox = charResult.boundingBox.adjusted(-charResult.scaledHalfLeading, 0, charResult.scaledHalfLeading, 0);
+        }
 
         if (bitmapGlyph) {
             charResult.boundingBox |= bitmapGlyph->drawRect;

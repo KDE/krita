@@ -482,10 +482,10 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
              && !(currentLine.isEmpty() && wordIndices.isEmpty()));
         if (!doNotCountAdvance) {
             if (wordIndices.isEmpty()) {
-                wordBox = charResult.boundingBox.translated(charResult.baselineOffset);
+                wordBox = charResult.lineHeightBox.translated(charResult.baselineOffset);
                 wordAdvance = charResult.advance;
             } else {
-                wordBox |= charResult.boundingBox.translated(wordAdvance+charResult.baselineOffset);
+                wordBox |= charResult.lineHeightBox.translated(wordAdvance+charResult.baselineOffset);
                 wordAdvance += charResult.advance;
             }
         }
@@ -595,7 +595,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
             if (!foundFirst && firstLine && !wordIndices.isEmpty() && !currentShape.isEmpty()) {
                 // Last-ditch attempt to get any kind of positioning to happen.
                 // This typically happens when wrapping has been disabled.
-                wordBox = result[wordIndices.first()].boundingBox.translated(result[wordIndices.first()].baselineOffset);
+                wordBox = result[wordIndices.first()].lineHeightBox.translated(result[wordIndices.first()].baselineOffset);
                 foundFirst = getFirstPosition(currentPos, currentShape, wordBox, lineOffset, writingMode, ltr);
                 lastDitch = true;
             }

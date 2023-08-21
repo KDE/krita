@@ -315,7 +315,7 @@ void KisResourceItemChooser::setResponsiveness(bool isResponsive)
 void KisResourceItemChooser::setListViewMode(ListViewMode newViewMode)
 {
     d->requestedViewMode = newViewMode;
-    if (d->layout != Layout::Horizontal1Row) {
+    if (d->layout == Layout::NotSet || d->layout == Layout::Vertical) {
         d->view->setListViewMode(newViewMode);
     }
 }

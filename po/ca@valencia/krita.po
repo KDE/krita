@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-20 00:44+0000\n"
-"PO-Revision-Date: 2023-08-13 19:17+0200\n"
+"PO-Revision-Date: 2023-08-20 10:22+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -36444,8 +36444,9 @@ msgid ""
 "Ctrl+V) shown in the right column."
 msgstr ""
 "Ací podeu veure una llista dels lligams de tecla, associacions entre accions "
-"(p. ex. «Copia») mostrades en la columna de l'esquerra i tecles o "
-"combinacions de tecles (p. ex. «Ctrl+V») mostrades en la columna de la dreta."
+"(p. ex., «Copia») mostrades en la columna de l'esquerra i tecles o "
+"combinacions de tecles (p. ex., «Ctrl+V») mostrades en la columna de la "
+"dreta."
 
 #. i18n: ectx: property (text), widget (QTreeWidget, list)
 #: libs/widgetutils/xmlgui/KisShortcutsDialog.ui:38
@@ -47650,13 +47651,13 @@ msgstr "Activada"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "VarDCT mode (e.g. for photographic images)"
-msgstr "Mode VarDCT (p. ex. per a imatges fotogràfiques)"
+msgstr "Mode VarDCT (p. ex., per a imatges fotogràfiques)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:53
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Modular mode (e.g. for lossless images)"
-msgstr "Mode modular (p. ex. per a imatges sense pèrdua)"
+msgstr "Mode modular (p. ex., per a imatges sense pèrdua)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:64
 #, kde-format
@@ -47886,7 +47887,7 @@ msgid ""
 msgstr ""
 "Utilitza la codificació modular en lloc de la VarDCT predeterminada per a la "
 "compressió amb pèrdua\n"
-"(p. ex. per a imatges no fotogràfiques).\n"
+"(p. ex., per a imatges no fotogràfiques).\n"
 "Predeterminada: desactivada."
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceModular)
@@ -59182,18 +59183,15 @@ msgstr "Ancora el text a la dreta."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:102
-#, fuzzy, kde-format
-#| msgid "SVG Source"
+#, kde-format
 msgid "Edit SVG Source"
-msgstr "Codi font de SVG"
+msgstr "Edita el codi font de SVG"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-#| msgctxt "Open the folder when the new created video is placed"
-#| msgid "Show in folder"
+#, kde-format
 msgid "Show line boxes"
-msgstr "Mostra en la carpeta"
+msgstr "Mostra les caixes de línies"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
@@ -60737,18 +60735,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "Editor Mode"
-#~ msgstr "Mode de l'editor"
-
-#~ msgid "Note: the Rich Text editor only supports a subset of SVG."
-#~ msgstr "Nota: L'editor de text enriquit només accepta un subconjunt de SVG."
-
-#~ msgid "Rich Te&xt Only"
-#~ msgstr "Només te&xt enriquit"
-
-#~ msgid "Both"
-#~ msgstr "Ambdós"
-
-#~ msgid "S&VG Source Only"
-#~ msgstr "Només codi font de SVG"

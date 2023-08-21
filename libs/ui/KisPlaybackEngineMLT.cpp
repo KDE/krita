@@ -409,7 +409,7 @@ void KisPlaybackEngineMLT::setCanvas(KoCanvasBase *p_canvas)
     // Connect new canvas..
     if (activeCanvas()) {
         KisCanvasAnimationState* animationState = activeCanvas()->animationState();
-        KIS_ASSERT(animationState);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(animationState);
 
         connect(animationState, &KisCanvasAnimationState::sigPlaybackStateChanged, this, [this](PlaybackState state){
             Q_UNUSED(state); // We don't need the state yet -- we just want to stop and resume playback according to new state info.
@@ -432,8 +432,7 @@ void KisPlaybackEngineMLT::setCanvas(KoCanvasBase *p_canvas)
         connect(animationState, &KisCanvasAnimationState::sigAudioLevelChanged, this, &KisPlaybackEngineMLT::setAudioVolume);
 
         auto image = activeCanvas()->image();
-
-        KIS_ASSERT(image);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(image);
 
         // Connect new image..
         connect(image->animationInterface(), &KisImageAnimationInterface::sigFramerateChanged, this, [this](){

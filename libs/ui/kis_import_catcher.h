@@ -9,6 +9,7 @@
 
 #include <QObject>
 
+#include "kritaui_export.h"
 #include <kis_types.h>
 
 class KisViewManager;
@@ -22,7 +23,7 @@ class KisViewManager;
  * Caveat: this class calls "delete this", which means that you new
  * it and then never touch it again. Thank you very much.
  */
-class KisImportCatcher : QObject
+class KRITAUI_EXPORT KisImportCatcher : QObject
 {
 
     Q_OBJECT

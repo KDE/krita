@@ -18,6 +18,9 @@
 #include <kis_clipboard.h>
 #include <kis_layer.h>
 #include <kis_painter.h>
+#include "kis_paint_layer.h"
+#include "kis_import_catcher.h"
+
 
 ImageBuilder::ImageBuilder(QObject* parent)
 : QObject(parent)
@@ -62,19 +65,32 @@ void ImageBuilder::createImageFromClipboardDelayed()
 {
     DocumentManager::instance()->disconnect(this, SLOT(createImageFromClipboardDelayed()));
 
-    QSize sz = KisClipboard::instance()->clipSize();
-    KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QRect(0, 0, sz.width(), sz.height()),
-                                                                 false,
-                                                                 (int)KisClipboard::PASTE_ASSUME_MONITOR);
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
     KisImageWSP image = DocumentManager::instance()->document()->image();
     if (image && image->root() && image->root()->firstChild()) {
-        KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
-        Q_ASSERT(layer);
-        layer->setOpacity(OPACITY_OPAQUE_U8);
-        QRect r = clipDevice->exactBounds();
+        KisNodeSP node = image->root()->firstChild();
+        while (node && (!dynamic_cast<KisPaintLayer*>(node.data()) || node->userLocked())) {
+            node = node->nextSibling();
+        }
 
-        KisPainter::copyAreaOptimized(QPoint(), clipDevice, layer->paintDevice(), r);
-        layer->setDirty(QRect(0, 0, sz.width(), sz.height()));
+        if (!node) {
+            KisPaintLayerSP newLayer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8);
+            image->addNode(newLayer);
+            node = newLayer;
+        }
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN(node);
+
+        KisPaintLayer * layer = dynamic_cast<KisPaintLayer*>(node.data());
+        KIS_SAFE_ASSERT_RECOVER_RETURN(layer);
+
+        layer->setOpacity(OPACITY_OPAQUE_U8);
+        const QRect r = clip->exactBounds();
+        KisImportCatcher::adaptClipToImageColorSpace(clip, image);
+
+        KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), r);
+        layer->setDirty();
+
     }
 }
 

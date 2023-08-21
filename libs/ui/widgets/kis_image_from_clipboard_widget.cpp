@@ -78,13 +78,27 @@ void KisImageFromClipboardWidget::createImage()
     if (doc) {
         KisImageSP image = doc->image();
         if (image && image->root() && image->root()->firstChild()) {
-            KisLayer *layer = qobject_cast<KisLayer *>(image->root()->firstChild().data());
+            KisNodeSP node = image->root()->firstChild();
+            while (node && (!dynamic_cast<KisPaintLayer*>(node.data()) || node->userLocked())) {
+                node = node->nextSibling();
+            }
 
+            if (!node) {
+                KisPaintLayerSP newLayer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8);
+                image->addNode(newLayer);
+                node = newLayer;
+            }
+
+            KIS_SAFE_ASSERT_RECOVER_RETURN(node);
+
+            KisPaintLayer * layer = dynamic_cast<KisPaintLayer*>(node.data());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(layer);
+
+            layer->setOpacity(OPACITY_OPAQUE_U8);
+            const QRect r = clip->exactBounds();
             KisImportCatcher::adaptClipToImageColorSpace(clip, image);
 
-            QRect r = clip->exactBounds();
             KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), r);
-
             layer->setDirty();
         }
         doc->setModified(true);

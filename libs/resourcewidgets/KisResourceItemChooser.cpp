@@ -732,6 +732,7 @@ void KisResourceItemChooser::applyVerticalLayout()
     d->viewModeButton->setVisible(d->showViewModeBtn);
     d->storagePopupButton->setVisible(d->showStoragePopupBtn);
 
+    d->viewModeButton->setVisible(d->showViewModeBtn);
     d->layout = Layout::Vertical;
 }
 
@@ -782,7 +783,7 @@ void KisResourceItemChooser::changeLayoutBasedOnSize()
             thisLayout->setColumnStretch(0, 2);
             thisLayout->setRowStretch(1, 0);
 
-            d->viewModeButton->setVisible(d->showViewModeBtn);
+            d->viewModeButton->setVisible(false);
             d->storagePopupButton->setVisible(d->showStoragePopupBtn);
 
             d->horzSplitter->show();
@@ -825,7 +826,7 @@ void KisResourceItemChooser::changeLayoutBasedOnSize()
             thisLayout->setColumnStretch(0, 2);
             thisLayout->setRowStretch(1, 0);
 
-            d->viewModeButton->setVisible(d->showViewModeBtn);
+            d->viewModeButton->setVisible(false);
             d->storagePopupButton->setVisible(d->showStoragePopupBtn);
 
             d->horzSplitter->show();

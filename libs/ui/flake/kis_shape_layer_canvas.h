@@ -117,6 +117,7 @@ private:
 
     KisThreadSafeSignalCompressor m_asyncUpdateSignalCompressor;
     volatile bool m_hasUpdateInCompressor = false;
+    bool m_hasUpdateOnSetImage = false;
     KisSafeBlockingQueueConnectionProxy<void> m_safeForcedConnection;
 
     bool m_forceUpdateHiddenAreasOnly = false;

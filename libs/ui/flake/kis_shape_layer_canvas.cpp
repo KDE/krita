@@ -196,7 +196,8 @@ void KisShapeLayerCanvas::setImage(KisImageWSP image)
         m_projection->convertTo(image->colorSpace());
     }
     m_projection->setDefaultBounds(new KisDefaultBounds(image));
-    if (image) {
+    if (image && m_hasUpdateOnSetImage) {
+        m_hasUpdateOnSetImage = false;
         updateCanvas(m_cachedImageRect);
     }
 }
@@ -244,7 +245,11 @@ private:
 
 void KisShapeLayerCanvas::updateCanvas(const QVector<QRectF> &region)
 {
-    if (!m_image || !m_parentLayer->image() || m_isDestroying) {
+    if (!m_image){
+        m_hasUpdateOnSetImage = true;
+        return;
+    }
+    if (!m_parentLayer->image() || m_isDestroying) {
         return;
     }
 

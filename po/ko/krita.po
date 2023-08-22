@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-19 02:23+0000\n"
+"POT-Creation-Date: 2023-08-22 02:25+0000\n"
 "PO-Revision-Date: 2023-07-24 21:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -20676,7 +20676,7 @@ msgstr "섬네일"
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
-#: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:305
+#: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
@@ -20687,17 +20687,17 @@ msgstr "섬네일"
 msgid "All"
 msgstr "모두"
 
-#: libs/resources/KisTagModel.cpp:154 libs/resources/KisTagModel.cpp:315
+#: libs/resources/KisTagModel.cpp:153 libs/resources/KisTagModel.cpp:312
 #, kde-format
 msgid "All Untagged"
 msgstr "태그되지 않은 모두"
 
-#: libs/resources/KisTagModel.cpp:308
+#: libs/resources/KisTagModel.cpp:305
 #, kde-format
 msgid "All Resources"
 msgstr "모든 리소스"
 
-#: libs/resources/KisTagModel.cpp:318
+#: libs/resources/KisTagModel.cpp:315
 #, kde-format
 msgid "All Untagged Resources"
 msgstr "태그가 없는 모든 리소스"
@@ -34830,7 +34830,7 @@ msgstr "필터 설정 XML"
 msgid "No configuration options"
 msgstr "설정 옵션 없음"
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:148
 #, fuzzy, kde-format
 #| msgid "The layer does not have an image associated with it."
 msgid "The clipboard is empty or does not have an image in it."

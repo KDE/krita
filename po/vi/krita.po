@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-19 02:23+0000\n"
+"POT-Creation-Date: 2023-08-22 02:25+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -19976,7 +19976,7 @@ msgstr "Nhập ảnh"
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
-#: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:305
+#: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
@@ -19987,18 +19987,18 @@ msgstr "Nhập ảnh"
 msgid "All"
 msgstr ""
 
-#: libs/resources/KisTagModel.cpp:154 libs/resources/KisTagModel.cpp:315
+#: libs/resources/KisTagModel.cpp:153 libs/resources/KisTagModel.cpp:312
 #, fuzzy, kde-format
 msgid "All Untagged"
 msgstr "Ảnh GLSL"
 
-#: libs/resources/KisTagModel.cpp:308
+#: libs/resources/KisTagModel.cpp:305
 #, fuzzy, kde-format
 #| msgid "&Resources"
 msgid "All Resources"
 msgstr "&Tài nguyên"
 
-#: libs/resources/KisTagModel.cpp:318
+#: libs/resources/KisTagModel.cpp:315
 #, fuzzy, kde-format
 msgid "All Untagged Resources"
 msgstr "&Tài nguyên"
@@ -33432,7 +33432,7 @@ msgstr "Cấu hình mới %1"
 msgid "No configuration options"
 msgstr "Không có tuỳ chọn nào."
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:148
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "The clipboard is empty or does not have an image in it."

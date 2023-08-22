@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-19 02:23+0000\n"
+"POT-Creation-Date: 2023-08-22 02:25+0000\n"
 "PO-Revision-Date: 2011-06-01 01:29-0400\n"
 "Last-Translator: Agron Selimaj <linuxmaster@verizon.net>\n"
 "Language-Team: Albanian <sq@li.org>\n"
@@ -19849,7 +19849,7 @@ msgstr "Objektivi:"
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
-#: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:305
+#: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
@@ -19860,17 +19860,17 @@ msgstr "Objektivi:"
 msgid "All"
 msgstr ""
 
-#: libs/resources/KisTagModel.cpp:154 libs/resources/KisTagModel.cpp:315
+#: libs/resources/KisTagModel.cpp:153 libs/resources/KisTagModel.cpp:312
 #, fuzzy, kde-format
 msgid "All Untagged"
 msgstr "Kanali"
 
-#: libs/resources/KisTagModel.cpp:308
+#: libs/resources/KisTagModel.cpp:305
 #, fuzzy, kde-format
 msgid "All Resources"
 msgstr "Burimi"
 
-#: libs/resources/KisTagModel.cpp:318
+#: libs/resources/KisTagModel.cpp:315
 #, fuzzy, kde-format
 msgid "All Untagged Resources"
 msgstr "Burimi"
@@ -33092,7 +33092,7 @@ msgstr "Teksti"
 msgid "No configuration options"
 msgstr "Teksti"
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:148
 #, kde-format
 msgid "The clipboard is empty or does not have an image in it."
 msgstr ""

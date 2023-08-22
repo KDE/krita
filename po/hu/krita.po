@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-19 02:23+0000\n"
+"POT-Creation-Date: 2023-08-22 02:25+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -20419,7 +20419,7 @@ msgstr "Bélyegkép"
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
-#: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:305
+#: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
@@ -20430,17 +20430,17 @@ msgstr "Bélyegkép"
 msgid "All"
 msgstr "Minden"
 
-#: libs/resources/KisTagModel.cpp:154 libs/resources/KisTagModel.cpp:315
+#: libs/resources/KisTagModel.cpp:153 libs/resources/KisTagModel.cpp:312
 #, kde-format
 msgid "All Untagged"
 msgstr "Minden címke nélküli"
 
-#: libs/resources/KisTagModel.cpp:308
+#: libs/resources/KisTagModel.cpp:305
 #, kde-format
 msgid "All Resources"
 msgstr "Minden erőforrás"
 
-#: libs/resources/KisTagModel.cpp:318
+#: libs/resources/KisTagModel.cpp:315
 #, kde-format
 msgid "All Untagged Resources"
 msgstr "Minden címke nélküli erőforrás"
@@ -34245,7 +34245,7 @@ msgstr "Új beállítás %1"
 msgid "No configuration options"
 msgstr "Nincsenek beállítási lehetőségek."
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:148
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "The clipboard is empty or does not have an image in it."

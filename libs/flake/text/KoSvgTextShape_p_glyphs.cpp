@@ -26,6 +26,7 @@
 #include FT_COLOR_H
 #include FT_BITMAP_H
 #include FT_OUTLINE_H
+#include FT_TRUETYPE_TABLES_H
 
 #include <hb.h>
 #include <hb-ft.h>
@@ -59,7 +60,25 @@ static QString glyphFormatToStr(const FT_Glyph_Format _v)
 static void
 emboldenGlyphIfNeeded(const FT_Face ftface, const CharacterResult &charResult, int *x_advance, int *y_advance)
 {
-    if (charResult.fontWeight >= 600 && !(ftface->style_flags & FT_STYLE_FLAG_BOLD)) {
+    constexpr int WEIGHT_SEMIBOLD = 600;
+    if (charResult.fontWeight >= WEIGHT_SEMIBOLD) {
+        // Simplest check: Bold fonts don't need to be embolden.
+        if (ftface->style_flags & FT_STYLE_FLAG_BOLD) {
+            return;
+        }
+
+        // Variable fnots also don't need to be embolden.
+        if (FT_HAS_MULTIPLE_MASTERS(ftface)) {
+            return;
+        }
+
+        // Some heavy weight classes don't cause FT_STYLE_FLAG_BOLD to be set,
+        // so we have to check the OS/2 table for its weight class to be sure.
+        if (const TT_OS2 *const os2Table = reinterpret_cast<TT_OS2 *>(FT_Get_Sfnt_Table(ftface, FT_SFNT_OS2));
+            os2Table && os2Table->usWeightClass >= WEIGHT_SEMIBOLD) {
+            return;
+        }
+
         // This code is somewhat inspired by Firefox.
         FT_Pos strength =
             FT_MulFix(ftface->units_per_EM, ftface->size->metrics.y_scale) / 48;

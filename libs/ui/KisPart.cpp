@@ -698,7 +698,10 @@ void KisPart::upgradeToPlaybackEngineMLT(KoCanvasBase* canvas)
     }
 
     setPlaybackEngine(new KisPlaybackEngineMLT(this));
-    d->playbackEngine->setObservedCanvas(canvas);
+
+    if (canvas) {
+        d->playbackEngine->setObservedCanvas(canvas);
+    }
 
 #endif //HAVE_MLT
 }

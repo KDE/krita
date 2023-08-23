@@ -140,9 +140,25 @@ QPainterPath KoSvgTextShape::selectionBoxes(int pos, int anchor)
     QPainterPath p;
     p.setFillRule(Qt::WindingFill);
     for (int i = start; i < end; i++) {
-        CharacterResult res = d->result.at(d->cursorPos.at(i).cluster);
+        CursorPos pos = d->cursorPos.at(i);
+        CharacterResult res = d->result.at(pos.cluster);
         const QTransform tf = res.finalTransform();
-        p.addPolygon(tf.map(res.boundingBox));
+        QLineF first = res.cursorInfo.caret;
+        QLineF last = first;
+        if (pos.offset > 0) {
+            first.translate(res.cursorInfo.offsets.at(pos.offset-1));
+        }
+
+        if (res.cursorInfo.offsets.size() > 0 && pos.offset == 0) {
+            last.translate(res.cursorInfo.offsets.at(0));
+        } else if (pos.offset > 0 && pos.offset < res.cursorInfo.offsets.size()) {
+            last.translate(res.cursorInfo.offsets.at(pos.offset));
+        } else {
+            last.translate(res.advance);
+        }
+        QPolygonF poly;
+        poly << first.p1() << first.p2() << last.p2() << last.p1() << first.p1();
+        p.addPolygon(tf.map(poly));
     }
 
     return p;

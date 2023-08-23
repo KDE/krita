@@ -26,7 +26,8 @@ struct Q_DECL_HIDDEN KoColorSpace::Private {
     KoConvolutionOp* convolutionOp;
     QHash<QString, QMap<DitherType, KisDitherOp*>> ditherOps;
 
-    QThreadStorage< QVector<quint8>* > conversionCache;
+    mutable QThreadStorage< QVector<quint8>* > conversionCache;
+    mutable QThreadStorage< QVector<quint8>* > channelFlagsHomogenizationCache;
 
     mutable KoColorConversionTransformation* transfoToRGBA16;
     mutable KoColorConversionTransformation* transfoFromRGBA16;
@@ -41,6 +42,20 @@ struct Q_DECL_HIDDEN KoColorSpace::Private {
     KoColorSpaceEngine *iccEngine;
 
     Deletability deletability;
+
+    QVector<quint8> * threadLocalChannelFlagsHomogenizationCache(quint32 size)
+    {
+        QVector<quint8> * ba = 0;
+        if (!channelFlagsHomogenizationCache.hasLocalData()) {
+            ba = new QVector<quint8>(size, '0');
+            channelFlagsHomogenizationCache.setLocalData(ba);
+        } else {
+            ba = channelFlagsHomogenizationCache.localData();
+            if ((quint8)ba->size() < size)
+                ba->resize(size);
+        }
+        return ba;
+    }
 };
 
 #endif

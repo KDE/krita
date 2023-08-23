@@ -134,7 +134,7 @@ void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisP
 
     KisPaintDeviceSP frameDevice = new KisPaintDevice(sourceDevice->colorSpace());
     KisPainter gcFrame(frameDevice);
-    QBitArray channelFlags = targetDevice->colorSpace()->channelFlags(true, false);
+    QBitArray channelFlags = sourceDevice->colorSpace()->channelFlags(true, false);
     gcFrame.setChannelFlags(channelFlags);
     gcFrame.setOpacity(m_d->tintFactor);
 

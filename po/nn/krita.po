@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-19 02:23+0000\n"
+"POT-Creation-Date: 2023-08-22 02:25+0000\n"
 "PO-Revision-Date: 2023-07-30 21:46+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -19835,7 +19835,7 @@ msgstr "Miniatyrbilete"
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
-#: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:305
+#: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
@@ -19846,17 +19846,17 @@ msgstr "Miniatyrbilete"
 msgid "All"
 msgstr "Alle"
 
-#: libs/resources/KisTagModel.cpp:154 libs/resources/KisTagModel.cpp:315
+#: libs/resources/KisTagModel.cpp:153 libs/resources/KisTagModel.cpp:312
 #, kde-format
 msgid "All Untagged"
 msgstr "Alle utan merkelappar"
 
-#: libs/resources/KisTagModel.cpp:308
+#: libs/resources/KisTagModel.cpp:305
 #, kde-format
 msgid "All Resources"
 msgstr "Alle ressursar"
 
-#: libs/resources/KisTagModel.cpp:318
+#: libs/resources/KisTagModel.cpp:315
 #, kde-format
 msgid "All Untagged Resources"
 msgstr "Alle ressursar utan merkelappar"
@@ -33821,7 +33821,7 @@ msgstr "XML for filteroppsett"
 msgid "No configuration options"
 msgstr "Ingen oppsettsval"
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:148
 #, kde-format
 msgid "The clipboard is empty or does not have an image in it."
 msgstr ""

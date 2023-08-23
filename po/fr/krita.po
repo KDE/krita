@@ -21,7 +21,7 @@
 # Stanislas Zeller <uncensored.assault@gmail.com>, 2008.
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2008.
 # Geoffray Levasseur <geoffray.levasseurbrandin@numericable.fr>, 2010, 2011.
-# xavier <xavier.besnard@neuf.fr>, 2012.
+# SPDX-FileCopyrightText: 2012, 2023 xavier <xavier.besnard@neuf.fr>
 # Daniel Durand <durand.d@9online.fr>, 2012, 2013.
 # Sebastien Renard <renard@kde.org>, 2013, 2014, 2015.
 # Vincent PINON <vpinon@kde.org>, 2014, 2016.
@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-22 02:25+0000\n"
-"PO-Revision-Date: 2023-06-25 15:34+0200\n"
+"PO-Revision-Date: 2023-08-21 14:07+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -111,7 +111,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.07.90\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -23298,10 +23298,10 @@ msgstr ""
 "Annulation du rendu."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgid "Wait for existing frame generation process to complete..."
-msgstr "Attente de la fin de l'opération sur l'image..."
+msgstr ""
+"Attendre que le processus existant de génération de trames soit terminé..."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
@@ -23708,10 +23708,9 @@ msgstr "Utiliser toujours ce modèle"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
 #: libs/ui/forms/KisWelcomePage.ui:60
-#, fuzzy, kde-format
-#| msgid "Support Krita"
+#, kde-format
 msgid "Support Krita!"
-msgstr "Soutenir Krita"
+msgstr "Soutenez Krita !"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:140
@@ -23749,10 +23748,9 @@ msgstr "X"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
 #: libs/ui/forms/KisWelcomePage.ui:322
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Open Image"
-msgstr "Ouvrir des images"
+msgstr "Ouvrir une image"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:394
@@ -23804,10 +23802,9 @@ msgstr "Site officiel de Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1069
-#, fuzzy, kde-format
-#| msgid "Separate Image"
+#, kde-format
 msgid "Recent Images"
-msgstr "Séparer l'image"
+msgstr "Images récentes"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
 #: libs/ui/forms/KisWelcomePage.ui:1093
@@ -40853,8 +40850,7 @@ msgstr "Apparence de teinte en anneau :"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, fuzzy, kde-format
-#| msgid "Static"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Always shows full saturation and full "
 "brightness colors."
@@ -40863,8 +40859,7 @@ msgstr "Statique"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
-#, fuzzy, kde-format
-#| msgid "Dynamic"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Shows colors depending on the current "
 "color saturation and brightness."
@@ -50477,7 +50472,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "TIFF image with PSD data"
-msgstr ""
+msgstr "Image « TIFF « avec des données « PSD »"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1579
 #, kde-format
@@ -50486,6 +50481,8 @@ msgid ""
 "The TIFF image contains valid PSD data embedded. Would you like to use PSD "
 "data instead of normal TIFF data?"
 msgstr ""
+"L’image « TIFF » contient des données intégrées « PSD » valides. Voulez-vous "
+"utiliser ces données « PSD » au lieu des données « TIFF » normales ?"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
 #. i18n: ectx: property (title), widget (QGroupBox, tiffOptions)

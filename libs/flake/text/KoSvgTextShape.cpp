@@ -166,13 +166,23 @@ QPainterPath KoSvgTextShape::selectionBoxes(int pos, int anchor)
 
 int KoSvgTextShape::posForPoint(QPointF point)
 {
-    for (int i=0; i<d->result.size(); i++) {
-        QRectF rect = d->result.at(i).finalTransform().mapRect(d->result.at(i).boundingBox);
-        if (rect.contains(point)) {
-                return i;
+    double closest = std::numeric_limits<double>::max();;
+    int candidate = -1;
+    for (int i=0; i<d->cursorPos.size(); i++) {
+        CursorPos pos = d->cursorPos.at(i);
+        CharacterResult res = d->result.at(pos.cluster);
+        QPointF cursorStart = res.finalPosition;
+        if (pos.offset>0) {
+            cursorStart += res.cursorInfo.offsets.at(pos.offset-1);
         }
+        double distance = kisDistance(cursorStart, point);
+        if (distance < closest) {
+            candidate = i;
+            closest = distance;
+        }
+
     }
-    return -1;
+    return candidate;
 }
 
 int KoSvgTextShape::posForIndex(int index, bool firstIndex, bool skipSynthetic)

@@ -541,16 +541,45 @@ void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::Par
             QVector<quint8> * conversionCache        = threadLocalConversionCache(params.rows * conversionBufferStride);
             quint8*           conversionData         = conversionCache->data();
 
-            for(qint32 row=0; row<params.rows; row++) {
-                srcSpace->convertPixelsTo(params.srcRowStart + row * params.srcRowStride,
-                                          conversionData     + row * conversionBufferStride, this, params.cols,
-                                          renderingIntent, conversionFlags);
+
+            const bool noChannelFlags = params.channelFlags.isEmpty() ||
+                    params.channelFlags == srcSpace->channelFlags(true, true);
+
+            if (noChannelFlags) {
+                for(qint32 row=0; row<params.rows; row++) {
+                    srcSpace->convertPixelsTo(params.srcRowStart + row * params.srcRowStride,
+                                              conversionData     + row * conversionBufferStride, this, params.cols,
+                                              renderingIntent, conversionFlags);
+                }
+
+                KoCompositeOp::ParameterInfo paramInfo(params);
+                paramInfo.srcRowStart  = conversionData;
+                paramInfo.srcRowStride = conversionBufferStride;
+                paramInfo.channelFlags = QBitArray();
+                op->composite(paramInfo);
+            } else {
+                quint32           homogenizationBufferStride = params.cols * srcSpace->pixelSize();
+                QVector<quint8> * homogenizationCache        = d->threadLocalChannelFlagsHomogenizationCache(homogenizationBufferStride);
+                quint8*           homogenizationData         = homogenizationCache->data();
+
+                for(qint32 row=0; row<params.rows; row++) {
+                    srcSpace->convertChannelToVisualRepresentation(params.srcRowStart + row * params.srcRowStride,
+                                                                   homogenizationData, params.cols,
+                                                                   params.channelFlags | srcSpace->channelFlags(false, true));
+                    srcSpace->convertPixelsTo(homogenizationData,
+                                              conversionData + row * conversionBufferStride, this, params.cols,
+                                              renderingIntent, conversionFlags);
+                }
+
+
+                KoCompositeOp::ParameterInfo paramInfo(params);
+                paramInfo.srcRowStart  = conversionData;
+                paramInfo.srcRowStride = conversionBufferStride;
+                paramInfo.channelFlags = channelFlags(true, params.channelFlags.testBit(srcSpace->alphaPos()));
+                op->composite(paramInfo);
             }
 
-            KoCompositeOp::ParameterInfo paramInfo(params);
-            paramInfo.srcRowStart  = conversionData;
-            paramInfo.srcRowStride = conversionBufferStride;
-            op->composite(paramInfo);
+
         }
     }
     else {

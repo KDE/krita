@@ -15,6 +15,9 @@ private Q_SLOTS:
     void testMixColorsOpF32();
     void testMixColorsOpU8NoAlpha();
     void testMixColorsOpU8NoAlphaLinear();
+    void testBitBltCrossColorSpaceWithChannelFlags_data();
+    void testBitBltCrossColorSpaceWithChannelFlags();
+
 };
 
 #endif

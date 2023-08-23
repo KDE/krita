@@ -123,6 +123,7 @@ void KisTimeBasedItemModel::setImage(KisImageWSP p_image)
     }
 
     m_d->image = p_image;
+    m_d->numFramesOverride = m_d->effectiveNumFrames();
 
     if (m_d->image) {
         KisImageAnimationInterface *ai = m_d->image->animationInterface();
@@ -212,7 +213,7 @@ void KisTimeBasedItemModel::setLastVisibleFrame(int time)
 int KisTimeBasedItemModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return m_d->effectiveNumFrames();
+    return m_d->numFramesOverride;
 }
 
 QVariant KisTimeBasedItemModel::data(const QModelIndex &index, int role) const

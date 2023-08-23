@@ -375,6 +375,7 @@ public:
         DataSP data = m_frames[frameId];
         data->setX(offset.x());
         data->setY(offset.y());
+        data->cache()->invalidate();
     }
 
     const QList<int> frameIds() const
@@ -403,6 +404,7 @@ public:
         KoColor color(defPixel);
         color.convertTo(data->colorSpace());
         data->dataManager()->setDefaultPixel(color.data());
+        data->cache()->invalidate();
     }
 
     KoColor frameDefaultPixel(int frameId) const

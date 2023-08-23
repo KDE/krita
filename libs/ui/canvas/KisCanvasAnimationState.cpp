@@ -258,8 +258,6 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioTracksChanged, this, &KisCanvasAnimationState::setupAudioTracks);
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioLevelChanged, this, &KisCanvasAnimationState::sigAudioLevelChanged);
     connect(&m_d->m_statsTimer, SIGNAL(timeout()), this, SIGNAL(sigPlaybackStatisticsUpdated()));
-
-    setupAudioTracks();
 }
 
 KisCanvasAnimationState::~KisCanvasAnimationState()
@@ -316,21 +314,6 @@ qreal KisCanvasAnimationState::playbackSpeed() const
     return m_d->playbackSpeed;
 }
 
-void KisCanvasAnimationState::showFrame(int frame, bool finalize)
-{
-    m_d->displayProxy->displayFrame(frame, finalize);
-}
-
-KisTimeSpan KisCanvasAnimationState::activePlaybackRange()
-{
-    if (!m_d->canvas || !m_d->canvas->image()) {
-        return KisTimeSpan::infinite(0);
-    }
-
-    const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    return animation->activePlaybackRange();
-}
-
 void KisCanvasAnimationState::setupAudioTracks()
 {
     if (!m_d->canvas || !m_d->canvas->imageView()) {
@@ -355,6 +338,21 @@ void KisCanvasAnimationState::setupAudioTracks()
 
         emit sigPlaybackMediaChanged();
     }
+}
+
+void KisCanvasAnimationState::showFrame(int frame, bool finalize)
+{
+    m_d->displayProxy->displayFrame(frame, finalize);
+}
+
+KisTimeSpan KisCanvasAnimationState::activePlaybackRange()
+{
+    if (!m_d->canvas || !m_d->canvas->image()) {
+        return KisTimeSpan::infinite(0);
+    }
+
+    const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    return animation->activePlaybackRange();
 }
 
 void KisCanvasAnimationState::setPlaybackState(PlaybackState p_state)

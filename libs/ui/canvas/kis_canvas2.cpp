@@ -260,7 +260,7 @@ void KisCanvas2::setup()
     createCanvas(cfg.useOpenGL());
 
     setLodPreferredInCanvas(m_d->lodPreferredInImage);
-    m_d->animationPlayer.reset(new KisCanvasAnimationState(this));
+    
     connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 
@@ -299,6 +299,8 @@ void KisCanvas2::setup()
     connect(m_d->view->document(), SIGNAL(sigReferenceImagesChanged()), this, SLOT(slotReferenceImagesChanged()));
 
     initializeFpsDecoration();
+
+    m_d->animationPlayer.reset(new KisCanvasAnimationState(this));
 }
 
 void KisCanvas2::initializeFpsDecoration()
@@ -1358,6 +1360,9 @@ void KisCanvas2::bootstrapFinished()
 
     m_d->bootstrapLodBlocked = false;
     setLodPreferredInCanvas(m_d->lodPreferredInImage);
+
+    // Initialization of audio tracks is deferred until after canvas has been completely constructed.
+    m_d->animationPlayer->setupAudioTracks();
 }
 
 void KisCanvas2::setLodPreferredInCanvas(bool value)

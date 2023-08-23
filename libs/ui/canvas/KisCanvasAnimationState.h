@@ -67,6 +67,12 @@ public:
     void setPlaybackSpeed(qreal value);
     qreal playbackSpeed() const;
 
+    /**
+     * @brief Sets up the audio tracks for a given animation.
+     * (The only reason this is public is because we have to defer this until after canvas construction.)
+     */
+    void setupAudioTracks();
+
 public Q_SLOTS:
     void showFrame(int frame, bool finalize = false);
 
@@ -82,8 +88,6 @@ Q_SIGNALS:
 
 private:
     KisTimeSpan activePlaybackRange();
-
-    void setupAudioTracks();
 
     struct Private;
     QScopedPointer<Private> m_d;

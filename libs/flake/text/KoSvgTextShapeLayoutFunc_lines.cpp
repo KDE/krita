@@ -202,7 +202,6 @@ handleCollapseAndHang(QVector<CharacterResult> &result, LineChunk &chunk, bool l
         while (it.hasPrevious()) {
             int lastIndex = it.previous();
             if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::Collapse) {
-                result[lastIndex].addressable = false;
                 result[lastIndex].hidden = true;
             } else if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::ConditionallyHang) {
                 if (ltr) {

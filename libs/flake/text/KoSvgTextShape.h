@@ -115,13 +115,79 @@ public:
 
     void setResolution(qreal xRes, qreal yRes) override;
 
+    /**
+     * @brief nextPos
+     * get the next position.
+     * @param pos -- cursor position.
+     * @return the next pos;
+     */
     int nextPos(int pos);
-    int previousPos(int pos);
-    QPainterPath cursorForPos(int pos);
-    QPainterPath selectionBoxes(int pos, int anchor);
-    int posForPoint(QPointF point);
 
+    /**
+     * @brief previousPos
+     * get the previous position.
+     * @param pos -- cursor position.
+     * @return the previous pos;
+     */
+    int previousPos(int pos);
+
+    /**
+     * @brief cursorForPos
+     * returns the QPainterPath associated with this cursorPosition.
+     * @param pos the cursor Position
+     * @return a path to draw a cursor with.
+     */
+    QPainterPath cursorForPos(int pos);
+
+    /**
+     * @brief selectionBoxes
+     * returns all selection boxes for a given range.
+     * Range will be normalized internally.
+     * @param pos -- the main cursor pos.
+     * @param anchor -- the anchor from which the selection is calculated.
+     * @return a winding-fill style QPainterPath will all boxes added as subpaths.
+     */
+    QPainterPath selectionBoxes(int pos, int anchor);
+
+    /**
+     * @brief posForPoint
+     * Finds the closest cursor position for the given point in shape coordinates.
+     * @param point
+     * @return the closest cursor position.
+     */
+    int posForPoint(QPointF point);
+    /**
+     * @brief posForIndex
+     * Get the cursor position for a given index in a string.
+     * @param index -- index in the string.
+     * @param firstIndex -- whether to return for the first instance of the index.
+     * @param skipSynthetic -- whether to skip over synthetic cursorPositions.
+     * @return the cursor -- position for an index.
+     */
+    int posForIndex(int index, bool firstIndex = false, bool skipSynthetic = false);
+    /**
+     * @brief indexForPos
+     * get the string index for a given cursor position.
+     * @param pos the cursor position.
+     * @return the index in the string.
+     */
+    int indexForPos(int pos);
+
+    /**
+     * @brief insertText
+     * Insert a text somewhere in the KoTextShape.
+     * @param pos the cursor position.
+     * @param text the text to insert.
+     * @return whether it was succesful in inserting text.
+     */
     bool insertText(int pos, QString text);
+
+    /**
+     * @brief removeText
+     * @param pos
+     * @param length
+     * @return
+     */
     bool removeText(int pos, int length);
 
 protected:

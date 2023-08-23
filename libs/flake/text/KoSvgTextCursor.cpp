@@ -78,7 +78,6 @@ void KoSvgTextCursor::moveCursor(bool forward, bool moveAnchor)
 
 void KoSvgTextCursor::insertText(QString text)
 {
-    qDebug() << d->pos << text;
     if (d->shape) {
         //TODO: don't break when the position is zero...
         QRectF updateRect = d->shape->boundingRect();
@@ -90,20 +89,18 @@ void KoSvgTextCursor::insertText(QString text)
                 d->anchor = d->pos;
             }
         }
+        int index = d->shape->indexForPos(d->pos);
         if (d->shape->insertText(d->pos, text)) {
-            d->pos += 1;
+            d->pos = d->shape->posForIndex(index+text.size(), true);
             d->anchor = d->pos;
             updateCursor();
         }
         d->shape->updateAbsolute( updateRect| d->shape->boundingRect());
-
-
     }
 }
 
 void KoSvgTextCursor::removeLast()
 {
-    qDebug() << "remove" << d->pos;
     if (d->shape) {
         QRectF updateRect = d->shape->boundingRect();
         if (d->anchor != d->pos) {
@@ -113,8 +110,13 @@ void KoSvgTextCursor::removeLast()
                 d->pos = start;
             }
         }
-        if (d->shape->removeText(d->pos - 1, 1)) {
-            d->pos -= 1;
+        int oldIndex = d->shape->indexForPos(d->pos);
+
+        // TODO: When there's 'pre-anchor' positions, these need to be skipped, not yet sure how.
+        int newPos = d->shape->posForIndex(oldIndex-1, true, true);
+        int newIndex = d->shape->indexForPos(newPos);
+        if (d->shape->removeText(newPos, oldIndex-newIndex)) {
+            d->pos = newPos;
             d->anchor = d->pos;
             updateCursor();
         }
@@ -124,7 +126,6 @@ void KoSvgTextCursor::removeLast()
 
 void KoSvgTextCursor::removeNext()
 {
-    qDebug() << "delete" << d->pos;
     if (d->shape) {
         QRectF updateRect = d->shape->boundingRect();
         if (d->anchor != d->pos) {

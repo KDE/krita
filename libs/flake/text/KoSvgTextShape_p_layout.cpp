@@ -535,6 +535,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     // surrogates or part of a ligature, are marked as such. Also set the css
     // position so that anchoring will work correctly later.
     int firstCluster = 0;
+    bool graphemeBreakNext = false;
     for (int i = 0; i < result.size(); i++) {
         result[i].middle = result.at(i).visualIndex == -1;
         if (result[i].addressable && !result.at(i).middle) {
@@ -551,12 +552,13 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                     result[firstCluster].lineEnd = result.at(i).lineEnd;
                 }
             }
-            if (graphemeBreaks[i] == GRAPHEMEBREAK_BREAK && result[i].addressable) {
+            if (graphemeBreakNext && result[i].addressable) {
                 result[firstCluster].cursorInfo.graphemeIndices.append(i);
             }
             result[i].cssPosition = result.at(firstCluster).cssPosition + result.at(firstCluster).advance;
             result[i].hidden = true;
         }
+        graphemeBreakNext = graphemeBreaks[i] == GRAPHEMEBREAK_BREAK;
     }
     debugFlake << "Glyphs retreived";
 
@@ -691,18 +693,22 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         KoSvgText::AssociatedShapeWrapper wrapper = chunk.format.associatedShapeWrapper();
         const int j = chunk.text.size();
         for (int i = globalIndex; i < globalIndex + j; i++) {
-            if (result.at(i).addressable && !result.at(i).hidden) {
+            if (result.at(i).addressable && !result.at(i).middle) {
 
                 if (result.at(i).anchored_chunk && !cursorPos.isEmpty()) {
-                    // add a position for the previous 'line' whenever we detect an anchored chunk.
-                    CursorPos pos;
-                    pos.cluster = cursorPos.last().cluster;
-                    pos.index = i;
-                    result[pos.cluster].cursorInfo.graphemeIndices.append(i);
-                    result[pos.cluster].cursorInfo.offsets.append(result[pos.cluster].advance);
-                    int size = result.at(i).cursorInfo.graphemeIndices.size();
-                    pos.offset = size+1;
-                    cursorPos.append(pos);
+                    if (!wrapped && result.at(cursorPos.last().cluster).breakType != BreakType::HardBreak) {
+                        // add a position for the previous 'line' whenever we detect an anchored chunk that
+                        // was not caused by a hard-break, this only happens with SVG absolute x and y positioning.
+                        CursorPos pos;
+                        pos.cluster = cursorPos.last().cluster;
+                        pos.index = i;
+                        result[pos.cluster].cursorInfo.graphemeIndices.append(i);
+                        result[pos.cluster].cursorInfo.offsets.append(result[pos.cluster].advance);
+                        int size = result.at(i).cursorInfo.graphemeIndices.size();
+                        pos.offset = size+1;
+                        pos.synthetic = true;
+                        cursorPos.append(pos);
+                    }
                 }
 
                 CursorPos pos;
@@ -724,8 +730,10 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                     result[i].cursorInfo.offsets = positions;
                 }
 
-                const QTransform tf = result.at(i).finalTransform();
-                wrapper.addCharacterRect(tf.mapRect(result.at(i).boundingBox));
+                if (!result.at(i).hidden) {
+                    const QTransform tf = result.at(i).finalTransform();
+                    wrapper.addCharacterRect(tf.mapRect(result.at(i).boundingBox));
+                }
             }
         }
         globalIndex += j;

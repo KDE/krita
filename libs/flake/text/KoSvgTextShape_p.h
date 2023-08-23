@@ -53,6 +53,7 @@ struct CursorPos {
     int cluster; ///< Which character result this position belongs in.
     int index; ///< Which grapheme this position belongs with.
     int offset; ///< Which offset this position belongs with.
+    bool synthetic = false; ///< Whether this position was inserted to have a visual indicator.
 };
 
 namespace Glyph {

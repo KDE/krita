@@ -159,6 +159,39 @@ int KoSvgTextShape::posForPoint(QPointF point)
     return -1;
 }
 
+int KoSvgTextShape::posForIndex(int index, bool firstIndex, bool skipSynthetic)
+{
+    int pos = -1;
+    if (d->cursorPos.isEmpty() || index < 0) {
+        return pos;
+    }
+    for (int i = 0; i< d->cursorPos.size(); i++) {
+        if (skipSynthetic && d->cursorPos.at(i).synthetic) {
+            continue;
+        }
+        if (d->cursorPos.at(i).index <= index) {
+            pos = i;
+            if (d->cursorPos.at(i).index == index && firstIndex) {
+                break;
+            }
+        } else if (d->cursorPos.at(i).index > index) {
+            break;
+        }
+    }
+
+    return pos;
+}
+
+int KoSvgTextShape::indexForPos(int pos)
+{
+    int index = -1;
+    if (d->cursorPos.isEmpty() || pos < 0) {
+        return index;
+    }
+
+    return d->cursorPos.at(qMin(d->cursorPos.size()-1, pos)).index;
+}
+
 KoSvgTextChunkShape *findTextChunkForIndex(KoShape *rootShape, int &currentIndex, int sought)
 {
     KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape *>(rootShape);
@@ -169,8 +202,7 @@ KoSvgTextChunkShape *findTextChunkForIndex(KoShape *rootShape, int &currentIndex
 
     if (!chunkShape->shapeCount()) {
         int length = chunkShape->layoutInterface()->numChars(true);
-        if (sought >= currentIndex && sought < currentIndex + length) {
-            qDebug() << "found shape" << currentIndex << sought << chunkShape->shapeCount();
+        if (sought == currentIndex || (sought > currentIndex && sought < currentIndex + length)) {
             return chunkShape;
         } else {
             currentIndex += length;
@@ -192,24 +224,15 @@ bool KoSvgTextShape::insertText(int pos, QString text)
     bool succes = false;
     int currentIndex = 0;
     int index = 0;
-    CursorPos cursorPos;
+    int oldIndex = 0;
     if (pos > -1 && !d->cursorPos.isEmpty()) {
-
-        cursorPos = d->cursorPos.at(qMin(pos, d->cursorPos.size()-1));
-        index = cursorPos.index;
-
-        // hack to ensure large indices always get their strings appended at the end.
-        int totalSize = this->layoutInterface()->numChars(true);
-        if (index >= totalSize) {
-            index = totalSize-1;
-        }
+        index = indexForPos(pos);
+        oldIndex = index;
+        index = qMin(index, d->result.size()-1);
     }
     KoSvgTextChunkShape *chunkShape = findTextChunkForIndex(this, currentIndex, index);
-    if (!this->shapeCount() && !chunkShape) {
-        chunkShape = this;
-    }
     if (chunkShape) {
-        int offset = chunkShape->layoutInterface()->relativeCharPos(chunkShape, cursorPos.index);
+        int offset = oldIndex - currentIndex;
         chunkShape->layoutInterface()->insertText(offset, text);
         notifyChanged();
         shapeChangedPriv(ContentChanged);
@@ -224,15 +247,14 @@ bool KoSvgTextShape::removeText(int pos, int length)
     if (pos < -1 || d->cursorPos.isEmpty()) {
         return succes;
     }
-    CursorPos cursorPos = d->cursorPos.at(qMin(pos, d->cursorPos.size()-1));
-    int index = cursorPos.index;
+    int index = indexForPos(pos);
     int currentIndex = 0;
     KoSvgTextChunkShape *chunkShape = findTextChunkForIndex(this, currentIndex, index);
     if (!this->shapeCount() && !chunkShape) {
         chunkShape = this;
     }
     if (chunkShape) {
-        int offset = chunkShape->layoutInterface()->relativeCharPos(chunkShape, index);
+        int offset =  index - currentIndex;
         chunkShape->layoutInterface()->removeText(offset, length);
         notifyChanged();
         shapeChangedPriv(ContentChanged);

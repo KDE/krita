@@ -633,12 +633,13 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                 if (lastDitch) {
                     QVector<int> wordNew;
                     QPointF advance = currentPos;
-                    Q_FOREACH(int i, wordIndices) {
+                    Q_FOREACH(const int i, wordIndices) {
                         advance += result[i].advance;
                         if (currentShape.contains(advance)) {
                             wordNew.append(i);
                         } else {
                             result[i].hidden = true;
+                            result[i].cssPosition = advance-result[i].advance;
                         }
                         wordIndices = wordNew;
                     }
@@ -646,7 +647,10 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                 addWordToLine(result, currentPos, wordIndices, currentLine, ltr, isHorizontal);
             } else {
                 currentLine = LineBox();
+                QPointF advance = currentPos;
                 Q_FOREACH (const int j, wordIndices) {
+                    result[j].cssPosition = advance;
+                    advance += result[j].advance;
                     result[j].hidden = true;
                 }
             }

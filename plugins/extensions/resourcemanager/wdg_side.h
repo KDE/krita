@@ -1,3 +1,6 @@
+/*
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ */
 #ifndef WDG_SIDE_H
 #define WDG_SIDE_H
 

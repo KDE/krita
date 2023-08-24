@@ -1,3 +1,6 @@
+/*
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ */
 #ifndef PAGE_TAG_CHOOSER_H
 #define PAGE_TAG_CHOOSER_H
 

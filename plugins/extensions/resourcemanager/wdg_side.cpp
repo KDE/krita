@@ -1,3 +1,6 @@
+/*
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ */
 #include "wdg_side.h"
 #include "ui_wdgside.h"
 #include <kis_icon.h>

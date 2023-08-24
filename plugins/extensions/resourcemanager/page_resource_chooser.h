@@ -1,3 +1,6 @@
+/*
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ */
 #ifndef PAGE_RESOURCE_CHOOSER_H
 #define PAGE_RESOURCE_CHOOSER_H
 

@@ -2,6 +2,7 @@
  *  SPDX-FileCopyrightText: 2014 Victor Lafon metabolic.ewilan @hotmail.fr
  *  SPDX-FileCopyrightText: 2020 Agata Cacko cacko.azh @gmail.com
  *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -86,7 +87,10 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
         m_count.insert(resourceType, 0);
     }
 
+    m_bundleCreaterMode = "Creator";
+
     if (m_bundle) {
+        m_bundleCreaterMode = "Editor";
         m_bundleStorage = new KisBundleStorage(m_bundle->filename());
 
         QStringList resourceTypes = QStringList() << ResourceType::Brushes << ResourceType::PaintOpPresets << ResourceType::Gradients << ResourceType::GamutMasks;
@@ -152,13 +156,6 @@ DlgCreateBundle::~DlgCreateBundle()
 QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags, QString resourceType) const
 {
     QVector<KisTagSP> tagsToEmbed;
-    /*
-    Q_FOREACH(KisTagSP tag, resourceTags) {
-        if (m_selectedTagIds.contains(tag->id())) {
-            tagsToEmbed << tag;
-        }
-    }*/
-
     KisTagModel *tagModel = new KisTagModel(resourceType);
 
     for (int i = 0; i < tagModel->rowCount(); i++) {
@@ -232,7 +229,7 @@ bool DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle)
         QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id), res->resourceType().first);
         bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5Sum(), res->resourceId(), prettyFilename);
 
-        if (!m_bundle) {
+        if (m_bundleCreaterMode == "Creator") {
             QList<KoResourceLoadResult> linkedResources = res->linkedResources(KisGlobalResourcesInterface::instance());
             Q_FOREACH(KoResourceLoadResult linkedResource, linkedResources) {
                 // we have requested linked resources, how can it be an embedded one?
@@ -395,7 +392,6 @@ void DlgCreateBundle::accept()
                 m_bundle.reset();
                 return;
             }
-//             KIS_SAFE_ASSERT_RECOVER(!m_bundle) { warnKrita << "Updating a bundle is not implemented yet"; };
         }
         QWizard::accept();
     }

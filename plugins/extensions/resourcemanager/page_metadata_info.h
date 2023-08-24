@@ -1,3 +1,6 @@
+/*
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ */
 #ifndef PAGE_METADATA_INFO_H
 #define PAGE_METADATA_INFO_H
 

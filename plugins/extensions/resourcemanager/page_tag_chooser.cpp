@@ -1,3 +1,6 @@
+/*
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ */
 #include "page_tag_chooser.h"
 #include "ui_pagetagchooser.h"
 #include "dlg_create_bundle.h"
@@ -91,7 +94,6 @@ PageTagChooser::PageTagChooser(KoResourceBundleSP bundle, QWidget *parent) :
             while (tagIter->hasNext()) {
                 tagIter->next();
                 KisTagSP tag = tagModel->tagForUrl(tagIter->tag()->url());
-//                 qDebug() << "tag id: " << tag->id();
                 m_selectedTagIds.append(tag->id());
             }
         }

@@ -1,3 +1,6 @@
+/*
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ */
 #ifndef WDGTAGPREVIEW_H
 #define WDGTAGPREVIEW_H
 

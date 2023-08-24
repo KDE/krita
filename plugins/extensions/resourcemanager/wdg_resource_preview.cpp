@@ -1,3 +1,6 @@
+/*
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ */
 #include "ui_wdgresourcepreview.h"
 #include "wdg_resource_preview.h"
 
@@ -44,9 +47,7 @@ WdgResourcePreview::WdgResourcePreview(WidgetType type, QWidget *parent) :
     m_ui->setupUi(this);
 
     m_ui->resourceItemView->setFixedToolTipThumbnailSize(QSize(128, 128));
-    // m_ui->resourceItemView->setListViewMode(ListViewMode::Detail);
 
-    // resource type combo box code
     if (m_type == WidgetType::ResourceManager) {
         m_resourceTypeModel = new KisResourceTypeModel(this);
         m_ui->cmbResourceType->setModel(m_resourceTypeModel);
@@ -74,7 +75,6 @@ WdgResourcePreview::WdgResourcePreview(WidgetType type, QWidget *parent) :
     connect(m_ui->cmbResourceType, SIGNAL(activated(int)), SLOT(slotResourceTypeSelected(int)));
     connect(m_ui->cmbResourceType, SIGNAL(activated(int)), SIGNAL(resourceTypeSelected(int)));
 
-    // tag type combo box code
     QString selectedResourceType = getCurrentResourceType();
 
 
@@ -87,8 +87,6 @@ WdgResourcePreview::WdgResourcePreview(WidgetType type, QWidget *parent) :
 
     connect(m_ui->cmbTag, SIGNAL(activated(int)), SLOT(slotTagSelected(int)));
 
-
-    // storage type combo box
     if (m_type == WidgetType::BundleCreator) {
         m_ui->cmbStorage->setVisible(false);
     } else {
@@ -99,7 +97,6 @@ WdgResourcePreview::WdgResourcePreview(WidgetType type, QWidget *parent) :
         connect(m_ui->cmbStorage, SIGNAL(activated(int)), SLOT(slotStorageSelected(int)));
     }
 
-    // resource item view code
     // the model will be owned by `proxyModel`
     KisResourceModel* resourceModel;
 

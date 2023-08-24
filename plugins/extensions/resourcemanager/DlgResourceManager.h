@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2021 Mathias Wein <lynx.mw+kde@gmail.com>
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

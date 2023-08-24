@@ -1,3 +1,6 @@
+/*
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ */
 #ifndef WDG_RESOURCE_PREVIEW_H
 #define WDG_RESOURCE_PREVIEW_H
 

@@ -1,3 +1,6 @@
+/*
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ */
 #include "KisResourceItemViwer.h"
 
 #include "ResourceListViewModes.h"

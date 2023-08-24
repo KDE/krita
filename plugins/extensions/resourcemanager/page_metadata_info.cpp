@@ -1,3 +1,6 @@
+/*
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ */
 #include "page_metadata_info.h"
 #include "ui_pagemetadatainfo.h"
 #include <kis_config.h>

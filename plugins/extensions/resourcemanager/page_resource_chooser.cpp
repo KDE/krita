@@ -1,3 +1,6 @@
+/*
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ */
 #include "page_resource_chooser.h"
 #include "ui_pageresourcechooser.h"
 #include "wdg_resource_preview.h"
@@ -43,7 +46,6 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
     m_kisResourceItemDelegate->setIsWidget(true);
     m_resourceItemWidget->setItemDelegate(m_kisResourceItemDelegate);
 
-    // btnRemoveSelected
     connect(m_ui->btnRemoveSelected, SIGNAL(clicked(bool)), this, SLOT(slotRemoveSelected(bool)));
 
     KisResourceItemViwer *viewModeButton;
@@ -87,7 +89,6 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
                 iter->next();
                 KoResourceSP res = resourceSourceAdapter.bestMatch(iter->resource()->md5Sum(false), iter->resource()->filename(), iter->resource()->name());
                 if (!res.isNull()) {
-//                     qDebug() << "res id: " << res->resourceId();
                     m_selectedResourcesIds.append(res->resourceId());
                 }
             }

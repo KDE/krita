@@ -1,3 +1,6 @@
+/*
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ */
 #include "page_bundle_saver.h"
 #include "ui_pagebundlesaver.h"
 #include "dlg_create_bundle.h"
@@ -116,7 +119,6 @@ void PageBundleSaver::onCountUpdated()
 void PageBundleSaver::onTagsUpdated()
 {
     DlgCreateBundle *wizard = qobject_cast<DlgCreateBundle*>(this->wizard());
-    // QString bundleDetails;
     m_tags = "";
     QSet<QString> set = wizard->m_tags;
 

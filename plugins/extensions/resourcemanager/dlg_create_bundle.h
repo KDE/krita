@@ -1,4 +1,6 @@
-
+/*
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ */
 #ifndef KOBUNDLECREATIONWIDGET_H
 #define KOBUNDLECREATIONWIDGET_H
 
@@ -38,22 +40,18 @@ private Q_SLOTS:
     void accept() override;
     void reject() override;
 
-    // old
     void saveToConfiguration(bool full);
     QVector<KisTagSP> getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags, QString resourceType) const;
 
 public Q_SLOTS:
 
-    // new
     void updateTitle(int id);
 
 
 private:
 
-    QWidget *m_page;
     Ui::WdgDlgCreateBundle *m_ui;
 
-    // old
     bool putResourcesInTheBundle(KoResourceBundleSP bundle);
     void putMetaDataInTheBundle(KoResourceBundleSP bundle) const;
     QString createPrettyFilenameFromName(KoResourceSP resource) const;
@@ -64,7 +62,6 @@ private:
     QString m_previewImage;
     KoResourceBundleSP m_bundle;
 
-    // new
     PageResourceChooser *m_pageResourceChooser;
     PageTagChooser *m_pageTagChooser;
     PageMetadataInfo *m_pageMetadataInfo;
@@ -74,6 +71,7 @@ private:
     KisResourceStorageSP m_resourceStorage;
     QString m_storageID;
     bool m_storageAdded;
+    QString m_bundleCreaterMode;
 };
 
 #endif // KOBUNDLECREATIONWIDGET_H

@@ -1,6 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2014 Victor Lafon metabolic.ewilan @hotmail.fr
- * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -296,15 +297,6 @@ void DlgBundleManager::editBundle()
                 }
             }
 
-//             QFileInfo oldFileInfo(filename);
-//
-//             QString newDir = KoResourcePaths::getAppDataLocation();
-//             QString newName = oldFileInfo.fileName();
-//             const QString newLocation = QStringLiteral("%1/Temp_%2").arg(newDir, newName);
-//
-//             QFileInfo newFileInfo(newLocation);
-//             QFile::copy(filename, newLocation);
-
             KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(filename);
             if (storage.isNull()){continue;}
             if (storage->valid()) {
@@ -320,23 +312,6 @@ void DlgBundleManager::editBundle()
                 KoResourceBundleSP bundleSP(bundle);
                 DlgCreateBundle* dlgBC = new DlgCreateBundle(bundleSP, this);
                 int response = dlgBC->exec();
-
-
-                if (response == KoDialog::Rejected) {
-
-//                     if (KisResourceLocator::instance()->hasStorage(filename)) {
-//
-//                         qDebug() << "delete";
-//                         bool removed = KisResourceLocator::instance()->removeStorage(filename);
-//                         qDebug() << removed << " :Bundle Manager removed";
-// //                         bool returned = QFile::remove(newLocation);
-// //                         qDebug() << returned << " :Bundle Manager QFile::remove";
-//                         KIS_SAFE_ASSERT_RECOVER(!KisResourceLocator::instance()->hasStorage(filename));
-//                         qDebug() << removed << " :Bundle Manager finished";
-//
-//                     }
-                }
-
             }
         }
     }
@@ -389,13 +364,11 @@ void DlgBundleManager::slotModelAboutToBeReset()
 
 void DlgBundleManager::slotRowsRemoved(const QModelIndex &parent, int start, int end)
 {
-    ENTER_FUNCTION();
     m_proxyModel->removeRows(start, end - start + 1, parent);
 }
 
 void DlgBundleManager::slotRowsInserted(const QModelIndex &parent, int start, int end)
 {
-    ENTER_FUNCTION();
     m_proxyModel->insertRows(start, end - start + 1, parent);
 }
 

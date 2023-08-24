@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-22 02:25+0000\n"
+"POT-Creation-Date: 2023-08-24 02:22+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -37915,14 +37915,14 @@ msgstr "ជក់​សំណព្វ"
 msgid "Next frames"
 msgstr "យក​ស្រទាប់​ចេញ"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:424
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
 msgid_plural "Remove %1 frames and shift"
 msgstr[0] "យក​ស្រទាប់​ចេញ"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:454
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"

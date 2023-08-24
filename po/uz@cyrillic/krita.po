@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-22 02:25+0000\n"
+"POT-Creation-Date: 2023-08-24 02:22+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -39269,7 +39269,7 @@ msgstr "Кўриб чиқиш:"
 msgid "Next frames"
 msgstr "Матнни қўйиш"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:424
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
 #, fuzzy, kde-format
 #| msgid "Remove Template"
 msgctxt "(qtundo-format)"
@@ -39277,7 +39277,7 @@ msgid "Remove frame and shift"
 msgid_plural "Remove %1 frames and shift"
 msgstr[0] "Намунани олиб ташлаш"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:454
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
 #, fuzzy
 #| msgid "Company Name"
 msgctxt "(qtundo-format)"

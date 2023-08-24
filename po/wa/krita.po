@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-22 02:25+0000\n"
+"POT-Creation-Date: 2023-08-24 02:22+0000\n"
 "PO-Revision-Date: 2011-01-17 21:35+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -38209,7 +38209,7 @@ msgstr "Pincea passete"
 msgid "Next frames"
 msgstr "Oister imådje"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:424
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -38217,7 +38217,7 @@ msgid_plural "Remove %1 frames and shift"
 msgstr[0] "Oister imådje"
 msgstr[1] "Oister imådje"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:454
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"

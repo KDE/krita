@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-22 02:25+0000\n"
+"POT-Creation-Date: 2023-08-24 02:22+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -37774,7 +37774,7 @@ msgstr "फ़िल्टर्स :"
 msgid "Next frames"
 msgstr "अगले फ़्रेम"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:424
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -37782,7 +37782,7 @@ msgid_plural "Remove %1 frames and shift"
 msgstr[0] "परत मिटाएं"
 msgstr[1] "परत मिटाएं"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:454
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
 msgstr "फ़्रेमों को प्रतिबिंबित करें"

@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2006-2007, 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2023 Carsten Hartenfels <carsten.hartenfels@pm.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -88,14 +89,23 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     else if (layer->compositeOpId() == COMPOSITE_LUMINIZE) compop = "svg:luminosity";
     else if (layer->compositeOpId() == COMPOSITE_HUE) compop = "svg:hue";
     else if (layer->compositeOpId() == COMPOSITE_SATURATION) compop = "svg:saturation";
-
-    // it is important that the check for alphaChannelDisabled (and other non compositeOpId checks)
-    // come before the check for COMPOSITE_OVER, otherwise they will be logically ignored.
-    else if (layer->alphaChannelDisabled()) compop = "svg:src-atop";
     else if (layer->compositeOpId() == COMPOSITE_OVER) compop = "svg:src-over";
 
     //else if (layer->compositeOpId() == COMPOSITE_EXCLUSION) compop = "svg:exclusion";
     else compop = "krita:" + layer->compositeOpId();
+
+    // Alpha preserve has a special case with the Normal blend mode, which is
+    // stored as src-atop for compatibility with previous Krita versions that
+    // don't understand the alpha-preserve property, as well as other programs
+    // like MyPaint that don't support alpha preserve on layers in general.
+    if(layer->alphaChannelDisabled()) {
+        if (layer->compositeOpId() == COMPOSITE_OVER) {
+            compop = "svg:src-atop";
+        } else {
+            elt.setAttribute("alpha-preserve", "true");
+        }
+    }
+
     elt.setAttribute("composite-op", compop);
 }
 

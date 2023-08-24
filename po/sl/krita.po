@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-22 00:44+0000\n"
+"POT-Creation-Date: 2023-08-24 00:44+0000\n"
 "PO-Revision-Date: 2023-08-21 07:57+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -38231,7 +38231,7 @@ msgstr "Prejšnje sličice"
 msgid "Next frames"
 msgstr "Naslednje sličice"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:424
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -38241,7 +38241,7 @@ msgstr[1] "Odstrani %1 sličico in zamakni"
 msgstr[2] "Odstrani %1 sličici in zamakni"
 msgstr[3] "Odstrani %1 sličice in zamakni"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:454
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:455
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
 msgstr "Zrcali sličice"

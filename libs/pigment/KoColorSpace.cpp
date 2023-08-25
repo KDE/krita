@@ -512,7 +512,7 @@ void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::Par
                 (*op->colorSpace() == *srcSpace || srcSpace->hasCompositeOp(op->id()))) {
 
             quint32           conversionDstBufferStride = params.cols * srcSpace->pixelSize();
-            QVector<quint8> * conversionDstCache        = threadLocalConversionCache(params.rows * conversionDstBufferStride);
+            QVector<quint8> * conversionDstCache        = d->conversionCache.get(params.rows * conversionDstBufferStride);
             quint8*           conversionDstData         = conversionDstCache->data();
 
             for(qint32 row=0; row<params.rows; row++) {
@@ -538,7 +538,7 @@ void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::Par
 
         } else {
             quint32           conversionBufferStride = params.cols * pixelSize();
-            QVector<quint8> * conversionCache        = threadLocalConversionCache(params.rows * conversionBufferStride);
+            QVector<quint8> * conversionCache        = d->conversionCache.get(params.rows * conversionBufferStride);
             quint8*           conversionData         = conversionCache->data();
 
 
@@ -559,7 +559,7 @@ void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::Par
                 op->composite(paramInfo);
             } else {
                 quint32           homogenizationBufferStride = params.cols * srcSpace->pixelSize();
-                QVector<quint8> * homogenizationCache        = d->threadLocalChannelFlagsHomogenizationCache(homogenizationBufferStride);
+                QVector<quint8> * homogenizationCache        = d->channelFlagsApplicationCache.get(homogenizationBufferStride);
                 quint8*           homogenizationData         = homogenizationCache->data();
 
                 for(qint32 row=0; row<params.rows; row++) {
@@ -585,21 +585,6 @@ void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::Par
     else {
         op->composite(params);
     }
-}
-
-
-QVector<quint8> * KoColorSpace::threadLocalConversionCache(quint32 size) const
-{
-    QVector<quint8> * ba = 0;
-    if (!d->conversionCache.hasLocalData()) {
-        ba = new QVector<quint8>(size, '0');
-        d->conversionCache.setLocalData(ba);
-    } else {
-        ba = d->conversionCache.localData();
-        if ((quint8)ba->size() < size)
-            ba->resize(size);
-    }
-    return ba;
 }
 
 KoColorTransformation* KoColorSpace::createColorTransformation(const QString & id, const QHash<QString, QVariant> & parameters) const

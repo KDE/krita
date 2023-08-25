@@ -100,9 +100,15 @@ QString SvgSavingContext::createUID(const QString &base)
 {
     QString idBase = base.isEmpty() ? "defitem" : base;
     int counter = d->uniqueNames.value(idBase);
-    d->uniqueNames.insert(idBase, counter+1);
+    QString res;
+    do {
+        res = idBase + QString::number(counter);
+        counter++;
+    } while (d->uniqueNames.contains(res));
 
-    return idBase + QString("%1").arg(counter);
+    d->uniqueNames.insert(idBase, counter);
+    d->uniqueNames.insert(res, 1);
+    return res;
 }
 
 QString SvgSavingContext::getID(const KoShape *obj)

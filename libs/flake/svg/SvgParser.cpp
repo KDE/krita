@@ -1686,7 +1686,11 @@ KoShape* SvgParser::parseGroup(const QDomElement &b, const QDomElement &override
     if (!overrideChildrenFrom.isNull()) {
         // we upload styles from both: <use> and <defs>
         uploadStyleToContext(overrideChildrenFrom);
-        childShapes = parseSingleElement(overrideChildrenFrom, 0);
+        if (overrideChildrenFrom.tagName() == "symbol") {
+            childShapes = {parseGroup(overrideChildrenFrom)};
+        } else {
+            childShapes = parseSingleElement(overrideChildrenFrom, 0);
+        }
     } else {
         childShapes = parseContainer(b);
     }
@@ -1920,14 +1924,11 @@ QList<KoShape*> SvgParser::parseSingleElement(const QDomElement &b, DeferredUseS
 
     if (b.tagName() == "svg") {
         shapes += parseSvg(b);
-    } else if (b.tagName() == "g" || b.tagName() == "a" || b.tagName() == "symbol") {
+    } else if (b.tagName() == "g" || b.tagName() == "a") {
         // treat svg link <a> as group so we don't miss its child elements
         shapes += parseGroup(b);
-
-        if (b.tagName() == "symbol") {
-            parseSymbol(b);
-        }
-
+    } else if (b.tagName() == "symbol") {
+        parseSymbol(b);
     } else if (b.tagName() == "switch") {
         m_context.pushGraphicsContext(b);
         shapes += parseContainer(b);

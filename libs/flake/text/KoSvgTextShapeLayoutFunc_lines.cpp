@@ -203,6 +203,7 @@ handleCollapseAndHang(QVector<CharacterResult> &result, LineChunk &chunk, bool l
             int lastIndex = it.previous();
             if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::Collapse) {
                 result[lastIndex].hidden = true;
+                result[lastIndex].advance = QPointF();
             } else if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::ConditionallyHang) {
                 if (ltr) {
                     QPointF hangPos = result[lastIndex].cssPosition + result[lastIndex].advance;
@@ -254,7 +255,7 @@ static void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
 
     bool first = true;
     Q_FOREACH (int i, lineIndices) {
-        if (!result.at(i).addressable || (result.at(i).isHanging && result.at(i).anchored_chunk)) {
+        if (!result.at(i).addressable || result.at(i).hidden || (result.at(i).isHanging && result.at(i).anchored_chunk)) {
             continue;
         }
 
@@ -341,7 +342,7 @@ void finalizeLine(QVector<CharacterResult> &result,
             QPointF advanceLength; ///< Because we may have collapsed the last glyph, we'll need to recalculate the total advance;
             bool first = true;
             Q_FOREACH (int j, visualToLogical.values()) {
-                if (!result.at(j).addressable) {
+                if (!result.at(j).addressable || result.at(j).hidden) {
                     continue;
                 }
                 advanceLength += result.at(j).advance;

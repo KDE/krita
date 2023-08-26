@@ -7,16 +7,60 @@
 #include "graphemebreak.h"
 #include <QChar>
 
-QString KoCssTextUtils::transformTextCapitalize(const QString &text, const QString langCode)
+QVector<QPair<int, int>> positionDifference(QStringList a, QStringList b) {
+    QVector<QPair<int, int>> positions;
+
+    int countA = 0;
+    int countB = 0;
+    for (int i=0; i< a.size(); i++) {
+        QString textA = a.at(i);
+        QString textB = b.at(i);
+        if (textA.size() > textB.size()) {
+            for (int j=0; j < textA.size(); j++) {
+                int k = j < textB.size()? countB+j: -1;
+                positions.append(QPair(countA+j, k));
+            }
+        } else {
+            for (int j=0; j < textB.size(); j++) {
+                int k = j < textA.size()? countA+j: -1;
+                positions.append(QPair(k, countB+j));
+            }
+        }
+        countA += textA.size();
+        countB += textB.size();
+    }
+
+    return positions;
+}
+
+QString KoCssTextUtils::transformTextToUpperCase(const QString &text, const QString &langCode, QVector<QPair<int, int> > &positions)
+{
+    QLocale locale(langCode.split("-").join("_"));
+    QString transformedText = locale.toUpper(text);
+    positions = positionDifference(textToUnicodeGraphemeClusters(text, langCode), textToUnicodeGraphemeClusters(transformedText, langCode));
+    return transformedText;
+}
+
+QString KoCssTextUtils::transformTextToLowerCase(const QString &text, const QString &langCode, QVector<QPair<int, int> > &positions)
+{
+    QLocale locale(langCode.split("-").join("_"));
+    QString transformedText = locale.toLower(text);
+    positions = positionDifference(textToUnicodeGraphemeClusters(text, langCode), textToUnicodeGraphemeClusters(transformedText, langCode));
+    return transformedText;
+};
+
+QString KoCssTextUtils::transformTextCapitalize(const QString &text, const QString langCode, QVector<QPair<int, int>> &positions)
 {
     QLocale locale(langCode.split("-").join("_"));
 
     QStringList graphemes = textToUnicodeGraphemeClusters(text, langCode);
+    QStringList oldGraphemes = graphemes;
     bool capitalizeGrapheme = true;
     for (int i = 0; i < graphemes.size(); i++) {
         QString grapheme = graphemes.at(i);
         if (grapheme.isEmpty() || IsCssWordSeparator(grapheme)) {
             capitalizeGrapheme = true;
+
         } else if (capitalizeGrapheme) {
             graphemes[i] = locale.toUpper(grapheme);
             if (i + 1 < graphemes.size()) {
@@ -31,6 +75,7 @@ QString KoCssTextUtils::transformTextCapitalize(const QString &text, const QStri
         }
     }
 
+    positions = positionDifference(oldGraphemes, graphemes);
     return graphemes.join("");
 }
 

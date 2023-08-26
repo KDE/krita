@@ -172,7 +172,7 @@ int KoSvgTextShape::posForPoint(QPointF point)
         CursorPos pos = d->cursorPos.at(i);
         CharacterResult res = d->result.at(pos.cluster);
         QPointF cursorStart = res.finalPosition;
-        if (pos.offset>0) {
+        if (pos.offset>0 && pos.offset-1 < res.cursorInfo.offsets.size()) {
             cursorStart += res.cursorInfo.offsets.at(pos.offset-1);
         }
         double distance = kisDistance(cursorStart, point);
@@ -227,7 +227,7 @@ KoSvgTextChunkShape *findTextChunkForIndex(KoShape *rootShape, int &currentIndex
     }
 
     if (!chunkShape->shapeCount()) {
-        int length = chunkShape->layoutInterface()->numChars(true);
+        int length = chunkShape->layoutInterface()->numChars(false);
         if (sought == currentIndex || (sought > currentIndex && sought < currentIndex + length)) {
             return chunkShape;
         } else {

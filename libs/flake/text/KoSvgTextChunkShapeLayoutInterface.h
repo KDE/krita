@@ -159,32 +159,42 @@ public:
         {
         }
 
-        SubChunk(QString _text, KoSvgText::KoSvgCharChunkFormat _format, bool textInPath = false, bool firstTextInPath = false)
+        SubChunk(QString _text, QString originalText, KoSvgText::KoSvgCharChunkFormat _format, QVector<QPair<int, int>> positions, bool textInPath = false, bool firstTextInPath = false)
             : text(std::move(_text))
+            , originalText(originalText)
             , format(std::move(_format))
+            , newToOldPositions(positions)
             , textInPath(textInPath)
             , firstTextInPath(firstTextInPath)
         {
         }
 
         SubChunk(QString _text,
+                 QString originalText,
                  KoSvgText::KoSvgCharChunkFormat _format,
                  const QVector<KoSvgText::CharTransformation> &t,
+                 QVector<QPair<int, int>> positions,
                  bool textInPath = false,
                  bool firstTextInPath = false)
             : text(std::move(_text))
+            , originalText(originalText)
             , format(std::move(_format))
             , transformation(t)
+            , newToOldPositions(positions)
             , textInPath(textInPath)
             , firstTextInPath(firstTextInPath)
         {
         }
 
         QString text;
+        QString originalText;
         KoSvgText::KoSvgCharChunkFormat format;
         QVector<KoSvgText::CharTransformation> transformation;
+        QVector<QPair<int, int>> newToOldPositions; ///< For transformed strings, we need to know which
+                                                    ///< original index matches which new index;
         bool textInPath = false;
-        bool firstTextInPath = false; // We need to mark the first text in path as an anchored chunk.
+        bool firstTextInPath = false; ///< We need to mark the first text in path as an anchored chunk.
+
     };
 
     /**

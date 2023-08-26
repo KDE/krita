@@ -95,6 +95,7 @@ struct CharacterResult {
 
     QRectF boundingBox;
     int visualIndex = -1;
+    int plaintTextIndex = -1;
     QPointF cssPosition = QPointF(); ///< the position in accordance with the CSS specs, as opossed to the SVG spec.
     QPointF baselineOffset = QPointF(); ///< The computed baseline offset, will be applied
                                         ///< when calculating the line-offset during line breaking.

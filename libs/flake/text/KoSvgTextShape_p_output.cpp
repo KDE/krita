@@ -371,6 +371,7 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
                             text += QString::number(end);
                         }
                     }
+                    text += QString("\n(%1)").arg(result.at(i).plaintTextIndex);
                     painter.setWorldMatrixEnabled(false);
                     painter.setPen(Qt::red);
                     painter.drawText(QRectF(painter.transform().map(center), QSizeF(0, 64)).adjusted(-128, 0, 128, 0),

@@ -2109,18 +2109,19 @@ void TestSvgText::testCssTextTransform()
     QString capitalize = "Aaa Bbb Ccc Ddd Eee Fff Ggg Hhh Iii Jjj Kkk Lll Mmm Nnn Ooo Ppp Qqq Rrr Sss Ttt Uuu Vvv Www Xxx Yyy Zzz";
     QString uppercase = "AAA BBB CCC DDD EEE FFF GGG HHH III JJJ KKK LLL MMM NNN OOO PPP QQQ RRR SSS TTT UUU VVV WWW XXX YYY ZZZ";
 
-    QVERIFY2(KoCssTextUtils::transformTextToLowerCase(capitalize, "") == lower, QString("Transform to lower case does not match lowercase string").toLatin1());
-    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(capitalize, "") == uppercase,
+    QVector<QPair<int, int>> positions;
+    QVERIFY2(KoCssTextUtils::transformTextToLowerCase(capitalize, "", positions) == lower, QString("Transform to lower case does not match lowercase string").toLatin1());
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(capitalize, "", positions) == uppercase,
              QString("Transform to upper case does not match uppercase string").toLatin1());
-    QVERIFY2(KoCssTextUtils::transformTextCapitalize(lower, "") == capitalize,
+    QVERIFY2(KoCssTextUtils::transformTextCapitalize(lower, "", positions) == capitalize,
              QString("Capitalization transform does not match capitalized string").toLatin1());
-    QVERIFY2(KoCssTextUtils::transformTextCapitalize(uppercase, "") == uppercase,
+    QVERIFY2(KoCssTextUtils::transformTextCapitalize(uppercase, "", positions) == uppercase,
              QString("Capitalization transform on uppercase string does not match uppercase string").toLatin1());
 
     // Turkish differentiates between İ and I, little details like these are why we use QLocale, and in effect, this tests whether the QLocale support is
     // lacking on whichever system we're building for.
     QString uppercaseTurkish = "AAA BBB CCC DDD EEE FFF GGG HHH Iİİ JJJ KKK LLL MMM NNN OOO PPP QQQ RRR SSS TTT UUU VVV WWW XXX YYY ZZZ";
-    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(capitalize, "tr") == uppercaseTurkish,
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(capitalize, "tr", positions) == uppercaseTurkish,
              QString("Transform to upper case in Turkish locale does not match reference string, QLocale might not be able to provide good text transforms")
                  .toLatin1());
 
@@ -2151,25 +2152,25 @@ void TestSvgText::testCssTextTransform()
     QString ijDigraphTest = "ijsland";
     QString ijDigraphRef = "IJsland";
 
-    QVERIFY2(KoCssTextUtils::transformTextCapitalize(ijDigraphTest, "nl") == ijDigraphRef, QString("IJ disgraph tailor test is failing").toLatin1());
+    QVERIFY2(KoCssTextUtils::transformTextCapitalize(ijDigraphTest, "nl", positions) == ijDigraphRef, QString("IJ disgraph tailor test is failing").toLatin1());
 
     // Adapted from web platform test text-transform-tailoring-002.html
     QString greekTonosTest = "καλημέρα αύριο";
     QString greekTonosRef = "ΚΑΛΗΜΕΡΑ ΑΥΡΙΟ";
-    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el") == greekTonosRef, QString("Greek tonos tailor test is failing").toLatin1());
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el", positions) == greekTonosRef, QString("Greek tonos tailor test is failing").toLatin1());
 
     // Adapted from web platform test text-transform-tailoring-002a.html
     greekTonosTest = "θεϊκό";
     greekTonosRef = "ΘΕΪΚΟ";
 
-    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el") == greekTonosRef,
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el", positions) == greekTonosRef,
              QString("Greek tonos tailor test for dialytika is failing").toLatin1());
 
     // Adapted from web platform test text-transform-tailoring-003.html
     greekTonosTest = "ευφυΐα Νεράιδα";
     greekTonosRef = "ΕΥΦΥΪΑ ΝΕΡΑΪΔΑ";
 
-    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el") == greekTonosRef,
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el", positions) == greekTonosRef,
              QString("Greek tonos tailor test number 3 is failing.").toLatin1());
 
     // Adapted from web platform test text-transform-tailoring-004.html
@@ -2187,7 +2188,7 @@ void TestSvgText::testCssTextTransform()
 
     greekTonosTest = "ήσουν ή εγώ ή εσύ";
     greekTonosRef = "ΗΣΟΥΝ Ή ΕΓΩ Ή ΕΣΥ";
-    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el") == greekTonosRef,
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el", positions) == greekTonosRef,
              QString("Greek tonos tailor test number 5 is failing").toLatin1());
 }
 

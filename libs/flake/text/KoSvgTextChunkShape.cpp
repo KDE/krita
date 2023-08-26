@@ -212,9 +212,10 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
                 KoSvgText::TextTransformInfo textTransformInfo =
                     q->s->properties.propertyOrDefault(KoSvgTextProperties::TextTransformId).value<KoSvgText::TextTransformInfo>();
                 QString lang = q->s->properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
+                QVector<QPair<int, int>> positions;
 
                 result = getBidiOpening(direction == KoSvgText::DirectionLeftToRight, bidi).size();
-                result += transformText(q->s->text, textTransformInfo, lang).size();
+                result += transformText(q->s->text, textTransformInfo, lang, positions).size();
                 result += getBidiClosing(bidi).size();
             } else {
                 result = q->s->text.size();
@@ -332,14 +333,19 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         return result;
     }
 
-    static QString transformText(QString text, KoSvgText::TextTransformInfo textTransformInfo, const QString lang)
+    static QString transformText(QString text, KoSvgText::TextTransformInfo textTransformInfo, const QString lang, QVector<QPair<int, int>> &positions)
     {
         if (textTransformInfo.capitals == KoSvgText::TextTransformCapitalize) {
-            text = KoCssTextUtils::transformTextCapitalize(text, lang);
+            text = KoCssTextUtils::transformTextCapitalize(text, lang, positions);
         } else if (textTransformInfo.capitals == KoSvgText::TextTransformUppercase) {
-            text = KoCssTextUtils::transformTextToUpperCase(text, lang);
+            text = KoCssTextUtils::transformTextToUpperCase(text, lang, positions);
         } else if (textTransformInfo.capitals == KoSvgText::TextTransformLowercase) {
-            text = KoCssTextUtils::transformTextToLowerCase(text, lang);
+            text = KoCssTextUtils::transformTextToLowerCase(text, lang, positions);
+        } else {
+            positions.clear();
+            for (int i = 0; i < text.size(); i++) {
+                positions.append(QPair<int, int>(i, i));
+            }
         }
 
         if (textTransformInfo.fullWidth) {
@@ -364,7 +370,8 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
             KoSvgText::TextTransformInfo textTransformInfo =
                 q->s->properties.propertyOrDefault(KoSvgTextProperties::TextTransformId).value<KoSvgText::TextTransformInfo>();
             QString lang = q->s->properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
-            const QString text = transformText(q->s->text, textTransformInfo, lang);
+            QVector<QPair<int, int>> positions;
+            const QString text = transformText(q->s->text, textTransformInfo, lang, positions);
             const KoSvgText::KoSvgCharChunkFormat format = q->fetchCharFormat();
             QVector<KoSvgText::CharTransformation> transforms = q->s->localTransformations;
 
@@ -382,18 +389,18 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
             const QString bidiClosing = getBidiClosing(bidi);
 
             if (!bidiOpening.isEmpty()) {
-                result << SubChunk(bidiOpening, format, textInPath, firstTextInPath);
+                result << SubChunk(bidiOpening, QString(), format, positions, textInPath, firstTextInPath);
                 firstTextInPath = false;
             }
 
             if (transforms.isEmpty()) {
-                result << SubChunk(text, format, textInPath, firstTextInPath);
+                result << SubChunk(text, q->s->text, format, positions, textInPath, firstTextInPath);
             } else {
-                result << SubChunk(text, format, transforms, textInPath, firstTextInPath);
+                result << SubChunk(text, q->s->text, format, transforms, positions, textInPath, firstTextInPath);
             }
 
             if (!bidiClosing.isEmpty()) {
-                result << SubChunk(bidiClosing, format, textInPath, firstTextInPath);
+                result << SubChunk(bidiClosing, QString(), format, positions, textInPath, firstTextInPath);
             }
             firstTextInPath = false;
 

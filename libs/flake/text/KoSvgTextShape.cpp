@@ -218,7 +218,7 @@ int KoSvgTextShape::indexForPos(int pos)
     return d->cursorPos.at(qMin(d->cursorPos.size()-1, pos)).index;
 }
 
-KoSvgTextChunkShape *findTextChunkForIndex(KoShape *rootShape, int &currentIndex, int sought)
+KoSvgTextChunkShape *findTextChunkForIndex(KoShape *rootShape, int &currentIndex, int sought, bool skipZeroWidth = false)
 {
     KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape *>(rootShape);
 
@@ -228,6 +228,9 @@ KoSvgTextChunkShape *findTextChunkForIndex(KoShape *rootShape, int &currentIndex
 
     if (!chunkShape->shapeCount()) {
         int length = chunkShape->layoutInterface()->numChars(false);
+        if (length == 0 && skipZeroWidth) {
+            return nullptr;
+        }
         if (sought == currentIndex || (sought > currentIndex && sought < currentIndex + length)) {
             return chunkShape;
         } else {
@@ -235,7 +238,7 @@ KoSvgTextChunkShape *findTextChunkForIndex(KoShape *rootShape, int &currentIndex
         }
     } else {
         Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-            KoSvgTextChunkShape *shape = findTextChunkForIndex(child, currentIndex, sought);
+            KoSvgTextChunkShape *shape = findTextChunkForIndex(child, currentIndex, sought, skipZeroWidth);
             if (shape) {
                 return shape;
             }
@@ -274,17 +277,23 @@ bool KoSvgTextShape::removeText(int pos, int length)
         return succes;
     }
     int index = indexForPos(pos);
-    int currentIndex = 0;
-    KoSvgTextChunkShape *chunkShape = findTextChunkForIndex(this, currentIndex, index);
-    if (!this->shapeCount() && !chunkShape) {
-        chunkShape = this;
+    int currentLength = length;
+    while (currentLength > 0) {
+        int currentIndex = 0;
+        KoSvgTextChunkShape *chunkShape = findTextChunkForIndex(this, currentIndex, index, true);
+        if (chunkShape) {
+            int offset =  index - currentIndex;
+            int size = chunkShape->layoutInterface()->numChars(false);
+            chunkShape->layoutInterface()->removeText(offset, currentLength);
+            currentLength -= (size - chunkShape->layoutInterface()->numChars(false));
+            succes = true;
+        } else {
+            currentLength = -1;
+        }
     }
-    if (chunkShape) {
-        int offset =  index - currentIndex;
-        chunkShape->layoutInterface()->removeText(offset, length);
+    if (succes) {
         notifyChanged();
         shapeChangedPriv(ContentChanged);
-        succes = true;
     }
     return succes;
 }

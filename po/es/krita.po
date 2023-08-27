@@ -66,7 +66,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-24 00:44+0000\n"
-"PO-Revision-Date: 2023-08-21 14:01+0100\n"
+"PO-Revision-Date: 2023-08-26 18:08+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -26642,13 +26642,13 @@ msgstr "Motor de pincel actual"
 #: libs/ui/forms/wdgpaintopsettings.ui:340
 #, kde-format
 msgid "Save New Brush Preset..."
-msgstr "Guardar nuevos valores predefinidos del pincel..."
+msgstr "Guardar preajustes del pincel..."
 
 #. i18n: ectx: property (text), widget (QPushButton, saveBrushPresetButton)
 #: libs/ui/forms/wdgpaintopsettings.ui:359
 #, kde-format
 msgid "Overwrite Brush Preset"
-msgstr "Sobrescribir el valor predefinido del pincel"
+msgstr "Sobrescribir preajustes del pincel"
 
 #. i18n: ectx: property (text), widget (QLabel, presetsSidebarLabel)
 #: libs/ui/forms/wdgpaintopsettings.ui:427
@@ -26672,7 +26672,7 @@ msgstr "El modo de borrado Usará un tamaño de pincel independiente"
 #: libs/ui/forms/wdgpaintopsettings.ui:618
 #, kde-format
 msgid "Eraser switch size"
-msgstr "Cambio del tamaño del borrador"
+msgstr "Cambiar tamaño del borrador"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, eraserBrushOpacityCheckBox)
 #: libs/ui/forms/wdgpaintopsettings.ui:634
@@ -26684,13 +26684,13 @@ msgstr "El modo de borrado usará una opacidad de pincel independiente"
 #: libs/ui/forms/wdgpaintopsettings.ui:637
 #, kde-format
 msgid "Eraser switch opacity"
-msgstr "Cambio de la opacidad del borrador"
+msgstr "Cambiar opacidad del borrador"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dirtyPresetCheckBox)
 #: libs/ui/forms/wdgpaintopsettings.ui:653
 #, kde-format
 msgid "Temporarily Save Tweaks To Presets"
-msgstr "Guardar temporalmente los ajustes en los valores predefinidos"
+msgstr "Guardar preajustes temporalmente"
 
 #. i18n: ectx: property (text), widget (QLabel, scratchpadSidebarLabel)
 #: libs/ui/forms/wdgpaintopsettings.ui:780

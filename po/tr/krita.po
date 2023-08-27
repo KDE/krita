@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-24 00:44+0000\n"
-"PO-Revision-Date: 2023-08-22 23:17+0300\n"
+"PO-Revision-Date: 2023-08-27 01:49+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19652,7 +19652,7 @@ msgstr "Kirli"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:791
 #, kde-format
 msgid "Metadata"
-msgstr "Üst veri"
+msgstr "Üst Veri"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
@@ -20419,7 +20419,7 @@ msgstr "şerit"
 #, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
-msgstr "KULLANILAMIYOR"
+msgstr "YOK"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
 #, kde-format
@@ -20442,7 +20442,7 @@ msgid ""
 "will be reduced to 50 frames per second"
 msgstr ""
 "Canlandırılmış GIF görseller 50'den daha yüksek kare hızına sahip olamaz. "
-"Kare hızı saniyede 50 kareye düşürülür."
+"Kare hızı saniyede 50 kareye düşürülür"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
@@ -20726,7 +20726,7 @@ msgstr "Video verisi yükleniyor... %1 kare incelendi."
 #: libs/ui/animation/KisVideoSaver.cpp:52
 #, kde-format
 msgid "ffmpeg could not be found at %1"
-msgstr "ffmpeg %1 konumunda bulunamadı"
+msgstr "FFmpeg, %1 konumunda bulunamadı"
 
 #: libs/ui/animation/KisVideoSaver.cpp:141
 #, kde-format
@@ -20752,7 +20752,7 @@ msgstr "Kod çözücü:"
 #: libs/ui/animation/video_export_options_dialog.ui:23
 #, kde-format
 msgid "Codec options"
-msgstr "Kod çözücü seçenekleri"
+msgstr "Kod Çözücü Seçenekleri"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -20768,7 +20768,7 @@ msgstr "Bit hızı:"
 #: libs/ui/animation/video_export_options_dialog.ui:141
 #, kde-format
 msgid "Constant Rate Factor:"
-msgstr "Sabit Oran Faktörü:"
+msgstr "Sabit hız çarpanı:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPresetH264)
 #. i18n: ectx: property (text), widget (QLabel, lblPresetH265)
@@ -20850,7 +20850,7 @@ msgstr "Saydamlık Farkı"
 #: libs/ui/animation/video_export_options_dialog.ui:300
 #, kde-format
 msgid "Auto-generate 8bit Palette:"
-msgstr "8 Bit Paleti Otomatik Oluştur:"
+msgstr "8 bit paleti otomatik oluştur:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
@@ -20864,13 +20864,13 @@ msgstr "Titreme:"
 #: libs/ui/animation/video_export_options_dialog.ui:320
 #, kde-format
 msgid "Bayer Scale:"
-msgstr "Bayer Ölçeği:"
+msgstr "Bayer ölçeği:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDiffModeGIF)
 #: libs/ui/animation/video_export_options_dialog.ui:337
 #, kde-format
 msgid "Difference Mode:"
-msgstr "Fark Kipi:"
+msgstr "Fark kipi:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, gifReserveTransparent)
 #: libs/ui/animation/video_export_options_dialog.ui:347
@@ -20910,31 +20910,31 @@ msgstr ""
 #: libs/ui/animation/video_export_options_dialog.ui:350
 #, kde-format
 msgid "Preserve Transparency"
-msgstr "Saydamlığı Koru"
+msgstr "Saydamlığı koru"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPredAPNG)
 #: libs/ui/animation/video_export_options_dialog.ui:380
 #, kde-format
 msgid "Prediction Mode:"
-msgstr "Öngörü Kipi:"
+msgstr "Öngörü kipi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCompressWEBP)
 #: libs/ui/animation/video_export_options_dialog.ui:413
 #, kde-format
 msgid "Compression Level:"
-msgstr "Sıkıştırma Düzeyi:"
+msgstr "Sıkıştırma düzeyi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQscaleWEBP)
 #: libs/ui/animation/video_export_options_dialog.ui:423
 #, kde-format
 msgid "Image Quality:"
-msgstr "Görsel Kalitesi:"
+msgstr "Görsel kalitesi:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:457
 #, kde-format
 msgid "Custom options"
-msgstr "Özel seçenekler"
+msgstr "Özel Seçenekler"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:466
@@ -20943,8 +20943,8 @@ msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
 "destination streams of the FFmpeg instance"
 msgstr ""
-"Herhangi bir ffmpeg süzgeç seçeneğini buraya ekleyin. FFmpeg örneğinin "
-"kaynak ve hedef akışları arasına koyulacaktır"
+"Herhangi bir FFmpeg süzme seçeneğini buraya ekleyin. FFmpeg örneğinin kaynak "
+"ve hedef akışları arasına koyulacaktır"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -21539,7 +21539,7 @@ msgstr "Video dosyası:"
 #: libs/widgetutils/KisPreviewFileDialog.cpp:96
 #, kde-format
 msgid "No Preview"
-msgstr "Önizleme Yok"
+msgstr "Önizleme yok"
 
 #. i18n: ectx: property (text), widget (QLabel, lblThisMin_2)
 #. i18n: ectx: property (text), widget (QLabel, lblUnderMin_2)
@@ -21579,7 +21579,7 @@ msgid ""
 "Use ffmpeg to detect similar frames and reduce the total number of frames "
 "imported."
 msgstr ""
-"Benzer kareleri algılamak için ffmpeg kullanın ve içe aktarılan toplam kare "
+"Benzer kareleri algılamak için FFmpeg kullanın ve içe aktarılan toplam kare "
 "sayısını azaltın."
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionFilterDuplicates)
@@ -22983,47 +22983,47 @@ msgstr "Otomatik (%1)"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1773
 #, kde-format
 msgid "Display Id: %1"
-msgstr "Ekran Kimliği: %1"
+msgstr "Ekran kimliği: %1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1774
 #, kde-format
 msgid "Display Name: %1 %2"
-msgstr "Ekran Adı: %1 %2"
+msgstr "Ekran adı: %1 %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1775
 #, kde-format
 msgid "Min Luminance: %1"
-msgstr "En Az Renk Parlaklığı: %1"
+msgstr "En az renk parlaklığı: %1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1776
 #, kde-format
 msgid "Max Luminance: %1"
-msgstr "En Fazla Renk Parlaklığı: %1"
+msgstr "En çok renk parlaklığı: %1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1777
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
-msgstr "En Yüksek Tam Renk Parlaklığı: %1"
+msgstr "En yüksek tam renk parlaklığı: %1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1778
 #, kde-format
 msgid "Red Primary: %1, %2"
-msgstr "Kırmızı Ana Renk: %1, %2"
+msgstr "Kırmızı ana renk: %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1779
 #, kde-format
 msgid "Green Primary: %1, %2"
-msgstr "Yeşil Ana Renk: %1, %2"
+msgstr "Yeşil ana renk: %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1780
 #, kde-format
 msgid "Blue Primary: %1, %2"
-msgstr "Mavi Ana Renk: %1, %2"
+msgstr "Mavi ana renk: %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1781
 #, kde-format
 msgid "White Point: %1, %2"
-msgstr "Beyaz Nokta: %1, %2"
+msgstr "Beyaz nokta: %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1961
 #, kde-format
@@ -24733,13 +24733,13 @@ msgstr "Boyut:"
 #: libs/ui/forms/wdgdisplaysettings.ui:352
 #, kde-format
 msgid "Canvas Border Color:"
-msgstr "Tuval Kenarlık Rengi:"
+msgstr "Tuval kenarlık rengi:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:372
 #, kde-format
 msgid "Pixel Grid:"
-msgstr "Piksel Izgarası:"
+msgstr "Piksel ızgarası:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -24772,7 +24772,7 @@ msgstr "Gösterimi şuradan başlat:"
 #: libs/ui/forms/wdgdisplaysettings.ui:415
 #, kde-format
 msgid "Selection Overlay:"
-msgstr "Seçim Kaplaması:"
+msgstr "Seçim kaplaması:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
@@ -24804,7 +24804,7 @@ msgstr "Çeşitli"
 #: libs/ui/forms/wdgdisplaysettings.ui:500
 #, kde-format
 msgid "Hide Canvas Scrollbars"
-msgstr "Tuval Sarma Çubuklarını Gizle"
+msgstr "Tuval sarma çubuklarını gizle"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCurveAntialiasing)
 #: libs/ui/forms/wdgdisplaysettings.ui:510
@@ -24904,14 +24904,14 @@ msgstr "Görsel Çözünürlüğüne Uydur (ppi)"
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
 #, kde-format
 msgid "&Scaling Filter:"
-msgstr "&Ölçekleme Süzgeci:"
+msgstr "&Ölçekleme süzgeci:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
 #: libs/ui/forms/wdgfilternodecreation.ui:28
 #, kde-format
 msgid "Layer Name:"
-msgstr "Katman Adı:"
+msgstr "Katman adı:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:53
@@ -24963,7 +24963,7 @@ msgstr "Süzgeç Maskesi Oluştur"
 #: libs/ui/forms/wdgfilterselector.ui:30
 #, kde-format
 msgid "Filter selection"
-msgstr "Süzgeç seçimi"
+msgstr "Süzgeç Seçimi"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkRememberPreset)
 #: libs/ui/forms/wdgfilterselector.ui:120
@@ -25175,7 +25175,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:408
 #, kde-format
 msgid "Subwindow mode"
-msgstr "Alt pencere kipi"
+msgstr "Alt Pencere Kipi"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton)
 #. i18n: ectx: property (text), widget (QPushButton, clearBgImageButton)
@@ -25343,7 +25343,7 @@ msgstr "Toplamalı (Krita 5.1 ve önceki sürümler)"
 #: libs/ui/forms/wdggeneralsettings.ui:847
 #, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "CMYK Harmanlama Kipi (yeniden başlatma gerektirir):"
+msgstr "CMYK harmanlama kipi (yeniden başlatma gerektirir):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:855
@@ -25724,7 +25724,7 @@ msgstr "Yapıştırılan katmanlara \"(yapıştırılmış)\" ekle"
 #: libs/ui/forms/wdggeneralsettings.ui:1491
 #, kde-format
 msgid "Use cumulative undo"
-msgstr "Birikimli geri almayı kullan"
+msgstr "Birikimli geri alma kullan"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1511
@@ -25744,7 +25744,7 @@ msgstr "Özkaynaklar"
 #: libs/ui/forms/wdggeneralsettings.ui:1531
 #, kde-format
 msgid "Resource Folder:"
-msgstr "Özkaynak Klasörü:"
+msgstr "Özkaynak klasörü:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgGeometryOptions)
 #: libs/ui/forms/wdggeometryoptions.ui:18
@@ -27680,7 +27680,7 @@ msgid ""
 "maximum speed you can reach using Tablet Tester"
 msgstr ""
 "Hız algılayıcısı eğrisi için en yüksek hız 1,0 olarak eşlemlenmiştir. Tablet "
-"Sınayıcı kullanarak erişebileceğiniz en yüksek hıza ayarlı olmalıdır"
+"Sınayıcısı kullanarak erişebileceğiniz en yüksek hıza ayarlı olmalıdır"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intBrushSpeedSmoothing)
 #: libs/ui/forms/wdgtabletsettings.ui:213
@@ -27999,12 +27999,12 @@ msgstr "Bu eylemde bir kısayol çakışması bulundu."
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:52
 #, kde-format
 msgid "Delete Shortcut"
-msgstr "Kısayol Sil"
+msgstr "Kısayolu Sil"
 
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:112
 #, kde-format
 msgid "Deleting last shortcut for this action!"
-msgstr "Bu eylem için son kısayolu silme!"
+msgstr "Bu eylem için olan son kısayol siliniyor!"
 
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:113
 #, kde-format
@@ -28832,7 +28832,7 @@ msgstr "Dönüşüm Aracını Etkinleştir"
 #: libs/ui/input/wintab/drawpile_tablettester/tablettester.cpp:16
 #, kde-format
 msgid "Tablet Tester"
-msgstr "Tablet Sınayıcı"
+msgstr "Tablet Sınayıcısı"
 
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.cpp:22
 #, kde-format
@@ -29874,7 +29874,7 @@ msgstr "Başlatılıyor..."
 #: libs/ui/KisApplication.cpp:581
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
-msgstr "Mime türü bulunamadı. -mimetype seçeneğini kullanmayı deneyin"
+msgstr "MIME türü bulunamadı. -mimetype seçeneğini kullanmayı deneyin"
 
 #: libs/ui/KisApplication.cpp:637
 #, kde-format
@@ -34078,7 +34078,7 @@ msgstr "Seçimin kenarlarını yumuşatır"
 #: libs/ui/widgets/kis_selection_options.cc:235
 #, kde-format
 msgid "Grow or shrink the selection by the set amount"
-msgstr "Seçimi, küme miktarı kadar büyüt veya küçült"
+msgstr "Seçimi, ayarlı miktar kadar büyüt veya küçült"
 
 #: libs/ui/widgets/kis_selection_options.cc:237
 #: plugins/tools/basictools/kis_tool_fill.cc:628
@@ -34095,7 +34095,7 @@ msgstr "Seçimi, küme miktarı kadar bulanıklaştır"
 #: libs/ui/widgets/kis_selection_options.cc:242
 #, kde-format
 msgid "Select regions found from the active layer"
-msgstr "Etkin katmanla bulunan bölgeleri seç"
+msgstr "Etkin katmanda bulunan bölgeleri seç"
 
 #: libs/ui/widgets/kis_selection_options.cc:244
 #, kde-format
@@ -37919,7 +37919,7 @@ msgstr "Ses İçe Aktar..."
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
-msgstr "Sesi sil"
+msgstr "Sesi Kaldır"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, kde-format
@@ -37931,12 +37931,12 @@ msgstr "Sessize Al"
 #, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
-msgstr "Ses düzeyi:"
+msgstr "Ses düzeyi: "
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
 #, kde-format
 msgid "Animation audio menu"
-msgstr "Canlandırma ses menüsü"
+msgstr "Canlandırma sesi menüsü"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
@@ -38719,7 +38719,7 @@ msgstr "Histogram"
 #: plugins/dockers/historydocker/HistoryDock.cpp:23
 #, kde-format
 msgid "Undo History"
-msgstr "Geri Alma Geçmişi"
+msgstr "Geri Al Geçmişi"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:160
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
@@ -39271,7 +39271,7 @@ msgstr "Ön plan rengi ekle"
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:139
 #, kde-format
 msgid "Lock the current palette."
-msgstr "Geçerli paleti kilitle."
+msgstr "Geçerli paleti kilitleyin."
 
 #: plugins/dockers/presetdocker/presetdocker_dock.cpp:25
 #, kde-format
@@ -39533,7 +39533,7 @@ msgstr "Video profilini düzenle"
 #: plugins/dockers/recorder/recorder_export.ui:303
 #, kde-format
 msgid "ffmpeg"
-msgstr "ffmpeg"
+msgstr "FFmpeg"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, extendResultCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:348
@@ -39573,7 +39573,7 @@ msgstr "Şunun için önizlemeyi etkinleştir:"
 #: plugins/dockers/recorder/recorder_export.ui:537
 #, kde-format
 msgid "Setup ffmpeg executable location"
-msgstr "ffmpeg yürütülebilir konumunu ayarla"
+msgstr "FFmpeg yürütülebiliri konumunu ayarla"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinFirstFrameSec)
 #: plugins/dockers/recorder/recorder_export.ui:559
@@ -39591,7 +39591,7 @@ msgstr "FFmpeg:"
 #: plugins/dockers/recorder/recorder_export.ui:624
 #, kde-format
 msgid "Resize:"
-msgstr "Yeniden Boyutlandır:"
+msgstr "Yeniden boyutlandır:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleVideoDuration)
 #: plugins/dockers/recorder/recorder_export.ui:663
@@ -40516,7 +40516,7 @@ msgstr "&Tez Ayarlar Menüsünü Göster"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:124
 #, kde-format
 msgid "Favorite Selector Layouts:"
-msgstr "Sık Kullanılan Seçici Yerleşimleri:"
+msgstr "Sık kullanılan seçici yerleşimleri:"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, btnFavoriteSelectors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
@@ -40528,7 +40528,7 @@ msgstr "Seç..."
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
 #, kde-format
 msgid "Selection Color Space:"
-msgstr "Seçim Renk Uzayı:"
+msgstr "Seçim renk uzayı:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
@@ -40540,7 +40540,7 @@ msgstr "Katman/Maske"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
 #, kde-format
 msgid "Proof Colors to Painting Color Space"
-msgstr "Boyama Renk Uzayında Renkleri Provala"
+msgstr "Renkleri boyama renk uzayına provala"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPopups)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
@@ -40580,7 +40580,7 @@ msgstr "Yönelim:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:789
 #, kde-format
 msgid "hori&zontal"
-msgstr "yatay"
+msgstr "&yatay"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryVertical)
@@ -40590,7 +40590,7 @@ msgstr "yatay"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:799
 #, kde-format
 msgid "&vertical"
-msgstr "dikey"
+msgstr "&dikey"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -40640,13 +40640,13 @@ msgstr "Yamalar"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:894
 #, kde-format
 msgid "Max Patches:"
-msgstr "En Çok Yama:"
+msgstr "En çok yama:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
 #, kde-format
 msgid "Update Base Color When:"
-msgstr "Taban Rengi Şu Zamanda Güncelle:"
+msgstr "Taban rengi şu zamanda güncelle:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateExternal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:421
@@ -40658,7 +40658,7 @@ msgstr "Renk dışarıdan değiştiğinde"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
 #, kde-format
 msgid "Right-clicking on shade selector"
-msgstr "Gölge seçiciye sağ tıklandığında"
+msgstr "Gölge seçicisine sağ tıklandığında"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
@@ -40670,13 +40670,13 @@ msgstr "Etkileşim bittiğinde"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
 #, kde-format
 msgid "Line Count:"
-msgstr "Satır Sayısı:"
+msgstr "Çizgi sayısı:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:465
 #, kde-format
 msgid "Line Height:"
-msgstr "Çizgi Yüksekliği:"
+msgstr "Çizgi yüksekliği:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:726
@@ -40750,14 +40750,14 @@ msgstr "WG Renk Seçicisi Eylemleri"
 #, kde-format
 msgctxt "action"
 msgid "Show wide-gamut color selector"
-msgstr "Geniş gam renk seçicisini göster"
+msgstr "Geniş Gam Renk Seçicisini Göster"
 
 #. i18n: context: text @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:17
 #, kde-format
 msgctxt "action"
 msgid "Show wide-gamut shade selector"
-msgstr "Geniş gam gölge seçiciyi göster"
+msgstr "Geniş Gam Gölge Seçicisini Göster"
 
 #. i18n: context: toolTip @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
@@ -40768,7 +40768,7 @@ msgstr "Geniş gam gölge seçiciyi göster"
 #, kde-format
 msgctxt "action"
 msgid "Show shade selector"
-msgstr "Gölge seçiciyi göster"
+msgstr "Gölge Seçicisini Göster"
 
 #. i18n: context: toolTip @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
@@ -40779,7 +40779,7 @@ msgstr "Gölge seçiciyi göster"
 #, kde-format
 msgctxt "action"
 msgid "Show MyPaint selector"
-msgstr "MyPaint seçicisini göster"
+msgstr "MyPaint Seçicisini Göster"
 
 #. i18n: context: text @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
@@ -40790,7 +40790,7 @@ msgstr "MyPaint seçicisini göster"
 #, kde-format
 msgctxt "action"
 msgid "Make color lighter"
-msgstr "Rengi açıklaştır"
+msgstr "Rengi Açıklaştır"
 
 #. i18n: context: toolTip @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:49
@@ -40812,7 +40812,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Make color darker"
-msgstr "Rengi koyulaştır"
+msgstr "Rengi Koyulaştır"
 
 #. i18n: context: toolTip @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:59
@@ -40834,7 +40834,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Increase color saturation"
-msgstr "Renk doygunluğunu artır"
+msgstr "Renk Doygunluğunu Artır"
 
 #. i18n: context: toolTip @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:69
@@ -40852,7 +40852,7 @@ msgstr "Seçili rengin doygunluğunu artır"
 #, kde-format
 msgctxt "action"
 msgid "Decrease color saturation"
-msgstr "Renk doygunluğunu azalt"
+msgstr "Renk Doygunluğunu Azalt"
 
 #. i18n: context: toolTip @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:79
@@ -40870,7 +40870,7 @@ msgstr "Seçili rengin doygunluğunu azalt"
 #, kde-format
 msgctxt "action"
 msgid "Shift hue clockwise"
-msgstr "Renk tonunu saat yönünde kaydır"
+msgstr "Renk Tonunu Saat Yönünde Kaydır"
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:89
@@ -40888,7 +40888,7 @@ msgstr "Seçili rengin tonunu saat yönünde kaydır"
 #, kde-format
 msgctxt "action"
 msgid "Shift hue counter-clockwise"
-msgstr "Renk tonunu saat yönünün tersine kaydır"
+msgstr "Renk Tonunu Saat Yönünün Tersine Kaydır"
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:99
@@ -41289,7 +41289,7 @@ msgstr "Özkaynak Görünümü"
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:236
 #, kde-format
 msgid "Resource Type:"
-msgstr "Özkaynak Türü:"
+msgstr "Özkaynak türü:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:246
@@ -47799,7 +47799,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:345
 #, kde-format
 msgid "Encoder parameters"
-msgstr "Kodlayıcı parametreleri"
+msgstr "Kodlayıcı Parametreleri"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:351
@@ -53032,7 +53032,7 @@ msgstr ""
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
 #, kde-format
 msgid "Base Value: "
-msgstr "Temel Değer:"
+msgstr "Temel değer: "
 
 #: plugins/paintops/mypaint/MyPaintPaintOpPlugin.cpp:32
 #, kde-format
@@ -53309,7 +53309,7 @@ msgstr "Leke Yarıçap Günlüğü"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
 #, kde-format
 msgid "Smudge Length Multiplier"
-msgstr "Leke Uzunluğu Çoklayıcı"
+msgstr "Leke Uzunluğu Çoklayıcısı"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
 #, kde-format
@@ -56691,7 +56691,7 @@ msgstr "Desenin döndürmesini ayarla"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
-msgstr "Fırçalarınki yerine özel harmanlama seçeneklerini ayarla"
+msgstr "Fırçalarınkiler yerine özel harmanlama seçenekleri ayarla"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
@@ -60447,64 +60447,3 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
-
-#~ msgid "Editor Mode"
-#~ msgstr "Düzenleyici Kipi"
-
-#~ msgid "Note: the Rich Text editor only supports a subset of SVG."
-#~ msgstr ""
-#~ "Not: Zengin Metin düzenleyici yalnızca kısıtlı bir SVG alt kümesini "
-#~ "destekler."
-
-#~ msgid "Rich Te&xt Only"
-#~ msgstr "Yalnızca &Zengin Metin"
-
-#~ msgid "Both"
-#~ msgstr "İkisi"
-
-#~ msgid "S&VG Source Only"
-#~ msgstr "Yalnızca &SVG Kaynağı"
-
-#~ msgctxt ""
-#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-#~ msgid "Grow: "
-#~ msgstr "Büyüt: "
-
-#~ msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
-#~ msgid "Feather: "
-#~ msgstr "Yumuşat: "
-
-#~ msgid "Get your Krita Supporter Badge here!"
-#~ msgstr "Krita Destekçi Rozetinizi Alın!"
-
-#~ msgid "Drag an image into the window to open"
-#~ msgstr "Bir görseli açmak için bu pencereye sürükleyip bırakın"
-
-#~ msgid "New File"
-#~ msgstr "Yeni Dosya"
-
-#~ msgid "Recent Documents"
-#~ msgstr "Son Kullanılan Belgeler"
-
-#~ msgid ""
-#~ "⚠ Unsupported color space.\n"
-#~ "Only \"RGB/Alpha 8-bit\" is supported."
-#~ msgstr ""
-#~ "⚠ Desteklenmeyen renk uzayı.\n"
-#~ "Yalnızca \"RGB/Alfa 8 bit\" desteklenir."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "X'i Kırk"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "Y'yi Kırk"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "Ölçekle"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "Değişiklikleri Sıfırla"

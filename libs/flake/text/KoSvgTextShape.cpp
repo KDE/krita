@@ -298,6 +298,11 @@ bool KoSvgTextShape::removeText(int pos, int length)
     return succes;
 }
 
+QString KoSvgTextShape::plainText()
+{
+    return d->plainText;
+}
+
 void KoSvgTextShape::paintComponent(QPainter &painter) const
 {
     painter.save();

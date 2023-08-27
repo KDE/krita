@@ -10,6 +10,8 @@
 #include "kundo2command.h"
 #include <QTimer>
 #include <QDebug>
+#include <QClipboard>
+#include <QMimeData>
 
 struct Q_DECL_HIDDEN SvgTextCursor::Private {
     SvgTextTool *tool;
@@ -169,6 +171,31 @@ SvgTextRemoveCommand *SvgTextCursor::removeSelection(KUndo2Command *parent)
         }
     }
     return removeCmd;
+}
+
+void SvgTextCursor::copy() const
+{
+    if (d->shape) {
+        int start = d->shape->indexForPos(qMin(d->anchor, d->pos));
+        int length = d->shape->indexForPos(qMax(d->anchor, d->pos)) - start;
+        QString copied = d->shape->plainText().mid(start, length);
+        QClipboard *cb = QApplication::clipboard();
+        cb->setText(copied);
+    }
+}
+
+bool SvgTextCursor::paste()
+{
+    bool success = false;
+    if (d->shape) {
+        QClipboard *cb = QApplication::clipboard();
+        const QMimeData *mimeData = cb->mimeData();
+        if (mimeData->hasText()) {
+            insertText(mimeData->text());
+            success = true;
+        }
+    }
+    return success;
 }
 
 void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)

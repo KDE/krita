@@ -771,6 +771,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         pos.index = plainText.size();
         cursorPos.append(pos);
     }
+    this->plainText = plainText;
     this->result = result;
     this->cursorPos = cursorPos;
 }

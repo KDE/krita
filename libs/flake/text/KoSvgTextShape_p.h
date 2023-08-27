@@ -301,6 +301,8 @@ public:
 
     QVector<CursorPos> cursorPos;
 
+    QString plainText;
+
     void relayout(const KoSvgTextShape *q);
 
     bool loadGlyph(const QTransform &ftTF,

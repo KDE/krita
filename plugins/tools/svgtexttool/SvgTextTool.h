@@ -79,6 +79,17 @@ public:
      */
     void addCommand(KUndo2Command *cmd);
 
+    /// reimplemented from superclass
+    void copy() const override;
+    /// reimplemented from superclass
+    void deleteSelection() override;
+    /// reimplemented from superclass
+    bool paste() override;
+    /// reimplemented from superclass
+    bool hasSelection() override;
+    /// reimplemented from superclass
+    KoToolSelection * selection() override;
+
 protected:
     /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget() override;

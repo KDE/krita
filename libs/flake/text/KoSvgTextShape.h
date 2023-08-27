@@ -190,6 +190,14 @@ public:
      */
     bool removeText(int pos, int length);
 
+    /**
+     * @brief plainText
+     * plain text of all text inside this text shape,
+     * without the bidi controls or any transforms.
+     * @return a string of plain text.
+     */
+    QString plainText();
+
 protected:
     /**
      * Show if the shape is a root of the text hierarchy. Always true for

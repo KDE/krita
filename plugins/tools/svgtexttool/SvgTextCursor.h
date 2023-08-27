@@ -48,8 +48,20 @@ public:
      */
     SvgTextRemoveCommand *removeSelection(KUndo2Command *parent = 0);
 
+    /**
+     * @brief copy
+     * copies plain text into the clipboard between anchor and pos.
+     */
+    void copy() const;
+    /**
+     * @brief paste
+     * @return pastes plain text in the clipboard at pos.
+     */
+    bool paste();
+
     void paintDecorations(QPainter &gc, QColor selectionColor);
 
+    // Reimplemented.
     bool hasSelection() override;
 private Q_SLOTS:
     void blinkCursor();

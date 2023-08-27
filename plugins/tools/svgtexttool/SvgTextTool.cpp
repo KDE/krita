@@ -16,6 +16,7 @@
 #include "SvgMoveTextCommand.h"
 #include "SvgMoveTextStrategy.h"
 #include "SvgTextChangeCommand.h"
+#include "SvgTextRemoveCommand.h"
 
 #include <QLabel>
 #include <QPainterPath>
@@ -344,6 +345,31 @@ void SvgTextTool::addCommand(KUndo2Command *cmd)
             canvas()->addCommand(cmd);
         }
     }
+}
+
+void SvgTextTool::copy() const
+{
+    m_textCursor.copy();
+}
+
+void SvgTextTool::deleteSelection()
+{
+    addCommand(m_textCursor.removeSelection());
+}
+
+bool SvgTextTool::paste()
+{
+    return m_textCursor.paste();
+}
+
+bool SvgTextTool::hasSelection()
+{
+    return m_textCursor.hasSelection();
+}
+
+KoToolSelection *SvgTextTool::selection()
+{
+    return &m_textCursor;
 }
 
 void SvgTextTool::updateCursor(QRectF updateRect)

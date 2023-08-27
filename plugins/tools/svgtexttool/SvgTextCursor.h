@@ -4,20 +4,25 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef KOSVGTEXTCURSOR_H
-#define KOSVGTEXTCURSOR_H
+#ifndef SVGTEXTCURSOR_H
+#define SVGTEXTCURSOR_H
 
 #include <KoSvgTextShape.h>
-#include <QObject>
+#include <KoToolSelection.h>
 #include <QPainter>
 
-class KRITAFLAKE_EXPORT KoSvgTextCursor : public QObject
+class SvgTextTool;
+
+class SvgTextCursor : public KoToolSelection
 {
     Q_OBJECT
 public:
-    explicit KoSvgTextCursor(QObject *parent, KoSvgTextShape *textShape, int cursorWidth = 1, int cursorFlash = 1000, int cursorFlashLimit = 5000);
+    explicit SvgTextCursor(SvgTextTool *tool);
 
-    ~KoSvgTextCursor();
+    ~SvgTextCursor();
+
+    void setShape(KoSvgTextShape *textShape);
+    void setCaretSetting(int cursorWidth = 1, int cursorFlash = 1000, int cursorFlashLimit = 5000);
 
     int getPos();
     int getAnchor();
@@ -31,12 +36,12 @@ public:
     void removeNext();
 
     void paintDecorations(QPainter &gc, QColor selectionColor);
-Q_SIGNALS:
-    void decorationsChanged(QRectF);
 
-public Q_SLOTS:
+    bool hasSelection() override;
+private Q_SLOTS:
     void blinkCursor();
     void stopBlinkCursor();
+
 private:
 
     void updateCursor();
@@ -46,4 +51,4 @@ private:
     const QScopedPointer<Private> d;
 };
 
-#endif // KOSVGTEXTCURSOR_H
+#endif // SVGTEXTCURSOR_H

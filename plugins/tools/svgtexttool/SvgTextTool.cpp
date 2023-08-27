@@ -9,7 +9,6 @@
 #include "KoSvgTextProperties.h"
 #include "KoSvgTextShape.h"
 #include "KoSvgTextShapeMarkupConverter.h"
-#include "KoSvgTextCursor.h"
 #include "SvgCreateTextStrategy.h"
 #include "SvgInlineSizeChangeCommand.h"
 #include "SvgInlineSizeChangeStrategy.h"
@@ -69,7 +68,13 @@ static bool debugEnabled()
 
 SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
+    , m_textCursor(this)
 {
+     // TODO: figure out whether we should use system config for this, Windows and GTK have values for it, but Qt and MacOS don't(?).
+    int cursorFlashLimit = 5000;
+    m_textCursor.setCaretSetting(QApplication::style()->pixelMetric(QStyle::PM_TextCursorWidth)
+                                 , qApp->cursorFlashTime()
+                                 , cursorFlashLimit);
     m_base_cursor = QCursor(QPixmap(":/tool_text_basic.xpm"), 7, 7);
     m_text_inline_horizontal = QCursor(QPixmap(":/tool_text_inline_horizontal.xpm"), 7, 7);
     m_text_inline_vertical = QCursor(QPixmap(":/tool_text_inline_vertical.xpm"), 7, 7);
@@ -86,12 +91,14 @@ SvgTextTool::~SvgTextTool()
         m_editor->close();
     }
     delete m_defAlignment;
-    delete m_textCursor;
 }
 
 void SvgTextTool::activate(const QSet<KoShape *> &shapes)
 {
     KoToolBase::activate(shapes);
+    m_textCursor.setShape(selectedShape());
+    m_canvasConnections.addConnection(canvas()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+
     useCursor(m_base_cursor);
     auto uploadColorToResourceManager = [this](KoShape *shape) {
         m_originalColor = canvas()->resourceManager()->foregroundColor();
@@ -136,6 +143,7 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
 void SvgTextTool::deactivate()
 {
     KoToolBase::deactivate();
+    m_canvasConnections.clear();
     if (m_originalColor) {
         canvas()->resourceManager()->setForegroundColor(*m_originalColor);
     }
@@ -319,6 +327,11 @@ void SvgTextTool::storeDefaults()
     m_configGroup.writeEntry("defaultLetterSpacing", optionUi.defLetterSpacing->value());
 }
 
+void SvgTextTool::selectionChanged()
+{
+    m_textCursor.setShape(selectedShape());
+}
+
 void SvgTextTool::updateCursor(QRectF updateRect)
 {
     if (canvas()) {
@@ -415,9 +428,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
         }
     }
     if (shape) {
-        if (m_textCursor) {
-            m_textCursor->paintDecorations(gc, qApp->palette().color(QPalette::Highlight));
-        }
+            m_textCursor.paintDecorations(gc, qApp->palette().color(QPalette::Highlight));
     }
 
     // Paint debug outline
@@ -461,12 +472,8 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
 
         if (hoveredShape) {
             canvas()->shapeManager()->selection()->select(hoveredShape);
-            m_textCursor = new KoSvgTextCursor(nullptr, hoveredShape
-                                               , QApplication::style()->pixelMetric(QStyle::PM_TextCursorWidth)
-                                               , QApplication::cursorFlashTime());
-            connect(m_textCursor, SIGNAL(decorationsChanged(QRectF)), SLOT(updateCursor(QRectF)));
             this->setTextMode(true);
-            m_textCursor->setPosToPoint(event->point);
+            m_textCursor.setPosToPoint(event->point);
         } else {
             m_interactionStrategy.reset(new SvgCreateTextStrategy(this, event->point));
             m_dragging = DragMode::Create;
@@ -475,10 +482,8 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
             event->accept();
         }
     } else if (hoveredShape == selectedShape){
-        if (m_textCursor) {
-            this->setTextMode(true);
-            m_textCursor->setPosToPoint(event->point);
-        }
+        this->setTextMode(true);
+        m_textCursor.setPosToPoint(event->point);
     }
 
     repaintDecorations();
@@ -650,26 +655,24 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
         return;
     }
 
-    if (m_textCursor) {
         bool select = event->modifiers().testFlag(Qt::ShiftModifier);
         if (event->key() == Qt::Key_Right) {
-            m_textCursor->moveCursor(true, !select);
+            m_textCursor.moveCursor(true, !select);
             event->accept();
 
         } else if (event->key() == Qt::Key_Left) {
-            m_textCursor->moveCursor(false, !select);
+            m_textCursor.moveCursor(false, !select);
             event->accept();
         } else if (event->key() == Qt::Key_Backspace) {
-            m_textCursor->removeLast();
+            m_textCursor.removeLast();
             event->accept();
         } else if (event->key() == Qt::Key_Delete) {
-            m_textCursor->removeNext();
+            m_textCursor.removeNext();
             event->accept();
         } else if (!event->text().isEmpty()) {
-            m_textCursor->insertText(event->text());
+            m_textCursor.insertText(event->text());
             event->accept();
         }
-    }
 
     if (m_interactionStrategy) {
         if (event->key() == Qt::Key_Escape) {

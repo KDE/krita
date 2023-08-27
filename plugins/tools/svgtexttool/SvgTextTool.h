@@ -18,14 +18,17 @@
 #include <QDoubleSpinBox>
 #include <QTimer>
 
+#include <kis_signal_auto_connection.h>
+
 #include "SvgTextEditor.h"
+#include "SvgTextCursor.h"
 
 #include <memory>
 
 class KoSelection;
 class SvgTextEditor;
 class KoSvgTextShape;
-class KoSvgTextCursor;
+class SvgTextCursor;
 class KoInteractionStrategy;
 
 class SvgTextTool : public KoToolBase
@@ -59,6 +62,8 @@ public:
     void deactivate() override;
 
     KisPopupWidgetInterface* popupWidget() override;
+
+    void updateCursor(QRectF updateRect);
 
 protected:
     /// reimplemented from KoToolBase
@@ -95,7 +100,8 @@ private Q_SLOTS:
      */
     void storeDefaults();
 
-    void updateCursor(QRectF updateRect);
+    void selectionChanged();
+
 
 private:
     enum class DragMode {
@@ -118,7 +124,8 @@ private:
 
     QButtonGroup *m_defAlignment {nullptr};
     KConfigGroup m_configGroup;
-    KoSvgTextCursor *m_textCursor{nullptr};
+    SvgTextCursor m_textCursor;
+    KisSignalAutoConnectionsStore m_canvasConnections;
 
 
     QPainterPath m_hoveredShapeHighlightRect;

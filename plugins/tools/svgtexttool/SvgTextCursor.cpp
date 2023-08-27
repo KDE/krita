@@ -3,14 +3,16 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include "KoSvgTextCursor.h"
+#include "SvgTextCursor.h"
+#include "SvgTextTool.h"
 #include <QTimer>
 #include <QDebug>
 
-struct Q_DECL_HIDDEN KoSvgTextCursor::Private {
+struct Q_DECL_HIDDEN SvgTextCursor::Private {
+    SvgTextTool *tool;
     int pos = 0;
     int anchor = 0;
-    KoSvgTextShape *shape;
+    KoSvgTextShape *shape {nullptr};
 
     QTimer cursorFlash;
     QTimer cursorFlashLimit;
@@ -21,38 +23,46 @@ struct Q_DECL_HIDDEN KoSvgTextCursor::Private {
     QPainterPath selection;
 };
 
-KoSvgTextCursor::KoSvgTextCursor(QObject *parent, KoSvgTextShape *textShape, int cursorWidth, int cursorFlash, int cursorFlashLimit) :
-    QObject(parent)
-    , d(new Private)
+SvgTextCursor::SvgTextCursor(SvgTextTool *tool) :
+    d(new Private)
 {
-    d->shape = textShape;
-    d->cursorFlash.setInterval(cursorFlash/2);
-    d->cursorFlashLimit.setInterval(cursorFlashLimit);
-    d->cursorWidth = cursorWidth;
-    connect(&d->cursorFlash, SIGNAL(timeout()), this, SLOT(blinkCursor()));
-    connect(&d->cursorFlashLimit, SIGNAL(timeout()), this, SLOT(stopBlinkCursor()));
-    if (textShape) {
-        d->cursorFlash.start(500);
-    }
+    d->tool = tool;
 }
 
-KoSvgTextCursor::~KoSvgTextCursor()
+SvgTextCursor::~SvgTextCursor()
 {
     d->cursorFlash.stop();
     d->shape = nullptr;
 }
 
-int KoSvgTextCursor::getPos()
+void SvgTextCursor::setShape(KoSvgTextShape *textShape)
+{
+    d->shape = textShape;
+    d->pos = 0;
+    d->anchor = 0;
+    updateCursor();
+}
+
+void SvgTextCursor::setCaretSetting(int cursorWidth, int cursorFlash, int cursorFlashLimit)
+{
+    d->cursorFlash.setInterval(cursorFlash/2);
+    d->cursorFlashLimit.setInterval(cursorFlashLimit);
+    d->cursorWidth = cursorWidth;
+    connect(&d->cursorFlash, SIGNAL(timeout()), this, SLOT(blinkCursor()));
+    connect(&d->cursorFlashLimit, SIGNAL(timeout()), this, SLOT(stopBlinkCursor()));
+}
+
+int SvgTextCursor::getPos()
 {
     return d->pos;
 }
 
-int KoSvgTextCursor::getAnchor()
+int SvgTextCursor::getAnchor()
 {
     return d->anchor;
 }
 
-void KoSvgTextCursor::setPosToPoint(QPointF point)
+void SvgTextCursor::setPosToPoint(QPointF point)
 {
     if (d->shape) {
         d->pos = d->shape->posForPoint(d->shape->documentToShape(point));
@@ -61,7 +71,7 @@ void KoSvgTextCursor::setPosToPoint(QPointF point)
     }
 }
 
-void KoSvgTextCursor::moveCursor(bool forward, bool moveAnchor)
+void SvgTextCursor::moveCursor(bool forward, bool moveAnchor)
 {
     if (forward) {
         d->pos = d->shape->nextPos(d->pos);
@@ -76,7 +86,7 @@ void KoSvgTextCursor::moveCursor(bool forward, bool moveAnchor)
     updateCursor();
 }
 
-void KoSvgTextCursor::insertText(QString text)
+void SvgTextCursor::insertText(QString text)
 {
     if (d->shape) {
         //TODO: don't break when the position is zero...
@@ -99,7 +109,7 @@ void KoSvgTextCursor::insertText(QString text)
     }
 }
 
-void KoSvgTextCursor::removeLast()
+void SvgTextCursor::removeLast()
 {
     if (d->shape) {
         QRectF updateRect = d->shape->boundingRect();
@@ -124,7 +134,7 @@ void KoSvgTextCursor::removeLast()
     }
 }
 
-void KoSvgTextCursor::removeNext()
+void SvgTextCursor::removeNext()
 {
     if (d->shape) {
         QRectF updateRect = d->shape->boundingRect();
@@ -142,47 +152,56 @@ void KoSvgTextCursor::removeNext()
     }
 }
 
-void KoSvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
-{
-    gc.save();
-    gc.setTransform(d->shape->absoluteTransformation(), true);
-    if (d->pos != d->anchor) {
-        gc.save();
-        gc.setOpacity(0.5);
-        QBrush brush(selectionColor);
-        gc.fillPath(d->selection, brush);
-        gc.restore();
-    } else {
-        if (d->cursorVisible) {
-            QPen pen;
-            pen.setCosmetic(true);
-            pen.setColor(Qt::black);
-            pen.setWidth(d->cursorWidth);
-            gc.setPen(pen);
-            gc.drawPath(d->cursorShape);
-
-        }
-    }
-    gc.restore();
-}
-
-void KoSvgTextCursor::blinkCursor()
+void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
 {
     if (d->shape) {
-        emit(decorationsChanged(d->shape->shapeToDocument(d->cursorShape.boundingRect())));
+        gc.save();
+        gc.setTransform(d->shape->absoluteTransformation(), true);
+        if (d->pos != d->anchor) {
+            gc.save();
+            gc.setOpacity(0.5);
+            QBrush brush(selectionColor);
+            gc.fillPath(d->selection, brush);
+            gc.restore();
+        } else {
+            if (d->cursorVisible) {
+                QPen pen;
+                pen.setCosmetic(true);
+                pen.setColor(Qt::black);
+                pen.setWidth(d->cursorWidth);
+                gc.setPen(pen);
+                gc.drawPath(d->cursorShape);
+
+            }
+        }
+        gc.restore();
+    }
+}
+
+void SvgTextCursor::blinkCursor()
+{
+    if (d->shape) {
+        d->tool->updateCursor(d->shape->shapeToDocument(d->cursorShape.boundingRect()));
         d->cursorVisible = !d->cursorVisible;
     }
 }
 
-void KoSvgTextCursor::stopBlinkCursor()
+void SvgTextCursor::stopBlinkCursor()
 {
     d->cursorFlash.stop();
     d->cursorFlashLimit.stop();
     d->cursorVisible = true;
-    emit(decorationsChanged(d->shape->shapeToDocument(d->cursorShape.boundingRect())));
+    if (d->shape) {
+        d->tool->updateCursor(d->shape->shapeToDocument(d->cursorShape.boundingRect()));
+    }
 }
 
-void KoSvgTextCursor::updateCursor()
+bool SvgTextCursor::hasSelection()
+{
+    return d->pos != d->anchor;
+}
+
+void SvgTextCursor::updateCursor()
 {
     d->cursorShape = d->shape->cursorForPos(d->pos);
     d->cursorFlash.start();
@@ -191,10 +210,10 @@ void KoSvgTextCursor::updateCursor()
     blinkCursor();
 }
 
-void KoSvgTextCursor::updateSelection()
+void SvgTextCursor::updateSelection()
 {
     if (d->shape) {
         d->selection = d->shape->selectionBoxes(d->pos, d->anchor);
-        emit(decorationsChanged(d->shape->shapeToDocument(d->selection.boundingRect())));
+        d->tool->updateCursor(d->shape->shapeToDocument(d->cursorShape.boundingRect()));
     }
 }

@@ -26,6 +26,8 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     QPainterPath cursorShape;
     int cursorWidth = 1;
     QPainterPath selection;
+
+    bool visualNavigation = true;
 };
 
 SvgTextCursor::SvgTextCursor(SvgTextTool *tool) :
@@ -83,19 +85,33 @@ void SvgTextCursor::setPosToPoint(QPointF point)
     }
 }
 
-void SvgTextCursor::moveCursor(bool forward, bool moveAnchor)
+void SvgTextCursor::moveCursor(MoveMode mode, bool moveAnchor)
 {
-    if (forward) {
-        d->pos = d->shape->nextPos(d->pos);
-    } else {
-        d->pos = d->shape->previousPos(d->pos);
+    if (d->shape) {
+        if (mode == MoveLeft) {
+            d->pos = d->shape->posLeft(d->pos, d->visualNavigation);
+        } else if (mode == MoveRight) {
+            d->pos = d->shape->posRight(d->pos, d->visualNavigation);
+        } else if (mode == MoveUp) {
+            d->pos = d->shape->posUp(d->pos, d->visualNavigation);
+        } else if (mode == MoveDown) {
+            d->pos = d->shape->posDown(d->pos, d->visualNavigation);
+        } else if (mode == MoveLineStart) {
+            d->pos = d->shape->lineStart(d->pos);
+        } else if (mode == MoveLineEnd) {
+            d->pos = d->shape->lineEnd(d->pos);
+        } else if (mode == ParagraphStart) {
+            d->pos = 0;
+        } else if (mode == ParagraphEnd) {
+            d->pos = d->shape->posForIndex(d->shape->plainText().size());
+        }
+        if (moveAnchor) {
+            d->anchor = d->pos;
+        } else {
+            updateSelection();
+        }
+        updateCursor();
     }
-    if (moveAnchor) {
-        d->anchor = d->pos;
-    } else {
-        updateSelection();
-    }
-    updateCursor();
 }
 
 void SvgTextCursor::insertText(QString text)

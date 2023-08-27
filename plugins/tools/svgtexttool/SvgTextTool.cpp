@@ -693,11 +693,31 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
 
         bool select = event->modifiers().testFlag(Qt::ShiftModifier);
         if (event->key() == Qt::Key_Right) {
-            m_textCursor.moveCursor(true, !select);
+            m_textCursor.moveCursor(SvgTextCursor::MoveRight, !select);
             event->accept();
 
         } else if (event->key() == Qt::Key_Left) {
-            m_textCursor.moveCursor(false, !select);
+            m_textCursor.moveCursor(SvgTextCursor::MoveLeft, !select);
+            event->accept();
+        } else if (event->key() == Qt::Key_Up) {
+            m_textCursor.moveCursor(SvgTextCursor::MoveUp, !select);
+            event->accept();
+        } else if (event->key() == Qt::Key_Down) {
+            m_textCursor.moveCursor(SvgTextCursor::MoveDown, !select);
+            event->accept();
+        } else if (event->key() == Qt::Key_Home) {
+            if (event->modifiers().testFlag(Qt::ControlModifier)) {
+                m_textCursor.moveCursor(SvgTextCursor::ParagraphStart, !select);
+            } else {
+                m_textCursor.moveCursor(SvgTextCursor::MoveLineStart, !select);
+            }
+            event->accept();
+        } else if (event->key() == Qt::Key_End) {
+            if (event->modifiers().testFlag(Qt::ControlModifier)) {
+                m_textCursor.moveCursor(SvgTextCursor::ParagraphEnd, !select);
+            } else {
+                m_textCursor.moveCursor(SvgTextCursor::MoveLineEnd, !select);
+            }
             event->accept();
         } else if (event->key() == Qt::Key_Backspace) {
             m_textCursor.removeLast();

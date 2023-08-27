@@ -88,6 +88,101 @@ void KoSvgTextShape::setResolution(qreal xRes, qreal yRes)
     }
 }
 
+int KoSvgTextShape::posLeft(int pos, bool visual)
+{
+    KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::Direction direction = KoSvgText::Direction(this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+    if (mode == KoSvgText::VerticalRL) {
+        return nextLine(pos);
+    } else if (mode == KoSvgText::VerticalLR) {
+        return previousLine(pos);
+    } else {
+        if (direction == KoSvgText::DirectionRightToLeft && visual) {
+            return nextPos(pos);
+        } else {
+            return previousPos(pos);
+        }
+    }
+}
+
+int KoSvgTextShape::posRight(int pos, bool visual)
+{
+    KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::Direction direction = KoSvgText::Direction(this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+
+    if (mode == KoSvgText::VerticalRL) {
+        return previousLine(pos);
+    } else if (mode == KoSvgText::VerticalLR) {
+        return nextLine(pos);
+    } else {
+        if (direction == KoSvgText::DirectionRightToLeft && visual) {
+            return previousPos(pos);
+        } else {
+            return nextPos(pos);
+        }
+    }
+}
+
+int KoSvgTextShape::posUp(int pos, bool visual)
+{
+    Q_UNUSED(visual);
+    KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    if (mode == KoSvgText::VerticalRL || mode == KoSvgText::VerticalLR) {
+        return previousPos(pos);
+    } else {
+        return previousLine(pos);
+    }
+}
+
+int KoSvgTextShape::posDown(int pos, bool visual)
+{
+    Q_UNUSED(visual);
+    KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    if (mode == KoSvgText::VerticalRL || mode == KoSvgText::VerticalLR) {
+        return nextPos(pos);
+    } else {
+        return nextLine(pos);
+    }
+}
+
+int KoSvgTextShape::lineStart(int pos)
+{
+    if (pos < 0 || d->cursorPos.isEmpty() || d->result.isEmpty()) {
+        return pos;
+    }
+    CursorPos p = d->cursorPos.at(pos);
+    if (d->result.at(p.cluster).anchored_chunk) {
+        return pos;
+    }
+    int candidate = 0;
+    for (int i = 0; i < pos; i++) {
+        CursorPos p2 = d->cursorPos.at(i);
+        if (d->result.at(p2.cluster).anchored_chunk) {
+            candidate = i;
+        }
+    }
+    return candidate;
+}
+
+int KoSvgTextShape::lineEnd(int pos)
+{
+    if (pos < 0 || d->cursorPos.isEmpty() || d->result.isEmpty()) {
+        return pos;
+    }
+    if (pos > d->cursorPos.size()-1) {
+        return d->cursorPos.size() - 1;
+    }
+    int candidate = 0;
+    for (int i = pos; i < d->cursorPos.size(); i++) {
+        CursorPos p = d->cursorPos.at(i);
+        if (d->result.at(p.cluster).anchored_chunk && i != pos) {
+            break;
+        }
+        candidate = i;
+    }
+    return candidate;
+}
+
 int KoSvgTextShape::nextPos(int pos)
 {
     if (d->cursorPos.isEmpty()) {
@@ -102,6 +197,47 @@ int KoSvgTextShape::previousPos(int pos)
         return -1;
     }
     return qMax(pos - 1, 0);
+}
+
+int KoSvgTextShape::nextLine(int pos)
+{
+    if (pos < 0 || pos > d->cursorPos.size()-1 || d->result.isEmpty() || d->cursorPos.isEmpty()) {
+        return pos;
+    }
+    int nextLineStart = lineEnd(pos)+1;
+    int nextLineEnd = lineEnd(nextLineStart);
+
+    if (nextLineStart > d->cursorPos.size()-1) {
+        return d->cursorPos.size()-1;
+    }
+
+    QPointF currentPoint = d->result.at(d->cursorPos.at(pos).cluster).finalPosition;
+    int candidate = posForPoint(currentPoint, nextLineStart, nextLineEnd+1);
+    if (candidate < 0) {
+        return pos;
+    }
+
+    return candidate;
+}
+
+int KoSvgTextShape::previousLine(int pos)
+{
+    if (pos < 0 || pos > d->cursorPos.size()-1 || d->result.isEmpty() || d->cursorPos.isEmpty()) {
+        return pos;
+    }
+    int currentLineStart = lineStart(pos);
+    if (currentLineStart - 1 < 0) {
+        return 0;
+    }
+    int previousLineStart = lineStart(currentLineStart-1);
+
+    QPointF currentPoint = d->result.at(d->cursorPos.at(pos).cluster).finalPosition;
+    int candidate = posForPoint(currentPoint, previousLineStart, currentLineStart);
+    if (candidate < 0) {
+        return pos;
+    }
+
+    return candidate;
 }
 
 QPainterPath KoSvgTextShape::cursorForPos(int pos)
@@ -164,11 +300,17 @@ QPainterPath KoSvgTextShape::selectionBoxes(int pos, int anchor)
     return p;
 }
 
-int KoSvgTextShape::posForPoint(QPointF point)
+int KoSvgTextShape::posForPoint(QPointF point, int start, int end)
 {
-    double closest = std::numeric_limits<double>::max();;
+    int a = 0;
+    int b = d->cursorPos.size();
+    if (start >= 0 && end >= 0) {
+        a = qMax(start, a);
+        b = qMin(end, b);
+    }
+    double closest = std::numeric_limits<double>::max();
     int candidate = -1;
-    for (int i=0; i<d->cursorPos.size(); i++) {
+    for (int i = a; i < b; i++) {
         CursorPos pos = d->cursorPos.at(i);
         CharacterResult res = d->result.at(pos.cluster);
         QPointF cursorStart = res.finalPosition;

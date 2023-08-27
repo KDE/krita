@@ -22,6 +22,18 @@ class SvgTextCursor : public KoToolSelection
 public:
     explicit SvgTextCursor(SvgTextTool *tool);
 
+    enum MoveMode {
+        MoveNone,
+        MoveLeft,
+        MoveRight,
+        MoveUp,
+        MoveDown,
+        MoveLineStart,
+        MoveLineEnd,
+        ParagraphStart,
+        ParagraphEnd,
+    };
+
     ~SvgTextCursor();
 
     void setShape(KoSvgTextShape *textShape);
@@ -34,7 +46,7 @@ public:
 
     void setPosToPoint(QPointF point);
 
-    void moveCursor(bool forward, bool moveAnchor = true);
+    void moveCursor(MoveMode mode, bool moveAnchor = true);
 
     void insertText(QString text);
     void removeLast();

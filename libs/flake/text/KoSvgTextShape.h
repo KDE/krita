@@ -115,21 +115,36 @@ public:
 
     void setResolution(qreal xRes, qreal yRes) override;
 
-    /**
-     * @brief nextPos
-     * get the next position.
-     * @param pos -- cursor position.
-     * @return the next pos;
-     */
-    int nextPos(int pos);
+
+
+    /// return position to the left;
+    /// visual indicates whether to use logical ('previous') or visual left (depending on direction).
+    int posLeft(int pos, bool visual = false);
+    /// return position to the right;
+    /// visual indicates whether to use logical ('next') or visual right (depending on direction).
+    int posRight(int pos, bool visual = false);
+    /// return position above.
+    int posUp(int pos, bool visual = false);
+    /// return position below.
+    int posDown(int pos, bool visual = false);
 
     /**
-     * @brief previousPos
-     * get the previous position.
-     * @param pos -- cursor position.
-     * @return the previous pos;
+     * @brief lineStart
+     * return the 'line start' for this pos. This uses anchored chunks,
+     * so each absolute x, y posititioning will be considered a line-start.
+     * @param pos -- the cursor pos for which to find the line start.
+     * @return the line start.
      */
-    int previousPos(int pos);
+    int lineStart(int pos);
+    /**
+     * @brief lineEnd
+     * return the 'line end' for this pos. This uses anchored chunks,
+     * so each absolute x, y posititioning will be considered a line-start.
+     * @param pos -- the cursor pos for which to find the line end.
+     * @return the line end.
+     */
+    int lineEnd(int pos);
+
 
     /**
      * @brief cursorForPos
@@ -153,9 +168,11 @@ public:
      * @brief posForPoint
      * Finds the closest cursor position for the given point in shape coordinates.
      * @param point
+     * @param start -- optional start position;
+     * @param end -- optional end position;
      * @return the closest cursor position.
      */
-    int posForPoint(QPointF point);
+    int posForPoint(QPointF point, int start = -1, int end = -1);
     /**
      * @brief posForIndex
      * Get the cursor position for a given index in a string.
@@ -208,6 +225,37 @@ protected:
     void shapeChanged(ChangeType type, KoShape *shape) override;
 
 private:
+    /**
+     * @brief nextPos
+     * get the next position.
+     * @param pos -- cursor position.
+     * @return the next pos;
+     */
+    int nextPos(int pos);
+
+    /**
+     * @brief previousPos
+     * get the previous position.
+     * @param pos -- cursor position.
+     * @return the previous pos;
+     */
+    int previousPos(int pos);
+
+    /**
+     * @brief nextLine
+     * get a position on the next line for this position.
+     * @param pos -- cursor position.
+     * @return the pos on the next line;
+     */
+    int nextLine(int pos);
+    /**
+     * @brief previousLine
+     * get a position on the previous line for this position.
+     * @param pos -- cursor position.
+     * @return the pos on the previous line;
+     */
+    int previousLine(int pos);
+
     class Private;
     QScopedPointer<Private> d;
 };

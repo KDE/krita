@@ -11,6 +11,8 @@ set (SvgTextTool_SRCS
     SvgMoveTextCommand.cpp
     SvgMoveTextStrategy.cpp
     SvgTextChangeCommand.cpp
+    SvgTextInsertCommand.cpp
+    SvgTextRemoveCommand.cpp
     SvgRichTextCtrl.cpp
     SvgTextEditor.cpp
     SvgTextCursor.cpp

@@ -330,6 +330,20 @@ void SvgTextTool::storeDefaults()
 void SvgTextTool::selectionChanged()
 {
     m_textCursor.setShape(selectedShape());
+    if (selectedShape()) {
+        setTextMode(true);
+    } else {
+        setTextMode(false);
+    }
+}
+
+void SvgTextTool::addCommand(KUndo2Command *cmd)
+{
+    if (cmd) {
+        if (canvas()) {
+            canvas()->addCommand(cmd);
+        }
+    }
 }
 
 void SvgTextTool::updateCursor(QRectF updateRect)
@@ -472,17 +486,13 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
 
         if (hoveredShape) {
             canvas()->shapeManager()->selection()->select(hoveredShape);
-            this->setTextMode(true);
             m_textCursor.setPosToPoint(event->point);
         } else {
             m_interactionStrategy.reset(new SvgCreateTextStrategy(this, event->point));
             m_dragging = DragMode::Create;
-            //m_textCursor = nullptr;
-            //this->setTextMode(false);
             event->accept();
         }
     } else if (hoveredShape == selectedShape){
-        this->setTextMode(true);
         m_textCursor.setPosToPoint(event->point);
     }
 

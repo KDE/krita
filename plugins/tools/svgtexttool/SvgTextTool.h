@@ -30,6 +30,7 @@ class SvgTextEditor;
 class KoSvgTextShape;
 class SvgTextCursor;
 class KoInteractionStrategy;
+class KUndo2Command;
 
 class SvgTextTool : public KoToolBase
 {
@@ -63,7 +64,20 @@ public:
 
     KisPopupWidgetInterface* popupWidget() override;
 
+    /**
+     * @brief updateCursor
+     * update the canvas decorations in a particular update rect for the text cursor.
+     * @param updateRect the rect to update in.
+     */
     void updateCursor(QRectF updateRect);
+
+    /**
+     * @brief addCommand
+     * Add this command to the canvas undo stack, if the command exists.
+     * This is used by the SvgTextCursor to add commands.
+     * @param cmd the command to add.
+     */
+    void addCommand(KUndo2Command *cmd);
 
 protected:
     /// reimplemented from KoToolBase
@@ -100,6 +114,10 @@ private Q_SLOTS:
      */
     void storeDefaults();
 
+    /**
+     * @brief selectionChanged
+     * called when the canvas selection is changed.
+     */
     void selectionChanged();
 
 

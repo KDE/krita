@@ -5,6 +5,9 @@
  */
 #include "SvgTextCursor.h"
 #include "SvgTextTool.h"
+#include "SvgTextInsertCommand.h"
+#include "SvgTextRemoveCommand.h"
+#include "kundo2command.h"
 #include <QTimer>
 #include <QDebug>
 
@@ -62,6 +65,13 @@ int SvgTextCursor::getAnchor()
     return d->anchor;
 }
 
+void SvgTextCursor::setPos(int pos, int anchor)
+{
+    d->pos = pos;
+    d->anchor = anchor;
+    updateCursor();
+}
+
 void SvgTextCursor::setPosToPoint(QPointF point)
 {
     if (d->shape) {
@@ -88,68 +98,77 @@ void SvgTextCursor::moveCursor(bool forward, bool moveAnchor)
 
 void SvgTextCursor::insertText(QString text)
 {
+
     if (d->shape) {
-        //TODO: don't break when the position is zero...
-        QRectF updateRect = d->shape->boundingRect();
-        if (d->anchor != d->pos) {
-            int start = qMin(d->anchor, d->pos);
-            int length = qMax(d->anchor, d->pos) - start;
-            if (d->shape->removeText(start, length)) {
-                d->pos = start;
-                d->anchor = d->pos;
-            }
+        //KUndo2Command *parentCmd = new KUndo2Command;
+        if (hasSelection()) {
+            SvgTextRemoveCommand *removeCmd = removeSelection();
+            d->tool->addCommand(removeCmd);
         }
+        SvgTextInsertCommand *insertCmd = new SvgTextInsertCommand(d->shape, d->pos, d->anchor, text);
+        d->tool->addCommand(insertCmd);
+
         int index = d->shape->indexForPos(d->pos);
-        if (d->shape->insertText(d->pos, text)) {
-            d->pos = d->shape->posForIndex(index+text.size(), true);
-            d->anchor = d->pos;
-            updateCursor();
-        }
-        d->shape->updateAbsolute( updateRect| d->shape->boundingRect());
+        d->pos = d->shape->posForIndex(index+text.size(), true);
+        d->anchor = d->pos;
+        updateCursor();
     }
 }
 
 void SvgTextCursor::removeLast()
 {
     if (d->shape) {
-        QRectF updateRect = d->shape->boundingRect();
-        if (d->anchor != d->pos) {
-            int start = qMin(d->anchor, d->pos);
-            int length = qMax(d->anchor, d->pos) - start;
-            if (d->shape->removeText(start, length)) {
-                d->pos = start;
-            }
-        }
-        int oldIndex = d->shape->indexForPos(d->pos);
+        SvgTextRemoveCommand *removeCmd;
+        if (hasSelection()) {
+            removeCmd = removeSelection();
+        } else {
+            int oldIndex = d->shape->indexForPos(d->pos);
+            int newPos = d->shape->posForIndex(oldIndex-1, true, true);
+            int newIndex = d->shape->indexForPos(newPos);
 
-        // TODO: When there's 'pre-anchor' positions, these need to be skipped, not yet sure how.
-        int newPos = d->shape->posForIndex(oldIndex-1, true, true);
-        int newIndex = d->shape->indexForPos(newPos);
-        if (d->shape->removeText(newPos, oldIndex-newIndex)) {
+            removeCmd = new SvgTextRemoveCommand(d->shape, newPos, oldIndex-newIndex);
+            d->tool->addCommand(removeCmd);
             d->pos = newPos;
             d->anchor = d->pos;
+        }
+        if (removeCmd) {
+            d->tool->addCommand(removeCmd);
             updateCursor();
         }
-        d->shape->updateAbsolute( updateRect| d->shape->boundingRect());
     }
 }
 
 void SvgTextCursor::removeNext()
 {
     if (d->shape) {
-        QRectF updateRect = d->shape->boundingRect();
+        SvgTextRemoveCommand *removeCmd;
+        if (hasSelection()) {
+            removeCmd = removeSelection();
+        } else {
+            removeCmd = new SvgTextRemoveCommand(d->shape, d->pos, 1);
+            d->anchor = d->pos;
+
+        }
+        if (removeCmd) {
+            d->tool->addCommand(removeCmd);
+            updateCursor();
+        }
+    }
+}
+
+SvgTextRemoveCommand *SvgTextCursor::removeSelection(KUndo2Command *parent)
+{
+    SvgTextRemoveCommand *removeCmd = nullptr;
+    if (d->shape) {
         if (d->anchor != d->pos) {
             int start = qMin(d->anchor, d->pos);
-            int length = qMax(d->anchor, d->pos) - start;
-            if (d->shape->removeText(start, length)) {
-                d->pos = start;
-            }
+            int length = d->shape->indexForPos(qMax(d->anchor, d->pos)) - d->shape->indexForPos(start);
+            d->pos = start;
+            d->anchor = d->pos;
+            removeCmd = new SvgTextRemoveCommand(d->shape, start, length, parent);
         }
-        d->shape->removeText(d->pos, 1);
-        d->anchor = d->pos;
-        d->shape->updateAbsolute( updateRect| d->shape->boundingRect());
-        updateCursor();
     }
+    return removeCmd;
 }
 
 void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
@@ -203,7 +222,7 @@ bool SvgTextCursor::hasSelection()
 
 void SvgTextCursor::updateCursor()
 {
-    d->cursorShape = d->shape->cursorForPos(d->pos);
+    d->cursorShape = d->shape? d->shape->cursorForPos(d->pos): QPainterPath();
     d->cursorFlash.start();
     d->cursorFlashLimit.start();
     d->cursorVisible = false;

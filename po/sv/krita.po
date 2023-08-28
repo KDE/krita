@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-24 00:44+0000\n"
-"PO-Revision-Date: 2023-08-20 08:00+0200\n"
+"PO-Revision-Date: 2023-08-27 09:41+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -37978,7 +37978,7 @@ msgstr "Animeringsljudmeny"
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
 msgid "AutoKey Blank"
-msgstr "Töm nyckelbild automatiskt"
+msgstr "Tom nyckelbild automatiskt"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
 #, kde-format

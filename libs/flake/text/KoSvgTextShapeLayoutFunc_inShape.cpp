@@ -109,10 +109,16 @@ static bool getFirstPosition(QPointF &firstPoint,
         }
     }
 
+    /// Precision of fitting the word box into the polygon to account for
+    /// floating-point precision error.
+    constexpr qreal precision = 1e-6;
+
     QVector<QPointF> candidatePositions;
     QRectF word = wordBox.normalized();
-    qreal precision = 1.0; // floating point maths can be imprecise. TODO: make smaller?.
     word.translate(-wordBox.topLeft());
+    // Slightly shrink the box to account for precision error.
+    word.adjust(precision, precision, -precision, -precision);
+
     QPointF terminatorAdjusted = terminator;
     Q_FOREACH(const QPolygonF polygon, p.toFillPolygons()) {
         QVector<QLineF> offsetPoly;
@@ -122,17 +128,17 @@ static bool getFirstPosition(QPointF &firstPoint,
             line.setP2(polygon.at(i+1));
 
             if (line.angle() == 0.0 || line.angle() == 180.0) {
-                qreal offset = word.center().y() + precision;
+                qreal offset = word.center().y();
                 offsetPoly.append(line.translated(0, offset));
                 offsetPoly.append(line.translated(0, -offset));
             } else if (line.angle() == 90.0 || line.angle() == 270.0) {
-                qreal offset = word.center().x() + precision;
+                qreal offset = word.center().x();
                 offsetPoly.append(line.translated(offset, 0));
                 offsetPoly.append(line.translated(-offset, 0));
             } else {
                 qreal tAngle = fmod(line.angle(), 180.0);
                 QPointF cPos = tAngle > 90? line.center() + QPointF(-word.center().x(), word.center().y()): line.center() + word.center();
-                qreal offset = kisDistanceToLine(cPos, line) + precision;
+                qreal offset = kisDistanceToLine(cPos, line);
                 const QPointF vectorT(qCos(qDegreesToRadians(tAngle)), -qSin(qDegreesToRadians(tAngle)));
                 QPointF vectorN(-vectorT.y(), vectorT.x());
                 QPointF offsetP = QPointF() - (0.0 * vectorT) + (offset * vectorN);

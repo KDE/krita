@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-24 02:22+0000\n"
-"PO-Revision-Date: 2023-08-06 18:44+0200\n"
+"PO-Revision-Date: 2023-08-26 10:02+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.04.0\n"
+"X-Generator: Lokalize 23.04.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8318,12 +8318,10 @@ msgstr "Erakutsi sistemaren informazioa akats-txostenetan."
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:177 krita/krita.action:179 krita/krita.action:180
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Krita log for bug reports."
+#, kde-format
 msgctxt "action"
 msgid "Show Android log for bug reports."
-msgstr "Erakutsi akats-txostenetarako Kritaren egunkaria."
+msgstr "Erakutsi akats-txostenetarako «Android»eko egunkaria."
 
 #. i18n: context: text @ Action (crashlog), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (crashlog), Actions (General), ActionCollection (Krita)
@@ -8332,12 +8330,10 @@ msgstr "Erakutsi akats-txostenetarako Kritaren egunkaria."
 #. i18n: context: toolTip @ Action (crashlog), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (crashlog), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:187 krita/krita.action:189 krita/krita.action:190
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Krita log for bug reports."
+#, kde-format
 msgctxt "action"
 msgid "Show crash log for bug reports."
-msgstr "Erakutsi akats-txostenetarako Kritaren egunkaria."
+msgstr "Erakutsi akats-txostenetarako kraskadura egunkaria."
 
 #. i18n: context: text @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
@@ -8416,7 +8412,7 @@ msgstr "Alderantzikatu uneko hautapena"
 
 #. i18n: context: iconText @ Action (invert_selection), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:246
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Invert Selection"
 msgstr "Alderantzikatu hautapena"
@@ -8704,84 +8700,68 @@ msgstr "Txikiagotu pintzelaren isuria"
 #. i18n: context: text @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:466 krita/krita.action:469
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Value HSV"
-#| msgid "Increase Value"
+#, kde-format
 msgctxt "action"
 msgid "Increase Fade"
-msgstr "Handiagotu balioa"
+msgstr "Moteltzea handiagotzea"
 
 #. i18n: context: toolTip @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:468
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Increase brush Fade"
-msgstr "Handiagotu pintzelaren neurria"
+msgstr "Pintzelaren moteltzea handiagotzea"
 
 #. i18n: context: text @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:478 krita/krita.action:481
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Value HSV"
-#| msgid "Decrease Value"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Fade"
-msgstr "Txikiagotu balioa"
+msgstr "Moteltzea txikiagotzea"
 
 #. i18n: context: toolTip @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:480
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Decrease brush Fade"
-msgstr "Txikiagotu pintzelaren neurria"
+msgstr "Pintzelaren moteltzea txikiagotzea"
 
 #. i18n: context: text @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:490 krita/krita.action:493
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Saturation HSY"
-#| msgid "Increase Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Increase Scatter"
-msgstr "Handiagotu asetasuna"
+msgstr "Sakabanaketa handiagotzea"
 
 #. i18n: context: toolTip @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:492
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Increase brush Scatter strength"
-msgstr "Handiagotu pintzelaren neurria"
+msgstr "Pintzelaren sakabanaketa-indarra handiagotzea"
 
 #. i18n: context: text @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:502 krita/krita.action:505
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Saturation HSY"
-#| msgid "Decrease Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Scatter"
-msgstr "Txikiagotu asetasuna"
+msgstr "Sakabanaketa txikiagotzea"
 
 #. i18n: context: toolTip @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:504
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Decrease brush Scatter strength"
-msgstr "Txikiagotu pintzelaren neurria"
+msgstr "Pintzelaren sakabanaketa-indarra txikiagotzea"
 
 #. i18n: context: text @ Action (erase_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (erase_action), Actions (Painting), ActionCollection (Krita)
@@ -10021,7 +10001,7 @@ msgstr "Bozeldu horizontalki eta bertikalki"
 #, kde-format
 msgctxt "action"
 msgid "Random &Pick..."
-msgstr "Ausazko au&kera..."
+msgstr "Ausazko &hautaketa..."
 
 #. i18n: context: toolTip @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
@@ -10031,7 +10011,7 @@ msgstr "Ausazko au&kera..."
 #, kde-format
 msgctxt "action"
 msgid "Random Pick"
-msgstr "Ausazko aukera"
+msgstr "Ausazko hautaketa"
 
 #. i18n: context: text @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1408
@@ -11291,11 +11271,10 @@ msgstr "Gehitu &Klonatzeko geruza"
 
 #. i18n: context: toolTip @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2490
-#, fuzzy, kde-format
-#| msgid "Change Clone Layer"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Clone Layer"
-msgstr "Aldatu klon-geruza"
+msgstr "Gehitu klon-geruza berri bat"
 
 #. i18n: context: iconText @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2491
@@ -11306,20 +11285,17 @@ msgstr "Klon geruza"
 
 #. i18n: context: text @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2500
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Vector Layer"
+#, kde-format
 msgctxt "action"
 msgid "Add &Vector Layer"
-msgstr "&Bektore geruza"
+msgstr "Gehitu &bektore-geruza"
 
 #. i18n: context: toolTip @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2502
-#, fuzzy, kde-format
-#| msgid "Vector Layer"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Vector Layer"
-msgstr "Bektore-geruza"
+msgstr "Gehitu bektore-geruza berri bat"
 
 #. i18n: context: iconText @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2503
@@ -11330,18 +11306,17 @@ msgstr "Bektore geruza"
 
 #. i18n: context: text @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2512
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Add &Filter Layer..."
-msgstr "&Iragazki-geruza..."
+msgstr "Gehitu &iragazki-geruza..."
 
 #. i18n: context: toolTip @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2514
-#, fuzzy, kde-format
-#| msgid "New Filter Layer"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Filter Layer"
-msgstr "Iragazki-geruza berria"
+msgstr "Gehitu iragazki-geruza berri bat"
 
 #. i18n: context: iconText @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2515
@@ -11352,19 +11327,17 @@ msgstr "Iragazki geruza"
 
 #. i18n: context: text @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2524
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Add &Fill Layer..."
-msgstr "&Iragazki-geruza..."
+msgstr "Gehitu &betegarri-geruza..."
 
 #. i18n: context: toolTip @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2526
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change File Layer"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Fill Layer"
-msgstr "Aldatu fitxategi-geruza"
+msgstr "Gehitu betegarri-geruza berri bat"
 
 #. i18n: context: iconText @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2527
@@ -11375,19 +11348,17 @@ msgstr "Betegarri geruza"
 
 #. i18n: context: text @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2536
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Add &File Layer..."
-msgstr "&Iragazki-geruza..."
+msgstr "Gehitu &fitxategi-geruza..."
 
 #. i18n: context: toolTip @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2538
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change File Layer"
+#, kde-format
 msgctxt "action"
 msgid "Add a new File Layer"
-msgstr "Aldatu fitxategi-geruza"
+msgstr "Gehitu fitxategi-geruza berri bat"
 
 #. i18n: context: iconText @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2539
@@ -11398,20 +11369,17 @@ msgstr "Fitxategi geruza"
 
 #. i18n: context: text @ Action (add_new_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2548
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Transparency Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add &Transparency Mask"
-msgstr "Gehitu gardentasun maskara"
+msgstr "Gehitu &gardentasun-maskara"
 
 #. i18n: context: toolTip @ Action (add_new_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2550
-#, fuzzy, kde-format
-#| msgid "Add Transparency Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Transparency Mask"
-msgstr "Erantsi gardentasun maskara"
+msgstr "Gehitu gardentasun-maskara berri bat"
 
 #. i18n: context: iconText @ Action (add_new_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2551
@@ -11422,70 +11390,59 @@ msgstr "Gardentasun maskara"
 
 #. i18n: context: text @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2560
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Filter Mask..."
+#, kde-format
 msgctxt "action"
 msgid "Add &Filter Mask..."
-msgstr "&Iragazki maskara..."
+msgstr "Gehitu &iragazki-maskara..."
 
 #. i18n: context: toolTip @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2562
-#, fuzzy, kde-format
-#| msgid "Add Filter Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Filter Mask"
-msgstr "Erantsi iragazki maskara"
+msgstr "Gehitu iragazki maskara berri bat"
 
 #. i18n: context: iconText @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2563
 #, kde-format
 msgctxt "action"
 msgid "Filter Mask"
-msgstr "Iragazki maskara"
+msgstr "Iragazki-maskara"
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2572
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add &Colorize Mask"
-msgstr "Gehitu koloreztatzeko-maskara"
+msgstr "Gehitu &koloreztatze-maskara"
 
 #. i18n: context: toolTip @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2574
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Colorize Mask"
-msgstr "Gehitu koloreztatzeko-maskara"
+msgstr "Gehitu koloreztatze-maskara berri bat"
 
 #. i18n: context: iconText @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2575
 #, kde-format
 msgctxt "action"
 msgid "Colorize Mask"
-msgstr "Koloreztatze maskara"
+msgstr "Koloreztatze-maskara"
 
 #. i18n: context: text @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2584
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Transform Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add &Transform Mask"
-msgstr "Gehitu eraldatze-maskara"
+msgstr "Gehitu &eraldatze-maskara"
 
 #. i18n: context: toolTip @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2586
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Transform Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Transform Mask"
-msgstr "Gehitu eraldatze-maskara"
+msgstr "Gehitu eraldatze-maskara berri bat"
 
 #. i18n: context: iconText @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2587
@@ -11496,26 +11453,24 @@ msgstr "Eraldatze maskara"
 
 #. i18n: context: text @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2596
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Add &Local Selection"
-msgstr "&Tokiko hautapena"
+msgstr "Gehitu &tokiko hautapena"
 
 #. i18n: context: toolTip @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2598
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Local Selection"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Local Selection"
-msgstr "Tokiko hautapena"
+msgstr "Gehitu tokiko hautapen berri bat"
 
 #. i18n: context: iconText @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2599
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Local Selection"
-msgstr "&Tokiko hautapena"
+msgstr "Tokiko hautapena"
 
 #. i18n: context: text @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2608
@@ -11648,20 +11603,17 @@ msgstr "Txandakatu geruzaren alfa herentzia"
 
 #. i18n: context: text @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2692
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Paint Layer"
+#, kde-format
 msgctxt "action"
 msgid "Add &Paint Layer"
-msgstr "&Margo geruza"
+msgstr "Gehitu &Margo-geruza"
 
 #. i18n: context: toolTip @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2694
-#, fuzzy, kde-format
-#| msgid "Convert Current Layer From"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Paint Layer"
-msgstr "Honen uneko geruza bihurtu"
+msgstr "Gehitu margo-geruza berri bat"
 
 #. i18n: context: iconText @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2695
@@ -12016,7 +11968,7 @@ msgstr "Bihurtu geruza animazio fotograma"
 #, kde-format
 msgctxt "action"
 msgid "to &File Layer..."
-msgstr "&Fitxategiko geruzara..."
+msgstr "&Fitxategi geruzara..."
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2946
@@ -12028,9 +11980,7 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2947
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert to a file layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to File Layer"
 msgstr "Bihurtu fitxategi-geruza"
@@ -12057,7 +12007,7 @@ msgstr "Inportatu geruza"
 #, kde-format
 msgctxt "action"
 msgid "&as Paint Layer..."
-msgstr "Margo geruza gis&a..."
+msgstr "Margo-geruza gis&a..."
 
 #. i18n: context: toolTip @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
@@ -12067,14 +12017,14 @@ msgstr "Margo geruza gis&a..."
 #, kde-format
 msgctxt "action"
 msgid "as Paint Layer"
-msgstr "Margo geruza gisa"
+msgstr "Margo-geruza gisa"
 
 #. i18n: context: text @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2980
 #, kde-format
 msgctxt "action"
 msgid "as &Transparency Mask..."
-msgstr "&Gardentasun maskara gisa..."
+msgstr "&Gardentasun-maskara gisa..."
 
 #. i18n: context: toolTip @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
@@ -12084,7 +12034,7 @@ msgstr "&Gardentasun maskara gisa..."
 #, kde-format
 msgctxt "action"
 msgid "as Transparency Mask"
-msgstr "Gardentasun maskara gisa"
+msgstr "Gardentasun-maskara gisa"
 
 #. i18n: context: text @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2992
@@ -12122,12 +12072,10 @@ msgstr "Hautapen maskara gisa"
 
 #. i18n: context: text @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3016
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert to a Paint Layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &Paint Layer"
-msgstr "Bihurtu margo-geruza"
+msgstr "Bihurtu &margo-geruza"
 
 #. i18n: context: toolTip @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
@@ -12137,16 +12085,14 @@ msgstr "Bihurtu margo-geruza"
 #, kde-format
 msgctxt "action"
 msgid "to Paint Layer"
-msgstr "Margo geruzara"
+msgstr "Margo-geruzara"
 
 #. i18n: context: text @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "to &Transparency Mask"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &Transparency Mask"
-msgstr "&Gardentasun maskarara"
+msgstr "Bihurtu &gardentasun-maskarara"
 
 #. i18n: context: toolTip @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
@@ -12156,16 +12102,14 @@ msgstr "&Gardentasun maskarara"
 #, kde-format
 msgctxt "action"
 msgid "to Transparency Mask"
-msgstr "Gardentasun maskarara"
+msgstr "Gardentasun-maskarara"
 
 #. i18n: context: text @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3040
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "to &Filter Mask..."
+#, kde-format
 msgctxt "action"
 msgid "Convert to &Filter Mask..."
-msgstr "&Iragazki maskarara..."
+msgstr "Bihurtu &iragazki-maskara..."
 
 #. i18n: context: toolTip @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
@@ -12175,16 +12119,14 @@ msgstr "&Iragazki maskarara..."
 #, kde-format
 msgctxt "action"
 msgid "to Filter Mask"
-msgstr "Iragazki maskarara"
+msgstr "Iragazki-maskarara"
 
 #. i18n: context: text @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3052
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert to a Selection Mask"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &Selection Mask"
-msgstr "Bihurtu hautapen-maskara"
+msgstr "Bihurtu &hautapen-maskara"
 
 #. i18n: context: toolTip @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
@@ -12812,12 +12754,10 @@ msgstr "Ezarri hautatutako klon geruz(ar)en sorburua."
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3507
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set Copy F&rom..."
+#, kde-format
 msgctxt "action"
 msgid "Set Copy From"
-msgstr "Ezarri kopia &honetatik..."
+msgstr "Ezarri kopia honetatik"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -12856,12 +12796,12 @@ msgstr "Biltze modua"
 #: krita/krita5.xmlgui:99
 #, kde-format
 msgid "&Zoom, Rotate, and Mirror"
-msgstr ""
+msgstr "&Zooma, biratu, eta ispilatu"
 
 #: krita/krita5.xmlgui:131
 #, kde-format
 msgid "&Snap To"
-msgstr "At&xiki honi"
+msgstr "At&xiki horri"
 
 #: krita/krita5.xmlgui:154
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.xmlgui:4
@@ -12919,11 +12859,10 @@ msgid "&Select"
 msgstr "&Hautatu"
 
 #: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1222
-#, fuzzy, kde-format
-#| msgid "&Group"
+#, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
-msgstr "Tal&dea"
+msgstr "&Taldea"
 
 #: krita/krita5.xmlgui:247
 #, kde-format
@@ -13011,8 +12950,7 @@ msgstr "Sortu dokumentu berria"
 
 #. i18n: context: iconText @ Action (file_new), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:10
-#, fuzzy, kde-format
-#| msgid "New"
+#, kde-format
 msgctxt "action"
 msgid "New"
 msgstr "Berria"
@@ -13033,8 +12971,7 @@ msgstr "Ireki dagoen dokumentu bat"
 
 #. i18n: context: iconText @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:22
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "action"
 msgid "Open"
 msgstr "Ireki"
@@ -13044,7 +12981,7 @@ msgstr "Ireki"
 #, kde-format
 msgctxt "action"
 msgid "Open &Recent"
-msgstr "Ireki o&raintsukoa"
+msgstr "Ireki az&kenaldikoa"
 
 #. i18n: context: toolTip @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:33
@@ -13055,12 +12992,10 @@ msgstr "Ireki berriki ireki den dokumentu bat"
 
 #. i18n: context: iconText @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Open &Recent"
+#, kde-format
 msgctxt "action"
 msgid "Open Recent"
-msgstr "Ireki o&raintsukoa"
+msgstr "Ireki azkenaldikoa"
 
 #. i18n: context: text @ Action (file_save), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:43
@@ -13095,8 +13030,7 @@ msgstr "Gorde dokumentua izen berri batekin"
 
 #. i18n: context: iconText @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:58
-#, fuzzy, kde-format
-#| msgid "Save As"
+#, kde-format
 msgctxt "action"
 msgid "Save As"
 msgstr "Gorde honela"
@@ -13117,8 +13051,7 @@ msgstr "Ireki saio kudeatzailea"
 
 #. i18n: context: iconText @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:70
-#, fuzzy, kde-format
-#| msgid "Sessions"
+#, kde-format
 msgctxt "action"
 msgid "Sessions"
 msgstr "Saioak"
@@ -13227,8 +13160,7 @@ msgstr "Errendatu animazioa GIFera, irudi sekuentziara edo bideora"
 #. i18n: context: iconText @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:144 krita/kritamenu.action:156
-#, fuzzy, kde-format
-#| msgid "Render Animation"
+#, kde-format
 msgctxt "action"
 msgid "Render Animation"
 msgstr "Errendatu animazioa"
@@ -13382,12 +13314,10 @@ msgstr "Irten aplikaziotik"
 
 #. i18n: context: iconText @ Action (file_quit), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:252
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Quit"
+#, kde-format
 msgctxt "action"
 msgid "Quit"
-msgstr "I&rten"
+msgstr "Irten"
 
 #. i18n: context: text @ Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:262
@@ -13446,8 +13376,7 @@ msgstr "Ebaki hautapena arbelera"
 
 #. i18n: context: iconText @ Action (edit_cut), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:292
-#, fuzzy, kde-format
-#| msgid "Cut"
+#, kde-format
 msgctxt "action"
 msgid "Cut"
 msgstr "Ebaki"
@@ -13468,8 +13397,7 @@ msgstr "Kopiatu hautapena arbelera"
 
 #. i18n: context: iconText @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:304
-#, fuzzy, kde-format
-#| msgid "Copy"
+#, kde-format
 msgctxt "action"
 msgid "Copy"
 msgstr "Kopiatu"
@@ -13530,19 +13458,17 @@ msgstr "Kopiatu bateratua"
 #. i18n: context: text @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:349 krita/kritamenu.action:352
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Layer Style"
+#, kde-format
 msgctxt "action"
 msgid "Copy Layer Style"
-msgstr "Geruzaren estiloa"
+msgstr "Kopiatu geruzaren estiloa"
 
 #. i18n: context: toolTip @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:351
 #, kde-format
 msgctxt "action"
 msgid "Copy Layer Style from the Current Node"
-msgstr ""
+msgstr "Kopiatu uneko nodoko geruza estiloa"
 
 #. i18n: context: text @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:361
@@ -13560,9 +13486,7 @@ msgstr "Itsatsi arbelaren edukia"
 
 #. i18n: context: iconText @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:364
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Paste"
+#, kde-format
 msgctxt "action"
 msgid "Paste"
 msgstr "Itsatsi"
@@ -13649,20 +13573,17 @@ msgstr "Itsatsi erreferentzia-irudi gisa"
 #. i18n: context: text @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:433 krita/kritamenu.action:436
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste Shape Style"
+#, kde-format
 msgctxt "action"
 msgid "Paste Layer Style"
-msgstr "Itsatsi formaren estiloa"
+msgstr "Itsatsi geruzaren estiloa"
 
 #. i18n: context: toolTip @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:435
-#, fuzzy, kde-format
-#| msgid "Save Palette in the Current Document"
+#, kde-format
 msgctxt "action"
 msgid "Paste Layer Style into the Current Node"
-msgstr "Gorde paleta uneko dokumentuan"
+msgstr "Itsatsi geruzaren estiloa uneko nodoan"
 
 #. i18n: context: text @ Action (clear), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:446
@@ -13865,16 +13786,14 @@ msgstr "Erakut&si oihalak soilik"
 #, kde-format
 msgctxt "action"
 msgid "Show just the canvas or the whole window"
-msgstr "Erakutsi oihala besterik ez edo leiho osoa"
+msgstr "Erakutsi mihisea soilik edo leiho osoa"
 
 #. i18n: context: iconText @ Action (view_show_canvas_only), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:619
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Show Canvas Only"
+#, kde-format
 msgctxt "action"
 msgid "Show Canvas Only"
-msgstr "Erakut&si oihalak soilik"
+msgstr "Erakutsi mihisea bakarrik"
 
 #. i18n: context: text @ Action (fullscreen), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:628
@@ -13892,31 +13811,27 @@ msgstr "Azaldu leihoa pantaila-osoan"
 
 #. i18n: context: iconText @ Action (fullscreen), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:631
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "F&ull Screen Mode"
+#, kde-format
 msgctxt "action"
 msgid "Full Screen Mode"
-msgstr "&Pantaila-osoko modua"
+msgstr "Pantaila-osoko modua"
 
 #. i18n: context: text @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:640 krita/kritamenu.action:643
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Detach canvas"
+#, kde-format
 msgctxt "action"
 msgid "Detach Canvas"
-msgstr "Bereizi oihala"
+msgstr "Bereizi mihisea"
 
 #. i18n: context: toolTip @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:642
 #, kde-format
 msgctxt "action"
 msgid "Show the canvas on a separate window"
-msgstr "Erakutsi oihala leiho bereizian"
+msgstr "Erakutsi mihisea leiho bereizian"
 
 #. i18n: context: text @ Action (wrap_around_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:652
@@ -14059,7 +13974,7 @@ msgstr "Ikuspegi ispilatua"
 #, kde-format
 msgctxt "action"
 msgid "Mirror View Around Cursor"
-msgstr "Islatu kurtsorearen inguruko ikuspegia"
+msgstr "Ikuspegi ispilatua kurtsorearen inguruan"
 
 #. i18n: context: text @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
@@ -14069,31 +13984,27 @@ msgstr "Islatu kurtsorearen inguruko ikuspegia"
 #. i18n: context: iconText @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:752 krita/kritamenu.action:754
 #: krita/kritamenu.action:755
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror View Around Cursor"
+#, kde-format
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr "Islatu kurtsorearen inguruko ikuspegia"
+msgstr "Ikuspegi ispilatua mihisearen inguruan"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
-#, fuzzy, no-c-format, kde-format
-#| msgid "Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr "Zooma % 100"
+msgstr "&Zooma % 100era"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:764 krita/kritamenu.action:765
-#, fuzzy, no-c-format, kde-format
-#| msgid "Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
-msgstr "Zooma % 100"
+msgstr "Zooma % 100era"
 
 #. i18n: context: text @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:774
@@ -14128,57 +14039,51 @@ msgstr "Zooma urrundu"
 #. i18n: context: text @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:798 krita/kritamenu.action:801
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View"
-msgstr "Doitu orriari"
+msgstr "Egokitu ikuspegira"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:800
-#, fuzzy, kde-format
-#| msgid "Canvas Size"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View"
-msgstr "Oihalaren tamaina"
+msgstr "Egokitu mihisea ikuspegira"
 
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:808 krita/kritamenu.action:811
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
-msgstr "Doitu zabalerari"
+msgstr "Egokitu ikuspegiaren zabalerara"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Width"
-msgstr "Doitu zabalerari"
+msgstr "Egokitu mihisea ikuspegiaren zabalerara"
 
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:818 krita/kritamenu.action:821
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Height"
-msgstr "Doitu altuerara"
+msgstr "Egokitu ikuspegiaren altuerara"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:820
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Height"
-msgstr "Doitu altuerara"
+msgstr "Egokitu mihisea ikuspegiaren altuerara"
 
 #. i18n: context: text @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -14188,18 +14093,17 @@ msgstr "Doitu altuerara"
 #. i18n: context: iconText @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:828 krita/kritamenu.action:830
 #: krita/kritamenu.action:831
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Fit to View"
-msgstr "Doitu orriari"
+msgstr "Txandakatu ikuspegira egokitzea"
 
 #. i18n: context: text @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:838
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Canvas Right"
-msgstr "Biratu &oihala eskuinera"
+msgstr "Biratu &mihisea eskuinera"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
@@ -14209,14 +14113,14 @@ msgstr "Biratu &oihala eskuinera"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas Right"
-msgstr "Biratu oihala eskuinera"
+msgstr "Biratu mihisea eskuinera"
 
 #. i18n: context: text @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:850
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas &Left"
-msgstr "Biratu oihala e&zkerrera"
+msgstr "Biratu mihisea e&zkerrera"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
@@ -14226,7 +14130,7 @@ msgstr "Biratu oihala e&zkerrera"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas Left"
-msgstr "Biratu oihala ezkerrera"
+msgstr "Biratu mihisea ezkerrera"
 
 #. i18n: context: text @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
@@ -14239,26 +14143,24 @@ msgstr "Biratu oihala ezkerrera"
 #, kde-format
 msgctxt "action"
 msgid "Reset Canvas Rotation"
-msgstr "Berrezarri oihalaren biraketa"
+msgstr "Berrezarri mihisearen biraketa"
 
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:874 krita/kritamenu.action:877
-#, fuzzy, kde-format
-#| msgid "Master Display:"
+#, kde-format
 msgctxt "action"
 msgid "Reset Display"
-msgstr "Pantaila nagusia:"
+msgstr "Berrezarri bistaratzea"
 
 #. i18n: context: toolTip @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:876
-#, fuzzy, kde-format
-#| msgid "Reset the options to their default values"
+#, kde-format
 msgctxt "action"
 msgid "Reset zoom, rotation, and mirroring to their default states."
-msgstr "Berrabiarazi aukerak haien balio lehenetsietara"
+msgstr "Berrezarri zooma, biraketa, eta ispilatzea haien balio lehenetsietara."
 
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
@@ -14294,6 +14196,9 @@ msgid ""
 "image and can be used to position your mouse at the right place on the "
 "canvas. <p>Uncheck this to hide the rulers.</p>"
 msgstr ""
+"Erregelek, saguak irudian duen kokapen horizontala eta bertikala erakusten "
+"dute eta zure sagua mihiseko leku egokian kokatzeko erabil daitezke.<p>Kendu "
+"marka horri erregelak ezkutatzeko.</p>"
 
 #. i18n: context: toolTip @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_ruler), Actions (View), ActionCollection (Menu)
@@ -14326,6 +14231,8 @@ msgid ""
 "The rulers will track current mouse position and show it on screen. It can "
 "cause subtle performance slowdown"
 msgstr ""
+"Erregelek saguaren uneko kokapenaren aztarna jarraitu eta pantailan "
+"erakutsiko dute. Errendimendu moteltze arinak eragin ditzake"
 
 #. i18n: context: text @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
@@ -14641,7 +14548,7 @@ msgstr "Propietateak"
 #, kde-format
 msgctxt "action"
 msgid "&Image Background Color and Transparency..."
-msgstr "&Irudi atzealde kolorea eta gardentasuna..."
+msgstr "&Irudi atzealdearen kolorea eta gardentasuna..."
 
 #. i18n: context: toolTip @ Action (image_color), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1163
@@ -14652,12 +14559,10 @@ msgstr "Aldatu irudiaren atzealdeko kolorea"
 
 #. i18n: context: iconText @ Action (image_color), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1164
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Image Background Color and Transparency..."
+#, kde-format
 msgctxt "action"
 msgid "Image Background Color and Transparency"
-msgstr "&Irudi atzealde kolorea eta gardentasuna..."
+msgstr "Irudi atzealdearen kolorea eta gardentasuna..."
 
 #. i18n: context: text @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1173
@@ -17076,7 +16981,7 @@ msgstr "Sorgailua"
 #: libs/image/generator/kis_generator_stroke_strategy.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Fill Layer Render"
-msgstr "Betegarri geruza errendatu"
+msgstr "Betegarri geruza errendatzea"
 
 #: libs/image/kis_adjustment_layer.cc:124
 #, kde-format
@@ -17916,18 +17821,14 @@ msgstr ""
 "geruzako</b> metadatuak bakarrik gordeko dira."
 
 #: libs/impex/FillLayerTypeCheck.h:92
-#, fuzzy, kde-format
-#| msgctxt "Loading a .kra file"
-#| msgid ""
-#| "The file contains a clone layer that has an incorrect source node id. "
-#| "This layer will be converted into a paint layer."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Fill Layer of type <b>%1</b>, which is not supported, "
 "the layer will be converted to a paintlayer"
 msgstr ""
-"Fitxategiak jatorri-nodo-ID akastun bat duen klon geruza bat du. Geruza hori "
-"pintura-geruza bihurtuko da."
+"Irudiak <b>%1</b> motako betegarri-geruza bat du. bateragarria ez dena, "
+"geruza hori pintura-geruza bihurtuko da."
 
 #: libs/impex/IntegralFrameDuration.h:32
 #, kde-format
@@ -17954,7 +17855,7 @@ msgstr "Taldekatu"
 #: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:961
 #, kde-format
 msgid "File Layer"
-msgstr "Fitxategi-geruza"
+msgstr "Fitxategi geruza"
 
 #: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:665
 #: plugins/impex/svg/kis_svg_import.cc:93
@@ -18030,8 +17931,8 @@ msgid ""
 "layers that have multiple transparency masks, only the rendered result will "
 "be saved."
 msgstr ""
-"Irudiak <b>gardentasun maskara bat baino gehiago dauka geruza batean</b>. "
-"Gardentasun maskara anizkoitzak dituzten geruza guztietarako, errendatutako "
+"Irudiak <b>gardentasun-maskara bat baino gehiago dauka geruza batean</b>. "
+"Gardentasun-maskara anizkoitzak dituzten geruza guztietarako, errendatutako "
 "emaitza besterik ez da gordeko."
 
 #: libs/impex/NodeTypeCheck.h:25
@@ -20279,19 +20180,15 @@ msgid "All bundles have been deactivated."
 msgstr "Fardel guztiak desaktibatu dira."
 
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:162
-#, fuzzy, kde-format
-#| msgid ""
-#| "\n"
-#| "There are no brush presets available. Please re-enable a bundle that "
-#| "provides brush presets."
+#, kde-format
 msgid ""
 "\n"
 "There are no resources of type %1 available. Please enable at least one "
 "bundle."
 msgstr ""
 "\n"
-"Ez dago pintzel aurrehautaketa erabilgarririk. Mesedez, birgaitu pintzel "
-"aurrehautaketak hornitzen dituen fardel bat."
+"Ez dago %1 motako baliabide erabilgarririk. Mesedez, gaitu gutxienez fardel "
+"bat."
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:52
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
@@ -20469,7 +20366,7 @@ msgstr "Hautatu dena"
 #: libs/ui/KisView.cpp:784
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
-msgstr "Uhalde-betegarriko geruza"
+msgstr "Uholde-betegarriko geruza"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:346
 msgctxt "(qtundo-format)"
@@ -20829,18 +20726,14 @@ msgstr ""
 "osoa ikusteko</em></font>"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:487
-#, fuzzy, kde-format
-#| msgctxt "part of warning in video importer."
-#| msgid ""
-#| "WARNING, you are trying to import %1 frames, the maximum amount you can "
-#| "import is %2."
+#, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "<b>Warning:</b> you are trying to import %1 frames, the maximum amount you "
 "can import is %2."
 msgstr ""
-"ERNE, %1 fotograma inportatzen saiatzen ari zara, inporta dezakezun "
-"gehieneko kopurua %2 da."
+"<b>Oharra:</b> %1 fotograma inportatzen saiatzen ari zara, inporta dezakezun "
+"gehienezko kopurua %2 da."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:494
 #, kde-format
@@ -20869,18 +20762,14 @@ msgstr ""
 "litzateke."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
-#, fuzzy, kde-format
-#| msgctxt "part of warning in video importer."
-#| msgid ""
-#| "Krita does not support the video transfer curve (%1), it will be loaded "
-#| "as linear"
+#, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "Krita does not support the video transfer curve (%1), it will be loaded as "
 "linear."
 msgstr ""
-"Kritak ez du onartzen bideo transferentzia kurba (%1), lineala bezala "
-"zamatuko du"
+"Kritak ez du onartzen bideo transferentziaren kurba (%1), lineala bezala "
+"zamatuko da."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:549
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:551
@@ -20958,14 +20847,13 @@ msgstr "Desio duzun %1 fitxategia sortzen: %2/%3 fotograma."
 #: libs/ui/animation/video_export_options_dialog.ui:13
 #, kde-format
 msgid "Codec:"
-msgstr ""
+msgstr "Kodeka:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
 #: libs/ui/animation/video_export_options_dialog.ui:23
-#, fuzzy, kde-format
-#| msgid "No options"
+#, kde-format
 msgid "Codec options"
-msgstr "Aukerarik ez"
+msgstr "Kodekaren aukerak"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -21057,7 +20945,7 @@ msgstr "Animazio begizta"
 #: libs/ui/animation/video_export_options_dialog.ui:293
 #, kde-format
 msgid "Transparency Difference"
-msgstr "Gardentasunaren diferentzia"
+msgstr "Gardentasun diferentzia"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/animation/video_export_options_dialog.ui:300
@@ -21978,10 +21866,9 @@ msgstr "«FFmpeg»ren bide-izena:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:634
-#, fuzzy, kde-format
-#| msgid "FFProbe Path:"
+#, kde-format
 msgid "FFprobe path:"
-msgstr "FFProbe bide-izena:"
+msgstr "«FFProbe»n bide-izena:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimationRenderer)
 #: libs/ui/animation/wdg_animationrenderer.ui:10
@@ -22003,16 +21890,15 @@ msgstr "Azken fotograma:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export as image sequence"
-msgstr "Esposizioa"
+msgstr "Esportatu irudi sekuentzia gisa"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/wdg_animationrenderer.ui:58
-#, fuzzy, kde-format
-#| msgid "Fi&le format:"
+#, kde-format
 msgid "File format:"
-msgstr "Fit&xategi-formatua:"
+msgstr "Fitxategi-formatua:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbMimetype)
 #: libs/ui/animation/wdg_animationrenderer.ui:67
@@ -22022,7 +21908,7 @@ msgid ""
 "video or animated gif, you can only select PNG"
 msgstr ""
 "Aukeratu irudi sekuentziaren fitxategi-formatua. Bideora edo animatutako "
-"GIFera errendatu nahi baduzu, PNG baino ezin duzu hautatu"
+"GIFera errendatu nahi baduzu, PNG hauta dezakezu bakarrik"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnExportOptions)
 #: libs/ui/animation/wdg_animationrenderer.ui:74
@@ -22062,10 +21948,9 @@ msgstr "Fotograma bakarrak soilik"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
-#, fuzzy, kde-format
-#| msgid "Export size:"
+#, kde-format
 msgid "Export as video"
-msgstr "Esportatze neurria:"
+msgstr "Esportatze bideo gisa"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
@@ -22457,15 +22342,14 @@ msgid "Save without waiting"
 msgstr "Gorde itxoin gabe"
 
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Cancel Operation and Save"
+#, kde-format
 msgid "Cancel operation and save"
 msgstr "Utzi eragiketa eta gorde"
 
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:59
 #, kde-format
 msgid "Close, do not save"
-msgstr "Itxi, gorde gabe"
+msgstr "Itxi, ez gorde"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMessage)
 #: libs/ui/dialogs/kis_delayed_save_dialog.ui:31
@@ -22793,30 +22677,25 @@ msgid "Select ASL file"
 msgstr "Hautatu ASL fitxategia"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:353
-#, fuzzy, kde-format
-#| msgid "Could not load raster selection %1."
+#, kde-format
 msgid "Could not load layer style library %1."
-msgstr "Ezin izan da %1 raster hautapena zamatu."
+msgstr "Ezin izan du %1 estilo liburutegia zamatu."
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:367
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:244
-#, fuzzy, kde-format
-#| msgctxt "@ttile:window"
-#| msgid "Warning"
+#, kde-format
 msgctxt "@title:window"
 msgid "Warning"
 msgstr "Abisua"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:368
-#, fuzzy, kde-format
-#| msgid ""
-#| "There is already a bundle with this name installed. Do you want to "
-#| "overwrite it?"
+#, kde-format
 msgid ""
 "There is already a layer style library with this name installed. Do you want "
 "to overwrite it?"
 msgstr ""
-"Izen hau duen fardel bat instalatuta dago jada. Hura gainidatzi nahi duzu?"
+"Izen hori duen geruza estilo bat instalatuta dago jada. Hura gainidaztea "
+"nahi duzu?"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleXBox)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleYBox)
@@ -22894,15 +22773,10 @@ msgid "Missing Color Profile"
 msgstr "Kolore-profila falta da"
 
 #: libs/ui/dialogs/kis_dlg_paste_format.cpp:18
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "In Resource manager, this is text shown instead of filename, name or "
-#| "location, when multiple resources are shown so there is no one specific "
-#| "filename"
-#| msgid "(Multiple selected)"
+#, kde-format
 msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
-msgstr "(Hainbat hautatuta)"
+msgstr "Itsasteko sorburu anizkoitzak antzeman dira"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:208
 #, kde-format
@@ -23016,21 +22890,22 @@ msgid "Show session manager"
 msgstr "Erakutsi saio-kudeatzailea"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:432
-#, fuzzy, kde-format
-#| msgid "Note: Krita will need to be restarted for changes to take effect"
+#, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
-msgstr "Oharra: Krita berrabiatu beharra dago aldaketak indarrean sartzeko"
+msgstr "Aldaketak indarrean sartzeko, Krita berrabiatu beharko duzu."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:438
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
+"Fitxategi-hautatzailean hautatutako kokaleku batean gordetzeak abioa moteldu "
+"dezake!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:470
-#, fuzzy, kde-format
+#, kde-format
 msgid "Internal Storage"
-msgstr "Gurutzelarkatua"
+msgstr "Barneko biltegiratzea"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:472
 #, kde-format
@@ -29084,19 +28959,16 @@ msgid "Flow: %1%"
 msgstr "Emaria: %%1"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:347
-#, fuzzy, kde-format
-#| msgctxt "video importer: video file statistics"
-#| msgid "Frames: %1"
+#, kde-format
 msgctxt "Edge softness, Brush Option Fade"
 msgid "Fade: %1"
-msgstr "Fotogramak: %1"
+msgstr "Moteltzea: %1"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:375
-#, fuzzy, kde-format
-#| msgid "Scatter"
+#, kde-format
 msgctxt "Brush Option Scatter"
 msgid "Scatter: %1%"
-msgstr "Barreiadura"
+msgstr "Sakabanaketa: %%1"
 
 #: libs/ui/kis_change_file_layer_command.h:24
 msgctxt "(qtundo-format)"
@@ -29191,11 +29063,10 @@ msgid "This pattern already exists. Do you want to overwrite it?"
 msgstr "Eredu hori lehendik ere badago. Gainidatzi nahi duzu?"
 
 #: libs/ui/kis_file_layer.cpp:133
-#, fuzzy, kde-format
-#| msgid "No file name specified"
+#, kde-format
 msgctxt "placeholder test for a warning when not file is set in the file layer"
 msgid "<No file name is set>"
-msgstr "Ez da fitxategi-izenik zehaztu"
+msgstr "<Ez da fitxategi-izenik ezarri>"
 
 #: libs/ui/kis_file_layer.cpp:138
 #, kde-format
@@ -29204,11 +29075,10 @@ msgid "Linked file not found: %1"
 msgstr "Estekatutako fitxategia ez da aurkitu: %1"
 
 #: libs/ui/kis_file_layer.cpp:141
-#, fuzzy, kde-format
-#| msgid "Failed to download remote file"
+#, kde-format
 msgctxt "a tooltip shown when a file layer cannot load its linked file"
 msgid "Failed to load linked file: %1"
-msgstr "Urruneko fitxategia jaisteak huts egin du"
+msgstr "Estekatutako fitxategia zamatzea huts egin du: %1"
 
 #: libs/ui/kis_filter_manager.cc:190
 #, kde-format
@@ -29304,8 +29174,8 @@ msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr ""
-"Aukeratu geruza gordetzeko kokalekua. Fitxategiko geruza berriak kokaleku "
-"hori aipatuko du."
+"Aukeratu geruza gordetzeko kokalekua. Fitxategi-geruza berriak kokaleku hori "
+"aipatuko du."
 
 #: libs/ui/kis_layer_manager.cc:570
 msgctxt "(qtundo-format)"
@@ -29373,7 +29243,7 @@ msgstr "Hautapena"
 #: libs/ui/kis_mask_manager.cc:210
 msgctxt "(qtundo-format)"
 msgid "Add Transparency Mask"
-msgstr "Gehitu gardentasun maskara"
+msgstr "Gehitu gardentasun-maskara"
 
 #: libs/ui/kis_mask_manager.cc:223
 msgctxt "(qtundo-format)"
@@ -30091,7 +29961,7 @@ msgstr "Krita:Abisua"
 #: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:892
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
-msgstr "Ezin da gehitu %1 fitxategi geruza gisa: fitxategia ez da existitzen."
+msgstr "Ezin da gehitu %1 fitxategi-geruza gisa: fitxategia ez da existitzen."
 
 #: libs/ui/KisApplication.cpp:678
 #, kde-format
@@ -30105,6 +29975,15 @@ msgid ""
 "running instance of Krita, check the \"Allow only one instance of Krita\" "
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
+"Ezin du fitxategi-geruza gehitu: ez dago irekitako dokumenturik.\n"
+"\n"
+"Dokumentu berri bat sor dezakezu « --new-image » aukera erabiliz, edo "
+"existitzen den fitxategi bat ireki dezakezu.\n"
+"\n"
+"Horren ordez, fitxategi-geruza dagoeneko martxan dagoen Kritaren instantzia "
+"bateko dokumentu batera gehitu nahi baduzu, markatu  ezarpenetako (Ezarpenak "
+"-> Orokorra -> Leihoa) \"Baimendu Kritaren instantzia bakarra\" kontrol-"
+"laukia."
 
 #: libs/ui/KisApplication.cpp:684
 #, kde-format
@@ -30113,6 +29992,9 @@ msgid ""
 "You can either create a new file using the --new-image option, or you can "
 "open an existing file."
 msgstr ""
+"Ezin du fitxategi geruza gehitu: ez dago irekitako dokumenturik.\n"
+"Dokumentu berri bat sor dezakezu « --new-image » aukera erabiliz, edo "
+"existitzen den fitxategi bat ireki dezakezu."
 
 #: libs/ui/KisApplication.cpp:878
 #, kde-format
@@ -30122,7 +30004,7 @@ msgstr "Ezin izan du %1 fitxategia ireki"
 #: libs/ui/KisApplication.cpp:897
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
-msgstr "Ezin du gehitu fitxategi geruza: ez dago irekitako dokumenturik."
+msgstr "Ezin du fitxategi geruza gehitu: ez dago irekitako dokumenturik."
 
 #: libs/ui/KisApplication.cpp:1012
 #, kde-format
@@ -30261,7 +30143,7 @@ msgstr "Esportatzeko fitxategi-izena"
 #, kde-format
 msgid "File layer to be added to existing or new file"
 msgstr ""
-"Existitzen den fitxategian edo fitxategi berrian gehitu beharreko fitxategi "
+"Existitzen den fitxategian edo fitxategi berrian gehitu beharreko fitxategi-"
 "geruza"
 
 #: libs/ui/KisApplicationArguments.cpp:99
@@ -31947,7 +31829,7 @@ msgstr "Ka&nporaketa:"
 #: libs/ui/layerstyles/wdgblendingoptions.ui:216
 #, kde-format
 msgid "Set the interior transparency. Shallow = Group, Deep = Background"
-msgstr "Barne-gardentasuna ezartzea. Azalekoa = Taldea, Sakona = Atzeko-planoa"
+msgstr "Barne-gardentasuna ezarri. Azalekoa = Taldea, Sakona = Atzeko-planoa"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbKnockout)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:220
@@ -45453,7 +45335,7 @@ msgstr "Euri-tantak"
 #: plugins/filters/randompickfilter/randompickfilter.cpp:54
 #, kde-format
 msgid "&Random Pick..."
-msgstr "&Ausazko hautaketa..."
+msgstr "Ausa&zko hautaketa..."
 
 #: plugins/filters/randompickfilter/randompickfilter.h:37
 #, kde-format
@@ -48247,8 +48129,8 @@ msgid ""
 "The file contains a clone layer that has an incorrect source node id. This "
 "layer will be converted into a paint layer."
 msgstr ""
-"Fitxategiak jatorri-nodo-ID akastun bat duen klon geruza bat du. Geruza hori "
-"pintura-geruza bihurtuko da."
+"Fitxategiak jatorri-nodo-ID akastun bat duen klon-geruza bat du. Geruza hori "
+"margo-geruza bihurtuko da."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
 #, kde-format
@@ -48435,13 +48317,13 @@ msgid ""
 "\n"
 "Do you want to locate it manually?"
 msgstr ""
-"«%1» izeneko fitxategiko geruza batekin elkartutako fitxategia ez da "
+"\"%1\" izeneko fitxategi-geruza batekin elkartutako fitxategia ez da "
 "aurkitu.\n"
 "\n"
 "Espero zen bide-izena:\n"
 "%2\n"
 "\n"
-"Eskuz aurkitu nahi duzu?"
+"Eskuz bilatu nahi duzu?"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:93
 #, kde-format
@@ -48584,12 +48466,10 @@ msgstr "Ezin izan ditu animazioaren meta-datuak gorde."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:316
 #: plugins/impex/libkra/kis_kra_saver.cpp:339
-#, fuzzy, kde-format
-#| msgctxt "Error message when saving a .kra file"
-#| msgid "Could not save animation meta data."
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
-msgstr "Ezin izan ditu animazioaren meta-datuak gorde."
+msgstr "Ezin izan ditu audioaren meta-datuak gorde."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:452
 #, kde-format
@@ -48905,7 +48785,7 @@ msgstr "Konprimatzea (galerarik gabe):"
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:127
 #, kde-format
 msgid "Disable to get smaller files if your image has no transparency"
-msgstr "Irudiak gardentasunik ez badu, desgaitu fitxategi txikiagoak lortzeko"
+msgstr "Irudiak gardentasunik ez badu, desgaitu, fitxategi txikiagoak lortzeko"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, alpha)
 #: plugins/impex/png/kis_wdg_options_png.ui:181
@@ -52517,7 +52397,7 @@ msgstr "Abiadura"
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Fade"
-msgstr "Moteldu"
+msgstr "Moteltzea"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:15
 #, kde-format
@@ -52686,7 +52566,7 @@ msgstr "Irudi animatua"
 #: plugins/paintops/libpaintop/KisScatterOptionData.cpp:30
 #, kde-format
 msgid "Scatter"
-msgstr "Barreiadura"
+msgstr "Sakabanaketa"
 
 #: plugins/paintops/libpaintop/KisScatterOptionWidget.cpp:45
 #, kde-format
@@ -52701,7 +52581,7 @@ msgstr "Y ardatza"
 #: plugins/paintops/libpaintop/KisScatterOptionWidget.cpp:47
 #, kde-format
 msgid "Scatter amount"
-msgstr "Barreiadura kantitatea"
+msgstr "Sakabanaketa kopurua"
 
 #: plugins/paintops/libpaintop/KisSharpnessOptionData.cpp:32
 #, kde-format
@@ -59201,7 +59081,7 @@ msgstr "Kolore zehatz bateko eskualdeak"
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
-msgstr ""
+msgstr "Dena, gardentasuna izan ezik"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
 #, fuzzy, kde-format
@@ -59394,7 +59274,7 @@ msgstr ""
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:134
 #, kde-format
 msgid "Select a paint layer to use this tool"
-msgstr "Hautatu tresna hau erabiltzeko marko geruza bat"
+msgstr "Hautatu tresna hau erabiltzeko margo-geruza bat"
 
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:173
 msgctxt "(qtundo-format)"

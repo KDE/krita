@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-24 02:22+0000\n"
-"PO-Revision-Date: 2023-08-02 12:43\n"
+"PO-Revision-Date: 2023-08-27 03:43\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -780,7 +780,7 @@ msgstr "j) 水彩-1 基本-5 圆形 颗粒"
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Round-Grunge.kpp"
 msgid "j) WaterC Basic Round-Grunge"
-msgstr "j) 水彩-1 基本-6 圆形 油渍"
+msgstr "j) 水彩-1 基本-6 圆形 脏污"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -2545,7 +2545,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_shade_wash.kpp"
 msgid "Sketch shade wash"
-msgstr "草图 调子 冲刷"
+msgstr "草图 调子 冲染"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -22644,7 +22644,7 @@ msgstr "左键拖动面板"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:325
 #, kde-format
 msgid "On Middle-Click Drag"
-msgstr "中间键拖动面板"
+msgstr "中键拖动面板"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:362
 #, kde-format
@@ -27417,10 +27417,10 @@ msgid ""
 "tablet driver implementation).</p><p><br/></p><p>After changing this option "
 "Krita should be restarted.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>某些数位板只能分配一个笔身按钮给右键/中间键，另一个按钮"
-"被锁定为橡皮擦。可以安装 Wacom Feel Driver 或者第三方程序将两个笔身按钮模拟为"
-"鼠标键。勾选此项后，Krita 将尝试通过鼠标事件来获取右键/中间键点击。</p></"
-"body></html>"
+"<html><head/><body><p>某些数位板只能分配一个笔身按钮给右键/中键，另一个按钮被"
+"锁定为橡皮擦。可以安装 Wacom Feel Driver 或者第三方程序将两个笔身按钮模拟为鼠"
+"标键。勾选此项后，Krita 将尝试通过鼠标事件来获取右键/中键点击。</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseRightMiddleClickWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:180
@@ -27428,7 +27428,7 @@ msgstr ""
 msgid ""
 "Use mouse events for right- and middle-clicks (workaround for convertible "
 "devices, needs restart)"
-msgstr "使用鼠标事件读取右键/中间键 (需要重启)"
+msgstr "使用鼠标事件读取右键/中键 (需要重启)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
 #: libs/ui/forms/wdgtabletsettings.ui:200
@@ -27874,22 +27874,22 @@ msgstr "第三模式"
 #: libs/ui/input/kis_alternate_invocation_action.cpp:35
 #, kde-format
 msgid "Sample Foreground Color from Current Layer"
-msgstr "拾取当前图层颜色到前景色"
+msgstr "拾取当前图层颜色为前景色"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:36
 #, kde-format
 msgid "Sample Background Color from Current Layer"
-msgstr "拾取当前图层颜色到背景色"
+msgstr "拾取当前图层颜色为背景色"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:38
 #, kde-format
 msgid "Sample Foreground Color from Merged Image"
-msgstr "拾取合并图像颜色到前景色"
+msgstr "拾取合并图像颜色为前景色"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:39
 #, kde-format
 msgid "Sample Background Color from Merged Image"
-msgstr "拾取合并图像颜色到背景色"
+msgstr "拾取合并图像颜色为背景色"
 
 #: libs/ui/input/kis_change_frame_action.cpp:26
 #, kde-format
@@ -32074,7 +32074,7 @@ msgstr "无选项"
 #: libs/ui/tool/kis_tool.cc:684
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
-msgstr "此图层只能在冲刷模式下进行绘制。"
+msgstr "此图层只能在冲染模式下进行绘制。"
 
 #: libs/ui/tool/kis_tool.cc:686
 #, kde-format
@@ -36844,7 +36844,7 @@ msgstr "无"
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:60
 #, kde-format
 msgid "When Pressing Middle Mouse Button"
-msgstr "点击中间键显示"
+msgstr "点击中键显示"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:61
 #, kde-format
@@ -51372,7 +51372,7 @@ msgstr "堆积"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2073
 #, kde-format
 msgid "Wash"
-msgstr "冲刷"
+msgstr "冲染"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:54
@@ -51396,9 +51396,9 @@ msgid ""
 "stroke even if you go over the same place again and again.</p></html>"
 msgstr ""
 "<html>\n"
-"<p><b>绘画模式</b>：Krita 有两种绘画模式：<b>堆积</b>和<b>冲刷</b>。堆积模式"
+"<p><b>绘画模式</b>：Krita 有两种绘画模式：<b>堆积</b>和<b>冲染</b>。堆积模式"
 "下，同一条笔画中的笔尖印迹会在互相重叠处加深 ，一条笔画内部的颜色可能会不均"
-"匀；冲刷模式下，同一条笔画中的笔尖印迹不会在互相重叠处加深，一条笔画内部的颜"
+"匀；冲染模式下，同一条笔画中的笔尖印迹不会在互相重叠处加深，一条笔画内部的颜"
 "色总是均匀的。</p></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, stampButton)
@@ -52028,7 +52028,7 @@ msgstr "垂直"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Only wash mode is possible when using a masked brush."
-msgstr "使用蒙版笔刷时，只可使用冲刷模式。"
+msgstr "使用蒙版笔刷时，只可使用冲染模式。"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
 #, kde-format
@@ -58867,7 +58867,7 @@ msgid ""
 "deformations one on top of the other without any limits. Wash mode gradually "
 "deforms the piece to the selected deformation level."
 msgstr ""
-"在堆积模式和冲刷模式之间切换。堆积模式不限制单笔变形的累计变形幅度。冲刷模式"
+"在堆积模式和冲染模式之间切换。堆积模式不限制单笔变形的累计变形幅度。冲染模式"
 "不允许单笔变形的累计幅度超出设定的最大变形幅度。"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:241

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-24 02:22+0000\n"
-"PO-Revision-Date: 2023-08-13 19:17+0200\n"
+"PO-Revision-Date: 2023-08-25 19:00+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -18876,7 +18876,7 @@ msgstr "Exclusió"
 #, kde-format
 msgctxt "Blending mode - Arcus Tangent"
 msgid "Arcus Tangent"
-msgstr "Arc tangent"
+msgstr "Arctangent"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:107
 #, kde-format
@@ -36346,8 +36346,9 @@ msgid ""
 "Ctrl+V) shown in the right column."
 msgstr ""
 "Ací podeu veure una llista dels lligams de tecla, associacions entre accions "
-"(p. ex. «Copia») mostrades en la columna de l'esquerra i tecles o "
-"combinacions de tecles (p. ex. «Ctrl+V») mostrades en la columna de la dreta."
+"(p. ex., «Copia») mostrades en la columna de l'esquerra i tecles o "
+"combinacions de tecles (p. ex., «Ctrl+V») mostrades en la columna de la "
+"dreta."
 
 #. i18n: ectx: property (text), widget (QTreeWidget, list)
 #: libs/widgetutils/xmlgui/KisShortcutsDialog.ui:38
@@ -47547,13 +47548,13 @@ msgstr "Activada"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "VarDCT mode (e.g. for photographic images)"
-msgstr "Mode VarDCT (p. ex. per a imatges fotogràfiques)"
+msgstr "Mode VarDCT (p. ex., per a imatges fotogràfiques)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:53
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Modular mode (e.g. for lossless images)"
-msgstr "Mode modular (p. ex. per a imatges sense pèrdua)"
+msgstr "Mode modular (p. ex., per a imatges sense pèrdua)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:64
 #, kde-format
@@ -47783,7 +47784,7 @@ msgid ""
 msgstr ""
 "Utilitza la codificació modular en lloc de la VarDCT predeterminada per a la "
 "compressió amb pèrdua\n"
-"(p. ex. per a imatges no fotogràfiques).\n"
+"(p. ex., per a imatges no fotogràfiques).\n"
 "Predeterminada: desactivada."
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceModular)

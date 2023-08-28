@@ -99,6 +99,16 @@ static bool getFirstPosition(QPointF &firstPoint,
                              KoSvgText::WritingMode writingMode,
                              bool ltr)
 {
+    if (wordBox.isEmpty()) {
+        // line-height: 0 will give us empty rects, make them slightly tall/wide
+        // to avoid issues with complex QRectF operations.
+        if (writingMode == KoSvgText::HorizontalTB) {
+            wordBox.setHeight(1e-3);
+        } else {
+            wordBox.setWidth(1e-3);
+        }
+    }
+
     QVector<QPointF> candidatePositions;
     QRectF word = wordBox.normalized();
     qreal precision = 1.0; // floating point maths can be imprecise. TODO: make smaller?.

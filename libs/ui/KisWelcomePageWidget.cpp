@@ -378,7 +378,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
     kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")));
 
-    lblBanner->setPixmap(QPixmap::fromImage(m_bannerImage));
+    lblBanner->setUnscaledPixmap(QPixmap::fromImage(m_bannerImage));
     connect(lblBanner, SIGNAL(clicked()), this, SLOT(slotBannerClicked()));
     lblBanner->setVisible(m_showBanner);
 

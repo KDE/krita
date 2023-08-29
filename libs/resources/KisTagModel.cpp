@@ -223,7 +223,7 @@ bool KisAllTagsModel::setData(const QModelIndex &index, const QVariant &value, i
     int id = data(index, Qt::UserRole + Id).toInt();
 
     if (index.isValid() &&
-        (role == Qt::CheckStateRole || role == Active)) {
+        (role == Qt::CheckStateRole || role == Qt::UserRole + Active)) {
 
         QSqlQuery q;
         if (!q.prepare("UPDATE tags\n"

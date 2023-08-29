@@ -604,6 +604,12 @@ KisOpenGL::RendererConfig generateSurfaceConfig(KisOpenGL::OpenGLRenderer render
         // Make sure to request a Compatibility profile to have NVIDIA
         // return the maximum supported GL version.
         format.setProfile(QSurfaceFormat::CompatibilityProfile);
+#ifdef Q_OS_WIN
+        // Some parts of Qt seems to require deprecated functions. On Windows
+        // with the Intel Graphics driver, things like canvas decorations and
+        // the Touch Docker does not render without this option.
+        format.setOptions(QSurfaceFormat::DeprecatedFunctions);
+#endif
 #endif
         break;
     case QOpenGLContext::LibGLES:

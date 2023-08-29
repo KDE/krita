@@ -17,9 +17,10 @@
 #include <FlakeDebug.h>
 
 #include <QColor>
+#include <QDir>
 #include <QPainter>
 #include <QPainterPath>
-#include <QDir>
+#include <QRandomGenerator>
 
 #include <KoShape.h>
 #include <KoShapeRegistry.h>
@@ -2297,6 +2298,17 @@ void SvgParser::applyId(const QString &id, KoShape *shape)
     if (id.isEmpty())
         return;
 
-    shape->setName(id);
-    m_context.registerShape(id, shape);
+    KoShape *existingShape = m_context.shapeById(id);
+    if (existingShape) {
+        debugFlake << "SVG contains nodes with duplicated id:" << id;
+        // Generate a random name and just don't register the shape.
+        // We don't use the name as a unique identifier so we don't need to
+        // worry about the extremely rare case of name collision.
+        const QString suffix = QString::number(QRandomGenerator::system()->bounded(0x10000000, 0x7FFFFFFF), 16);
+        const QString newName = id + '_' + suffix;
+        shape->setName(newName);
+    } else {
+        shape->setName(id);
+        m_context.registerShape(id, shape);
+    }
 }

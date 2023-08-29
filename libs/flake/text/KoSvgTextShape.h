@@ -145,6 +145,22 @@ public:
      */
     int lineEnd(int pos);
 
+    /**
+     * @brief wordLeft
+     * return the cursorpos for the word left or the extreme of the line.
+     * @param pos the position.
+     * @param visual whether to flip for rtl.
+     * @return the first pos before a wordbreak at the left.
+     */
+    int wordLeft(int pos, bool visual = false);
+    /**
+     * @brief wordRight
+     * return the cursorpos for the word right or the extreme of the line.
+     * @param pos the position.
+     * @param visual whether to flip for rtl.
+     * @return the first word break at the right.
+     */
+    int wordRight(int pos, bool visual = false);
 
     /**
      * @brief cursorForPos
@@ -256,6 +272,21 @@ private:
      * @return the pos on the previous line;
      */
     int previousLine(int pos);
+
+    /**
+     * @brief wordEnd
+     * return the pos of the first wordbreak.
+     * @param pos -- cursor position.
+     * @return the first wordbreak or line end.
+     */
+    int wordEnd(int pos);
+    /**
+     * @brief wordStart
+     * return the first pos before a wordbreak in the start direction.
+     * @param pos -- cursor position
+     * @return the first position before a wordbreak or the line start.
+     */
+    int wordStart(int pos);
 
     class Private;
     QScopedPointer<Private> d;

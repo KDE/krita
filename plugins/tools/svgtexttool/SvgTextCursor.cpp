@@ -96,7 +96,11 @@ void SvgTextCursor::moveCursor(MoveMode mode, bool moveAnchor)
             d->pos = d->shape->posUp(d->pos, d->visualNavigation);
         } else if (mode == MoveDown) {
             d->pos = d->shape->posDown(d->pos, d->visualNavigation);
-        } else if (mode == MoveLineStart) {
+        } else if (mode == MoveWordLeft) {
+            d->pos = d->shape->wordLeft(d->pos, d->visualNavigation);
+        } else if (mode == MoveWordRight) {
+            d->pos = d->shape->wordRight(d->pos, d->visualNavigation);
+        }  else if (mode == MoveLineStart) {
             d->pos = d->shape->lineStart(d->pos);
         } else if (mode == MoveLineEnd) {
             d->pos = d->shape->lineEnd(d->pos);

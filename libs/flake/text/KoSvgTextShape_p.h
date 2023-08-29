@@ -48,6 +48,7 @@ struct CursorInfo {
     QVector<int> graphemeIndices; ///< The text-string indices of graphemes starting here, starting grapheme is not present.
     QVector<QPointF> offsets; ///< The advance offsets for each grapheme index.
     bool rtl = false; ///< Whether the current glyph is right-to-left, as opposed to the markup.
+    bool isWordBoundary = false;
 };
 
 struct CursorPos {

@@ -26,6 +26,7 @@
 #include <variant>
 
 #include <graphemebreak.h>
+#include <wordbreak.h>
 #include <linebreak.h>
 
 #include <ft2build.h>
@@ -179,11 +180,13 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     }
     QVector<QPair<bool, bool>> justify;
     QVector<char> lineBreaks(text.size());
+    QVector<char> wordBreaks(text.size());
     QVector<char> graphemeBreaks(text.size());
     if (text.size() > 0) {
         // TODO: Figure out how to gracefully skip all the next steps when the text-size is 0.
         // can't currently remember if removing the associated outlines was all that is necessary.
         set_linebreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), lang.toUtf8().data(), lineBreaks.data());
+        set_wordbreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), lang.toUtf8().data(), wordBreaks.data());
         set_graphemebreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), lang.toUtf8().data(), graphemeBreaks.data());
         justify = KoCssTextUtils::justificationOpportunities(text, lang);
     }
@@ -339,6 +342,9 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                         cr.lineEnd = KoCssTextUtils::characterCanHang(text.at(start + i), KoSvgText::HangEnd) ? edge : cr.lineEnd;
                     }
                 }
+
+                cr.cursorInfo.isWordBoundary = (wordBreaks[start + i] == WORDBREAK_BREAK);
+
                 if (text.at(start + i) == QChar::Tabulation) {
                     tabSizeInfo.insert(start + i, tabInfo);
                 }

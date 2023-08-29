@@ -28,6 +28,8 @@ public:
         MoveRight,
         MoveUp,
         MoveDown,
+        MoveWordLeft,
+        MoveWordRight,
         MoveLineStart,
         MoveLineEnd,
         ParagraphStart,

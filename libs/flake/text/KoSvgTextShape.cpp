@@ -181,6 +181,33 @@ int KoSvgTextShape::lineEnd(int pos)
     return candidate;
 }
 
+int KoSvgTextShape::wordLeft(int pos, bool visual)
+{
+    //TODO: figure out preferred behaviour for wordLeft in RTL && visual.
+    Q_UNUSED(visual)
+    if (pos < 0 || pos > d->cursorPos.size()-1 || d->result.isEmpty() || d->cursorPos.isEmpty()) {
+        return pos;
+    }
+    KoSvgText::Direction direction = KoSvgText::Direction(this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+    if (direction == KoSvgText::DirectionRightToLeft) {
+        return wordEnd(pos);
+    }
+    return wordStart(pos);
+}
+
+int KoSvgTextShape::wordRight(int pos, bool visual)
+{
+    Q_UNUSED(visual)
+    if (pos < 0 || pos > d->cursorPos.size()-1 || d->result.isEmpty() || d->cursorPos.isEmpty()) {
+        return pos;
+    }
+    KoSvgText::Direction direction = KoSvgText::Direction(this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+    if (direction == KoSvgText::DirectionRightToLeft) {
+        return wordStart(pos);
+    }
+    return wordEnd(pos);
+}
+
 int KoSvgTextShape::nextPos(int pos, bool visual)
 {
     if (d->cursorPos.isEmpty()) {
@@ -248,6 +275,55 @@ int KoSvgTextShape::previousLine(int pos)
     }
 
     return candidate;
+}
+
+int KoSvgTextShape::wordEnd(int pos)
+{
+    if (pos < 0 || pos > d->cursorPos.size()-1 || d->result.isEmpty() || d->cursorPos.isEmpty()) {
+        return pos;
+    }
+    int currentLineEnd = lineEnd(pos);
+    if (pos == currentLineEnd) {
+        currentLineEnd = lineEnd(pos+1);
+    }
+
+    int wordEnd = pos;
+    bool breakNext = false;
+    for (int i = pos; i<= currentLineEnd; i++) {
+        wordEnd = i;
+        if (breakNext) break;
+        if (d->result.at(d->cursorPos.at(i).cluster).cursorInfo.isWordBoundary && i != pos) {
+            breakNext = true;
+        }
+
+    }
+
+    return wordEnd;
+}
+
+int KoSvgTextShape::wordStart(int pos)
+{
+    if (pos < 0 || pos > d->cursorPos.size()-1 || d->result.isEmpty() || d->cursorPos.isEmpty()) {
+        return pos;
+    }
+    int currentLineStart = lineStart(pos);
+    if (pos == currentLineStart) {
+        currentLineStart = lineStart(pos-1);
+    }
+
+    int wordStart = pos;
+    for (int i = pos; i >= currentLineStart; i--) {
+        if (i == currentLineStart) {
+            wordStart = i;
+            break;
+        }
+        if (d->result.at(d->cursorPos.at(i).cluster).cursorInfo.isWordBoundary && i != pos && wordStart != pos) {
+            break;
+        }
+        wordStart = i;
+    }
+
+    return wordStart;
 }
 
 QPainterPath KoSvgTextShape::cursorForPos(int pos, double bidiFlagSize)

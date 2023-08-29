@@ -693,11 +693,19 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
 
         bool select = event->modifiers().testFlag(Qt::ShiftModifier);
         if (event->key() == Qt::Key_Right) {
-            m_textCursor.moveCursor(SvgTextCursor::MoveRight, !select);
+            if (event->modifiers().testFlag(Qt::ControlModifier)) {
+                m_textCursor.moveCursor(SvgTextCursor::MoveWordRight, !select);
+            } else {
+                m_textCursor.moveCursor(SvgTextCursor::MoveRight, !select);
+            }
             event->accept();
 
         } else if (event->key() == Qt::Key_Left) {
-            m_textCursor.moveCursor(SvgTextCursor::MoveLeft, !select);
+            if (event->modifiers().testFlag(Qt::ControlModifier)) {
+                m_textCursor.moveCursor(SvgTextCursor::MoveWordLeft, !select);
+            } else {
+                m_textCursor.moveCursor(SvgTextCursor::MoveLeft, !select);
+            }
             event->accept();
         } else if (event->key() == Qt::Key_Up) {
             m_textCursor.moveCursor(SvgTextCursor::MoveUp, !select);

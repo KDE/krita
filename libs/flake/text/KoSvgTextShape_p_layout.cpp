@@ -781,7 +781,8 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                             pos.cluster = cursorPos.last().cluster;
                             pos.index = result.at(i).plaintTextIndex;
                             result[pos.cluster].cursorInfo.graphemeIndices.append(pos.index);
-                            result[pos.cluster].cursorInfo.offsets.append(result[pos.cluster].advance);
+                            QPointF newOffset = result[pos.cluster].cursorInfo.rtl? QPointF(): result[pos.cluster].advance;
+                            result[pos.cluster].cursorInfo.offsets.append(newOffset);
                             int size = result.at(i).cursorInfo.graphemeIndices.size();
                             pos.offset = size;
                             pos.synthetic = true;
@@ -823,7 +824,8 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         CursorPos pos;
         pos.cluster = cursorPos.last().cluster;
         result[pos.cluster].cursorInfo.graphemeIndices.append(text.size());
-        result[pos.cluster].cursorInfo.offsets.append(result[pos.cluster].advance);
+        QPointF newOffset = result[pos.cluster].cursorInfo.rtl? QPointF(): result[pos.cluster].advance;
+        result[pos.cluster].cursorInfo.offsets.append(newOffset);
         pos.offset = result[pos.cluster].cursorInfo.graphemeIndices.size();
         pos.index = plainText.size();
         cursorPos.append(pos);

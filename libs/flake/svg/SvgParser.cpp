@@ -1832,15 +1832,21 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
         p.setAttribute("d", e.attribute("path"));
         KoShape *s = createPath(p);
         textChunk->setTextPath(s);
-    } else if (e.hasAttribute("href")) {
-        KoShape *s = m_context.shapeById(e.attribute("href").remove(0, 1));
-        if (s) {
-            textChunk->setTextPath(s->cloneShape());
+    } else {
+        QString pathId;
+        if (e.hasAttribute("href")) {
+            pathId = e.attribute("href").remove(0, 1);
+        } else if (e.hasAttribute("xlink:href")) {
+            pathId = e.attribute("xlink:href").remove(0, 1);
         }
-    } else if (e.hasAttribute("xlink:href")) {
-        KoShape *s = m_context.shapeById(e.attribute("xlink:href").remove(0, 1));
-        if (s) {
-            textChunk->setTextPath(s->cloneShape());
+        if (!pathId.isNull()) {
+            KoShape *s = m_context.shapeById(pathId);
+            if (s) {
+                const QTransform absTf = s->absoluteTransformation();
+                KoShape *cloned = s->cloneShape();
+                cloned->setTransformation(absTf * m_shapeParentTransform.value(s).inverted());
+                textChunk->setTextPath(cloned);
+            }
         }
     }
 
@@ -2090,6 +2096,9 @@ KoShape * SvgParser::createObjectDirect(const QDomElement &b)
 
     m_context.popGraphicsContext();
 
+    if (obj) {
+        m_shapeParentTransform.insert(obj, m_context.currentGC()->matrix);
+    }
     return obj;
 }
 
@@ -2112,6 +2121,10 @@ KoShape * SvgParser::createObject(const QDomElement &b, const SvgStyles &style)
     }
 
     m_context.popGraphicsContext();
+
+    if (obj) {
+        m_shapeParentTransform.insert(obj, m_context.currentGC()->matrix);
+    }
 
     return obj;
 }
@@ -2185,7 +2198,10 @@ KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value,
         start = value.indexOf('#') + 1;
         KoShape *s = m_context.shapeById(value.mid(start, end - start));
         if (s) {
-            return s->cloneShape();
+            const QTransform absTf = s->absoluteTransformation();
+            KoShape *cloned = s->cloneShape();
+            cloned->setTransformation(absTf * m_shapeParentTransform.value(s).inverted());
+            return cloned;
         }
     } else if (value.startsWith("circle(")) {
         el = e.ownerDocument().createElement("circle");

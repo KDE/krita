@@ -145,13 +145,10 @@ void SvgTextCursor::removeLast()
             removeCmd = removeSelection();
         } else {
             int oldIndex = d->shape->indexForPos(d->pos);
-            int newPos = d->shape->posForIndex(oldIndex-1, true, true);
-            int newIndex = d->shape->indexForPos(newPos);
-
-            removeCmd = new SvgTextRemoveCommand(d->shape, newPos, oldIndex-newIndex);
-            d->tool->addCommand(removeCmd);
-            d->pos = newPos;
+            d->pos = d->shape->posForIndex(oldIndex-1, true, true);
             d->anchor = d->pos;
+
+            removeCmd = new SvgTextRemoveCommand(d->shape, d->pos, 1);
         }
         if (removeCmd) {
             d->tool->addCommand(removeCmd);
@@ -168,8 +165,6 @@ void SvgTextCursor::removeNext()
             removeCmd = removeSelection();
         } else {
             removeCmd = new SvgTextRemoveCommand(d->shape, d->pos, 1);
-            d->anchor = d->pos;
-
         }
         if (removeCmd) {
             d->tool->addCommand(removeCmd);

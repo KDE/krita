@@ -97,7 +97,7 @@ int KoSvgTextShape::posLeft(int pos, bool visual)
     } else if (mode == KoSvgText::VerticalLR) {
         return previousLine(pos);
     } else {
-        if (direction == KoSvgText::DirectionRightToLeft && !visual) {
+        if (direction == KoSvgText::DirectionRightToLeft) {
             return nextPos(pos, visual);
         } else {
             return previousPos(pos, visual);
@@ -115,7 +115,7 @@ int KoSvgTextShape::posRight(int pos, bool visual)
     } else if (mode == KoSvgText::VerticalLR) {
         return nextLine(pos);
     } else {
-        if (direction == KoSvgText::DirectionRightToLeft && !visual) {
+        if (direction == KoSvgText::DirectionRightToLeft) {
             return previousPos(pos, visual);
         } else {
             return nextPos(pos, visual);

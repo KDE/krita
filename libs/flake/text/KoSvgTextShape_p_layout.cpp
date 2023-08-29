@@ -53,11 +53,13 @@ using KoSvgTextShapeLayoutFunc::flowTextInShapes;
  */
 QMap<int, int> logicalToVisualCursorPositions(QVector<CursorPos> cursorPos
                                               , QVector<CharacterResult> result
-                                              , QVector<LineBox> lines) {
+                                              , QVector<LineBox> lines
+                                              , bool ltr = false) {
     QMap<int, int> logicalToVisual;
     for (int i = 0; i < lines.size(); i++) {
         Q_FOREACH(LineChunk chunk, lines.at(i).chunks) {
             QMap<int, int> visualToLogical;
+            QVector<int> visual;
             Q_FOREACH(int j, chunk.chunkIndices) {
                 visualToLogical.insert(result.at(j).visualIndex, j);
             }
@@ -70,7 +72,17 @@ QMap<int, int> logicalToVisualCursorPositions(QVector<CursorPos> cursorPos
                 }
                 Q_FOREACH(int k, relevant.keys()) {
                     int final = result.at(j).cursorInfo.rtl? relevant.size()-1-k: k;
-                    logicalToVisual.insert(relevant.value(final), logicalToVisual.size());
+                    visual.append(relevant.value(final));
+                }
+            }
+
+            if (ltr) {
+                for (int k = 0; k < visual.size(); k++) {
+                    logicalToVisual.insert(visual.at(k), logicalToVisual.size());
+                }
+            } else {
+                for (int k = visual.size()-1; k > -1; k--) {
+                    logicalToVisual.insert(visual.at(k), logicalToVisual.size());
                 }
             }
         }
@@ -819,7 +831,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     this->plainText = plainText;
     this->result = result;
     this->cursorPos = cursorPos;
-    this->logicalToVisualCursorPos = logicalToVisualCursorPositions(cursorPos, result, this->lineBoxes);
+    this->logicalToVisualCursorPos = logicalToVisualCursorPositions(cursorPos, result, this->lineBoxes, direction == KoSvgText::DirectionLeftToRight);
 }
 
 void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)

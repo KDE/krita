@@ -1136,11 +1136,18 @@ void TestSvgParser::testRenderStrokeWithInlineStyle()
 
 void TestSvgParser::testIccColor()
 {
+#ifdef Q_OS_WIN
+    // HACK: For reasons yet unknown, the profile unique id is different on Windows.
+    // See https://invent.kde.org/graphics/krita/-/commit/1191295a4618a93893987497e3c54e6f0c2fd025#note_634123
+#define PROFILE_UNIQUE_ID_HEX "84f64878faf21217362594685be031d5"
+#else
+#define PROFILE_UNIQUE_ID_HEX "133a66607cffeebdd64dd433ada9bf4e"
+#endif
     struct ScopedProfileRemover
     {
         ScopedProfileRemover()
             : m_profile(KoColorSpaceRegistry::instance()->profileByUniqueId(
-                QByteArray::fromHex("84f64878faf21217362594685be031d5")))
+                QByteArray::fromHex(PROFILE_UNIQUE_ID_HEX)))
         {
             if (m_profile) {
                 qWarning() << "Profile already loaded, removing profile before test";
@@ -1168,10 +1175,10 @@ void TestSvgParser::testIccColor()
 
         "<g xml:base=\"icc\">"
         "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
-        "        local=\"84f64878faf21217362594685be031d5\" name=\"default-profile\"/>"
+        "        local=\"" PROFILE_UNIQUE_ID_HEX "\" name=\"default-profile\"/>"
 
         "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
-        "        local=\"84f64878faf21217362594685be031d5\" name=\"some-other-name\"/>"
+        "        local=\"" PROFILE_UNIQUE_ID_HEX "\" name=\"some-other-name\"/>"
 
         "    <rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
         "        style = \"fill: red icc-color(default-profile, 0, 1, 1); stroke :blue; stroke-width:2;\"/>"
@@ -1204,6 +1211,7 @@ void TestSvgParser::testIccColor()
         QVERIFY2(bg->color() == QColor("#00FFFF"), "icc-color is not being loaded during parsing");
     }
     QCOMPARE(numFetches, 1);
+#undef PROFILE_UNIQUE_ID_HEX
 }
 
 void TestSvgParser::testRenderFillLinearGradientRelativePercent()

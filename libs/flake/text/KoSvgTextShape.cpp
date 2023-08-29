@@ -97,10 +97,10 @@ int KoSvgTextShape::posLeft(int pos, bool visual)
     } else if (mode == KoSvgText::VerticalLR) {
         return previousLine(pos);
     } else {
-        if (direction == KoSvgText::DirectionRightToLeft && visual) {
-            return nextPos(pos);
+        if (direction == KoSvgText::DirectionRightToLeft && !visual) {
+            return nextPos(pos, visual);
         } else {
-            return previousPos(pos);
+            return previousPos(pos, visual);
         }
     }
 }
@@ -115,20 +115,19 @@ int KoSvgTextShape::posRight(int pos, bool visual)
     } else if (mode == KoSvgText::VerticalLR) {
         return nextLine(pos);
     } else {
-        if (direction == KoSvgText::DirectionRightToLeft && visual) {
-            return previousPos(pos);
+        if (direction == KoSvgText::DirectionRightToLeft && !visual) {
+            return previousPos(pos, visual);
         } else {
-            return nextPos(pos);
+            return nextPos(pos, visual);
         }
     }
 }
 
 int KoSvgTextShape::posUp(int pos, bool visual)
 {
-    Q_UNUSED(visual);
     KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
     if (mode == KoSvgText::VerticalRL || mode == KoSvgText::VerticalLR) {
-        return previousPos(pos);
+        return previousPos(pos, visual);
     } else {
         return previousLine(pos);
     }
@@ -136,10 +135,9 @@ int KoSvgTextShape::posUp(int pos, bool visual)
 
 int KoSvgTextShape::posDown(int pos, bool visual)
 {
-    Q_UNUSED(visual);
     KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
     if (mode == KoSvgText::VerticalRL || mode == KoSvgText::VerticalLR) {
-        return nextPos(pos);
+        return nextPos(pos, visual);
     } else {
         return nextLine(pos);
     }
@@ -183,19 +181,31 @@ int KoSvgTextShape::lineEnd(int pos)
     return candidate;
 }
 
-int KoSvgTextShape::nextPos(int pos)
+int KoSvgTextShape::nextPos(int pos, bool visual)
 {
     if (d->cursorPos.isEmpty()) {
         return -1;
     }
+
+    if(visual) {
+        int visualIndex = d->logicalToVisualCursorPos.value(pos);
+        return d->logicalToVisualCursorPos.key(qMin(visualIndex + 1, d->cursorPos.size() - 1), d->cursorPos.size() - 1);
+    }
+
     return qMin(pos + 1, d->cursorPos.size() - 1);
 }
 
-int KoSvgTextShape::previousPos(int pos)
+int KoSvgTextShape::previousPos(int pos, bool visual)
 {
     if (d->cursorPos.isEmpty()) {
         return -1;
     }
+
+    if(visual) {
+        int visualIndex = d->logicalToVisualCursorPos.value(pos);
+        return d->logicalToVisualCursorPos.key(qMax(visualIndex - 1, 0), 0);
+    }
+
     return qMax(pos - 1, 0);
 }
 
@@ -240,7 +250,7 @@ int KoSvgTextShape::previousLine(int pos)
     return candidate;
 }
 
-QPainterPath KoSvgTextShape::cursorForPos(int pos)
+QPainterPath KoSvgTextShape::cursorForPos(int pos, double bidiFlagSize)
 {
     QPainterPath p;
 
@@ -256,10 +266,19 @@ QPainterPath KoSvgTextShape::cursorForPos(int pos)
     QLineF caret = res.cursorInfo.caret;
     if (cursorPos.offset > 0 && cursorPos.offset-1 < res.cursorInfo.offsets.size()) {
         caret.translate(res.cursorInfo.offsets.at(cursorPos.offset-1));
+    } else if (res.cursorInfo.rtl) {
+        caret.translate(res.advance);
     }
 
     p.moveTo(tf.map(caret.p1()));
     p.lineTo(tf.map(caret.p2()));
+    if (d->isBidi) {
+        int sign = res.cursorInfo.rtl ? -1 : 1;
+        double bidiFlagHalf = bidiFlagSize * 0.5;
+        // TODO: handle top-to-bottom once text-orientation is tackled.
+        p.lineTo(p.currentPosition().x() + (sign * bidiFlagHalf), p.currentPosition().y() + bidiFlagHalf);
+        p.lineTo(p.currentPosition().x() - (sign * bidiFlagHalf), p.currentPosition().y() + bidiFlagHalf);
+    }
 
     return p;
 }
@@ -316,6 +335,8 @@ int KoSvgTextShape::posForPoint(QPointF point, int start, int end)
         QPointF cursorStart = res.finalPosition;
         if (pos.offset>0 && pos.offset-1 < res.cursorInfo.offsets.size()) {
             cursorStart += res.cursorInfo.offsets.at(pos.offset-1);
+        } else if (res.cursorInfo.rtl) {
+            cursorStart += res.advance;
         }
         double distance = kisDistance(cursorStart, point);
         if (distance < closest) {

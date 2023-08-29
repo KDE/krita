@@ -495,7 +495,7 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
 
     if (charResult.visualIndex == -1) {
         hb_font_t_up font(hb_ft_font_create_referenced(currentGlyph.ftface));
-        CursorInfo cursorInfo;
+        CursorInfo cursorInfo = charResult.cursorInfo;
         qreal lineHeight = (charResult.fontAscent-charResult.fontDescent) * bitmapScale;
             if (isHorizontal) {
                 hb_position_t run = 0;
@@ -513,7 +513,8 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                 cursorInfo.caret = ftTF.map(glyphObliqueTf.map(caret));
 
                 QVector<QPointF> positions;
-                hb_direction_t dir = charResult.direction == KoSvgText::DirectionLeftToRight? HB_DIRECTION_LTR: HB_DIRECTION_RTL;
+                // Ligature caret list only uses direction to determine whether horizontal or vertical.
+                hb_direction_t dir = HB_DIRECTION_LTR;
 
                 uint numCarets = hb_ot_layout_get_ligature_carets(font.data(), dir, currentGlyph.index, 0, nullptr, nullptr);
                 for (uint i=0; i<numCarets; i++) {

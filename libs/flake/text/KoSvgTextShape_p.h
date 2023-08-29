@@ -47,6 +47,7 @@ struct CursorInfo {
     QLineF caret; ///< Caret for this characterResult
     QVector<int> graphemeIndices; ///< The text-string indices of graphemes starting here, starting grapheme is not present.
     QVector<QPointF> offsets; ///< The advance offsets for each grapheme index.
+    bool rtl = false; ///< Whether the current glyph is right-to-left, as opposed to the markup.
 };
 
 struct CursorPos {
@@ -300,8 +301,10 @@ public:
     QVector<LineBox> lineBoxes;
 
     QVector<CursorPos> cursorPos;
+    QMap<int, int> logicalToVisualCursorPos;
 
     QString plainText;
+    bool isBidi = false;
 
     void relayout(const KoSvgTextShape *q);
 

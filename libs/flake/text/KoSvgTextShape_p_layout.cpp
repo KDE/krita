@@ -45,6 +45,40 @@ using KoSvgTextShapeLayoutFunc::breakLines;
 using KoSvgTextShapeLayoutFunc::getShapes;
 using KoSvgTextShapeLayoutFunc::flowTextInShapes;
 
+
+/**
+ * @brief logicalToVisualCursorPositions
+ * Create a map that sorts the cursor positions by the visual index of the cluster.
+ */
+QMap<int, int> logicalToVisualCursorPositions(QVector<CursorPos> cursorPos
+                                              , QVector<CharacterResult> result
+                                              , QVector<LineBox> lines) {
+    QMap<int, int> logicalToVisual;
+    for (int i = 0; i < lines.size(); i++) {
+        Q_FOREACH(LineChunk chunk, lines.at(i).chunks) {
+            QMap<int, int> visualToLogical;
+            Q_FOREACH(int j, chunk.chunkIndices) {
+                visualToLogical.insert(result.at(j).visualIndex, j);
+            }
+            Q_FOREACH(int j, visualToLogical.values()) {
+                QMap<int, int> relevant;
+                for (int k = 0; k < cursorPos.size(); k++) {
+                    if (j == cursorPos.at(k).cluster) {
+                        relevant.insert(cursorPos.at(k).offset, k);
+                    }
+                }
+                Q_FOREACH(int k, relevant.keys()) {
+                    int final = result.at(j).cursorInfo.rtl? relevant.size()-1-k: k;
+                    logicalToVisual.insert(relevant.value(final), logicalToVisual.size());
+                }
+            }
+        }
+    }
+
+    return logicalToVisual;
+}
+
+
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
 {
@@ -532,6 +566,11 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         const char32_t codepoint = getUcs4At(text, cluster);
         debugFlake << "glyph" << i << "cluster" << cluster << currentGlyph.index << codepoint;
 
+        charResult.cursorInfo.rtl = raqm_get_direction_at_index(layout.data(), cluster) == RAQM_DIRECTION_RTL;
+        if (charResult.cursorInfo.rtl != (charResult.direction == KoSvgText::DirectionRightToLeft)) {
+            this->isBidi = true;
+        }
+
         if (!this->loadGlyph(ftTF,
                              tabSizeInfo,
                              faceLoadFlags,
@@ -774,6 +813,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     this->plainText = plainText;
     this->result = result;
     this->cursorPos = cursorPos;
+    this->logicalToVisualCursorPos = logicalToVisualCursorPositions(cursorPos, result, this->lineBoxes);
 }
 
 void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)

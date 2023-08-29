@@ -150,9 +150,10 @@ public:
      * @brief cursorForPos
      * returns the QPainterPath associated with this cursorPosition.
      * @param pos the cursor Position
+     * @param bidiFlagSize -- size of the bidirectional indicator.
      * @return a path to draw a cursor with.
      */
-    QPainterPath cursorForPos(int pos);
+    QPainterPath cursorForPos(int pos, double bidiFlagSize = 1.0);
 
     /**
      * @brief selectionBoxes
@@ -231,7 +232,7 @@ private:
      * @param pos -- cursor position.
      * @return the next pos;
      */
-    int nextPos(int pos);
+    int nextPos(int pos, bool visual);
 
     /**
      * @brief previousPos
@@ -239,7 +240,7 @@ private:
      * @param pos -- cursor position.
      * @return the previous pos;
      */
-    int previousPos(int pos);
+    int previousPos(int pos, bool visual);
 
     /**
      * @brief nextLine

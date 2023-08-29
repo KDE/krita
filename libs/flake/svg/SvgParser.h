@@ -204,7 +204,6 @@ protected:
     void applyViewBoxTransform(const QDomElement &element);
 
 private:
-    QSizeF m_documentSize;
     SvgLoadingContext m_context;
     QMap<QString, SvgGradientHelper> m_gradients;
     QMap<QString, SvgFilterHelper> m_filters;
@@ -219,6 +218,7 @@ private:
     QString m_documentTitle;
     QString m_documentDescription;
     QVector<KoID> m_warnings;
+    QMap<KoShape *, QTransform> m_shapeParentTransform;
 };
 
 #endif

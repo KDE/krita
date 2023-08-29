@@ -1630,6 +1630,7 @@ void KisMainWindow::setMainWindowLayoutForCurrentMainWidget(int widgetIndex)
     }
     else {
         setAutoSaveSettings(d->windowStateConfig, false);
+        statusBar()->setVisible(KisConfig(true).showStatusBar());
     }
 
     QList<QAction *> actions = d->dockWidgetMenu->menu()->actions();

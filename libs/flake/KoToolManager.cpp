@@ -531,10 +531,26 @@ void KoToolManager::Private::postSwitchTool()
     if (canvasData->canvas->canvas()) {
         // Caller of postSwitchTool expect this to be called to update the selected tool
         updateToolForProxy();
+
+        // Activate the actions for the currently active tool
+        //
+        // We should do that **before** calling tool->activate(),
+        // because the tool may have its own logic on activation
+        // of the actions.
+        canvasData->activateToolActions();
+
         canvasData->activeTool->activate(shapesToOperateOn);
         KoCanvasBase *canvas = canvasData->canvas->canvas();
         canvas->updateInputMethodInfo();
     } else {
+
+        // Activate the actions for the currently active tool
+        //
+        // We should do that **before** calling tool->activate(),
+        // because the tool may have its own logic on activation
+        // of the actions.
+        canvasData->activateToolActions();
+
         canvasData->activeTool->activate(shapesToOperateOn);
     }
 
@@ -557,8 +573,6 @@ void KoToolManager::Private::postSwitchTool()
         optionWidgetList.append(toolWidget);
     }
 
-    // Activate the actions for the currently active tool
-    canvasData->activateToolActions();
 
     emit q->changedTool(canvasData->canvas);
 

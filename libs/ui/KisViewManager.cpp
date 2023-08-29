@@ -290,8 +290,6 @@ KisViewManager::KisViewManager(QWidget *parent, KisKActionCollection *_actionCol
     QScopedPointer<KoDummyCanvasController> dummy(new KoDummyCanvasController(actionCollection()));
     KoToolManager::instance()->registerToolActions(actionCollection(), dummy.data());
 
-    QTimer::singleShot(0, this, SLOT(initializeStatusBarVisibility()));
-
     connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(KoInputDevice)),
             d->controlFrame.paintopBox(), SLOT(slotInputDeviceChanged(KoInputDevice)));
 
@@ -1427,11 +1425,6 @@ void KisViewManager::updateIcons()
             }
         }
     }
-}
-void KisViewManager::initializeStatusBarVisibility()
-{
-    KisConfig cfg(true);
-    d->mainWindow->statusBar()->setVisible(cfg.showStatusBar());
 }
 
 void KisViewManager::guiUpdateTimeout()

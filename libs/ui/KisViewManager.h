@@ -248,7 +248,6 @@ private Q_SLOTS:
     void showStatusBar(bool toggled);
     void toggleTabletLogger();
     void openResourcesDirectory();
-    void initializeStatusBarVisibility();
     void guiUpdateTimeout();
     void slotUpdatePixelGridAction();
     void slotSaveShowRulersState(bool value);

@@ -288,6 +288,13 @@ private:
      */
     int wordStart(int pos);
 
+    /**
+     * @brief defaultCursorShape
+     * This returns a default cursor shape for when there's no text inside the text shape.
+     * @return a QPainterPath for a cursor.
+     */
+    QPainterPath defaultCursorShape();
+
     class Private;
     QScopedPointer<Private> d;
 };

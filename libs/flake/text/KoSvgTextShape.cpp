@@ -326,13 +326,33 @@ int KoSvgTextShape::wordStart(int pos)
     return wordStart;
 }
 
+QPainterPath KoSvgTextShape::defaultCursorShape()
+{
+    KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    double fontSize = this->textProperties().propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
+    QPainterPath p;
+    if (mode == KoSvgText::HorizontalTB) {
+        p.moveTo(0, fontSize*0.2);
+        p.lineTo(0, -fontSize);
+    } else {
+        p.moveTo(-fontSize * 0.5, 0);
+        p.lineTo(fontSize, 0);
+    }
+    QVector<KoSvgText::CharTransformation> transforms = this->layoutInterface()->localCharTransformations();
+    if (transforms.size()>0) {
+        p.translate(transforms.first().absolutePos());
+    }
+    //TODO: We should handle the case for positioning on path or in shape.
+
+    return p;
+}
+
 QPainterPath KoSvgTextShape::cursorForPos(int pos, double bidiFlagSize)
 {
-    QPainterPath p;
-
     if (d->result.isEmpty() || d->cursorPos.isEmpty() || pos < 0 || pos >= d->cursorPos.size()) {
-        return p;
+        return defaultCursorShape();
     }
+    QPainterPath p;
 
     CursorPos cursorPos = d->cursorPos.at(pos);
 

@@ -133,6 +133,13 @@ struct FrameMeasure {
         timeSinceLastFrame.start();
     }
 
+    void reset() {
+        timeSinceLastFrame.start();
+        averageTimePerFrame.reset(frameStatsWindow);
+        waitingForFrame = false;
+        droppedFramesStat.reset(frameStatsWindow);
+    }
+
     QElapsedTimer timeSinceLastFrame;
     KisRollingMeanAccumulatorWrapper averageTimePerFrame;
     bool waitingForFrame;
@@ -153,7 +160,7 @@ public:
     }
 
     QScopedPointer<PlaybackDriver> driver;
-    QScopedPointer<FrameMeasure> measure;
+    FrameMeasure measure;
 
 private:
     KisPlaybackEngineQT* self;
@@ -205,16 +212,16 @@ KisPlaybackEngine::PlaybackStats KisPlaybackEngineQT::playbackStatistics() const
 {
     KisPlaybackEngine::PlaybackStats stats;
 
-    if (m_d->measure && activeCanvas()->animationState()->playbackState() == PLAYING) {
-        const int droppedFrames = m_d->measure->droppedFramesStat.rollingSum();
+    if (activeCanvas()->animationState()->playbackState() == PLAYING) {
+        const int droppedFrames = m_d->measure.droppedFramesStat.rollingSum();
         const int totalFrames =
-            m_d->measure->droppedFramesStat.rollingCount() +
+            m_d->measure.droppedFramesStat.rollingCount() +
             droppedFrames;
 
         stats.droppedFramesPortion = qreal(droppedFrames) / totalFrames;
         stats.expectedFps = qreal(activeFramesPerSecond().get_value_or(24)) * m_d->driver->speed();
 
-        const qreal avgTimePerFrame = m_d->measure->averageTimePerFrame.rollingMeanSafe();
+        const qreal avgTimePerFrame = m_d->measure.averageTimePerFrame.rollingMeanSafe();
         stats.realFps = !qFuzzyIsNull(avgTimePerFrame) ? 1000.0 / avgTimePerFrame : 0.0;
     }
 
@@ -226,6 +233,8 @@ void KisPlaybackEngineQT::throttledDriverCallback()
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->driver);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas()->animationState());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas()->animationState()->playbackState() == PLAYING);
+
     KisFrameDisplayProxy* displayProxy = activeCanvas()->animationState()->displayProxy();
     KIS_SAFE_ASSERT_RECOVER_RETURN(displayProxy);
 
@@ -233,10 +242,8 @@ void KisPlaybackEngineQT::throttledDriverCallback()
     KisImageAnimationInterface *animInterface = activeCanvas()->image()->animationInterface();
     KIS_SAFE_ASSERT_RECOVER_RETURN(animInterface);
 
-    KIS_ASSERT(m_d->measure);
-
     // If we're waiting for each frame, then we delay our callback.
-    if (m_d->measure && m_d->measure->waitingForFrame) {
+    if (m_d->measure.waitingForFrame) {
         // Without drop frames on, we need to factor out time that we're waiting
         // for a frame from our time
         return;
@@ -246,20 +253,19 @@ void KisPlaybackEngineQT::throttledDriverCallback()
     const int startFrame = animInterface->activePlaybackRange().start();
     const int endFrame = animInterface->activePlaybackRange().end();
 
-    const int timeSinceLastFrame =  m_d->measure->timeSinceLastFrame.restart();
+    const int timeSinceLastFrame =  m_d->measure.timeSinceLastFrame.restart();
     const int timePerFrame = qRound(1000.0 / qreal(activeFramesPerSecond().get_value_or(24)) / m_d->driver->speed());
-    m_d->measure->averageTimePerFrame(timeSinceLastFrame);
+    m_d->measure.averageTimePerFrame(timeSinceLastFrame);
 
 
     // Drop frames logic...
     int extraFrames = 0;
     if (m_d->driver->dropFrames()) {
-        KIS_ASSERT(m_d->measure);
         const int offset = timeSinceLastFrame - timePerFrame;
         extraFrames = qMax(0, offset) / timePerFrame;
     }
 
-    m_d->measure->droppedFramesStat(extraFrames);
+    m_d->measure.droppedFramesStat(extraFrames);
 
     { // just advance the frame ourselves based on the displayProxy's active frame.
         int targetFrame = currentFrame + 1 + extraFrames;
@@ -268,12 +274,12 @@ void KisPlaybackEngineQT::throttledDriverCallback()
 
         if (currentFrame != targetFrame) {
             // We only wait when drop frames is enabled.
-            m_d->measure->waitingForFrame = !m_d->driver->dropFrames();
+            m_d->measure.waitingForFrame = !m_d->driver->dropFrames();
 
             bool neededRefresh = displayProxy->displayFrame(targetFrame, false);
 
             // If we didn't need to refresh, we just continue as usual.
-            m_d->measure->waitingForFrame = m_d->measure->waitingForFrame && neededRefresh;
+            m_d->measure.waitingForFrame &= neededRefresh;
         }
     }
 }
@@ -354,8 +360,6 @@ void KisPlaybackEngineQT::setCanvas(KoCanvasBase *p_canvas)
                 KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->driver);
 
                 if (state == PLAYING) {
-                    m_d->measure.reset(new FrameMeasure);
-                } else {
                     m_d->measure.reset();
                 }
 
@@ -373,15 +377,11 @@ void KisPlaybackEngineQT::setCanvas(KoCanvasBase *p_canvas)
             KisFrameDisplayProxy* displayProxy = animationState->displayProxy();
             KIS_ASSERT(displayProxy);
             connect(displayProxy, &KisFrameDisplayProxy::sigFrameDisplayRefreshed, this, [this](){
-                if (m_d->measure && m_d->measure->waitingForFrame) {
-                    m_d->measure->waitingForFrame = false;
-                }
+                m_d->measure.waitingForFrame = false;
             });
 
             connect(displayProxy, &KisFrameDisplayProxy::sigFrameRefreshSkipped, this, [this](){
-                if (m_d->measure && m_d->measure->waitingForFrame) {
-                    m_d->measure->waitingForFrame = false;
-                }
+                m_d->measure.waitingForFrame = false;
             });
         }
 

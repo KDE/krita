@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-24 00:44+0000\n"
+"POT-Creation-Date: 2023-08-30 00:44+0000\n"
 "PO-Revision-Date: 2023-08-21 14:07+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
@@ -16373,7 +16373,7 @@ msgstr "Une forme tracée simple"
 msgid "%1 Options"
 msgstr "Options %1 "
 
-#: libs/flake/KoToolManager.cpp:556
+#: libs/flake/KoToolManager.cpp:572
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Outil actif : %1"
@@ -17472,7 +17472,7 @@ msgstr "Traitement"
 
 #: libs/image/kis_psd_layer_style.cpp:104
 #: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1420
-#: libs/ui/KisMainWindow.cpp:1761 libs/ui/KisMainWindow.cpp:1774
+#: libs/ui/KisMainWindow.cpp:1762 libs/ui/KisMainWindow.cpp:1775
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18224,8 +18224,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Séparer l'image"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2132
-#: libs/ui/KisMainWindow.cpp:2215
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2133
+#: libs/ui/KisMainWindow.cpp:2216
 #, kde-format
 msgid "Import frames"
 msgstr "Importer des images"
@@ -19542,10 +19542,10 @@ msgstr "Ressources locales"
 #: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
 #: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:979
 #: libs/ui/KisMainWindow.cpp:1095 libs/ui/KisMainWindow.cpp:1221
-#: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1992
-#: libs/ui/KisMainWindow.cpp:2001 libs/ui/KisMainWindow.cpp:2140
-#: libs/ui/KisMainWindow.cpp:2201 libs/ui/KisMainWindow.cpp:2222
-#: libs/ui/KisMainWindow.cpp:2837 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1993
+#: libs/ui/KisMainWindow.cpp:2002 libs/ui/KisMainWindow.cpp:2141
+#: libs/ui/KisMainWindow.cpp:2202 libs/ui/KisMainWindow.cpp:2223
+#: libs/ui/KisMainWindow.cpp:2838 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20051,7 +20051,7 @@ msgid "Delete resource"
 msgstr "Supprimer la ressource"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:335
-#: libs/ui/KisMainWindow.cpp:2637
+#: libs/ui/KisMainWindow.cpp:2638
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20518,7 +20518,7 @@ msgstr ""
 "de sortie sont incomplets."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2242
+#: libs/ui/KisMainWindow.cpp:2243
 #, kde-format
 msgid "Render Animation"
 msgstr "Rendu de l'animation"
@@ -22728,7 +22728,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Saisissez un nouveau nom de style"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2648
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2649
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -31032,35 +31032,35 @@ msgstr "Exportation"
 msgid "Saving As"
 msgstr "Enregistrer sous"
 
-#: libs/ui/KisMainWindow.cpp:1740
+#: libs/ui/KisMainWindow.cpp:1741
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Créer un nouveau document"
 
-#: libs/ui/KisMainWindow.cpp:1764
+#: libs/ui/KisMainWindow.cpp:1765
 #, kde-format
 msgid "Custom Document"
 msgstr "Document personnalisé"
 
-#: libs/ui/KisMainWindow.cpp:1776
+#: libs/ui/KisMainWindow.cpp:1777
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Créer à partir du presse-papier"
 
-#: libs/ui/KisMainWindow.cpp:1961
+#: libs/ui/KisMainWindow.cpp:1962
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Calques / Masques"
 
-#: libs/ui/KisMainWindow.cpp:1987
+#: libs/ui/KisMainWindow.cpp:1988
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Vous n'avez aucun lot de ressources activé."
 
-#: libs/ui/KisMainWindow.cpp:1991
+#: libs/ui/KisMainWindow.cpp:1992
 #, kde-format
 msgid ""
 "\n"
@@ -31071,7 +31071,7 @@ msgstr ""
 "Il n'y a aucun préréglage de brosse disponible. Veuillez activer un lot "
 "possédant des préréglages de brosse, avant de continuer.\n"
 
-#: libs/ui/KisMainWindow.cpp:2001
+#: libs/ui/KisMainWindow.cpp:2002
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -31082,7 +31082,7 @@ msgstr ""
 "\n"
 "Seules vos ressources locales sont disponibles."
 
-#: libs/ui/KisMainWindow.cpp:2140 libs/ui/KisMainWindow.cpp:2222
+#: libs/ui/KisMainWindow.cpp:2141 libs/ui/KisMainWindow.cpp:2223
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31091,42 +31091,42 @@ msgstr ""
 "Impossible de terminer l'importation de l'animation :\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2201
+#: libs/ui/KisMainWindow.cpp:2202
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "Impossible de créer un nouveau document. Annulation de l'importation pour "
 "l'animation."
 
-#: libs/ui/KisMainWindow.cpp:2628
+#: libs/ui/KisMainWindow.cpp:2629
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importer des espaces de travail..."
 
-#: libs/ui/KisMainWindow.cpp:2643
+#: libs/ui/KisMainWindow.cpp:2644
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nouvel espace de travail..."
 
-#: libs/ui/KisMainWindow.cpp:2647
+#: libs/ui/KisMainWindow.cpp:2648
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nouvel espace de travail"
 
-#: libs/ui/KisMainWindow.cpp:2691
+#: libs/ui/KisMainWindow.cpp:2692
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2694
+#: libs/ui/KisMainWindow.cpp:2695
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2860
+#: libs/ui/KisMainWindow.cpp:2861
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -31135,19 +31135,19 @@ msgstr ""
 "Le module externe « Gestionnaire de couleur Little-CMS de Calligra » n'est "
 "pas installé. Krita va s'arrêter maintenant."
 
-#: libs/ui/KisMainWindow.cpp:2876
+#: libs/ui/KisMainWindow.cpp:2877
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Erreur à l'installation"
 
-#: libs/ui/KisMainWindow.cpp:2985
+#: libs/ui/KisMainWindow.cpp:2986
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Thèmes"
 
-#: libs/ui/KisMainWindow.cpp:3043
+#: libs/ui/KisMainWindow.cpp:3044
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Expansion de l'espaceur"
@@ -31529,36 +31529,36 @@ msgstr "Mais l'épreuve numérique est encore active."
 msgid "Gamut Warnings turned off."
 msgstr "Signalement des couleurs non imprimables inactif."
 
-#: libs/ui/KisViewManager.cpp:791
+#: libs/ui/KisViewManager.cpp:789
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Profil de l'auteur courant"
 
-#: libs/ui/KisViewManager.cpp:921
+#: libs/ui/KisViewManager.cpp:919
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (Copie)"
 
-#: libs/ui/KisViewManager.cpp:1064 libs/ui/KisViewManager.cpp:1145
+#: libs/ui/KisViewManager.cpp:1062 libs/ui/KisViewManager.cpp:1143
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Noms alternatifs épuisés, essayez d'enregistrer manuellement avec un nombre "
 "plus élevé"
 
-#: libs/ui/KisViewManager.cpp:1064
+#: libs/ui/KisViewManager.cpp:1062
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Impossible d'enregistrer la version numérotée"
 
-#: libs/ui/KisViewManager.cpp:1145
+#: libs/ui/KisViewManager.cpp:1143
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Impossible d'enregistrer une copie de sauvegarde numérotée"
 
-#: libs/ui/KisViewManager.cpp:1328
+#: libs/ui/KisViewManager.cpp:1326
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31567,13 +31567,13 @@ msgstr ""
 "Entrée dans le mode Interface cachée. \n"
 "Appuyez sur %1 pour en sortir."
 
-#: libs/ui/KisViewManager.cpp:1368
+#: libs/ui/KisViewManager.cpp:1366
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Ouvrir le dossier de ressources"
 
-#: libs/ui/KisViewManager.cpp:1372
+#: libs/ui/KisViewManager.cpp:1370
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31598,19 +31598,19 @@ msgstr ""
 "<p><b>Emplacement privé de l'application</b> : <br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1387
+#: libs/ui/KisViewManager.cpp:1385
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Ouvrir dans le dossier « AppData » de l'&utilisateur"
 
-#: libs/ui/KisViewManager.cpp:1388
+#: libs/ui/KisViewManager.cpp:1386
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Ouvrir dans l'emplacement d'une application &privée"
 
-#: libs/ui/KisViewManager.cpp:1506 libs/ui/KisViewManager.cpp:1524
+#: libs/ui/KisViewManager.cpp:1499 libs/ui/KisViewManager.cpp:1517
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"

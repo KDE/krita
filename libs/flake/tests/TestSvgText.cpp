@@ -2188,8 +2188,18 @@ void TestSvgText::testCssTextTransform()
 
     greekTonosTest = "ήσουν ή εγώ ή εσύ";
     greekTonosRef = "ΗΣΟΥΝ Ή ΕΓΩ Ή ΕΣΥ";
+    positions.clear();
     QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el", positions) == greekTonosRef,
              QString("Greek tonos tailor test number 5 is failing").toLatin1());
+    // This particular transformation also has a difference in characters between the before and after,
+    // so let's test the positions too.
+    QVector<QPair<int, int>> refPositions;
+    refPositions << QPair(0,0) << QPair(1,1) << QPair(2,2) << QPair(3,3) << QPair(4,4) << QPair(5,5)
+                 << QPair(6,6) << QPair(-1,7) << QPair(7,8) << QPair(8,9) << QPair(9,10)
+                 << QPair(10,11) << QPair(11,12) << QPair(12,13) << QPair(-1,14) << QPair(13,15)
+                 << QPair(14,16) << QPair(15,17) <<  QPair(16,18);
+    QVERIFY2(positions == refPositions,
+             QString("positions returned by Greek Tonos test number 5 are incorrect.").toLatin1());
 }
 
 /*
@@ -2357,6 +2367,140 @@ void TestSvgText::testShapeInsideRender()
         t.setFuzzyThreshold(5);
         t.test_standard(testFile, testFiles.value(testFile).size(), 72.0);
     }
+}
+/**
+ * Test text insertion.
+ * This tests basic text insertion and inserting text at end.
+ */
+void TestSvgText::testTextInsertion()
+{
+    // Insert some text.
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    QString ref ("The quick brown fox");
+    textShape->insertText(0, ref);
+    QVERIFY2(ref == textShape->plainText(), QString("Text shape plain text does not match inserted text.").toLatin1());
+
+    // Append at end.
+    QString ref2(" jumps over the lazy dog.");
+    textShape->insertText(19, ref2);
+    ref.insert(19, ref2);
+    QVERIFY2(ref == textShape->plainText(), QString("Text shape plain text does not match reference text.").toLatin1());
+}
+/**
+ * This tests basic text deletion.
+ */
+void TestSvgText::testTextDeletion()
+{
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    QString ref ("The quick brown fox jumps over the lazy dog.");
+    textShape->insertText(0, ref);
+
+    ref.remove(15, 10);
+    textShape->removeText(15, 10);
+    QVERIFY2(ref == textShape->plainText(),
+             QString("Mismatch between textShape plain text and reference for text-removal.").toLatin1());
+}
+/**
+ * Test the cursor navigation. In particular we're
+ * testing the logic for the up/down/left/right pos
+ */
+void TestSvgText::testNavigation()
+{
+    // Test basic left-to-right horizontal.
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    QString ref ("<text style=\"inline-size:50.0; font-size:10.0;font-family:Deja Vu Sans\">The quick brown fox jumps over the lazy dog.</text>");
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    int cursorPos = 0;
+    for (int i=0; i<4; i++) {
+        cursorPos = textShape->posRight(cursorPos);
+    }
+    QVERIFY(cursorPos == 4);
+    for (int i=0; i<5; i++) {
+        cursorPos = textShape->posLeft(cursorPos);
+    }
+    QVERIFY(cursorPos == 0);
+    for (int i=0; i<8; i++) {
+        cursorPos = textShape->posRight(cursorPos);
+    }
+    cursorPos = textShape->posDown(cursorPos);
+    QVERIFY(cursorPos == 18);
+    QVERIFY(textShape->lineStart(cursorPos) == 10);
+    QVERIFY(textShape->lineEnd(cursorPos) == 19);
+
+    // Test right-to-left horizontal.
+    QString rtlRef ("<text style=\"inline-size:50.0; font-size:10.0; direction:rtl; font-family:Deja Vu Sans\">داستان SVG 1.1 SE طولا ني است.</text>");
+    converter.convertFromSvg(rtlRef, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    cursorPos = 0;
+    for (int i=0; i<10; i++) {
+        cursorPos = textShape->posLeft(cursorPos, false);
+    }
+    QVERIFY(cursorPos == 10);
+    for (int i=0; i<11; i++) {
+        cursorPos = textShape->posRight(cursorPos, false);
+    }
+    QVERIFY(cursorPos == 0);
+
+
+    // Test right-to-left bidi with visual.
+    for (int i=0; i<10; i++) {
+        cursorPos = textShape->posLeft(cursorPos, true);
+    }
+    QVERIFY(cursorPos == 11);
+    for (int i=0; i<10; i++) {
+        cursorPos = textShape->posLeft(cursorPos, true);
+    }
+    QVERIFY(cursorPos == 20);
+
+    // Test top-to-bottom.
+    QString ttbRef ("<text style=\"inline-size:50.0; font-size:10.0; writing-mode:vertical-rl; font-family:Deja Vu Sans\">A B C D E F G H I J K L M N O P</text>");
+    converter.convertFromSvg(ttbRef, QString(), QRectF(0, 0, 300, 300), 72.0);
+    cursorPos = 0;
+    for (int i=0; i<5; i++) {
+        cursorPos = textShape->posDown(cursorPos);
+    }
+    QVERIFY(cursorPos == 5);
+    for (int i=0; i<10; i++) {
+        cursorPos = textShape->posUp(cursorPos);
+    }
+    QVERIFY(cursorPos == 0);
+    for (int i=0; i<5; i++) {
+        cursorPos = textShape->posDown(cursorPos);
+    }
+    cursorPos = textShape->posLeft(cursorPos);
+    QVERIFY(cursorPos == 11);
+    QVERIFY(textShape->lineStart(cursorPos) == 6);
+    QVERIFY(textShape->lineEnd(cursorPos) == 11);
+
+    cursorPos = textShape->posRight(cursorPos);
+    cursorPos = textShape->posRight(cursorPos);
+    QVERIFY(cursorPos == 0);
+
+    // Test vertical left-to-right.
+    QString ttbRef2 ("<text style=\"inline-size:50.0; font-size:10.0; writing-mode:vertical-lr; font-family:Deja Vu Sans\">A B C D E F G H I J K L M N O P</text>");
+    converter.convertFromSvg(ttbRef2, QString(), QRectF(0, 0, 300, 300), 72.0);
+    cursorPos = 0;
+    for (int i=0; i<5; i++) {
+        cursorPos = textShape->posDown(cursorPos);
+    }
+    QVERIFY(cursorPos == 5);
+    for (int i=0; i<10; i++) {
+        cursorPos = textShape->posUp(cursorPos);
+    }
+    QVERIFY(cursorPos == 0);
+    for (int i=0; i<5; i++) {
+        cursorPos = textShape->posDown(cursorPos);
+    }
+    cursorPos = textShape->posRight(cursorPos);
+    QVERIFY(cursorPos == 11);
+    QVERIFY(textShape->lineStart(cursorPos) == 6);
+    QVERIFY(textShape->lineEnd(cursorPos) == 11);
+
+    cursorPos = textShape->posLeft(cursorPos);
+    cursorPos = textShape->posLeft(cursorPos);
+    QVERIFY(cursorPos == 0);
 }
 
 #include "kistest.h"

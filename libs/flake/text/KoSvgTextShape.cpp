@@ -292,7 +292,7 @@ int KoSvgTextShape::wordEnd(int pos)
     for (int i = pos; i<= currentLineEnd; i++) {
         wordEnd = i;
         if (breakNext) break;
-        if (d->result.at(d->cursorPos.at(i).cluster).cursorInfo.isWordBoundary && i != pos) {
+        if (d->result.at(d->cursorPos.at(i).cluster).cursorInfo.isWordBoundary) {
             breakNext = true;
         }
 
@@ -317,7 +317,7 @@ int KoSvgTextShape::wordStart(int pos)
             wordStart = i;
             break;
         }
-        if (d->result.at(d->cursorPos.at(i).cluster).cursorInfo.isWordBoundary && i != pos && wordStart != pos) {
+        if (d->result.at(d->cursorPos.at(i).cluster).cursorInfo.isWordBoundary) {
             break;
         }
         wordStart = i;

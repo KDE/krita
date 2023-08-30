@@ -28,6 +28,7 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 
+#include <kis_algebra_2d.h>
 #include <kis_icon.h>
 #include <KoShape.h>
 #include <KoCanvasResourceProvider.h>
@@ -64,13 +65,23 @@
 #include <kis_action.h>
 #include "strokes/kis_color_sampler_stroke_strategy.h"
 #include "kis_popup_palette.h"
+#include "kis_paintop_utils.h"
+
+
+struct KisToolPaint::Private
+{
+    // Keeps track of past cursor positions. This is used to determine the drawing angle when
+    // drawing the brush outline or starting a stroke.
+    KisPaintOpUtils::PositionHistory lastCursorPos;
+};
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
     : KisTool(canvas, cursor),
       m_isOutlineEnabled(true),
       m_isOutlineVisible(true),
-      m_colorSamplerHelper(dynamic_cast<KisCanvas2*>(canvas))
+      m_colorSamplerHelper(dynamic_cast<KisCanvas2*>(canvas)),
+      m_d(new Private())
 {
 
     {
@@ -686,12 +697,22 @@ KisOptimizedBrushOutline KisToolPaint::getOutlinePath(const QPointF &documentPos
     KIS_ASSERT(canvas2);
     const KisCoordinatesConverter *converter = canvas2->coordinatesConverter();
 
-    KisPaintInformation info(convertToPixelCoord(documentPos));
+    const QPointF pixelPos = convertToPixelCoord(documentPos);
+    KisPaintInformation info(pixelPos);
     info.setCanvasMirroredH(canvas2->coordinatesConverter()->xAxisMirrored());
     info.setCanvasMirroredV(canvas2->coordinatesConverter()->yAxisMirrored());
     info.setCanvasRotation(canvas2->coordinatesConverter()->rotationAngle());
     info.setRandomSource(new KisRandomSource());
     info.setPerStrokeRandomSource(new KisPerStrokeRandomSource());
+
+    const qreal currentZoom = canvas2->resourceManager() ? canvas2->resourceManager()->resource(KoCanvasResource::EffectiveZoom).toReal() : 1.0;
+
+    QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(pixelPos, currentZoom);
+    qreal startAngle = KisAlgebra2D::directionBetweenPoints(prevPoint, pixelPos, 0);
+    KisDistanceInformation distanceInfo(prevPoint, startAngle);
+
+    KisPaintInformation::DistanceInformationRegistrar registrar =
+        info.registerDistanceInformation(&distanceInfo);
 
     KisOptimizedBrushOutline path = currentPaintOpPreset()->settings()->
         brushOutline(info,

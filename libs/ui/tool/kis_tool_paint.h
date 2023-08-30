@@ -153,6 +153,9 @@ private:
 
     void tryRestoreOpacitySnapshot();
 
+    struct Private;
+    QScopedPointer<Private> m_d;
+
 Q_SIGNALS:
     void sigPaintingFinished();
 };

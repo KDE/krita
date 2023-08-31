@@ -19,7 +19,7 @@ public:
 
 public:
     KisFullRefreshWalker(QRect cropRect, Flags flags = None)
-        : KisRefreshSubtreeWalker(cropRect, flags),
+        : KisRefreshSubtreeWalker(cropRect, flags | DontAdjustChangeRect),
           KisMergeWalker(cropRect, NO_FILTHY)
     {
     }

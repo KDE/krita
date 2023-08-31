@@ -95,11 +95,6 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
 
     new KoKeepShapesSelectedCommand({}, {textShape}, tool->canvas()->selectedShapesProxy(), true, parentCommand);
 
-    // HACK: The command is executed after returning, but showing the editor
-    // requires the new text shape to be selected, so we schedule it to happen
-    // after returning to Qt's event loop.
-    QTimer::singleShot(0, tool, &SvgTextTool::showEditor);
-
     return parentCommand;
 }
 

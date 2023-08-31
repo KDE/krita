@@ -115,10 +115,6 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
             koSelection()->deselectAll();
         } else {
             uploadColorToResourceManager(textShape);
-            // if we are a text shape...and the proxy tells us we want to edit the shape. open the text editor
-            if (canvas()->selectedShapesProxy()->isRequestingToBeEdited()) {
-                showEditor();
-            }
         }
     } else if (shapes.size() > 1) {
         KoSvgTextShape *foundTextShape = nullptr;
@@ -316,7 +312,7 @@ QString SvgTextTool::generateDefs(const QString &extraProperties)
     QString fontColor = canvas()->resourceManager()->foregroundColor().toQColor().name();
     QString letterSpacing = QString::number(optionUi.defLetterSpacing->value());
 
-    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ; fill:%3 ;  text-anchor:%4; letter-spacing:%5;%6\n  }\n </style>\n</defs>").arg(font, size, fontColor, textAnchor, letterSpacing, extraProperties);
+    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ; fill:%3 ;  text-anchor:%4; letter-spacing:%5;%6\n  white-space:pre-wrap;\n  }\n </style>\n</defs>").arg(font, size, fontColor, textAnchor, letterSpacing, extraProperties);
 }
 
 void SvgTextTool::storeDefaults()
@@ -639,7 +635,8 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
             } else {
                 cursor = m_ibeam_vertical;
             }
-        } else if(m_highlightItem == HighlightItem::None) {
+        }/// Commenting this out until we have a good idea of how we want to tackle the text and shape to put them on.
+        /* else if(m_highlightItem == HighlightItem::None) {
             KoPathShape *shape = dynamic_cast<KoPathShape *>(canvas()->shapeManager()->shapeAt(event->point));
             if (shape) {
                 if (shape->subpathCount() > 0) {
@@ -655,7 +652,7 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
             } else {
                 m_hoveredShapeHighlightRect = QPainterPath();
             }
-        }
+        }*/
         useCursor(cursor);
         event->ignore();
     }
@@ -674,9 +671,6 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
         m_interactionStrategy = nullptr;
         m_dragging = DragMode::None;
         useCursor(m_base_cursor);
-        event->accept();
-    } else if (m_editor) {
-        showEditor();
         event->accept();
     }
 }
@@ -748,9 +742,6 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
         } else {
             event->ignore();
         }
-    } else if (event->key()==Qt::Key_Enter || event->key()==Qt::Key_Return) {
-        showEditor();
-        event->accept();
     } else {
         event->ignore();
     }
@@ -776,11 +767,6 @@ void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
     }
     const QRectF updateRect = std::exchange(m_hoveredShapeHighlightRect, QPainterPath()).boundingRect();
     canvas()->updateCanvas(kisGrowRect(updateRect, 100));
-    showEditor();
-    if(m_editor) {
-        m_editor->raise();
-        m_editor->activateWindow();
-    }
     event->accept();
 }
 

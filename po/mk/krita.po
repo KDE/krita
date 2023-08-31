@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-30 02:23+0000\n"
+"POT-Creation-Date: 2023-08-31 02:22+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -16418,7 +16418,7 @@ msgstr "Зачувај документ како"
 msgid "Active tool: %1"
 msgstr "Одбери..."
 
-#: libs/flake/svg/SvgParser.cpp:1788
+#: libs/flake/svg/SvgParser.cpp:1792
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -23706,19 +23706,19 @@ msgid "Always use this template"
 msgstr "Создади шаблон"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
-#: libs/ui/forms/KisWelcomePage.ui:60
+#: libs/ui/forms/KisWelcomePage.ui:66
 #, fuzzy, kde-format
 msgid "Support Krita!"
 msgstr "Отстрани табулатор"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:140
+#: libs/ui/forms/KisWelcomePage.ui:146
 #, fuzzy, kde-format
 msgid "Start"
 msgstr "Улица :"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:207 libs/ui/KisWelcomePageWidget.cpp:634
+#: libs/ui/forms/KisWelcomePage.ui:213 libs/ui/KisWelcomePageWidget.cpp:634
 #, kde-format
 msgid "DEV BUILD"
 msgstr ""
@@ -23727,7 +23727,7 @@ msgstr ""
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/KisWelcomePage.ui:261 libs/ui/forms/wdgimageproperties.ui:18
+#: libs/ui/forms/KisWelcomePage.ui:267 libs/ui/forms/wdgimageproperties.ui:18
 #: libs/ui/forms/wdgnewimage.ui:18
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:24
 #, fuzzy, kde-format
@@ -23736,7 +23736,7 @@ msgstr "Преглед на страна"
 
 #. i18n: ectx: property (text), widget (QLabel, newFileLinkShortcut)
 #. i18n: ectx: property (text), widget (QLabel, openFileShortcut)
-#: libs/ui/forms/KisWelcomePage.ui:294 libs/ui/forms/KisWelcomePage.ui:355
+#: libs/ui/forms/KisWelcomePage.ui:300 libs/ui/forms/KisWelcomePage.ui:361
 #: plugins/color/lcms2engine/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:22
 #: plugins/color/lcms2engine/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:27
 #: plugins/color/lcms2engine/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:22
@@ -23746,75 +23746,75 @@ msgid "X"
 msgstr "Факс :"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:322
+#: libs/ui/forms/KisWelcomePage.ui:328
 #, fuzzy, kde-format
 msgid "Open Image"
 msgstr "Преглед на страна"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:394
+#: libs/ui/forms/KisWelcomePage.ui:400
 #, fuzzy, kde-format
 #| msgid "Comment"
 msgid "Community"
 msgstr "Коментар"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:463 libs/ui/KisWelcomePageWidget.cpp:393
+#: libs/ui/forms/KisWelcomePage.ui:469 libs/ui/KisWelcomePageWidget.cpp:393
 #, kde-format
 msgid "User Manual"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:553 libs/ui/KisWelcomePageWidget.cpp:396
+#: libs/ui/forms/KisWelcomePage.ui:559 libs/ui/KisWelcomePageWidget.cpp:396
 #, kde-format
 msgid "Support Krita"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:643 libs/ui/KisWelcomePageWidget.cpp:405
+#: libs/ui/forms/KisWelcomePage.ui:649 libs/ui/KisWelcomePageWidget.cpp:405
 #, kde-format
 msgid "Powered by KDE"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:733 libs/ui/KisWelcomePageWidget.cpp:402
+#: libs/ui/forms/KisWelcomePage.ui:739 libs/ui/KisWelcomePageWidget.cpp:402
 #, fuzzy, kde-format
 msgid "Source Code"
 msgstr "Отстрани шаблон"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:820 libs/ui/KisWelcomePageWidget.cpp:390
+#: libs/ui/forms/KisWelcomePage.ui:826 libs/ui/KisWelcomePageWidget.cpp:390
 #, fuzzy, kde-format
 msgid "Getting Started"
 msgstr "&Додади група..."
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:907 libs/ui/KisWelcomePageWidget.cpp:387
+#: libs/ui/forms/KisWelcomePage.ui:913 libs/ui/KisWelcomePageWidget.cpp:387
 #, fuzzy, kde-format
 msgid "User Community"
 msgstr "Колони"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:994 libs/ui/KisWelcomePageWidget.cpp:399
+#: libs/ui/forms/KisWelcomePage.ui:1000 libs/ui/KisWelcomePageWidget.cpp:399
 #, fuzzy, kde-format
 msgid "Krita Website"
 msgstr "Насловна линија:"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1069
+#: libs/ui/forms/KisWelcomePage.ui:1075
 #, fuzzy, kde-format
 msgid "Recent Images"
 msgstr "Отстрани приказ"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:1093
+#: libs/ui/forms/KisWelcomePage.ui:1099
 #, fuzzy, kde-format
 msgctxt "Welcome Screen Recent Document List's Clear link Label"
 msgid "Clear"
 msgstr "Рабови на страна"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:1144
+#: libs/ui/forms/KisWelcomePage.ui:1150
 #, fuzzy, kde-format
 msgid ""
 "You don't seem to have any\n"
@@ -23822,37 +23822,37 @@ msgid ""
 msgstr "Не може да се отвори датотеката %1"
 
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1275
+#: libs/ui/forms/KisWelcomePage.ui:1281
 #, kde-format
 msgid "News"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:1298
+#: libs/ui/forms/KisWelcomePage.ui:1304
 #, fuzzy, kde-format
 msgid "News options"
 msgstr "Зачувај документ како"
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1405
+#: libs/ui/forms/KisWelcomePage.ui:1411
 #, fuzzy, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr "Нема расположиви слики."
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:1456
+#: libs/ui/forms/KisWelcomePage.ui:1462
 #, fuzzy, kde-format
 msgid "Update now!"
 msgstr "Создади шаблон"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:1463
+#: libs/ui/forms/KisWelcomePage.ui:1469
 #, fuzzy, kde-format
 msgid "Show details"
 msgstr "Покажи %1 алатник"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1515 libs/ui/KisWelcomePageWidget.cpp:407
+#: libs/ui/forms/KisWelcomePage.ui:1521 libs/ui/KisWelcomePageWidget.cpp:407
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -23861,7 +23861,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1587
+#: libs/ui/forms/KisWelcomePage.ui:1593
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -32256,12 +32256,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:653
+#: libs/ui/opengl/kis_opengl.cpp:659
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:655
+#: libs/ui/opengl/kis_opengl.cpp:661
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32269,14 +32269,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1069
+#: libs/ui/opengl/kis_opengl.cpp:1075
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1071
+#: libs/ui/opengl/kis_opengl.cpp:1077
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -32359,7 +32359,7 @@ msgstr ""
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_paint.cc:571
+#: libs/ui/tool/kis_tool_paint.cc:582
 #, fuzzy, kde-format
 msgid "Brush Size: %1 px"
 msgstr "&Додади група..."

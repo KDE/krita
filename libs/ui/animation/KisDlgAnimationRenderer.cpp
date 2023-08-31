@@ -192,18 +192,9 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 
     m_page->chkOnlyUniqueFrames->setChecked(lastUsedOptions.wantsOnlyUniqueFrameSequence);
 
-    if (lastUsedOptions.shouldDeleteSequence) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(lastUsedOptions.shouldEncodeVideo);
-        m_page->shouldExportOnlyVideo->setChecked(true);
-    } else if (!lastUsedOptions.shouldEncodeVideo) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!lastUsedOptions.shouldDeleteSequence);
-        m_page->shouldExportOnlyImageSequence->setChecked(true);
-    } else {
-        // export to both
-        m_page->shouldExportOnlyVideo->setChecked(true);
-        m_page->shouldExportOnlyImageSequence->setChecked(true);
-    }
-
+    m_page->shouldExportOnlyVideo->setChecked(lastUsedOptions.shouldEncodeVideo);
+    m_page->shouldExportOnlyImageSequence->setChecked(!lastUsedOptions.shouldDeleteSequence);
+    slotExportTypeChanged();
 
     {
         KisPropertiesConfigurationSP settings = loadLastConfiguration("VIDEO_ENCODER");
@@ -647,8 +638,8 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
     options.lastFrame = m_page->intEnd->value();
     options.sequenceStart = m_page->sequenceStart->value();
 
-    options.shouldEncodeVideo = !m_page->shouldExportOnlyImageSequence->isChecked();
-    options.shouldDeleteSequence = m_page->shouldExportOnlyVideo->isChecked();
+    options.shouldEncodeVideo = m_page->shouldExportOnlyVideo->isChecked();
+    options.shouldDeleteSequence = !m_page->shouldExportOnlyImageSequence->isChecked();
     options.includeAudio = m_page->chkIncludeAudio->isChecked();
     options.wantsOnlyUniqueFrameSequence = m_page->chkOnlyUniqueFrames->isChecked();
 
@@ -753,6 +744,16 @@ void KisDlgAnimationRenderer::slotExportTypeChanged()
          // videos always uses PNG for creating video, so disable the ability to change the format
          m_page->cmbMimetype->setEnabled(false);
          m_page->cmbMimetype->setCurrentIndex(m_page->cmbMimetype->findData("image/png"));
+    }
+
+    /**
+     * A fallback fix for a case when both checkboxes are unchecked
+     */
+    if (!m_page->shouldExportOnlyVideo->isChecked() &&
+        !m_page->shouldExportOnlyImageSequence->isChecked()) {
+
+         KisSignalsBlocker b(m_page->shouldExportOnlyImageSequence);
+         m_page->shouldExportOnlyImageSequence->setChecked(true);
     }
 }
 

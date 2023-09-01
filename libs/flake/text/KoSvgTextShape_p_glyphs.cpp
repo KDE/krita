@@ -8,6 +8,7 @@
 #include "KoSvgTextShape.h"
 #include "KoSvgTextShape_p.h"
 
+#include "KisTofuGlyph.h"
 #include "KoFontLibraryResourceUtils.h"
 
 #include <FlakeDebug.h>
@@ -275,6 +276,13 @@ std::pair<QTransform, qreal> KoSvgTextShape::Private::loadGlyphOnly(const QTrans
     /// The scaling factor for color bitmap glyphs, otherwise always 1.0
     qreal bitmapScale = 1.0;
 
+    if (currentGlyph.index == 0) {
+        // Missing glyph -- don't try to load the glyph from the font, we will
+        // draw a tofu block instead.
+        debugFlake << "Missing glyph";
+        return {glyphObliqueTf, bitmapScale};
+    }
+
     // Try to retrieve CPAL/COLR v0 color layers, this should be preferred over
     // other glyph formats. Doing this first also allows us to skip loading the
     // default outline glyph.
@@ -457,6 +465,7 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                                         const QMap<int, KoSvgText::TabSizeInfo> &tabSizeInfo,
                                         const FT_Int32 faceLoadFlags,
                                         const bool isHorizontal,
+                                        const char32_t firstCodepoint,
                                         raqm_glyph_t &currentGlyph,
                                         CharacterResult &charResult,
                                         QPointF &totalAdvanceFTFontCoordinates) const
@@ -495,8 +504,27 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
             } else {
                 advance = isHorizontal ? QPointF(newAdvance, advance.y()) : QPointF(advance.x(), newAdvance);
             }
-            charResult.glyph = std::monostate{};
+            charResult.glyph.emplace<Glyph::Outline>();
         }
+
+        if (std::holds_alternative<std::monostate>(charResult.glyph)) {
+            // For whatever reason we don't have a glyph for this char. Draw a
+            // tofu block for it.
+            const auto height = ftTF.map(QPointF(currentGlyph.ftface->size->metrics.height, 0)).x() * 0.6;
+            QPainterPath glyph = KisTofuGlyph::create(firstCodepoint, height);
+            if (isHorizontal) {
+                glyph.translate(0, -height);
+                const qreal newAdvance =
+                    ftTF.inverted().map(QPointF(glyph.boundingRect().width() + height * (1. / 15.), 0)).x();
+                if (newAdvance > advance.x()) {
+                    advance.setX(newAdvance);
+                }
+            } else {
+                glyph.translate(glyph.boundingRect().width() * -0.5, (ftTF.map(advance).y() - height) * 0.5);
+            }
+            charResult.glyph.emplace<Glyph::Outline>(Glyph::Outline{glyph});
+        }
+
         charResult.advance += ftTF.map(advance);
 
         Glyph::Bitmap *const bitmapGlyph = std::get_if<Glyph::Bitmap>(&charResult.glyph);

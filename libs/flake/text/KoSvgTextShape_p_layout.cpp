@@ -493,12 +493,30 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
 
         const FT_Int32 faceLoadFlags = loadFlagsForFace(currentGlyph.ftface);
 
-        debugFlake << "glyph" << i << "cluster" << cluster << currentGlyph.index << text.at(cluster).unicode();
+        const auto getUcs4At = [](const QString &s, int i) -> char32_t {
+            const QChar high = s.at(i);
+            if (!high.isSurrogate()) {
+                return high.unicode();
+            }
+            if (high.isHighSurrogate() && s.length() > i + 1) {
+                const QChar low = s[i + 1];
+                if (low.isLowSurrogate()) {
+                    return QChar::surrogateToUcs4(high, low);
+                }
+            }
+            // Don't return U+FFFD replacement character but return the
+            // unpaired surrogate itself, so that if we want to we can draw
+            // a tofu block for it.
+            return high.unicode();
+        };
+        const char32_t codepoint = getUcs4At(text, cluster);
+        debugFlake << "glyph" << i << "cluster" << cluster << currentGlyph.index << codepoint;
 
         if (!this->loadGlyph(ftTF,
                              tabSizeInfo,
                              faceLoadFlags,
                              isHorizontal,
+                             codepoint,
                              currentGlyph,
                              charResult,
                              totalAdvanceFTFontCoordinates)) {

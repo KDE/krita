@@ -191,6 +191,7 @@ set(kritaflake_SRCS
     svg/SvgMeshPatch.cpp
     svg/SvgMeshArray.cpp
 
+    text/KisTofuGlyph.cpp
     text/KoSvgText.cpp
     text/KoSvgTextProperties.cpp
     text/KoSvgTextChunkShape.cpp

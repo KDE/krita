@@ -289,6 +289,7 @@ public:
                    const QMap<int, KoSvgText::TabSizeInfo> &tabSizeInfo,
                    FT_Int32 faceLoadFlags,
                    bool isHorizontal,
+                   char32_t firstCodepoint,
                    raqm_glyph_t &currentGlyph,
                    CharacterResult &charResult,
                    QPointF &totalAdvanceFTFontCoordinates) const;

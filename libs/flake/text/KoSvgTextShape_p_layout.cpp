@@ -499,13 +499,16 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                              tabSizeInfo,
                              faceLoadFlags,
                              isHorizontal,
-                             i,
                              currentGlyph,
-                             logicalToVisual,
                              charResult,
                              totalAdvanceFTFontCoordinates)) {
             continue;
         }
+
+        charResult.visualIndex = i;
+        logicalToVisual.insert(cluster, i);
+
+        charResult.middle = false;
 
         result[cluster] = charResult;
     }

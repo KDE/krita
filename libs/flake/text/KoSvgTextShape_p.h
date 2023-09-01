@@ -289,11 +289,15 @@ public:
                    const QMap<int, KoSvgText::TabSizeInfo> &tabSizeInfo,
                    FT_Int32 faceLoadFlags,
                    bool isHorizontal,
-                   int i,
                    raqm_glyph_t &currentGlyph,
-                   QMap<int, int> &logicalToVisual,
                    CharacterResult &charResult,
                    QPointF &totalAdvanceFTFontCoordinates) const;
+
+    std::pair<QTransform, qreal> loadGlyphOnly(const QTransform &ftTF,
+                                               FT_Int32 faceLoadFlags,
+                                               bool isHorizontal,
+                                               raqm_glyph_t &currentGlyph,
+                                               CharacterResult &charResult) const;
 
     void clearAssociatedOutlines(const KoShape *rootShape);
     void resolveTransforms(const KoShape *rootShape, QString text, QVector<CharacterResult> &result, int &currentIndex, bool isHorizontal, bool wrapped, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars);

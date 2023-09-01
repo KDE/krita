@@ -289,17 +289,16 @@ int KoSvgTextShape::wordEnd(int pos)
         return pos;
     }
     int currentLineEnd = lineEnd(pos);
-    if (pos == currentLineEnd) {
-        currentLineEnd = lineEnd(pos+1);
+    if (pos == lineStart(pos) || pos == currentLineEnd) {
+        return pos;
     }
 
     int wordEnd = pos;
-    bool breakNext = false;
     for (int i = pos; i<= currentLineEnd; i++) {
         wordEnd = i;
-        if (breakNext) break;
-        if (d->result.at(d->cursorPos.at(i).cluster).cursorInfo.isWordBoundary) {
-            breakNext = true;
+        CursorPos cursorPos = d->cursorPos.at(i);
+        if (d->result.at(cursorPos.cluster).cursorInfo.isWordBoundary && cursorPos.offset == 0) {
+            break;
         }
 
     }
@@ -313,18 +312,17 @@ int KoSvgTextShape::wordStart(int pos)
         return pos;
     }
     int currentLineStart = lineStart(pos);
-    if (pos == currentLineStart) {
-        currentLineStart = lineStart(pos-1);
+    if (pos == currentLineStart || pos == lineEnd(pos)) {
+        return pos;
     }
 
     int wordStart = pos;
+    bool breakNext = false;
     for (int i = pos; i >= currentLineStart; i--) {
-        if (i == currentLineStart) {
-            wordStart = i;
-            break;
-        }
-        if (d->result.at(d->cursorPos.at(i).cluster).cursorInfo.isWordBoundary) {
-            break;
+        if (breakNext) break;
+        CursorPos cursorPos = d->cursorPos.at(i);
+        if (d->result.at(cursorPos.cluster).cursorInfo.isWordBoundary && cursorPos.offset == 0) {
+            breakNext = true;
         }
         wordStart = i;
     }

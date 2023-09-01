@@ -15,15 +15,21 @@ Q_GLOBAL_STATIC(KisImageConfigNotifier, s_instance)
 
 struct KisImageConfigNotifier::Private
 {
-    Private() : updateCompressor(300, KisSignalCompressor::FIRST_ACTIVE) {}
+    Private()
+        : updateCompressor(300, KisSignalCompressor::FIRST_ACTIVE)
+        , autoKeyframeUpdateCompressor(300, KisSignalCompressor::FIRST_ACTIVE)
+    {}
 
     KisSignalCompressor updateCompressor;
+    KisSignalCompressor autoKeyframeUpdateCompressor;
 };
 
 KisImageConfigNotifier::KisImageConfigNotifier()
     : m_d(new Private)
 {
     connect(&m_d->updateCompressor, SIGNAL(timeout()), SIGNAL(configChanged()));
+    connect(&m_d->updateCompressor, SIGNAL(timeout()), SIGNAL(autoKeyFrameConfigurationChanged()));
+    connect(&m_d->autoKeyframeUpdateCompressor, SIGNAL(timeout()), SIGNAL(autoKeyFrameConfigurationChanged()));
 }
 
 KisImageConfigNotifier::~KisImageConfigNotifier()
@@ -38,4 +44,9 @@ KisImageConfigNotifier *KisImageConfigNotifier::instance()
 void KisImageConfigNotifier::notifyConfigChanged()
 {
     m_d->updateCompressor.start();
+}
+
+void KisImageConfigNotifier::notifyAutoKeyFrameConfigurationChanged()
+{
+    m_d->autoKeyframeUpdateCompressor.start();
 }

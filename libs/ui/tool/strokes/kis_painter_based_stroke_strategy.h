@@ -13,7 +13,6 @@
 #include "kis_resources_snapshot.h"
 #include "kis_selection.h"
 #include "kis_indirect_painting_support.h"
-#include "KisAnimAutoKey.h"
 
 class KisPainter;
 class KisDistanceInformation;
@@ -128,7 +127,6 @@ private:
     KisPaintDeviceSP m_targetDevice;
     KisSelectionSP m_activeSelection;
 
-    KisAutoKey::Mode m_autokeyMode {KisAutoKey::NONE};
     QScopedPointer<KUndo2Command> m_autokeyCommand;
 
     bool m_useMergeID {false};

@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-31 00:44+0000\n"
+"POT-Creation-Date: 2023-09-01 00:43+0000\n"
 "PO-Revision-Date: 2023-08-14 21:16+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -16309,7 +16309,7 @@ msgstr "Opzioni %1"
 msgid "Active tool: %1"
 msgstr "Strumento attivo: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1792
+#: libs/flake/svg/SvgParser.cpp:1793
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -19407,7 +19407,7 @@ msgstr "Fuori"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:504 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19443,9 +19443,9 @@ msgstr "Risorse locali"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20481,12 +20481,12 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "N/D"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:389
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Nessun eseguibile FFmpeg valido fornito..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:462
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
@@ -20494,7 +20494,7 @@ msgstr ""
 "Affinché la trasparenza GIF funzioni devi utilizzare FFMpeg in versione 4.2 "
 "o superiore"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:469
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -20505,13 +20505,13 @@ msgstr ""
 "superiore a 50. La velocità dei fotogrammi sarà ridotta a 50 fotogrammi al "
 "secondo"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:476
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgid "Warning(s):"
 msgstr "Avvisi:"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20520,7 +20520,7 @@ msgstr ""
 "Il file FFmpeg che hai fornito sembra essere compresso. Prova prima a "
 "estrarre il file FFmpeg dall'archivio."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -20529,7 +20529,7 @@ msgstr ""
 "Il file FFmpeg che hai fornito non sembra valido. Seleziona la posizione "
 "attuale di un eseguibile FFmpeg nel tuo sistema."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Inserisci un nome file su cui eseguire la resa."
@@ -43614,7 +43614,7 @@ msgstr "&Configurabile:"
 msgid "Separate Image"
 msgstr "Separa immagine"
 
-#: plugins/extensions/separate_channels/kis_channel_separator.cc:192
+#: plugins/extensions/separate_channels/kis_channel_separator.cc:197
 msgctxt "(qtundo-format)"
 msgid "Separate Image"
 msgstr "Separa immagine"

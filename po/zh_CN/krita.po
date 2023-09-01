@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-31 00:44+0000\n"
+"POT-Creation-Date: 2023-09-01 00:43+0000\n"
 "PO-Revision-Date: 2023-08-27 03:40\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16217,7 +16217,7 @@ msgstr "%1的选项"
 msgid "Active tool: %1"
 msgstr "活动工具：%1"
 
-#: libs/flake/svg/SvgParser.cpp:1792
+#: libs/flake/svg/SvgParser.cpp:1793
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -19283,7 +19283,7 @@ msgstr "输出"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:504 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19319,9 +19319,9 @@ msgstr "本地资源"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20345,18 +20345,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "不适用"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:389
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "没有提供有效的 FFmpeg 可执行程序..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:462
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr "FFmpeg 必须是 4.2 版本以上才能支持 GIF 透明度"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:469
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -20364,13 +20364,13 @@ msgid ""
 "will be reduced to 50 frames per second"
 msgstr "GIF 动画图像的每秒帧数不能超过 50，它将被降低到每秒 50 帧。"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:476
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgid "Warning(s):"
 msgstr "警告："
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20379,7 +20379,7 @@ msgstr ""
 "您给 Krita 提供的 FFmpeg 似乎是一个压缩文件。请尝试将这个压缩文件的内容解压出"
 "来。"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -20388,7 +20388,7 @@ msgstr ""
 "您给 Krita 提供的 FFmpeg 似乎无效。请选择 FFmpeg 可执行文件在本机中的正确位"
 "置。"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "请输入导出动画的目标文件名称。"
@@ -42968,7 +42968,7 @@ msgstr "自定义(&C)："
 msgid "Separate Image"
 msgstr "分离图像通道"
 
-#: plugins/extensions/separate_channels/kis_channel_separator.cc:192
+#: plugins/extensions/separate_channels/kis_channel_separator.cc:197
 msgctxt "(qtundo-format)"
 msgid "Separate Image"
 msgstr "分离图像通道"

@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-31 00:44+0000\n"
+"POT-Creation-Date: 2023-09-01 00:43+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -16298,7 +16298,7 @@ msgstr "Iznimke"
 msgid "Active tool: %1"
 msgstr "Iznimke"
 
-#: libs/flake/svg/SvgParser.cpp:1792
+#: libs/flake/svg/SvgParser.cpp:1793
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -19423,7 +19423,7 @@ msgstr "Izlaz"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:504 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -19459,9 +19459,9 @@ msgstr "Uglovi:"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20490,18 +20490,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:389
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:462
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:469
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -20509,28 +20509,28 @@ msgid ""
 "will be reduced to 50 frames per second"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:476
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Warning(s):"
 msgstr "Upozorenje"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr ""
@@ -42657,7 +42657,7 @@ msgstr "Kistovi"
 msgid "Separate Image"
 msgstr "Nova slika"
 
-#: plugins/extensions/separate_channels/kis_channel_separator.cc:192
+#: plugins/extensions/separate_channels/kis_channel_separator.cc:197
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Separate Image"

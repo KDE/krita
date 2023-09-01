@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-31 00:44+0000\n"
+"POT-Creation-Date: 2023-09-01 00:43+0000\n"
 "PO-Revision-Date: 2023-08-20 21:04+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -16281,7 +16281,7 @@ msgstr "%1 Opcioj"
 msgid "Active tool: %1"
 msgstr "Aktiva ilo: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1792
+#: libs/flake/svg/SvgParser.cpp:1793
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -19375,7 +19375,7 @@ msgstr "Elen"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:504 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19411,9 +19411,9 @@ msgstr "Lokaj Rimedoj"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20444,18 +20444,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "N/A"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:389
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Ne donis validan FFmpeg-binarprogramon..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:462
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr "FFmpeg devas esti almenaŭ versio 4.2+ por ke GIF-travideblo funkciu"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:469
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -20465,13 +20465,13 @@ msgstr ""
 "Viglaj GIF-bildoj ne povas havi bildrapidecon pli altan ol 50. La "
 "bildfrekvenco estos reduktita al 50 bildoj sekunde"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:476
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgid "Warning(s):"
 msgstr "Averto(j):"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20480,7 +20480,7 @@ msgstr ""
 "La FFmpeg, kiun vi donis, ŝajnas esti kunpremita. Bonvolu unue provu "
 "ekstrakti FFmpeg de la arkivo."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -20489,7 +20489,7 @@ msgstr ""
 "La FFmpeg, kiun vi donis, ŝajnas esti nevalida. Bonvolu elekti la ĝustan "
 "lokon de FFmpeg-binarprogramo en via sistemo."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Bonvolu enigi dosiernomon por bildigi."
@@ -43413,7 +43413,7 @@ msgstr "&Propra:"
 msgid "Separate Image"
 msgstr "Apartigi Bildon"
 
-#: plugins/extensions/separate_channels/kis_channel_separator.cc:192
+#: plugins/extensions/separate_channels/kis_channel_separator.cc:197
 msgctxt "(qtundo-format)"
 msgid "Separate Image"
 msgstr "Apartigi Bildon"

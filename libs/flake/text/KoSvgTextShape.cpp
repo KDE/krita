@@ -149,13 +149,13 @@ int KoSvgTextShape::lineStart(int pos)
         return pos;
     }
     CursorPos p = d->cursorPos.at(pos);
-    if (d->result.at(p.cluster).anchored_chunk) {
+    if (d->result.at(p.cluster).anchored_chunk &&  p.offset == 0) {
         return pos;
     }
     int candidate = 0;
     for (int i = 0; i < pos; i++) {
         CursorPos p2 = d->cursorPos.at(i);
-        if (d->result.at(p2.cluster).anchored_chunk) {
+        if (d->result.at(p2.cluster).anchored_chunk && p2.offset == 0) {
             candidate = i;
         }
     }
@@ -173,7 +173,7 @@ int KoSvgTextShape::lineEnd(int pos)
     int candidate = 0;
     for (int i = pos; i < d->cursorPos.size(); i++) {
         CursorPos p = d->cursorPos.at(i);
-        if (d->result.at(p.cluster).anchored_chunk && i != pos) {
+        if (d->result.at(p.cluster).anchored_chunk && i != pos && p.offset == 0) {
             break;
         }
         candidate = i;
@@ -248,7 +248,10 @@ int KoSvgTextShape::nextLine(int pos)
         return d->cursorPos.size()-1;
     }
 
-    QPointF currentPoint = d->result.at(d->cursorPos.at(pos).cluster).finalPosition;
+    CursorPos cursorPos = d->cursorPos.at(pos);
+    CharacterResult res = d->result.at(cursorPos.cluster);
+    QPointF currentPoint = res.finalPosition;
+    currentPoint += res.cursorInfo.offsets.value(cursorPos.offset, res.advance);
     int candidate = posForPoint(currentPoint, nextLineStart, nextLineEnd+1);
     if (candidate < 0) {
         return pos;
@@ -268,7 +271,10 @@ int KoSvgTextShape::previousLine(int pos)
     }
     int previousLineStart = lineStart(currentLineStart-1);
 
-    QPointF currentPoint = d->result.at(d->cursorPos.at(pos).cluster).finalPosition;
+    CursorPos cursorPos = d->cursorPos.at(pos);
+    CharacterResult res = d->result.at(cursorPos.cluster);
+    QPointF currentPoint = res.finalPosition;
+    currentPoint += res.cursorInfo.offsets.value(cursorPos.offset, res.advance);
     int candidate = posForPoint(currentPoint, previousLineStart, currentLineStart);
     if (candidate < 0) {
         return pos;
@@ -360,11 +366,7 @@ QPainterPath KoSvgTextShape::cursorForPos(int pos, double bidiFlagSize)
 
     const QTransform tf = res.finalTransform();
     QLineF caret = res.cursorInfo.caret;
-    if (cursorPos.offset > 0 && cursorPos.offset-1 < res.cursorInfo.offsets.size()) {
-        caret.translate(res.cursorInfo.offsets.at(cursorPos.offset-1));
-    } else if (res.cursorInfo.rtl) {
-        caret.translate(res.advance);
-    }
+    caret.translate(res.cursorInfo.offsets.value(cursorPos.offset, QPointF()));
 
     p.moveTo(tf.map(caret.p1()));
     p.lineTo(tf.map(caret.p2()));
@@ -392,23 +394,17 @@ QPainterPath KoSvgTextShape::selectionBoxes(int pos, int anchor)
 
     QPainterPath p;
     p.setFillRule(Qt::WindingFill);
-    for (int i = start; i < end; i++) {
+    for (int i = start; i <= end; i++) {
         CursorPos pos = d->cursorPos.at(i);
         CharacterResult res = d->result.at(pos.cluster);
         const QTransform tf = res.finalTransform();
+        if (i == start && pos.offset == res.cursorInfo.offsets.size()-1) {
+            continue;
+        }
         QLineF first = res.cursorInfo.caret;
         QLineF last = first;
-        if (pos.offset > 0) {
-            first.translate(res.cursorInfo.offsets.at(pos.offset-1));
-        }
-
-        if (res.cursorInfo.offsets.size() > 0 && pos.offset == 0) {
-            last.translate(res.cursorInfo.offsets.at(0));
-        } else if (pos.offset > 0 && pos.offset < res.cursorInfo.offsets.size()) {
-            last.translate(res.cursorInfo.offsets.at(pos.offset));
-        } else {
-            last.translate(res.advance);
-        }
+        first.translate(res.cursorInfo.offsets.value(pos.offset-1,  QPointF()));
+        last.translate(res.cursorInfo.offsets.value(pos.offset, res.advance));
         QPolygonF poly;
         poly << first.p1() << first.p2() << last.p2() << last.p1() << first.p1();
         p.addPolygon(tf.map(poly));
@@ -431,11 +427,7 @@ int KoSvgTextShape::posForPoint(QPointF point, int start, int end)
         CursorPos pos = d->cursorPos.at(i);
         CharacterResult res = d->result.at(pos.cluster);
         QPointF cursorStart = res.finalPosition;
-        if (pos.offset>0 && pos.offset-1 < res.cursorInfo.offsets.size()) {
-            cursorStart += res.cursorInfo.offsets.at(pos.offset-1);
-        } else if (res.cursorInfo.rtl) {
-            cursorStart += res.advance;
-        }
+        cursorStart += res.cursorInfo.offsets.value(pos.offset, res.advance);
         double distance = kisDistance(cursorStart, point);
         if (distance < closest) {
             candidate = i;
@@ -516,8 +508,10 @@ bool KoSvgTextShape::insertText(int pos, QString text)
     int index = 0;
     int oldIndex = 0;
     if (pos > -1 && !d->cursorPos.isEmpty()) {
-        index = indexForPos(pos);
-        oldIndex = index;
+        CursorPos cursorPos = d->cursorPos.at(pos);
+        CharacterResult res = d->result.at(cursorPos.cluster);
+        index = res.plaintTextIndex;
+        oldIndex = cursorPos.index;
         index = qMin(index, d->result.size()-1);
     }
     KoSvgTextChunkShape *chunkShape = findTextChunkForIndex(this, currentIndex, index);

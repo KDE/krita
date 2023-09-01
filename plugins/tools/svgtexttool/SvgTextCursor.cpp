@@ -139,11 +139,12 @@ void SvgTextCursor::insertText(QString text)
             SvgTextRemoveCommand *removeCmd = removeSelection();
             d->tool->addCommand(removeCmd);
         }
+        int oldIndex = d->shape->indexForPos(d->pos);
+
         SvgTextInsertCommand *insertCmd = new SvgTextInsertCommand(d->shape, d->pos, d->anchor, text);
         d->tool->addCommand(insertCmd);
 
-        int index = d->shape->indexForPos(d->pos);
-        d->pos = d->shape->posForIndex(index+text.size(), true);
+        d->pos = d->shape->posForIndex(oldIndex + text.size(), false, true);
         d->anchor = d->pos;
         updateCursor();
     }
@@ -155,15 +156,15 @@ void SvgTextCursor::removeLast()
         SvgTextRemoveCommand *removeCmd;
         if (hasSelection()) {
             removeCmd = removeSelection();
+            d->tool->addCommand(removeCmd);
+            updateCursor();
         } else {
             int oldIndex = d->shape->indexForPos(d->pos);
-            d->pos = d->shape->posForIndex(oldIndex-1, true, true);
-            d->anchor = d->pos;
-
-            removeCmd = new SvgTextRemoveCommand(d->shape, d->pos, 1);
-        }
-        if (removeCmd) {
+            int newPos = d->shape->posForIndex(oldIndex-1, false, false);
+            removeCmd = new SvgTextRemoveCommand(d->shape, newPos, 1);
             d->tool->addCommand(removeCmd);
+            d->pos = d->shape->posForIndex(oldIndex-1, false, false);
+            d->anchor = d->pos;
             updateCursor();
         }
     }
@@ -175,11 +176,14 @@ void SvgTextCursor::removeNext()
         SvgTextRemoveCommand *removeCmd;
         if (hasSelection()) {
             removeCmd = removeSelection();
-        } else {
-            removeCmd = new SvgTextRemoveCommand(d->shape, d->pos, 1);
-        }
-        if (removeCmd) {
             d->tool->addCommand(removeCmd);
+            updateCursor();
+        } else {
+            int oldIndex = d->shape->indexForPos(d->pos);
+            removeCmd = new SvgTextRemoveCommand(d->shape, d->pos, 1);
+            d->tool->addCommand(removeCmd);
+            d->pos = d->shape->posForIndex(oldIndex, false, false);
+            d->anchor = d->pos;
             updateCursor();
         }
     }

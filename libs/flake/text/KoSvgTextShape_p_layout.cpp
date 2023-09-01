@@ -611,31 +611,46 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     // fix it so that characters that are in the 'middle' due to either being
     // surrogates or part of a ligature, are marked as such. Also set the css
     // position so that anchoring will work correctly later.
-    int firstCluster = 0;
+    int firstCluster = -1;
     bool graphemeBreakNext = false;
     for (int i = 0; i < result.size(); i++) {
         result[i].middle = result.at(i).visualIndex == -1;
         if (result[i].addressable && !result.at(i).middle) {
+            if (result.at(i).plaintTextIndex > -1 && firstCluster > -1) {
+                CursorInfo info = result.at(firstCluster).cursorInfo;
+                // ensure the advance gets added to the ligature carets if we found them,
+                // so they don't get overwritten by the synthesis code.
+                if (!info.offsets.isEmpty()) {
+                    info.offsets.append(result.at(firstCluster).advance);
+                }
+                info.graphemeIndices.append(result.at(i).plaintTextIndex);
+                result[firstCluster].cursorInfo = info;
+            }
             firstCluster = i;
         } else {
-            if (text[firstCluster].isSpace() == text[i].isSpace()) {
-                if (result[firstCluster].breakType != BreakType::HardBreak) {
-                    result[firstCluster].breakType = result.at(i).breakType;
+            int fC = qMax(0, firstCluster);
+            if (text[fC].isSpace() == text[i].isSpace()) {
+                if (result[fC].breakType != BreakType::HardBreak) {
+                    result[fC].breakType = result.at(i).breakType;
                 }
-                if (result[firstCluster].lineStart == LineEdgeBehaviour::NoChange) {
-                    result[firstCluster].lineStart = result.at(i).lineStart;
+                if (result[fC].lineStart == LineEdgeBehaviour::NoChange) {
+                    result[fC].lineStart = result.at(i).lineStart;
                 }
-                if (result[firstCluster].lineEnd == LineEdgeBehaviour::NoChange) {
-                    result[firstCluster].lineEnd = result.at(i).lineEnd;
+                if (result[fC].lineEnd == LineEdgeBehaviour::NoChange) {
+                    result[fC].lineEnd = result.at(i).lineEnd;
                 }
             }
             if (graphemeBreakNext && result[i].addressable && result.at(i).plaintTextIndex > -1) {
-                result[firstCluster].cursorInfo.graphemeIndices.append(result.at(i).plaintTextIndex);
+                result[fC].cursorInfo.graphemeIndices.append(result.at(i).plaintTextIndex);
             }
-            result[i].cssPosition = result.at(firstCluster).cssPosition + result.at(firstCluster).advance;
+            result[i].cssPosition = result.at(fC).cssPosition + result.at(fC).advance;
             result[i].hidden = true;
         }
         graphemeBreakNext = graphemeBreaks[i] == GRAPHEMEBREAK_BREAK;
+    }
+    int fC = qMax(0, firstCluster);
+    if (result.at(fC).cursorInfo.graphemeIndices.isEmpty()) {
+        result[fC].cursorInfo.graphemeIndices.append(plainText.size());
     }
     debugFlake << "Glyphs retreived";
 
@@ -773,38 +788,33 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
             if (result.at(i).addressable && !result.at(i).middle) {
 
                 if (result.at(i).plaintTextIndex > -1) {
-                    if (result.at(i).anchored_chunk && !cursorPos.isEmpty()) {
-                        if (!wrapped && result.at(cursorPos.last().cluster).breakType != BreakType::HardBreak) {
-                            // add a position for the previous 'line' whenever we detect an anchored chunk that
-                            // was not caused by a hard-break, this only happens with SVG absolute x and y positioning.
-                            CursorPos pos;
-                            pos.cluster = cursorPos.last().cluster;
-                            pos.index = result.at(i).plaintTextIndex;
-                            result[pos.cluster].cursorInfo.graphemeIndices.append(pos.index);
-                            QPointF newOffset = result[pos.cluster].cursorInfo.rtl? QPointF(): result[pos.cluster].advance;
-                            result[pos.cluster].cursorInfo.offsets.append(newOffset);
-                            int size = result.at(i).cursorInfo.graphemeIndices.size();
-                            pos.offset = size;
-                            pos.synthetic = true;
-                            cursorPos.append(pos);
-                        }
+                    QVector<QPointF> positions;
+                    bool insertFirst = false;
+                    if (result.at(i).anchored_chunk) {
+                        CursorPos pos;
+                        pos.cluster = i;
+                        pos.index = result.at(i).plaintTextIndex;
+                        insertFirst = true;
+                        QPointF newOffset = result.at(i).cursorInfo.rtl? result.at(i).advance: QPointF();
+                        result[i].cursorInfo.offsets.insert(0, newOffset);
+                        positions.append(newOffset);
+                        pos.offset = 0;
+                        pos.synthetic = true;
+                        cursorPos.append(pos);
                     }
 
-
-                    CursorPos pos;
-                    pos.cluster = i;
-                    pos.offset = 0;
-                    pos.index = result.at(i).plaintTextIndex;
-                    cursorPos.append(pos);
-                    QVector<QPointF> positions;
                     int graphemes = result.at(i).cursorInfo.graphemeIndices.size();
                     for (int k = 0; k < graphemes; k++) {
                         CursorPos pos;
                         pos.cluster = i;
                         pos.index = result.at(i).cursorInfo.graphemeIndices.at(k);
-                        pos.offset = k+1;
+                        pos.offset = insertFirst? k+1: k;
                         cursorPos.append(pos);
-                        positions.append((k+1) * result.at(i).advance/(graphemes+1));
+                        QPointF offset = (k+1) * (result.at(i).advance/graphemes);
+                        positions.append(result.at(i).cursorInfo.rtl? result.at(i).advance - offset: offset);
+                    }
+                    if (insertFirst) {
+                        result[i].cursorInfo.graphemeIndices.insert(0, result[i].plaintTextIndex);
                     }
                     if (result.at(i).cursorInfo.offsets.size() < positions.size()) {
                         result[i].cursorInfo.offsets = positions;
@@ -819,16 +829,6 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
             }
         }
         globalIndex += j;
-    }
-    if (!cursorPos.isEmpty()) {
-        CursorPos pos;
-        pos.cluster = cursorPos.last().cluster;
-        result[pos.cluster].cursorInfo.graphemeIndices.append(text.size());
-        QPointF newOffset = result[pos.cluster].cursorInfo.rtl? QPointF(): result[pos.cluster].advance;
-        result[pos.cluster].cursorInfo.offsets.append(newOffset);
-        pos.offset = result[pos.cluster].cursorInfo.graphemeIndices.size();
-        pos.index = plainText.size();
-        cursorPos.append(pos);
     }
     this->plainText = plainText;
     this->result = result;

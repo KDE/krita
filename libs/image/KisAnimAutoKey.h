@@ -9,6 +9,15 @@
 #define _KIS_ANIM_AUTOKEY_H
 
 #include "kritaimage_export.h"
+#include <QFlags>
+
+template<class T>
+class KisSharedPtr;
+
+class KisPaintDevice;
+typedef KisSharedPtr<KisPaintDevice> KisPaintDeviceSP;
+
+class KUndo2Command;
 
 namespace KisAutoKey {
 enum Mode {
@@ -19,6 +28,25 @@ enum Mode {
 };
 
 KRITAIMAGE_EXPORT Mode activeMode();
+
+enum AutoCreateKeyframeFlag {
+    None = 0x0,
+    AllowBlankMode = 0x1,
+    SupportsLod = 0x2
+};
+
+Q_DECLARE_FLAGS(AutoCreateKeyframeFlags, AutoCreateKeyframeFlag)
+
+/**
+ * @brief create a new **duplicated** keyframe if auto-keyframe mode is on
+ * @param device a paint device of the layer to be processed
+ * @return an undo command if the keyframe has been duplicated
+ */
+KRITAIMAGE_EXPORT
+KUndo2Command* tryAutoCreateDuplicatedFrame(KisPaintDeviceSP device, AutoCreateKeyframeFlags flags = None);
+
 }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisAutoKey::AutoCreateKeyframeFlags)
 
 #endif //_KIS_ANIM_AUTOKEY_H

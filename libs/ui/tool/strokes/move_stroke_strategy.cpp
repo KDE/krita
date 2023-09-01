@@ -29,6 +29,7 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_image_animation_interface.h"
 #include "commands_new/KisSimpleModifyTransformMaskCommand.h"
+#include "KisAnimAutoKey.h"
 
 /* MoveNodeStrategyBase and descendants
  *
@@ -306,28 +307,6 @@ void MoveStrokeStrategy::initStrokeCallback()
 
     QVector<KisRunnableStrokeJobData*> jobs;
 
-    if (KisAutoKey::activeMode() > KisAutoKey::NONE) {
-        KritaUtils::addJobBarrier(jobs, [this]() {
-            Q_FOREACH(KisNodeSP node, m_nodes) {
-                if (node->hasEditablePaintDevice()) {
-                        // Try to create a copy keyframe if available.
-                        KisPaintDeviceSP device = node->paintDevice();
-                        KIS_ASSERT(device);
-                        if (device->keyframeChannel()) {
-                            KUndo2CommandSP undo(new KUndo2Command);
-                            const int activeKeyframe = device->keyframeChannel()->activeKeyframeTime();
-                            const int targetKeyframe = node->image()->animationInterface()->currentTime();
-
-                            if (activeKeyframe != targetKeyframe) {
-                                device->keyframeChannel()->copyKeyframe(activeKeyframe, targetKeyframe, undo.data());
-                                runAndSaveCommand(undo, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
-                            }
-                        }
-                    }
-                }
-        });
-    }
-
     KritaUtils::addJobBarrier(jobs, [this]() {
         Q_FOREACH(KisNodeSP node, m_nodes) {
             KisLayerUtils::forceAllHiddenOriginalsUpdate(node);
@@ -351,6 +330,19 @@ void MoveStrokeStrategy::initStrokeCallback()
                 handlesRect |= node->projectionPlane()->tightUserVisibleBounds();
             });
 
+        KisStrokeStrategyUndoCommandBased::initStrokeCallback();
+
+        Q_FOREACH(KisNodeSP node, m_nodes) {
+            KIS_SAFE_ASSERT_RECOVER(node->hasEditablePaintDevice()) { continue; }
+
+            KUndo2Command *autoKeyframeCommand =
+                KisAutoKey::tryAutoCreateDuplicatedFrame(node->paintDevice(),
+                                                         KisAutoKey::SupportsLod);
+            if (autoKeyframeCommand) {
+                runAndSaveCommand(toQShared(autoKeyframeCommand), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+            }
+        }
+
         /**
          * Create strategies and start the transactions when necessary
          */
@@ -364,8 +356,6 @@ void MoveStrokeStrategy::initStrokeCallback()
                     m_d->strategy.emplace(node, new MoveNormalNodeStrategy(node));
                 }
             });
-
-        KisStrokeStrategyUndoCommandBased::initStrokeCallback();
 
         if (m_updatesEnabled) {
             KisLodTransform t(m_nodes.first()->image()->currentLevelOfDetail());

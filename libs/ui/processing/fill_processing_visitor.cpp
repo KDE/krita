@@ -13,6 +13,9 @@
 #include <kis_assert.h>
 #include <KisImageResolutionProxy.h>
 #include <KoCompositeOpRegistry.h>
+#include "KisAnimAutoKey.h"
+#include "kis_undo_adapter.h"
+
 
 FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
                                              KisSelectionSP selection,
@@ -73,6 +76,11 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
     KIS_ASSERT(!m_seedPoints.isEmpty());
 
     QRect fillRect = m_resources->image()->bounds();
+
+    KUndo2Command *autoKeyframeCommand = KisAutoKey::tryAutoCreateDuplicatedFrame(device);
+    if (autoKeyframeCommand) {
+        undoAdapter->addCommand(autoKeyframeCommand);
+    }
 
     if (m_selectionOnly) {
         if (device->defaultBounds()->wrapAroundMode()) {

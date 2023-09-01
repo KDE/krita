@@ -51,6 +51,7 @@
 #include <kis_shape_layer.h>
 #include "kis_raster_keyframe_channel.h"
 #include "kis_image_animation_interface.h"
+#include "KisAnimAutoKey.h"
 
 
 struct InplaceTransformStrokeStrategy::Private
@@ -392,18 +393,11 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
                                                                                                                                                 new KisTransformMaskAdapter(m_d->initialTransformArgs))));
                     runAndSaveCommand( addKeyCommand, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
                 } else if (node->hasEditablePaintDevice()){
-                    // Try to create a copy keyframe if available.
-                    KisPaintDeviceSP device = node->paintDevice();
-                    KIS_ASSERT(device);
-                    if (device->keyframeChannel()) {
-                        KUndo2CommandSP undo(new KUndo2Command);
-                        const int activeKeyframe = device->keyframeChannel()->activeKeyframeTime();
-                        const int targetKeyframe = node->image()->animationInterface()->currentTime();
-
-                        if (activeKeyframe != targetKeyframe) {
-                            device->keyframeChannel()->copyKeyframe(activeKeyframe, targetKeyframe, undo.data());
-                            runAndSaveCommand(undo, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
-                        }
+                    KUndo2Command *autoKeyframeCommand =
+                        KisAutoKey::tryAutoCreateDuplicatedFrame(node->paintDevice(),
+                                                                 KisAutoKey::SupportsLod);
+                    if (autoKeyframeCommand) {
+                        runAndSaveCommand(toQShared(autoKeyframeCommand), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
                     }
                 }
             }

@@ -57,26 +57,12 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
 
     KisPaintDeviceSP movedDevice = new KisPaintDevice(m_paintLayer.data(), paintDevice->colorSpace());
 
-    QVector<KisStrokeJobData *> extraInitJobs;
-
-    if (KisAutoKey::activeMode() > KisAutoKey::NONE) {
-        KritaUtils::addJobSequential(extraInitJobs, [this]() {
-            KisPaintDeviceSP device = m_paintLayer->paintDevice();
-            KIS_ASSERT(device);
-            if (device->keyframeChannel()) {
-                KUndo2CommandSP undo(new KUndo2Command);
-                const int activeKeyframe = device->keyframeChannel()->activeKeyframeTime();
-                const int targetKeyframe = m_paintLayer->image()->animationInterface()->currentTime();
-
-                if (activeKeyframe != targetKeyframe) {
-                    device->keyframeChannel()->copyKeyframe(activeKeyframe, targetKeyframe, undo.data());
-                    runAndSaveCommand(undo, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
-                }
-            }
-        });
+    KUndo2Command *autoKeyframeCommand =
+        KisAutoKey::tryAutoCreateDuplicatedFrame(m_paintLayer->paintDevice(),
+                                                 KisAutoKey::SupportsLod);
+    if (autoKeyframeCommand) {
+        runAndSaveCommand(toQShared(autoKeyframeCommand), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
     }
-
-    addMutatedJobs(extraInitJobs);
 
     QRect copyRect = m_selection->selectedRect();
     KisPainter gc(movedDevice);

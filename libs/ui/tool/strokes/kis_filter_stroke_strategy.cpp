@@ -27,7 +27,6 @@ struct KisFilterStrokeStrategy::Private {
     Private()
         : updatesFacade(0)
         , levelOfDetail(0)
-        , m_autokeyMode(KisAutoKey::activeMode())
     {
     }
 
@@ -54,8 +53,6 @@ struct KisFilterStrokeStrategy::Private {
     KisImageSP image;
     KisUpdatesFacade *updatesFacade;
     int levelOfDetail;
-
-    KisAutoKey::Mode m_autokeyMode;
 
     ExternalCancelUpdatesStorageSP cancelledUpdates;
     QRect nextExternalUpdateRect;
@@ -186,32 +183,11 @@ void KisFilterStrokeStrategy::initStrokeCallback()
     KisLodTransform t(m_d->levelOfDetail);
     m_d->nextExternalUpdateRect = t.map(m_d->nextExternalUpdateRect);
 
-    // Create keyframe if necessary (ie: AutoKey enabled)..
-    const int time = m_d->image->animationInterface()->currentTime();
-    const bool isLodNMode = m_d->levelOfDetail > 0;
-    KisRasterKeyframeChannel* channel = dynamic_cast<KisRasterKeyframeChannel*>(m_d->node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
-
-    /**
-     * In instant preview mode we just reuse the LodN plane
-     */
-    if (channel && !isLodNMode) {
-        KisKeyframeSP keyframe = channel->keyframeAt(time);
-        if (!keyframe && m_d->m_autokeyMode != KisAutoKey::NONE) {
-            int activeKeyTime = channel->activeKeyframeTime(time);
-            KUndo2CommandSP autokeyCommand = toQShared( new KUndo2Command() );
-            channel->copyKeyframe(activeKeyTime, time, autokeyCommand.data());
-
-            keyframe = channel->keyframeAt(time);
-            KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
-
-            // Use the same color label as previous keyframe...
-            KisKeyframeSP previousKey = channel->keyframeAt(activeKeyTime);
-            if (previousKey) {
-                keyframe->setColorLabel(previousKey->colorLabel());
-            }
-
-            runAndSaveCommand(autokeyCommand, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
-        }
+    KUndo2Command *autoKeyframeCommand =
+        KisAutoKey::tryAutoCreateDuplicatedFrame(m_d->node->paintDevice(),
+                                                 KisAutoKey::SupportsLod);
+    if (autoKeyframeCommand) {
+        runAndSaveCommand(toQShared(autoKeyframeCommand), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
     }
 }
 

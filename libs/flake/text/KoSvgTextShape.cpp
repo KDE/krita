@@ -401,8 +401,13 @@ QPainterPath KoSvgTextShape::selectionBoxes(int pos, int anchor)
         }
         QLineF first = res.cursorInfo.caret;
         QLineF last = first;
-        first.translate(res.cursorInfo.offsets.value(pos.offset-1,  QPointF()));
-        last.translate(res.cursorInfo.offsets.value(pos.offset, res.advance));
+        if (res.cursorInfo.rtl) {
+            last.translate(res.cursorInfo.offsets.value(pos.offset-1,  res.advance));
+            first.translate(res.cursorInfo.offsets.value(pos.offset, QPointF()));
+        } else {
+            first.translate(res.cursorInfo.offsets.value(pos.offset-1,  QPointF()));
+            last.translate(res.cursorInfo.offsets.value(pos.offset, res.advance));
+        }
         QPolygonF poly;
         poly << first.p1() << first.p2() << last.p2() << last.p1() << first.p1();
         p.addPolygon(tf.map(poly));

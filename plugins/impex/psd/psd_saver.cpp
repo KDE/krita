@@ -97,17 +97,11 @@ KisImportExportErrorCode PSDSaver::buildFile(QIODevice &io)
         return ImportExportCodes::Failure;
     }
 
-    const bool haveLayers = m_image->rootLayer()->childCount() > 1 ||
-        KisPainter::checkDeviceHasTransparency(
-                m_image->rootLayer()->firstChild()->projection());
-
     // HEADER
     PSDHeader header;
     header.signature = "8BPS";
     header.version = 1;
-    header.nChannels = haveLayers ?
-        m_image->colorSpace()->channelCount() :
-        m_image->colorSpace()->colorChannelCount();
+    header.nChannels = m_image->colorSpace()->channelCount();
 
     header.width = m_image->width();
     header.height = m_image->height();
@@ -200,30 +194,19 @@ KisImportExportErrorCode PSDSaver::buildFile(QIODevice &io)
     }
 
     // LAYER AND MASK DATA
-    // Only save layers and masks if there is more than one layer
-    dbgFile << "m_image->rootLayer->childCount" << m_image->rootLayer()->childCount() << io.pos();
+    PSDLayerMaskSection layerSection(header);
+    layerSection.hasTransparency = true;
 
-    if (haveLayers) {
-
-        PSDLayerMaskSection layerSection(header);
-        layerSection.hasTransparency = true;
-
-        if (!layerSection.write(io, m_image->rootLayer(), psd_compression_type::RLE)) {
-            dbgFile << "failed to write layer section. Error:" << layerSection.error << io.pos();
-            return ImportExportCodes::ErrorWhileWriting;
-        }
-    }
-    else {
-        // else write a zero length block
-        dbgFile << "No layers, saving empty layers/mask block" << io.pos();
-        psdwrite(io, (quint32)0);
+    if (!layerSection.write(io, m_image->rootLayer(), psd_compression_type::RLE)) {
+        dbgFile << "failed to write layer section. Error:" << layerSection.error << io.pos();
+        return ImportExportCodes::ErrorWhileWriting;
     }
 
     // IMAGE DATA
     dbgFile << "Saving composited image" << io.pos();
     PSDImageData imagedata(&header);
     // Photoshop compresses layer data by default with RLE.
-    if (!imagedata.write(io, m_image->projection(), haveLayers, psd_compression_type::RLE)) {
+    if (!imagedata.write(io, m_image->projection(), true, psd_compression_type::RLE)) {
         dbgFile << "Failed to write image data. Error:"  << imagedata.error;
         return ImportExportCodes::ErrorWhileWriting;
     }

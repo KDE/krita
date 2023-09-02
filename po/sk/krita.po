@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-01 02:23+0000\n"
+"POT-Creation-Date: 2023-09-02 02:31+0000\n"
 "PO-Revision-Date: 2022-07-27 20:32+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -24083,7 +24083,7 @@ msgstr "Nový obrázok"
 
 #. i18n: ectx: property (text), widget (QLabel, newFileLinkShortcut)
 #. i18n: ectx: property (text), widget (QLabel, openFileShortcut)
-#: libs/ui/forms/KisWelcomePage.ui:300 libs/ui/forms/KisWelcomePage.ui:361
+#: libs/ui/forms/KisWelcomePage.ui:306 libs/ui/forms/KisWelcomePage.ui:373
 #: plugins/color/lcms2engine/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:22
 #: plugins/color/lcms2engine/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:27
 #: plugins/color/lcms2engine/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:22
@@ -24093,69 +24093,69 @@ msgid "X"
 msgstr "X"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:328
+#: libs/ui/forms/KisWelcomePage.ui:334
 #, fuzzy, kde-format
 #| msgid "Open Images"
 msgid "Open Image"
 msgstr "Otvoriť obrázky"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:400
+#: libs/ui/forms/KisWelcomePage.ui:412
 #, kde-format
 msgid "Community"
 msgstr "Komunita"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:469 libs/ui/KisWelcomePageWidget.cpp:393
+#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:393
 #, kde-format
 msgid "User Manual"
 msgstr "Používateľská príručka"
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:559 libs/ui/KisWelcomePageWidget.cpp:396
+#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:396
 #, kde-format
 msgid "Support Krita"
 msgstr "Podporte Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:649 libs/ui/KisWelcomePageWidget.cpp:405
+#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:405
 #, kde-format
 msgid "Powered by KDE"
 msgstr "Založené na KDE"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:739 libs/ui/KisWelcomePageWidget.cpp:402
+#: libs/ui/forms/KisWelcomePage.ui:751 libs/ui/KisWelcomePageWidget.cpp:402
 #, kde-format
 msgid "Source Code"
 msgstr "Zdrojový kód"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:826 libs/ui/KisWelcomePageWidget.cpp:390
+#: libs/ui/forms/KisWelcomePage.ui:838 libs/ui/KisWelcomePageWidget.cpp:390
 #, kde-format
 msgid "Getting Started"
 msgstr "Začíname"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:913 libs/ui/KisWelcomePageWidget.cpp:387
+#: libs/ui/forms/KisWelcomePage.ui:925 libs/ui/KisWelcomePageWidget.cpp:387
 #, kde-format
 msgid "User Community"
 msgstr "Používateľská komunita"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:1000 libs/ui/KisWelcomePageWidget.cpp:399
+#: libs/ui/forms/KisWelcomePage.ui:1012 libs/ui/KisWelcomePageWidget.cpp:399
 #, kde-format
 msgid "Krita Website"
 msgstr "Webové stránky Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1075
+#: libs/ui/forms/KisWelcomePage.ui:1087
 #, fuzzy, kde-format
 #| msgid "Replace Image"
 msgid "Recent Images"
 msgstr "Nahradiť obrázok"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:1099
+#: libs/ui/forms/KisWelcomePage.ui:1111
 #, fuzzy, kde-format
 #| msgid "Clear"
 msgctxt "Welcome Screen Recent Document List's Clear link Label"
@@ -24163,7 +24163,7 @@ msgid "Clear"
 msgstr "Vyčistiť"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:1150
+#: libs/ui/forms/KisWelcomePage.ui:1162
 #, fuzzy, kde-format
 #| msgid "Could not create the output document"
 msgid ""
@@ -24172,38 +24172,38 @@ msgid ""
 msgstr "Nemôžem vytvoriť výstupný dokument"
 
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1281
+#: libs/ui/forms/KisWelcomePage.ui:1293
 #, kde-format
 msgid "News"
 msgstr "Správy"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:1304
+#: libs/ui/forms/KisWelcomePage.ui:1316
 #, fuzzy, kde-format
 #| msgid "No options"
 msgid "News options"
 msgstr "Nie je dostupná žiadna voľba"
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1411
+#: libs/ui/forms/KisWelcomePage.ui:1423
 #, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr "Dostupná verzia Krita X.X.X"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:1462
+#: libs/ui/forms/KisWelcomePage.ui:1474
 #, kde-format
 msgid "Update now!"
 msgstr "Aktualizovať teraz!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:1469
+#: libs/ui/forms/KisWelcomePage.ui:1481
 #, kde-format
 msgid "Show details"
 msgstr "Zobraziť podrobnosti"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1521 libs/ui/KisWelcomePageWidget.cpp:407
+#: libs/ui/forms/KisWelcomePage.ui:1533 libs/ui/KisWelcomePageWidget.cpp:407
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -24212,7 +24212,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1593
+#: libs/ui/forms/KisWelcomePage.ui:1605
 #, fuzzy, kde-format
 #| msgid ""
 #| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"

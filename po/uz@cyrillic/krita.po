@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-01 02:23+0000\n"
+"POT-Creation-Date: 2023-09-02 02:31+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -24569,7 +24569,7 @@ msgstr "Бетга мослаш"
 
 #. i18n: ectx: property (text), widget (QLabel, newFileLinkShortcut)
 #. i18n: ectx: property (text), widget (QLabel, openFileShortcut)
-#: libs/ui/forms/KisWelcomePage.ui:300 libs/ui/forms/KisWelcomePage.ui:361
+#: libs/ui/forms/KisWelcomePage.ui:306 libs/ui/forms/KisWelcomePage.ui:373
 #: plugins/color/lcms2engine/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:22
 #: plugins/color/lcms2engine/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:27
 #: plugins/color/lcms2engine/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:22
@@ -24580,77 +24580,77 @@ msgid "X"
 msgstr "Факс:"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:328
+#: libs/ui/forms/KisWelcomePage.ui:334
 #, fuzzy, kde-format
 #| msgid "Palettes"
 msgid "Open Image"
 msgstr "Асбоб ойналари"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:400
+#: libs/ui/forms/KisWelcomePage.ui:412
 #, fuzzy, kde-format
 #| msgid "Comment"
 msgid "Community"
 msgstr "Изоҳ"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:469 libs/ui/KisWelcomePageWidget.cpp:393
+#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:393
 #, kde-format
 msgid "User Manual"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:559 libs/ui/KisWelcomePageWidget.cpp:396
+#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:396
 #, kde-format
 msgid "Support Krita"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:649 libs/ui/KisWelcomePageWidget.cpp:405
+#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:405
 #, kde-format
 msgid "Powered by KDE"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:739 libs/ui/KisWelcomePageWidget.cpp:402
+#: libs/ui/forms/KisWelcomePage.ui:751 libs/ui/KisWelcomePageWidget.cpp:402
 #, fuzzy, kde-format
 msgid "Source Code"
 msgstr "Матнни ўчириш"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:826 libs/ui/KisWelcomePageWidget.cpp:390
+#: libs/ui/forms/KisWelcomePage.ui:838 libs/ui/KisWelcomePageWidget.cpp:390
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Getting Started"
 msgstr "Жойлашиши"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:913 libs/ui/KisWelcomePageWidget.cpp:387
+#: libs/ui/forms/KisWelcomePage.ui:925 libs/ui/KisWelcomePageWidget.cpp:387
 #, fuzzy, kde-format
 msgid "User Community"
 msgstr "Боғни қўйиш"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:1000 libs/ui/KisWelcomePageWidget.cpp:399
+#: libs/ui/forms/KisWelcomePage.ui:1012 libs/ui/KisWelcomePageWidget.cpp:399
 #, fuzzy, kde-format
 msgid "Krita Website"
 msgstr "Сана:"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1075
+#: libs/ui/forms/KisWelcomePage.ui:1087
 #, fuzzy, kde-format
 msgid "Recent Images"
 msgstr "&Алмаштириш:"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:1099
+#: libs/ui/forms/KisWelcomePage.ui:1111
 #, fuzzy, kde-format
 msgctxt "Welcome Screen Recent Document List's Clear link Label"
 msgid "Clear"
 msgstr "Белги услубини ўзгартириш"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:1150
+#: libs/ui/forms/KisWelcomePage.ui:1162
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid ""
@@ -24659,38 +24659,38 @@ msgid ""
 msgstr "Сақлаш учун файлни яратиб бўлмади"
 
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1281
+#: libs/ui/forms/KisWelcomePage.ui:1293
 #, kde-format
 msgid "News"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:1304
+#: libs/ui/forms/KisWelcomePage.ui:1316
 #, fuzzy, kde-format
 msgid "News options"
 msgstr "Тўлдириш мосламалари"
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1411
+#: libs/ui/forms/KisWelcomePage.ui:1423
 #, fuzzy, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr "Сана:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:1462
+#: libs/ui/forms/KisWelcomePage.ui:1474
 #, fuzzy, kde-format
 msgid "Update now!"
 msgstr "Сана"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:1469
+#: libs/ui/forms/KisWelcomePage.ui:1481
 #, fuzzy, kde-format
 #| msgid "Show %1"
 msgid "Show details"
 msgstr "%1 ойнасини кўрсатиш"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1521 libs/ui/KisWelcomePageWidget.cpp:407
+#: libs/ui/forms/KisWelcomePage.ui:1533 libs/ui/KisWelcomePageWidget.cpp:407
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -24699,7 +24699,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1593
+#: libs/ui/forms/KisWelcomePage.ui:1605
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"

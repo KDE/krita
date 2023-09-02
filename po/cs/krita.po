@@ -48,7 +48,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-01 00:43+0000\n"
+"POT-Creation-Date: 2023-09-02 00:44+0000\n"
 "PO-Revision-Date: 2023-06-28 14:15+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -23394,7 +23394,7 @@ msgstr "Nový obrázek"
 
 #. i18n: ectx: property (text), widget (QLabel, newFileLinkShortcut)
 #. i18n: ectx: property (text), widget (QLabel, openFileShortcut)
-#: libs/ui/forms/KisWelcomePage.ui:300 libs/ui/forms/KisWelcomePage.ui:361
+#: libs/ui/forms/KisWelcomePage.ui:306 libs/ui/forms/KisWelcomePage.ui:373
 #: plugins/color/lcms2engine/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:22
 #: plugins/color/lcms2engine/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:27
 #: plugins/color/lcms2engine/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:22
@@ -23404,74 +23404,74 @@ msgid "X"
 msgstr "X"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:328
+#: libs/ui/forms/KisWelcomePage.ui:334
 #, kde-format
 msgid "Open Image"
 msgstr "Otevřít obrázek"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:400
+#: libs/ui/forms/KisWelcomePage.ui:412
 #, kde-format
 msgid "Community"
 msgstr "Komunita"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:469 libs/ui/KisWelcomePageWidget.cpp:393
+#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:393
 #, kde-format
 msgid "User Manual"
 msgstr "Uživatelská příručka"
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:559 libs/ui/KisWelcomePageWidget.cpp:396
+#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:396
 #, kde-format
 msgid "Support Krita"
 msgstr "Podpořte Kritu"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:649 libs/ui/KisWelcomePageWidget.cpp:405
+#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:405
 #, kde-format
 msgid "Powered by KDE"
 msgstr "Založeno na KDE"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:739 libs/ui/KisWelcomePageWidget.cpp:402
+#: libs/ui/forms/KisWelcomePage.ui:751 libs/ui/KisWelcomePageWidget.cpp:402
 #, kde-format
 msgid "Source Code"
 msgstr "Zdrojový kód"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:826 libs/ui/KisWelcomePageWidget.cpp:390
+#: libs/ui/forms/KisWelcomePage.ui:838 libs/ui/KisWelcomePageWidget.cpp:390
 #, kde-format
 msgid "Getting Started"
 msgstr "Začínáme"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:913 libs/ui/KisWelcomePageWidget.cpp:387
+#: libs/ui/forms/KisWelcomePage.ui:925 libs/ui/KisWelcomePageWidget.cpp:387
 #, kde-format
 msgid "User Community"
 msgstr "Komunita uživatelů"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:1000 libs/ui/KisWelcomePageWidget.cpp:399
+#: libs/ui/forms/KisWelcomePage.ui:1012 libs/ui/KisWelcomePageWidget.cpp:399
 #, kde-format
 msgid "Krita Website"
 msgstr "Webová stránka aplikace Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1075
+#: libs/ui/forms/KisWelcomePage.ui:1087
 #, kde-format
 msgid "Recent Images"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:1099
+#: libs/ui/forms/KisWelcomePage.ui:1111
 #, kde-format
 msgctxt "Welcome Screen Recent Document List's Clear link Label"
 msgid "Clear"
 msgstr "Vymazat"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:1150
+#: libs/ui/forms/KisWelcomePage.ui:1162
 #, kde-format
 msgid ""
 "You don't seem to have any\n"
@@ -23479,37 +23479,37 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1281
+#: libs/ui/forms/KisWelcomePage.ui:1293
 #, kde-format
 msgid "News"
 msgstr "Novinky"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:1304
+#: libs/ui/forms/KisWelcomePage.ui:1316
 #, kde-format
 msgid "News options"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1411
+#: libs/ui/forms/KisWelcomePage.ui:1423
 #, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:1462
+#: libs/ui/forms/KisWelcomePage.ui:1474
 #, kde-format
 msgid "Update now!"
 msgstr "Aktualizovat nyní."
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:1469
+#: libs/ui/forms/KisWelcomePage.ui:1481
 #, kde-format
 msgid "Show details"
 msgstr "Zobrazit podrobnosti"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1521 libs/ui/KisWelcomePageWidget.cpp:407
+#: libs/ui/forms/KisWelcomePage.ui:1533 libs/ui/KisWelcomePageWidget.cpp:407
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -23518,7 +23518,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1593
+#: libs/ui/forms/KisWelcomePage.ui:1605
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -39612,23 +39612,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, fuzzy, kde-format
-#| msgid "Static"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Always shows full saturation and full "
 "brightness colors."
 msgid "Static"
-msgstr "Statický"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
-#, fuzzy, kde-format
-#| msgid "Dynamic"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Shows colors depending on the current "
 "color saturation and brightness."
 msgid "Dynamic"
-msgstr "Dynamický"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
@@ -56490,12 +56488,10 @@ msgid "Threshold: "
 msgstr "Práh: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
 msgid "Spread: "
-msgstr "Rozptyl: "
+msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, kde-format
@@ -56724,12 +56720,9 @@ msgid "Adjust text auto wrap"
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:23
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Move left"
 msgctxt "(qtundo-format)"
 msgid "Move text"
-msgstr "Posunout doleva"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
 msgctxt "(qtundo-format)"
@@ -56806,18 +56799,16 @@ msgstr "Tloušťka čáry"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1588
-#, fuzzy, kde-format
-#| msgid "Normal"
+#, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
-msgstr "Normální"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1592
-#, fuzzy, kde-format
-#| msgid "100%"
+#, kde-format
 msgctxt "line height for text"
 msgid "100%"
-msgstr "100%"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1606
@@ -57355,18 +57346,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:102
-#, fuzzy, kde-format
-#| msgid "SVG Source"
+#, kde-format
 msgid "Edit SVG Source"
-msgstr "Zdroj SVG"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-#| msgctxt "Open the folder when the new created video is placed"
-#| msgid "Show in folder"
+#, kde-format
 msgid "Show line boxes"
-msgstr "Zobrazit ve složce"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
@@ -58878,14 +58866,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#~ msgid "Both"
-#~ msgstr "Oboje"
-
-#~ msgid "S&VG Source Only"
-#~ msgstr "Pouze zdroj S&VG"
-
-#~ msgctxt ""
-#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-#~ msgid "Grow: "
-#~ msgstr "Zvětšit: "

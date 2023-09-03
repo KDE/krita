@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-30 02:23+0000\n"
+"POT-Creation-Date: 2023-09-02 02:31+0000\n"
 "PO-Revision-Date: 2015-08-25 20:08+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -16185,7 +16185,7 @@ msgstr "%1-valg"
 msgid "Active tool: %1"
 msgstr "Aktivt verktøy: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1788
+#: libs/flake/svg/SvgParser.cpp:1793
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -19242,7 +19242,7 @@ msgstr "Ut"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:504 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19278,9 +19278,9 @@ msgstr ""
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20284,18 +20284,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:398
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:389
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:471
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:462
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:478
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:469
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -20303,27 +20303,27 @@ msgid ""
 "will be reduced to 50 frames per second"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:485
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:476
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgid "Warning(s):"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:698
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:724
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr ""
@@ -23289,19 +23289,19 @@ msgid "Always use this template"
 msgstr "Bruk alltid denne malen"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
-#: libs/ui/forms/KisWelcomePage.ui:60
+#: libs/ui/forms/KisWelcomePage.ui:66
 #, kde-format
 msgid "Support Krita!"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:140
+#: libs/ui/forms/KisWelcomePage.ui:146
 #, kde-format
 msgid "Start"
 msgstr "Start"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:207 libs/ui/KisWelcomePageWidget.cpp:634
+#: libs/ui/forms/KisWelcomePage.ui:213 libs/ui/KisWelcomePageWidget.cpp:634
 #, kde-format
 msgid "DEV BUILD"
 msgstr ""
@@ -23310,7 +23310,7 @@ msgstr ""
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/KisWelcomePage.ui:261 libs/ui/forms/wdgimageproperties.ui:18
+#: libs/ui/forms/KisWelcomePage.ui:267 libs/ui/forms/wdgimageproperties.ui:18
 #: libs/ui/forms/wdgnewimage.ui:18
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:24
 #, kde-format
@@ -23319,7 +23319,7 @@ msgstr "Nytt bilde"
 
 #. i18n: ectx: property (text), widget (QLabel, newFileLinkShortcut)
 #. i18n: ectx: property (text), widget (QLabel, openFileShortcut)
-#: libs/ui/forms/KisWelcomePage.ui:294 libs/ui/forms/KisWelcomePage.ui:355
+#: libs/ui/forms/KisWelcomePage.ui:306 libs/ui/forms/KisWelcomePage.ui:373
 #: plugins/color/lcms2engine/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:22
 #: plugins/color/lcms2engine/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:27
 #: plugins/color/lcms2engine/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:22
@@ -23329,74 +23329,74 @@ msgid "X"
 msgstr "X"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:322
+#: libs/ui/forms/KisWelcomePage.ui:334
 #, kde-format
 msgid "Open Image"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:394
+#: libs/ui/forms/KisWelcomePage.ui:412
 #, kde-format
 msgid "Community"
 msgstr "Fellesskap"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:463 libs/ui/KisWelcomePageWidget.cpp:393
+#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:393
 #, kde-format
 msgid "User Manual"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:553 libs/ui/KisWelcomePageWidget.cpp:396
+#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:396
 #, kde-format
 msgid "Support Krita"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:643 libs/ui/KisWelcomePageWidget.cpp:405
+#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:405
 #, kde-format
 msgid "Powered by KDE"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:733 libs/ui/KisWelcomePageWidget.cpp:402
+#: libs/ui/forms/KisWelcomePage.ui:751 libs/ui/KisWelcomePageWidget.cpp:402
 #, kde-format
 msgid "Source Code"
 msgstr "Kildekode"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:820 libs/ui/KisWelcomePageWidget.cpp:390
+#: libs/ui/forms/KisWelcomePage.ui:838 libs/ui/KisWelcomePageWidget.cpp:390
 #, kde-format
 msgid "Getting Started"
 msgstr "Kom i gang"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:907 libs/ui/KisWelcomePageWidget.cpp:387
+#: libs/ui/forms/KisWelcomePage.ui:925 libs/ui/KisWelcomePageWidget.cpp:387
 #, kde-format
 msgid "User Community"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:994 libs/ui/KisWelcomePageWidget.cpp:399
+#: libs/ui/forms/KisWelcomePage.ui:1012 libs/ui/KisWelcomePageWidget.cpp:399
 #, kde-format
 msgid "Krita Website"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1069
+#: libs/ui/forms/KisWelcomePage.ui:1087
 #, kde-format
 msgid "Recent Images"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:1093
+#: libs/ui/forms/KisWelcomePage.ui:1111
 #, kde-format
 msgctxt "Welcome Screen Recent Document List's Clear link Label"
 msgid "Clear"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:1144
+#: libs/ui/forms/KisWelcomePage.ui:1162
 #, kde-format
 msgid ""
 "You don't seem to have any\n"
@@ -23404,37 +23404,37 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1275
+#: libs/ui/forms/KisWelcomePage.ui:1293
 #, kde-format
 msgid "News"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:1298
+#: libs/ui/forms/KisWelcomePage.ui:1316
 #, kde-format
 msgid "News options"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1405
+#: libs/ui/forms/KisWelcomePage.ui:1423
 #, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:1456
+#: libs/ui/forms/KisWelcomePage.ui:1474
 #, kde-format
 msgid "Update now!"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:1463
+#: libs/ui/forms/KisWelcomePage.ui:1481
 #, kde-format
 msgid "Show details"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1515 libs/ui/KisWelcomePageWidget.cpp:407
+#: libs/ui/forms/KisWelcomePage.ui:1533 libs/ui/KisWelcomePageWidget.cpp:407
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -23443,7 +23443,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1587
+#: libs/ui/forms/KisWelcomePage.ui:1605
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -31632,12 +31632,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:653
+#: libs/ui/opengl/kis_opengl.cpp:659
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:655
+#: libs/ui/opengl/kis_opengl.cpp:661
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -31645,14 +31645,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1069
+#: libs/ui/opengl/kis_opengl.cpp:1075
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1071
+#: libs/ui/opengl/kis_opengl.cpp:1077
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -31733,7 +31733,7 @@ msgstr ""
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_paint.cc:571
+#: libs/ui/tool/kis_tool_paint.cc:582
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr ""
@@ -42294,7 +42294,7 @@ msgstr "&Tilpasset:"
 msgid "Separate Image"
 msgstr "Separer bilde"
 
-#: plugins/extensions/separate_channels/kis_channel_separator.cc:192
+#: plugins/extensions/separate_channels/kis_channel_separator.cc:197
 msgctxt "(qtundo-format)"
 msgid "Separate Image"
 msgstr "Separer bilde"

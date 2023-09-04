@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-02 00:44+0000\n"
-"PO-Revision-Date: 2023-08-05 13:01+0200\n"
+"PO-Revision-Date: 2023-09-03 12:19+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -15349,7 +15349,7 @@ msgstr "Amosar a &barra de estado"
 #, kde-format
 msgctxt "action"
 msgid "Show or hide the status bar"
-msgstr "Amosar ou agochar a barra do estado"
+msgstr "Amosar ou agochar a barra de estado"
 
 #. i18n: context: iconText @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:957
@@ -19120,7 +19120,7 @@ msgstr "Pincel MyPaint"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Krita Assistant"
-msgstr "Axudante de Krita"
+msgstr "Asistente de Krita"
 
 #: libs/koplugin/KisMimeDatabase.cpp:199
 #, kde-format
@@ -39015,7 +39015,7 @@ msgstr "Subdivisión:"
 #: plugins/assistants/Assistants/kis_assistant_tool.h:177
 #, kde-format
 msgid "Assistant Tool"
-msgstr "Ferramenta de asistencia"
+msgstr "Ferramenta asistente"
 
 #. i18n: context: text @ Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: text @ Actions (tool-shortcuts), ActionCollection (Tools)
@@ -39088,7 +39088,7 @@ msgstr "Atallos da ferramenta"
 #, kde-format
 msgctxt "action"
 msgid "Assistant Tool"
-msgstr "Ferramenta de asistencia"
+msgstr "Ferramenta asistente"
 
 #: plugins/assistants/Assistants/ParallelRulerAssistant.cc:28
 #, kde-format

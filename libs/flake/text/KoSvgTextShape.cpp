@@ -451,13 +451,10 @@ QPainterPath KoSvgTextShape::selectionBoxes(int pos, int anchor)
 
     QPainterPath p;
     p.setFillRule(Qt::WindingFill);
-    for (int i = start; i <= end; i++) {
+    for (int i = start+1; i <= end; i++) {
         CursorPos pos = d->cursorPos.at(i);
         CharacterResult res = d->result.at(pos.cluster);
         const QTransform tf = res.finalTransform();
-        if (i == start && pos.offset == res.cursorInfo.offsets.size()-1) {
-            continue;
-        }
         QLineF first = res.cursorInfo.caret;
         QLineF last = first;
         if (res.cursorInfo.rtl) {

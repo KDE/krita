@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-02 00:44+0000\n"
+"POT-Creation-Date: 2023-09-05 00:43+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -17245,7 +17245,7 @@ msgid "Set Image Resolution"
 msgstr "Bildoplösen fastleggen"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:224
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr "Verschuven"
@@ -23045,7 +23045,7 @@ msgstr "Laag-Egenschappen"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -32994,7 +32994,7 @@ msgid ""
 "Y: %2 px"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
+#: libs/ui/tool/kis_tool_utils.cpp:193 libs/ui/tool/kis_tool_utils.cpp:205
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -33016,7 +33016,7 @@ msgstr "Pinsel grötter maken"
 msgid "Decrease Brush Size"
 msgstr "Pinsel lütter maken"
 
-#: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:146
+#: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, fuzzy, kde-format
 msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
@@ -38075,13 +38075,13 @@ msgid "Animation Curves"
 msgstr "&Klöörlaag"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:70
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:70
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:71
 #, fuzzy, kde-format
 msgid "Frame register"
 msgstr "Manfred Wiese, Sönke Dibbern"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:87
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:88
 #, fuzzy, kde-format
 #| msgid "Speed"
 msgctxt "preview playback speed percentage prefix"
@@ -38089,7 +38089,7 @@ msgid "Speed: "
 msgstr "Gauigkeit"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:88
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:89
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:90
 #, kde-format
 msgid "Preview playback speed"
 msgstr ""
@@ -38101,7 +38101,7 @@ msgid "Val:"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:168
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:130
 #, fuzzy, kde-format
 msgid "Onion skins menu"
 msgstr "Afmeten&grenzen"
@@ -38113,26 +38113,26 @@ msgid "Audio menu"
 msgstr "ISO-Studiolamp"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:184
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:182
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation settings menu"
 msgstr "Animeert"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:196
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:194
 #, fuzzy, kde-format
 msgid "Clip Start: "
 msgstr "Start"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:200
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:198
 #, kde-format
 msgid "Clip End: "
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:205
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:203
 #, fuzzy, kde-format
 msgid "Frame Rate: "
 msgstr "Manfred Wiese, Sönke Dibbern"
@@ -38236,71 +38236,71 @@ msgid_plural "Adjust %1 Keyframes"
 msgstr[0] "Naam infögen"
 msgstr[1] "Naam infögen"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:57
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:292
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:58
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:296
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation Timeline"
 msgstr "Animeert"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:138
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Borndateien:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:140
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "<< Wegmaken"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:148
 #, fuzzy, kde-format
 #| msgid "Volume:"
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "Sett:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:168
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation audio menu"
 msgstr "Animeert"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
 #, kde-format
 msgid "AutoKey Blank"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:213
 #, fuzzy, kde-format
 #| msgid "Duplicate"
 msgid "AutoKey Duplicate"
 msgstr "Verdubbeln"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:520
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:528
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:532
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:529
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:533
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:530
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:534
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""
@@ -60779,8 +60779,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "En Laag oder Köör ümwanneln"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:144
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:58
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Wanneln"

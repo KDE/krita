@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-02 02:31+0000\n"
+"POT-Creation-Date: 2023-09-05 02:22+0000\n"
 "PO-Revision-Date: 2023-08-26 10:02+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -16903,7 +16903,7 @@ msgid "Set Image Resolution"
 msgstr "Ezarri irudi-bereizmena"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:224
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr "Lekuz aldatu"
@@ -22558,7 +22558,7 @@ msgstr "Geruzaren propietateak"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -32583,7 +32583,7 @@ msgstr ""
 "X: %1 px\n"
 "Y: %2 px"
 
-#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
+#: libs/ui/tool/kis_tool_utils.cpp:193 libs/ui/tool/kis_tool_utils.cpp:205
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
@@ -32604,7 +32604,7 @@ msgstr "Handitu pintzelaren tamaina"
 msgid "Decrease Brush Size"
 msgstr "Txikitu pintzelaren tamaina"
 
-#: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:146
+#: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, kde-format
 msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
@@ -37716,20 +37716,20 @@ msgid "Animation Curves"
 msgstr "Animazio kurbak"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:70
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:70
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:71
 #, kde-format
 msgid "Frame register"
 msgstr "Fotogramen erregistroa"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:87
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:88
 #, kde-format
 msgctxt "preview playback speed percentage prefix"
 msgid "Speed: "
 msgstr "Abiadura:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:88
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:89
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:90
 #, kde-format
 msgid "Preview playback speed"
 msgstr "Aurreikusteko atzera-jotze abiadura"
@@ -37741,7 +37741,7 @@ msgid "Val:"
 msgstr "Bal:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:168
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:130
 #, kde-format
 msgid "Onion skins menu"
 msgstr "Tipula-paperen menua"
@@ -37752,25 +37752,25 @@ msgid "Audio menu"
 msgstr "Audio menua"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:184
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:182
 #, kde-format
 msgid "Animation settings menu"
 msgstr "Animazio ezarpenen menua"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:196
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:194
 #, kde-format
 msgid "Clip Start: "
 msgstr "Kliparen hasiera: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:200
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:198
 #, kde-format
 msgid "Clip End: "
 msgstr "Kliparen amaiera: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:205
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:203
 #, kde-format
 msgid "Frame Rate: "
 msgstr "Fotograma-emaria:"
@@ -37865,69 +37865,69 @@ msgid_plural "Adjust %1 Keyframes"
 msgstr[0] "Doitu gako-fotograma"
 msgstr[1] "Doitu %1 gako-fotograma"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:57
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:292
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:58
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:296
 #, kde-format
 msgid "Animation Timeline"
 msgstr "Animazioaren denbora-lerroa"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:138
 #, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Inportatu audioa..."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:140
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Kendu audioa"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Isilarazi"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:148
 #, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "Bolumena: "
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:168
 #, fuzzy, kde-format
 #| msgid "Animation settings menu"
 msgid "Animation audio menu"
 msgstr "Animazio ezarpenen menua"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
 #, kde-format
 msgid "AutoKey Blank"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:213
 #, fuzzy, kde-format
 #| msgid "Duplicate"
 msgid "AutoKey Duplicate"
 msgstr "Bikoiztu"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:520
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Gaitu atzera-jotzeko denbora mantentzea."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:528
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:532
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Egiazko FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:529
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:533
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "FPS erreala:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:530
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:534
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Baztertutako fotogramak:\t%%1"
@@ -59586,8 +59586,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Eraldatu geruza bat edo hautapen bat"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:144
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:58
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Eraldatu"

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-02 02:31+0000\n"
+"POT-Creation-Date: 2023-09-05 02:22+0000\n"
 "PO-Revision-Date: 2023-08-27 01:49+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -16789,7 +16789,7 @@ msgid "Set Image Resolution"
 msgstr "Görsel Çözünürlüğünü Ayarla"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:224
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr "Taşı"
@@ -22432,7 +22432,7 @@ msgstr "Katman Özellikleri"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -32402,7 +32402,7 @@ msgstr ""
 "X: %1 pks\n"
 "Y: %2 pks"
 
-#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
+#: libs/ui/tool/kis_tool_utils.cpp:193 libs/ui/tool/kis_tool_utils.cpp:205
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
@@ -32423,7 +32423,7 @@ msgstr "Fırça Boyutunu Artır"
 msgid "Decrease Brush Size"
 msgstr "Fırça Boyutu Küçült"
 
-#: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:146
+#: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, kde-format
 msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
@@ -37674,20 +37674,20 @@ msgid "Animation Curves"
 msgstr "Canlandırma Eğrileri"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:70
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:70
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:71
 #, kde-format
 msgid "Frame register"
 msgstr "Kare kaydı"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:87
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:88
 #, kde-format
 msgctxt "preview playback speed percentage prefix"
 msgid "Speed: "
 msgstr "Hız: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:88
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:89
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:90
 #, kde-format
 msgid "Preview playback speed"
 msgstr "Önizleme oynatma hızı"
@@ -37699,7 +37699,7 @@ msgid "Val:"
 msgstr "Değ:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:168
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:130
 #, kde-format
 msgid "Onion skins menu"
 msgstr "Soğan zarları menüsü"
@@ -37710,25 +37710,25 @@ msgid "Audio menu"
 msgstr "Ses menüsü"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:184
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:182
 #, kde-format
 msgid "Animation settings menu"
 msgstr "Canlandırma ayarları menüsü"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:196
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:194
 #, kde-format
 msgid "Clip Start: "
 msgstr "Kırpma Başlangıcı: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:200
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:198
 #, kde-format
 msgid "Clip End: "
 msgstr "Kırpma Bitişi: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:205
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:203
 #, kde-format
 msgid "Frame Rate: "
 msgstr "Kare Hızı: "
@@ -37823,67 +37823,67 @@ msgid_plural "Adjust %1 Keyframes"
 msgstr[0] "Anahtar Kareyi Ayarla"
 msgstr[1] "%1 Anahtar Kareyi Ayarla"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:57
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:292
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:58
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:296
 #, kde-format
 msgid "Animation Timeline"
 msgstr "Canlandırma Zaman Akışı"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:138
 #, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Ses İçe Aktar..."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:140
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Sesi Kaldır"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Sessize Al"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:148
 #, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "Ses düzeyi: "
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:168
 #, kde-format
 msgid "Animation audio menu"
 msgstr "Canlandırma sesi menüsü"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
 #, kde-format
 msgid "AutoKey Blank"
 msgstr "Boş Otomatik Anahtar"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:213
 #, kde-format
 msgid "AutoKey Duplicate"
 msgstr "Yinelenmiş Otomatik Anahtar"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:520
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Oynatma zamanlamasını korumak için etkinleştirin."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:528
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:532
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Etkili FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:529
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:533
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Gerçek FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:530
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:534
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Bırakılan kareler:\t%​%1"
@@ -59703,8 +59703,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Bir katmanın ya da seçimin şeklini değiştir"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:144
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:58
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Dönüştür"

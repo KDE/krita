@@ -836,8 +836,8 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         //
         // See: https://github.com/libjxl/libjxl/issues/2463
         const int setPatches = [&]() -> int {
-            if ((cfg->getInt("effort", 7) > 4) && !cfg->getBool("flattenLayers", true) && cfg->getBool("lossless")) {
-                warnFile << "Using workaround for lossless layer exports, disabling patches option on effort > 4";
+            if ((cfg->getInt("effort", 7) > 4) && !cfg->getBool("flattenLayers", true)) {
+                warnFile << "Using workaround for layer exports, disabling patches option on effort > 4";
                 return 0;
             }
             return cfg->getInt("patches", -1);

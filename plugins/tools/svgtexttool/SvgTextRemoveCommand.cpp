@@ -5,18 +5,27 @@
  */
 #include "SvgTextRemoveCommand.h"
 
+#include "SvgTextTool.h"
+#include "SvgTextCursor.h"
+
 #include <klocalizedstring.h>
+#include "kis_command_ids.h"
 
 #include "KoSvgTextShape.h"
 #include "KoSvgTextShapeMarkupConverter.h"
 SvgTextRemoveCommand::SvgTextRemoveCommand(KoSvgTextShape *shape,
-                                           int pos,
+                                           int pos, int originalPos,
+                                           int anchor,
                                            int length,
+                                           SvgTextCursor *cursor,
                                            KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shape(shape)
     , m_pos(pos)
+    , m_originalPos(originalPos)
+    , m_anchor(anchor)
     , m_length(length)
+    , m_cursor(cursor)
 {
     Q_ASSERT(shape);
     setText(kundo2_i18n("Remove Text"));
@@ -25,10 +34,17 @@ SvgTextRemoveCommand::SvgTextRemoveCommand(KoSvgTextShape *shape,
 void SvgTextRemoveCommand::redo()
 {
     QRectF updateRect = m_shape->boundingRect();
+    int oldIndex = m_shape->indexForPos(m_pos);
+
     KoSvgTextShapeMarkupConverter converter(m_shape);
     converter.convertToSvg(&m_oldSvg, &m_oldDefs);
     m_shape->removeText(m_pos, m_length);
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
+
+    if (m_cursor) {
+        int pos = m_shape->posForIndex(oldIndex, false, false);
+        m_cursor->setPos(pos, pos);
+    }
 }
 
 void SvgTextRemoveCommand::undo()
@@ -38,4 +54,31 @@ void SvgTextRemoveCommand::undo()
     // Hardcoded resolution?
     converter.convertFromSvg(m_oldSvg, m_oldDefs, m_shape->boundingRect(), 72.0);
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
+
+    if (m_cursor) {
+        m_cursor->setPos(m_originalPos, m_anchor);
+    }
+}
+
+int SvgTextRemoveCommand::id() const
+{
+    return KisCommandUtils::SvgRemoveTextCommand;
+}
+
+bool SvgTextRemoveCommand::mergeWith(const KUndo2Command *other)
+{
+    const SvgTextRemoveCommand *command = dynamic_cast<const SvgTextRemoveCommand*>(other);
+
+
+    if (!command || command->m_shape != m_shape || command->m_cursor != m_cursor) {
+        return false;
+    }
+    int oldIndex = m_shape->indexForPos(m_pos);
+    int otherOldIndex = m_shape->indexForPos(command->m_pos);
+    if (oldIndex - m_length != otherOldIndex) {
+        return false;
+    }
+
+    m_length += command->m_length;
+    return true;
 }

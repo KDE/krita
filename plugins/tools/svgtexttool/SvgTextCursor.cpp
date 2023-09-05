@@ -139,14 +139,10 @@ void SvgTextCursor::insertText(QString text)
             SvgTextRemoveCommand *removeCmd = removeSelection();
             d->tool->addCommand(removeCmd);
         }
-        int oldIndex = d->shape->indexForPos(d->pos);
 
-        SvgTextInsertCommand *insertCmd = new SvgTextInsertCommand(d->shape, d->pos, d->anchor, text);
+        SvgTextInsertCommand *insertCmd = new SvgTextInsertCommand(d->shape, d->pos, d->anchor, text, this);
         d->tool->addCommand(insertCmd);
 
-        d->pos = d->shape->posForIndex(oldIndex + text.size(), false, true);
-        d->anchor = d->pos;
-        updateCursor();
     }
 }
 
@@ -161,11 +157,8 @@ void SvgTextCursor::removeLast()
         } else {
             int oldIndex = d->shape->indexForPos(d->pos);
             int newPos = d->shape->posForIndex(oldIndex-1, false, false);
-            removeCmd = new SvgTextRemoveCommand(d->shape, newPos, 1);
+            removeCmd = new SvgTextRemoveCommand(d->shape, newPos, d->pos, d->anchor, 1, this);
             d->tool->addCommand(removeCmd);
-            d->pos = d->shape->posForIndex(oldIndex-1, false, false);
-            d->anchor = d->pos;
-            updateCursor();
         }
     }
 }
@@ -179,12 +172,8 @@ void SvgTextCursor::removeNext()
             d->tool->addCommand(removeCmd);
             updateCursor();
         } else {
-            int oldIndex = d->shape->indexForPos(d->pos);
-            removeCmd = new SvgTextRemoveCommand(d->shape, d->pos, 1);
+            removeCmd = new SvgTextRemoveCommand(d->shape, d->pos, d->pos, d->anchor, 1, this);
             d->tool->addCommand(removeCmd);
-            d->pos = d->shape->posForIndex(oldIndex, false, false);
-            d->anchor = d->pos;
-            updateCursor();
         }
     }
 }
@@ -198,7 +187,7 @@ SvgTextRemoveCommand *SvgTextCursor::removeSelection(KUndo2Command *parent)
             int length = d->shape->indexForPos(qMax(d->anchor, d->pos)) - d->shape->indexForPos(start);
             d->pos = start;
             d->anchor = d->pos;
-            removeCmd = new SvgTextRemoveCommand(d->shape, start, length, parent);
+            removeCmd = new SvgTextRemoveCommand(d->shape, start, d->pos, d->anchor, length, this, parent);
         }
     }
     return removeCmd;

@@ -36,6 +36,8 @@ enum CommandId {
     ChangeProjectionColorCommand,
     SvgInlineSizeChangeCommand,
     SvgMoveTextCommand,
+    SvgInsertTextCommand,
+    SvgRemoveTextCommand
 };
 
 }

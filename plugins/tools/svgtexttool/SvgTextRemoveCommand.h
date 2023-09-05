@@ -10,13 +10,17 @@
 #include <kundo2command.h>
 
 class KoSvgTextShape;
+class SvgTextCursor;
 
 class SvgTextRemoveCommand : public KUndo2Command
 {
 public:
     SvgTextRemoveCommand(KoSvgTextShape *shape,
                          int pos,
+                         int originalPos,
+                         int anchor,
                          int length,
+                         SvgTextCursor *cursor = 0,
                          KUndo2Command *parent = 0);
     ~SvgTextRemoveCommand() override = default;
 
@@ -25,10 +29,16 @@ public:
     /// revert the actions done in redo
     void undo() override;
 
+    int id() const override;
+    bool mergeWith(const KUndo2Command *other) override;
+
 private:
     KoSvgTextShape *m_shape;
     int m_pos;
+    int m_originalPos;
+    int m_anchor;
     int m_length;
+    SvgTextCursor *m_cursor;
     QString m_oldSvg;
     QString m_oldDefs;
 };

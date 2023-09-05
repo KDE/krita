@@ -494,7 +494,10 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 d.m_depthID_target = d.m_depthID;
                 d.m_colorID_target = d.m_colorID;
                 d.m_depthID = Float32BitsColorDepthID;
-                d.m_colorID = RGBAColorModelID;
+
+                if (d.m_colorID != GrayAColorModelID) {
+                    d.m_colorID = RGBAColorModelID;
+                }
             }
         } else if (status == JXL_DEC_COLOR_ENCODING) {
             // Determine color space information
@@ -738,6 +741,8 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
             }
 
             if (d.cs_target) {
+                dbgFile << "Source profile:" << d.cs->profile()->name();
+                dbgFile << "Source space:" << d.cs->name() << d.cs->colorModelId() << d.cs->colorDepthId();
                 dbgFile << "Target profile:" << d.cs_target->profile()->name();
                 dbgFile << "Color space:" << d.cs_target->name() << d.cs_target->colorModelId()
                         << d.cs_target->colorDepthId();

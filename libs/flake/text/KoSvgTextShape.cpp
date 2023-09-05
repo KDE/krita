@@ -241,14 +241,44 @@ int KoSvgTextShape::nextLine(int pos)
     if (pos < 0 || pos > d->cursorPos.size()-1 || d->result.isEmpty() || d->cursorPos.isEmpty()) {
         return pos;
     }
+
     int nextLineStart = lineEnd(pos)+1;
     int nextLineEnd = lineEnd(nextLineStart);
+    CursorPos cursorPos = d->cursorPos.at(pos);
+    if (!this->shapesInside().isEmpty()) {
+        LineBox nextLineBox;
+        for (int i = 0; i < d->lineBoxes.size(); ++i) {
+            for (int j = 0; j < d->lineBoxes.at(i).chunks.size(); ++j) {
+                if (d->lineBoxes.at(i).chunks.at(j).chunkIndices.contains(cursorPos.cluster)) {
+                    nextLineBox = d->lineBoxes.at(qMin(i + 1, d->lineBoxes.size()-1));
+                }
+            }
+        }
+        if (nextLineBox.chunks.size()>0) {
+            int first = -1;
+            int last = -1;
+            Q_FOREACH(LineChunk chunk, nextLineBox.chunks) {
+                Q_FOREACH (int i, chunk.chunkIndices) {
+                    if (d->result.at(i).addressable) {
+                        if (first < 0) {
+                            first = d->result.at(i).cursorInfo.graphemeIndices.first();
+                        }
+                        last = d->result.at(i).cursorInfo.graphemeIndices.last();
+                    }
+                }
+            }
+            if (first > -1 && last > -1) {
+                nextLineStart = posForIndex(first);
+                nextLineEnd = posForIndex(last);
+            }
+        }
+    }
+
 
     if (nextLineStart > d->cursorPos.size()-1) {
         return d->cursorPos.size()-1;
     }
 
-    CursorPos cursorPos = d->cursorPos.at(pos);
     CharacterResult res = d->result.at(cursorPos.cluster);
     QPointF currentPoint = res.finalPosition;
     currentPoint += res.cursorInfo.offsets.value(cursorPos.offset, res.advance);
@@ -272,6 +302,35 @@ int KoSvgTextShape::previousLine(int pos)
     int previousLineStart = lineStart(currentLineStart-1);
 
     CursorPos cursorPos = d->cursorPos.at(pos);
+    if (!this->shapesInside().isEmpty()) {
+        LineBox previousLineBox;
+        for (int i = 0; i < d->lineBoxes.size(); ++i) {
+            for (int j = 0; j < d->lineBoxes.at(i).chunks.size(); ++j) {
+                if (d->lineBoxes.at(i).chunks.at(j).chunkIndices.contains(cursorPos.cluster)) {
+                    previousLineBox = d->lineBoxes.at(qMax(i - 1, 0));
+                }
+            }
+        }
+        if (previousLineBox.chunks.size()>0) {
+            int first = -1;
+            int last = -1;
+            Q_FOREACH(LineChunk chunk, previousLineBox.chunks) {
+                Q_FOREACH (int i, chunk.chunkIndices) {
+                    if (d->result.at(i).addressable) {
+                        if (first < 0) {
+                            first = d->result.at(i).cursorInfo.graphemeIndices.first();
+                        }
+                        last = d->result.at(i).cursorInfo.graphemeIndices.last();
+                    }
+                }
+            }
+            if (first > -1 && last > -1) {
+                previousLineStart = posForIndex(first);
+                currentLineStart = posForIndex(last);
+            }
+        }
+    }
+
     CharacterResult res = d->result.at(cursorPos.cluster);
     QPointF currentPoint = res.finalPosition;
     currentPoint += res.cursorInfo.offsets.value(cursorPos.offset, res.advance);

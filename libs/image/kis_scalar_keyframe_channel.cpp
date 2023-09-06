@@ -309,28 +309,28 @@ QPointF KisScalarKeyframeChannel::interpolate(QPointF point1, QPointF rightTange
 
 void KisScalarKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2Command *parentUndoCmd)
 {
-    KisKeyframeChannel::insertKeyframe(time, keyframe, parentUndoCmd);
-
     KisScalarKeyframeSP scalarKeyframe = keyframe.dynamicCast<KisScalarKeyframe>();
     if (scalarKeyframe) {
         scalarKeyframe->valueChangedChannelConnection =
-                QObject::connect(scalarKeyframe.data(),
-                                 &KisScalarKeyframe::sigChanged,
-                                 [this, time](const KisScalarKeyframe* key){
-                                     Q_UNUSED(key);
-                                     emit sigKeyframeChanged(this, time);
-                                 });
+            QObject::connect(scalarKeyframe.data(),
+                             &KisScalarKeyframe::sigChanged,
+                             [this, time](const KisScalarKeyframe* key){
+                                 Q_UNUSED(key);
+                                 emit sigKeyframeChanged(this, time);
+                             });
     }
+
+    KisKeyframeChannel::insertKeyframe(time, keyframe, parentUndoCmd);
 }
 
 void KisScalarKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentUndoCmd)
 {
-    KisKeyframeChannel::removeKeyframe(time, parentUndoCmd);
-
     KisScalarKeyframeSP keyframe = keyframeAt<KisScalarKeyframe>(time);
     if (keyframe) {
         disconnect(keyframe->valueChangedChannelConnection);
     }
+
+    KisKeyframeChannel::removeKeyframe(time, parentUndoCmd);
 }
 
 KisTimeSpan KisScalarKeyframeChannel::affectedFrames(int time) const

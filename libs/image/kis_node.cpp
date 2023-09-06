@@ -22,6 +22,7 @@
 #include "kis_processing_visitor.h"
 #include "kis_node_progress_proxy.h"
 #include "kis_busy_progress_indicator.h"
+#include "KisFrameChangeUpdateRecipe.h"
 
 #include "kis_clone_layer.h"
 
@@ -104,6 +105,9 @@ public:
     void processDuplicatedClones(const KisNode *srcDuplicationRoot,
                                  const KisNode *dstDuplicationRoot,
                                  KisNode *node);
+
+    std::optional<KisFrameChangeUpdateRecipe> frameRemovalUpdateRecipe;
+    KisFrameChangeUpdateRecipe handleKeyframeChannelUpdateImpl(const KisKeyframeChannel *channel, int time);
 };
 
 /**
@@ -623,35 +627,51 @@ void KisNode::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
     }
 }
 
-void KisNode::handleKeyframeChannelUpdateImpl(const KisKeyframeChannel *channel, int time)
+KisFrameChangeUpdateRecipe
+KisNode::Private::handleKeyframeChannelUpdateImpl(const KisKeyframeChannel *channel, int time)
 {
-    const KisTimeSpan affectedRange = channel->affectedFrames(time);
-    const QRect affectedRect = channel->affectedRect(time);
+    KisFrameChangeUpdateRecipe recipe;
 
-    invalidateFrames(affectedRange, affectedRect);
+    recipe.affectedRange = channel->affectedFrames(time);
+    recipe.affectedRect = channel->affectedRect(time);
 
-    if (image()) {
-        KisDefaultBoundsSP bounds(new KisDefaultBounds(image()));
+    if (parent->image()) {
+        KisDefaultBoundsSP bounds(new KisDefaultBounds(parent->image()));
 
-        if (affectedRange.contains(bounds->currentTime())) {
-            setDirty(affectedRect);
+        if (recipe.affectedRange.contains(bounds->currentTime())) {
+            recipe.totalDirtyRect = recipe.affectedRect;
         }
     }
+
+    return recipe;
 }
 
 void KisNode::handleKeyframeChannelFrameChange(const KisKeyframeChannel *channel, int time)
 {
-    handleKeyframeChannelUpdateImpl(channel, time);
+    m_d->handleKeyframeChannelUpdateImpl(channel, time).notify(this);
 }
 
 void KisNode::handleKeyframeChannelFrameAdded(const KisKeyframeChannel *channel, int time)
 {
-    handleKeyframeChannelUpdateImpl(channel, time);
+    m_d->handleKeyframeChannelUpdateImpl(channel, time).notify(this);
+}
+
+KisFrameChangeUpdateRecipe KisNode::handleKeyframeChannelFrameAboutToBeRemovedImpl(const KisKeyframeChannel *channel, int time)
+{
+    return m_d->handleKeyframeChannelUpdateImpl(channel, time);
 }
 
 void KisNode::handleKeyframeChannelFrameAboutToBeRemoved(const KisKeyframeChannel *channel, int time)
 {
-    handleKeyframeChannelUpdateImpl(channel, time);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->frameRemovalUpdateRecipe);
+    m_d->frameRemovalUpdateRecipe = handleKeyframeChannelFrameAboutToBeRemovedImpl(channel, time);
+}
+
+void KisNode::handleKeyframeChannelFrameHasBeenRemoved(const KisKeyframeChannel *channel, int time)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->frameRemovalUpdateRecipe);
+    m_d->frameRemovalUpdateRecipe->notify(this);
+    m_d->frameRemovalUpdateRecipe = std::nullopt;
 }
 
 void KisNode::requestTimeSwitch(int time)

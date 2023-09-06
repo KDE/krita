@@ -32,6 +32,7 @@
 #include "kis_signal_auto_connection.h"
 #include "kis_layer_properties_icons.h"
 
+#include "KisFrameChangeUpdateRecipe.h"
 #include "kis_onion_skin_cache.h"
 #include "kis_time_span.h"
 
@@ -54,7 +55,9 @@ public:
 
     bool onionSkinVisibleOverride = true;
 
-    void handleRasterKeyframeChannelUpdateImpl(const KisKeyframeChannel *channel, int time);
+    [[nodiscard]]
+    KisFrameChangeUpdateRecipe
+    handleRasterKeyframeChannelUpdateImpl(const KisKeyframeChannel *channel, int time);
 };
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
@@ -330,31 +333,26 @@ KisKeyframeChannel *KisPaintLayer::requestKeyframeChannel(const QString &id)
     return KisLayer::requestKeyframeChannel(id);
 }
 
-void KisPaintLayer::Private::handleRasterKeyframeChannelUpdateImpl(const KisKeyframeChannel *channel, int time)
+KisFrameChangeUpdateRecipe KisPaintLayer::Private::handleRasterKeyframeChannelUpdateImpl(const KisKeyframeChannel *channel, int time)
 {
-    const KisTimeSpan affectedRange = channel->affectedFrames(time);
-    const QRect affectedRect = channel->affectedRect(time);
+    KisFrameChangeUpdateRecipe recipe;
 
-    q->invalidateFrames(affectedRange, affectedRect);
+    recipe.affectedRange = channel->affectedFrames(time);
+    recipe.affectedRect = channel->affectedRect(time);
 
-    bool affectsCurrentFrame = false;
     KisImageWSP image = q->image();
     if (image) {
         KisDefaultBoundsSP bounds(new KisDefaultBounds(image));
-        affectsCurrentFrame = affectedRange.contains(bounds->currentTime());
+        if (recipe.affectedRange.contains(bounds->currentTime())) {
+            recipe.totalDirtyRect = recipe.affectedRect;
+        }
     }
 
     if (contentChannel->onionSkinsEnabled()) {
-        QRect rc = KisOnionSkinCompositor::instance()->updateExtentOnAddition(paintDevice, time);
-
-        if (affectsCurrentFrame) {
-            rc |= affectedRect;
-        }
-
-        q->setDirty(rc);
-    } else {
-        q->setDirty(affectedRect);
+        recipe.totalDirtyRect |= KisOnionSkinCompositor::instance()->updateExtentOnAddition(paintDevice, time);
     }
+
+    return recipe;
 }
 
 void KisPaintLayer::handleKeyframeChannelFrameChange(const KisKeyframeChannel *channel, int time)
@@ -369,21 +367,20 @@ void KisPaintLayer::handleKeyframeChannelFrameChange(const KisKeyframeChannel *c
 void KisPaintLayer::handleKeyframeChannelFrameAdded(const KisKeyframeChannel *channel, int time)
 {
     if (channel->id() == KisKeyframeChannel::Raster.id()) {
-        m_d->handleRasterKeyframeChannelUpdateImpl(channel, time);
+        m_d->handleRasterKeyframeChannelUpdateImpl(channel, time).notify(this);
     } else {
         KisLayer::handleKeyframeChannelFrameAdded(channel, time);
     }
 }
 
-void KisPaintLayer::handleKeyframeChannelFrameAboutToBeRemoved(const KisKeyframeChannel *channel, int time)
+KisFrameChangeUpdateRecipe KisPaintLayer::handleKeyframeChannelFrameAboutToBeRemovedImpl(const KisKeyframeChannel *channel, int time)
 {
     if (channel->id() == KisKeyframeChannel::Raster.id()) {
-        m_d->handleRasterKeyframeChannelUpdateImpl(channel, time);
+        return m_d->handleRasterKeyframeChannelUpdateImpl(channel, time);
     } else {
-        KisLayer::handleKeyframeChannelFrameAboutToBeRemoved(channel, time);
+        return KisLayer::handleKeyframeChannelFrameAboutToBeRemovedImpl(channel, time);
     }
 }
-
 
 bool KisPaintLayer::supportsKeyframeChannel(const QString &id)
 {

@@ -623,17 +623,35 @@ void KisNode::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
     }
 }
 
-void KisNode::handleKeyframeChannelUpdate(const KisTimeSpan &range, const QRect &rect)
+void KisNode::handleKeyframeChannelUpdateImpl(const KisKeyframeChannel *channel, int time)
 {
-    invalidateFrames(range, rect);
+    const KisTimeSpan affectedRange = channel->affectedFrames(time);
+    const QRect affectedRect = channel->affectedRect(time);
+
+    invalidateFrames(affectedRange, affectedRect);
 
     if (image()) {
         KisDefaultBoundsSP bounds(new KisDefaultBounds(image()));
 
-        if (range.contains(bounds->currentTime())) {
-            setDirty(rect);
+        if (affectedRange.contains(bounds->currentTime())) {
+            setDirty(affectedRect);
         }
     }
+}
+
+void KisNode::handleKeyframeChannelFrameChange(const KisKeyframeChannel *channel, int time)
+{
+    handleKeyframeChannelUpdateImpl(channel, time);
+}
+
+void KisNode::handleKeyframeChannelFrameAdded(const KisKeyframeChannel *channel, int time)
+{
+    handleKeyframeChannelUpdateImpl(channel, time);
+}
+
+void KisNode::handleKeyframeChannelFrameAboutToBeRemoved(const KisKeyframeChannel *channel, int time)
+{
+    handleKeyframeChannelUpdateImpl(channel, time);
 }
 
 void KisNode::requestTimeSwitch(int time)

@@ -149,9 +149,6 @@ public:
     virtual KisTimeSpan affectedFrames(int time) const override;
     virtual KisTimeSpan identicalFrames(int time) const override;
 
-Q_SIGNALS:
-    void sigKeyframeChanged(const KisKeyframeChannel *channel, int time);
-
 private:
     static qreal findCubicCurveParameter(int time0, qreal delta0, qreal delta1, int time1, int time);
     static qreal cubicBezier(qreal p0, qreal delta1, qreal delta2, qreal p3, qreal t);

@@ -221,7 +221,7 @@ void KisAnimatedTransformMaskParameters::setKeyframeChannel(const QString &name,
         m_d->transformChannels[name] = kcsp.dynamicCast<KisScalarKeyframeChannel>();
         m_d->transformChannels[name]->setDefaultValue(defaultValueForScalarChannel(name));
         m_d->transformChannels[name]->setDefaultInterpolationMode(KisScalarKeyframe::Linear);
-        m_d->transformChannels[name]->connect(m_d->transformChannels[name].data(), &KisKeyframeChannel::sigChannelUpdated, [this](const KisTimeSpan&, const QRect&){
+        m_d->transformChannels[name]->connect(m_d->transformChannels[name].data(), &KisKeyframeChannel::sigAnyKeyframeChange, [this] () {
             this->clearChangedFlag();
         });
     }

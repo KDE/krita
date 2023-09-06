@@ -1614,6 +1614,163 @@ void KisPaintDeviceTest::benchmarkLod4Generation()
 #include "kis_paint_device_frames_interface.h"
 #include "testing_timed_default_bounds.h"
 
+void KisPaintDeviceTest::testFramesSignals_data()
+{
+    QTest::addColumn<bool>("useCommand");
+
+    QTest::newRow("no command") << false;
+    QTest::newRow("with command") << true;
+}
+
+void KisPaintDeviceTest::testFramesSignals()
+{
+    QFETCH(bool, useCommand);
+
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
+    dev->setDefaultBounds(bounds);
+
+    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Raster);
+    QVERIFY(channel);
+
+    KisPaintDeviceFramesInterface *i = dev->framesInterface();
+    QVERIFY(i);
+
+    QCOMPARE(i->frames().size(), 1);
+
+    std::optional<int> receivedAddedKey;
+    std::optional<int> receivedToBeRemovedKey;
+    std::optional<int> receivedHasBeenRemovedKey;
+    bool receivedAnyFrameChange = false;
+
+    connect(channel, &KisKeyframeChannel::sigAddedKeyframe, channel,
+            [&] (const KisKeyframeChannel *ch, int time) {
+                QVERIFY(!receivedAddedKey);
+                QVERIFY(ch == channel);
+
+                /**
+                 * The signal should come **after** the frame has beed added
+                 */
+
+                KisKeyframeSP keyframe = ch->keyframeAt(time);
+                QVERIFY(keyframe);
+
+                KisRasterKeyframe *rasterKeyframe =
+                    dynamic_cast<KisRasterKeyframe*>(keyframe.data());
+                QVERIFY(rasterKeyframe);
+
+                /**
+                 * The raster keyframe channel should have had time to add the
+                 * frame to its internal structures.
+                 */
+                QVERIFY(!channel->timesForFrameID(rasterKeyframe->frameID()).isEmpty());
+
+                receivedAddedKey = time;
+            });
+
+    connect(channel, &KisKeyframeChannel::sigKeyframeAboutToBeRemoved, channel,
+            [&] (const KisKeyframeChannel *ch, int time) {
+                QVERIFY(!receivedToBeRemovedKey);
+                QVERIFY(ch == channel);
+
+                /**
+                 * The signal should come **before** the frame has beed removed
+                 */
+
+                KisKeyframeSP keyframe = ch->keyframeAt(time);
+                QVERIFY(keyframe);
+
+                KisRasterKeyframe *rasterKeyframe =
+                    dynamic_cast<KisRasterKeyframe*>(keyframe.data());
+                QVERIFY(rasterKeyframe);
+
+                /**
+                 * The raster keyframe channel should have info about this frame
+                 */
+                QVERIFY(!channel->timesForFrameID(rasterKeyframe->frameID()).isEmpty());
+
+                receivedToBeRemovedKey = time;
+            });
+
+    connect(channel, &KisKeyframeChannel::sigKeyframeHasBeenRemoved, channel,
+            [&] (const KisKeyframeChannel *ch, int time) {
+                QVERIFY(!receivedHasBeenRemovedKey);
+                QVERIFY(ch == channel);
+
+                /**
+                 * The signal should come **after** the frame has beed removed
+                 */
+
+                KisKeyframeSP keyframe = ch->keyframeAt(time);
+                QVERIFY(!keyframe);
+
+                receivedHasBeenRemovedKey = time;
+            });
+
+    connect(channel, &KisKeyframeChannel::sigAnyKeyframeChange, channel,
+            [&] () {
+                QVERIFY(!receivedAnyFrameChange);
+                receivedAnyFrameChange = true;
+            });
+
+
+    QScopedPointer<KUndo2Command> parentCommand;
+
+    if (useCommand) {
+        parentCommand.reset(new KUndo2Command);
+    }
+
+    // add keyframe at position 10
+    channel->addKeyframe(10, parentCommand.data());
+
+    QVERIFY(receivedAddedKey);
+    QCOMPARE(*receivedAddedKey, 10);
+    receivedAddedKey = std::nullopt;
+
+    QVERIFY(!receivedToBeRemovedKey);
+    QVERIFY(!receivedHasBeenRemovedKey);
+    QVERIFY(receivedAnyFrameChange);
+    receivedAnyFrameChange = false;
+
+    if (parentCommand) {
+        // first redo is skipped
+        parentCommand->redo();
+        QVERIFY(!receivedAddedKey);
+        QVERIFY(!receivedToBeRemovedKey);
+        QVERIFY(!receivedHasBeenRemovedKey);
+        QVERIFY(!receivedAnyFrameChange);
+        parentCommand.reset(new KUndo2Command);
+    }
+
+    // add keyframe at position 10
+    channel->removeKeyframe(10, parentCommand.data());
+
+    QVERIFY(!receivedAddedKey);
+
+    QVERIFY(receivedToBeRemovedKey);
+    QCOMPARE(*receivedToBeRemovedKey, 10);
+    receivedToBeRemovedKey = std::nullopt;
+
+    QVERIFY(receivedHasBeenRemovedKey);
+    QCOMPARE(*receivedHasBeenRemovedKey, 10);
+    receivedHasBeenRemovedKey = std::nullopt;
+
+    QVERIFY(receivedAnyFrameChange);
+    receivedAnyFrameChange = false;
+
+    if (parentCommand) {
+        // first redo is skipped
+        parentCommand->redo();
+        QVERIFY(!receivedAddedKey);
+        QVERIFY(!receivedToBeRemovedKey);
+        QVERIFY(!receivedHasBeenRemovedKey);
+        QVERIFY(!receivedAnyFrameChange);
+        parentCommand.reset(new KUndo2Command);
+    }
+}
+
 void KisPaintDeviceTest::testFramesLeaking()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();

@@ -18,6 +18,7 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_mask.h"
 #include "kis_image.h"
+#include "kis_command_utils.h"
 
 #include <QMap>
 
@@ -100,7 +101,9 @@ void KisKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2
     }
 
     if (parentUndoCmd) {
-        KUndo2Command* cmd = new KisInsertKeyframeCommand(this, time, keyframe, parentUndoCmd);
+        KUndo2Command* cmd =
+            new KisCommandUtils::SkipFirstRedoWrapper(
+                new KisInsertKeyframeCommand(this, time, keyframe), parentUndoCmd);
         Q_UNUSED(cmd);
     }
 
@@ -111,7 +114,9 @@ void KisKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2
 void KisKeyframeChannel::removeKeyframeImpl(int time, KUndo2Command *parentUndoCmd)
 {
     if (parentUndoCmd) {
-        KUndo2Command* cmd = new KisRemoveKeyframeCommand(this, time, parentUndoCmd);
+        KUndo2Command* cmd =
+            new KisCommandUtils::SkipFirstRedoWrapper(
+                new KisRemoveKeyframeCommand(this, time), parentUndoCmd);
         Q_UNUSED(cmd);
     }
 

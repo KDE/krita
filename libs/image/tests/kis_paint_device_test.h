@@ -58,6 +58,9 @@ private Q_SLOTS:
     void benchmarkLod3Generation();
     void benchmarkLod4Generation();
 
+    void testFramesSignals_data();
+    void testFramesSignals();
+
     void testFramesLeaking();
     void testFramesUndoRedo();
     void testFramesUndoRedoWithChannel();

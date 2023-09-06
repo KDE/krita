@@ -259,7 +259,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
                                                      KisAutoKey::AllowBlankMode |
                                                          KisAutoKey::SupportsLod);
         if (autoKeyframeCommand) {
-            m_autokeyCommand.reset(new KisCommandUtils::SkipFirstRedoWrapper(autoKeyframeCommand));
+            m_autokeyCommand.reset(autoKeyframeCommand);
         }
     });
 

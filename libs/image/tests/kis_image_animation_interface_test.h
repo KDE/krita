@@ -25,8 +25,10 @@ private Q_SLOTS:
     void testSwitchFrameWithUndo();
     void testSwitchFrameHangup();
 
+    void testAutoKeyframeWithOnionSkins();
 
     void slotFrameDone();
+
 
 private:
     KisImageSP m_image;

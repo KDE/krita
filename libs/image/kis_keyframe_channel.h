@@ -145,14 +145,17 @@ Q_SIGNALS:
     void sigAddedKeyframe(const KisKeyframeChannel *channel, int time);
 
     /** @brief This signal is emitted just BEFORE a keyframe is removed from the channel. */
-    void sigRemovingKeyframe(const KisKeyframeChannel *channel, int time);
+    void sigKeyframeAboutToBeRemoved(const KisKeyframeChannel *channel, int time);
+
+    /** @brief This signal is emitted just AFTER a keyframe is removed from the channel. */
+    void sigKeyframeHasBeenRemoved(const KisKeyframeChannel *channel, int time);
 
     /** @brief This signal is emitted just AFTER a non-raster keyframe was changed its value */
     void sigKeyframeChanged(const KisKeyframeChannel *channel, int time);
 
     /** This signal is an aggregate of the following signals:
      *      - sigAddedKeyframe
-     *      - sigRemovingKeyframe
+     *      - sigKeyframeHasBeenRemoved
      *      - sigKeyframeChanged
      */
     void sigAnyKeyframeChange();

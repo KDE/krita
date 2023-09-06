@@ -64,7 +64,7 @@ KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bo
         Q_EMIT sigAnyKeyframeChange();
     });
 
-    connect(this, &KisKeyframeChannel::sigRemovingKeyframe, [this](const KisKeyframeChannel *, int) {
+    connect(this, &KisKeyframeChannel::sigKeyframeHasBeenRemoved, [this](const KisKeyframeChannel *, int) {
         Q_EMIT sigAnyKeyframeChange();
     });
 
@@ -116,11 +116,12 @@ void KisKeyframeChannel::removeKeyframeImpl(int time, KUndo2Command *parentUndoC
     }
 
     m_d->keys.remove(time);
+    emit sigKeyframeHasBeenRemoved(this, time);
 }
 
 void KisKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentUndoCmd)
 {
-    emit sigRemovingKeyframe(this, time);
+    emit sigKeyframeAboutToBeRemoved(this, time);
     removeKeyframeImpl(time, parentUndoCmd);
 }
 
@@ -282,7 +283,8 @@ void KisKeyframeChannel::setNode(KisNodeWSP node)
 {
     if (m_d->parentNode.isValid()) { // Disconnect old..
         disconnect(this, &KisKeyframeChannel::sigAddedKeyframe, m_d->parentNode, &KisNode::handleKeyframeChannelFrameAdded);
-        disconnect(this, &KisKeyframeChannel::sigRemovingKeyframe, m_d->parentNode, &KisNode::handleKeyframeChannelFrameAboutToBeRemoved);
+        disconnect(this, &KisKeyframeChannel::sigKeyframeAboutToBeRemoved, m_d->parentNode, &KisNode::handleKeyframeChannelFrameAboutToBeRemoved);
+        disconnect(this, &KisKeyframeChannel::sigKeyframeHasBeenRemoved, m_d->parentNode, &KisNode::handleKeyframeChannelFrameHasBeenRemoved);
         disconnect(this, &KisKeyframeChannel::sigKeyframeChanged, m_d->parentNode, &KisNode::handleKeyframeChannelFrameChange);
     }
 
@@ -291,7 +293,8 @@ void KisKeyframeChannel::setNode(KisNodeWSP node)
 
     if (m_d->parentNode) { // Connect new..
         connect(this, &KisKeyframeChannel::sigAddedKeyframe, m_d->parentNode, &KisNode::handleKeyframeChannelFrameAdded, Qt::DirectConnection);
-        connect(this, &KisKeyframeChannel::sigRemovingKeyframe, m_d->parentNode, &KisNode::handleKeyframeChannelFrameAboutToBeRemoved, Qt::DirectConnection);
+        connect(this, &KisKeyframeChannel::sigKeyframeAboutToBeRemoved, m_d->parentNode, &KisNode::handleKeyframeChannelFrameAboutToBeRemoved, Qt::DirectConnection);
+        connect(this, &KisKeyframeChannel::sigKeyframeHasBeenRemoved, m_d->parentNode, &KisNode::handleKeyframeChannelFrameHasBeenRemoved, Qt::DirectConnection);
         connect(this, &KisKeyframeChannel::sigKeyframeChanged, m_d->parentNode, &KisNode::handleKeyframeChannelFrameChange, Qt::DirectConnection);
     }
 }

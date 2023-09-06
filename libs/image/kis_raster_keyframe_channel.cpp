@@ -249,7 +249,7 @@ void KisRasterKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, 
 
 void KisRasterKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentUndoCmd)
 {
-    emit sigRemovingKeyframe(this, time);
+    emit sigKeyframeAboutToBeRemoved(this, time);
 
     KisRasterKeyframeSP rasterKey = keyframeAt<KisRasterKeyframe>(time);
     if (rasterKey) {

@@ -110,7 +110,7 @@ namespace KisAnimUtils {
                 // maybe there is a better way to do this
                 node->setOpacity(originalOpacity);
 
-                return success ? new KisCommandUtils::SkipFirstRedoWrapper(cmd.take()) : nullptr;
+                return success ? cmd.take() : nullptr;
         });
 
         return cmd;
@@ -154,7 +154,7 @@ namespace KisAnimUtils {
                     result = true;
                 }
 
-                return result ? new KisCommandUtils::SkipFirstRedoWrapper(cmd.take()) : 0;
+                return result ? cmd.take() : 0;
         });
 
         KisProcessingApplicator::runSingleCommandStroke(image, cmd,
@@ -368,7 +368,7 @@ namespace KisAnimUtils {
                     }
                 }
 
-                return result ? new KisCommandUtils::SkipFirstRedoWrapper(cmd.take()) : nullptr;
+                return result ? cmd.take() : nullptr;
         });
 
         return cmd;

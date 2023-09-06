@@ -337,6 +337,7 @@ void KisKeyframingTest::testRasterUndoRedo()
     {   // Add/Insert
         KUndo2Command cmd;
         channel->addKeyframe(25, &cmd);
+        cmd.redo();
 
         QVERIFY(channel->keyframeAt(25));
 
@@ -361,6 +362,7 @@ void KisKeyframingTest::testRasterUndoRedo()
         const int originalFrameID = keyframe->frameID();
 
         channel->removeKeyframe(25, &cmd);
+        cmd.redo();
 
         QVERIFY(channel->keyframeAt(25) == nullptr);
 
@@ -381,6 +383,7 @@ void KisKeyframingTest::testRasterUndoRedo()
         KUndo2Command cmd;
 
         channel->moveKeyframe(33, 34, &cmd);
+        cmd.redo();
 
         QVERIFY(channel->keyframeAt(33) == nullptr);
         QVERIFY(channel->keyframeAt(34));
@@ -402,6 +405,7 @@ void KisKeyframingTest::testRasterUndoRedo()
         KUndo2Command cmd;
 
         channel->copyKeyframe(33, 35, &cmd);
+        cmd.redo();
 
         QVERIFY(channel->keyframeAt(33));
         QVERIFY(channel->keyframeAt(35));
@@ -427,6 +431,7 @@ void KisKeyframingTest::testRasterUndoRedo()
         int original_f66_frameID = channel->keyframeAt<KisRasterKeyframe>(66)->frameID();
 
         channel->swapKeyframes(33, 66, &cmd);
+        cmd.redo();
 
         QVERIFY(channel->keyframeAt(33));
         QVERIFY(channel->keyframeAt(66));
@@ -451,6 +456,7 @@ void KisKeyframingTest::testRasterUndoRedo()
 
         //Clone / overwrite frame 33 over 66
         channel->cloneKeyframe(33, 66, &cmd);
+        cmd.redo();
 
         QVERIFY(channel->keyframeAt(33));
         QVERIFY(channel->keyframeAt(66));
@@ -518,6 +524,7 @@ void KisKeyframingTest::testFirstFrameOperations()
         KUndo2Command cmd;
         const int original_frame0_frameID = channel->keyframeAt<KisRasterKeyframe>(0)->frameID();
         channel->removeKeyframe(0, &cmd);
+        cmd.redo();
 
         QVERIFY(channel->keyframeAt(0));
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(0)->frameID() != original_frame0_frameID);
@@ -540,6 +547,7 @@ void KisKeyframingTest::testFirstFrameOperations()
         int movedFrameId = channel->keyframeAt<KisRasterKeyframe>(0)->frameID();
 
         channel->moveKeyframe(0, 3, &cmd);
+        cmd.redo();
 
         {
             KisRasterKeyframeSP frame0 = channel->keyframeAt<KisRasterKeyframe>(0);
@@ -816,6 +824,7 @@ void KisKeyframingTest::testScalarChannelUndoRedo()
 
         channel->addKeyframe(1, &cmd);
         KisScalarKeyframeSP key = channel->keyframeAt<KisScalarKeyframe>(1);
+        cmd.redo();
 
         QVERIFY(key);
         QVERIFY(key->value() == defaultValue);
@@ -838,6 +847,7 @@ void KisKeyframingTest::testScalarChannelUndoRedo()
         key->setValue(value);
 
         channel->removeKeyframe(1, &cmd);
+        cmd.redo();
 
         QVERIFY(channel->keyframeAt(1) == nullptr);
 

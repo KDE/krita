@@ -287,6 +287,10 @@ QRect KisOnionSkinCompositor::Private::updateExtentOnFrameChange(KisRasterKeyfra
                                   skinsAfter.begin(), skinsAfter.end(),
                                   std::back_inserter(changedSkins));
 
+//    ENTER_FUNCTION() << ppVar(skinsBefore);
+//    ENTER_FUNCTION() << ppVar(skinsAfter);
+//    ENTER_FUNCTION() << ppVar(changedSkins);
+
     for (auto it = changedSkins.begin(); it != changedSkins.end(); ++it) {
         KIS_SAFE_ASSERT_RECOVER(channel->keyframeAt(*it)) { continue; }
         rect |= channel->frameExtents(channel->keyframeAt(*it));

@@ -517,7 +517,7 @@ bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
     }
 
     KisProcessingApplicator::runSingleCommandStroke(m_d->image,
-                                                    new KisCommandUtils::SkipFirstRedoWrapper(parentCommand.take()),
+                                                    parentCommand.take(),
                                                     KisStrokeJobData::BARRIER,
                                                     KisStrokeJobData::EXCLUSIVE);
     return true;

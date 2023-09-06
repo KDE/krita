@@ -58,7 +58,7 @@ void KisKeyframingTest::testChannelSignals()
 
     qRegisterMetaType<const KisKeyframeChannel*>("const KisKeyframeChannel*");
     qRegisterMetaType<KisKeyframeSP>("KisKeyframeSP");
-    QSignalSpy spyUpdated(channel, SIGNAL(sigChannelUpdated(KisTimeSpan, QRect)));
+    QSignalSpy spyUpdated(channel, SIGNAL(sigAnyKeyframeChange()));
     QSignalSpy spyAdded(channel, SIGNAL(sigAddedKeyframe(const KisKeyframeChannel*,int)));
     QSignalSpy spyRemoving(channel, SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)));
 

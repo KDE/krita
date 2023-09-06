@@ -97,6 +97,11 @@ struct KisOnionSkinCompositor::Private
 
         configSeqNo++;
     }
+
+    QRect updateExtentOnFrameChange(KisRasterKeyframeChannel *channel,
+                                    int prevActiveTime, int prevIgnoredTime,
+                                    int nowActiveTime, int nowIgnoredTime);
+
 };
 
 KisOnionSkinCompositor *KisOnionSkinCompositor::instance()
@@ -187,7 +192,7 @@ QRect KisOnionSkinCompositor::calculateFullExtent(const KisPaintDeviceSP device)
     return rect;
 }
 
-QRect KisOnionSkinCompositor::calculateExtent(const KisPaintDeviceSP device)
+QRect KisOnionSkinCompositor::calculateExtent(const KisPaintDeviceSP device, int time)
 {
     QRect rect;
     int keyframeTimeBack;
@@ -199,7 +204,7 @@ QRect KisOnionSkinCompositor::calculateExtent(const KisPaintDeviceSP device)
         return rect;
     }
 
-    keyframeTimeBack = keyframeTimeFwd = channel->activeKeyframeTime();
+    keyframeTimeBack = keyframeTimeFwd = time;
 
     for (int offset = 1; offset <= m_d->numberOfSkins; offset++) {
         if (channel->keyframeAt(keyframeTimeBack)) {
@@ -218,6 +223,100 @@ QRect KisOnionSkinCompositor::calculateExtent(const KisPaintDeviceSP device)
             }
         }
     }
+
+    return rect;
+}
+
+QRect KisOnionSkinCompositor::calculateExtent(const KisPaintDeviceSP device)
+{
+    KisRasterKeyframeChannel *channel = device->keyframeChannel(); //TODO: take in channel instead of device...?
+
+    if (!channel) { // it happens when you try to show onion skins on non-animated layer with opacity keyframes
+        return QRect();
+    }
+
+    return calculateExtent(device, channel->activeKeyframeTime());
+}
+
+
+QRect KisOnionSkinCompositor::Private::updateExtentOnFrameChange(KisRasterKeyframeChannel *channel,
+                                                                 int prevActiveTime, int prevIgnoredTime,
+                                                                 int nowActiveTime, int nowIgnoredTime)
+{
+    QRect rect;
+
+    std::vector<int> skinsBefore;
+    std::vector<int> skinsAfter;
+
+    auto fetchSkins = [this] (KisRasterKeyframeChannel *channel, const int activeTime, int ignoredFrame) {
+        std::vector<int> skinsLeft;
+        std::vector<int> skinsRight;
+
+        int keyframeTimeBck = activeTime;
+        int keyframeTimeFwd = activeTime;
+
+        auto addNextFrame = [channel, this, ignoredFrame] (int offset, int &startTime, std::vector<int> &skins, bool backwards) {
+            KisRasterKeyframeSP keyframe;
+            do {
+                keyframe = getNextFrameToComposite(channel, startTime, backwards);
+            } while (keyframe && startTime == ignoredFrame);
+
+            if (keyframe && skinOpacity(-offset) != OPACITY_TRANSPARENT_U8) {
+                skins.push_back(startTime);
+            }
+        };
+
+        for (int offset = 1; offset <= numberOfSkins; offset++) {
+            addNextFrame(offset, keyframeTimeBck, skinsLeft, true);
+            addNextFrame(offset, keyframeTimeFwd, skinsRight, false);
+        }
+
+        std::reverse(skinsLeft.begin(), skinsLeft.end());
+        skinsLeft.reserve(skinsLeft.size() + skinsRight.size());
+        std::copy(skinsRight.begin(), skinsRight.end(), std::back_inserter(skinsLeft));
+
+        return skinsLeft;
+    };
+
+    skinsBefore = fetchSkins(channel, prevActiveTime, prevIgnoredTime);
+    skinsAfter = fetchSkins(channel, nowActiveTime, nowIgnoredTime);
+
+    std::vector<int> changedSkins;
+
+    std::set_symmetric_difference(skinsBefore.begin(), skinsBefore.end(),
+                                  skinsAfter.begin(), skinsAfter.end(),
+                                  std::back_inserter(changedSkins));
+
+    for (auto it = changedSkins.begin(); it != changedSkins.end(); ++it) {
+        KIS_SAFE_ASSERT_RECOVER(channel->keyframeAt(*it)) { continue; }
+        rect |= channel->frameExtents(channel->keyframeAt(*it));
+    }
+
+    return rect;
+}
+
+QRect KisOnionSkinCompositor::updateExtentOnAddition(const KisPaintDeviceSP device, int addedTime)
+{
+    QRect rect;
+
+    KisRasterKeyframeChannel *channel = device->keyframeChannel(); //TODO: take in channel instead of device...?
+
+    if (!channel) { // it happens when you try to show onion skins on non-animated layer with opacity keyframes
+        return rect;
+    }
+
+    int currentActiveTime = channel->activeKeyframeTime();
+    int prevActiveTime = -1;
+
+    if (currentActiveTime == addedTime) {
+        prevActiveTime = channel->previousKeyframeTime(currentActiveTime);
+    } else {
+        prevActiveTime = currentActiveTime;
+    }
+
+    rect = m_d->updateExtentOnFrameChange(channel,
+                                          prevActiveTime, addedTime,
+                                          currentActiveTime, -1);
 
     return rect;
 }

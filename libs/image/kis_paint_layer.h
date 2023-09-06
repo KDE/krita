@@ -143,6 +143,10 @@ public:
     void setDecorationsVisible(bool value, bool update) override;
     using KisDecoratedNodeInterface::setDecorationsVisible;
 
+    void handleKeyframeChannelFrameChange(const KisKeyframeChannel *channel, int time) override;
+    void handleKeyframeChannelFrameAdded(const KisKeyframeChannel *channel, int time) override;
+    void handleKeyframeChannelFrameAboutToBeRemoved(const KisKeyframeChannel *channel, int time) override;
+
 public Q_SLOTS:
     void slotExternalUpdateOnionSkins();
 

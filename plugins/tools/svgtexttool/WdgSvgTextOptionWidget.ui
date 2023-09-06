@@ -129,7 +129,7 @@
       <item>
        <widget class="QCheckBox" name="chkDbgLineBox">
         <property name="text">
-         <string>Show line boxes</string>
+         <string notr="true">Show line boxes</string>
         </property>
        </widget>
       </item>

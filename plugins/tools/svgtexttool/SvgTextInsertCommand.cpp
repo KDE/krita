@@ -31,7 +31,7 @@ void SvgTextInsertCommand::redo()
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
 
     if (m_cursor) {
-        int pos = m_shape->posForIndex(oldIndex + m_text.size(), false, true);
+        int pos = m_shape->posForIndex(oldIndex + m_text.size(), false, false);
         m_cursor->setPos(pos, pos);
     }
 }

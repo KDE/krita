@@ -652,7 +652,40 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     if (result.at(fC).cursorInfo.graphemeIndices.isEmpty()) {
         result[fC].cursorInfo.graphemeIndices.append(plainText.size());
     }
-    debugFlake << "Glyphs retreived";
+
+    // Add a dummy charResult at the end when the last non-collapsed position
+    // is a hard breaks, so the new line is laid out.
+    int dummyIndex = -1;
+    if (result.at(fC).breakType == BreakType::HardBreak) {
+        CharacterResult hardbreak = result.at(fC);
+        dummyIndex = fC +1;
+        CharacterResult dummy;
+        //dummy.hidden = true;
+        dummy.addressable = true;
+        dummy.visualIndex = hardbreak.visualIndex + 1;
+        dummy.scaledAscent = hardbreak.scaledAscent;
+        dummy.scaledDescent = hardbreak.scaledDescent;
+        dummy.scaledHalfLeading = hardbreak.scaledHalfLeading;
+        dummy.cssPosition = hardbreak.cssPosition + hardbreak.advance;
+        dummy.finalPosition = dummy.cssPosition;
+        dummy.boundingBox = hardbreak.boundingBox;
+        dummy.lineHeightBox = hardbreak.lineHeightBox;
+        if (isHorizontal) {
+            dummy.boundingBox.setWidth(0);
+            dummy.lineHeightBox.setWidth(0);
+        } else {
+            dummy.boundingBox.setHeight(0);
+            dummy.lineHeightBox.setHeight(0);
+        }
+        dummy.plaintTextIndex = hardbreak.cursorInfo.graphemeIndices.last();
+        dummy.cursorInfo.caret = hardbreak.cursorInfo.caret;
+        dummy.cursorInfo.rtl = hardbreak.cursorInfo.rtl;
+        dummy.direction = hardbreak.direction;
+        result.insert(dummyIndex, dummy);
+        logicalToVisual.insert(dummyIndex, dummy.visualIndex);
+    }
+
+    debugFlake << "Glyphs retrieved";
 
     // Compute baseline alignment.
     globalIndex = 0;
@@ -805,6 +838,9 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
 
                     int graphemes = result.at(i).cursorInfo.graphemeIndices.size();
                     for (int k = 0; k < graphemes; k++) {
+                        if (result.at(i).breakType == BreakType::HardBreak && k+1 == graphemes) {
+                            continue;
+                        }
                         CursorPos pos;
                         pos.cluster = i;
                         pos.index = result.at(i).cursorInfo.graphemeIndices.at(k);
@@ -829,6 +865,19 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
             }
         }
         globalIndex += j;
+    }
+    // figure out if we added a dummy, and if so add a pos for it.
+    if (dummyIndex > -1 && dummyIndex < result.size()) {
+        if (result.at(dummyIndex).anchored_chunk) {
+            CursorPos pos;
+            pos.cluster = dummyIndex;
+            pos.index = result.at(dummyIndex).plaintTextIndex;
+            result[dummyIndex].plaintTextIndex -= 1;
+            result[dummyIndex].cursorInfo.offsets.insert(0, QPointF());
+            pos.offset = 0;
+            pos.synthetic = true;
+            cursorPos.append(pos);
+        }
     }
     this->plainText = plainText;
     this->result = result;

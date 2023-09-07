@@ -1936,6 +1936,8 @@ void KisPaintDeviceTest::testFramesUndoRedo()
         KUndo2Command cmdAdd;
 
         channel->addKeyframe(time, &cmdAdd);
+        cmdAdd.redo();
+
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(time));
         frameId = channel->keyframeAt<KisRasterKeyframe>(time)->frameID();
         QCOMPARE(frameId, 1);
@@ -1973,6 +1975,7 @@ void KisPaintDeviceTest::testFramesUndoRedo()
         QVERIFY(keyframe);
 
         channel->removeKeyframe(time, &cmdRemove);
+        cmdRemove.redo();
 
         o = i->testingGetDataObjects();
         QVERIFY(o.m_data); // default m_data should always be present
@@ -2040,6 +2043,7 @@ void KisPaintDeviceTest::testFramesUndoRedoWithChannel()
         KUndo2Command cmdAdd;
 
         channel->addKeyframe(10, &cmdAdd);
+        cmdAdd.redo();
 
         QVERIFY(channel->keyframeAt(10));
 
@@ -2076,6 +2080,7 @@ void KisPaintDeviceTest::testFramesUndoRedoWithChannel()
     {
         KUndo2Command cmdRemove;
         channel->removeKeyframe(10, &cmdRemove);
+        cmdRemove.redo();
 
         QVERIFY(!channel->keyframeAt(10));
 
@@ -2121,6 +2126,7 @@ void KisPaintDeviceTest::testFramesUndoRedoWithChannel()
         KUndo2Command cmdMove;
         channel->addKeyframe(10);
         channel->moveKeyframe(10, 12, &cmdMove);
+        cmdMove.redo();
 
         QVERIFY(!channel->keyframeAt(10));
         QVERIFY(channel->keyframeAt(12));
@@ -2302,6 +2308,7 @@ void KisPaintDeviceTest::testCopyPaintDeviceWithFrames()
     KUndo2Command cmdAdd;
 
     channel->addKeyframe(10, &cmdAdd);
+    cmdAdd.redo();
 
     QVERIFY(channel->keyframeAt(10));
 

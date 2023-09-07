@@ -17,7 +17,18 @@ SvgTextInsertCommand::SvgTextInsertCommand(KoSvgTextShape *shape, int pos, int a
     , m_text(text)
     , m_cursor(cursor)
 {
-    setText(kundo2_i18n("Insert Text"));
+    QRegExp exp;
+    // This replaces...
+    // - carriage return
+    // - linefeed-carriage return
+    // - carriage return-linefeed
+    // - line seperator
+    // - paragraph seperator
+    // - vertical tab/line tab
+    // with a single linefeed to avoid them from being added to the textShape.
+    exp.setPattern("[\\r|\\r\\n|\\x2029|\\x2028\\x000b]");
+    text.replace(exp, "\n");
+    m_text = text;
 }
 
 void SvgTextInsertCommand::redo()

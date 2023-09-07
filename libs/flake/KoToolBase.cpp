@@ -30,6 +30,7 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QApplication>
 
 KoToolBase::KoToolBase(KoCanvasBase *canvas)
     : d_ptr(new KoToolBasePrivate(this, canvas))
@@ -130,6 +131,8 @@ QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewCo
         return QVariant();
 
     switch (query) {
+    case Qt::ImEnabled:
+        return isInTextMode();
     case Qt::ImCursorRectangle:
         return QRect(d->canvas->canvasWidget()->width() / 2, 0, 1, d->canvas->canvasWidget()->height());
     case Qt::ImFont:
@@ -309,6 +312,7 @@ void KoToolBase::setTextMode(bool value)
 {
     Q_D(KoToolBase);
     d->isInTextMode = value;
+    qApp->inputMethod()->update(Qt::ImEnabled);
     emit textModeChanged(d->isInTextMode);
 }
 

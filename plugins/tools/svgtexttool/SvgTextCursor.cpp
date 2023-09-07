@@ -8,6 +8,10 @@
 #include "KoSvgTextProperties.h"
 #include "SvgTextInsertCommand.h"
 #include "SvgTextRemoveCommand.h"
+
+#include "KoViewConverter.h"
+#include "kis_coordinates_converter.h"
+
 #include "kundo2command.h"
 #include <QTimer>
 #include <QDebug>
@@ -18,6 +22,7 @@
 #include <QKeySequence>
 #include <QAction>
 #include <kis_assert.h>
+#include <QInputMethodEvent>
 
 struct Q_DECL_HIDDEN SvgTextCursor::Private {
     KoCanvasBase *canvas;
@@ -32,6 +37,8 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
 
     QPainterPath cursorShape;
     QRectF oldCursorRect;
+    QLineF cursorCaret;
+    QLineF anchorCaret;
     int cursorWidth = 1;
     QPainterPath selection;
     QRectF oldSelectionRect;
@@ -41,6 +48,10 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     int anchorIndex = 0;
 
     bool visualNavigation = true;
+
+    SvgTextInsertCommand *preEditCommand {nullptr};
+    int preEditStart = -1;
+    int preEditLength = -1;
 };
 
 SvgTextCursor::SvgTextCursor(KoCanvasBase *canvas) :
@@ -59,6 +70,11 @@ SvgTextCursor::~SvgTextCursor()
 void SvgTextCursor::setShape(KoSvgTextShape *textShape)
 {
     if (d->shape) {
+        if (d->preEditCommand) {
+            d->preEditCommand->undo();
+            d->preEditCommand = 0;
+        }
+        qApp->inputMethod()->reset();
         d->shape->removeShapeChangeListener(this);
     }
     d->shape = textShape;
@@ -106,6 +122,7 @@ void SvgTextCursor::setPos(int pos, int anchor)
 void SvgTextCursor::setPosToPoint(QPointF point, bool moveAnchor)
 {
     if (d->shape) {
+        qApp->inputMethod()->commit();
         d->pos = d->shape->posForPointLineSensitive(d->shape->documentToShape(point));
         if (moveAnchor) {
             d->anchor = d->pos;
@@ -113,6 +130,7 @@ void SvgTextCursor::setPosToPoint(QPointF point, bool moveAnchor)
         updateSelection();
         updateCursor();
         updateSelection();
+        qApp->inputMethod()->invokeAction(QInputMethod::Click, d->shape->indexForPos(d->pos));
     }
 }
 
@@ -239,8 +257,218 @@ void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
 
             }
         }
+        if (d->preEditCommand) {
+            gc.save();
+            QPen pen;
+            pen.setCosmetic(true);
+            pen.setColor(selectionColor);
+            pen.setWidth(d->cursorWidth);
+            gc.setPen(pen);
+            int index = d->shape->indexForPos(d->preEditStart) + d->preEditLength;
+            int anchor = d->shape->posForIndex(index);
+            gc.drawPath(d->shape->underlines(d->preEditStart, anchor));
+            gc.restore();
+        }
         gc.restore();
     }
+}
+
+QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
+{
+    qDebug() << "receiving inputmethod query" << query;
+
+    switch(query) {
+    case Qt::ImEnabled:
+        return d->shape? true: false;
+        break;
+    case Qt::ImCursorRectangle:
+        // The platform integration will always define the cursor as the 'left side' handle.
+        if (d->shape) {
+            QPointF caret1(d->shape->shapeToDocument(d->cursorCaret.p1()));
+            QPointF caret2(d->shape->shapeToDocument(d->cursorCaret.p2()));
+
+            caret1 = d->canvas->viewConverter()->documentToView().map(caret1);
+            caret2 = d->canvas->viewConverter()->documentToView().map(caret2);
+            caret1 = d->canvas->viewConverter()->viewToWidget().map(caret1);
+            caret2 = d->canvas->viewConverter()->viewToWidget().map(caret2);
+            QRectF rect = QRectF(caret1, caret2).normalized();
+            if (!rect.isValid()) {
+                if (rect.height() < 1) {
+                    rect.adjust(0, 1, 0, 0);
+                }
+                if (rect.width() < 1) {
+                    rect.adjust(0, 0, 1, 0);
+                }
+
+            }
+            return rect.toAlignedRect();
+        }
+        break;
+    case Qt::ImAnchorRectangle:
+        // The platform integration will always define the anchor as the 'right side' handle.
+        if (d->shape) {
+            QPointF caret1(d->shape->shapeToDocument(d->anchorCaret.p1()));
+            QPointF caret2(d->shape->shapeToDocument(d->anchorCaret.p2()));
+
+            caret1 = d->canvas->viewConverter()->documentToView().map(caret1);
+            caret2 = d->canvas->viewConverter()->documentToView().map(caret2);
+            caret1 = d->canvas->viewConverter()->viewToWidget().map(caret1);
+            caret2 = d->canvas->viewConverter()->viewToWidget().map(caret2);
+            QRectF rect = QRectF(caret1, caret2).normalized();
+            if (rect.isEmpty()) {
+                if (rect.height() < 1) {
+                    rect.adjust(0, 1, 0, 0);
+                }
+                if (rect.width() < 1) {
+                    rect = rect.adjusted(-1, 0, 0, 0).normalized();
+                }
+            }
+            return rect.toAlignedRect();
+        }
+        break;
+    //case Qt::ImFont: // not sure what this is used for, but we cannot sent out without access to properties.
+    case Qt::ImAbsolutePosition:
+    case Qt::ImCursorPosition:
+        if (d->shape) {
+            return d->shape->indexForPos(d->pos);
+        }
+        break;
+    case Qt::ImSurroundingText:
+        if (d->shape) {
+            return d->shape->plainText();
+        }
+        break;
+    case Qt::ImCurrentSelection:
+        if (d->shape) {
+            int start = d->shape->indexForPos(qMin(d->anchor, d->pos));
+            int length = d->shape->indexForPos(qMax(d->anchor, d->pos)) - start;
+            return d->shape->plainText().mid(start, length);
+        }
+        break;
+    case Qt::ImTextBeforeCursor:
+        if (d->shape) {
+            int start = d->shape->indexForPos(d->pos);
+            return d->shape->plainText().left(start);
+        }
+        break;
+    case Qt::ImTextAfterCursor:
+        if (d->shape) {
+            int start = d->shape->indexForPos(d->pos);
+            return d->shape->plainText().right(start);
+        }
+        break;
+    case Qt::ImMaximumTextLength:
+        return QVariant(); // infinite text length!
+        break;
+    case Qt::ImAnchorPosition:
+        if (d->shape) {
+            return d->shape->indexForPos(d->anchor);
+        }
+        break;
+    case Qt::ImHints:
+        // It would be great to use Qt::ImhNoTextHandles or Qt::ImhNoEditMenu,
+        // but neither are implemented for anything but web platform integration
+        return Qt::ImhMultiLine;
+        break;
+    // case Qt::ImPreferredLanguage: // requires access to properties.
+    // case Qt::ImPlatformData: // this is only for iOS at time of writing.
+    case Qt::ImEnterKeyType:
+        if (d->shape) {
+            return Qt::EnterKeyDefault; // because input method hint is always multiline, this will show a return key.
+        }
+        break;
+    // case Qt::ImInputItemClipRectangle // whether the input item is clipped?
+    default:
+        return QVariant();
+    }
+    return QVariant();
+}
+
+void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
+{
+    qDebug() << "Commit:"<< event->commitString() << "predit:"<< event->preeditString();
+    qDebug() << "Replacement:"<< event->replacementStart() << event->replacementLength();
+
+
+    // Remove previous preedit string.
+    if (d->preEditCommand) {
+        d->preEditCommand->undo();
+        d->preEditCommand = 0;
+        d->preEditStart = -1;
+        d->preEditLength = -1;
+    }
+
+    if (!d->shape) {
+        event->accept();
+        return;
+    }
+
+    // remove the selection if any.
+    addCommandToUndoAdapter(removeSelectionImpl());
+
+    // set the text insertion pos to replacement start and also remove replacement length, if any.
+    int originalPos = d->pos;
+    int index = d->shape->indexForPos(d->pos) + event->replacementStart();
+    d->pos = d->shape->posForIndex(index);
+    if (event->replacementLength() > 0) {
+        SvgTextRemoveCommand *cmd = new SvgTextRemoveCommand(d->shape,
+                                                             d->pos,
+                                                             originalPos,
+                                                             d->anchor,
+                                                             event->replacementLength());
+        addCommandToUndoAdapter(cmd);
+    }
+
+    // add the commit string, if any.
+    if (!event->commitString().isEmpty()) {
+        insertText(event->commitString());
+    }
+
+    // set the selection...
+    Q_FOREACH(QInputMethodEvent::Attribute attribute, event->attributes()) {
+        if (attribute.type == QInputMethodEvent::Selection) {
+            d->pos = d->shape->posForIndex(attribute.start);
+            int index = d->shape->indexForPos(d->pos);
+            d->anchor = d->shape->posForIndex(index + attribute.length);
+            updateCursor();
+        }
+    }
+
+    // insert a preedit string, if any.
+    if (!event->preeditString().isEmpty()) {
+        int index = d->shape->indexForPos(d->pos);
+        d->preEditCommand = new SvgTextInsertCommand(d->shape, d->pos, d->anchor, event->preeditString());
+        d->preEditCommand->redo();
+        d->preEditLength = event->preeditString().size();
+        d->preEditStart = d->shape->posForIndex(index, true);
+    } else {
+        d->preEditCommand = 0;
+    }
+    // Apply the cursor offset for the preedit.
+    Q_FOREACH(QInputMethodEvent::Attribute attribute, event->attributes()) {
+        qDebug() << "attribute: "<< attribute.type << "start: " << attribute.start
+                 << "length: " << attribute.length << "val: " << attribute.value;
+        // Text Format is about setting the look of the preedit string, and there can be multiple per event
+        // however, we can´t set them yet: we can't format yet, as well, all but qt's windows integration
+        // just use an underline, and the windows integration just inverts the text colors... We can't actually
+        // draw this. So we'll just use underlines for now.
+        //if (attribute.type == QInputMethodEvent::TextFormat) {
+        //    QTextCharFormat form = attribute.value.data();
+        //}
+
+        // QInputMethodEvent::Language is about setting the locale on the given  preedit string, which is not possible yet.
+        // QInputMethodEvent::Ruby is supossedly ruby info for the preedit string, but none of the platform integrations
+        // actually implement this at time of writing, and it may have been something from a previous live of Qt's.
+        if (attribute.type == QInputMethodEvent::Cursor) {
+            int index = d->shape->indexForPos(d->preEditStart);
+            d->pos = d->shape->posForIndex(index + attribute.start);
+            d->anchor = d->pos;
+            // attribute value is the cursor color, and should be used to paint the cursor.
+            // attribute length is about whether the cursor should be visible at all...
+            updateCursor();
+        }
+    }
+    event->accept();
 }
 
 void SvgTextCursor::blinkCursor()
@@ -520,10 +748,11 @@ void SvgTextCursor::updateCursor()
         d->posIndex = d->shape->indexForPos(d->pos);
         d->anchorIndex = d->shape->indexForPos(d->anchor);
     }
-    d->cursorShape = d->shape? d->shape->cursorForPos(d->pos): QPainterPath();
+    d->cursorShape = d->shape? d->shape->cursorForPos(d->pos, d->cursorCaret): QPainterPath();
     d->cursorFlash.start();
     d->cursorFlashLimit.start();
     d->cursorVisible = false;
+    qApp->inputMethod()->update(Qt::ImQueryInput);
     blinkCursor();
 }
 
@@ -531,6 +760,7 @@ void SvgTextCursor::updateSelection()
 {
     if (d->shape) {
         d->oldSelectionRect = d->shape->shapeToDocument(d->selection.boundingRect());
+        d->shape->cursorForPos(d->anchor, d->anchorCaret);
         d->selection = d->shape->selectionBoxes(d->pos, d->anchor);
         emit updateCursorDecoration(d->shape->shapeToDocument(d->selection.boundingRect()) | d->oldSelectionRect);
     }

@@ -18,6 +18,7 @@ class SvgTextInsertCommand;
 class SvgTextRemoveCommand;
 class KUndo2Command;
 class QKeyEvent;
+class QInputMethodEvent;
 
 /**
  * @brief The SvgTextCursor class
@@ -137,6 +138,9 @@ public:
     void deselectText();
 
     void paintDecorations(QPainter &gc, QColor selectionColor);
+
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    void inputMethodEvent(QInputMethodEvent *event);
 
     // Reimplemented.
     bool hasSelection() override;

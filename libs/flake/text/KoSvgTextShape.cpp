@@ -466,7 +466,7 @@ QPainterPath KoSvgTextShape::defaultCursorShape()
     return p;
 }
 
-QPainterPath KoSvgTextShape::cursorForPos(int pos, double bidiFlagSize)
+QPainterPath KoSvgTextShape::cursorForPos(int pos, QLineF &caret, double bidiFlagSize)
 {
     if (d->result.isEmpty() || d->cursorPos.isEmpty() || pos < 0 || pos >= d->cursorPos.size()) {
         return defaultCursorShape();
@@ -478,12 +478,12 @@ QPainterPath KoSvgTextShape::cursorForPos(int pos, double bidiFlagSize)
     CharacterResult res = d->result.at(cursorPos.cluster);
 
     const QTransform tf = res.finalTransform();
-    QLineF caret = res.cursorInfo.caret;
+    caret = res.cursorInfo.caret;
     caret.translate(res.cursorInfo.offsets.value(cursorPos.offset, QPointF()));
 
     p.moveTo(tf.map(caret.p1()));
     p.lineTo(tf.map(caret.p2()));
-    if (d->isBidi) {
+    if (d->isBidi && bidiFlagSize > 0) {
         int sign = res.cursorInfo.rtl ? -1 : 1;
         double bidiFlagHalf = bidiFlagSize * 0.5;
         // TODO: handle top-to-bottom once text-orientation is tackled.
@@ -492,6 +492,7 @@ QPainterPath KoSvgTextShape::cursorForPos(int pos, double bidiFlagSize)
         p.lineTo(tf.map(point3));
         p.lineTo(tf.map(point4));
     }
+    caret = tf.map(caret);
 
     return p;
 }
@@ -523,6 +524,36 @@ QPainterPath KoSvgTextShape::selectionBoxes(int pos, int anchor)
         QPolygonF poly;
         poly << first.p1() << first.p2() << last.p2() << last.p1() << first.p1();
         p.addPolygon(tf.map(poly));
+    }
+
+    return p;
+}
+
+QPainterPath KoSvgTextShape::underlines(int pos, int anchor)
+{
+    int start = qMin(pos, anchor);
+    int end = qMax(pos, anchor);
+
+    if (start == end || start < 0 || end >= d->cursorPos.size()) {
+        return QPainterPath();
+    }
+
+    QPainterPath p;
+    for (int i = start+1; i <= end; i++) {
+        CursorPos pos = d->cursorPos.at(i);
+        CharacterResult res = d->result.at(pos.cluster);
+        const QTransform tf = res.finalTransform();
+        QPointF first = res.cursorInfo.caret.p1();
+        QPointF last = first;
+        if (res.cursorInfo.rtl) {
+            last  += res.cursorInfo.offsets.value(pos.offset-1,  res.advance);
+            first += res.cursorInfo.offsets.value(pos.offset, QPointF());
+        } else {
+            first += res.cursorInfo.offsets.value(pos.offset-1,  QPointF());
+            last  += res.cursorInfo.offsets.value(pos.offset, res.advance);
+        }
+        p.moveTo(tf.map(first));
+        p.lineTo(tf.map(last));
     }
 
     return p;

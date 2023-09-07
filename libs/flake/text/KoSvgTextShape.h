@@ -219,7 +219,7 @@ public:
      * @param bidiFlagSize -- size of the bidirectional indicator.
      * @return a path to draw a cursor with.
      */
-    QPainterPath cursorForPos(int pos, double bidiFlagSize = 1.0);
+    QPainterPath cursorForPos(int pos, QLineF &caret, double bidiFlagSize = 1.0);
 
     /**
      * @brief selectionBoxes
@@ -230,6 +230,8 @@ public:
      * @return a winding-fill style QPainterPath will all boxes added as subpaths.
      */
     QPainterPath selectionBoxes(int pos, int anchor);
+
+    QPainterPath underlines(int pos, int anchor);
 
     /**
      * @brief posForPoint

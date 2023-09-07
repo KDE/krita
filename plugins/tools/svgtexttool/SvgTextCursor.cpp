@@ -157,7 +157,9 @@ void SvgTextCursor::removeLast()
         } else {
             int oldIndex = d->shape->indexForPos(d->pos);
             int newPos = d->shape->posForIndex(oldIndex-1, false, false);
-            removeCmd = new SvgTextRemoveCommand(d->shape, newPos, d->pos, d->anchor, 1, this);
+            int newIndex = d->shape->indexForPos(newPos);
+            // using old-new index allows us to remove the whole grapheme.
+            removeCmd = new SvgTextRemoveCommand(d->shape, newPos, d->pos, d->anchor, oldIndex-newIndex, this);
             d->tool->addCommand(removeCmd);
         }
     }
@@ -172,7 +174,12 @@ void SvgTextCursor::removeNext()
             d->tool->addCommand(removeCmd);
             updateCursor();
         } else {
-            removeCmd = new SvgTextRemoveCommand(d->shape, d->pos, d->pos, d->anchor, 1, this);
+            int oldIndex = d->shape->indexForPos(d->pos);
+            int newIndex = d->shape->indexForPos(d->pos+1);
+            if (newIndex == oldIndex) {
+                newIndex = d->shape->indexForPos(d->pos+2);
+            }
+            removeCmd = new SvgTextRemoveCommand(d->shape, d->pos, d->pos, d->anchor, newIndex-oldIndex, this);
             d->tool->addCommand(removeCmd);
         }
     }

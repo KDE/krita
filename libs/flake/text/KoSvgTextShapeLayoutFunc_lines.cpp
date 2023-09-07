@@ -203,7 +203,9 @@ handleCollapseAndHang(QVector<CharacterResult> &result, LineChunk &chunk, bool l
             int lastIndex = it.previous();
             if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::Collapse) {
                 result[lastIndex].hidden = true;
-                result[lastIndex].addressable = false;
+                // We literally collapse the advance of the last collapsed white-space to ensure it may
+                // still be possible to track it by cursor movement.
+                result[lastIndex].advance = QPointF();
             } else if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::ConditionallyHang) {
                 if (ltr) {
                     QPointF hangPos = result[lastIndex].cssPosition + result[lastIndex].advance;

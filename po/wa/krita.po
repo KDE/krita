@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2011-01-17 21:35+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -59361,12 +59361,6 @@ msgstr "Foice:"
 msgid "Edit SVG Source"
 msgstr "Sourdant"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-msgid "Show line boxes"
-msgstr "Lårdjeur di picsel"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, fuzzy, kde-format
@@ -60933,6 +60927,10 @@ msgstr "Zoumer so ttafwait"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Imådje di referince:"
+
+#, fuzzy
+#~ msgid "Show line boxes"
+#~ msgstr "Lårdjeur di picsel"
 
 #, fuzzy
 #~ msgid "Editor Mode"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2023-08-01 13:34+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -58191,14 +58191,6 @@ msgstr "將文字錨定到右側。"
 msgid "Edit SVG Source"
 msgstr "SVG 原始碼"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-#| msgctxt "Open the folder when the new created video is placed"
-#| msgid "Show in folder"
-msgid "Show line boxes"
-msgstr "在資料夾顯示"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, kde-format
@@ -59716,6 +59708,12 @@ msgstr "縮放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "參考圖工具"
+
+#, fuzzy
+#~| msgctxt "Open the folder when the new created video is placed"
+#~| msgid "Show in folder"
+#~ msgid "Show line boxes"
+#~ msgstr "在資料夾顯示"
 
 #~ msgid "Editor Mode"
 #~ msgstr "編輯器模式"

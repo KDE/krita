@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2023-08-20 21:04+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -58912,12 +58912,6 @@ msgstr "Ankri tekston dekstren."
 msgid "Edit SVG Source"
 msgstr "Redakti SVG-Fonton"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, kde-format
-msgid "Show line boxes"
-msgstr "Montri linioskatolojn"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, kde-format
@@ -60452,3 +60446,6 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
+
+#~ msgid "Show line boxes"
+#~ msgstr "Montri linioskatolojn"

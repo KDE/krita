@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -60211,12 +60211,6 @@ msgstr "Δύναμη:"
 msgid "Edit SVG Source"
 msgstr "Πηγή"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-msgid "Show line boxes"
-msgstr "Πλάτος γραμμής"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, fuzzy, kde-format
@@ -61798,6 +61792,10 @@ msgstr "Εστίαση όλων"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Εικόνες αναφοράς"
+
+#, fuzzy
+#~ msgid "Show line boxes"
+#~ msgstr "Πλάτος γραμμής"
 
 #, fuzzy
 #~| msgid "Edit Mode"

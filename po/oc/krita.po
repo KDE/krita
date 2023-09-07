@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -58314,12 +58314,6 @@ msgstr "Longor :"
 msgid "Edit SVG Source"
 msgstr "Sorga"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-msgid "Show line boxes"
-msgstr "Largor :"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, fuzzy, kde-format
@@ -59848,6 +59842,10 @@ msgstr "Reduire el zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Preferéncias"
+
+#, fuzzy
+#~ msgid "Show line boxes"
+#~ msgstr "Largor :"
 
 #, fuzzy
 #~ msgid "Editor Mode"

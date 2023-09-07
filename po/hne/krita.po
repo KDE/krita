@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -58982,12 +58982,6 @@ msgstr "सामर्थ्य:"
 msgid "Edit SVG Source"
 msgstr "स्रोत"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-msgid "Show line boxes"
-msgstr "पिक्सेल चौड़ाई"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, fuzzy, kde-format
@@ -60542,6 +60536,10 @@ msgstr "सब्बो जूम करव"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "संदर्भ फोटू:"
+
+#, fuzzy
+#~ msgid "Show line boxes"
+#~ msgstr "पिक्सेल चौड़ाई"
 
 #, fuzzy
 #~ msgid "Editor Mode"

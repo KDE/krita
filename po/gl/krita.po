@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2023-09-03 12:19+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -61942,13 +61942,6 @@ msgstr "Ancorar o texto á dereita."
 msgid "Edit SVG Source"
 msgstr "Fonte de SVG"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-#| msgid "Show in Timeline"
-msgid "Show line boxes"
-msgstr "Mostrar na liña temporal"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, kde-format
@@ -63553,6 +63546,11 @@ msgstr "Ferramenta de ampliación"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta de imaxes de referencia"
+
+#, fuzzy
+#~| msgid "Show in Timeline"
+#~ msgid "Show line boxes"
+#~ msgstr "Mostrar na liña temporal"
 
 #~ msgid "Editor Mode"
 #~ msgstr "Modo de edición"

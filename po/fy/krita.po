@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -59071,12 +59071,6 @@ msgstr "Sterkte:"
 msgid "Edit SVG Source"
 msgstr "Boarne"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-msgid "Show line boxes"
-msgstr "Selbreedte"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, fuzzy, kde-format
@@ -60633,6 +60627,10 @@ msgstr "Zoomark"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referinsje-ôfbylding:"
+
+#, fuzzy
+#~ msgid "Show line boxes"
+#~ msgstr "Selbreedte"
 
 #, fuzzy
 #~ msgid "Editor Mode"

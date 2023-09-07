@@ -37,7 +37,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2008-01-01 23:08+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -57757,12 +57757,6 @@ msgstr "Сіла:"
 msgid "Edit SVG Source"
 msgstr "Крыніца"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-msgid "Show line boxes"
-msgstr "Шырыня экраннай кропкі"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, fuzzy, kde-format
@@ -59277,6 +59271,10 @@ msgstr "Маштабаванне"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Інтэрферэнцыйны бэзавы"
+
+#, fuzzy
+#~ msgid "Show line boxes"
+#~ msgstr "Шырыня экраннай кропкі"
 
 #, fuzzy
 #~ msgid "Editor Mode"

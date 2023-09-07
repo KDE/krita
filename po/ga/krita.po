@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -59311,12 +59311,6 @@ msgstr "Neart:"
 msgid "Edit SVG Source"
 msgstr "Foinse"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-msgid "Show line boxes"
-msgstr "Leithead na líne"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, fuzzy, kde-format
@@ -60873,6 +60867,10 @@ msgstr "Uirlis Súmála"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Athainmnigh Íomhá"
+
+#, fuzzy
+#~ msgid "Show line boxes"
+#~ msgstr "Leithead na líne"
 
 #, fuzzy
 #~| msgid "Edit Mode"

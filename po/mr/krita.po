@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -60013,12 +60013,6 @@ msgstr "सामर्थ्य :"
 msgid "Edit SVG Source"
 msgstr "स्रोत"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-msgid "Show line boxes"
-msgstr "रेषेची जाडी :"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, fuzzy, kde-format
@@ -61590,6 +61584,10 @@ msgstr "आकाराप्रमाणे वाढवा"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "25%"
+
+#, fuzzy
+#~ msgid "Show line boxes"
+#~ msgstr "रेषेची जाडी :"
 
 #, fuzzy
 #~| msgid "Edit Mode"

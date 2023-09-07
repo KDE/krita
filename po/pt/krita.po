@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2023-07-13 00:28+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -59455,14 +59455,6 @@ msgstr "Âncora do texto à direita."
 msgid "Edit SVG Source"
 msgstr "Código SVG"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-#| msgctxt "Open the folder when the new created video is placed"
-#| msgid "Show in folder"
-msgid "Show line boxes"
-msgstr "Mostrar na pasta"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, kde-format
@@ -61011,6 +61003,12 @@ msgstr "Ferramenta de Ampliação"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta de Imagens de Referência"
+
+#, fuzzy
+#~| msgctxt "Open the folder when the new created video is placed"
+#~| msgid "Show in folder"
+#~ msgid "Show line boxes"
+#~ msgstr "Mostrar na pasta"
 
 #~ msgid "Editor Mode"
 #~ msgstr "Modo do Editor"

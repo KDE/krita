@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -59810,12 +59810,6 @@ msgstr "Stärk:"
 msgid "Edit SVG Source"
 msgstr "Born"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-msgid "Show line boxes"
-msgstr "Lienenbreed"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, fuzzy, kde-format
@@ -61393,6 +61387,10 @@ msgstr "Ansichtgrött op all"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Betogbild:"
+
+#, fuzzy
+#~ msgid "Show line boxes"
+#~ msgstr "Lienenbreed"
 
 #, fuzzy
 #~ msgid "Editor Mode"

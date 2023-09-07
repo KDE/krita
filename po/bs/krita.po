@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -61013,12 +61013,6 @@ msgstr "Sidro"
 msgid "Edit SVG Source"
 msgstr "Izvor"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-msgid "Show line boxes"
-msgstr "Trajanje"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, fuzzy, kde-format
@@ -62640,6 +62634,10 @@ msgstr "Uvećaj sve"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referentne slike"
+
+#, fuzzy
+#~ msgid "Show line boxes"
+#~ msgstr "Trajanje"
 
 #, fuzzy
 #~| msgid "Edit Mode"

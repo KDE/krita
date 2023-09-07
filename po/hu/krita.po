@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -60233,12 +60233,6 @@ msgstr "Erősség:"
 msgid "Edit SVG Source"
 msgstr "SVG forrás"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-msgid "Show line boxes"
-msgstr "Vonalvastagság:"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, kde-format
@@ -61802,6 +61796,10 @@ msgstr "Nagyító eszköz"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referenciaképek eszköz"
+
+#, fuzzy
+#~ msgid "Show line boxes"
+#~ msgstr "Vonalvastagság:"
 
 #~ msgid "Editor Mode"
 #~ msgstr "Szerkesztő mód"

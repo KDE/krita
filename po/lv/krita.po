@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2008-12-27 19:32+0200\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Lavtian <locale@laka.lv>\n"
@@ -58098,12 +58098,6 @@ msgstr "Pretestība:"
 msgid "Edit SVG Source"
 msgstr "Avots"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-msgid "Show line boxes"
-msgstr "Pikselis"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, fuzzy, kde-format
@@ -59628,6 +59622,10 @@ msgstr "Aplaušanas pults T&roksnis."
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Atsauksme:"
+
+#, fuzzy
+#~ msgid "Show line boxes"
+#~ msgstr "Pikselis"
 
 #, fuzzy
 #~ msgid "Editor Mode"

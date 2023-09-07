@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2023-08-21 06:39+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -57129,12 +57129,6 @@ msgstr ""
 msgid "Edit SVG Source"
 msgstr "SVG წყაროს ჩასწორება"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, kde-format
-msgid "Show line boxes"
-msgstr "ხაზის ყუთების ჩვენება"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, kde-format
@@ -58643,6 +58637,9 @@ msgstr "გადიდების ხელსაწყო"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
+
+#~ msgid "Show line boxes"
+#~ msgstr "ხაზის ყუთების ჩვენება"
 
 #~ msgid "Both"
 #~ msgstr "ორივე"

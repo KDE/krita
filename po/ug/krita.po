@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -59852,12 +59852,6 @@ msgstr "كۈچلۈكلۈكى:"
 msgid "Edit SVG Source"
 msgstr "مەنبە"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-msgid "Show line boxes"
-msgstr "قۇر كەڭلىكى:"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, fuzzy, kde-format
@@ -61422,6 +61416,10 @@ msgstr "تاللىغان رايون چوڭلۇقىغا تارايت"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "نەقىل"
+
+#, fuzzy
+#~ msgid "Show line boxes"
+#~ msgstr "قۇر كەڭلىكى:"
 
 #, fuzzy
 #~| msgid "Edit Mode"

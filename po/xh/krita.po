@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 00:43+0000\n"
+"POT-Creation-Date: 2023-09-07 00:43+0000\n"
 "PO-Revision-Date: 2002-11-08 16:00+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -57789,12 +57789,6 @@ msgstr "Oluphezulu Lwangoku %1"
 msgid "Edit SVG Source"
 msgstr "Izinto zobumnini Zolwaleko..."
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDbgLineBox)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:132
-#, fuzzy, kde-format
-msgid "Show line boxes"
-msgstr "&Ububanzi:"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
 #, fuzzy, kde-format
@@ -59310,6 +59304,10 @@ msgstr "&Isixhobo Sokusondeza"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Umfanekiso Onikwe igama kwakhona"
+
+#, fuzzy
+#~ msgid "Show line boxes"
+#~ msgstr "&Ububanzi:"
 
 #, fuzzy
 #~ msgid "Editor Mode"

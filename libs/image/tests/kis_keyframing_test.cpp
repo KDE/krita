@@ -1015,4 +1015,119 @@ void KisKeyframingTest::testChangeOfScalarLimits()
     QCOMPARE(key30->value(), channel->valueAt(30));
 }
 
+#include <KisAnimAutoKey.h>
+
+void KisKeyframingTest::testAutoKeyframing_data()
+{
+    QTest::addColumn<KisAutoKey::Mode>("autoKeyMode");
+    QTest::addColumn<bool>("allowBlank");
+    QTest::addColumn<bool>("useLodNMode");
+
+
+    QTest::addRow("duplicate") << KisAutoKey::DUPLICATE << true << false;
+    QTest::addRow("blank") << KisAutoKey::BLANK << true << false;
+    QTest::addRow("blank, not allowed") << KisAutoKey::BLANK << false << false;
+    QTest::addRow("none") << KisAutoKey::NONE << true << false;
+
+    QTest::addRow("duplicate, lodn") << KisAutoKey::DUPLICATE << true << true;
+    QTest::addRow("blank, lodn") << KisAutoKey::BLANK << true << true;
+    QTest::addRow("blank, not allowed, lodn") << KisAutoKey::BLANK << false << true;
+    QTest::addRow("none, lodn") << KisAutoKey::NONE << true << true;
+}
+
+namespace {
+inline QRect rectForTime(int time) {
+    return QRect(time * 64 + 1, 65, 62, 62);
+}
+} // namespace
+
+void KisKeyframingTest::testAutoKeyframing()
+{
+    QFETCH(KisAutoKey::Mode, autoKeyMode);
+    KisAutoKey::testingSetActiveMode(autoKeyMode);
+
+    QFETCH(bool, allowBlank);
+    QFETCH(bool, useLodNMode);
+
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
+
+    if (useLodNMode) {
+        bounds->testingSetLod(3);
+    }
+
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->setDefaultBounds(bounds);
+
+    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KoID());
+
+    channel->addKeyframe(0);
+
+    bounds->testingSetTime(10);
+    channel->addKeyframe(10);
+
+    KisKeyframeSP keyframe10 = channel->keyframeAt(10);
+    QVERIFY(keyframe10);
+
+    const int colorLabelIndex = 3;
+
+    keyframe10->setColorLabel(colorLabelIndex);
+    QCOMPARE(keyframe10->colorLabel(), colorLabelIndex);
+
+    dev->fill(rectForTime(10), KoColor(Qt::black, cs));
+
+    QCOMPARE(dev->exactBounds(), rectForTime(10));
+
+    bounds->testingSetTime(13);
+    QCOMPARE(dev->exactBounds(), rectForTime(10));
+
+    KisAutoKey::AutoCreateKeyframeFlags flags = KisAutoKey::None;
+
+    if (allowBlank) {
+        flags |= KisAutoKey::AllowBlankMode;
+    }
+
+    if (useLodNMode) {
+        flags |= KisAutoKey::SupportsLod;
+        bounds->testingSetLod(3);
+    }
+
+    KUndo2Command *cmd = KisAutoKey::tryAutoCreateDuplicatedFrame(dev, flags);
+
+    if (useLodNMode) {
+        if (autoKeyMode == KisAutoKey::DUPLICATE || !allowBlank) {
+            QVERIFY(!cmd);
+            QCOMPARE(dev->exactBounds(), rectForTime(10));
+        } else if (autoKeyMode == KisAutoKey::BLANK) {
+            QVERIFY(cmd);
+            cmd->redo();
+            QVERIFY(dev->exactBounds().isEmpty());
+        } else if (autoKeyMode == KisAutoKey::NONE) {
+            QVERIFY(!cmd);
+            QCOMPARE(dev->exactBounds(), rectForTime(10));
+        }
+    } else {
+        if (autoKeyMode == KisAutoKey::DUPLICATE || !allowBlank) {
+            QVERIFY(cmd);
+            cmd->redo();
+            QCOMPARE(dev->exactBounds(), rectForTime(10));
+        } else if (autoKeyMode == KisAutoKey::BLANK) {
+            QVERIFY(cmd);
+            cmd->redo();
+            QVERIFY(dev->exactBounds().isEmpty());
+        } else if (autoKeyMode == KisAutoKey::NONE) {
+            QVERIFY(!cmd);
+            QCOMPARE(dev->exactBounds(), rectForTime(10));
+        }
+    }
+
+    KisKeyframeSP keyframe13 = channel->keyframeAt(13);
+
+    if (autoKeyMode != KisAutoKey::NONE && !useLodNMode) {
+        QVERIFY(keyframe13);
+        QCOMPARE(keyframe13->colorLabel(), colorLabelIndex);
+    } else {
+        QVERIFY(!keyframe13);
+    }
+}
+
 SIMPLE_TEST_MAIN(KisKeyframingTest)

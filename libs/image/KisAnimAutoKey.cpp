@@ -40,6 +40,11 @@ public:
         return m_mode;
     }
 
+    void testingSetActiveMode(Mode mode) {
+        QWriteLocker l(&m_lock);
+        m_mode = mode;
+    }
+
 private Q_SLOTS:
     void slotAutoKeyFrameSettingChanged() {
         QWriteLocker l(&m_lock);
@@ -106,21 +111,28 @@ KUndo2Command* tryAutoCreateDuplicatedFrame(KisPaintDeviceSP device, AutoCreateK
 
         if (flags & AllowBlankMode && autoKeyMode == KisAutoKey::BLANK) {
             channel->addKeyframe(targetKeyframe, undo);
+
+            /// Use the same color label as previous keyframe, the duplicate
+            /// action duplicates the label automatically, but addKeyframe not
+
+            KisKeyframeSP newKeyframe = channel->keyframeAt(targetKeyframe);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(newKeyframe, undo);
+
+            KisKeyframeSP oldKeyframe = channel->keyframeAt(activeKeyframe);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(oldKeyframe, undo);
+
+            newKeyframe->setColorLabel(oldKeyframe->colorLabel());
         } else {
             channel->copyKeyframe(activeKeyframe, targetKeyframe, undo);
         }
-
-        KisKeyframeSP newKeyframe = channel->keyframeAt(targetKeyframe);
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(newKeyframe, undo);
-
-        // Use the same color label as previous keyframe...
-        KisKeyframeSP oldKeyframe = channel->keyframeAt(activeKeyframe);
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(oldKeyframe, undo);
-
-        newKeyframe->setColorLabel(oldKeyframe->colorLabel());
     }
 
     return undo;
+}
+
+void testingSetActiveMode(Mode mode)
+{
+    s_holder->testingSetActiveMode(mode);
 }
 
 

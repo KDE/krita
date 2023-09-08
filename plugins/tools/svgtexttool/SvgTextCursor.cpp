@@ -278,7 +278,9 @@ bool SvgTextCursor::hasSelection()
 
 void SvgTextCursor::updateCursor()
 {
-    d->oldCursorRect = d->shape->shapeToDocument(d->cursorShape.boundingRect());
+    if (d->shape) {
+        d->oldCursorRect = d->shape->shapeToDocument(d->cursorShape.boundingRect());
+    }
     d->cursorShape = d->shape? d->shape->cursorForPos(d->pos): QPainterPath();
     d->cursorFlash.start();
     d->cursorFlashLimit.start();

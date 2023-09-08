@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-07 00:43+0000\n"
+"POT-Creation-Date: 2023-09-08 00:43+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -17382,7 +17382,7 @@ msgstr " بكسل"
 
 #. i18n: ectx: property (text), widget (QCheckBox, opacityCBox)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:19
-#: libs/image/kis_keyframe_channel.cpp:26 libs/image/kis_layer.cc:276
+#: libs/image/kis_keyframe_channel.cpp:27 libs/image/kis_layer.cc:276
 #: libs/widgets/KoColorPopupAction.cpp:85
 #: plugins/dockers/layerdocker/LayerBox.cpp:207
 #: plugins/dockers/layerdocker/LayerBox.cpp:392
@@ -17822,52 +17822,52 @@ msgid "Crop Selections"
 msgstr "اقتصاص التّحديدات"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: libs/image/kis_keyframe_channel.cpp:25 libs/ui/forms/wdgnewimage.ui:424
+#: libs/image/kis_keyframe_channel.cpp:26 libs/ui/forms/wdgnewimage.ui:424
 #, kde-format
 msgid "Content"
 msgstr "المحتوى"
 
-#: libs/image/kis_keyframe_channel.cpp:27
+#: libs/image/kis_keyframe_channel.cpp:28
 #, kde-format
 msgid "Position (X)"
 msgstr "الموضع (س)"
 
-#: libs/image/kis_keyframe_channel.cpp:28
+#: libs/image/kis_keyframe_channel.cpp:29
 #, kde-format
 msgid "Position (Y)"
 msgstr "الموضع (ص)"
 
-#: libs/image/kis_keyframe_channel.cpp:29
+#: libs/image/kis_keyframe_channel.cpp:30
 #, kde-format
 msgid "Scale (X)"
 msgstr "المقياس (س)"
 
-#: libs/image/kis_keyframe_channel.cpp:30
+#: libs/image/kis_keyframe_channel.cpp:31
 #, kde-format
 msgid "Scale (Y)"
 msgstr "المقياس (ص)"
 
-#: libs/image/kis_keyframe_channel.cpp:31
+#: libs/image/kis_keyframe_channel.cpp:32
 #, kde-format
 msgid "Shear (X)"
 msgstr "قطع (س)"
 
-#: libs/image/kis_keyframe_channel.cpp:32
+#: libs/image/kis_keyframe_channel.cpp:33
 #, kde-format
 msgid "Shear (Y)"
 msgstr "قطع (ص)"
 
-#: libs/image/kis_keyframe_channel.cpp:33
+#: libs/image/kis_keyframe_channel.cpp:34
 #, kde-format
 msgid "Rotation (X)"
 msgstr "التّدوير (س)"
 
-#: libs/image/kis_keyframe_channel.cpp:34
+#: libs/image/kis_keyframe_channel.cpp:35
 #, kde-format
 msgid "Rotation (Y)"
 msgstr "التّدوير (ص)"
 
-#: libs/image/kis_keyframe_channel.cpp:35
+#: libs/image/kis_keyframe_channel.cpp:36
 #, kde-format
 msgid "Rotation (Z)"
 msgstr "التّدوير (ع)"
@@ -17908,13 +17908,13 @@ msgid "Inherit Alpha"
 msgstr "ترث ألفا"
 
 #: libs/image/kis_layer_properties_icons.cpp:24
-#: libs/image/kis_paint_layer.cc:200
+#: libs/image/kis_paint_layer.cc:209
 #, kde-format
 msgid "Alpha Locked"
 msgstr "ألفا مقفلة"
 
 #: libs/image/kis_layer_properties_icons.cpp:25
-#: libs/image/kis_paint_layer.cc:203
+#: libs/image/kis_paint_layer.cc:212
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:30
 #, kde-format
 msgid "Onion Skins"

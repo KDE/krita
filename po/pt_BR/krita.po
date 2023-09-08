@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-07 00:43+0000\n"
+"POT-Creation-Date: 2023-09-08 00:43+0000\n"
 "PO-Revision-Date: 2023-02-14 11:07-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -16733,7 +16733,7 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QCheckBox, opacityCBox)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:19
-#: libs/image/kis_keyframe_channel.cpp:26 libs/image/kis_layer.cc:276
+#: libs/image/kis_keyframe_channel.cpp:27 libs/image/kis_layer.cc:276
 #: libs/widgets/KoColorPopupAction.cpp:85
 #: plugins/dockers/layerdocker/LayerBox.cpp:207
 #: plugins/dockers/layerdocker/LayerBox.cpp:392
@@ -17163,52 +17163,52 @@ msgid "Crop Selections"
 msgstr "Recortar seleções"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: libs/image/kis_keyframe_channel.cpp:25 libs/ui/forms/wdgnewimage.ui:424
+#: libs/image/kis_keyframe_channel.cpp:26 libs/ui/forms/wdgnewimage.ui:424
 #, kde-format
 msgid "Content"
 msgstr "Conteúdo"
 
-#: libs/image/kis_keyframe_channel.cpp:27
+#: libs/image/kis_keyframe_channel.cpp:28
 #, kde-format
 msgid "Position (X)"
 msgstr "Posição (X)"
 
-#: libs/image/kis_keyframe_channel.cpp:28
+#: libs/image/kis_keyframe_channel.cpp:29
 #, kde-format
 msgid "Position (Y)"
 msgstr "Posição (Y)"
 
-#: libs/image/kis_keyframe_channel.cpp:29
+#: libs/image/kis_keyframe_channel.cpp:30
 #, kde-format
 msgid "Scale (X)"
 msgstr "Escala (X)"
 
-#: libs/image/kis_keyframe_channel.cpp:30
+#: libs/image/kis_keyframe_channel.cpp:31
 #, kde-format
 msgid "Scale (Y)"
 msgstr "Escala (Y)"
 
-#: libs/image/kis_keyframe_channel.cpp:31
+#: libs/image/kis_keyframe_channel.cpp:32
 #, kde-format
 msgid "Shear (X)"
 msgstr "Inclinar (X)"
 
-#: libs/image/kis_keyframe_channel.cpp:32
+#: libs/image/kis_keyframe_channel.cpp:33
 #, kde-format
 msgid "Shear (Y)"
 msgstr "Inclinar (Y)"
 
-#: libs/image/kis_keyframe_channel.cpp:33
+#: libs/image/kis_keyframe_channel.cpp:34
 #, kde-format
 msgid "Rotation (X)"
 msgstr "Rotação (X)"
 
-#: libs/image/kis_keyframe_channel.cpp:34
+#: libs/image/kis_keyframe_channel.cpp:35
 #, kde-format
 msgid "Rotation (Y)"
 msgstr "Rotação (Y)"
 
-#: libs/image/kis_keyframe_channel.cpp:35
+#: libs/image/kis_keyframe_channel.cpp:36
 #, kde-format
 msgid "Rotation (Z)"
 msgstr "Rotação (Z)"
@@ -17249,13 +17249,13 @@ msgid "Inherit Alpha"
 msgstr "Herdar o Alfa"
 
 #: libs/image/kis_layer_properties_icons.cpp:24
-#: libs/image/kis_paint_layer.cc:200
+#: libs/image/kis_paint_layer.cc:209
 #, kde-format
 msgid "Alpha Locked"
 msgstr "Bloqueado no Alfa"
 
 #: libs/image/kis_layer_properties_icons.cpp:25
-#: libs/image/kis_paint_layer.cc:203
+#: libs/image/kis_paint_layer.cc:212
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:30
 #, kde-format
 msgid "Onion Skins"

@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-07 00:43+0000\n"
+"POT-Creation-Date: 2023-09-08 00:43+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -17819,7 +17819,7 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QCheckBox, opacityCBox)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:19
-#: libs/image/kis_keyframe_channel.cpp:26 libs/image/kis_layer.cc:276
+#: libs/image/kis_keyframe_channel.cpp:27 libs/image/kis_layer.cc:276
 #: libs/widgets/KoColorPopupAction.cpp:85
 #: plugins/dockers/layerdocker/LayerBox.cpp:207
 #: plugins/dockers/layerdocker/LayerBox.cpp:392
@@ -18264,52 +18264,52 @@ msgid "Crop Selections"
 msgstr "Valikute kärpimine"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: libs/image/kis_keyframe_channel.cpp:25 libs/ui/forms/wdgnewimage.ui:424
+#: libs/image/kis_keyframe_channel.cpp:26 libs/ui/forms/wdgnewimage.ui:424
 #, kde-format
 msgid "Content"
 msgstr "Sisu"
 
-#: libs/image/kis_keyframe_channel.cpp:27
+#: libs/image/kis_keyframe_channel.cpp:28
 #, kde-format
 msgid "Position (X)"
 msgstr "Asukoht (X)"
 
-#: libs/image/kis_keyframe_channel.cpp:28
+#: libs/image/kis_keyframe_channel.cpp:29
 #, kde-format
 msgid "Position (Y)"
 msgstr "Asukoht (Y)"
 
-#: libs/image/kis_keyframe_channel.cpp:29
+#: libs/image/kis_keyframe_channel.cpp:30
 #, kde-format
 msgid "Scale (X)"
 msgstr "Skaleerimine (X)"
 
-#: libs/image/kis_keyframe_channel.cpp:30
+#: libs/image/kis_keyframe_channel.cpp:31
 #, kde-format
 msgid "Scale (Y)"
 msgstr "Skaleerimine (Y)"
 
-#: libs/image/kis_keyframe_channel.cpp:31
+#: libs/image/kis_keyframe_channel.cpp:32
 #, kde-format
 msgid "Shear (X)"
 msgstr "Kallutamine (X)"
 
-#: libs/image/kis_keyframe_channel.cpp:32
+#: libs/image/kis_keyframe_channel.cpp:33
 #, kde-format
 msgid "Shear (Y)"
 msgstr "Kallutamine (Y)"
 
-#: libs/image/kis_keyframe_channel.cpp:33
+#: libs/image/kis_keyframe_channel.cpp:34
 #, kde-format
 msgid "Rotation (X)"
 msgstr "Pööramine (X)"
 
-#: libs/image/kis_keyframe_channel.cpp:34
+#: libs/image/kis_keyframe_channel.cpp:35
 #, kde-format
 msgid "Rotation (Y)"
 msgstr "Pööramine (Y)"
 
-#: libs/image/kis_keyframe_channel.cpp:35
+#: libs/image/kis_keyframe_channel.cpp:36
 #, kde-format
 msgid "Rotation (Z)"
 msgstr "Pööramine (Z)"
@@ -18350,13 +18350,13 @@ msgid "Inherit Alpha"
 msgstr "Alfa pärimine"
 
 #: libs/image/kis_layer_properties_icons.cpp:24
-#: libs/image/kis_paint_layer.cc:200
+#: libs/image/kis_paint_layer.cc:209
 #, kde-format
 msgid "Alpha Locked"
 msgstr "Alfa lukustatud"
 
 #: libs/image/kis_layer_properties_icons.cpp:25
-#: libs/image/kis_paint_layer.cc:203
+#: libs/image/kis_paint_layer.cc:212
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:30
 #, kde-format
 msgid "Onion Skins"

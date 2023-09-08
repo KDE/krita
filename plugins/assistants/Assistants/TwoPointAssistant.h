@@ -29,7 +29,7 @@ public:
 
 
     TwoPointAssistant();
-    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
+    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny, qreal moveThresholdPt) override;
     void adjustLine(QPointF &point, QPointF& strokeBegin) override;
     void endStroke() override;
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;

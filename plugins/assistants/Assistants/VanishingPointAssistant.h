@@ -42,7 +42,7 @@ public:
     };
 
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
-    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, bool snapToAny) override;
+    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, bool snapToAny, qreal moveThresholdPt) override;
     void adjustLine(QPointF &point, QPointF& strokeBegin) override;
     QPointF getDefaultEditorPosition() const override;
     int numHandles() const override { return isLocal() ? 3 : 1; }
@@ -66,7 +66,7 @@ protected:
 private:
 
 
-    QPointF project(const QPointF& pt, const QPointF& strokeBegin);
+    QPointF project(const QPointF& pt, const QPointF& strokeBegin, qreal moveThresholdPt);
     explicit VanishingPointAssistant(const VanishingPointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 
     KisCanvas2 *m_canvas {nullptr};

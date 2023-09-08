@@ -23,7 +23,7 @@ public:
     ConcentricEllipseAssistant();
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
 
-    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
+    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny, qreal moveThresholdPt) override;
     void adjustLine(QPointF &point, QPointF& strokeBegin) override;
 
     QPointF getDefaultEditorPosition() const override;
@@ -38,7 +38,7 @@ protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
-    QPointF project(const QPointF& pt, const QPointF& strokeBegin, const bool checkForInitialMovement = true) const;
+    QPointF project(const QPointF& pt, const QPointF& strokeBegin, const bool checkForInitialMovement, qreal moveThresholdPt) const;
     mutable Ellipse m_ellipse;
     mutable Ellipse m_extraEllipse;
     explicit ConcentricEllipseAssistant(const ConcentricEllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);

@@ -40,14 +40,14 @@ KisPaintingAssistantSP VanishingPointAssistant::clone(QMap<KisPaintingAssistantH
     return KisPaintingAssistantSP(new VanishingPointAssistant(*this, handleMap));
 }
 
-QPointF VanishingPointAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
+QPointF VanishingPointAssistant::project(const QPointF& pt, const QPointF& strokeBegin, qreal moveThresholdPt)
 {
     //Q_ASSERT(handles().size() == 1 || handles().size() == 5);
     //code nicked from the perspective ruler.
     qreal dx = pt.x() - strokeBegin.x();
     qreal dy = pt.y() - strokeBegin.y();
 
-    if (dx * dx + dy * dy < 4.0) {
+    if (KisAlgebra2D::norm(QPointF(dx, dy)) < moveThresholdPt) {
         // allow some movement before snapping
         return strokeBegin;
     }
@@ -78,14 +78,14 @@ QPointF VanishingPointAssistant::project(const QPointF& pt, const QPointF& strok
     return r;
 }
 
-QPointF VanishingPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
+QPointF VanishingPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal moveThresholdPt)
 {
-    return project(pt, strokeBegin);
+    return project(pt, strokeBegin, moveThresholdPt);
 }
 
 void VanishingPointAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
 {
-    point = project(point, strokeBegin);
+    point = project(point, strokeBegin, 0.0);
 }
 
 void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)

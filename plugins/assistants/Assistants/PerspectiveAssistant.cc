@@ -51,7 +51,7 @@ KisPaintingAssistantSP PerspectiveAssistant::clone(QMap<KisPaintingAssistantHand
     return KisPaintingAssistantSP(new PerspectiveAssistant(*this, handleMap));
 }
 
-QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBegin, const bool alwaysStartAnew)
+QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBegin, const bool alwaysStartAnew, qreal moveThresholdPt)
 {
     const static QPointF nullPoint(std::numeric_limits<qreal>::quiet_NaN(), std::numeric_limits<qreal>::quiet_NaN());
 
@@ -69,11 +69,7 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
             return nullPoint; // avoid problems with multiple assistants: only snap if starting in the grid
         }
 
-
-        const qreal dx = pt.x() - strokeBegin.x();
-        const qreal dy = pt.y() - strokeBegin.y();
-
-        if (dx * dx + dy * dy < 4.0) {
+        if (KisAlgebra2D::norm(pt - strokeBegin) < moveThresholdPt) {
             return strokeBegin; // allow some movement before snapping
         }
 
@@ -108,14 +104,14 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
     return r;
 }
 
-QPointF PerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
+QPointF PerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal moveThresholdPt)
 {
-    return project(pt, strokeBegin);
+    return project(pt, strokeBegin, false, moveThresholdPt);
 }
 
 void PerspectiveAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
 {
-    point = project(point, strokeBegin, true);
+    point = project(point, strokeBegin, true, 0.0);
 }
 
 void PerspectiveAssistant::endStroke()

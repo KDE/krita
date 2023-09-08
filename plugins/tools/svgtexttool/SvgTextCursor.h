@@ -77,6 +77,10 @@ public:
 
     // Reimplemented.
     bool hasSelection() override;
+
+Q_SIGNALS:
+
+    void updateCursorDecoration(QRectF updateRect);
 private Q_SLOTS:
     void blinkCursor();
     void stopBlinkCursor();

@@ -24,8 +24,10 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     bool cursorVisible = false;
 
     QPainterPath cursorShape;
+    QRectF oldCursorRect;
     int cursorWidth = 1;
     QPainterPath selection;
+    QRectF oldSelectionRect;
 
     bool visualNavigation = true;
 };
@@ -254,7 +256,7 @@ void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
 void SvgTextCursor::blinkCursor()
 {
     if (d->shape) {
-        d->tool->updateCursor(d->shape->shapeToDocument(d->cursorShape.boundingRect()));
+        emit updateCursorDecoration(d->shape->shapeToDocument(d->cursorShape.boundingRect()) | d->oldCursorRect);
         d->cursorVisible = !d->cursorVisible;
     }
 }
@@ -265,7 +267,7 @@ void SvgTextCursor::stopBlinkCursor()
     d->cursorFlashLimit.stop();
     d->cursorVisible = true;
     if (d->shape) {
-        d->tool->updateCursor(d->shape->shapeToDocument(d->cursorShape.boundingRect()));
+        emit updateCursorDecoration(d->shape->shapeToDocument(d->cursorShape.boundingRect()) | d->oldCursorRect);
     }
 }
 
@@ -276,6 +278,7 @@ bool SvgTextCursor::hasSelection()
 
 void SvgTextCursor::updateCursor()
 {
+    d->oldCursorRect = d->shape->shapeToDocument(d->cursorShape.boundingRect());
     d->cursorShape = d->shape? d->shape->cursorForPos(d->pos): QPainterPath();
     d->cursorFlash.start();
     d->cursorFlashLimit.start();
@@ -286,7 +289,8 @@ void SvgTextCursor::updateCursor()
 void SvgTextCursor::updateSelection()
 {
     if (d->shape) {
+        d->oldSelectionRect = d->shape->shapeToDocument(d->selection.boundingRect());
         d->selection = d->shape->selectionBoxes(d->pos, d->anchor);
-        d->tool->updateCursor(d->shape->shapeToDocument(d->cursorShape.boundingRect()));
+        emit updateCursorDecoration(d->shape->shapeToDocument(d->selection.boundingRect()) | d->oldSelectionRect);
     }
 }

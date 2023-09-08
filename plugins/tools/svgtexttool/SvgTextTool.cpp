@@ -76,6 +76,8 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     m_textCursor.setCaretSetting(QApplication::style()->pixelMetric(QStyle::PM_TextCursorWidth)
                                  , qApp->cursorFlashTime()
                                  , cursorFlashLimit);
+    connect(&m_textCursor, SIGNAL(updateCursorDecoration(QRectF)), this, SLOT(slotUpdateCursorDecoration(QRectF)));
+
     m_base_cursor = QCursor(QPixmap(":/tool_text_basic.xpm"), 7, 7);
     m_text_inline_horizontal = QCursor(QPixmap(":/tool_text_inline_horizontal.xpm"), 7, 7);
     m_text_inline_vertical = QCursor(QPixmap(":/tool_text_inline_vertical.xpm"), 7, 7);
@@ -98,7 +100,7 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
 {
     KoToolBase::activate(shapes);
     m_textCursor.setShape(selectedShape());
-    m_canvasConnections.addConnection(canvas()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    m_canvasConnections.addConnection(canvas()->selectedShapesProxy(), SIGNAL(slotShapeSelectionChanged()), this, SLOT(slotShapeSelectionChanged()));
 
     useCursor(m_base_cursor);
     auto uploadColorToResourceManager = [this](KoShape *shape) {
@@ -324,7 +326,7 @@ void SvgTextTool::storeDefaults()
     m_configGroup.writeEntry("defaultLetterSpacing", optionUi.defLetterSpacing->value());
 }
 
-void SvgTextTool::selectionChanged()
+void SvgTextTool::slotShapeSelectionChanged()
 {
     m_textCursor.setShape(selectedShape());
     if (selectedShape()) {
@@ -368,7 +370,7 @@ KoToolSelection *SvgTextTool::selection()
     return &m_textCursor;
 }
 
-void SvgTextTool::updateCursor(QRectF updateRect)
+void SvgTextTool::slotUpdateCursorDecoration(QRectF updateRect)
 {
     if (canvas()) {
         canvas()->updateCanvas(updateRect);

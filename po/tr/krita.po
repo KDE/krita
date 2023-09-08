@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 02:22+0000\n"
+"POT-Creation-Date: 2023-09-08 02:23+0000\n"
 "PO-Revision-Date: 2023-08-27 01:49+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -16655,7 +16655,7 @@ msgstr "Boyut"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:389
+#: plugins/tools/basictools/kis_tool_brush.cc:388
 #: plugins/tools/basictools/kis_tool_fill.cc:568
 #: plugins/tools/basictools/kis_tool_fill.cc:579
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
@@ -16681,7 +16681,7 @@ msgstr " pks"
 
 #. i18n: ectx: property (text), widget (QCheckBox, opacityCBox)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:19
-#: libs/image/kis_keyframe_channel.cpp:26 libs/image/kis_layer.cc:276
+#: libs/image/kis_keyframe_channel.cpp:27 libs/image/kis_layer.cc:276
 #: libs/widgets/KoColorPopupAction.cpp:85
 #: plugins/dockers/layerdocker/LayerBox.cpp:207
 #: plugins/dockers/layerdocker/LayerBox.cpp:392
@@ -17111,52 +17111,52 @@ msgid "Crop Selections"
 msgstr "Seçimleri Kırp"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: libs/image/kis_keyframe_channel.cpp:25 libs/ui/forms/wdgnewimage.ui:424
+#: libs/image/kis_keyframe_channel.cpp:26 libs/ui/forms/wdgnewimage.ui:424
 #, kde-format
 msgid "Content"
 msgstr "İçerik"
 
-#: libs/image/kis_keyframe_channel.cpp:27
+#: libs/image/kis_keyframe_channel.cpp:28
 #, kde-format
 msgid "Position (X)"
 msgstr "Konum (X)"
 
-#: libs/image/kis_keyframe_channel.cpp:28
+#: libs/image/kis_keyframe_channel.cpp:29
 #, kde-format
 msgid "Position (Y)"
 msgstr "Konum (Y)"
 
-#: libs/image/kis_keyframe_channel.cpp:29
+#: libs/image/kis_keyframe_channel.cpp:30
 #, kde-format
 msgid "Scale (X)"
 msgstr "Ölçek (X)"
 
-#: libs/image/kis_keyframe_channel.cpp:30
+#: libs/image/kis_keyframe_channel.cpp:31
 #, kde-format
 msgid "Scale (Y)"
 msgstr "Ölçek (Y)"
 
-#: libs/image/kis_keyframe_channel.cpp:31
+#: libs/image/kis_keyframe_channel.cpp:32
 #, kde-format
 msgid "Shear (X)"
 msgstr "Kırp (X)"
 
-#: libs/image/kis_keyframe_channel.cpp:32
+#: libs/image/kis_keyframe_channel.cpp:33
 #, kde-format
 msgid "Shear (Y)"
 msgstr "Kırp (Y)"
 
-#: libs/image/kis_keyframe_channel.cpp:33
+#: libs/image/kis_keyframe_channel.cpp:34
 #, kde-format
 msgid "Rotation (X)"
 msgstr "Döndürme (X)"
 
-#: libs/image/kis_keyframe_channel.cpp:34
+#: libs/image/kis_keyframe_channel.cpp:35
 #, kde-format
 msgid "Rotation (Y)"
 msgstr "Döndürme (Y)"
 
-#: libs/image/kis_keyframe_channel.cpp:35
+#: libs/image/kis_keyframe_channel.cpp:36
 #, kde-format
 msgid "Rotation (Z)"
 msgstr "Döndürme (Z)"
@@ -17197,13 +17197,13 @@ msgid "Inherit Alpha"
 msgstr "Alfayı Miras al"
 
 #: libs/image/kis_layer_properties_icons.cpp:24
-#: libs/image/kis_paint_layer.cc:200
+#: libs/image/kis_paint_layer.cc:209
 #, kde-format
 msgid "Alpha Locked"
 msgstr "Alfa Kilitli"
 
 #: libs/image/kis_layer_properties_icons.cpp:25
-#: libs/image/kis_paint_layer.cc:203
+#: libs/image/kis_paint_layer.cc:212
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:30
 #, kde-format
 msgid "Onion Skins"
@@ -56353,83 +56353,83 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "Serbest Fırça Vuruşu"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:178
+#: plugins/tools/basictools/kis_tool_brush.cc:177
 #, kde-format
 msgid "Sample count:"
 msgstr "Örnek Sayısı:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:189
+#: plugins/tools/basictools/kis_tool_brush.cc:188
 #, kde-format
 msgctxt ""
 "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
 msgid "Distance:"
 msgstr "Uzaklık:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:346
+#: plugins/tools/basictools/kis_tool_brush.cc:345
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "Yok"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:347
+#: plugins/tools/basictools/kis_tool_brush.cc:346
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "Temel"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:348
+#: plugins/tools/basictools/kis_tool_brush.cc:347
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "Ağırlıklı"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:349
+#: plugins/tools/basictools/kis_tool_brush.cc:348
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "Dengeleyici"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:351
+#: plugins/tools/basictools/kis_tool_brush.cc:350
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr "Fırça Yumuşatma:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:377
+#: plugins/tools/basictools/kis_tool_brush.cc:376
 #, kde-format
 msgid "Delay:"
 msgstr "Gecikme:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:382
+#: plugins/tools/basictools/kis_tool_brush.cc:381
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "Çizgiyi pürüzsüzleştirmek için fırça darbesini geciktir"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:386
+#: plugins/tools/basictools/kis_tool_brush.cc:385
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "Fırçanın engellendiği yarıçap"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:393
+#: plugins/tools/basictools/kis_tool_brush.cc:392
 #, kde-format
 msgid "Finish line:"
 msgstr "Bitiş çizgisi:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:406
+#: plugins/tools/basictools/kis_tool_brush.cc:405
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr "Algılayıcıları Dengele:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:415
+#: plugins/tools/basictools/kis_tool_brush.cc:414
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "Vuruş Sonu:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:422
+#: plugins/tools/basictools/kis_tool_brush.cc:421
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "Pürüzsüz Basınç"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:429
+#: plugins/tools/basictools/kis_tool_brush.cc:428
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -56439,38 +56439,38 @@ msgstr ""
 "Ölçeklenebilir uzaklık yakınlaştırma düzeyini dikkate alır ve hangi "
 "yakınlaştırma düzeyi seçili olursa olsun uzaklığı görsel olarak sabit yapar"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:434
+#: plugins/tools/basictools/kis_tool_brush.cc:433
 #, kde-format
 msgid "Scalable Distance"
 msgstr "Ölçeklenebilir Uzaklık"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:450
+#: plugins/tools/basictools/kis_tool_brush.cc:449
 #: plugins/tools/basictools/kis_tool_line.cc:101
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Yardımcılara Tuttur"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:452
+#: plugins/tools/basictools/kis_tool_brush.cc:451
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr "Bu aracın çalışmasından önce bir Yardımcı eklemelisiniz."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:457
+#: plugins/tools/basictools/kis_tool_brush.cc:456
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "Yardımcı Mıknatıslık"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:463
+#: plugins/tools/basictools/kis_tool_brush.cc:462
 #, kde-format
 msgid "Magnetism:"
 msgstr "Mıknatıslık:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:466
+#: plugins/tools/basictools/kis_tool_brush.cc:465
 #, kde-format
 msgid "Snap to Single Line"
 msgstr "Tek Çizgiye Tuttur"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:469
+#: plugins/tools/basictools/kis_tool_brush.cc:468
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -56480,13 +56480,13 @@ msgstr ""
 "Onu yalnızca tek bir yardımcı çizgisine tutturulacak biçimde yapmak, sayısız "
 "yardımcılar kullanılırken sığdırma karmaşasını önler."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:474
+#: plugins/tools/basictools/kis_tool_brush.cc:473
 #: plugins/tools/basictools/kis_tool_line.cc:104
 #, kde-format
 msgid "Snap Eraser"
 msgstr "Silgi Tuttur"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:477
+#: plugins/tools/basictools/kis_tool_brush.cc:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"

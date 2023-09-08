@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 02:22+0000\n"
+"POT-Creation-Date: 2023-09-08 02:23+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -16897,7 +16897,7 @@ msgstr "ទំហំ"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:389
+#: plugins/tools/basictools/kis_tool_brush.cc:388
 #: plugins/tools/basictools/kis_tool_fill.cc:568
 #: plugins/tools/basictools/kis_tool_fill.cc:579
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
@@ -16923,7 +16923,7 @@ msgstr "ភីកសែល​"
 
 #. i18n: ectx: property (text), widget (QCheckBox, opacityCBox)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:19
-#: libs/image/kis_keyframe_channel.cpp:26 libs/image/kis_layer.cc:276
+#: libs/image/kis_keyframe_channel.cpp:27 libs/image/kis_layer.cc:276
 #: libs/widgets/KoColorPopupAction.cpp:85
 #: plugins/dockers/layerdocker/LayerBox.cpp:207
 #: plugins/dockers/layerdocker/LayerBox.cpp:392
@@ -17392,54 +17392,54 @@ msgid "Crop Selections"
 msgstr "បង្កើន​ការ​ជ្រើស​រើស"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: libs/image/kis_keyframe_channel.cpp:25 libs/ui/forms/wdgnewimage.ui:424
+#: libs/image/kis_keyframe_channel.cpp:26 libs/ui/forms/wdgnewimage.ui:424
 #, fuzzy, kde-format
 msgid "Content"
 msgstr "មាតិកា​"
 
-#: libs/image/kis_keyframe_channel.cpp:27
+#: libs/image/kis_keyframe_channel.cpp:28
 #, fuzzy, kde-format
 msgid "Position (X)"
 msgstr "របៀប​តែង"
 
-#: libs/image/kis_keyframe_channel.cpp:28
+#: libs/image/kis_keyframe_channel.cpp:29
 #, fuzzy, kde-format
 msgid "Position (Y)"
 msgstr "របៀប​តែង"
 
-#: libs/image/kis_keyframe_channel.cpp:29
+#: libs/image/kis_keyframe_channel.cpp:30
 #, fuzzy, kde-format
 msgid "Scale (X)"
 msgstr "មាត្រដ្ឋាន X ៖"
 
-#: libs/image/kis_keyframe_channel.cpp:30
+#: libs/image/kis_keyframe_channel.cpp:31
 #, fuzzy, kde-format
 msgid "Scale (Y)"
 msgstr "មាត្រដ្ឋាន Y ៖"
 
-#: libs/image/kis_keyframe_channel.cpp:31
+#: libs/image/kis_keyframe_channel.cpp:32
 #, fuzzy, kde-format
 msgid "Shear (X)"
 msgstr "កាត់ X ៖"
 
-#: libs/image/kis_keyframe_channel.cpp:32
+#: libs/image/kis_keyframe_channel.cpp:33
 #, fuzzy, kde-format
 msgid "Shear (Y)"
 msgstr "កាត់ Y ៖"
 
-#: libs/image/kis_keyframe_channel.cpp:33
+#: libs/image/kis_keyframe_channel.cpp:34
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Rotation (X)"
 msgstr "​បង្វិល"
 
-#: libs/image/kis_keyframe_channel.cpp:34
+#: libs/image/kis_keyframe_channel.cpp:35
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Rotation (Y)"
 msgstr "​បង្វិល"
 
-#: libs/image/kis_keyframe_channel.cpp:35
+#: libs/image/kis_keyframe_channel.cpp:36
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Rotation (Z)"
@@ -17481,13 +17481,13 @@ msgid "Inherit Alpha"
 msgstr "មិនអើពើ​អាល់ហ្វា"
 
 #: libs/image/kis_layer_properties_icons.cpp:24
-#: libs/image/kis_paint_layer.cc:200
+#: libs/image/kis_paint_layer.cc:209
 #, kde-format
 msgid "Alpha Locked"
 msgstr "បាន​ចាក់​សោ​អាល់ហ្វា"
 
 #: libs/image/kis_layer_properties_icons.cpp:25
-#: libs/image/kis_paint_layer.cc:203
+#: libs/image/kis_paint_layer.cc:212
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:30
 #, fuzzy, kde-format
 msgid "Onion Skins"
@@ -56335,87 +56335,87 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "ជក់​ដែល​បានកំណត់​ជា​ស្រេច"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:178
+#: plugins/tools/basictools/kis_tool_brush.cc:177
 #, fuzzy, kde-format
 #| msgid "Samples"
 msgid "Sample count:"
 msgstr "គំរូ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:189
+#: plugins/tools/basictools/kis_tool_brush.cc:188
 #, fuzzy, kde-format
 msgctxt ""
 "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
 msgid "Distance:"
 msgstr "ចម្ងាយ​ ៖​"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:346
+#: plugins/tools/basictools/kis_tool_brush.cc:345
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "គ្មាន"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:347
+#: plugins/tools/basictools/kis_tool_brush.cc:346
 #, fuzzy, kde-format
 #| msgid "Basic"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "មូល​ដ្ឋាន"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:348
+#: plugins/tools/basictools/kis_tool_brush.cc:347
 #, fuzzy, kde-format
 #| msgid "Height:"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "កម្ពស់​ ៖"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:349
+#: plugins/tools/basictools/kis_tool_brush.cc:348
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "មាន​លំនឹង​"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:351
+#: plugins/tools/basictools/kis_tool_brush.cc:350
 #, fuzzy, kde-format
 msgid "Brush Smoothing:"
 msgstr "ការ​កំណត់​ជក់"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:377
+#: plugins/tools/basictools/kis_tool_brush.cc:376
 #, fuzzy, kde-format
 msgid "Delay:"
 msgstr "បង្ហាញ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:382
+#: plugins/tools/basictools/kis_tool_brush.cc:381
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:386
+#: plugins/tools/basictools/kis_tool_brush.cc:385
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:393
+#: plugins/tools/basictools/kis_tool_brush.cc:392
 #, fuzzy, kde-format
 msgid "Finish line:"
 msgstr "បញ្ចប់"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:406
+#: plugins/tools/basictools/kis_tool_brush.cc:405
 #, fuzzy, kde-format
 msgid "Stabilize Sensors:"
 msgstr "មាន​លំនឹង​"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:415
+#: plugins/tools/basictools/kis_tool_brush.cc:414
 #, fuzzy, kde-format
 msgid "Stroke Ending:"
 msgstr "ថិរ​វេលា​ខ្វាច់"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:422
+#: plugins/tools/basictools/kis_tool_brush.cc:421
 #, fuzzy, kde-format
 msgid "Smooth Pressure"
 msgstr "សម្ពាធ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:429
+#: plugins/tools/basictools/kis_tool_brush.cc:428
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -56423,40 +56423,40 @@ msgid ""
 "visually constant whatever zoom level is chosen"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:434
+#: plugins/tools/basictools/kis_tool_brush.cc:433
 #, fuzzy, kde-format
 msgid "Scalable Distance"
 msgstr "ចម្ងាយ​ប្រធាន​បទ ៖"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:450
+#: plugins/tools/basictools/kis_tool_brush.cc:449
 #: plugins/tools/basictools/kis_tool_line.cc:101
 #, fuzzy, kde-format
 msgid "Snap to Assistants"
 msgstr "អ្នក​ជំនួយ​ការ ៖"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:452
+#: plugins/tools/basictools/kis_tool_brush.cc:451
 #, fuzzy, kde-format
 #| msgid "You need to add Ruler Assistants before this tool will work."
 msgid "You need to add Assistants before this tool will work."
 msgstr "អ្នក​ត្រូវ​តែ​បន្ថែម​អ្នក​ជំនួយ​ការ​បន្ទាត់​មុន​ពេល​ឧបករណ៍​នេះ​នឹង​ធ្វើ​ការ ។"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:457
+#: plugins/tools/basictools/kis_tool_brush.cc:456
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "មេដែក​ជំនួយ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:463
+#: plugins/tools/basictools/kis_tool_brush.cc:462
 #, fuzzy, kde-format
 #| msgid "Magnetify"
 msgid "Magnetism:"
 msgstr "ធ្វើ​ឲ្យ​ទៅ​ជា​មេដែក"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:466
+#: plugins/tools/basictools/kis_tool_brush.cc:465
 #, fuzzy, kde-format
 msgid "Snap to Single Line"
 msgstr "កាត់​មុំ X ៖"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:469
+#: plugins/tools/basictools/kis_tool_brush.cc:468
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -56464,13 +56464,13 @@ msgid ""
 "using the infinite assistants."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:474
+#: plugins/tools/basictools/kis_tool_brush.cc:473
 #: plugins/tools/basictools/kis_tool_line.cc:104
 #, fuzzy, kde-format
 msgid "Snap Eraser"
 msgstr "ជ័រលុប"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:477
+#: plugins/tools/basictools/kis_tool_brush.cc:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"

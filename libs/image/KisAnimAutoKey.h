@@ -10,6 +10,7 @@
 
 #include "kritaimage_export.h"
 #include <QFlags>
+#include <QMetaType>
 
 template<class T>
 class KisSharedPtr;
@@ -28,6 +29,7 @@ enum Mode {
 };
 
 KRITAIMAGE_EXPORT Mode activeMode();
+KRITAIMAGE_EXPORT void testingSetActiveMode(Mode mode);
 
 enum AutoCreateKeyframeFlag {
     None = 0x0,
@@ -48,5 +50,6 @@ KUndo2Command* tryAutoCreateDuplicatedFrame(KisPaintDeviceSP device, AutoCreateK
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisAutoKey::AutoCreateKeyframeFlags)
+Q_DECLARE_METATYPE(KisAutoKey::Mode)
 
 #endif //_KIS_ANIM_AUTOKEY_H

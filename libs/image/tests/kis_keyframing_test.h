@@ -35,6 +35,9 @@ private Q_SLOTS:
     void testScalarAffectedFrames();
     void testChangeOfScalarLimits();
 
+    void testAutoKeyframing_data();
+    void testAutoKeyframing();
+
 private:
     const KoColorSpace *cs;
 

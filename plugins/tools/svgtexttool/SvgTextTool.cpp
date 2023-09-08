@@ -69,7 +69,7 @@ static bool debugEnabled()
 
 SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
-    , m_textCursor(this)
+    , m_textCursor(canvas)
 {
      // TODO: figure out whether we should use system config for this, Windows and GTK have values for it, but Qt and MacOS don't(?).
     int cursorFlashLimit = 5000;
@@ -100,7 +100,7 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
 {
     KoToolBase::activate(shapes);
     m_textCursor.setShape(selectedShape());
-    m_canvasConnections.addConnection(canvas()->selectedShapesProxy(), SIGNAL(slotShapeSelectionChanged()), this, SLOT(slotShapeSelectionChanged()));
+    m_canvasConnections.addConnection(canvas()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotShapeSelectionChanged()));
 
     useCursor(m_base_cursor);
     auto uploadColorToResourceManager = [this](KoShape *shape) {

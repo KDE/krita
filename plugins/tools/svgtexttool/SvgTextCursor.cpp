@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "SvgTextCursor.h"
-#include "SvgTextTool.h"
+#include "KoCanvasBase.h"
 #include "SvgTextInsertCommand.h"
 #include "SvgTextRemoveCommand.h"
 #include "kundo2command.h"
@@ -12,9 +12,10 @@
 #include <QDebug>
 #include <QClipboard>
 #include <QMimeData>
+#include <QApplication>
 
 struct Q_DECL_HIDDEN SvgTextCursor::Private {
-    SvgTextTool *tool;
+    KoCanvasBase *canvas;
     int pos = 0;
     int anchor = 0;
     KoSvgTextShape *shape {nullptr};
@@ -32,10 +33,10 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     bool visualNavigation = true;
 };
 
-SvgTextCursor::SvgTextCursor(SvgTextTool *tool) :
+SvgTextCursor::SvgTextCursor(KoCanvasBase *canvas) :
     d(new Private)
 {
-    d->tool = tool;
+    d->canvas = canvas;
 }
 
 SvgTextCursor::~SvgTextCursor()
@@ -43,6 +44,7 @@ SvgTextCursor::~SvgTextCursor()
     d->cursorFlash.stop();
     d->shape = nullptr;
 }
+
 
 void SvgTextCursor::setShape(KoSvgTextShape *textShape)
 {
@@ -139,11 +141,11 @@ void SvgTextCursor::insertText(QString text)
         //KUndo2Command *parentCmd = new KUndo2Command;
         if (hasSelection()) {
             SvgTextRemoveCommand *removeCmd = removeSelection();
-            d->tool->addCommand(removeCmd);
+            addCommandToUndoAdapter(removeCmd);
         }
 
         SvgTextInsertCommand *insertCmd = new SvgTextInsertCommand(d->shape, d->pos, d->anchor, text, this);
-        d->tool->addCommand(insertCmd);
+        addCommandToUndoAdapter(insertCmd);
 
     }
 }
@@ -154,7 +156,7 @@ void SvgTextCursor::removeLast()
         SvgTextRemoveCommand *removeCmd;
         if (hasSelection()) {
             removeCmd = removeSelection();
-            d->tool->addCommand(removeCmd);
+            addCommandToUndoAdapter(removeCmd);
             updateCursor();
         } else {
             int oldIndex = d->shape->indexForPos(d->pos);
@@ -162,7 +164,7 @@ void SvgTextCursor::removeLast()
             int newIndex = d->shape->indexForPos(newPos);
             // using old-new index allows us to remove the whole grapheme.
             removeCmd = new SvgTextRemoveCommand(d->shape, newPos, d->pos, d->anchor, oldIndex-newIndex, this);
-            d->tool->addCommand(removeCmd);
+            addCommandToUndoAdapter(removeCmd);
         }
     }
 }
@@ -173,7 +175,7 @@ void SvgTextCursor::removeNext()
         SvgTextRemoveCommand *removeCmd;
         if (hasSelection()) {
             removeCmd = removeSelection();
-            d->tool->addCommand(removeCmd);
+            addCommandToUndoAdapter(removeCmd);
             updateCursor();
         } else {
             int oldIndex = d->shape->indexForPos(d->pos);
@@ -182,7 +184,7 @@ void SvgTextCursor::removeNext()
                 newIndex = d->shape->indexForPos(d->pos+2);
             }
             removeCmd = new SvgTextRemoveCommand(d->shape, d->pos, d->pos, d->anchor, newIndex-oldIndex, this);
-            d->tool->addCommand(removeCmd);
+            addCommandToUndoAdapter(removeCmd);
         }
     }
 }
@@ -294,5 +296,14 @@ void SvgTextCursor::updateSelection()
         d->oldSelectionRect = d->shape->shapeToDocument(d->selection.boundingRect());
         d->selection = d->shape->selectionBoxes(d->pos, d->anchor);
         emit updateCursorDecoration(d->shape->shapeToDocument(d->selection.boundingRect()) | d->oldSelectionRect);
+    }
+}
+
+void SvgTextCursor::addCommandToUndoAdapter(KUndo2Command *cmd)
+{
+    if (d->canvas) {
+        if (cmd) {
+            d->canvas->addCommand(cmd);
+        }
     }
 }

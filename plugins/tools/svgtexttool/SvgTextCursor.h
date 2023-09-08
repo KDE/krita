@@ -11,7 +11,7 @@
 #include <KoToolSelection.h>
 #include <QPainter>
 
-class SvgTextTool;
+class KoCanvasBase;
 class SvgTextInsertCommand;
 class SvgTextRemoveCommand;
 class KUndo2Command;
@@ -20,7 +20,7 @@ class SvgTextCursor : public KoToolSelection
 {
     Q_OBJECT
 public:
-    explicit SvgTextCursor(SvgTextTool *tool);
+    explicit SvgTextCursor(KoCanvasBase *canvas);
 
     enum MoveMode {
         MoveNone,
@@ -89,6 +89,7 @@ private:
 
     void updateCursor();
     void updateSelection();
+    void addCommandToUndoAdapter(KUndo2Command *cmd);
 
     struct Private;
     const QScopedPointer<Private> d;

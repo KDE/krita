@@ -803,7 +803,7 @@ void KisWalkersTest::testFullRefreshVisiting()
 
         reportStartWith("root");
         walker.collectRects(groupLayer, testRect);
-        verifyResult(walker, orderList, accessRect, false, true);
+        verifyResult(walker, orderList, accessRect, true, true);
     }
 }
 

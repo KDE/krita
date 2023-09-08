@@ -683,6 +683,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         dummy.direction = hardbreak.direction;
         result.insert(dummyIndex, dummy);
         logicalToVisual.insert(dummyIndex, dummy.visualIndex);
+        resolvedTransforms.insert(dummyIndex, KoSvgText::CharTransformation());
     }
 
     debugFlake << "Glyphs retrieved";

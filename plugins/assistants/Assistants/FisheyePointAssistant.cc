@@ -41,16 +41,13 @@ KisPaintingAssistantSP FisheyePointAssistant::clone(QMap<KisPaintingAssistantHan
     return KisPaintingAssistantSP(new FisheyePointAssistant(*this, handleMap));
 }
 
-QPointF FisheyePointAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
+QPointF FisheyePointAssistant::project(const QPointF& pt, const QPointF& strokeBegin, qreal moveThresholdPt)
 {
     const static QPointF nullPoint(std::numeric_limits<qreal>::quiet_NaN(), std::numeric_limits<qreal>::quiet_NaN());
     Q_ASSERT(isAssistantComplete());
     e.set(*handles()[0], *handles()[1], *handles()[2]);
 
-    qreal dx = pt.x() - strokeBegin.x();
-    qreal dy = pt.y() - strokeBegin.y();
-
-    if (dx * dx + dy * dy < 4.0) {
+    if (KisAlgebra2D::norm(pt - strokeBegin) < moveThresholdPt) {
         // allow some movement before snapping
         return strokeBegin;
     }
@@ -74,9 +71,9 @@ QPointF FisheyePointAssistant::project(const QPointF& pt, const QPointF& strokeB
 
 }
 
-QPointF FisheyePointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
+QPointF FisheyePointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal moveThresholdPt)
 {
-    return project(pt, strokeBegin);
+    return project(pt, strokeBegin, moveThresholdPt);
 }
 
 void FisheyePointAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)

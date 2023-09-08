@@ -107,8 +107,10 @@ public:
      *         snapToAny true means that you can use any of the inside assistant, while it being false
      *         means you should use the last used one. The logic determining when it happens (first stroke etc.)
      *         is in the decoration, so those two options are enough.
+     * @param moveThresholdPt the threshold for the "move" of the cursor measured in pt
+     *                        (usually equals to 2px in screen coordinates converted to pt)
      */
-    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, bool snapToAny) = 0;
+    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, bool snapToAny, qreal moveThresholdPt) = 0;
     virtual void adjustLine(QPointF& point, QPointF& strokeBegin) = 0;
     virtual void endStroke();
     virtual void setAdjustedBrushPosition(const QPointF position);

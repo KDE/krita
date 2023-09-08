@@ -145,7 +145,7 @@ void TwoPointAssistant::endStroke()
     KisPaintingAssistant::endStroke();
 }
 
-QPointF TwoPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAny)
+QPointF TwoPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAny, qreal /*moveThresholdPt*/)
 {
     return project(pt, strokeBegin, snapToAny);
 }

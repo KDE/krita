@@ -511,13 +511,14 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
         if (hoveredShape) {
             canvas()->shapeManager()->selection()->select(hoveredShape);
             m_textCursor.setPosToPoint(event->point);
-        } else {
+        } else if (!this->isInTextMode()){
             m_interactionStrategy.reset(new SvgCreateTextStrategy(this, event->point));
             m_dragging = DragMode::Create;
-            event->accept();
         }
+        event->accept();
     } else if (hoveredShape == selectedShape){
         m_textCursor.setPosToPoint(event->point);
+        event->accept();
     }
 
     repaintDecorations();
@@ -673,8 +674,8 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
         m_interactionStrategy = nullptr;
         m_dragging = DragMode::None;
         useCursor(m_base_cursor);
-        event->accept();
     }
+    event->accept();
 }
 
 void SvgTextTool::keyPressEvent(QKeyEvent *event)

@@ -65,6 +65,7 @@ KisInputManager::KisInputManager(QObject *parent)
 
     connect(KoToolManager::instance(), SIGNAL(aboutToChangeTool(KoCanvasController*)), SLOT(slotAboutToChangeTool()));
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*)), SLOT(slotToolChanged()));
+    connect(KoToolManager::instance(), SIGNAL(textModeChanged(bool)), SLOT(slotTextModeChanged()));
     connect(&d->moveEventCompressor, SIGNAL(timeout()), SLOT(slotCompressedMoveEvent()));
 
 
@@ -932,6 +933,22 @@ void KisInputManager::slotToolChanged()
 
         d->matcher.suppressConflictingKeyActions(toolProxy()->toolPriorityShortcuts());
         d->matcher.toolHasBeenActivated();
+    }
+}
+
+void KisInputManager::slotTextModeChanged()
+{
+    if (!d->canvas) return;
+    KoToolManager *toolManager = KoToolManager::instance();
+    KoToolBase *tool = toolManager->toolById(canvas(), toolManager->activeToolId());
+    if (tool) {
+        if (tool->isInTextMode()) {
+            d->forwardAllEventsToTool = true;
+            d->matcher.suppressAllActions(true);
+        } else {
+            d->forwardAllEventsToTool = false;
+            d->matcher.suppressAllActions(false);
+        }
     }
 }
 

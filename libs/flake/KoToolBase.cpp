@@ -308,7 +308,8 @@ QRectF KoToolBase::handlePaintRect(const QPointF &position) const
 void KoToolBase::setTextMode(bool value)
 {
     Q_D(KoToolBase);
-    d->isInTextMode=value;
+    d->isInTextMode = value;
+    emit textModeChanged(d->isInTextMode);
 }
 
 bool KoToolBase::paste()

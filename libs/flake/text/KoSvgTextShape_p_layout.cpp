@@ -550,6 +550,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
 
     QPointF totalAdvanceFTFontCoordinates;
     QMap<int, int> logicalToVisual;
+    this->isBidi = false;
 
 
     KIS_ASSERT(count <= INT32_MAX);

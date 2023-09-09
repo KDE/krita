@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-08 02:23+0000\n"
+"POT-Creation-Date: 2023-09-09 02:23+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -36111,7 +36111,7 @@ msgstr "காஸ்சியன் தெளிவற்ற நிலை"
 msgid "Concentric Ellipse assistant"
 msgstr "காஸ்சியன் தெளிவற்ற நிலை"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:221
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
 #, fuzzy, kde-format
 msgid "Concentric Ellipse"
 msgstr "தேர்வு"
@@ -36156,7 +36156,7 @@ msgstr "நீள்வட்டம்"
 msgid "Fish Eye Point assistant"
 msgstr "அளவுகோல்களை காட்டு"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:232
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
 #, fuzzy, kde-format
 msgid "Fish Eye Point"
 msgstr "Alpha"
@@ -36297,7 +36297,7 @@ msgstr "அழிக்கும் கருவி"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:380
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, fuzzy, kde-format
@@ -46518,16 +46518,16 @@ msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:637
-#: plugins/impex/jxl/JPEGXLImport.cpp:647
-#: plugins/impex/jxl/JPEGXLImport.cpp:661
-#: plugins/impex/jxl/JPEGXLImport.cpp:671
+#: plugins/impex/jxl/JPEGXLImport.cpp:640
+#: plugins/impex/jxl/JPEGXLImport.cpp:650
+#: plugins/impex/jxl/JPEGXLImport.cpp:664
+#: plugins/impex/jxl/JPEGXLImport.cpp:674
 #, fuzzy, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "உருவத்திற்கு அடுக்கை சேர்க்க முடியவில்லை."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:811
+#: plugins/impex/jxl/JPEGXLImport.cpp:816
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid ""
@@ -46535,13 +46535,13 @@ msgid ""
 "flattened image."
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:828
+#: plugins/impex/jxl/JPEGXLImport.cpp:833
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:887
+#: plugins/impex/jxl/JPEGXLImport.cpp:892
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."

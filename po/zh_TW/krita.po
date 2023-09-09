@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-08 02:23+0000\n"
+"POT-Creation-Date: 2023-09-09 02:23+0000\n"
 "PO-Revision-Date: 2023-08-01 21:30+0800\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -36366,7 +36366,7 @@ msgstr "儲存輔助尺集合"
 msgid "Concentric Ellipse assistant"
 msgstr "同心橢圓輔助尺"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:221
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr "同心橢圓"
@@ -36408,7 +36408,7 @@ msgstr "橢圓"
 msgid "Fish Eye Point assistant"
 msgstr "魚眼透視輔助尺"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:232
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
 #, kde-format
 msgid "Fish Eye Point"
 msgstr "魚眼透視"
@@ -36549,7 +36549,7 @@ msgstr "透視輔助尺"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:380
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -46762,16 +46762,16 @@ msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr "偵測到含專色 (spot color) 通道的 JPEG-XL 影像，將匯入已平整的影像。"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:637
-#: plugins/impex/jxl/JPEGXLImport.cpp:647
-#: plugins/impex/jxl/JPEGXLImport.cpp:661
-#: plugins/impex/jxl/JPEGXLImport.cpp:671
+#: plugins/impex/jxl/JPEGXLImport.cpp:640
+#: plugins/impex/jxl/JPEGXLImport.cpp:650
+#: plugins/impex/jxl/JPEGXLImport.cpp:664
+#: plugins/impex/jxl/JPEGXLImport.cpp:674
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "無法讀取影像色彩特性。"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:811
+#: plugins/impex/jxl/JPEGXLImport.cpp:816
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid ""
@@ -46779,13 +46779,13 @@ msgid ""
 "flattened image."
 msgstr "偵測到此多圖層 JPEG-XL 影像含有未支援的混色模式，將匯入已平整的影像。"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:828
+#: plugins/impex/jxl/JPEGXLImport.cpp:833
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
 msgstr "無效的 JPEG-XL 圖層名稱長度"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:887
+#: plugins/impex/jxl/JPEGXLImport.cpp:892
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."

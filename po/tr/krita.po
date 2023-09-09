@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-08 02:23+0000\n"
+"POT-Creation-Date: 2023-09-09 02:23+0000\n"
 "PO-Revision-Date: 2023-08-27 01:49+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -36753,7 +36753,7 @@ msgstr "Yardımcı Kümesini Kaydet"
 msgid "Concentric Ellipse assistant"
 msgstr "Ortak Merkezli Elips yardımcısı"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:221
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr "Ortak Merkezli Elips"
@@ -36795,7 +36795,7 @@ msgstr "Elips"
 msgid "Fish Eye Point assistant"
 msgstr "Balık Gözü Noktası yardımcısı"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:232
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
 #, kde-format
 msgid "Fish Eye Point"
 msgstr "Balık Gözü Noktası"
@@ -36936,7 +36936,7 @@ msgstr "Perspektif yardımcısı"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:380
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -47244,16 +47244,16 @@ msgstr ""
 "Spot renk kanallı JPEG-XL görseli algılandı, düzleştirilmiş görsel içe "
 "aktarılıyor."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:637
-#: plugins/impex/jxl/JPEGXLImport.cpp:647
-#: plugins/impex/jxl/JPEGXLImport.cpp:661
-#: plugins/impex/jxl/JPEGXLImport.cpp:671
+#: plugins/impex/jxl/JPEGXLImport.cpp:640
+#: plugins/impex/jxl/JPEGXLImport.cpp:650
+#: plugins/impex/jxl/JPEGXLImport.cpp:664
+#: plugins/impex/jxl/JPEGXLImport.cpp:674
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "Görsel profili okunamadı."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:811
+#: plugins/impex/jxl/JPEGXLImport.cpp:816
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid ""
@@ -47263,13 +47263,13 @@ msgstr ""
 "Desteklenmeyen harmanlama kipli, çok kanallı JPEG-XL görseli algılandı; "
 "düzleştirilmiş görsel içe aktarılıyor."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:828
+#: plugins/impex/jxl/JPEGXLImport.cpp:833
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
 msgstr "Geçersiz JPEG-XL katmanı adı uzunluğu"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:887
+#: plugins/impex/jxl/JPEGXLImport.cpp:892
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."

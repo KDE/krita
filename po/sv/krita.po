@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-08 02:23+0000\n"
+"POT-Creation-Date: 2023-09-09 02:23+0000\n"
 "PO-Revision-Date: 2023-08-01 07:26+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -36786,7 +36786,7 @@ msgstr "Spara guideuppsättning"
 msgid "Concentric Ellipse assistant"
 msgstr "Koncentrisk ellipsguide"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:221
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr "Koncentrisk ellips"
@@ -36828,7 +36828,7 @@ msgstr "Ellips"
 msgid "Fish Eye Point assistant"
 msgstr "Guide för fiskögonpunkt"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:232
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
 #, kde-format
 msgid "Fish Eye Point"
 msgstr "Fiskögonpunkt"
@@ -36969,7 +36969,7 @@ msgstr "Perspektivguide"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:380
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -47280,16 +47280,16 @@ msgid ""
 msgstr ""
 "Detekterade JPEG-XL-bild med punktfärgkanaler, importerar utplattad bild."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:637
-#: plugins/impex/jxl/JPEGXLImport.cpp:647
-#: plugins/impex/jxl/JPEGXLImport.cpp:661
-#: plugins/impex/jxl/JPEGXLImport.cpp:671
+#: plugins/impex/jxl/JPEGXLImport.cpp:640
+#: plugins/impex/jxl/JPEGXLImport.cpp:650
+#: plugins/impex/jxl/JPEGXLImport.cpp:664
+#: plugins/impex/jxl/JPEGXLImport.cpp:674
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "Kunde inte läsa bildprofilen."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:811
+#: plugins/impex/jxl/JPEGXLImport.cpp:816
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid ""
@@ -47299,13 +47299,13 @@ msgstr ""
 "Detekterade flerlagers JPEG-XL-bild med blandningsläge som inte stöds, "
 "importerar utplattad bild."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:828
+#: plugins/impex/jxl/JPEGXLImport.cpp:833
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
 msgstr "Ogiltig JPEG-XL lagernamnlängd"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:887
+#: plugins/impex/jxl/JPEGXLImport.cpp:892
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."

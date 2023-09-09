@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-08 02:23+0000\n"
+"POT-Creation-Date: 2023-09-09 02:23+0000\n"
 "PO-Revision-Date: 2023-08-26 10:02+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -36792,7 +36792,7 @@ msgstr "Gorde laguntzaile-multzoa"
 msgid "Concentric Ellipse assistant"
 msgstr "Elipse zentrokide laguntzailea"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:221
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr "Elipse zentrokidea"
@@ -36834,7 +36834,7 @@ msgstr "Elipsea"
 msgid "Fish Eye Point assistant"
 msgstr "Arrain-begi puntuaren laguntzailea"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:232
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
 #, kde-format
 msgid "Fish Eye Point"
 msgstr "Arrain-begi puntua"
@@ -36976,7 +36976,7 @@ msgstr "Perspektiba-laguntzailea"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:380
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -47293,16 +47293,16 @@ msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:637
-#: plugins/impex/jxl/JPEGXLImport.cpp:647
-#: plugins/impex/jxl/JPEGXLImport.cpp:661
-#: plugins/impex/jxl/JPEGXLImport.cpp:671
+#: plugins/impex/jxl/JPEGXLImport.cpp:640
+#: plugins/impex/jxl/JPEGXLImport.cpp:650
+#: plugins/impex/jxl/JPEGXLImport.cpp:664
+#: plugins/impex/jxl/JPEGXLImport.cpp:674
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "Ezin izan du irudi-profila irakurri."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:811
+#: plugins/impex/jxl/JPEGXLImport.cpp:816
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid ""
@@ -47310,13 +47310,13 @@ msgid ""
 "flattened image."
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:828
+#: plugins/impex/jxl/JPEGXLImport.cpp:833
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
 msgstr "JPEG-XL geruza izen luzera baliogabea"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:887
+#: plugins/impex/jxl/JPEGXLImport.cpp:892
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."

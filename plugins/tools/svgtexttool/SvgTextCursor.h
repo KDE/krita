@@ -11,13 +11,14 @@
 #include <KoToolSelection.h>
 #include <QPainter>
 #include <KoShape.h>
+#include "kritatoolsvgtext_export.h"
 
 class KoCanvasBase;
 class SvgTextInsertCommand;
 class SvgTextRemoveCommand;
 class KUndo2Command;
 
-class SvgTextCursor : public KoToolSelection, public KoSvgTextShape::TextCursorChangeListener
+class KRITATOOLSVGTEXT_EXPORT SvgTextCursor : public KoToolSelection, public KoSvgTextShape::TextCursorChangeListener
 {
     Q_OBJECT
 public:
@@ -41,6 +42,14 @@ public:
 
     void setShape(KoSvgTextShape *textShape);
     void setCaretSetting(int cursorWidth = 1, int cursorFlash = 1000, int cursorFlashLimit = 5000);
+
+    /**
+     * @brief setVisualMode
+     * set whether the navigation mode is visual or logical.
+     * This right now primarily affects Bidirectional text.
+     * @param mode whether to turn off visual mode.
+     */
+    void setVisualMode(bool visualMode = true);
 
     int getPos();
     int getAnchor();
@@ -99,5 +108,8 @@ private:
     struct Private;
     const QScopedPointer<Private> d;
 };
+
+Q_DECLARE_METATYPE(SvgTextCursor::MoveMode)
+
 
 #endif // SVGTEXTCURSOR_H

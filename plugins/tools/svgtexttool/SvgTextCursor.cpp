@@ -70,6 +70,11 @@ void SvgTextCursor::setCaretSetting(int cursorWidth, int cursorFlash, int cursor
     connect(&d->cursorFlashLimit, SIGNAL(timeout()), this, SLOT(stopBlinkCursor()));
 }
 
+void SvgTextCursor::setVisualMode(bool visualMode)
+{
+    d->visualNavigation = visualMode;
+}
+
 int SvgTextCursor::getPos()
 {
     return d->pos;

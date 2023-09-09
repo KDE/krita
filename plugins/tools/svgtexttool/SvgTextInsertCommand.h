@@ -7,10 +7,11 @@
 #define SVGTEXTINSERTCOMMAND_H
 
 #include <kundo2command.h>
+#include "kritatoolsvgtext_export.h"
 
 class KoSvgTextShape;
 
-class SvgTextInsertCommand : public KUndo2Command
+class KRITATOOLSVGTEXT_EXPORT SvgTextInsertCommand : public KUndo2Command
 {
 public:
     SvgTextInsertCommand(KoSvgTextShape *shape, int pos, int anchor, QString text, KUndo2Command *parent = 0);

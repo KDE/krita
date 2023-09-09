@@ -77,6 +77,7 @@ private:
     class Private;
 
     friend class TestSvgText;
+    friend class SvgTextCursorTest;
 
     /**
      * @brief addFontFilePathToRegistery

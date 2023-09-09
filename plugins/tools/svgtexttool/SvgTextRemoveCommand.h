@@ -8,10 +8,11 @@
 #define SVGTEXTREMOVECOMMAND_H
 
 #include <kundo2command.h>
+#include "kritatoolsvgtext_export.h"
 
 class KoSvgTextShape;
 
-class SvgTextRemoveCommand : public KUndo2Command
+class KRITATOOLSVGTEXT_EXPORT SvgTextRemoveCommand : public KUndo2Command
 {
 public:
     SvgTextRemoveCommand(KoSvgTextShape *shape,

@@ -18,7 +18,6 @@ set (SvgTextTool_SRCS
     SvgTextCursor.cpp
     SvgTextTool.cpp
     SvgTextToolFactory.cpp
-    svgtexttool.qrc
     FontSizeAction.cpp
 )
 
@@ -35,6 +34,7 @@ install( FILES
 
 set(SvgTextTool_SOURCES
     Plugin.cpp
+    svgtexttool.qrc
 )
 
 

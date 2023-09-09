@@ -5,9 +5,6 @@
  */
 #include "SvgTextRemoveCommand.h"
 
-#include "SvgTextTool.h"
-#include "SvgTextCursor.h"
-
 #include <klocalizedstring.h>
 #include "kis_command_ids.h"
 
@@ -17,7 +14,6 @@ SvgTextRemoveCommand::SvgTextRemoveCommand(KoSvgTextShape *shape,
                                            int pos, int originalPos,
                                            int anchor,
                                            int length,
-                                           SvgTextCursor *cursor,
                                            KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shape(shape)
@@ -25,7 +21,6 @@ SvgTextRemoveCommand::SvgTextRemoveCommand(KoSvgTextShape *shape,
     , m_originalPos(originalPos)
     , m_anchor(anchor)
     , m_length(length)
-    , m_cursor(cursor)
 {
     Q_ASSERT(shape);
     setText(kundo2_i18n("Remove Text"));
@@ -41,10 +36,8 @@ void SvgTextRemoveCommand::redo()
     m_shape->removeText(m_pos, m_length);
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
 
-    if (m_cursor) {
-        int pos = m_shape->posForIndex(oldIndex, false, false);
-        m_cursor->setPos(pos, pos);
-    }
+    int pos = m_shape->posForIndex(oldIndex, false, false);
+    m_shape->notifyCursorPosChanged(pos, pos);
 }
 
 void SvgTextRemoveCommand::undo()
@@ -55,9 +48,7 @@ void SvgTextRemoveCommand::undo()
     converter.convertFromSvg(m_oldSvg, m_oldDefs, m_shape->boundingRect(), 72.0);
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
 
-    if (m_cursor) {
-        m_cursor->setPos(m_originalPos, m_anchor);
-    }
+    m_shape->notifyCursorPosChanged(m_originalPos, m_anchor);
 }
 
 int SvgTextRemoveCommand::id() const
@@ -70,7 +61,7 @@ bool SvgTextRemoveCommand::mergeWith(const KUndo2Command *other)
     const SvgTextRemoveCommand *command = dynamic_cast<const SvgTextRemoveCommand*>(other);
 
 
-    if (!command || command->m_shape != m_shape || command->m_cursor != m_cursor) {
+    if (!command || command->m_shape != m_shape) {
         return false;
     }
     int oldIndex = m_shape->indexForPos(m_pos);

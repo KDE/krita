@@ -617,6 +617,16 @@ QString KoSvgTextShape::plainText()
     return d->plainText;
 }
 
+void KoSvgTextShape::notifyCursorPosChanged(int pos, int anchor)
+{
+    Q_FOREACH (KoShape::ShapeChangeListener *listener, listeners()) {
+        TextCursorChangeListener *cursorListener = dynamic_cast<TextCursorChangeListener*>(listener);
+        if (cursorListener) {
+            cursorListener->notifyCursorPosChanged(pos, anchor);
+        }
+    }
+}
+
 void KoSvgTextShape::paintComponent(QPainter &painter) const
 {
     painter.save();
@@ -863,4 +873,10 @@ KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocume
 bool KoSvgTextShapeFactory::supports(const QDomElement &/*e*/, KoShapeLoadingContext &/*context*/) const
 {
     return false;
+}
+
+void KoSvgTextShape::TextCursorChangeListener::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
+{
+    Q_UNUSED(type);
+    Q_UNUSED(shape);
 }

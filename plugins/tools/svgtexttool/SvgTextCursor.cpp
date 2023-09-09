@@ -48,10 +48,17 @@ SvgTextCursor::~SvgTextCursor()
 
 void SvgTextCursor::setShape(KoSvgTextShape *textShape)
 {
+    if (d->shape) {
+        d->shape->removeShapeChangeListener(this);
+    }
     d->shape = textShape;
+    if (d->shape) {
+        d->shape->addShapeChangeListener(this);
+    }
     d->pos = 0;
     d->anchor = 0;
     updateCursor();
+    updateSelection();
 }
 
 void SvgTextCursor::setCaretSetting(int cursorWidth, int cursorFlash, int cursorFlashLimit)
@@ -144,7 +151,7 @@ void SvgTextCursor::insertText(QString text)
             addCommandToUndoAdapter(removeCmd);
         }
 
-        SvgTextInsertCommand *insertCmd = new SvgTextInsertCommand(d->shape, d->pos, d->anchor, text, this);
+        SvgTextInsertCommand *insertCmd = new SvgTextInsertCommand(d->shape, d->pos, d->anchor, text);
         addCommandToUndoAdapter(insertCmd);
 
     }
@@ -163,7 +170,7 @@ void SvgTextCursor::removeLast()
             int newPos = d->shape->posForIndex(oldIndex-1, false, false);
             int newIndex = d->shape->indexForPos(newPos);
             // using old-new index allows us to remove the whole grapheme.
-            removeCmd = new SvgTextRemoveCommand(d->shape, newPos, d->pos, d->anchor, oldIndex-newIndex, this);
+            removeCmd = new SvgTextRemoveCommand(d->shape, newPos, d->pos, d->anchor, oldIndex-newIndex);
             addCommandToUndoAdapter(removeCmd);
         }
     }
@@ -183,7 +190,7 @@ void SvgTextCursor::removeNext()
             if (newIndex == oldIndex) {
                 newIndex = d->shape->indexForPos(d->pos+2);
             }
-            removeCmd = new SvgTextRemoveCommand(d->shape, d->pos, d->pos, d->anchor, newIndex-oldIndex, this);
+            removeCmd = new SvgTextRemoveCommand(d->shape, d->pos, d->pos, d->anchor, newIndex-oldIndex);
             addCommandToUndoAdapter(removeCmd);
         }
     }
@@ -196,9 +203,7 @@ SvgTextRemoveCommand *SvgTextCursor::removeSelection(KUndo2Command *parent)
         if (d->anchor != d->pos) {
             int start = qMin(d->anchor, d->pos);
             int length = d->shape->indexForPos(qMax(d->anchor, d->pos)) - d->shape->indexForPos(start);
-            d->pos = start;
-            d->anchor = d->pos;
-            removeCmd = new SvgTextRemoveCommand(d->shape, start, d->pos, d->anchor, length, this, parent);
+            removeCmd = new SvgTextRemoveCommand(d->shape, start, d->pos, d->anchor, length, parent);
         }
     }
     return removeCmd;
@@ -276,6 +281,22 @@ void SvgTextCursor::stopBlinkCursor()
 bool SvgTextCursor::hasSelection()
 {
     return d->pos != d->anchor;
+}
+
+void SvgTextCursor::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
+{
+    Q_UNUSED(type);
+    Q_UNUSED(shape);
+    updateCursor();
+    updateSelection();
+}
+
+void SvgTextCursor::notifyCursorPosChanged(int pos, int anchor)
+{
+    d->pos = pos;
+    d->anchor = anchor;
+    updateCursor();
+    updateSelection();
 }
 
 void SvgTextCursor::updateCursor()

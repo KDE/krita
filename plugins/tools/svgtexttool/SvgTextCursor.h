@@ -10,13 +10,14 @@
 #include <KoSvgTextShape.h>
 #include <KoToolSelection.h>
 #include <QPainter>
+#include <KoShape.h>
 
 class KoCanvasBase;
 class SvgTextInsertCommand;
 class SvgTextRemoveCommand;
 class KUndo2Command;
 
-class SvgTextCursor : public KoToolSelection
+class SvgTextCursor : public KoToolSelection, public KoSvgTextShape::TextCursorChangeListener
 {
     Q_OBJECT
 public:
@@ -77,6 +78,10 @@ public:
 
     // Reimplemented.
     bool hasSelection() override;
+
+
+    void notifyShapeChanged(KoShape::ChangeType type, KoShape *shape) override;
+    void notifyCursorPosChanged(int pos, int anchor) override;
 
 Q_SIGNALS:
 

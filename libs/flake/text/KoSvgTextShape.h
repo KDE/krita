@@ -232,6 +232,14 @@ public:
      */
     QString plainText();
 
+    /// ShapeChangeListener so we can inform any text cursors that the cursor needs updating.
+    struct KRITAFLAKE_EXPORT TextCursorChangeListener : public ShapeChangeListener {
+        void notifyShapeChanged(ChangeType type, KoShape *shape) override;
+        virtual void notifyCursorPosChanged(int pos, int anchor) = 0;
+    };
+    /// Notify that the cursor position has changed.
+    void notifyCursorPosChanged(int pos, int anchor);
+
 protected:
     /**
      * Show if the shape is a root of the text hierarchy. Always true for

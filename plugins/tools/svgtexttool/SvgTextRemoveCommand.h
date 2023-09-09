@@ -10,7 +10,6 @@
 #include <kundo2command.h>
 
 class KoSvgTextShape;
-class SvgTextCursor;
 
 class SvgTextRemoveCommand : public KUndo2Command
 {
@@ -20,7 +19,6 @@ public:
                          int originalPos,
                          int anchor,
                          int length,
-                         SvgTextCursor *cursor = 0,
                          KUndo2Command *parent = 0);
     ~SvgTextRemoveCommand() override = default;
 
@@ -38,7 +36,6 @@ private:
     int m_originalPos;
     int m_anchor;
     int m_length;
-    SvgTextCursor *m_cursor;
     QString m_oldSvg;
     QString m_oldDefs;
 };

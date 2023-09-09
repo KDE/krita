@@ -6,16 +6,14 @@
 #include "SvgTextInsertCommand.h"
 #include "KoSvgTextShape.h"
 #include "KoSvgTextShapeMarkupConverter.h"
-#include "SvgTextCursor.h"
 
 #include "kis_command_ids.h"
-SvgTextInsertCommand::SvgTextInsertCommand(KoSvgTextShape *shape, int pos, int anchor, QString text, SvgTextCursor *cursor, KUndo2Command *parent)
+SvgTextInsertCommand::SvgTextInsertCommand(KoSvgTextShape *shape, int pos, int anchor, QString text, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shape(shape)
     , m_pos(pos)
     , m_anchor(anchor)
     , m_text(text)
-    , m_cursor(cursor)
 {
     QRegExp exp;
     // This replaces...
@@ -41,10 +39,9 @@ void SvgTextInsertCommand::redo()
     m_shape->insertText(m_pos, m_text);
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
 
-    if (m_cursor) {
-        int pos = m_shape->posForIndex(oldIndex + m_text.size(), false, false);
-        m_cursor->setPos(pos, pos);
-    }
+    int pos = m_shape->posForIndex(oldIndex + m_text.size(), false, false);
+    m_shape->notifyCursorPosChanged(pos, pos);
+
 }
 
 void SvgTextInsertCommand::undo()
@@ -55,9 +52,7 @@ void SvgTextInsertCommand::undo()
     converter.convertFromSvg(m_oldSvg, m_oldDefs, m_shape->boundingRect(), 72.0);
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
 
-    if (m_cursor) {
-        m_cursor->setPos(m_pos, m_anchor);
-    }
+    m_shape->notifyCursorPosChanged(m_pos, m_anchor);
 }
 
 int SvgTextInsertCommand::id() const
@@ -70,7 +65,7 @@ bool SvgTextInsertCommand::mergeWith(const KUndo2Command *other)
     const SvgTextInsertCommand *command = dynamic_cast<const SvgTextInsertCommand*>(other);
 
 
-    if (!command || command->m_shape != m_shape || command->m_cursor != m_cursor) {
+    if (!command || command->m_shape != m_shape) {
         return false;
     }
     int oldIndex = m_shape->indexForPos(m_pos);

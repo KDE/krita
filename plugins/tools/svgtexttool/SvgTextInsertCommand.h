@@ -9,12 +9,11 @@
 #include <kundo2command.h>
 
 class KoSvgTextShape;
-class SvgTextCursor;
 
 class SvgTextInsertCommand : public KUndo2Command
 {
 public:
-    SvgTextInsertCommand(KoSvgTextShape *shape, int pos, int anchor, QString text, SvgTextCursor *cursor = 0, KUndo2Command *parent = 0);
+    SvgTextInsertCommand(KoSvgTextShape *shape, int pos, int anchor, QString text, KUndo2Command *parent = 0);
     ~SvgTextInsertCommand() override = default;
 
     void redo() override;
@@ -30,7 +29,6 @@ private:
     int m_pos;
     int m_anchor;
     QString m_text;
-    SvgTextCursor *m_cursor;
     QString m_oldSvg;
     QString m_oldDefs;
 };

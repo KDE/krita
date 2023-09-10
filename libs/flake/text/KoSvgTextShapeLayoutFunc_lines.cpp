@@ -75,7 +75,12 @@ void addWordToLine(QVector<CharacterResult> &result,
         CharacterResult cr = result.at(j);
         if (currentChunk.boundingBox.isEmpty() && j == wordIndices.first()) {
             if (result.at(j).lineStart == LineEdgeBehaviour::Collapse) {
-                result[j].addressable = false;
+                result[j].advance = QPointF();
+                if (isHorizontal) {
+                    result[j].boundingBox.setWidth(0);
+                } else {
+                    result[j].boundingBox.setHeight(0);
+                }
                 result[j].hidden = true;
                 continue;
             }
@@ -134,6 +139,7 @@ static QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
                                 currentLine.actualLineBottom,
                                 writingMode == KoSvgText::HorizontalTB,
                                 false);
+            result[chunkIndices.first()].anchored_chunk = true;
         }
     }
 

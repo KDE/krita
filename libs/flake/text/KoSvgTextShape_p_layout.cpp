@@ -879,6 +879,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
             pos.offset = 0;
             pos.synthetic = true;
             cursorPos.append(pos);
+            q->layoutInterface()->addAssociatedOutline(result.at(dummyIndex).finalTransform().mapRect(result[dummyIndex].boundingBox));
         }
     }
     this->plainText = plainText;

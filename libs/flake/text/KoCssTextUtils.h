@@ -161,7 +161,7 @@ public:
      * @param langCode the language code of the text, BCP style.
      * @return a QStringList of the graphemes as seperate strings.
      */
-    static QStringList textToUnicodeGraphemeClusters(QString text, QString langCode);
+    static QStringList textToUnicodeGraphemeClusters(const QString &text, const QString &langCode);
 
     /**
      * @brief justificationOpportunities

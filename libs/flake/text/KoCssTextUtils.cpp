@@ -352,7 +352,7 @@ bool KoCssTextUtils::IsCssWordSeparator(const QString grapheme)
         grapheme == "\u1039F");
 }
 
-QStringList KoCssTextUtils::textToUnicodeGraphemeClusters(const QString text, const QString langCode)
+QStringList KoCssTextUtils::textToUnicodeGraphemeClusters(const QString &text, const QString &langCode)
 {
     QVector<char> graphemeBreaks(text.size());
     set_graphemebreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), langCode.toUtf8().data(), graphemeBreaks.data());

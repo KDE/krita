@@ -51,10 +51,10 @@ using KoSvgTextShapeLayoutFunc::flowTextInShapes;
  * @brief logicalToVisualCursorPositions
  * Create a map that sorts the cursor positions by the visual index of the cluster.
  */
-static QMap<int, int> logicalToVisualCursorPositions(const QVector<CursorPos> cursorPos
-                                              , const QVector<CharacterResult> result
-                                              , const QVector<LineBox> lines
-                                              , const bool ltr = false)  {
+static QMap<int, int> logicalToVisualCursorPositions(const QVector<CursorPos> &cursorPos
+                                              , const QVector<CharacterResult> &result
+                                              , const QVector<LineBox> &lines
+                                              , const bool &ltr = false)  {
     QMap<int, int> logicalToVisual;
     for (int i = 0; i < lines.size(); i++) {
         Q_FOREACH(const LineChunk chunk, lines.at(i).chunks) {

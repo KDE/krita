@@ -159,7 +159,7 @@ public:
         {
         }
 
-        SubChunk(QString _text, QString originalText, KoSvgText::KoSvgCharChunkFormat _format, const QVector<QPair<int, int>> positions, bool textInPath = false, bool firstTextInPath = false)
+        SubChunk(QString _text, QString originalText, KoSvgText::KoSvgCharChunkFormat _format, const QVector<QPair<int, int>> &positions, bool textInPath = false, bool firstTextInPath = false)
             : text(std::move(_text))
             , originalText(std::move(originalText))
             , format(std::move(_format))
@@ -173,7 +173,7 @@ public:
                  QString originalText,
                  KoSvgText::KoSvgCharChunkFormat _format,
                  const QVector<KoSvgText::CharTransformation> &t,
-                 const QVector<QPair<int, int>> positions,
+                 const QVector<QPair<int, int>> &positions,
                  bool textInPath = false,
                  bool firstTextInPath = false)
             : text(std::move(_text))

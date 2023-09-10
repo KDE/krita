@@ -47,7 +47,6 @@ public Q_SLOTS:
 
     void updateTitle(int id);
 
-
 private:
 
     Ui::WdgDlgCreateBundle *m_ui;

@@ -2760,7 +2760,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_y_inverted.kpp"
 msgid "Tangent normal y inverted"
-msgstr "Tanjant-normal y ters çevrilmiş"
+msgstr "Tanjant-normal y tersine çevrilmiş"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8313,21 +8313,21 @@ msgstr "Piksel ölçeği için 2'nin katlarını kullan"
 #, kde-format
 msgctxt "action"
 msgid "&Invert Selection"
-msgstr "Seçimi &Ters Çevir"
+msgstr "Seçimi &Tersine Çevir"
 
 #. i18n: context: toolTip @ Action (invert_selection), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:245
 #, kde-format
 msgctxt "action"
 msgid "Invert current selection"
-msgstr "Geçerli seçimi ters çevir"
+msgstr "Geçerli seçimi tersine çevir"
 
 #. i18n: context: iconText @ Action (invert_selection), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:246
 #, kde-format
 msgctxt "action"
 msgid "Invert Selection"
-msgstr "Seçimi Ters Çevir"
+msgstr "Seçimi Tersine Çevir"
 
 #. i18n: context: text @ Action (create_snapshot), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_snapshot), Actions (General), ActionCollection (Krita)
@@ -8615,14 +8615,14 @@ msgstr "Fırça akışını azalt"
 #, kde-format
 msgctxt "action"
 msgid "Increase Fade"
-msgstr "Solmayı Artır"
+msgstr "Boya Atımını Artır"
 
 #. i18n: context: toolTip @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:468
 #, kde-format
 msgctxt "action"
 msgid "Increase brush Fade"
-msgstr "Fırça solmasını artır"
+msgstr "Fırçadan boya atımını artır"
 
 #. i18n: context: text @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
@@ -8632,14 +8632,14 @@ msgstr "Fırça solmasını artır"
 #, kde-format
 msgctxt "action"
 msgid "Decrease Fade"
-msgstr "Solmayı Azalt"
+msgstr "Boya Atımını Azalt"
 
 #. i18n: context: toolTip @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:480
 #, kde-format
 msgctxt "action"
 msgid "Decrease brush Fade"
-msgstr "Fırça solmasını azalt"
+msgstr "Fırçadan boya atımını azalt"
 
 #. i18n: context: text @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
@@ -9344,7 +9344,7 @@ msgstr "Yalnızca Yatay Kabart"
 #, kde-format
 msgctxt "action"
 msgid "D&odge"
-msgstr "&Atlat"
+msgstr "&Soldur"
 
 #. i18n: context: toolTip @ Action (krita_filter_dodge), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_dodge), Actions (Filters), ActionCollection (Krita)
@@ -9354,7 +9354,7 @@ msgstr "&Atlat"
 #, kde-format
 msgctxt "action"
 msgid "Dodge"
-msgstr "Atlat"
+msgstr "Soldur"
 
 #. i18n: context: text @ Action (krita_filter_sharpen), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1012
@@ -9531,7 +9531,7 @@ msgstr "Hareket Bulanıklaştırması"
 #, kde-format
 msgctxt "action"
 msgid "&Invert"
-msgstr "&Ters Çevir"
+msgstr "&Tersine Çevir"
 
 #. i18n: context: toolTip @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
@@ -9541,7 +9541,7 @@ msgstr "&Ters Çevir"
 #, kde-format
 msgctxt "action"
 msgid "Invert"
-msgstr "Ters Çevir"
+msgstr "Tersine Çevir"
 
 #. i18n: context: text @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1144
@@ -10187,7 +10187,7 @@ msgstr "Ekran Harmanlama Kipini Seç"
 #, kde-format
 msgctxt "action"
 msgid "Select Color Dodge Blending Mode"
-msgstr "Renk Atlatma Harmanlama Kipini Seç"
+msgstr "Renk Soldurma Harmanlama Kipini Seç"
 
 #. i18n: context: text @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10199,7 +10199,7 @@ msgstr "Renk Atlatma Harmanlama Kipini Seç"
 #, kde-format
 msgctxt "action"
 msgid "Select Linear Dodge Blending Mode"
-msgstr "Doğrusal Atlatma Harmanlama Kipini Seç"
+msgstr "Doğrusal Soldurma Harmanlama Kipini Seç"
 
 #. i18n: context: text @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -17398,7 +17398,7 @@ msgstr "Seçimi Pürüzsüzleştir"
 #: libs/image/kis_selection_filters.cpp:885
 msgctxt "(qtundo-format)"
 msgid "Invert Selection"
-msgstr "Seçimi Ters Çevir"
+msgstr "Seçimi Tersine Çevir"
 
 #: libs/image/kis_selection_filters.cpp:930
 msgctxt "(qtundo-format)"
@@ -18689,13 +18689,13 @@ msgstr "Basit Yakma"
 #, kde-format
 msgctxt "Blending mode - Color Dodge"
 msgid "Color Dodge"
-msgstr "Renk Atlat"
+msgstr "Renk Soldur"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
 msgctxt "Blending mode - Linear Dodge"
 msgid "Linear Dodge"
-msgstr "Doğrusal Atlatma"
+msgstr "Doğrusal Soldurma"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -18815,7 +18815,7 @@ msgstr "Sis Açıklaştır (IFS Yanılsama)"
 #, kde-format
 msgctxt "Blending mode - Easy Dodge"
 msgid "Easy Dodge"
-msgstr "Basit Atlatma"
+msgstr "Basit Soldurma"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:93
 #, kde-format
@@ -26381,7 +26381,7 @@ msgstr ""
 #: libs/ui/forms/wdgnewimage.ui:491
 #, kde-format
 msgid "Bac&kground Color:"
-msgstr "&Arka Plan Rengi:"
+msgstr "&Arka plan rengi:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpBackground)
 #. i18n: ectx: property (text), widget (QLabel, labelBackground)
@@ -26391,7 +26391,7 @@ msgstr "&Arka Plan Rengi:"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:719
 #, kde-format
 msgid "Background:"
-msgstr "Arka Plan:"
+msgstr "Arka plan:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsRaster)
 #: libs/ui/forms/wdgnewimage.ui:551
@@ -28900,7 +28900,7 @@ msgstr "Son Kullanılan"
 #: libs/ui/kis_canvas_controls_manager.cpp:287
 #, kde-format
 msgid "Brush Opacity: %1%"
-msgstr "Fırça Matlığı: %​%1"
+msgstr "Fırça matlığı: %​%1"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:319
 #, kde-format
@@ -28912,7 +28912,7 @@ msgstr "Akış: %​%1"
 #, kde-format
 msgctxt "Edge softness, Brush Option Fade"
 msgid "Fade: %1"
-msgstr "Solma: %1"
+msgstr "Boya atımı: %1"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:375
 #, kde-format
@@ -32261,7 +32261,7 @@ msgstr "Katmanla bağlantıla"
 #, kde-format
 msgctxt "@option:check In Layer Style"
 msgid "&Invert"
-msgstr "&Ters Çevir"
+msgstr "&Tersine Çevir"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/layerstyles/WdgStroke.ui:53
@@ -32784,7 +32784,7 @@ msgstr "Matlık: "
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:164
 #, kde-format
 msgid "Position: "
-msgstr "Konum:"
+msgstr "Konum: "
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:39
 #, kde-format
@@ -34495,7 +34495,7 @@ msgstr "Doldurma rengini değiştir"
 #: libs/ui/widgets/KoFillConfigWidget.cpp:295
 #, kde-format
 msgid "Change filling gradient"
-msgstr "Doldurma geçişini değiştir"
+msgstr "Doldurma gradyanını değiştir"
 
 #: libs/ui/widgets/KoFillConfigWidget.cpp:638
 #, kde-format
@@ -38365,7 +38365,7 @@ msgstr "Rıhtım ayarları"
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:134
 #, kde-format
 msgid "Invert Saturation"
-msgstr "Doygunluğu Ters Çevir"
+msgstr "Doygunluğu Tersine Çevir"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDefault)
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:157
@@ -39107,7 +39107,7 @@ msgstr "OpenColorIO kullan"
 #: plugins/dockers/lut/wdglut.ui:93
 #, kde-format
 msgid "Display Device:"
-msgstr "Ekran Aygıtı:"
+msgstr "Ekran aygıtı:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/lut/wdglut.ui:106
@@ -39127,7 +39127,7 @@ msgstr "Pozlandırma:"
 #: plugins/dockers/lut/wdglut.ui:152
 #, kde-format
 msgid "Input ColorSpace:"
-msgstr "Girdi Renk Uzayı:"
+msgstr "Girdi renk uzayı:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblConfig)
 #: plugins/dockers/lut/wdglut.ui:175
@@ -39151,7 +39151,7 @@ msgstr "Görünüm:"
 #: plugins/dockers/lut/wdglut.ui:296
 #, kde-format
 msgid "Color Engine:"
-msgstr "Renk İşletkesi:"
+msgstr "Renk işletkesi:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_colorManagement)
 #: plugins/dockers/lut/wdglut.ui:310
@@ -41137,7 +41137,7 @@ msgstr "Gölgeler"
 #: plugins/filters/example/example.cpp:42
 #, kde-format
 msgid "&Invert"
-msgstr "&Ters Çevir"
+msgstr "&Tersine Çevir"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:82
@@ -44426,7 +44426,7 @@ msgstr "Köşegen Kabart"
 #: plugins/filters/dodgeburn/DodgeBurnPlugin.cpp:19
 #, kde-format
 msgid "Dodge..."
-msgstr "Atlat..."
+msgstr "Soldur..."
 
 #: plugins/filters/dodgeburn/DodgeBurnPlugin.cpp:20
 #, kde-format
@@ -44537,7 +44537,7 @@ msgstr "Değişken Derinliği ile Kabart"
 #: plugins/filters/example/example.h:33
 #, kde-format
 msgid "Invert"
-msgstr "Ters Çevir"
+msgstr "Tersine Çevir"
 
 #: plugins/filters/fastcolortransfer/fastcolortransfer.cpp:48
 #, kde-format
@@ -44694,14 +44694,14 @@ msgstr "Sertlik:"
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:130
 #, kde-format
 msgid "Invert:"
-msgstr "Ters Çevir:"
+msgstr "Tersine çevir:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelForeground)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:144
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:685
 #, kde-format
 msgid "Foreground:"
-msgstr "Ön Plan:"
+msgstr "Ön plan:"
 
 #: plugins/filters/halftone/KisHalftoneConfigWidget.cpp:37
 #, kde-format
@@ -44720,12 +44720,12 @@ msgstr "Kip:"
 #: plugins/filters/halftone/KisHalftoneFilter.cpp:43
 #, kde-format
 msgid "&Halftone..."
-msgstr "&Yarıton..."
+msgstr "&Yarım Ton..."
 
 #: plugins/filters/halftone/KisHalftoneFilter.h:37
 #, kde-format
 msgid "Halftone"
-msgstr "Yarım tonlama"
+msgstr "Yarım tonlu"
 
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.cpp:30
 #, kde-format
@@ -46276,7 +46276,7 @@ msgstr "Konum:"
 #, kde-format
 msgctxt "Swapping FG and BG color in the screentone pattern"
 msgid "Invert:"
-msgstr "Ters Çevir:"
+msgstr "Tersine çevir:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #. i18n: ectx: property (text), widget (QLabel, labelContrast)
@@ -51955,7 +51955,7 @@ msgstr ""
 "<p> en fazla değer</p><p>(0,7 basınç), (0,3 hız) = 0,7<br/></p>\n"
 "<p> en az değer </p><p>(0,7 basınç), (0,3 hız) = 0,3<br/></p>\n"
 "<p> en az ve en fazla değerler arasındaki fark</p><p>(0,8 basınç), (0,3 "
-"hız), (0,6 solma) = 0,5</p></body></html>"
+"hız), (0,6 boya atımı) = 0,5</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurveMode)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -52199,7 +52199,7 @@ msgstr "Yatay Ofset:"
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:238
 #, kde-format
 msgid "Invert Pattern"
-msgstr "Deseni Ters Çevir"
+msgstr "Deseni Tersine Çevir"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomOffsetY)
 #. i18n: ectx: property (text), widget (QCheckBox, randomOffsetX)
@@ -54423,7 +54423,7 @@ msgstr "Düzenli Metin"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:371
 msgid "Inverted Text"
-msgstr "Ters Çevrilmiş Metin"
+msgstr "Tersine Çevrilmiş Metin"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:386
 msgid "Document Info"
@@ -59195,7 +59195,7 @@ msgstr "Çevrele ve Doldur"
 #, kde-format
 msgctxt "The 'invert' checkbox in enclose and fill tool"
 msgid "Invert"
-msgstr "Ters Çevir"
+msgstr "Tersine Çevir"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:429
 #, kde-format
@@ -60441,6 +60441,3 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
-
-#~ msgid "Show line boxes"
-#~ msgstr "Çizgi kutularını göster"

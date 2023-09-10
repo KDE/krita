@@ -398,8 +398,8 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
                     pen.setColor(penColor);
                     painter.setPen(pen);
                     QVector<QPointF> offset = result.at(i).cursorInfo.offsets;
-                    for (int j=0; j<offset.size(); j++) {
-                        painter.drawPoint(tf.map(offset.at(j)));
+                    for (int k=0; k<offset.size(); k++) {
+                        painter.drawPoint(tf.map(offset.at(k)));
                     }
                     // Finalpos
                     penColor = Qt::red;

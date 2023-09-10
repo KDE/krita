@@ -51,7 +51,7 @@ QString KoCssTextUtils::transformTextToLowerCase(const QString &text, const QStr
 
 QString KoCssTextUtils::transformTextCapitalize(const QString &text, const QString langCode, QVector<QPair<int, int>> &positions)
 {
-    QLocale locale(langCode.split("-").join("_"));
+    QLocale locale(langCode);
 
     QStringList graphemes = textToUnicodeGraphemeClusters(text, langCode);
     QStringList oldGraphemes = graphemes;

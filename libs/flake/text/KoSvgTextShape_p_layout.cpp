@@ -51,26 +51,26 @@ using KoSvgTextShapeLayoutFunc::flowTextInShapes;
  * @brief logicalToVisualCursorPositions
  * Create a map that sorts the cursor positions by the visual index of the cluster.
  */
-QMap<int, int> logicalToVisualCursorPositions(QVector<CursorPos> cursorPos
-                                              , QVector<CharacterResult> result
-                                              , QVector<LineBox> lines
-                                              , bool ltr = false) {
+static QMap<int, int> logicalToVisualCursorPositions(const QVector<CursorPos> cursorPos
+                                              , const QVector<CharacterResult> result
+                                              , const QVector<LineBox> lines
+                                              , const bool ltr = false)  {
     QMap<int, int> logicalToVisual;
     for (int i = 0; i < lines.size(); i++) {
-        Q_FOREACH(LineChunk chunk, lines.at(i).chunks) {
+        Q_FOREACH(const LineChunk chunk, lines.at(i).chunks) {
             QMap<int, int> visualToLogical;
             QVector<int> visual;
-            Q_FOREACH(int j, chunk.chunkIndices) {
+            Q_FOREACH(const int j, chunk.chunkIndices) {
                 visualToLogical.insert(result.at(j).visualIndex, j);
             }
-            Q_FOREACH(int j, visualToLogical.values()) {
+            Q_FOREACH(const int j, visualToLogical.values()) {
                 QMap<int, int> relevant;
                 for (int k = 0; k < cursorPos.size(); k++) {
                     if (j == cursorPos.at(k).cluster) {
                         relevant.insert(cursorPos.at(k).offset, k);
                     }
                 }
-                Q_FOREACH(int k, relevant.keys()) {
+                Q_FOREACH(const int k, relevant.keys()) {
                     int final = result.at(j).cursorInfo.rtl? relevant.size()-1-k: k;
                     visual.append(relevant.value(final));
                 }
@@ -163,7 +163,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     QVector<QPair<int, int>> clusterToOriginalString;
     QString plainText;
     Q_FOREACH (const KoSvgTextChunkShapeLayoutInterface::SubChunk &chunk, textChunks) {
-        for (int i=0; i<chunk.newToOldPositions.size(); i++) {
+        for (int i = 0; i < chunk.newToOldPositions.size(); i++) {
             QPair pos = chunk.newToOldPositions.at(i);
             int a = pos.second < 0? -1: text.size()+pos.second;
             int b = pos.first < 0? -1: plainText.size()+pos.first;

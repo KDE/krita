@@ -452,17 +452,17 @@ QPainterPath KoSvgTextShape::selectionBoxes(int pos, int anchor)
     QPainterPath p;
     p.setFillRule(Qt::WindingFill);
     for (int i = start+1; i <= end; i++) {
-        CursorPos pos = d->cursorPos.at(i);
-        CharacterResult res = d->result.at(pos.cluster);
+        CursorPos cursorPos = d->cursorPos.at(i);
+        CharacterResult res = d->result.at(cursorPos.cluster);
         const QTransform tf = res.finalTransform();
         QLineF first = res.cursorInfo.caret;
         QLineF last = first;
         if (res.cursorInfo.rtl) {
-            last.translate(res.cursorInfo.offsets.value(pos.offset-1,  res.advance));
-            first.translate(res.cursorInfo.offsets.value(pos.offset, QPointF()));
+            last.translate(res.cursorInfo.offsets.value(cursorPos.offset-1,  res.advance));
+            first.translate(res.cursorInfo.offsets.value(cursorPos.offset, QPointF()));
         } else {
-            first.translate(res.cursorInfo.offsets.value(pos.offset-1,  QPointF()));
-            last.translate(res.cursorInfo.offsets.value(pos.offset, res.advance));
+            first.translate(res.cursorInfo.offsets.value(cursorPos.offset-1,  QPointF()));
+            last.translate(res.cursorInfo.offsets.value(cursorPos.offset, res.advance));
         }
         QPolygonF poly;
         poly << first.p1() << first.p2() << last.p2() << last.p1() << first.p1();
@@ -522,9 +522,8 @@ int KoSvgTextShape::posForIndex(int index, bool firstIndex, bool skipSynthetic)
 
 int KoSvgTextShape::indexForPos(int pos)
 {
-    int index = -1;
     if (d->cursorPos.isEmpty() || pos < 0) {
-        return index;
+        return -1;
     }
 
     return d->cursorPos.at(qMin(d->cursorPos.size()-1, pos)).index;

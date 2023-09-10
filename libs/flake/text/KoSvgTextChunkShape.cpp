@@ -333,7 +333,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         return result;
     }
 
-    static QString transformText(QString text, KoSvgText::TextTransformInfo textTransformInfo, const QString lang, QVector<QPair<int, int>> &positions)
+    static QString transformText(QString text, KoSvgText::TextTransformInfo textTransformInfo, const QString &lang, QVector<QPair<int, int>> &positions)
     {
         if (textTransformInfo.capitals == KoSvgText::TextTransformCapitalize) {
             text = KoCssTextUtils::transformTextCapitalize(text, lang, positions);

@@ -237,9 +237,13 @@ void SvgTextCursorTest::test_text_insert_command()
     int pos = textShape->posForIndex(25, false, true);
     SvgTextInsertCommand *cmd = new SvgTextInsertCommand(textShape, pos, pos, " badly");
     QString test = "The quick brown fox jumps over the lazy dog.";
+    QString test2 = test;
     test.insert(25, " badly");
     cmd->redo();
     QCOMPARE(test, textShape->plainText());
+
+    cmd->undo();
+    QCOMPARE(test2, textShape->plainText());
 }
 
 // Test basic text removal in a horizontal ltr wrapped text;
@@ -250,12 +254,16 @@ void SvgTextCursorTest::test_text_remove_command()
     KoSvgTextShapeMarkupConverter converter(textShape);
     converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
     QString test = "The quick brown fox jumps over the lazy dog.";
+    QString test2 = test;
 
     SvgTextRemoveCommand *cmd = new SvgTextRemoveCommand(textShape, 10, 10, 10, 5);
     test.remove(10, 5);
 
     cmd->redo();
     QCOMPARE(test, textShape->plainText());
+
+    cmd->undo();
+    QCOMPARE(test2, textShape->plainText());
 }
 
 SIMPLE_TEST_MAIN(SvgTextCursorTest)

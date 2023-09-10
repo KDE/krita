@@ -18,6 +18,23 @@ class SvgTextInsertCommand;
 class SvgTextRemoveCommand;
 class KUndo2Command;
 
+/**
+ * @brief The SvgTextCursor class
+ *
+ * This class handles cursor movement and text editing operations.
+ *
+ * It acts as the KoToolSelection for SvgTextTool, allowing it to
+ * integrate with the basic KoToolBase functionality for copy, cut
+ * paste and clear.
+ *
+ * A selection is defined as the anchor being different from the cursor
+ * position, with the move operation accepting whether you want to shift
+ * the cursor position.
+ *
+ * It is also a shape listener to allow the textcursor to update itself
+ * whenever the corresponding text shape changes.
+ */
+
 class KRITATOOLSVGTEXT_EXPORT SvgTextCursor : public KoToolSelection, public KoSvgTextShape::TextCursorChangeListener
 {
     Q_OBJECT
@@ -40,7 +57,19 @@ public:
 
     ~SvgTextCursor();
 
+    /**
+     * @brief setShape
+     * @param textShape KoSvgTextShape to set, is allowed to be a nullptr, the cursor just won't do anything.
+     */
     void setShape(KoSvgTextShape *textShape);
+
+    /**
+     * @brief setCaretSetting
+     * Set the caret settings for the cursor. Qt has some standard functionality associated, which we pass via this.
+     * @param cursorWidth - Cursor width from the style.
+     * @param cursorFlash - the total time it takes for a cursor to hide reapear.
+     * @param cursorFlashLimit - maximum amount of time a cursor is allowed to flash.
+     */
     void setCaretSetting(int cursorWidth = 1, int cursorFlash = 1000, int cursorFlashLimit = 5000);
 
     /**
@@ -51,17 +80,30 @@ public:
      */
     void setVisualMode(bool visualMode = true);
 
+    /// Get the current position.
     int getPos();
+
+    /// Get the current selection anchor. This is the same as position, unless there's a selection.
     int getAnchor();
 
+    /// Set the pos and the anchor.
     void setPos(int pos, int anchor);
 
+    /// Set the pos from a point. This currently does a search inside the text shape.
     void setPosToPoint(QPointF point);
 
+    /// Move the cursor, and, if you don't want a selection, move the anchor.
     void moveCursor(MoveMode mode, bool moveAnchor = true);
 
+    /// Insert text at getPos()
     void insertText(QString text);
+
+    /// Remove the last character before the position.
+    /// This tries to delete whole graphemes.
     void removeLast();
+
+    /// Remove the next character after the position.
+    /// this tries to delete a whole grapheme.
     void removeNext();
 
     /**
@@ -88,8 +130,12 @@ public:
     // Reimplemented.
     bool hasSelection() override;
 
-
+    /// ShapeChangeListener reimplementation. This will update the cursor position
+    /// when the shape was updated.
     void notifyShapeChanged(KoShape::ChangeType type, KoShape *shape) override;
+
+    /// TextCursorChangeListener reimplementation, this allows undo commands
+    /// to update the cursor without having the cursor owned by the command.
     void notifyCursorPosChanged(int pos, int anchor) override;
 
 Q_SIGNALS:

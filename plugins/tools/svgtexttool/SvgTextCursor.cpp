@@ -30,6 +30,10 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     QPainterPath selection;
     QRectF oldSelectionRect;
 
+    // This is used to adjust cursorpositions better on text-shape relayouts.
+    int posIndex = 0;
+    int anchorIndex = 0;
+
     bool visualNavigation = true;
 };
 
@@ -293,6 +297,12 @@ void SvgTextCursor::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
 {
     Q_UNUSED(type);
     Q_UNUSED(shape);
+    if (d->shape->indexForPos(d->pos) != d->posIndex) {
+        d->pos = d->shape->posForIndex(d->posIndex);
+    }
+    if (d->shape->indexForPos(d->anchor) != d->anchorIndex) {
+        d->anchor = d->shape->posForIndex(d->anchorIndex);
+    }
     updateCursor();
     updateSelection();
 }
@@ -309,6 +319,8 @@ void SvgTextCursor::updateCursor()
 {
     if (d->shape) {
         d->oldCursorRect = d->shape->shapeToDocument(d->cursorShape.boundingRect());
+        d->posIndex = d->shape->indexForPos(d->pos);
+        d->anchorIndex = d->shape->indexForPos(d->anchor);
     }
     d->cursorShape = d->shape? d->shape->cursorForPos(d->pos): QPainterPath();
     d->cursorFlash.start();

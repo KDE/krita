@@ -99,7 +99,6 @@ SvgTextTool::~SvgTextTool()
 void SvgTextTool::activate(const QSet<KoShape *> &shapes)
 {
     KoToolBase::activate(shapes);
-    m_textCursor.setShape(selectedShape());
     m_canvasConnections.addConnection(canvas()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotShapeSelectionChanged()));
 
     useCursor(m_base_cursor);
@@ -135,6 +134,7 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
             koSelection()->select(foundTextShape);
         }
     }
+    slotShapeSelectionChanged();
 
     repaintDecorations();
 }
@@ -730,6 +730,8 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
         } else if (event->key() == Qt::Key_Delete) {
             m_textCursor.removeNext();
             event->accept();
+        } else if (event->key() == Qt::Key_Escape) {
+            event->ignore();
         } else if (!event->text().isEmpty()) {
             m_textCursor.insertText(event->text());
             event->accept();

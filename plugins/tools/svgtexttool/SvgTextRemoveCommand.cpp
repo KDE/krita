@@ -36,7 +36,7 @@ void SvgTextRemoveCommand::redo()
     m_shape->removeText(m_pos, m_length);
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
 
-    int pos = m_shape->posForIndex(oldIndex, false, false);
+    int pos = qMax(0, m_shape->posForIndex(oldIndex, false, false));
     m_shape->notifyCursorPosChanged(pos, pos);
 }
 

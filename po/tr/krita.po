@@ -4409,7 +4409,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Dodge.kpp"
 msgid "l) Adjust Dodge"
-msgstr "l) Atlatmayı Ayarla"
+msgstr "l) Soldurmayı Ayarla"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -8615,14 +8615,14 @@ msgstr "Fırça akışını azalt"
 #, kde-format
 msgctxt "action"
 msgid "Increase Fade"
-msgstr "Boya Atımını Artır"
+msgstr "Solmayı Artır"
 
 #. i18n: context: toolTip @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:468
 #, kde-format
 msgctxt "action"
 msgid "Increase brush Fade"
-msgstr "Fırçadan boya atımını artır"
+msgstr "Fırça solmasını artır"
 
 #. i18n: context: text @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
@@ -8632,14 +8632,14 @@ msgstr "Fırçadan boya atımını artır"
 #, kde-format
 msgctxt "action"
 msgid "Decrease Fade"
-msgstr "Boya Atımını Azalt"
+msgstr "Solmayı Azalt"
 
 #. i18n: context: toolTip @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:480
 #, kde-format
 msgctxt "action"
 msgid "Decrease brush Fade"
-msgstr "Fırçadan boya atımını azalt"
+msgstr "Fırça solmasını azalt"
 
 #. i18n: context: text @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
@@ -8656,7 +8656,7 @@ msgstr "Saçılmayı Artır"
 #, kde-format
 msgctxt "action"
 msgid "Increase brush Scatter strength"
-msgstr "Fırça saçılma gücünü artır"
+msgstr "Fırçanın saçılma gücünü artır"
 
 #. i18n: context: text @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
@@ -8673,7 +8673,7 @@ msgstr "Saçılmayı Azalt"
 #, kde-format
 msgctxt "action"
 msgid "Decrease brush Scatter strength"
-msgstr "Fırça saçılma gücünü azalt"
+msgstr "Fırçanın saçılma gücünü azalt"
 
 #. i18n: context: text @ Action (erase_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (erase_action), Actions (Painting), ActionCollection (Krita)
@@ -10683,14 +10683,14 @@ msgstr "Birden Çok Anahtar Kare Ekle"
 #, kde-format
 msgctxt "action"
 msgid "Insert several keyframes based on user parameters."
-msgstr "Kullanıcı parametrelerine göre birkaç anahtar kare ekle."
+msgstr "Kullanıcı parametrelerine göre birkaç anahtar kare ekleyin."
 
 #. i18n: context: text @ Action (remove_frames_and_pull), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2065
 #, kde-format
 msgctxt "action"
 msgid "Remove Frame and Pull"
-msgstr "Kare Kaldır ve Çek"
+msgstr "Kareyi Kaldır ve Çek"
 
 #. i18n: context: toolTip @ Action (remove_frames_and_pull), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2067
@@ -10890,7 +10890,7 @@ msgstr "Kareden geçerli konumda bir bekletme sütununu kaldır"
 #, kde-format
 msgctxt "action"
 msgid "Remove Multiple Hold Columns"
-msgstr "Çoklu Bekletme Sütununu Kaldır"
+msgstr "Birden Çok Bekletme Sütununu Kaldır"
 
 #. i18n: context: toolTip @ Action (remove_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2235
@@ -14022,7 +14022,7 @@ msgstr "Tuvali Görünüm Yüksekliğine Sığdır"
 #, kde-format
 msgctxt "action"
 msgid "Toggle Fit to View"
-msgstr "Görünüme Sığdır Aç/Kapat"
+msgstr "Görünüme Sığdır'ı Aç/Kapat"
 
 #. i18n: context: text @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:838
@@ -27179,7 +27179,7 @@ msgstr "Palet Boyutu:"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:82
 #, kde-format
 msgid "Color Selector:"
-msgstr "Renk Seçicisi:"
+msgstr "Renk seçicisi:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:90
@@ -28912,7 +28912,7 @@ msgstr "Akış: %​%1"
 #, kde-format
 msgctxt "Edge softness, Brush Option Fade"
 msgid "Fade: %1"
-msgstr "Boya atımı: %1"
+msgstr "Solma: %1"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:375
 #, kde-format
@@ -33334,7 +33334,7 @@ msgstr ""
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:494
 #, kde-format
 msgid "The following conversion intents are possible: "
-msgstr "Aşağıdaki diyalog amaçları olanaklıdır: "
+msgstr "Aşağıdaki dönüşüm niyetleri olanaklıdır: "
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:513
 #, kde-format
@@ -34495,7 +34495,7 @@ msgstr "Doldurma rengini değiştir"
 #: libs/ui/widgets/KoFillConfigWidget.cpp:295
 #, kde-format
 msgid "Change filling gradient"
-msgstr "Doldurma gradyanını değiştir"
+msgstr "Dolgu gradyanını değiştir"
 
 #: libs/ui/widgets/KoFillConfigWidget.cpp:638
 #, kde-format
@@ -36808,7 +36808,7 @@ msgstr "Sabit Uzunluk"
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:160
 #, kde-format
 msgid "Global Color:"
-msgstr "Global Renk:"
+msgstr "Global renk:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useCustomAssistantColor)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:209
@@ -37473,7 +37473,7 @@ msgstr "Seçici arka planı için özel renk kullan."
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:233
 #, kde-format
 msgid "Color Selector Uses Different Color Space than Ima&ge"
-msgstr "Renk Seçicisi Görselden Farklı Renk Uzayı Kulla&nır"
+msgstr "Renk Seçicisi, Görselden Farklı Renk Uzayı Kulla&nır"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_general)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:259
@@ -39107,7 +39107,7 @@ msgstr "OpenColorIO kullan"
 #: plugins/dockers/lut/wdglut.ui:93
 #, kde-format
 msgid "Display Device:"
-msgstr "Ekran aygıtı:"
+msgstr "Görüntü aygıtı:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/lut/wdglut.ui:106
@@ -39127,7 +39127,7 @@ msgstr "Pozlandırma:"
 #: plugins/dockers/lut/wdglut.ui:152
 #, kde-format
 msgid "Input ColorSpace:"
-msgstr "Girdi renk uzayı:"
+msgstr "Giriş renk uzayı:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblConfig)
 #: plugins/dockers/lut/wdglut.ui:175
@@ -45063,7 +45063,7 @@ msgstr "Süzgeci Paletleştir"
 #: plugins/filters/palettize/palettize.cpp:110
 #, kde-format
 msgid "Offset Scale:"
-msgstr "Ofset Ölçeği:"
+msgstr "Ofset ölçeği:"
 
 #: plugins/filters/palettize/palettize.cpp:119
 #, kde-format
@@ -46082,7 +46082,7 @@ msgstr "&Desen:"
 #: plugins/paintops/hairy/wdgbristleoptions.ui:118
 #, kde-format
 msgid "Shear:"
-msgstr "Kırkma:"
+msgstr "Kırk:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gb3dRotation)
 #: plugins/generators/pattern/wdgpatternoptions.ui:293
@@ -47239,7 +47239,7 @@ msgstr "1 x 1, 1 x 1, 1 x 1 (en iyi kalite)"
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:228
 #, kde-format
 msgid "Force baseline JPEG"
-msgstr "Temel JPEG zorla"
+msgstr "Temel JPEG'i zorla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, optimize)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:238
@@ -49430,7 +49430,7 @@ msgstr "Pozlandırma Düzeltme (P. D)"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "<p>Turn on the exposure correction before interpolation.</p>"
-msgstr "<p>Girişpolasyondan önce pozlandırma düzeltmeyi aç.</p>"
+msgstr "<p>Aradeğerlemeden önce pozlandırma düzeltmeyi açın.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:525
 #, kde-format
@@ -51955,7 +51955,7 @@ msgstr ""
 "<p> en fazla değer</p><p>(0,7 basınç), (0,3 hız) = 0,7<br/></p>\n"
 "<p> en az değer </p><p>(0,7 basınç), (0,3 hız) = 0,3<br/></p>\n"
 "<p> en az ve en fazla değerler arasındaki fark</p><p>(0,8 basınç), (0,3 "
-"hız), (0,6 boya atımı) = 0,5</p></body></html>"
+"hız), (0,6 solma) = 0,5</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurveMode)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -52168,13 +52168,13 @@ msgstr "Boru kipi"
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:144
 #, kde-format
 msgid "Cutoff Policy:"
-msgstr "Kesme Politikası:"
+msgstr "Kesme politikası:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDensity)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:160
 #, kde-format
 msgid "Texturing Mode:"
-msgstr "Dokulandırma Kipi:"
+msgstr "Dokulandırma kipi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing_2)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:179
@@ -52187,13 +52187,13 @@ msgstr "Kesme:"
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:199
 #, kde-format
 msgid "Neutral Point:"
-msgstr "Nötr Nokta:"
+msgstr "Nötr nokta:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpikes)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:222
 #, kde-format
 msgid "Horizontal Offset:"
-msgstr "Yatay Ofset:"
+msgstr "Yatay ofset:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkInvert)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:238
@@ -52213,7 +52213,7 @@ msgstr "Rastgele Ofset"
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:261
 #, kde-format
 msgid "Vertical Offset:"
-msgstr "Dikey Ofset:"
+msgstr "Dikey ofset:"
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:249
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:91

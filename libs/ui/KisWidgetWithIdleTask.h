@@ -56,9 +56,13 @@ public:
     }
 
     void hideEvent(QHideEvent *event) override {
+        /// Qt's show/hide events may arrive unbalanced, our
+        /// assert should take that into account
+        const bool wasVisible = this->isVisible();
+
         BaseWidget::hideEvent(event);
 
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_canvas || m_idleTaskGuard.isValid());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_canvas || wasVisible == m_idleTaskGuard.isValid());
         m_idleTaskGuard = KisIdleTasksManager::TaskGuard();
 
         clearCachedState();

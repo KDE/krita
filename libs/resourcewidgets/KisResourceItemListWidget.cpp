@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2023 Srirupa Datta
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
+
 #include "KisResourceItemListWidget.h"
 
 #include <QDebug>

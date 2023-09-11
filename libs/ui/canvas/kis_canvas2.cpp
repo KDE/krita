@@ -1224,9 +1224,10 @@ void KisCanvas2::slotConfigChanged()
 
     resetCanvas(cfg.useOpenGL());
 
-    // FIXME: We should change to associate the display profiles with the screen
-    //        model and serial number instead. See https://bugs.kde.org/show_bug.cgi?id=407498
-    const int canvasScreenNumber = QApplication::desktop()->screenNumber(QApplication::activeWindow());
+    QWidget *mainWindow = m_d->view->mainWindow();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(mainWindow);
+
+    const int canvasScreenNumber = QApplication::desktop()->screenNumber(mainWindow);
     if (canvasScreenNumber != -1) {
         setDisplayProfile(cfg.displayProfile(canvasScreenNumber));
     } else {

@@ -35,7 +35,7 @@
 #include <KoIcon.h>
 #include "ResourceListViewModes.h"
 #include <kis_config.h>
-#include "KisResourceItemViwer.h"
+#include "KisResourceItemViewer.h"
 
 
 WdgResourcePreview::WdgResourcePreview(WidgetType type, QWidget *parent) :
@@ -135,12 +135,12 @@ WdgResourcePreview::WdgResourcePreview(WidgetType type, QWidget *parent) :
 
     connect(m_ui->resourceItemView, SIGNAL(currentResourceChanged(QModelIndex)), SIGNAL(signalResourcesSelectionChanged(QModelIndex)));
 
-    KisResourceItemViwer *viewModeButton;
+    KisResourceItemViewer *viewModeButton;
 
     if (m_type == WidgetType::BundleCreator) {
-        viewModeButton = new KisResourceItemViwer(Viewer::TableAvailable, this);
+        viewModeButton = new KisResourceItemViewer(Viewer::TableAvailable, this);
     } else {
-        viewModeButton = new KisResourceItemViwer(Viewer::ResourceManager, this);
+        viewModeButton = new KisResourceItemViewer(Viewer::ResourceManager, this);
     }
 
     KisConfig cfg(true);

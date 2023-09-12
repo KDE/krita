@@ -79,7 +79,10 @@ void LogDockerDock::toggleLogging(bool toggle)
 {
     KisConfig(false).writeEntry<bool>("logviewer_enabled", toggle);
     if (toggle) {
-        s_originalMessageHandler = qInstallMessageHandler(messageHandler);
+        const QtMessageHandler oldHandler = qInstallMessageHandler(messageHandler);
+        if (!s_originalMessageHandler) {
+            s_originalMessageHandler = oldHandler;
+        }
         applyCategories();
     }
     else {

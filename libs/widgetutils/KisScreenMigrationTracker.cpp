@@ -10,6 +10,7 @@
 #include <QWidget>
 #include <QWindow>
 #include <QScreen>
+#include <kis_assert.h>
 #include <kis_signal_compressor.h>
 
 KisScreenMigrationTracker::KisScreenMigrationTracker(QWidget *trackedWidget, QObject *parent)

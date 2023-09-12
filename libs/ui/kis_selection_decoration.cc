@@ -36,6 +36,7 @@
 #include "KisView.h"
 #include "kis_selection_mask.h"
 #include <KisPart.h>
+#include <KisScreenMigrationTracker.h>
 
 static const unsigned int ANT_LENGTH = 4;
 static const unsigned int ANT_SPACE = 4;
@@ -45,20 +46,12 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>_view)
     : KisCanvasDecoration("selection", _view),
       m_signalCompressor(50 /*ms*/, KisSignalCompressor::FIRST_ACTIVE),
       m_offset(0),
-      m_mode(Ants)
+      m_mode(Ants),
+      m_migrationTracker(new KisScreenMigrationTracker(_view->mainWindow(), this))
 {
-    Q_ASSERT(view());
-    Q_ASSERT(view()->mainWindow());
-    Q_ASSERT(view()->mainWindow()->windowHandle());
-
-    m_window = view()->mainWindow()->windowHandle();
-    connect(m_window, SIGNAL(screenChanged(QScreen*)), this, SLOT(screenChanged(QScreen*)));
-
-    m_screen = m_window->screen();
-    initializePens();
-
-    connect(m_screen, SIGNAL(logicalDotsPerInchChanged(qreal)),
-            this, SLOT(initializePens()));
+    connect(m_migrationTracker, &KisScreenMigrationTracker::sigScreenOrResolutionChanged,
+            this, &KisSelectionDecoration::initializePens);
+    initializePens(m_migrationTracker->currentScreen());
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
@@ -98,12 +91,13 @@ bool KisSelectionDecoration::selectionIsActive()
             selection->isVisible();
 }
 
-void KisSelectionDecoration::initializePens()
+void KisSelectionDecoration::initializePens(QScreen *screen)
 {
     KisPaintingTweaks::initAntsPen(&m_antsPen, &m_outlinePen,
                                    ANT_LENGTH, ANT_SPACE);
 
-    int penWidth = qRound(m_screen->devicePixelRatio());
+    int penWidth = qRound(screen->devicePixelRatio());
+
     if (penWidth > 1) {
         m_antsPen.setWidth(penWidth);
         m_outlinePen.setWidth(penWidth);
@@ -176,12 +170,6 @@ void KisSelectionDecoration::slotConfigChanged()
     m_opacity = imageConfig.selectionOutlineOpacity();
     m_maskColor = imageConfig.selectionOverlayMaskColor();
     m_antialiasSelectionOutline = cfg.antialiasSelectionOutline();
-}
-
-void KisSelectionDecoration::screenChanged(QScreen *screen)
-{
-    m_screen = screen;
-    initializePens();
 }
 
 void KisSelectionDecoration::antsAttackEvent()

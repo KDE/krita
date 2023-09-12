@@ -2259,7 +2259,6 @@ bool KisConfig::switchSelectionCtrlAlt(bool defaultValue) const
 void KisConfig::setSwitchSelectionCtrlAlt(bool value)
 {
     m_cfg.writeEntry("switchSelectionCtrlAlt", value);
-    KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
 bool KisConfig::convertToImageColorspaceOnImport(bool defaultValue) const

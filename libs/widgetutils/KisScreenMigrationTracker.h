@@ -9,29 +9,40 @@
 
 #include <QObject>
 #include <kritawidgetutils_export.h>
+#include <kis_signal_auto_connection.h>
+
 
 class QScreen;
 class QWidget;
+class KisSignalCompressor;
 
 class KRITAWIDGETUTILS_EXPORT KisScreenMigrationTracker : public QObject
 {
     Q_OBJECT
 public:
-    KisScreenMigrationTracker(QWidget *trackedWidget);
+    KisScreenMigrationTracker(QWidget *trackedWidget, QObject *parent = nullptr);
+
+    QScreen* currentScreen() const;
 
 private Q_SLOTS:
     void slotScreenChanged(QScreen *screen);
-    void slotScreenResolutionChanged();
+    void slotScreenResolutionChanged(qreal value);
+    void slotScreenLogicalResolutionChanged(qreal value);
+    void slotResolutionCompressorTriggered();
 
 Q_SIGNALS:
     void sigScreenChanged(QScreen *screen);
     void sigScreenOrResolutionChanged(QScreen *screen);
 
 private:
+    void connectScreenSignals(QScreen *screen);
+
+private:
     Q_DISABLE_COPY_MOVE(KisScreenMigrationTracker)
 
     QWidget *m_trackedWidget {nullptr};
-    QMetaObject::Connection m_screenConnection;
+    KisSignalAutoConnectionsStore m_screenConnections;
+    KisSignalCompressor *m_resolutionChangeCompressor;
 };
 
 #endif // KISSCREENMIGRATIONTRACKER_H

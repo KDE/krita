@@ -18,6 +18,7 @@
 class KisView;
 class QWindow;
 class QScreen;
+class KisScreenMigrationTracker;
 
 class KRITAUI_EXPORT KisSelectionDecoration : public KisCanvasDecoration
 {
@@ -43,8 +44,7 @@ protected:
 private Q_SLOTS:
     void slotStartUpdateSelection();
     void slotConfigChanged();
-    void screenChanged(QScreen *screen);
-    void initializePens();
+    void initializePens(QScreen *screen);
 
 public Q_SLOTS:
     void selectionChanged();
@@ -70,8 +70,7 @@ private:
     QColor m_maskColor;
     bool m_antialiasSelectionOutline;
 
-    QWindow *m_window;
-    QScreen *m_screen;
+    KisScreenMigrationTracker *m_migrationTracker {nullptr};
 };
 
 #endif

@@ -1,3 +1,10 @@
+/*
+ * SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
+
 #ifndef KISRESOURCEITEMLISTWIDGET_H
 #define KISRESOURCEITEMLISTWIDGET_H
 

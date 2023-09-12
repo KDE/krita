@@ -302,7 +302,6 @@ public:
     KConfigGroup windowStateConfig;
 
     QUuid workspaceBorrowedBy;
-    KisSignalAutoConnectionsStore screenConnectionsStore;
 
     KateCommandBar *commandBar {nullptr};
 
@@ -625,8 +624,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     }
 
     this->winId(); // Ensures the native window has been created.
-    QWindow *window = this->windowHandle();
-    connect(window, &QWindow::screenChanged, this, &KisMainWindow::windowScreenChanged);
 
 #ifdef Q_OS_ANDROID
     // HACK: This prevents the mainWindow from going beyond the screen with no
@@ -821,9 +818,6 @@ void KisMainWindow::slotPreferences()
         KisConfigNotifier::instance()->notifyConfigChanged();
         KisConfigNotifier::instance()->notifyPixelGridModeChanged();
         KisImageConfigNotifier::instance()->notifyConfigChanged();
-
-        // Refresh the DPI and display profile on all consumers.
-        emit screenChanged();
 
         // XXX: should this be changed for the views in other windows as well?
         Q_FOREACH (QPointer<KisView> koview, KisPart::instance()->views()) {
@@ -3107,14 +3101,6 @@ void KisMainWindow::initializeGeometry()
 void KisMainWindow::showManual()
 {
     QDesktopServices::openUrl(QUrl("https://docs.krita.org"));
-}
-
-void KisMainWindow::windowScreenChanged(QScreen *screen)
-{
-    emit screenChanged();
-    d->screenConnectionsStore.clear();
-    d->screenConnectionsStore.addConnection(screen, &QScreen::physicalDotsPerInchChanged,
-                                            this, &KisMainWindow::screenChanged);
 }
 
 void KisMainWindow::showDockerTitleBars(bool show)

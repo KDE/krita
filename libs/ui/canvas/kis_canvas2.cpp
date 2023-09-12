@@ -237,7 +237,6 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
      */
     m_d->bootstrapLodBlocked = true;
     connect(mainWindow, SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
-    connect(mainWindow, &KisMainWindow::screenChanged, this, &KisCanvas2::slotConfigChanged);
 
     KisImageConfig config(false);
 
@@ -1227,14 +1226,30 @@ void KisCanvas2::slotConfigChanged()
     QWidget *mainWindow = m_d->view->mainWindow();
     KIS_SAFE_ASSERT_RECOVER_RETURN(mainWindow);
 
-    const int canvasScreenNumber = QApplication::desktop()->screenNumber(mainWindow);
+    QWidget *topLevelWidget = mainWindow->topLevelWidget();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(topLevelWidget);
+
+    slotScreenChanged(mainWindow->screen());
+
+    initializeFpsDecoration();
+}
+
+void KisCanvas2::slotScreenChanged(QScreen *screen)
+{
+    /**
+     * We cannot use QApplication::desktop()->screenNumber(mainWindow) here,
+     * because this data is not yet ready when screenChanged signal is delivered.
+     */
+
+    const int canvasScreenNumber = qApp->screens().indexOf(screen);
+
     if (canvasScreenNumber != -1) {
+        // If profile is the same, then setDisplayProfile does nothing
+        KisConfig cfg(true);
         setDisplayProfile(cfg.displayProfile(canvasScreenNumber));
     } else {
         warnUI << "Failed to get screenNumber for updating display profile.";
     }
-
-    initializeFpsDecoration();
 }
 
 void KisCanvas2::refetchDataFromImage()

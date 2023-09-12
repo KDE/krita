@@ -93,6 +93,7 @@
 #include <commands_new/kis_processing_command.h>
 #include <commands_new/kis_update_command.h>
 #include <kis_command_utils.h>
+#include <KisScreenMigrationTracker.h>
 
 //static
 QString KisView::newObjectName()
@@ -117,6 +118,7 @@ public:
         , zoomManager(_q, &this->viewConverter, &this->canvasController)
         , viewManager(viewManager)
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
+        , screenMigrationTracker(_q)
     {
     }
 
@@ -145,6 +147,8 @@ public:
 
     KisSynchronizedConnection<KisNodeSP> addNodeConnection;
     KisSynchronizedConnection<KisNodeSP> removeNodeConnection;
+
+    KisScreenMigrationTracker screenMigrationTracker;
 
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
@@ -1200,8 +1204,17 @@ bool KisView::queryClose()
 
 }
 
-void KisView::slotScreenChanged()
+void KisView::slotMigratedToScreen(QScreen *screen)
 {
+    d->canvas.slotScreenChanged(screen);
+}
+
+void KisView::slotScreenOrResolutionChanged()
+{
+    /**
+     * slotScreenOrResolutionChanged() is guaranteed to come after
+     * slotMigratedToScreen() when a migration happens
+     */
     d->zoomManager.updateScreenResolution(this);
 }
 
@@ -1449,7 +1462,8 @@ void KisView::slotLoadingFinished()
     }
 
     setCurrentNode(activeNode);
-    connect(d->viewManager->mainWindow(), SIGNAL(screenChanged()), SLOT(slotScreenChanged()));
+    connect(&d->screenMigrationTracker, SIGNAL(sigScreenChanged(QScreen*)), this, SLOT(slotMigratedToScreen(QScreen*)));
+    connect(&d->screenMigrationTracker, SIGNAL(sigScreenOrResolutionChanged(QScreen*)), this, SLOT(slotScreenOrResolutionChanged()));
     zoomManager()->updateImageBoundsSnapping();
 }
 

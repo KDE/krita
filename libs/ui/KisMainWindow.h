@@ -204,9 +204,6 @@ Q_SIGNALS:
 
     void guiLoadingFinished();
 
-    /// emitted when the window is migrated among different screens
-    void screenChanged();
-
     /// emitted when the current view has changed
     void activeViewChanged();
 
@@ -419,8 +416,6 @@ private Q_SLOTS:
     void initializeGeometry();
     void showManual();
     void switchTab(int index);
-
-    void windowScreenChanged(QScreen *screen);
 
     void slotXmlGuiMakingChanges(bool finished);
 

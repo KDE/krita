@@ -224,7 +224,8 @@ public Q_SLOTS:
 
     bool queryClose();
 
-    void slotScreenChanged();
+    void slotMigratedToScreen(QScreen *screen);
+    void slotScreenOrResolutionChanged();
 
     void slotThemeChanged(QPalette pal);
 

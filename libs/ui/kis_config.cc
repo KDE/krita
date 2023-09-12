@@ -579,6 +579,7 @@ void KisConfig::setMonitorProfile(int screen, const QString & monitorProfile, bo
     }
 }
 
+// TODO: rename into getSystemScreenProfile
 const KoColorProfile *KisConfig::getScreenProfile(int screen)
 {
     if (screen < 0) return 0;

@@ -47,6 +47,7 @@ set(kritawidgetutils_LIB_SRCS
     KisRepaintDebugger.cpp
     KisMenuStyleDontCloseOnAlt.cpp
     KisSpinBoxPluralHelper.cpp
+    KisScreenMigrationTracker.cpp
 
     config/kcolorscheme.cpp
     config/kcolorschememanager.cpp

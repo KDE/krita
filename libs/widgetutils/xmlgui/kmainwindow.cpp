@@ -468,6 +468,8 @@ void KisKMainWindow::savePropertiesInternal(KConfig *config, int number)
 
 void KisKMainWindow::saveMainWindowSettings(KConfigGroup &cg)
 {
+    if (!windowsLayoutSavingAllowed()) return;
+
     K_D(KisKMainWindow);
     //qDebug(200) << "KisKMainWindow::saveMainWindowSettings " << cg.name();
 
@@ -639,6 +641,11 @@ bool KisKMainWindow::settingsDirty() const
 {
     K_D(const KisKMainWindow);
     return d->settingsDirty;
+}
+
+bool KisKMainWindow::windowsLayoutSavingAllowed() const
+{
+    return true;
 }
 
 void KisKMainWindow::setAutoSaveSettings(const QString &groupName, bool saveWindowSize)

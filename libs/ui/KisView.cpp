@@ -1218,6 +1218,11 @@ void KisView::slotScreenOrResolutionChanged()
     d->zoomManager.updateScreenResolution(this);
 }
 
+QScreen* KisView::currentScreen() const
+{
+    return d->screenMigrationTracker.currentScreen();
+}
+
 void KisView::slotThemeChanged(QPalette pal)
 {
     this->setPalette(pal);

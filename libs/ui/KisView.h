@@ -124,6 +124,11 @@ public:
 
     void closeView();
 
+    /**
+     * Returns the current screen that the view belongs to
+     */
+    QScreen *currentScreen() const;
+
 public:
 
     /**

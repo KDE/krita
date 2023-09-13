@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-12 00:44+0000\n"
+"POT-Creation-Date: 2023-09-13 00:44+0000\n"
 "PO-Revision-Date: 2022-12-09 17:44+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -9249,7 +9249,7 @@ msgstr "Показване на глобална маска на селекци�
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:949 plugins/dockers/logdocker/LogDockerDock.cpp:145
+#: krita/krita.action:949 plugins/dockers/logdocker/LogDockerDock.cpp:148
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -17326,8 +17326,8 @@ msgid "Processing"
 msgstr ""
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1420
-#: libs/ui/KisMainWindow.cpp:1762 libs/ui/KisMainWindow.cpp:1775
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1414
+#: libs/ui/KisMainWindow.cpp:1756 libs/ui/KisMainWindow.cpp:1769
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18055,8 +18055,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr ""
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2133
-#: libs/ui/KisMainWindow.cpp:2216
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2127
+#: libs/ui/KisMainWindow.cpp:2210
 #, kde-format
 msgid "Import frames"
 msgstr "Импортиране на кадри"
@@ -19304,7 +19304,7 @@ msgstr "Навън"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19365,17 +19365,17 @@ msgstr ""
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
 #: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
-#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:979
-#: libs/ui/KisMainWindow.cpp:1095 libs/ui/KisMainWindow.cpp:1221
-#: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1993
-#: libs/ui/KisMainWindow.cpp:2002 libs/ui/KisMainWindow.cpp:2141
-#: libs/ui/KisMainWindow.cpp:2202 libs/ui/KisMainWindow.cpp:2223
-#: libs/ui/KisMainWindow.cpp:2838 libs/ui/KisPart.cpp:578
+#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:973
+#: libs/ui/KisMainWindow.cpp:1089 libs/ui/KisMainWindow.cpp:1215
+#: libs/ui/KisMainWindow.cpp:1312 libs/ui/KisMainWindow.cpp:1987
+#: libs/ui/KisMainWindow.cpp:1996 libs/ui/KisMainWindow.cpp:2135
+#: libs/ui/KisMainWindow.cpp:2196 libs/ui/KisMainWindow.cpp:2217
+#: libs/ui/KisMainWindow.cpp:2832 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
-#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:740
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:693
+#: libs/ui/KisView.cpp:1178 libs/ui/KisWelcomePageWidget.cpp:740
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -19601,7 +19601,7 @@ msgstr ""
 #: libs/resources/KisResourceModel.cpp:154
 #: libs/resources/KisTagResourceModel.cpp:656
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:189
+#: plugins/dockers/logdocker/LogDockerDock.cpp:192
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:860
 #: plugins/impex/webp/kis_wdg_options_webp.ui:791
@@ -19879,7 +19879,7 @@ msgid "Delete resource"
 msgstr "Изтриване на ресурс"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:335
-#: libs/ui/KisMainWindow.cpp:2638
+#: libs/ui/KisMainWindow.cpp:2632
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20206,7 +20206,7 @@ msgid "Select All"
 msgstr "Избиране на всичко"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:784
+#: libs/ui/KisView.cpp:788
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr ""
@@ -20268,7 +20268,7 @@ msgid "Paste shapes"
 msgstr "Поставяне на фигури"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:361 libs/ui/KisView.cpp:598
+#: libs/ui/actions/KisPasteActionFactories.cpp:361 libs/ui/KisView.cpp:602
 #, kde-format
 msgid "(pasted)"
 msgstr "(поставено)"
@@ -20321,7 +20321,7 @@ msgstr ""
 "Неуспешно изграждане кадрите на анимацията! Изходните файлове са непълни."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2243
+#: libs/ui/KisMainWindow.cpp:2237
 #, kde-format
 msgid "Render Animation"
 msgstr "Изграждане на анимация"
@@ -21444,7 +21444,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
-#: plugins/dockers/logdocker/LogDockerDock.cpp:121
+#: plugins/dockers/logdocker/LogDockerDock.cpp:124
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:31
@@ -22335,7 +22335,7 @@ msgid "Numerical"
 msgstr "Цифрено"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1183
 #, kde-format
 msgid "Import Images"
 msgstr "Импортиране на изображение"
@@ -22482,7 +22482,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2649
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2643
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -22970,7 +22970,7 @@ msgid "Canvas Input"
 msgstr "Въвеждане на платно"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2093
-#: plugins/dockers/logdocker/LogDockerDock.cpp:193
+#: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
 msgstr "Управление на цветовете"
@@ -25150,7 +25150,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:650
-#: plugins/dockers/logdocker/LogDockerDock.cpp:137
+#: plugins/dockers/logdocker/LogDockerDock.cpp:140
 #, kde-format
 msgid "Tools"
 msgstr "Инструменти"
@@ -26397,7 +26397,7 @@ msgstr "Текущи настройки на четка"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1068
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -28759,7 +28759,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr ""
 
-#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:690
+#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:694
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -30444,44 +30444,44 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Работна &среда"
 
-#: libs/ui/KisMainWindow.cpp:585
+#: libs/ui/KisMainWindow.cpp:584
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Показване на лентата с инстр&ументи %1"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:586
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Скриване на лента с инструменти %1"
 
-#: libs/ui/KisMainWindow.cpp:1037
+#: libs/ui/KisMainWindow.cpp:1031
 #, kde-format
 msgid "Write Protected"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1035
 #, kde-format
 msgid "Recovered"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1071
+#: libs/ui/KisMainWindow.cpp:1065
 #, kde-format
 msgid "Save as %1"
 msgstr "Запазване като %1"
 
-#: libs/ui/KisMainWindow.cpp:1095
+#: libs/ui/KisMainWindow.cpp:1089
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Файлът %1 не съществува."
 
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1183
 #, kde-format
 msgid "Open Images"
 msgstr "Отваряне на изображения"
 
-#: libs/ui/KisMainWindow.cpp:1319
+#: libs/ui/KisMainWindow.cpp:1313
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30490,45 +30490,45 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1369
 #, kde-format
 msgid "Exporting"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1369
 #, kde-format
 msgid "Saving As"
 msgstr "Запазване като."
 
-#: libs/ui/KisMainWindow.cpp:1741
+#: libs/ui/KisMainWindow.cpp:1735
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Създаване на нов документ"
 
-#: libs/ui/KisMainWindow.cpp:1765
+#: libs/ui/KisMainWindow.cpp:1759
 #, kde-format
 msgid "Custom Document"
 msgstr "Потребителски документ"
 
-#: libs/ui/KisMainWindow.cpp:1777
+#: libs/ui/KisMainWindow.cpp:1771
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Създаване от клипборда"
 
-#: libs/ui/KisMainWindow.cpp:1962
+#: libs/ui/KisMainWindow.cpp:1956
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Слоеве/Маски"
 
-#: libs/ui/KisMainWindow.cpp:1988
+#: libs/ui/KisMainWindow.cpp:1982
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Нямате активиран пакет с ресурси."
 
-#: libs/ui/KisMainWindow.cpp:1992
+#: libs/ui/KisMainWindow.cpp:1986
 #, kde-format
 msgid ""
 "\n"
@@ -30539,7 +30539,7 @@ msgstr ""
 "Няма инсталиран набор от четки. Моля, инсталирайте пакет със съответния "
 "набор преди да продължите.\n"
 
-#: libs/ui/KisMainWindow.cpp:2002
+#: libs/ui/KisMainWindow.cpp:1996
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -30550,70 +30550,70 @@ msgstr ""
 "\n"
 "Налични са само локални ресурси."
 
-#: libs/ui/KisMainWindow.cpp:2141 libs/ui/KisMainWindow.cpp:2223
+#: libs/ui/KisMainWindow.cpp:2135 libs/ui/KisMainWindow.cpp:2217
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
 "%1"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2202
+#: libs/ui/KisMainWindow.cpp:2196
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2629
+#: libs/ui/KisMainWindow.cpp:2623
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Импортиране на работна среда..."
 
-#: libs/ui/KisMainWindow.cpp:2644
+#: libs/ui/KisMainWindow.cpp:2638
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Нова работна среда..."
 
-#: libs/ui/KisMainWindow.cpp:2648
+#: libs/ui/KisMainWindow.cpp:2642
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Нова работна среда..."
 
-#: libs/ui/KisMainWindow.cpp:2692
+#: libs/ui/KisMainWindow.cpp:2686
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu opened document, %1=index %2=document path"
 #| msgid "&%1 %2"
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2695
+#: libs/ui/KisMainWindow.cpp:2689
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu opened document, %1=index %2=document path"
 #| msgid "%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2861
+#: libs/ui/KisMainWindow.cpp:2855
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2877
+#: libs/ui/KisMainWindow.cpp:2871
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2986
+#: libs/ui/KisMainWindow.cpp:2980
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Теми"
 
-#: libs/ui/KisMainWindow.cpp:3044
+#: libs/ui/KisMainWindow.cpp:3038
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -30923,27 +30923,27 @@ msgstr "Няма налично изображение."
 msgid "Use This Template"
 msgstr "Използване на този шаблон"
 
-#: libs/ui/KisView.cpp:759
+#: libs/ui/KisView.cpp:763
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool.cc:678
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:678
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Слоят е заключен и невидим"
 
-#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:680
+#: libs/ui/KisView.cpp:773 libs/ui/tool/kis_tool.cc:680
 #, kde-format
 msgid "Layer is locked."
 msgstr ""
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:682
+#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:682
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Слоят е невидим"
 
-#: libs/ui/KisView.cpp:1175
+#: libs/ui/KisView.cpp:1179
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -30952,37 +30952,37 @@ msgstr ""
 "<p>Документът <b>\"%1\"</b> е променен.</p><p>Искате ли промените да бъдат "
 "записани?</p>"
 
-#: libs/ui/KisView.cpp:1364
+#: libs/ui/KisView.cpp:1377
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Проверка на цветово предаване не работи при плаваща запатия."
 
-#: libs/ui/KisView.cpp:1369
+#: libs/ui/KisView.cpp:1382
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Проверка на цветово предаване е включена."
 
-#: libs/ui/KisView.cpp:1371
+#: libs/ui/KisView.cpp:1384
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Проверка на цветово предаване е изключена."
 
-#: libs/ui/KisView.cpp:1383
+#: libs/ui/KisView.cpp:1396
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Проверка на цветово предаване не работи при плаваща запатия."
 
-#: libs/ui/KisView.cpp:1389
+#: libs/ui/KisView.cpp:1402
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Предупреждения при излизане извън е включено."
 
-#: libs/ui/KisView.cpp:1391
+#: libs/ui/KisView.cpp:1404
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Но проверка на цветово предаване е все още изключена."
 
-#: libs/ui/KisView.cpp:1394
+#: libs/ui/KisView.cpp:1407
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Предупреждения при излизане извън е изключено."
@@ -38491,79 +38491,79 @@ msgstr "Изтриване на слоя или маската"
 msgid "Log Viewer"
 msgstr ""
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:114
+#: plugins/dockers/logdocker/LogDockerDock.cpp:117
 #, kde-format
 msgid "Log Settings"
 msgstr ""
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:125
+#: plugins/dockers/logdocker/LogDockerDock.cpp:128
 #, kde-format
 msgid "Resource Management"
 msgstr "Управление на ресурси"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:129
+#: plugins/dockers/logdocker/LogDockerDock.cpp:132
 #, kde-format
 msgid "Image Core"
 msgstr ""
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:133
+#: plugins/dockers/logdocker/LogDockerDock.cpp:136
 #, kde-format
 msgid "Registries"
 msgstr ""
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:141
+#: plugins/dockers/logdocker/LogDockerDock.cpp:144
 #, kde-format
 msgid "Tile Engine"
 msgstr ""
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:149
+#: plugins/dockers/logdocker/LogDockerDock.cpp:152
 #, kde-format
 msgid "Plugin Management"
 msgstr ""
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:153
+#: plugins/dockers/logdocker/LogDockerDock.cpp:156
 #, kde-format
 msgid "User Interface"
 msgstr "Потребителски интерфейс"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:157
+#: plugins/dockers/logdocker/LogDockerDock.cpp:160
 #, kde-format
 msgid "File loading and saving"
 msgstr "Зареждане и запазване на файлове"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:161
+#: plugins/dockers/logdocker/LogDockerDock.cpp:164
 #, kde-format
 msgid "Mathematics and calculations"
 msgstr ""
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:165
+#: plugins/dockers/logdocker/LogDockerDock.cpp:168
 #, kde-format
 msgid "Image Rendering"
 msgstr ""
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:169
+#: plugins/dockers/logdocker/LogDockerDock.cpp:172
 #, kde-format
 msgid "Scripting"
 msgstr ""
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:173
+#: plugins/dockers/logdocker/LogDockerDock.cpp:176
 #, kde-format
 msgid "Input handling"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:177
+#: plugins/dockers/logdocker/LogDockerDock.cpp:180
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, kde-format
 msgid "Actions"
 msgstr "Действия"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:181
+#: plugins/dockers/logdocker/LogDockerDock.cpp:184
 #, kde-format
 msgid "Tablet Handling"
 msgstr ""
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:185
+#: plugins/dockers/logdocker/LogDockerDock.cpp:188
 #, kde-format
 msgid "GPU Canvas"
 msgstr "Графичен процесор на платно"

@@ -1,6 +1,9 @@
 /*
  *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
+
 #ifndef PAGE_TAG_CHOOSER_H
 #define PAGE_TAG_CHOOSER_H
 

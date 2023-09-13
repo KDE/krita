@@ -1,5 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "page_metadata_info.h"

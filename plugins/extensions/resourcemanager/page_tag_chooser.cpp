@@ -1,6 +1,9 @@
 /*
  *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
+
 #include "page_tag_chooser.h"
 #include "ui_pagetagchooser.h"
 #include "dlg_create_bundle.h"

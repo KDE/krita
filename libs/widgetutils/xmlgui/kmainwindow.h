@@ -453,6 +453,8 @@ protected:
      */
     bool settingsDirty() const;
 
+    virtual bool windowsLayoutSavingAllowed() const;
+
 protected Q_SLOTS:
 
     /**

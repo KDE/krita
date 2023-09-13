@@ -437,6 +437,8 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dragLeaveEvent(QDragLeaveEvent *event) override;
 
+    bool windowsLayoutSavingAllowed() const override;
+
 private:
 
     friend class KisWelcomePageWidget;

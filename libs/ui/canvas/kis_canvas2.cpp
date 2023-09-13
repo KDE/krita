@@ -568,7 +568,15 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     m_d->frameCache = 0;
 
     KisConfig cfg(true);
-    const KoColorProfile *profile = cfg.displayProfile(QApplication::desktop()->screenNumber(QApplication::activeWindow()));
+
+    int canvasScreenNumber = qApp->screens().indexOf(m_d->view->currentScreen());
+
+    if (canvasScreenNumber < 0) {
+        warnKrita << "Couldn't detect screen that Krita belongs to..." << ppVar(m_d->view->currentScreen());
+        canvasScreenNumber = 0;
+    }
+
+    const KoColorProfile *profile = cfg.displayProfile(canvasScreenNumber);
     m_d->displayColorConverter.notifyOpenGLCanvasIsActive(useOpenGL && KisOpenGL::hasOpenGL());
     m_d->displayColorConverter.setMonitorProfile(profile);
 

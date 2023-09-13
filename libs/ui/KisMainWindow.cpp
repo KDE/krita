@@ -1610,16 +1610,22 @@ void KisMainWindow::showEvent(QShowEvent *event)
     // we're here because, we need to make sure everything (dockers, toolbars etc) is loaded and ready before
     // we can hide it.
     if (!event->spontaneous()) {
-        setMainWindowLayoutForCurrentMainWidget(0);
+        setMainWindowLayoutForCurrentMainWidget(d->widgetStack->currentIndex(), false);
     }
     return KXmlGuiWindow::showEvent(event);
 }
 
-void KisMainWindow::setMainWindowLayoutForCurrentMainWidget(int widgetIndex)
+void KisMainWindow::setMainWindowLayoutForCurrentMainWidget(int widgetIndex, bool widgetIndexChanged)
 {
+
     if (widgetIndex == 0) {
-        // save the state of the window which existed up-to now (this is before we stop auto-saving).
-        saveMainWindowSettings(d->windowStateConfig);
+        if (widgetIndexChanged) {
+            /// save the state of the window which existed up-to now (this is before we stop auto-saving).
+            ///
+            /// saving should happen if the call s has come from a real state change, but not from
+            /// on-startup initialization
+            saveMainWindowSettings(d->windowStateConfig);
+        }
         adjustLayoutForWelcomePage();
     }
     else {
@@ -1716,11 +1722,11 @@ void KisMainWindow::showWelcomeScreen(bool show)
         // These have to be done in different sequence to avoid graphical
         // layout glitch during the switch.
         if (show) {
-            setMainWindowLayoutForCurrentMainWidget(currentIndex);
+            setMainWindowLayoutForCurrentMainWidget(currentIndex, true);
             d->widgetStack->setCurrentIndex(currentIndex);
         } else {
             d->widgetStack->setCurrentIndex(currentIndex);
-            setMainWindowLayoutForCurrentMainWidget(currentIndex);
+            setMainWindowLayoutForCurrentMainWidget(currentIndex, true);
         }
         setUpdatesEnabled(true);
     }

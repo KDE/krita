@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-12 02:25+0000\n"
-"PO-Revision-Date: 2023-08-27 01:49+0300\n"
+"POT-Creation-Date: 2023-09-13 02:34+0000\n"
+"PO-Revision-Date: 2023-09-12 23:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -9192,7 +9192,7 @@ msgid ""
 "Shows global selection as a usual selection mask in <interface>Layers</"
 "interface> docker"
 msgstr ""
-"<interface>Katmanlar</interface> rıhtımcısında, global seçimi olağan seçim "
+"<interface>Katmanlar</interface> panelinde, global seçimi olağan seçim "
 "maskesi olarak göster"
 
 #. i18n: context: iconText @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
@@ -9222,7 +9222,7 @@ msgstr "Global Seçim Maskesini Göster"
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:925 plugins/dockers/logdocker/LogDockerDock.cpp:145
+#: krita/krita.action:925 plugins/dockers/logdocker/LogDockerDock.cpp:148
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -15325,7 +15325,7 @@ msgstr "Uygulama Dilini Değiştir"
 #, kde-format
 msgctxt "action"
 msgid "&Show Dockers"
-msgstr "Rıhtımcıları &Göster"
+msgstr "Panelleri &Göster"
 
 #. i18n: context: toolTip @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
@@ -15335,14 +15335,14 @@ msgstr "Rıhtımcıları &Göster"
 #, kde-format
 msgctxt "action"
 msgid "Show Dockers"
-msgstr "Rıhtımcıları Göster"
+msgstr "Panelleri Göster"
 
 #. i18n: context: text @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1797
 #, kde-format
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
-msgstr "Rıhtımcı Başlık Çubukları&nı Göster"
+msgstr "Panel Başlık Çubukları&nı Göster"
 
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
@@ -15352,7 +15352,7 @@ msgstr "Rıhtımcı Başlık Çubukları&nı Göster"
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Titlebars"
-msgstr "Rıhtımcı Başlık Çubuklarını Göster"
+msgstr "Panel Başlık Çubuklarını Göster"
 
 #. i18n: context: text @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1809
@@ -15382,7 +15382,7 @@ msgstr "Araç Çubuklarını Yapılandır"
 #, kde-format
 msgctxt "action"
 msgid "Dockers"
-msgstr "Rıhtımcılar"
+msgstr "Paneller"
 
 #. i18n: context: text @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1831
@@ -17316,8 +17316,8 @@ msgid "Processing"
 msgstr "İşleniyor"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1420
-#: libs/ui/KisMainWindow.cpp:1762 libs/ui/KisMainWindow.cpp:1775
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1414
+#: libs/ui/KisMainWindow.cpp:1756 libs/ui/KisMainWindow.cpp:1769
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18060,8 +18060,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "CSV Belgesi"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2133
-#: libs/ui/KisMainWindow.cpp:2216
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2127
+#: libs/ui/KisMainWindow.cpp:2210
 #, kde-format
 msgid "Import frames"
 msgstr "Kareler içe aktar"
@@ -19310,7 +19310,7 @@ msgstr "Dış"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19371,17 +19371,17 @@ msgstr "Yerel Özkaynaklar"
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
 #: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
-#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:979
-#: libs/ui/KisMainWindow.cpp:1095 libs/ui/KisMainWindow.cpp:1221
-#: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1993
-#: libs/ui/KisMainWindow.cpp:2002 libs/ui/KisMainWindow.cpp:2141
-#: libs/ui/KisMainWindow.cpp:2202 libs/ui/KisMainWindow.cpp:2223
-#: libs/ui/KisMainWindow.cpp:2838 libs/ui/KisPart.cpp:578
+#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:973
+#: libs/ui/KisMainWindow.cpp:1089 libs/ui/KisMainWindow.cpp:1215
+#: libs/ui/KisMainWindow.cpp:1312 libs/ui/KisMainWindow.cpp:1987
+#: libs/ui/KisMainWindow.cpp:1996 libs/ui/KisMainWindow.cpp:2135
+#: libs/ui/KisMainWindow.cpp:2196 libs/ui/KisMainWindow.cpp:2217
+#: libs/ui/KisMainWindow.cpp:2832 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
-#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:740
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:693
+#: libs/ui/KisView.cpp:1178 libs/ui/KisWelcomePageWidget.cpp:740
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -19608,7 +19608,7 @@ msgstr "Kirli"
 #: libs/resources/KisResourceModel.cpp:154
 #: libs/resources/KisTagResourceModel.cpp:656
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:189
+#: plugins/dockers/logdocker/LogDockerDock.cpp:192
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:860
 #: plugins/impex/webp/kis_wdg_options_webp.ui:791
@@ -19878,7 +19878,7 @@ msgid "Delete resource"
 msgstr "Özkaynağı sil"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:335
-#: libs/ui/KisMainWindow.cpp:2638
+#: libs/ui/KisMainWindow.cpp:2632
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20228,7 +20228,7 @@ msgid "Select All"
 msgstr "Tümünü Seç"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:784
+#: libs/ui/KisView.cpp:788
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Taşkın Dolgu Katman"
@@ -20290,7 +20290,7 @@ msgid "Paste shapes"
 msgstr "Şekiller yapıştır"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:361 libs/ui/KisView.cpp:598
+#: libs/ui/actions/KisPasteActionFactories.cpp:361 libs/ui/KisView.cpp:602
 #, kde-format
 msgid "(pasted)"
 msgstr "(yapıştırılmış)"
@@ -20342,7 +20342,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Canlandırma kareleri sunulamadı! Çıktı dosyaları eksik."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2243
+#: libs/ui/KisMainWindow.cpp:2237
 #, kde-format
 msgid "Render Animation"
 msgstr "Canlandırmayı Sun"
@@ -21480,7 +21480,7 @@ msgstr "Video Canlandırma İçe Aktar"
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
-#: plugins/dockers/logdocker/LogDockerDock.cpp:121
+#: plugins/dockers/logdocker/LogDockerDock.cpp:124
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:31
@@ -22270,7 +22270,7 @@ msgid ""
 "filter all other keyframe selected in the Animation Timeline docker."
 msgstr ""
 "Şu anda görünür kareyi süzmenin yanı sıra, Canlandırma\n"
-"Zaman Akışı rıhtımcısındaki tüm diğer anahtar kareleri süzün."
+"Zaman Akışı panelindeki tüm diğer anahtar kareleri süzün."
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:140
 #, kde-format
@@ -22386,7 +22386,7 @@ msgid "Numerical"
 msgstr "Sayısal"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1183
 #, kde-format
 msgid "Import Images"
 msgstr "Görseller İçe Aktar"
@@ -22532,7 +22532,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Yeni biçem adını gir"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2649
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2643
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -23018,7 +23018,7 @@ msgid "Canvas Input"
 msgstr "Tuval Girişi"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2093
-#: plugins/dockers/logdocker/LogDockerDock.cpp:193
+#: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
 msgstr "Renk Yönetimi"
@@ -24979,7 +24979,7 @@ msgstr "Araç Çubukları"
 #: libs/ui/forms/wdgfullscreensettings.ui:49
 #, kde-format
 msgid "Toolbox and dockers"
-msgstr "Araç kutusu ve rıhtımcılar"
+msgstr "Araç kutusu ve paneller"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScrollbars)
 #: libs/ui/forms/wdgfullscreensettings.ui:56
@@ -25010,7 +25010,7 @@ msgstr "Gam maskesini aç/kapat"
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:23
 #, kde-format
 msgid "Select a mask in \"Gamut Masks\" docker"
-msgstr "\"Gam Maskesi\" rıhtımcısında bir maske seç"
+msgstr "\"Gam Maskesi\" panelinde bir maske seç"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdggeneralsettings.ui:49
@@ -25205,7 +25205,7 @@ msgstr "(yeniden başlatma gerektirir)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:650
-#: plugins/dockers/logdocker/LogDockerDock.cpp:137
+#: plugins/dockers/logdocker/LogDockerDock.cpp:140
 #, kde-format
 msgid "Tools"
 msgstr "Araçlar"
@@ -25220,7 +25220,7 @@ msgstr "Araç Seçenekleri Konumu (yeniden başlatmayı gerektirir)"
 #: libs/ui/forms/wdggeneralsettings.ui:662
 #, kde-format
 msgid "In Doc&ker"
-msgstr "&Rıhtım İçinde"
+msgstr "&Panelde"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioToolOptionsInToolbar)
 #: libs/ui/forms/wdggeneralsettings.ui:669
@@ -25286,7 +25286,7 @@ msgstr "Hassaslık:"
 #: libs/ui/forms/wdggeneralsettings.ui:781
 #, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
-msgstr "Devinimsel sarma etkinse rıhtımcı sarma çubuklarını gizle"
+msgstr "Devinimsel sarma etkinse panel sarma çubuklarını gizle"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:834
@@ -26469,7 +26469,7 @@ msgstr "Geçerli fırça önayarı"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1068
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -28842,7 +28842,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Dosya Katmanı Değiştir"
 
-#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:690
+#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:694
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -30573,7 +30573,7 @@ msgstr "Biçemler"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
-msgstr "&Rıhtımcılar"
+msgstr "&Paneller"
 
 #: libs/ui/KisMainWindow.cpp:187
 #, kde-format
@@ -30593,44 +30593,44 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "&Çalışma Alanı"
 
-#: libs/ui/KisMainWindow.cpp:585
+#: libs/ui/KisMainWindow.cpp:584
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "%1 Araç Çubuğunu Göster"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:586
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "%1 Araç Çubuğunu Gizle"
 
-#: libs/ui/KisMainWindow.cpp:1037
+#: libs/ui/KisMainWindow.cpp:1031
 #, kde-format
 msgid "Write Protected"
 msgstr "Yazma Korumalı"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1035
 #, kde-format
 msgid "Recovered"
 msgstr "Kurtarılmış"
 
-#: libs/ui/KisMainWindow.cpp:1071
+#: libs/ui/KisMainWindow.cpp:1065
 #, kde-format
 msgid "Save as %1"
 msgstr "%1 olarak kaydet"
 
-#: libs/ui/KisMainWindow.cpp:1095
+#: libs/ui/KisMainWindow.cpp:1089
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "%1 dosyası yok."
 
-#: libs/ui/KisMainWindow.cpp:1189
+#: libs/ui/KisMainWindow.cpp:1183
 #, kde-format
 msgid "Open Images"
 msgstr "Görseller Aç"
 
-#: libs/ui/KisMainWindow.cpp:1319
+#: libs/ui/KisMainWindow.cpp:1313
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30643,45 +30643,45 @@ msgstr ""
 "\n"
 "Lütfen özgün dosyanın geçersiz kılınmadığı bir yer seçin!"
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1369
 #, kde-format
 msgid "Exporting"
 msgstr "Dışa Aktarılıyor"
 
-#: libs/ui/KisMainWindow.cpp:1375
+#: libs/ui/KisMainWindow.cpp:1369
 #, kde-format
 msgid "Saving As"
 msgstr "Farklı Kaydediliyor"
 
-#: libs/ui/KisMainWindow.cpp:1741
+#: libs/ui/KisMainWindow.cpp:1735
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Yeni belge oluştur"
 
-#: libs/ui/KisMainWindow.cpp:1765
+#: libs/ui/KisMainWindow.cpp:1759
 #, kde-format
 msgid "Custom Document"
 msgstr "Özel Belge"
 
-#: libs/ui/KisMainWindow.cpp:1777
+#: libs/ui/KisMainWindow.cpp:1771
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Panodan Oluştur"
 
-#: libs/ui/KisMainWindow.cpp:1962
+#: libs/ui/KisMainWindow.cpp:1956
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Katmanlar/Maskeler"
 
-#: libs/ui/KisMainWindow.cpp:1988
+#: libs/ui/KisMainWindow.cpp:1982
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Hiçbir özkaynak demeti etkinleştirilmemiş."
 
-#: libs/ui/KisMainWindow.cpp:1992
+#: libs/ui/KisMainWindow.cpp:1986
 #, kde-format
 msgid ""
 "\n"
@@ -30692,7 +30692,7 @@ msgstr ""
 "Kullanılabilir fırça önayarı yok. Sürdürmeden önce lütfen önayar içeren bir "
 "demeti etkinleştirin.\n"
 
-#: libs/ui/KisMainWindow.cpp:2002
+#: libs/ui/KisMainWindow.cpp:1996
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -30703,7 +30703,7 @@ msgstr ""
 "\n"
 "Yalnızca yerel özkaynaklar kullanılabiliyor."
 
-#: libs/ui/KisMainWindow.cpp:2141 libs/ui/KisMainWindow.cpp:2223
+#: libs/ui/KisMainWindow.cpp:2135 libs/ui/KisMainWindow.cpp:2217
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30712,59 +30712,59 @@ msgstr ""
 "Canlandırma içe aktarma bitirilemedi:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2202
+#: libs/ui/KisMainWindow.cpp:2196
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Yeni belge oluşturulamadı. Canlandırma içe aktarma iptal edildi."
 
-#: libs/ui/KisMainWindow.cpp:2629
+#: libs/ui/KisMainWindow.cpp:2623
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Çalışma Alanı İçe Aktar..."
 
-#: libs/ui/KisMainWindow.cpp:2644
+#: libs/ui/KisMainWindow.cpp:2638
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Yeni Çalışma Alanı..."
 
-#: libs/ui/KisMainWindow.cpp:2648
+#: libs/ui/KisMainWindow.cpp:2642
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Yeni Çalışma Alanı..."
 
-#: libs/ui/KisMainWindow.cpp:2692
+#: libs/ui/KisMainWindow.cpp:2686
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2695
+#: libs/ui/KisMainWindow.cpp:2689
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2861
+#: libs/ui/KisMainWindow.cpp:2855
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr "Krita LittleCMS renk yönetimi eklentisi yüklü değil. Krita kapanacak."
 
-#: libs/ui/KisMainWindow.cpp:2877
+#: libs/ui/KisMainWindow.cpp:2871
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Kurulum hatası"
 
-#: libs/ui/KisMainWindow.cpp:2986
+#: libs/ui/KisMainWindow.cpp:2980
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temalar"
 
-#: libs/ui/KisMainWindow.cpp:3044
+#: libs/ui/KisMainWindow.cpp:3038
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Genişleyen Boşluk"
@@ -31078,27 +31078,27 @@ msgstr "Kullanılabilir resim yok."
 msgid "Use This Template"
 msgstr "Bu Şablonu Kullan"
 
-#: libs/ui/KisView.cpp:759
+#: libs/ui/KisView.cpp:763
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Seçili katman türüne renkleri sürükleyip bırakamazsınız."
 
-#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool.cc:678
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:678
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Katman kilitlendi ve görünmez."
 
-#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:680
+#: libs/ui/KisView.cpp:773 libs/ui/tool/kis_tool.cc:680
 #, kde-format
 msgid "Layer is locked."
 msgstr "Katman kilitli."
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:682
+#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:682
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Katman görünmez."
 
-#: libs/ui/KisView.cpp:1175
+#: libs/ui/KisView.cpp:1179
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -31106,37 +31106,37 @@ msgid ""
 msgstr ""
 "<p><b>'%1'</b> adlı belge değiştirildi. </p><p>Kaydetmek istiyor musunuz?</p>"
 
-#: libs/ui/KisView.cpp:1364
+#: libs/ui/KisView.cpp:1377
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Ekran Provası, kayan noktalı sayılarda çalışmaz."
 
-#: libs/ui/KisView.cpp:1369
+#: libs/ui/KisView.cpp:1382
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Ekran Provası açık."
 
-#: libs/ui/KisView.cpp:1371
+#: libs/ui/KisView.cpp:1384
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Ekran Provası kapalı."
 
-#: libs/ui/KisView.cpp:1383
+#: libs/ui/KisView.cpp:1396
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Gam Uyarıları kayan noktalı sayılarda çalışmaz."
 
-#: libs/ui/KisView.cpp:1389
+#: libs/ui/KisView.cpp:1402
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Gam Uyarıları açık."
 
-#: libs/ui/KisView.cpp:1391
+#: libs/ui/KisView.cpp:1404
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Ancak Ekran Provası hâlâ kapalı."
 
-#: libs/ui/KisView.cpp:1394
+#: libs/ui/KisView.cpp:1407
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Gam Uyarıları kapalı."
@@ -32411,7 +32411,7 @@ msgstr "Temizle"
 #: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:291
 #, kde-format
 msgid "Color sampler does not work on this layer."
-msgstr "Renk örnekleyici bu katmanda çalışmaz."
+msgstr "Renk örnekleyicisi bu katmanda çalışmaz."
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:27
 #, kde-format
@@ -35023,19 +35023,19 @@ msgstr "Yardım al..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Float Docker"
-msgstr "Rıhtımcıyı Yüzdür"
+msgstr "Paneli Yüzdür"
 
 #: libs/widgets/KoDockWidgetTitleBar.cpp:52
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close Docker"
-msgstr "Rıhtımcıyı Kapat"
+msgstr "Paneli Kapat"
 
 #: libs/widgets/KoDockWidgetTitleBar.cpp:61
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Lock Docker"
-msgstr "Rıhtımcıyı Kilitle"
+msgstr "Paneli Kilitle"
 
 #: libs/widgets/KoEditColorSetDialog.cpp:159
 #, kde-format
@@ -37317,7 +37317,7 @@ msgstr "Kaydır: "
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:42
 #, kde-format
 msgid "Docker:"
-msgstr "Rıhtımcı:"
+msgstr "Panel:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSelector)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_typeshape)
@@ -37404,25 +37404,25 @@ msgstr "Davranış"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:274
 #, kde-format
 msgid "When Docker Resizes: "
-msgstr "Sabitleyici Yeniden Boyutlandığında: "
+msgstr "Panel yeniden boyutlandığında: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:294
 #, kde-format
 msgid "Show Zoom Selector UI: "
-msgstr "Yakınlaştırma Seçicisi Arayüzünü Göster: "
+msgstr "Yakınlaştırma seçicisi arayüzünü göster: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:304
 #, kde-format
 msgid "Zoom Selector Size: "
-msgstr "Yakınlaştırma Seçicisi Boyutu: "
+msgstr "Yakınlaştırma seçicisi boyutu: "
 
 #. i18n: ectx: property (text), widget (QCheckBox, hidePopupOnClickCheck)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:330
 #, kde-format
 msgid "Hide Popup on click."
-msgstr "Açılır Pencereyi tıklamada gizle."
+msgstr "Açılır Pencereyi tıklamada gizleyin."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabShadeSelector)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:351
@@ -37442,7 +37442,7 @@ msgstr "Renk modeli:"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:383
 #, kde-format
 msgid "Update Selector When:"
-msgstr "Seçiciyi Şu Zamanda Güncelle:"
+msgstr "Seçiciyi şu zamanda güncelle:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnForeground)
@@ -37504,13 +37504,13 @@ msgstr "Satır Sayısı: "
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:533
 #, kde-format
 msgid "Line Height: "
-msgstr "Çizgi Yüksekliği: "
+msgstr "Çizgi yüksekliği: "
 
 #. i18n: ectx: property (text), widget (QLabel, patchesPerLineLabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:556
 #, kde-format
 msgid "Patches Per Line: "
-msgstr "Satır Başına Yama: "
+msgstr "Satır başına yama: "
 
 #. i18n: ectx: property (title), widget (QGroupBox, historyGroupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_ColorHistory)
@@ -37540,7 +37540,7 @@ msgstr "Yama Seçenekleri"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:898
 #, kde-format
 msgid "Max Patches: "
-msgstr "En Fazla Yama: "
+msgstr "En çok yama: "
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #. i18n: ectx: property (title), widget (QGroupBox, formGroupBox)
@@ -38278,7 +38278,7 @@ msgstr "Renk tekerleği tercihleri"
 #: plugins/dockers/artisticcolorselector/forms/wdgArtisticColorSelector.ui:95
 #, kde-format
 msgid "Docker settings"
-msgstr "Rıhtım ayarları"
+msgstr "Panel ayarları"
 
 #. i18n: ectx: property (text), widget (QCheckBox, bnInverseSat)
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:134
@@ -38657,8 +38657,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
-"<b>Katmanlar</b> sabitleyicisinde global seçimleri her zamanki seçim "
-"maskeleri olarak gösterir"
+"<b>Katmanlar</b> panelinde global seçimleri her zamanki seçim maskeleri "
+"olarak gösterir"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:320
 #, kde-format
@@ -38832,79 +38832,79 @@ msgstr "Katman ya da maskeyi sil"
 msgid "Log Viewer"
 msgstr "Günlük Görüntüleyicisi"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:114
+#: plugins/dockers/logdocker/LogDockerDock.cpp:117
 #, kde-format
 msgid "Log Settings"
 msgstr "Günlük Ayarları"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:125
+#: plugins/dockers/logdocker/LogDockerDock.cpp:128
 #, kde-format
 msgid "Resource Management"
 msgstr "Kaynak Yönetimi"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:129
+#: plugins/dockers/logdocker/LogDockerDock.cpp:132
 #, kde-format
 msgid "Image Core"
 msgstr "Görsel Çekirdeği"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:133
+#: plugins/dockers/logdocker/LogDockerDock.cpp:136
 #, kde-format
 msgid "Registries"
 msgstr "Kayıtlar"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:141
+#: plugins/dockers/logdocker/LogDockerDock.cpp:144
 #, kde-format
 msgid "Tile Engine"
 msgstr "Döşeme İşletkesi"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:149
+#: plugins/dockers/logdocker/LogDockerDock.cpp:152
 #, kde-format
 msgid "Plugin Management"
 msgstr "Eklenti Yönetimi"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:153
+#: plugins/dockers/logdocker/LogDockerDock.cpp:156
 #, kde-format
 msgid "User Interface"
 msgstr "Kullanıcı Arayüzü"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:157
+#: plugins/dockers/logdocker/LogDockerDock.cpp:160
 #, kde-format
 msgid "File loading and saving"
 msgstr "Dosya Yükleme ve Kaydetme"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:161
+#: plugins/dockers/logdocker/LogDockerDock.cpp:164
 #, kde-format
 msgid "Mathematics and calculations"
 msgstr "Matematik ve Hesaplamalar"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:165
+#: plugins/dockers/logdocker/LogDockerDock.cpp:168
 #, kde-format
 msgid "Image Rendering"
 msgstr "Görsel Sunumu"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:169
+#: plugins/dockers/logdocker/LogDockerDock.cpp:172
 #, kde-format
 msgid "Scripting"
 msgstr "Betikleme"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:173
+#: plugins/dockers/logdocker/LogDockerDock.cpp:176
 #, kde-format
 msgid "Input handling"
 msgstr "Girdi Kullanımı"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:177
+#: plugins/dockers/logdocker/LogDockerDock.cpp:180
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, kde-format
 msgid "Actions"
 msgstr "Eylemler"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:181
+#: plugins/dockers/logdocker/LogDockerDock.cpp:184
 #, kde-format
 msgid "Tablet Handling"
 msgstr "Tablet Kullanımı"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:185
+#: plugins/dockers/logdocker/LogDockerDock.cpp:188
 #, kde-format
 msgid "GPU Canvas"
 msgstr "GPU Tuval"
@@ -39967,7 +39967,7 @@ msgstr "Seçili anlık görüntüyü kaldır"
 #: plugins/dockers/snapshotdocker/SnapshotDocker.cpp:82
 #, kde-format
 msgid "Snapshot Docker"
-msgstr "Anlık Görüntü Rıhtımcısı"
+msgstr "Anlık Görüntü Paneli"
 
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:70
 #, kde-format
@@ -40387,7 +40387,7 @@ msgstr "İşlemci Kısma"
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:86
 #, kde-format
 msgid "Touch Docker"
-msgstr "Dokunma Rıhtımı"
+msgstr "Dokunma Paneli"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
@@ -43894,7 +43894,7 @@ msgstr "Eşik:"
 #: plugins/filters/colors/wdgcolortoalphabase.ui:164
 #, kde-format
 msgid "Color Sampler:"
-msgstr "Renk Örnekleyici:"
+msgstr "Renk örnekleyicisi:"
 
 #. i18n: context: text @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
@@ -54199,7 +54199,7 @@ msgstr "Metin Katmanı Anahtarı:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:259
 msgid "Panel Layer Key:"
-msgstr "Panel Katmanı Anahtarı:"
+msgstr "Panel katmanı anahtarı:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:268
 msgid "Export to CBZ"
@@ -54633,11 +54633,11 @@ msgstr "Fotoğraflayan"
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Editor"
-msgstr "Editör"
+msgstr "Düzenleyici"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
 msgid "Assistant Editor"
-msgstr "Yardımcı Editör"
+msgstr "Yardımcı Düzenleyici"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
@@ -55736,7 +55736,7 @@ msgstr "&Uzantı"
 #: plugins/python/krita_script_starter/bbdkss.ui:129
 #, kde-format
 msgid "&Docker"
-msgstr "&Rıhtım"
+msgstr "&Panel"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:152
@@ -55748,7 +55748,7 @@ msgid ""
 "&gt;Settings menu entry. </p></body></html>"
 msgstr ""
 "<html><head/><body><p>İşaretlendiğinde, betiğiniz Krita'da otomatik olarak "
-"etkinleştirilecektir. Diğer bir deyişle, Betikler menüsünde veya rıhtım "
+"etkinleştirilecektir. Diğer bir deyişle, Betikler menüsünde veya panel "
 "listesinde görüntülenir. Aksi takdirde, betiği Krita-&gt;Ayarlar menü "
 "yoluyla elle etkinleştirmeniz gerekir. </p></body></html>"
 
@@ -55766,7 +55766,7 @@ msgstr "Betik Oluştur"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:29
 msgid "Last Documents Docker"
-msgstr "Son Belgeler Rıhtımı"
+msgstr "Son Belgeler Paneli"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:41
 msgid "Change settings"
@@ -55774,7 +55774,7 @@ msgstr "Ayarları değiştir"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:58
 msgid "Mixer Slider Docker"
-msgstr "Karıştırıcı Kaydırıcısı Rıhtımcısı"
+msgstr "Karıştırıcı Kaydırıcısı Paneli"
 
 #: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:36
 msgid "Number of slider lines: "
@@ -55782,7 +55782,7 @@ msgstr "Kaydırıcı çizgilerinin sayısı: "
 
 #: plugins/python/palette_docker/palette_docker.py:37
 msgid "Python Palette Docker"
-msgstr "Python Palet Rıhtımı"
+msgstr "Python Palet Paneli"
 
 #: plugins/python/palette_docker/palette_docker.py:63
 msgid "Set"
@@ -55963,7 +55963,7 @@ msgstr "Zip Arşivi"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:29
 msgid "Quick Settings Docker"
-msgstr "Tez Ayarlar Rıhtımcısı"
+msgstr "Tez Ayarlar Paneli"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"
@@ -55971,7 +55971,7 @@ msgstr "Betik Ekle"
 
 #: plugins/python/scriptdocker/scriptdocker.py:24
 msgid "Script Docker"
-msgstr "Betik Rıhtımcısı"
+msgstr "Betik Paneli"
 
 #: plugins/python/scriptdocker/scriptdocker.py:41
 #, python-brace-format
@@ -56980,7 +56980,7 @@ msgstr "Seçimi Taşı"
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
-msgstr "Renk Örnekleyici"
+msgstr "Renk Örnekleyicisi"
 
 #. i18n: ectx: property (text), widget (QLabel, blendLabel)
 #: plugins/tools/basictools/wdgcolorsampler.ui:29
@@ -57008,7 +57008,7 @@ msgid ""
 "<nobr>Determines whether the color sampler will sample</nobr> colors from "
 "all visible layers or only the currently selected layer."
 msgstr ""
-"Renk örnekleyicinin renkleri tüm görünür katmanlardan mı veya yalnızca "
+"Renk örnekleyicisinin renkleri tüm görünür katmanlardan mı veya yalnızca "
 "geçerli seçili katmandan mı örnekleyeceğini belirler."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
@@ -57063,7 +57063,7 @@ msgid ""
 "<nobr>Radius controls the color sampler's sampling area.</nobr> Pixel colors "
 "within this radius are mixed together."
 msgstr ""
-"<nobr>Yarıçap, renk örnekleyicinin örnekleme alanını denetler.</nobr> Bu "
+"<nobr>Yarıçap, renk örnekleyicisinin örnekleme alanını denetler.</nobr> Bu "
 "yarıçap içindeki piksel renkleri birlikte karıştırılır."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbPalette)
@@ -58061,7 +58061,7 @@ msgstr "Arama Yarıçapı: "
 #, kde-format
 msgctxt "Anchor Gap in Magnetic Selection's Tool options"
 msgid "Anchor Gap: "
-msgstr "Sabitleyici Boşluğu: "
+msgstr "Sabitleyici boşluğu: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:762
 #, kde-format
@@ -58152,7 +58152,7 @@ msgstr "Serbest Seçim Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Bezier Curve Selection Tool"
-msgstr "Bezier Eğrisi Seçim Aracı"
+msgstr "Bézier Eğrisi Seçim Aracı"
 
 #. i18n: context: toolTip @ Action (KisToolSelectPolygonal), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolSelectPolygonal), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -58614,7 +58614,7 @@ msgstr "Çizgi Yüksekliği (em olarak)"
 #, kde-format
 msgctxt "action"
 msgid "Text Editor Settings"
-msgstr "Metin Editörü Ayarları"
+msgstr "Metin Düzenleyicisi Ayarları"
 
 #. i18n: context: text @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:243
@@ -58637,7 +58637,7 @@ msgstr "Ayarlar..."
 #, kde-format
 msgctxt "action"
 msgid "Color Sampler"
-msgstr "Renk Örnekleyici"
+msgstr "Renk Örnekleyicisi"
 
 #. i18n: context: iconText @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59426,7 +59426,7 @@ msgstr "Doğruluk:"
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:115
 #, kde-format
 msgid "Patch Radius:"
-msgstr "Yama Yarıçapı:"
+msgstr "Yama yarıçapı:"
 
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
@@ -59659,7 +59659,7 @@ msgstr "Ofset: Vuruş yönünün sağına doğru görseli kaydır"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Undo: erase actions of other tools"
-msgstr "Geri Al: Diğer araçların eylemlerini sil"
+msgstr "Geri al: Diğer araçların eylemlerini sil"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:617
 #, kde-format
@@ -59945,7 +59945,7 @@ msgstr "&Esneklik:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1467
 #, kde-format
 msgid "Anc&hor Strength:"
-msgstr "&Sabitleyici Gücü:"
+msgstr "&Sabitleyici gücü:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1485

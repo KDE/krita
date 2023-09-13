@@ -1537,8 +1537,9 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
     QList<QMdiSubWindow*> childrenList = d->mdiArea->subWindowList();
 
     if (childrenList.isEmpty()) {
+        // TODO: that assignment looks really suspicious, because `e`
+        // is destroyed right after the exit of this function
         d->deferredClosingEvent = e;
-        saveWindowState(true);
         d->canvasWindow->close();
     } else {
         e->setAccepted(false);
@@ -1629,7 +1630,16 @@ void KisMainWindow::setMainWindowLayoutForCurrentMainWidget(int widgetIndex, boo
             ///
             /// saving should happen if the call s has come from a real state change, but not from
             /// on-startup initialization
-            saveMainWindowSettings(d->windowStateConfig);
+
+            if (d->mdiArea->subWindowList().isEmpty()) {
+                /**
+                 * When closing the latest subwindow we should restore the
+                 * canvas-only mode to save stuff properly
+                 */
+                saveWindowState(true);
+            } else {
+                saveMainWindowSettings(d->windowStateConfig);
+            }
         }
         adjustLayoutForWelcomePage();
     }

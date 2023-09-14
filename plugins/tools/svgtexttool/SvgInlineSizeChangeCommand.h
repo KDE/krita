@@ -18,6 +18,10 @@ public:
     SvgInlineSizeChangeCommand(KoSvgTextShape *shape,
                                double inlineSize,
                                double oldInlineSize,
+                               int anchor,
+                               int oldAnchor,
+                               QPointF newPos,
+                               QPointF oldPos,
                                KUndo2Command *parent = nullptr);
     ~SvgInlineSizeChangeCommand() override = default;
 
@@ -28,12 +32,16 @@ public:
     bool mergeWith(const KUndo2Command *other) override;
 
 private:
-    void applyInlineSize(double inlineSize);
+    void applyInlineSize(double inlineSize, int anchor, QPointF pos, bool undo = false);
 
 private:
     KoSvgTextShape *m_shape;
     double m_inlineSize;
     double m_oldInlineSize;
+    int m_anchor;
+    int m_oldAnchor;
+    QPointF m_originalPos;
+    QPointF m_movePos;
 };
 
 #endif /* SVG_INLINE_SIZE_CHANGE_COMMAND_H */

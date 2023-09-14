@@ -19,10 +19,11 @@ enum class VisualAnchor;
 enum class Side;
 } // namespace SvgInlineSizeHelper
 
+
 class SvgInlineSizeChangeStrategy : public KoInteractionStrategy
 {
 public:
-    SvgInlineSizeChangeStrategy(KoToolBase *tool, KoSvgTextShape *shape, const QPointF &clicked);
+    SvgInlineSizeChangeStrategy(KoToolBase *tool, KoSvgTextShape *shape, const QPointF &clicked, bool start);
     ~SvgInlineSizeChangeStrategy() override = default;
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
@@ -35,8 +36,15 @@ private:
     double m_initialInlineSize;
     double m_finalInlineSize;
     QPointF m_dragStart;
+    int m_originalAnchor;
+    int m_finalAnchor;
+    int m_flakeAnchor;
+    QPointF m_initialPosition;
+    QPointF m_finalPos;
+    QPointF m_anchorOffset;
     SvgInlineSizeHelper::VisualAnchor m_anchor;
     SvgInlineSizeHelper::Side m_handleSide;
+    bool m_startHandle;
 };
 
 #endif /* SVG_INLINE_SIZE_CHANGE_STRATEGY_H */

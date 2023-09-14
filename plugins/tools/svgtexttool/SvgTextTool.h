@@ -149,7 +149,8 @@ private:
     };
     enum class HighlightItem {
         None = 0,
-        InlineSizeHandle,
+        InlineSizeStartHandle,
+        InlineSizeEndHandle,
         MoveBorder,
     };
 

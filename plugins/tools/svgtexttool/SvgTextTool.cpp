@@ -482,8 +482,14 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
         if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape)) {
             handlePainter.setHandleStyle(KisHandleStyle::secondarySelection());
             handlePainter.drawConnectionLine(info->baselineLineLocal());
+
+            if (m_highlightItem == HighlightItem::InlineSizeStartHandle) {
+                handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
+            }
             handlePainter.drawConnectionLine(info->nonEditLineLocal());
-            if (m_highlightItem == HighlightItem::InlineSizeHandle) {
+
+            handlePainter.setHandleStyle(KisHandleStyle::secondarySelection());
+            if (m_highlightItem == HighlightItem::InlineSizeEndHandle) {
                 handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
             }
             handlePainter.drawConnectionLine(info->editLineLocal());
@@ -538,8 +544,13 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
             m_dragging = DragMode::Move;
             event->accept();
             return;
-        } else if (m_highlightItem == HighlightItem::InlineSizeHandle) {
-            m_interactionStrategy.reset(new SvgInlineSizeChangeStrategy(this, selectedShape, event->point));
+        } else if (m_highlightItem == HighlightItem::InlineSizeEndHandle) {
+            m_interactionStrategy.reset(new SvgInlineSizeChangeStrategy(this, selectedShape, event->point, false));
+            m_dragging = DragMode::InlineSizeHandle;
+            event->accept();
+            return;
+        }  else if (m_highlightItem == HighlightItem::InlineSizeStartHandle) {
+            m_interactionStrategy.reset(new SvgInlineSizeChangeStrategy(this, selectedShape, event->point, true));
             m_dragging = DragMode::InlineSizeHandle;
             event->accept();
             return;
@@ -634,8 +645,12 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
 
             if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(selectedShape)) {
                 const QPolygonF zone = info->editLineGrabRect(sensitivity);
+                const QPolygonF startZone = info->nonEditLineGrabRect(sensitivity);
                 if (zone.containsPoint(event->point, Qt::OddEvenFill)) {
-                    m_highlightItem = HighlightItem::InlineSizeHandle;
+                    m_highlightItem = HighlightItem::InlineSizeEndHandle;
+                    cursor = lineToCursor(info->baselineLine(), canvas());
+                } else if (startZone.containsPoint(event->point, Qt::OddEvenFill)){
+                    m_highlightItem = HighlightItem::InlineSizeStartHandle;
                     cursor = lineToCursor(info->baselineLine(), canvas());
                 }
             }

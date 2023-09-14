@@ -216,6 +216,18 @@ public:
         return shapeTransform.map(editLineLocal());
     }
 
+    [[nodiscard]] inline Side nonEditLineSide() const
+    {
+        switch (anchor) {
+        case VisualAnchor::LeftOrTop:
+        case VisualAnchor::Mid:
+        default:
+            return Side::LeftOrTop;
+        case VisualAnchor::RightOrBottom:
+            return Side::RightOrBottom;
+        }
+    }
+
     [[nodiscard]] inline QLineF nonEditLineLocal() const
     {
         switch (editLineSide()) {
@@ -245,6 +257,26 @@ public:
             break;
         }
         const QRectF rect{editLine.x1() - grabThreshold,
+                          top - grabThreshold,
+                          grabThreshold * 2,
+                          bottom - top + grabThreshold * 2};
+        const QPolygonF poly(rect);
+        return shapeTransform.map(editorTransform.map(poly));
+    }
+
+    [[nodiscard]] inline QPolygonF nonEditLineGrabRect(double grabThreshold) const
+    {
+        QLineF nonEditLine;
+        switch (editLineSide()) {
+        case Side::LeftOrTop:
+            nonEditLine = rightLineRaw();
+            break;
+        case Side::RightOrBottom:
+        default:
+            nonEditLine = leftLineRaw();
+            break;
+        }
+        const QRectF rect{nonEditLine.x1() - grabThreshold,
                           top - grabThreshold,
                           grabThreshold * 2,
                           bottom - top + grabThreshold * 2};

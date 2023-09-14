@@ -36,7 +36,11 @@ set_package_properties(FriBidi PROPERTIES
 
 include(FetchContent)
 if(NOT DEFINED PATCH_COMMAND)
-    set(PATCH_COMMAND patch)
+    if(WIN32)
+        set(PATCH_COMMAND patch --binary)
+    else()
+        set(PATCH_COMMAND patch)
+    endif()
 endif()
 
 FetchContent_Declare(
@@ -47,7 +51,7 @@ FetchContent_Declare(
         # CMake to rerun the patch commands on the already-patched source, which
         # results in a failure. Changing the following fake URL tricks CMake
         # into re-extracting the source so the patch commands can succeed.
-        http://:0/hack_to_trigger_re-extract-source/20230901
+        http://:0/hack_to_trigger_re-extract-source/20230914
     URL_HASH SHA256=4d76a358358d67c5945684f2f10b3b08fb80e924371bf3ebf8b15cd2e321d05d
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Add-arbitrary-run-break-function.patch
           COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Fix-Unicode-codepoint-conversion-from-UTF-16.patch

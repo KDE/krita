@@ -252,6 +252,8 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *e)
          * See https://bugs.kde.org/show_bug.cgi?id=441216
          */
         d->updateRect = e->rect();
+    } else {
+        d->updateRect = this->rect();
     }
 
     QOpenGLWidget::paintEvent(e);

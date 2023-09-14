@@ -547,9 +547,15 @@ QString KisConfig::monitorProfile(int screen) const
     const QString defaultProfile = "sRGB-elle-V2-srgbtrc.icc";
 
     QString profile;
-    const QString screenIdentifierKey = "monitorProfile" + getScreenStringIdentfier(screen);
+    const QString screenIdentifier = getScreenStringIdentfier(screen);
+    const QString screenIdentifierKey = "monitorProfile" + screenIdentifier;
 
-    if (m_cfg.hasKey(screenIdentifierKey)) {
+    /**
+     * Screen identifier may be empty (e.g. on macOS), so the identifier
+     * key will be plain 'monitorProfile', which is the key fot the **first**
+     * display's profile, so we shouldn't fall into this trap...
+     */
+    if (!screenIdentifier.isEmpty() && m_cfg.hasKey(screenIdentifierKey)) {
         profile = m_cfg.readEntry(screenIdentifierKey, defaultProfile);
     } else {
         profile = m_cfg.readEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), defaultProfile);
@@ -574,7 +580,7 @@ void KisConfig::setMonitorProfile(int screen, const QString & monitorProfile, bo
 {
     m_cfg.writeEntry("monitorProfile/OverrideX11", override);
     m_cfg.writeEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), monitorProfile);
-    if (getScreenStringIdentfier(screen) != "") {
+    if (!getScreenStringIdentfier(screen).isEmpty()) {
         m_cfg.writeEntry("monitorProfile" + getScreenStringIdentfier(screen), monitorProfile);
     }
 }

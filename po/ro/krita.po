@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 00:44+0000\n"
+"POT-Creation-Date: 2023-09-14 00:43+0000\n"
 "PO-Revision-Date: 2021-05-15 15:07+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -17577,7 +17577,7 @@ msgstr "Presiune"
 
 #: libs/image/kis_psd_layer_style.cpp:104
 #: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1414
-#: libs/ui/KisMainWindow.cpp:1756 libs/ui/KisMainWindow.cpp:1769
+#: libs/ui/KisMainWindow.cpp:1777 libs/ui/KisMainWindow.cpp:1790
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, fuzzy, kde-format
 msgid "Unnamed"
@@ -18325,8 +18325,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Șterge imaginea"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2127
-#: libs/ui/KisMainWindow.cpp:2210
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2148
+#: libs/ui/KisMainWindow.cpp:2231
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Importă imagine"
@@ -19710,10 +19710,10 @@ msgstr "Șterge plan"
 #: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
 #: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:973
 #: libs/ui/KisMainWindow.cpp:1089 libs/ui/KisMainWindow.cpp:1215
-#: libs/ui/KisMainWindow.cpp:1312 libs/ui/KisMainWindow.cpp:1987
-#: libs/ui/KisMainWindow.cpp:1996 libs/ui/KisMainWindow.cpp:2135
-#: libs/ui/KisMainWindow.cpp:2196 libs/ui/KisMainWindow.cpp:2217
-#: libs/ui/KisMainWindow.cpp:2832 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:1312 libs/ui/KisMainWindow.cpp:2008
+#: libs/ui/KisMainWindow.cpp:2017 libs/ui/KisMainWindow.cpp:2156
+#: libs/ui/KisMainWindow.cpp:2217 libs/ui/KisMainWindow.cpp:2238
+#: libs/ui/KisMainWindow.cpp:2853 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20225,7 +20225,7 @@ msgid "Delete resource"
 msgstr "Șterge resursă"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:335
-#: libs/ui/KisMainWindow.cpp:2632
+#: libs/ui/KisMainWindow.cpp:2653
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -20684,7 +20684,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Șterge plan"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2237
+#: libs/ui/KisMainWindow.cpp:2258
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "Orientare"
@@ -22833,7 +22833,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Introduceți nume grup:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2643
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2664
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -30780,35 +30780,35 @@ msgstr "Exportă"
 msgid "Saving As"
 msgstr "Format de salvare"
 
-#: libs/ui/KisMainWindow.cpp:1735
+#: libs/ui/KisMainWindow.cpp:1756
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "Pornește cu un document g&ol"
 
-#: libs/ui/KisMainWindow.cpp:1759
+#: libs/ui/KisMainWindow.cpp:1780
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "Gradient personalizat"
 
-#: libs/ui/KisMainWindow.cpp:1771
+#: libs/ui/KisMainWindow.cpp:1792
 #, fuzzy, kde-format
 msgid "Create from Clipboard"
 msgstr "Primul strat din clipboard"
 
-#: libs/ui/KisMainWindow.cpp:1956
+#: libs/ui/KisMainWindow.cpp:1977
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Salvează planul ca imagine..."
 
-#: libs/ui/KisMainWindow.cpp:1982
+#: libs/ui/KisMainWindow.cpp:2003
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Nu s-a putut crea fişierul pentru salvare "
 
-#: libs/ui/KisMainWindow.cpp:1986
+#: libs/ui/KisMainWindow.cpp:2007
 #, kde-format
 msgid ""
 "\n"
@@ -30816,7 +30816,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1996
+#: libs/ui/KisMainWindow.cpp:2017
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -30825,7 +30825,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2135 libs/ui/KisMainWindow.cpp:2217
+#: libs/ui/KisMainWindow.cpp:2156 libs/ui/KisMainWindow.cpp:2238
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30834,61 +30834,61 @@ msgstr ""
 "Nu s-a putut importa\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2196
+#: libs/ui/KisMainWindow.cpp:2217
 #, fuzzy, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Șterge plan"
 
-#: libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/KisMainWindow.cpp:2644
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Culegător culoare"
 
-#: libs/ui/KisMainWindow.cpp:2638
+#: libs/ui/KisMainWindow.cpp:2659
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Culegător culoare"
 
-#: libs/ui/KisMainWindow.cpp:2642
+#: libs/ui/KisMainWindow.cpp:2663
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "&Culegător culoare"
 
-#: libs/ui/KisMainWindow.cpp:2686
+#: libs/ui/KisMainWindow.cpp:2707
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "&%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2689
+#: libs/ui/KisMainWindow.cpp:2710
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2855
+#: libs/ui/KisMainWindow.cpp:2876
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2871
+#: libs/ui/KisMainWindow.cpp:2892
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Plan"
 
-#: libs/ui/KisMainWindow.cpp:2980
+#: libs/ui/KisMainWindow.cpp:3001
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3038
+#: libs/ui/KisMainWindow.cpp:3059
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -31242,39 +31242,39 @@ msgid ""
 msgstr ""
 "<p>Documentul <b>\"%1\"</b> a fost modificat.</p><p>Doriți să îl salvați?</p>"
 
-#: libs/ui/KisView.cpp:1377
+#: libs/ui/KisView.cpp:1382
 #, fuzzy, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Alfa"
 
-#: libs/ui/KisView.cpp:1382
+#: libs/ui/KisView.cpp:1387
 #, fuzzy, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Alfa"
 
-#: libs/ui/KisView.cpp:1384
+#: libs/ui/KisView.cpp:1389
 #, fuzzy, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Alfa"
 
-#: libs/ui/KisView.cpp:1396
+#: libs/ui/KisView.cpp:1401
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Avertizment"
 
-#: libs/ui/KisView.cpp:1402
+#: libs/ui/KisView.cpp:1407
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned on."
 msgstr "Avertizment"
 
-#: libs/ui/KisView.cpp:1404
+#: libs/ui/KisView.cpp:1409
 #, fuzzy, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Alfa"
 
-#: libs/ui/KisView.cpp:1407
+#: libs/ui/KisView.cpp:1412
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned off."

@@ -53,6 +53,7 @@ public:
     int multiClickCount {0};
     QPointF multiClickGlobalPoint;
     QElapsedTimer multiClickTimeStamp;
+    QVector<QKeySequence> toolPriorityShortcuts;
 
     boost::optional<KoPointerEventWrapper> lastPointerEvent;
 };

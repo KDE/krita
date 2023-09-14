@@ -65,6 +65,7 @@ public:
     }
 
     QList<KisSingleActionShortcut*> singleActionShortcuts;
+    QSet<KisSingleActionShortcut*> suppressedSingleActionShortcuts;
     QList<KisStrokeShortcut*> strokeShortcuts;
     QList<KisTouchShortcut*> touchShortcuts;
     QList<KisNativeGestureShortcut*> nativeGestureShortcuts;
@@ -673,6 +674,19 @@ void KisShortcutMatcher::suppressAllActions(bool value)
     m_d->suppressAllActions = value;
 }
 
+void KisShortcutMatcher::suppressConflictingKeyActions(const QVector<QKeySequence> &shortcuts)
+{
+    m_d->suppressedSingleActionShortcuts.clear();
+
+    Q_FOREACH (KisSingleActionShortcut *s, m_d->singleActionShortcuts) {
+        Q_FOREACH (const QKeySequence &seq, shortcuts) {
+            if (s->conflictsWith(seq)) {
+                m_d->suppressedSingleActionShortcuts.insert(s);
+            }
+        }
+    }
+}
+
 void KisShortcutMatcher::clearShortcuts()
 {
     reset("Clearing shortcuts");
@@ -709,7 +723,8 @@ bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const
     KisSingleActionShortcut *goodCandidate = 0;
 
     Q_FOREACH (KisSingleActionShortcut *s, m_d->singleActionShortcuts) {
-        if(s->isAvailable(m_d->actionGroupMask()) &&
+        if (!m_d->suppressedSingleActionShortcuts.contains(s) &&
+           s->isAvailable(m_d->actionGroupMask()) &&
            s->match(keysState, param) &&
            (!goodCandidate || s->priority() > goodCandidate->priority())) {
 

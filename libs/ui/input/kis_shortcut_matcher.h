@@ -255,6 +255,11 @@ public:
     void suppressAllActions(bool value);
 
     /**
+     * Disable one-time actions whose shortcuts conflict with the listed shortcuts
+     */
+    void suppressConflictingKeyActions(const QVector<QKeySequence> &shortcuts);
+
+    /**
      * Remove all shortcuts that have been registered.
      */
     void clearShortcuts();

@@ -6,8 +6,9 @@
 
 #include "kis_single_action_shortcut.h"
 
-#include "kis_abstract_input_action.h"
 #include <QKeySequence>
+#include "kis_abstract_input_action.h"
+#include <kis_assert.h>
 
 class Q_DECL_HIDDEN KisSingleActionShortcut::Private
 {

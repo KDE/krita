@@ -61,13 +61,14 @@ struct Q_DECL_HIDDEN InlineSizeInfo {
         if (inlineSize <= 0) {
             return {};
         }
+        KoSvgTextProperties props = shape->propertiesForPos(-1);
 
         const KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(
-            shape->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+            props.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
         const KoSvgText::Direction direction =
-            KoSvgText::Direction(shape->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+            KoSvgText::Direction(props.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
         const KoSvgText::TextAnchor textAnchor =
-            KoSvgText::TextAnchor(shape->textProperties().propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt());
+            KoSvgText::TextAnchor(props.propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt());
 
         VisualAnchor anchor{};
         switch (textAnchor) {
@@ -90,10 +91,6 @@ struct Q_DECL_HIDDEN InlineSizeInfo {
             }
             break;
         }
-
-        // FIXME: To draw the wrapping area correctly, this needs to take
-        // the x and y from the text element, or, if not set, the first
-        // tspan.
         const double xPos = 0;
         const double yPos = 0;
 

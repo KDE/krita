@@ -294,6 +294,9 @@ public:
      */
     bool removeText(int pos, int length);
 
+    KoSvgTextProperties propertiesForPos(int pos);
+    void setPropertiesAtPos(int pos, KoSvgTextProperties properties);
+
     /**
      * @brief plainText
      * plain text of all text inside this text shape,

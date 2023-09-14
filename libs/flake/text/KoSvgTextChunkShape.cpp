@@ -492,6 +492,11 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         }
     }
 
+    void setTextProperties(KoSvgTextProperties properties) override
+    {
+        q->s->properties = properties;
+    };
+
 private:
     KoSvgTextChunkShape *q;
 };

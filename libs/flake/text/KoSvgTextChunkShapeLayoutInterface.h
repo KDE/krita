@@ -17,6 +17,7 @@
 #include <utility>
 
 class KoSvgTextChunkShape;
+class KoSvgTextProperties;
 
 
 /**
@@ -148,6 +149,8 @@ public:
     virtual void insertText(int index, QString text) = 0;
 
     virtual void removeText(int index, int length) = 0;
+
+    virtual void setTextProperties(KoSvgTextProperties properties) = 0;
 
     /**
      * A QTextLayout-compatible representation of a single leaf of

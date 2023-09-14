@@ -794,6 +794,42 @@ bool KoSvgTextShape::removeText(int pos, int length)
     return succes;
 }
 
+KoSvgTextProperties KoSvgTextShape::propertiesForPos(int pos)
+{
+    KoSvgTextProperties props = textProperties();
+    if (pos < 0 || d->cursorPos.isEmpty()) {
+        return props;
+    }
+    CursorPos cursorPos = d->cursorPos.at(pos);
+    CharacterResult res = d->result.at(cursorPos.cluster);
+    int currentIndex = 0;
+    KoSvgTextChunkShape *chunkShape = findTextChunkForIndex(this, currentIndex, res.plaintTextIndex);
+    if (chunkShape) {
+        props = chunkShape->textProperties();
+    }
+
+    return props;
+}
+
+void KoSvgTextShape::setPropertiesAtPos(int pos, KoSvgTextProperties properties)
+{
+    if (pos < 0 || d->cursorPos.isEmpty()) {
+        this->layoutInterface()->setTextProperties(properties);
+        notifyChanged();
+        shapeChangedPriv(ContentChanged);
+        return;
+    }
+    CursorPos cursorPos = d->cursorPos.at(pos);
+    CharacterResult res = d->result.at(cursorPos.cluster);
+    int currentIndex = 0;
+    KoSvgTextChunkShape *chunkShape = findTextChunkForIndex(this, currentIndex, res.plaintTextIndex);
+    if (chunkShape) {
+        chunkShape->layoutInterface()->setTextProperties(properties);
+        notifyChanged();
+        shapeChangedPriv(ContentChanged);
+    }
+}
+
 QString KoSvgTextShape::plainText()
 {
     return d->plainText;

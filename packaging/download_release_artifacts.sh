@@ -9,9 +9,9 @@ set -e
 KRITA_VERSION=5.2.0-beta2
 CHANNEL=Stable
 
-if echo $KRITA_VERSION | grep beta > /dev/null;
+if echo $KRITA_VERSION | grep beta > /dev/null; then
    CHANNEL=Beta
-elif echo $KRITA_VERSION | grep rc > /dev/null;
+elif echo $KRITA_VERSION | grep rc > /dev/null; then
    # release candidates are also considered as "beta" for updater
    CHANNEL=Beta
 fi

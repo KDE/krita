@@ -896,6 +896,7 @@ void KisInputManager::slotToolChanged()
             d->matcher.suppressAllActions(false);
         }
 
+        d->matcher.suppressConflictingKeyActions(toolProxy()->toolPriorityShortcuts());
         d->matcher.toolHasBeenActivated();
     }
 }

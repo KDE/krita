@@ -137,6 +137,8 @@ public:
 
     KoPointerEvent* lastDeliveredPointerEvent() const;
 
+    QVector<QKeySequence> toolPriorityShortcuts() const;
+
     /// \internal
     KoToolProxyPrivate *priv();
 

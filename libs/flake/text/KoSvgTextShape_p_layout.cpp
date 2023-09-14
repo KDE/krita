@@ -238,12 +238,6 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     // argue shaping across multiple text-chunks is undefined behaviour, but it breaks SVG 1.1 text
     // to consider it anything but required to have both shaping and bidi-reorder break.
     QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
-    if (!resolvedTransforms.empty()) {
-        // Ensure the first entry defaults to 0.0 for x and y, otherwise textAnchoring
-        // will not work for text that has been bidi-reordered.
-        resolvedTransforms[0].xPos = 0.0;
-        resolvedTransforms[0].yPos = 0.0;
-    }
     globalIndex = 0;
     bool wrapped = !(inlineSize.isAuto && q->shapesInside().isEmpty());
     this->resolveTransforms(q, text, result, globalIndex, isHorizontal, wrapped, false, resolvedTransforms, collapseChars);
@@ -937,12 +931,7 @@ void KoSvgTextShape::Private::resolveTransforms(const KoShape *rootShape, QStrin
 
     if (wrapped) {
         // Apparantly when there's bidi controls in the text, they participate in line-wrapping,
-        // so we should only resolve the first char and then apply the collapsing of characters.
-        if (!local.isEmpty() && !resolved.empty()) {
-            KoSvgText::CharTransformation newTransform = local.first();
-            newTransform.mergeInParentTransformation(resolved[0]);
-            resolved[0] = newTransform;
-        }
+        // so we only set the addressability.
         for (int i = 0; i < text.size(); i++) {
             result[i].addressable = !collapsedChars[i];
         }

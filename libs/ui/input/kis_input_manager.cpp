@@ -925,10 +925,10 @@ void KisInputManager::slotToolChanged()
         d->setMaskSyntheticEvents(tool->maskSyntheticEvents());
         if (tool->isInTextMode()) {
             d->forwardAllEventsToTool = true;
-            d->matcher.suppressAllActions(true);
+            d->matcher.suppressAllKeyboardActions(true);
         } else {
             d->forwardAllEventsToTool = false;
-            d->matcher.suppressAllActions(false);
+            d->matcher.suppressAllKeyboardActions(false);
         }
 
         d->matcher.suppressConflictingKeyActions(toolProxy()->toolPriorityShortcuts());
@@ -944,10 +944,10 @@ void KisInputManager::slotTextModeChanged()
     if (tool) {
         if (tool->isInTextMode()) {
             d->forwardAllEventsToTool = true;
-            d->matcher.suppressAllActions(true);
+            d->matcher.suppressAllKeyboardActions(true);
         } else {
             d->forwardAllEventsToTool = false;
-            d->matcher.suppressAllActions(false);
+            d->matcher.suppressAllKeyboardActions(false);
         }
     }
 }

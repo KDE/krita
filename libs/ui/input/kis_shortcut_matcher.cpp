@@ -53,6 +53,7 @@ public:
         , nativeGestureShortcut(0)
         , actionGroupMask([] () { return AllActionGroup; })
         , suppressAllActions(false)
+        , suppressAllKeyboardActions(false)
         , cursorEntered(false)
         , usingTouch(false)
         , usingNativeGesture(false)
@@ -91,6 +92,7 @@ public:
 
     std::function<KisInputActionGroupsMask()> actionGroupMask;
     bool suppressAllActions;
+    bool suppressAllKeyboardActions;
     bool cursorEntered;
     bool usingTouch;
     bool usingNativeGesture;
@@ -146,6 +148,10 @@ public:
 
     inline bool actionsSuppressedIgnoreFocus() const {
         return suppressAllActions;
+    }
+
+    inline bool KeyboardActionsSuppressed() const {
+        return suppressAllKeyboardActions;
     }
 
     // only for touch events with touchPoints count >= 2
@@ -702,6 +708,11 @@ void KisShortcutMatcher::suppressConflictingKeyActions(const QVector<QKeySequenc
     }
 }
 
+void KisShortcutMatcher::suppressAllKeyboardActions(bool value)
+{
+    m_d->suppressAllKeyboardActions = value;
+}
+
 void KisShortcutMatcher::clearShortcuts()
 {
     reset("Clearing shortcuts");
@@ -723,14 +734,14 @@ void KisShortcutMatcher::setInputActionGroupsMaskCallback(std::function<KisInput
 
 bool KisShortcutMatcher::tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event)
 {
-    return tryRunSingleActionShortcutImpl(wheelAction, event, m_d->keys);
+    return tryRunSingleActionShortcutImpl(wheelAction, event, m_d->keys, false);
 }
 
 // Note: sometimes event can be zero!!
 template<typename T, typename U>
-bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const QSet<Qt::Key> &keysState)
+bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const QSet<Qt::Key> &keysState, bool keyboard)
 {
-    if (m_d->actionsSuppressedIgnoreFocus()) {
+    if (m_d->actionsSuppressedIgnoreFocus() || (keyboard && m_d->KeyboardActionsSuppressed())) {
         DEBUG_EVENT_ACTION("Event suppressed", event)
         return false;
     }
@@ -762,6 +773,11 @@ void KisShortcutMatcher::prepareReadyShortcuts()
 {
     m_d->candidateShortcuts.clear();
     if (m_d->actionsSuppressed()) return;
+    if (m_d->KeyboardActionsSuppressed()
+            && !m_d->keys.isEmpty()
+            && m_d->buttons.isEmpty()) {
+        return;
+    }
 
     Q_FOREACH (KisStrokeShortcut *s, m_d->strokeShortcuts) {
         if (s->matchReady(m_d->keys, m_d->buttons)) {

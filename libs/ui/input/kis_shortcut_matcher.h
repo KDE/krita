@@ -264,6 +264,17 @@ public:
     void suppressConflictingKeyActions(const QVector<QKeySequence> &shortcuts);
 
     /**
+     * Disable keyboard actions.
+     *
+     * This will disable all actions that consist of only
+     * keyboard keys being pressed without mouse or stylus
+     * buttons being pressed.
+     *
+     * This is turned on when the tool is in text mode.
+     */
+    void suppressAllKeyboardActions(bool value);
+
+    /**
      * Remove all shortcuts that have been registered.
      */
     void clearShortcuts();
@@ -277,7 +288,7 @@ private:
     void reset(QString msg);
 
     bool tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event);
-    template<typename T, typename U> bool tryRunSingleActionShortcutImpl(T param, U *event, const QSet<Qt::Key> &keysState);
+    template<typename T, typename U> bool tryRunSingleActionShortcutImpl(T param, U *event, const QSet<Qt::Key> &keysState, bool keyboard = true);
 
     void prepareReadyShortcuts();
 

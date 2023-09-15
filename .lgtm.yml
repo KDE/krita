@@ -45,7 +45,6 @@ extraction:
                 - extra-cmake-modules
                 - libkf5coreaddons-dev
                 - libkf5guiaddons-dev
-                - libkf5itemmodels-dev
                 - libkf5itemviews-dev
                 - libkf5widgetsaddons-dev
                 - libkf5i18n-dev

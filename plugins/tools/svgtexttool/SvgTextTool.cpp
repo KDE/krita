@@ -229,10 +229,52 @@ QWidget *SvgTextTool::createOptionWidget()
         optionUi.alignLeft->setChecked(true);
     }
 
+    int checkedWritingMode = m_configGroup.readEntry<int>("defaultWritingMode", 0);
+
+    m_defWritingMode = new QButtonGroup();
+    optionUi.modeHorizontalTb->setIcon(KisIconUtils::loadIcon("format-text-direction-horizontal-tb"));
+    m_defWritingMode->addButton(optionUi.modeHorizontalTb, 0);
+
+    optionUi.modeVerticalRl->setIcon(KisIconUtils::loadIcon("format-text-direction-vertical-rl"));
+    m_defWritingMode->addButton(optionUi.modeVerticalRl, 1);
+
+    optionUi.modeVerticalLr->setIcon(KisIconUtils::loadIcon("format-text-direction-vertical-lr"));
+    m_defWritingMode->addButton(optionUi.modeVerticalLr, 2);
+
+    m_defWritingMode->setExclusive(true);
+    if (checkedWritingMode<1) {
+        optionUi.modeHorizontalTb->setChecked(true);
+    } else if (checkedWritingMode==1) {
+        optionUi.modeVerticalRl->setChecked(true);
+    } else if (checkedWritingMode==2) {
+        optionUi.modeVerticalLr->setChecked(true);
+    } else {
+        optionUi.modeHorizontalTb->setChecked(true);
+    }
+
+    bool rtl = m_configGroup.readEntry<int>("defaultWritingDirection", false);
+    m_defDirection = new QButtonGroup();
+
+    optionUi.directionLtr->setIcon(KisIconUtils::loadIcon("format-text-direction-ltr"));
+    m_defDirection->addButton(optionUi.directionLtr, 0);
+
+    optionUi.directionRtl->setIcon(KisIconUtils::loadIcon("format-text-direction-rtl"));
+    m_defDirection->addButton(optionUi.directionRtl, 1);
+    m_defDirection->setExclusive(true);
+    optionUi.directionLtr->setChecked(!rtl);
+    optionUi.directionRtl->setChecked(rtl);
+
+    bool directionEnabled = !bool(m_defWritingMode->checkedId());
+    optionUi.directionLtr->setEnabled(directionEnabled);
+    optionUi.directionRtl->setEnabled(directionEnabled);
+
     double storedLetterSpacing = m_configGroup.readEntry<double>("defaultLetterSpacing", 0.0);
     optionUi.defLetterSpacing->setValue(storedLetterSpacing);
 
     connect(m_defAlignment, SIGNAL(buttonClicked(int)), this, SLOT(storeDefaults()));
+    connect(m_defWritingMode, SIGNAL(buttonClicked(int)), this, SLOT(storeDefaults()));
+    connect(m_defDirection, SIGNAL(buttonClicked(int)), this, SLOT(storeDefaults()));
+
     connect(optionUi.defFont, SIGNAL(currentFontChanged(QFont)), this, SLOT(storeDefaults()));
     connect(optionUi.defPointSize, SIGNAL(currentIndexChanged(int)), this, SLOT(storeDefaults()));
     connect(optionUi.defLetterSpacing, SIGNAL(valueChanged(double)), SLOT(storeDefaults()));
@@ -328,10 +370,21 @@ QString SvgTextTool::generateDefs(const QString &extraProperties)
         textAnchor = "end";
     }
 
+    QString direction = "ltr";
+    QString writingMode = "horizontal-tb";
+    if (m_defWritingMode->button(1)->isChecked()) {
+        writingMode = "vertical-rl";
+    } else if (m_defWritingMode->button(2)->isChecked()) {
+        writingMode = "vertical-lr";
+    } else {
+        direction = m_defDirection->button(0)->isChecked()? "ltr" : "rtl";
+    }
+
     QString fontColor = canvas()->resourceManager()->foregroundColor().toQColor().name();
     QString letterSpacing = QString::number(optionUi.defLetterSpacing->value());
 
-    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ; fill:%3 ;  text-anchor:%4; letter-spacing:%5;%6\n  white-space:pre-wrap;\n  }\n </style>\n</defs>").arg(font, size, fontColor, textAnchor, letterSpacing, extraProperties);
+    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ; fill:%3 ;  text-anchor:%4; letter-spacing:%5; writing-mode:%6; direction: %7; %8\n  white-space:pre-wrap;\n  }\n </style>\n</defs>")
+            .arg(font, size, fontColor, textAnchor, letterSpacing, writingMode, direction, extraProperties);
 }
 
 void SvgTextTool::storeDefaults()
@@ -341,6 +394,12 @@ void SvgTextTool::storeDefaults()
     m_configGroup.writeEntry("defaultSize", QFontDatabase::standardSizes().at(optionUi.defPointSize->currentIndex() > -1 ? optionUi.defPointSize->currentIndex() : 0));
     m_configGroup.writeEntry("defaultAlignment", m_defAlignment->checkedId());
     m_configGroup.writeEntry("defaultLetterSpacing", optionUi.defLetterSpacing->value());
+    m_configGroup.writeEntry("defaultWritingMode", m_defWritingMode->checkedId());
+    m_configGroup.writeEntry("defaultWritingDirection", m_defDirection->checkedId());
+
+    bool directionEnabled = !bool(m_defWritingMode->checkedId());
+    optionUi.directionLtr->setEnabled(directionEnabled);
+    optionUi.directionRtl->setEnabled(directionEnabled);
 }
 
 void SvgTextTool::slotShapeSelectionChanged()
@@ -437,6 +496,16 @@ Qt::Alignment SvgTextTool::horizontalAlign() const
         return Qt::AlignRight;
     }
     return Qt::AlignLeft;
+}
+
+int SvgTextTool::writingMode() const
+{
+    return m_defWritingMode->checkedId();
+}
+
+bool SvgTextTool::isRtl() const
+{
+    return m_defDirection->checkedId();
 }
 
 QRectF SvgTextTool::decorationsRect() const

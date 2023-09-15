@@ -62,6 +62,7 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
     ascender += fontMetrics.leading()/2;
     ascender = (ascender / fontMetrics.fontDpi()) * 72.0; // 72 points in an inch.
     double lineHeight = (fontMetrics.lineSpacing() / fontMetrics.fontDpi()) * 72.0;
+    const KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(tool->writingMode());
 
     bool unwrappedText = m_modifiers.testFlag(Qt::ControlModifier);
     if (rectangle.width() < lineHeight && rectangle.height() < lineHeight) {
@@ -74,22 +75,46 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
     }
     QString extraProperties;
     if (!unwrappedText) {
-        extraProperties = QLatin1String("inline-size:%1;").arg(QString::number(rectangle.width()));
+        if (writingMode == KoSvgText::HorizontalTB) {
+            extraProperties = QLatin1String("inline-size:%1;").arg(QString::number(rectangle.width()));
+        } else {
+            extraProperties = QLatin1String("inline-size:%1;").arg(QString::number(rectangle.height()));
+        }
     }
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoSvgTextShapeID");
     KoProperties *params = new KoProperties();//Fill these with "svgText", "defs" and "shapeRect"
     params->setProperty("defs", QVariant(tool->generateDefs(extraProperties)));
 
     {
-
-        rectangle.setTop(rectangle.top() + ascender);
         const Qt::Alignment halign = tool->horizontalAlign();
-        if (halign & Qt::AlignCenter) {
-            rectangle.setLeft(rectangle.center().x());
-        } else if (halign & Qt::AlignRight) {
-            qreal right = rectangle.right();
-            rectangle.setRight(right+10);
-            rectangle.setLeft(right);
+        const bool isRtl = tool->isRtl();
+
+        if (writingMode == KoSvgText::HorizontalTB) {
+            rectangle.setTop(rectangle.top() + ascender);
+            if (halign & Qt::AlignCenter) {
+                rectangle.setLeft(rectangle.center().x());
+            } else if ((halign & Qt::AlignRight && !isRtl) || (halign & Qt::AlignLeft && isRtl)) {
+                qreal right = rectangle.right();
+                rectangle.setRight(right+10);
+                rectangle.setLeft(right);
+            }
+        } else {
+            if (writingMode == KoSvgText::VerticalRL) {
+                qreal right = rectangle.right() - (lineHeight*0.5);
+                rectangle.setRight(right+10);
+                rectangle.setLeft(right);
+
+            } else {
+                rectangle.setLeft(rectangle.left() + (lineHeight*0.5));
+            }
+
+            if (halign & Qt::AlignCenter) {
+                rectangle.setTop(rectangle.center().y());
+            } else if (halign & Qt::AlignRight) {
+                qreal bottom = rectangle.bottom();
+                rectangle.setBottom(bottom+10);
+                rectangle.setTop(bottom);
+            }
         }
 
         params->setProperty("shapeRect", QVariant(rectangle));

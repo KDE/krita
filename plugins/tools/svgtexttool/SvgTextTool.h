@@ -102,6 +102,8 @@ private:
 
     QFont defaultFont() const;
     Qt::Alignment horizontalAlign() const;
+    int writingMode() const;
+    bool isRtl() const;
 
 private Q_SLOTS:
 
@@ -161,6 +163,8 @@ private:
     HighlightItem m_highlightItem {HighlightItem::None};
 
     QButtonGroup *m_defAlignment {nullptr};
+    QButtonGroup *m_defWritingMode {nullptr};
+    QButtonGroup *m_defDirection {nullptr};
     KConfigGroup m_configGroup;
     SvgTextCursor m_textCursor;
     KisSignalAutoConnectionsStore m_canvasConnections;

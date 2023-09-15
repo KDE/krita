@@ -345,6 +345,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->debugEvent<QMouseEvent, true>(event);
         if (d->touchHasBlockedPressEvents) break;
 
+        d->tryFixPolledKeys();
+
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
         if (d->popupWidget) {
@@ -390,6 +392,9 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
             d->fixShortcutMatcherModifiersState(guessedKeys, modifiers);
             d->shouldSynchronizeOnNextKeyPress = false;
+        }
+        else {
+            d->tryFixPolledKeys();
         }
 
         if (!keyEvent->isAutoRepeat()) {
@@ -462,6 +467,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::Wheel: {
         d->debugEvent<QWheelEvent, false>(event);
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
+
+        d->tryFixPolledKeys();
 
 #ifdef Q_OS_MACOS
         // Some QT wheel events are actually touch pad pan events. From the QT docs:
@@ -579,6 +586,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->debugEvent<QTabletEvent, false>(event);
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
 
+        d->tryFixPolledKeys();
+
         {
             //Make sure the input actions know we are active.
             KisAbstractInputAction::setInputManager(this);
@@ -662,6 +671,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
     case QEvent::TouchBegin:
     {
+        d->tryFixPolledKeys();
+
         d->debugEvent<QTouchEvent, false>(event);
         // The popup was dismissed in previous TouchBegin->TouchEnd sequence. We now have a new TouchBegin.
         d->popupWasActive = false;

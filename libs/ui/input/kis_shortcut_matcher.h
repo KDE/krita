@@ -233,6 +233,11 @@ public:
     QVector<Qt::Key> debugPressedKeys() const;
 
     /**
+     * Check if polled keys are present, which signals that we need to call KisInputManager::Private::fixShortcutMatcherModifiersState.
+     */
+    bool hasPolledKeys();
+
+    /**
      * Krita lost focus, it means that all the running actions should be ended
      * forcefully.
      */

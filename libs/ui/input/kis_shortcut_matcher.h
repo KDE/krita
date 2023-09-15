@@ -228,8 +228,7 @@ public:
     bool sanityCheckModifiersCorrectness(Qt::KeyboardModifiers modifiers) const;
 
     /**
-     * Return the internal state of the tracked modifiers. Used for debugging
-     * and error reporting only.
+     * Return the internal state of the tracked modifiers.
      */
     QVector<Qt::Key> debugPressedKeys() const;
 

@@ -547,40 +547,6 @@ static inline Qt::CursorShape lineToCursor(const QLineF line, const KoCanvasBase
     return angleToCursor(QVector2D(wdgLine.p2() - wdgLine.p1()).normalized());
 }
 
-// badly copied from KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
-// should this be generalized? If so, where?
-static inline KoPathSegment segmentAtPoint(const QPointF &point, KoPathShape *shape, QRectF grabRoi)
-{
-    // the max allowed distance from a segment
-    const qreal distanceThreshold = 0.5 * KisAlgebra2D::maxDimension(grabRoi);
-    KoPathSegment segment;
-
-    // convert document point to shape coordinates
-    const QPointF p = shape->documentToShape(point);
-    // our region of interest, i.e. a region around our mouse position
-    const QRectF roi = shape->documentToShape(grabRoi);
-
-    qreal minDistance = std::numeric_limits<qreal>::max();
-
-    // check all segments of this shape which intersect the region of interest
-    const QList<KoPathSegment> segments = shape->segmentsAt(roi);
-
-    foreach (const KoPathSegment &s, segments) {
-        const qreal nearestPointParam = s.nearestPoint(p);
-        const QPointF nearestPoint = s.pointAt(nearestPointParam);
-        const qreal distance = kisDistance(p, nearestPoint);
-
-        // are we within the allowed distance ?
-        if (distance > distanceThreshold)
-            continue;
-        // are we closer to the last closest point ?
-        if (distance < minDistance) {
-            segment = s;
-        }
-    }
-    return segment;
-}
-
 void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
 {
     m_lastMousePos = event->point;
@@ -638,8 +604,10 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
             } else {
                 cursor = m_ibeam_vertical;
             }
-        }/// Commenting this out until we have a good idea of how we want to tackle the text and shape to put them on.
-        /* else if(m_highlightItem == HighlightItem::None) {
+        }
+#if 0
+        /// Commenting this out until we have a good idea of how we want to tackle the text and shape to put them on.
+           else if(m_highlightItem == HighlightItem::None) {
             KoPathShape *shape = dynamic_cast<KoPathShape *>(canvas()->shapeManager()->shapeAt(event->point));
             if (shape) {
                 if (shape->subpathCount() > 0) {
@@ -655,7 +623,8 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
             } else {
                 m_hoveredShapeHighlightRect = QPainterPath();
             }
-        }*/
+        }
+#endif
         useCursor(cursor);
         event->ignore();
     }
@@ -686,7 +655,7 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
         m_interactionStrategy->handleMouseMove(m_lastMousePos, event->modifiers());
         event->accept();
         return;
-    }
+    } else {
 
         bool select = event->modifiers().testFlag(Qt::ShiftModifier);
         if (event->key() == Qt::Key_Right) {
@@ -736,6 +705,7 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
             m_textCursor.insertText(event->text());
             event->accept();
         }
+    }
 
     if (m_interactionStrategy) {
         if (event->key() == Qt::Key_Escape) {

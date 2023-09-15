@@ -16,6 +16,7 @@
 #include "kis_touch_shortcut.h"
 #include "kis_native_gesture_shortcut.h"
 #include "kis_config.h"
+#include "kis_extended_modifiers_mapper.h"
 #include <KoPointerEvent.h>
 
 //#define DEBUG_MATCHER
@@ -72,6 +73,8 @@ public:
 
     QSet<Qt::Key> keys; // Model of currently pressed keys
     QSet<Qt::MouseButton> buttons; // Model of currently pressed buttons
+
+    QSet<Qt::Key> polledKeys; // Keys that were polled using native platform APIs and thus need to be treated carefully, as they may not generate QT key events.
 
     KisStrokeShortcut *runningShortcut;
     KisStrokeShortcut *readyShortcut;
@@ -244,6 +247,8 @@ bool KisShortcutMatcher::keyReleased(Qt::Key key)
 
     if (!m_d->keys.contains(key)) { DEBUG_ACTION("Peculiar, key released but can't remember it was pressed"); }
     else m_d->keys.remove(key);
+
+    m_d->polledKeys.remove(key);
 
     DEBUG_KEY("Released");
 
@@ -591,6 +596,7 @@ void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &k
     Q_FOREACH (Qt::Key key, keys) {
         if (!m_d->keys.contains(key)) {
             keyPressed(key);
+            m_d->polledKeys << key;
         }
     }
 
@@ -624,6 +630,11 @@ QVector<Qt::Key> KisShortcutMatcher::debugPressedKeys() const
     QVector<Qt::Key> keys;
     std::copy(m_d->keys.begin(), m_d->keys.end(), std::back_inserter(keys));
     return keys;
+}
+
+bool KisShortcutMatcher::hasPolledKeys()
+{
+    return !m_d->polledKeys.empty();
 }
 
 void KisShortcutMatcher::lostFocusEvent(const QPointF &localPos)

@@ -754,6 +754,13 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
     return retval;
 }
 
+void KisInputManager::Private::tryFixPolledKeys()
+{
+    if (matcher.hasPolledKeys()) {
+        fixShortcutMatcherModifiersState();
+    }
+}
+
 void KisInputManager::Private::fixShortcutMatcherModifiersState()
 {
     KisExtendedModifiersMapper mapper;
@@ -771,6 +778,7 @@ void KisInputManager::Private::fixShortcutMatcherModifiersState()
 void KisInputManager::Private::fixShortcutMatcherModifiersState(QVector<Qt::Key> newKeys, Qt::KeyboardModifiers modifiers)
 {
     QVector<Qt::Key> danglingKeys = matcher.debugPressedKeys();
+
     matcher.recoveryModifiersWithoutFocus(newKeys);
 
     for (auto it = danglingKeys.begin(); it != danglingKeys.end();) {

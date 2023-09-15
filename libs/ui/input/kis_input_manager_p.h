@@ -55,6 +55,12 @@ public:
 
     KisShortcutMatcher matcher;
 
+    /**
+     * Re-check the native platform key API against keys we are unsure about, and fix them in case they now show as released.
+     * \see comment on KisExtendedModifiersMapper::queryExtendedModifiers()
+     */
+    void tryFixPolledKeys();
+
     KisToolInvocationAction *defaultInputAction = 0;
 
     QObject *eventsReceiver = 0;

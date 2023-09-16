@@ -48,7 +48,7 @@ const QPixmap &KisTemplate::loadPicture()
         if (img.width() > maxHeightWidth || img.height() > maxHeightWidth) {
             img = img.scaled(maxHeightWidth, maxHeightWidth, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
-        m_pixmap = QPixmap::fromImage(img);
+        m_pixmap = QPixmap::fromImage(std::move(img));
         return m_pixmap;
     }
     else { // relative path

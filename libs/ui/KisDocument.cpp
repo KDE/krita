@@ -1748,7 +1748,7 @@ QPixmap KisDocument::generatePreview(const QSize& size)
             QImage original = image->convertToQImage(originalSize, 0);
             // scale using FastTransformation, which is probably Nearest neighbour, suitable for pixel art
             QImage scaled = original.scaled(newSize, Qt::KeepAspectRatio, Qt::FastTransformation);
-            px = QPixmap::fromImage(scaled);
+            px = QPixmap::fromImage(std::move(scaled));
         } else {
             px = QPixmap::fromImage(image->convertToQImage(newSize, 0));
         }

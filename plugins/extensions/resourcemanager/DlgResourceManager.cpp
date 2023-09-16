@@ -194,7 +194,7 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         QImage thumbLabel = m_thumbnailPainter.getReadyThumbnail(idx, thumbSize*devicePixelRatioF(), palette());
         thumbLabel.setDevicePixelRatio(devicePixelRatioF());
 
-        const QPixmap pix = QPixmap::fromImage(thumbLabel);
+        const QPixmap pix = QPixmap::fromImage(std::move(thumbLabel));
         m_ui->lblThumbnail->setScaledContents(true);
         m_ui->lblThumbnail->setPixmap(pix);
 

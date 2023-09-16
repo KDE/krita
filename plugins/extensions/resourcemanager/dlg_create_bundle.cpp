@@ -156,7 +156,7 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
         if (!m_previewImage.isEmpty()) {
             QImage img(m_previewImage);
             img = img.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            m_ui->lblPreview->setPixmap(QPixmap::fromImage(img));
+            m_ui->lblPreview->setPixmap(QPixmap::fromImage(std::move(img)));
         }
 
         m_ui->lblSaveLocation->setText(cfg.readEntry<QString>("BundleExportLocation", QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
@@ -560,7 +560,7 @@ void DlgCreateBundle::getPreviewImage()
     m_previewImage = dialog.filename();
     QImage img(m_previewImage);
     img = img.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    m_ui->lblPreview->setPixmap(QPixmap::fromImage(img));
+    m_ui->lblPreview->setPixmap(QPixmap::fromImage(std::move(img)));
 }
 
 

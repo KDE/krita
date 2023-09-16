@@ -323,7 +323,7 @@ void KoTriangleColorSelector::generateTriangle()
         }
     }
 
-    d->trianglePixmap = QPixmap::fromImage(image);
+    d->trianglePixmap = QPixmap::fromImage(std::move(image));
     d->invalidTriangle = false;
 }
 
@@ -364,7 +364,7 @@ void KoTriangleColorSelector::generateWheel()
             }
         }
     }
-    d->wheelPixmap = QPixmap::fromImage(image);
+    d->wheelPixmap = QPixmap::fromImage(std::move(image));
 }
 
 void KoTriangleColorSelector::mouseReleaseEvent( QMouseEvent * event )

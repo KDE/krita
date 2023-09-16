@@ -117,7 +117,7 @@ QPixmap KisPaletteComboBox::createColorSquare(const KisSwatch &swatch) const
         circlePainter.setPen(pen);
         circlePainter.drawEllipse(0, 0, 32, 32);
         circlePainter.end();
-        colorSquare = QPixmap::fromImage(img);
+        colorSquare = QPixmap::fromImage(std::move(img));
     } else {
         colorSquare.fill(swatch.color().toQColor());
     }

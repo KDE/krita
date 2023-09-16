@@ -209,7 +209,7 @@ void OverviewWidget::wheelEvent(QWheelEvent* event)
 
 void OverviewWidget::updateThumbnail(QImage pixmap)
 {
-    m_pixmap = QPixmap::fromImage(pixmap);
+    m_pixmap = QPixmap::fromImage(std::move(pixmap));
     m_oldPixmap = m_pixmap.copy();
     update();
 }

@@ -33,7 +33,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
     : m_tagChooserWidget(tagChooser)
 {
     QImage image = resource->image();
-    QIcon icon(QPixmap::fromImage(image));
+    QIcon icon(QPixmap::fromImage(std::move(image)));
     QAction *label = new QAction(resource->name(), this);
     label->setIcon(icon);
 

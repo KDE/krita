@@ -323,7 +323,7 @@ void KisHsvColorSlider::drawContents(QPainter *painter)
             }
         }
 
-        d->pixmap = QPixmap::fromImage(image);
+        d->pixmap = QPixmap::fromImage(std::move(image));
         d->upToDate = true;
     }
 

@@ -325,7 +325,7 @@ void KisRawImport::slotUpdatePreview()
             }
         }
         const QSize previewSize = m_rawWidget->preview->size() * m_rawWidget->preview->devicePixelRatioF();
-        QPixmap img = QPixmap::fromImage(image).scaled(previewSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        QPixmap img = QPixmap::fromImage(std::move(image)).scaled(previewSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         img.setDevicePixelRatio(m_rawWidget->preview->devicePixelRatioF());
         m_rawWidget->preview->setPixmap(img);
     }

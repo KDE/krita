@@ -63,7 +63,7 @@ void KisWidgetChooser::updateArrowIcon()
     painter.setPen(option.palette.text().color());
     painter.drawPrimitive(QStyle::PE_IndicatorArrowDown, option);
 
-    m_arrowButton->setIcon(QIcon(QPixmap::fromImage(image)));
+    m_arrowButton->setIcon(QIcon(QPixmap::fromImage(std::move(image))));
 }
 
 void KisWidgetChooser::addLabelWidget(const QString& id, const QString& label, QWidget* widget)

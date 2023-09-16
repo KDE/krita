@@ -195,5 +195,5 @@ void KoResourcePopupAction::updateIcon()
 
     p.end();
 
-    setIcon(QIcon(QPixmap::fromImage(pm)));
+    setIcon(QIcon(QPixmap::fromImage(std::move(pm))));
 }

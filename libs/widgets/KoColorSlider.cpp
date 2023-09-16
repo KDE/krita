@@ -127,7 +127,7 @@ void KoColorSlider::drawContents( QPainter *painter )
                 image.setPixel(x, y, color.rgba());
             }
         }
-        d->pixmap = QPixmap::fromImage(image);
+        d->pixmap = QPixmap::fromImage(std::move(image));
         d->upToDate = true;
     }
     painter->drawPixmap( contentsRect_, d->pixmap, QRect( 0, 0, d->pixmap.width(), d->pixmap.height()) );

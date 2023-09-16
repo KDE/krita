@@ -106,10 +106,10 @@ void KisWdgSeExprPresetsSave::loadImageFromFile()
 
     if (!filename.isEmpty()) { // empty if "cancel" is pressed
         // take that file and load it into the thumbnail are
-        const QImage imageToLoad(filename);
+        QImage imageToLoad(filename);
 
         presetThumbnailWidget->clear(); // clear the background in case our new image has transparency
-        presetThumbnailWidget->setPixmap(QPixmap::fromImage(imageToLoad));
+        presetThumbnailWidget->setPixmap(QPixmap::fromImage(std::move(imageToLoad)));
     }
 }
 
@@ -130,7 +130,7 @@ void KisWdgSeExprPresetsSave::renderScriptToThumbnail()
         fillPainter.fillRect(0, 0, 256, 256, m_currentConfiguration);
 
         QImage thumbnail = src->convertToQImage(nullptr, 0, 0, 256, 256);
-        presetThumbnailWidget->setPixmap(QPixmap::fromImage(thumbnail));
+        presetThumbnailWidget->setPixmap(QPixmap::fromImage(std::move(thumbnail)));
     }
 }
 

@@ -96,7 +96,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
         gc.fillRect(base.rect(), Qt::white);
         gc.drawImage(0, 0, image);
         gc.end();
-        QImage converted = base.convertToFormat(QImage::Format_Grayscale8);
+        QImage converted = std::move(base).convertToFormat(QImage::Format_Grayscale8);
         setBrushTipImage(converted);
         setBrushType(MASK);
         setBrushApplication(ALPHAMASK);

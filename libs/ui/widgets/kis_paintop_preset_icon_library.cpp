@@ -49,26 +49,26 @@ KisPaintopPresetIconLibrary::KisPaintopPresetIconLibrary(QWidget *parent): QWidg
 
     QImage empty = QImage(200, 200, QImage::Format_ARGB32);
     empty.fill(Qt::transparent);
-    m_baseModel->appendRow(new QStandardItem(QIcon(QPixmap::fromImage(empty)), NULL));
+    m_baseModel->appendRow(new QStandardItem(QIcon(QPixmap::fromImage(std::move(empty))), NULL));
 
     QStringList toolIcon_paths = KoResourcePaths::findAllAssets("data", "preset_icons/tool_icons/*.png");
     for (int i=0; i<toolIcon_paths.size(); i++) {
         QImage pix;
         pix.load(toolIcon_paths.at(i));
-        QStandardItem *image = new QStandardItem(QIcon(QPixmap::fromImage(pix)), NULL);
+        QStandardItem *image = new QStandardItem(QIcon(QPixmap::fromImage(std::move(pix))), NULL);
         m_baseModel->appendRow(image);
     }
 
 
     empty = QImage(40, 40, QImage::Format_ARGB32);
     empty.fill(Qt::transparent);
-    m_optionalModel->appendRow(new QStandardItem(QIcon(QPixmap::fromImage(empty)), NULL));
+    m_optionalModel->appendRow(new QStandardItem(QIcon(QPixmap::fromImage(std::move(empty))), NULL));
 
     QStringList emblemIcon_paths = KoResourcePaths::findAllAssets("data", "preset_icons/emblem_icons/*.png");
     for (int i=0; i<emblemIcon_paths.size(); i++) {
         QImage pix;
         pix.load(emblemIcon_paths.at(i));
-        QStandardItem *image = new QStandardItem(QIcon(QPixmap::fromImage(pix)), NULL);
+        QStandardItem *image = new QStandardItem(QIcon(QPixmap::fromImage(std::move(pix))), NULL);
         m_optionalModel->appendRow(image);
     }
 

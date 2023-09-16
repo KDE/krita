@@ -169,7 +169,7 @@ void DlgImagesplit::updatePreview()
         }
     }
 
-    m_page->imagePreviewLabel->setPixmap(QPixmap::fromImage(img));
+    m_page->imagePreviewLabel->setPixmap(QPixmap::fromImage(std::move(img)));
 }
 
 void DlgImagesplit::applyClicked()

@@ -96,7 +96,7 @@ void KisCustomBrushWidget::updatePreviewImage()
         brushImage = brushImage.scaled(w, w, Qt::KeepAspectRatio);
     }
 
-    preview->setPixmap(QPixmap::fromImage(brushImage));
+    preview->setPixmap(QPixmap::fromImage(std::move(brushImage)));
 }
 
 void KisCustomBrushWidget::slotUpdateCurrentBrush(int)

@@ -61,7 +61,7 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
             p.drawPixmap(0, 0, icon.pixmap(iconSize, QIcon::Normal) );
             p.end();
 
-            icon = QIcon( QPixmap::fromImage(image) ); // the new icon is ready
+            icon = QIcon( QPixmap::fromImage(std::move(image)) ); // the new icon is ready
 
 
 

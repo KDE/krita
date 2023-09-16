@@ -212,7 +212,7 @@ void KisAutoBrushWidget::slotUpdateBrushPreview()
         pi = pi.scaled((int)(coeff * pi.width()) , (int)(coeff * pi.height()),  Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
 
-    QPixmap p = QPixmap::fromImage(pi);
+    QPixmap p = QPixmap::fromImage(std::move(pi));
     brushPreview->setIcon(QIcon(p));
 }
 

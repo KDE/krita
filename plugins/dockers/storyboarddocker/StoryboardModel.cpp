@@ -58,7 +58,7 @@ QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &paren
     if (column != 0) {
         return QModelIndex();
     }
-    
+
     if (isValidBoard(parent)) {
         StoryboardItemSP parentItem = m_items.at(parent.row());
         QSharedPointer<StoryboardChild> childItem = parentItem->child(row);
@@ -275,7 +275,7 @@ bool StoryboardModel::setThumbnailPixmapData(const QModelIndex & parentIndex, co
     float scale = qMin(thumbnailRect.height() / (float)m_image->height(), (float)thumbnailRect.width() / m_image->width());
 
     QImage image = dev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile(), m_image->bounds());
-    QPixmap pxmap = QPixmap::fromImage(image);
+    QPixmap pxmap = QPixmap::fromImage(std::move(image));
     pxmap = pxmap.scaled((1.5)*scale*m_image->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     if (isValidBoard(index))
@@ -746,7 +746,7 @@ int StoryboardModel::lastKeyframeWithin(QModelIndex sceneIndex)
 
     if (!m_image)
         return sceneFrame;
-    
+
     QModelIndex nextScene = index(sceneIndex.row() + 1, 0);
     int nextSceneFrame;
     if (nextScene.isValid()) {
@@ -938,7 +938,7 @@ bool StoryboardModel::insertItem(QModelIndex index, bool after)
     if (!index.isValid()) {
         desiredIndex = rowCount();
     } else {
-        desiredIndex = after ? index.row() + 1 : index.row();    
+        desiredIndex = after ? index.row() + 1 : index.row();
     }
 
     insertRow(desiredIndex);
@@ -1081,7 +1081,7 @@ void StoryboardModel::slotKeyframeRemoved(const KisKeyframeChannel *channel, int
 }
 
 void StoryboardModel::slotNodeRemoved(KisNodeSP node)
-{ 
+{
     if (node->isAnimated() && node->paintDevice() && node->paintDevice()->keyframeChannel()) {
         KisKeyframeChannel *channel = node->paintDevice()->keyframeChannel();
         int keyframeTime = channel->firstKeyframeTime();
@@ -1162,7 +1162,7 @@ void StoryboardModel::slotUpdateThumbnailsForItems(QModelIndexList indices) {
             continue;
 
         const int frame = index(StoryboardItem::FrameNumber, 0, storyboardItemIndex).data().toInt();
-        slotUpdateThumbnailForFrame(frame, false);        
+        slotUpdateThumbnailForFrame(frame, false);
     }
 }
 
@@ -1419,7 +1419,7 @@ void StoryboardModel::insertChildRows(int position, StoryboardItemSP item)
     insertRows(0, 4 + m_commentList.count(), parentIndex);
 
     setFreeze(true);
-    for (int i = 0; i < item->childCount(); i++) {   
+    for (int i = 0; i < item->childCount(); i++) {
         QVariant data = item->child(i)->data();
         setData(index(i, 0, index(position, 0)), data);
     }

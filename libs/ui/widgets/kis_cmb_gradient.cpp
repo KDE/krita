@@ -57,7 +57,7 @@ void KisCmbGradient::gradientSelected(KoResourceSP resource)
         gc.drawImage(QPoint(), preview);
     }
 
-    setIcon(QIcon(QPixmap::fromImage(thumbnail)));
+    setIcon(QIcon(QPixmap::fromImage(std::move(thumbnail))));
 
     emit gradientChanged(gradient);
 }

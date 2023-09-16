@@ -67,7 +67,7 @@ QIcon createIcon(const QImage &source, const QSize &iconSize)
     painter.setPen(blendedColor);
     painter.drawRect(result.rect().adjusted(0, 0, -1, -1));
 
-    return QIcon(QPixmap::fromImage(result));
+    return QIcon(QPixmap::fromImage(std::move(result)));
 }
 
 }

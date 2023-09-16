@@ -102,9 +102,9 @@ void KisPresetLivePreviewView::slotPreviewGenerationCompleted()
 
     // only add the object once...then just update the pixmap so we can move the preview around
     if (!m_sceneImageItem) {
-        m_sceneImageItem = m_brushPreviewScene->addPixmap(QPixmap::fromImage(m_temp_image));
+        m_sceneImageItem = m_brushPreviewScene->addPixmap(QPixmap::fromImage(std::move(m_temp_image)));
     } else {
-        m_sceneImageItem->setPixmap(QPixmap::fromImage(m_temp_image));
+        m_sceneImageItem->setPixmap(QPixmap::fromImage(std::move(m_temp_image)));
     }
 }
 
@@ -161,7 +161,7 @@ void KisPresetLivePreviewView::paintBackground()
         // experimentbrush -- this creates artifacts that carry over to other previews and messes up their display
         // duplicate (clone) brush doesn't have a preview as it doesn't show anything)
 
-        // fill with gray first to clear out what existed from previous preview        
+        // fill with gray first to clear out what existed from previous preview
         KisTransaction t(m_layer->paintDevice());
         m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Window) , m_colorSpace));
         t.end();

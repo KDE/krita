@@ -86,8 +86,8 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
 
 
             QImage resultImage(resultFileInfo.absoluteFilePath());
-            resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);
-            sourceImage = sourceImage.convertToFormat(QImage::Format_ARGB32);
+            resultImage.convertTo(QImage::Format_ARGB32);
+            sourceImage.convertTo(QImage::Format_ARGB32);
 
             QPoint pt;
 

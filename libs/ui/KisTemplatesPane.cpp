@@ -59,7 +59,7 @@ KisTemplatesPane::KisTemplatesPane(QWidget* parent, const QString& header,
         QPixmap preview = t->loadPicture();
         QImage icon = preview.toImage();
         icon = icon.scaled(IconExtent, IconExtent, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        icon = icon.convertToFormat(QImage::Format_ARGB32);
+        icon.convertTo(QImage::Format_ARGB32);
         icon = icon.copy((icon.width() - IconExtent) / 2, (icon.height() - IconExtent) / 2, IconExtent, IconExtent);
         QStandardItem* item = new QStandardItem(QPixmap::fromImage(icon), t->name());
         item->setEditable(false);

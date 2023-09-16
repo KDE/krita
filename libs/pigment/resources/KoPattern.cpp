@@ -158,7 +158,7 @@ bool KoPattern::loadPatFromDevice(QIODevice *dev)
         }
         // It was grayscale, so make the pattern as small as possible
         // by converting it to Indexed8
-        pattern = pattern.convertToFormat(QImage::Format_Indexed8);
+        pattern.convertTo(QImage::Format_Indexed8);
     }
     else if (bh.bytes == 2) {
         // Grayscale + A

@@ -90,7 +90,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
         //       they can have the lightness and gradient options available
         QImage base(image.size(), image.format());
         if ((int)base.format() < (int)QImage::Format_RGB32) {
-            base = base.convertToFormat(QImage::Format_ARGB32);
+            base.convertTo(QImage::Format_ARGB32);
         }
         QPainter gc(&base);
         gc.fillRect(base.rect(), Qt::white);
@@ -104,7 +104,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
     }
     else {
         if ((int)image.format() < (int)QImage::Format_RGB32) {
-            image = image.convertToFormat(QImage::Format_ARGB32);
+            image.convertTo(QImage::Format_ARGB32);
         }
 
         setBrushTipImage(image);

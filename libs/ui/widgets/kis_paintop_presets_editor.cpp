@@ -558,7 +558,7 @@ void KisPaintOpPresetsEditor::resourceSelected(KoResourceSP resource)
     if (!thumbImage.isNull()) {
         thumbnail = QPixmap::fromImage(thumbImage.scaled(thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     } else {
-        thumbnail = QPixmap::fromImage(QImage());
+        thumbnail = QPixmap();
     }
 
     thumbnail.setDevicePixelRatio(devicePixelRatioF());

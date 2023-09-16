@@ -66,6 +66,7 @@ QIcon createIcon(const QImage &source, const QSize &iconSize)
     QColor blendedColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.2);
     painter.setPen(blendedColor);
     painter.drawRect(result.rect().adjusted(0, 0, -1, -1));
+    painter.end(); // Otherwise there will always be a copy
 
     return QIcon(QPixmap::fromImage(result));
 }

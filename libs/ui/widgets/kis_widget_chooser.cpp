@@ -62,6 +62,7 @@ void KisWidgetChooser::updateArrowIcon()
     painter.setBrush(option.palette.text().color());
     painter.setPen(option.palette.text().color());
     painter.drawPrimitive(QStyle::PE_IndicatorArrowDown, option);
+    painter.end(); // Otherwise there will always be a copy
 
     m_arrowButton->setIcon(QIcon(QPixmap::fromImage(std::move(image))));
 }

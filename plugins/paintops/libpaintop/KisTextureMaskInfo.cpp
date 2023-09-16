@@ -155,7 +155,7 @@ void KisTextureMaskInfo::recalculateMask()
 
     if ((mask.format() != QImage::Format_RGB32)
         || (mask.format() != QImage::Format_ARGB32)) {
-        mask = mask.convertToFormat(QImage::Format_ARGB32);
+        mask.convertTo(QImage::Format_ARGB32);
     }
 
     qreal scale = m_scale * KisLodTransform::lodToScale(m_levelOfDetail);
@@ -202,7 +202,7 @@ void KisTextureMaskInfo::recalculateMask()
             maskValue = qBound(0.0f, maskValue, 1.0f);
 
             float neutralAdjustedValue;
-            
+
             //Adjust neutral point in linear fashion.  Uses separate linear equations from 0 to neutralPoint, and neutralPoint to 1,
             //to prevent loss of detail (clipping).
             if (m_neutralPoint == 1 || (m_neutralPoint != 0 && maskValue <= m_neutralPoint)) {

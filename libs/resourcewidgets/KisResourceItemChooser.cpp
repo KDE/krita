@@ -554,7 +554,7 @@ void KisResourceItemChooser::updatePreview(const QModelIndex &idx)
         image.format() != QImage::Format_ARGB32 &&
         image.format() != QImage::Format_ARGB32_Premultiplied) {
 
-        image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+        image.convertTo(QImage::Format_ARGB32_Premultiplied);
     }
 
     if (d->tiledPreview) {

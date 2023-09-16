@@ -245,7 +245,7 @@ void KisMagneticWorker::saveTheImage(vQPointF points)
         pt -= offset;
     }
 
-    img = img.convertToFormat(QImage::Format_ARGB32);
+    img.convertTo(QImage::Format_ARGB32);
     QPainter gc(&img);
 
     QPainterPath path;

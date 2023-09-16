@@ -113,6 +113,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
         setHasColorAndTransparency(!isAllGray);
     }
 
+
     setWidth(brushTipImage().width());
     setHeight(brushTipImage().height());
 

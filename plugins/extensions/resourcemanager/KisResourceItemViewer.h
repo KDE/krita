@@ -1,8 +1,8 @@
 /*
  *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
  */
-#ifndef KISRESOURCEITEMVIWER_H
-#define KISRESOURCEITEMVIWER_H
+#ifndef KISRESOURCEITEMVIEWER_H
+#define KISRESOURCEITEMVIEWER_H
 
 #include <QWidget>
 
@@ -12,13 +12,13 @@
 
 enum class Viewer {TableAvailable, ResourceManager, TableSelected};
 
-class KisResourceItemViwer : public KisPopupButton
+class KisResourceItemViewer : public KisPopupButton
 {
     Q_OBJECT
 
 public:
-    explicit KisResourceItemViwer(Viewer type, QWidget *parent = nullptr);
-    ~KisResourceItemViwer();
+    explicit KisResourceItemViewer(Viewer type, QWidget *parent = nullptr);
+    ~KisResourceItemViewer();
 
     void updateViewSettings();
 
@@ -37,4 +37,4 @@ private:
 
 };
 
-#endif // KISRESOURCEITEMVIWER_H
+#endif // KISRESOURCEITEMVIEWER_H

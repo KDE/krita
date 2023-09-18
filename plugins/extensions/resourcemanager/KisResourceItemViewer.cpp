@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "KisResourceItemViwer.h"
+#include "KisResourceItemViewer.h"
 
 #include "ResourceListViewModes.h"
 #include "KisPopupButton.h"
@@ -12,7 +12,7 @@
 #include <kis_config.h>
 #include <QMenu>
 
-KisResourceItemViwer::KisResourceItemViwer(Viewer type, QWidget *parent) :
+KisResourceItemViewer::KisResourceItemViewer(Viewer type, QWidget *parent) :
     KisPopupButton(parent),
     m_mode(ListViewMode::IconGrid),
     m_type(type)
@@ -61,11 +61,11 @@ KisResourceItemViwer::KisResourceItemViwer(Viewer type, QWidget *parent) :
 
 }
 
-KisResourceItemViwer::~KisResourceItemViwer()
+KisResourceItemViewer::~KisResourceItemViewer()
 {
 }
 
-void KisResourceItemViwer::slotViewThumbnail()
+void KisResourceItemViewer::slotViewThumbnail()
 {
     KisConfig cfg(false);
     if (m_type == Viewer::TableAvailable) {
@@ -78,7 +78,7 @@ void KisResourceItemViwer::slotViewThumbnail()
     emit onViewThumbnail();
 }
 
-void KisResourceItemViwer::slotViewDetails()
+void KisResourceItemViewer::slotViewDetails()
 {
     KisConfig cfg(false);
     if (m_type == Viewer::TableAvailable) {

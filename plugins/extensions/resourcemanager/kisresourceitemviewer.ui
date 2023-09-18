@@ -2,8 +2,8 @@
  <author/>
  <comment/>
  <exportmacro/>
- <class>KisResourceItemViwer</class>
- <widget name="KisResourceItemViwer" class="QWidget">
+ <class>KisResourceItemViewer</class>
+ <widget name="KisResourceItemViewer" class="QWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

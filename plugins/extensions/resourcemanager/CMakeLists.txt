@@ -13,7 +13,7 @@ set(kritaresourcemanager_SOURCES
     page_bundle_saver.cpp
     page_metadata_info.cpp
     wdg_resource_preview.cpp
-    KisResourceItemViwer.cpp
+    KisResourceItemViewer.cpp
     wdgtagpreview.cpp
 )
 

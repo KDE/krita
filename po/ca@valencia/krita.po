@@ -25352,7 +25352,7 @@ msgstr "Dur (Krita 4.1 i versions anteriors)"
 #: libs/ui/forms/wdggeneralsettings.ui:703
 #, kde-format
 msgid "Switch Control/Alt Selection Modifiers"
-msgstr "Canvia la selecció de modificadors Control/Alt"
+msgstr "Canvia la selecció de modificadors «Control»/«Alt»"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTouch)
 #: libs/ui/forms/wdggeneralsettings.ui:710
@@ -39932,7 +39932,7 @@ msgstr "Seleccioneu les gravacions que s'han d'eliminar"
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:259
 #, kde-format
 msgid "Space to be freed:"
-msgstr "Espai a alliberar:"
+msgstr "Espai que s'ha d'alliberar:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSpace)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:272
@@ -40893,7 +40893,7 @@ msgstr "Pantalla:"
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
 #, kde-format
 msgid "S&lider"
-msgstr "Control &lliscant"
+msgstr "«Control» &lliscant"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
@@ -43843,7 +43843,7 @@ msgstr "Cercle en sentit antihorari"
 #: plugins/extensions/spensettings/wdg_spensettings.ui:154
 #, kde-format
 msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
-msgstr "Els següents gestos estan admesos pels dispositius Nota 10 i Tab S6."
+msgstr "Els gestos següents estan admesos pels dispositius Note 10 i Tab S6."
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, kde-format
@@ -56397,7 +56397,7 @@ msgstr "Torna a carregar el fitxer"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:26
 msgid "Reload File Alt+R"
-msgstr "Torna a carregar el fitxer (Alt+R)"
+msgstr "Torna a carregar el fitxer («Alt+R»)"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:39
 msgid "No existing document"
@@ -60203,7 +60203,7 @@ msgstr "&Filtre:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:377
 #, kde-format
 msgid "Transform around pivot point (Alt)"
-msgstr "Transforma al voltant d'un punt pivot (Alt)"
+msgstr "Transforma al voltant d'un punt pivot («Alt»)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeMoveRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:630

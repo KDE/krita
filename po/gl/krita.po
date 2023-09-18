@@ -32288,7 +32288,7 @@ msgid ""
 "%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try "
 "saving again under a different name, in another location."
 msgstr ""
-"%1 ten todos os bytes a cero nos primeiros 1000 bytes, probablemente estea "
+"%1 ten todos os bytes a cero nos primeiros 1000 bytes, probabelmente estea "
 "corrupto. Prove a gardalo de novo cun nome distinto, nun lugar distinto."
 
 #: libs/ui/KisImportExportFilter.cpp:248
@@ -60391,7 +60391,7 @@ msgstr ""
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
-"Esta ferramenta só funciona en capas vectoriais. Probablemente o que queira "
+"Esta ferramenta só funciona en capas vectoriais. Probabelmente o que queira "
 "é a ferramenta de mover."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1292

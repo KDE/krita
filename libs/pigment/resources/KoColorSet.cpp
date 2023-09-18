@@ -1868,10 +1868,10 @@ bool KoColorSet::Private::loadSbz() {
                     }
 
                     KoColor color(colorSpace);
-                    reinterpret_cast<float*>(color.data())[0] = c;
-                    reinterpret_cast<float*>(color.data())[1] = m;
-                    reinterpret_cast<float*>(color.data())[2] = y;
-                    reinterpret_cast<float*>(color.data())[3] = k;
+                    reinterpret_cast<float*>(color.data())[0] = c * KoCmykColorSpaceMathsTraits<float>::unitValueCMYK;
+                    reinterpret_cast<float*>(color.data())[1] = m * KoCmykColorSpaceMathsTraits<float>::unitValueCMYK;
+                    reinterpret_cast<float*>(color.data())[2] = y * KoCmykColorSpaceMathsTraits<float>::unitValueCMYK;
+                    reinterpret_cast<float*>(color.data())[3] = k * KoCmykColorSpaceMathsTraits<float>::unitValueCMYK;
                     color.setOpacity(OPACITY_OPAQUE_F);
                     currentEntry.setColor(color);
                     firstDefinition = true;

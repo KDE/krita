@@ -7,7 +7,7 @@
 #include "page_resource_chooser.h"
 #include "ui_pageresourcechooser.h"
 #include "wdg_resource_preview.h"
-#include "KisResourceItemViewer.h"
+#include "KisResourceItemViwer.h"
 #include <kis_config.h>
 #include "KisResourceItemListView.h"
 #include "dlg_create_bundle.h"
@@ -51,8 +51,8 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
 
     connect(m_ui->btnRemoveSelected, SIGNAL(clicked(bool)), this, SLOT(slotRemoveSelected(bool)));
 
-    KisResourceItemViewer *viewModeButton;
-    viewModeButton = new KisResourceItemViewer(Viewer::TableSelected, this);
+    KisResourceItemViwer *viewModeButton;
+    viewModeButton = new KisResourceItemViwer(Viewer::TableSelected, this);
 
     KisConfig cfg(true);
     m_mode = (cfg.readEntry<quint32>("ResourceItemsBCSelected.viewMode", 1) == 1)? ListViewMode::IconGrid : ListViewMode::Detail;

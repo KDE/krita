@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-14 00:43+0000\n"
+"POT-Creation-Date: 2023-09-19 00:43+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -16974,7 +16974,7 @@ msgid "Node Rename"
 msgstr "&Nama:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:853
+#: libs/image/kis_image.cc:852
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -17199,129 +17199,129 @@ msgstr ""
 msgid "Imported Image"
 msgstr "Import Imej"
 
-#: libs/image/kis_image.cc:689 libs/image/kis_layer_utils.cpp:1872
+#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1872
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
 msgstr "Pemadam Pemilihan"
 
-#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2577
+#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2577
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "latar belakang"
 
-#: libs/image/kis_image.cc:753 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:752 libs/ui/kis_layer_manager.cc:623
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&Lapisan"
 
-#: libs/image/kis_image.cc:852
+#: libs/image/kis_image.cc:851
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Ricik Imej"
 
-#: libs/image/kis_image.cc:948
+#: libs/image/kis_image.cc:947
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "&Ricih Lapisan..."
 
-#: libs/image/kis_image.cc:949
+#: libs/image/kis_image.cc:948
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Topeng alfa"
 
-#: libs/image/kis_image.cc:986
+#: libs/image/kis_image.cc:985
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Ricik Imej"
 
-#: libs/image/kis_image.cc:987
+#: libs/image/kis_image.cc:986
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Resolusi Imej"
 
-#: libs/image/kis_image.cc:1034
+#: libs/image/kis_image.cc:1033
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "Skalakan Lapisan"
 
-#: libs/image/kis_image.cc:1159
+#: libs/image/kis_image.cc:1158
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Putar Imej"
 
-#: libs/image/kis_image.cc:1165
+#: libs/image/kis_image.cc:1164
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Craters"
 
-#: libs/image/kis_image.cc:1167
+#: libs/image/kis_image.cc:1166
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "Putar Lapisan"
 
-#: libs/image/kis_image.cc:1248
+#: libs/image/kis_image.cc:1247
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Hapuskan Teks"
 
-#: libs/image/kis_image.cc:1251
+#: libs/image/kis_image.cc:1250
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "Ricih lapisan"
 
-#: libs/image/kis_image.cc:1258
+#: libs/image/kis_image.cc:1257
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Ricik Imej"
 
-#: libs/image/kis_image.cc:1276
+#: libs/image/kis_image.cc:1275
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "&Ubah Jenis Imej..."
 
-#: libs/image/kis_image.cc:1327
+#: libs/image/kis_image.cc:1326
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "&Ubah Jenis Imej..."
 
-#: libs/image/kis_image.cc:1328
+#: libs/image/kis_image.cc:1327
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "&Ubah Jenis Imej..."
 
-#: libs/image/kis_image.cc:1386
+#: libs/image/kis_image.cc:1385
 #, fuzzy
 #| msgid "Apply Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Guna Profil"
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1426
 #, fuzzy
 #| msgid "Apply Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Guna Profil"
 
-#: libs/image/kis_image.cc:2487
+#: libs/image/kis_image.cc:2486
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -29608,12 +29608,11 @@ msgid ""
 "href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">User Community</span></a></p><p><a href=\"https://"
 "invent.kde.org/graphics/krita\"><span style=\" text-decoration: underline; "
-"color:%1;\">Source Code</span></a></p><p><a href=\"https://api.kde.org/"
-"appscomplete-api/krita-apidocs/libs/libkis/html/index.html\"><span style=\" "
-"text-decoration: underline; color:%1;\">Scripting API</span></a></p><p><a "
-"href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" "
-"text-decoration: underline; color:%1;\">Scripting School</span></a></p></"
-"td></table></body></html>"
+"color:%1;\">Source Code</span></a></p><p><a href=\"https://api.kde.org/krita/"
+"html/classKrita.html\"><span style=\" text-decoration: underline; color:%1;"
+"\">Scripting API</span></a></p><p><a href=\"https://scripting.krita.org/"
+"lessons/introduction\"><span style=\" text-decoration: underline; color:%1;"
+"\">Scripting School</span></a></p></td></table></body></html>"
 msgstr ""
 
 #: libs/ui/kis_statusbar.cc:88
@@ -55800,7 +55799,7 @@ msgstr "Pemilihan"
 msgid "Select the script"
 msgstr "Kemaskini warna semasa"
 
-#: plugins/python/tenscripts/uitenscripts.py:90
+#: plugins/python/tenscripts/uitenscripts.py:89
 #, fuzzy
 msgid "Python files (*.py)"
 msgstr "Segiempat Sama Kecil"

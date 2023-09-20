@@ -23,7 +23,7 @@ struct  Q_DECL_HIDDEN KisResourceItemListView::Private
     QScroller* scroller {0};
     QString prev_scrollbar_style;
 
-    QSize requestedItemSize = QSize(64, 64);
+    QSize requestedItemSize = QSize(56, 56);
 };
 
 KisResourceItemListView::KisResourceItemListView(QWidget *parent)
@@ -91,6 +91,8 @@ void KisResourceItemListView::setListViewMode(ListViewMode viewMode)
         setViewMode(ViewMode::ListMode);
         setFlow(Flow::TopToBottom);
         setWrapping(false);
+        restoreScrollbar();
+        setItemSize(m_d->requestedItemSize);
         // horizontalScrollBar()->setStyleSheet(m_d->prev_scrollbar_style);
         setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
         setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);

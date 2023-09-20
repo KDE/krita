@@ -58,6 +58,7 @@ private Q_SLOTS:
     void addBundle();
     void createBundle();
     void toggleBundle();
+    void editBundle();
 
     void slotModelAboutToBeReset();
     void slotModelReset();

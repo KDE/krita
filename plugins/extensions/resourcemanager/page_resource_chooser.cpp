@@ -178,6 +178,7 @@ void PageResourceChooser::slotResourcesSelectionChanged(QModelIndex selected)
             updateCount(true);
         }
     }
+
     m_resourceItemWidget->sortItems();
 }
 
@@ -249,6 +250,7 @@ void PageResourceChooser::slotresourceTypeSelected(int idx)
     }
 
     m_resourceItemWidget->sortItems();
+
 }
 
 void PageResourceChooser::slotRemoveSelected(bool)

@@ -1,12 +1,15 @@
 /*
  *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
  */
+
 #include "page_metadata_info.h"
 #include "ui_pagemetadatainfo.h"
 #include <kis_config.h>
 #include <KoDocumentInfo.h>
 #include <KisImportExportManager.h>
 #include <KoFileDialog.h>
+#include <KoResource.h>
+#include "KisResourceStorage.h"
 
 
 PageMetadataInfo::PageMetadataInfo(KoResourceBundleSP bundle, QWidget *parent) :
@@ -117,4 +120,3 @@ void PageMetadataInfo::removeWarning()
 {
      m_ui->editBundleName->setStyleSheet(QString(""));
 }
-

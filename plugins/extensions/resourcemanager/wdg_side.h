@@ -5,6 +5,7 @@
 #define WDG_SIDE_H
 
 #include <QWidget>
+#include <KoResourceBundle.h>
 
 namespace Ui {
 class WdgSide;
@@ -15,7 +16,7 @@ class WdgSide : public QWidget
     Q_OBJECT
 
 public:
-    explicit WdgSide(QWidget *parent = nullptr);
+    explicit WdgSide(KoResourceBundleSP bundle, QWidget *parent = nullptr);
     ~WdgSide();
 
 private:
@@ -23,6 +24,9 @@ private:
 
 public Q_SLOTS:
     void focusLabel(int id);
+
+private:
+    KoResourceBundleSP m_bundle;
 };
 
 #endif // WDG_SIDE_H

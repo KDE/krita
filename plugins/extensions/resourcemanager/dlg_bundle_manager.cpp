@@ -34,6 +34,7 @@
 #include <kis_config.h>
 #include <KisResourceLocator.h>
 #include <KisKineticScroller.h>
+#include <KisCursorOverrideLock.h>
 #include "KisBundleStorage.h"
 
 #include <KisMainWindow.h>
@@ -150,6 +151,9 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     m_ui->bnNew->setText(i18nc("In bundle manager; press button to create a new bundle", "Create Bundle"));
     connect(m_ui->bnNew, SIGNAL(clicked(bool)), SLOT(createBundle()));
 
+    m_ui->bnEdit->setIcon(KisIconUtils::loadIcon("document-new"));
+    m_ui->bnEdit->setText(i18nc("In bundle manager; press button to edit existing bundle", "Edit Bundle"));
+    connect(m_ui->bnEdit, SIGNAL(clicked(bool)), SLOT(editBundle()));
 
     setButtons(Close);
 
@@ -331,6 +335,12 @@ void DlgBundleManager::toggleBundle()
     idx = m_proxyModel->index(idx.row(), 0);
     m_proxyModel->setData(idx, QVariant(!active), Qt::CheckStateRole);
 
+    if (active) {
+        m_ui->bnEdit->setEnabled(false);
+    } else {
+        m_ui->bnEdit->setEnabled(true);
+    }
+
     currentCellSelectedChanged(idx, idx);
 
     KisMainWindow *mw = KisPart::instance()->currentMainwindow();
@@ -402,10 +412,12 @@ void DlgBundleManager::updateToggleButton(bool active)
         m_ui->bnToggle->setIcon(KisIconUtils::loadIcon("edit-delete"));
         m_ui->bnToggle->setText(i18nc("In bundle manager; press button to deactivate the bundle "
                                       "(remove resources from the bundle from the available resources)","Deactivate"));
+        m_ui->bnEdit->setEnabled(true);
     } else {
         m_ui->bnToggle->setIcon(QIcon());
         m_ui->bnToggle->setText(i18nc("In bundle manager; press button to activate the bundle "
                                       "(add resources from the bundle to the available resources)","Activate"));
+        m_ui->bnEdit->setEnabled(false);
     }
 }
 

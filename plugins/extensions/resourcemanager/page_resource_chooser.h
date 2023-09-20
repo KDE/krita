@@ -15,6 +15,7 @@
 #include <KisResourceModel.h>
 #include <KisResourceItemDelegate.h>
 #include "KisResourceItemListWidget.h"
+#include "KisBundleStorage.h"
 
 namespace Ui {
 class PageResourceChooser;
@@ -57,6 +58,7 @@ private:
     KisResourceItemDelegate *m_kisResourceItemDelegate;
     KisResourceItemListWidget *m_resourceItemWidget;
 
+    KisBundleStorage *m_bundleStorage;
 };
 
 #endif // PAGE_RESOURCE_CHOOSER_H

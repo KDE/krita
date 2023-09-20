@@ -316,10 +316,6 @@ void DlgCreateBundle::saveToConfiguration(bool full)
     cfg.writeEntry<QString>("BundleLicense", m_pageMetadataInfo->license());
 }
 
-void DlgCreateBundle::slotEmbedTags()
-{
-}
-
 QPixmap imageToIcon(const QImage &img, Qt::AspectRatioMode aspectRatioMode) {
     QPixmap pixmap(ICON_SIZE, ICON_SIZE);
     return pixmap;

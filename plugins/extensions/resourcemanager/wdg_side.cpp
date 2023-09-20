@@ -1,6 +1,9 @@
 /*
  *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
+
 #include "wdg_side.h"
 #include "ui_wdgside.h"
 #include <kis_icon.h>
@@ -11,9 +14,10 @@
 #include <QVBoxLayout>
 #include <QApplication>
 
-WdgSide::WdgSide(QWidget *parent) :
+WdgSide::WdgSide(KoResourceBundleSP bundle, QWidget *parent) :
     QWidget(parent),
     m_ui(new Ui::WdgSide)
+    , m_bundle(bundle)
 {
     m_ui->setupUi(this);
 

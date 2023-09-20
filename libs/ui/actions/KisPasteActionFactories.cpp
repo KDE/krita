@@ -223,7 +223,12 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
                 KisClipboard::instance()->clipFromKritaLayers(
                     fittingBounds,
                     image->colorSpace());
-            KIS_ASSERT(clip);
+
+            if (!clip) {
+                pasteAtCursorPosition = false;
+                return {};
+            }
+
 
             QPointF imagePos;
             if (pasteAtCursorPosition) {

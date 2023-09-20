@@ -218,6 +218,36 @@ int KoSvgTextShape::wordRight(int pos, bool visual)
     return wordEnd(pos);
 }
 
+int KoSvgTextShape::nextCluster(int pos)
+{
+    if (d->cursorPos.isEmpty()) {
+        return pos;
+    }
+    int currentCluster = d->cursorPos.at(pos).cluster;
+
+    for (int i = pos; i < d->cursorPos.size(); i++) {
+        if (d->cursorPos.at(i).cluster > currentCluster) {
+            return i;
+        }
+    }
+    return pos;
+}
+
+int KoSvgTextShape::previousCluster(int pos)
+{
+    if (d->cursorPos.isEmpty()) {
+        return pos;
+    }
+    int currentCluster = d->cursorPos.at(pos).cluster;
+
+    for (int i = pos; i > 0; i--) {
+        if (d->cursorPos.at(i).cluster < currentCluster) {
+            return i;
+        }
+    }
+    return pos;
+}
+
 int KoSvgTextShape::nextPos(int pos, bool visual)
 {
     if (d->cursorPos.isEmpty()) {

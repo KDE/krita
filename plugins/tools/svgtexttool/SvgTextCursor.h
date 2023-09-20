@@ -17,6 +17,7 @@ class KoCanvasBase;
 class SvgTextInsertCommand;
 class SvgTextRemoveCommand;
 class KUndo2Command;
+class QKeyEvent;
 
 /**
  * @brief The SvgTextCursor class
@@ -47,8 +48,14 @@ public:
         MoveRight,
         MoveUp,
         MoveDown,
+        MoveNextChar,
+        MovePreviousChar,
+        MoveNextLine,
+        MovePreviousLine,
         MoveWordLeft,
         MoveWordRight,
+        MoveWordEnd,
+        MoveWordStart,
         MoveLineStart,
         MoveLineEnd,
         ParagraphStart,
@@ -98,13 +105,15 @@ public:
     /// Insert text at getPos()
     void insertText(QString text);
 
-    /// Remove the last character before the position.
-    /// This tries to delete whole graphemes.
-    void removeLast();
-
-    /// Remove the next character after the position.
-    /// this tries to delete a whole grapheme.
-    void removeNext();
+    /**
+     * @brief removeText
+     * remove text relative to the current position.
+     * This will move the cursor according to the move modes and then
+     * remove the text between the two positions.
+     * @param first how the cursor should move to get to the start position.
+     * @param second how the cursor should move to get to the end position.
+     */
+    void removeText(MoveMode first, MoveMode second);
 
     /**
      * @brief removeSelection
@@ -138,6 +147,9 @@ public:
     /// to update the cursor without having the cursor owned by the command.
     void notifyCursorPosChanged(int pos, int anchor) override;
 
+    /// Handle the cursor-related key events.
+    void keyPressEvent(QKeyEvent *event);
+
 Q_SIGNALS:
 
     void updateCursorDecoration(QRectF updateRect);
@@ -150,6 +162,9 @@ private:
     void updateCursor();
     void updateSelection();
     void addCommandToUndoAdapter(KUndo2Command *cmd);
+
+    int moveModeResult(MoveMode &mode, int &pos, bool visual = false) const;
+    bool acceptableInput(const QKeyEvent *event) const;
 
     struct Private;
     const QScopedPointer<Private> d;

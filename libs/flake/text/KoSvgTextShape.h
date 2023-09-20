@@ -163,6 +163,53 @@ public:
     int wordRight(int pos, bool visual = false);
 
     /**
+     * @brief nextCluster
+     * Return the first cursor position with a
+     * higher cluster.
+     * @param pos the cursor position.
+     * @return the first pos with a higher cluster.
+     */
+    int nextCluster(int pos);
+
+    /**
+     * @brief previousCluster
+     * Return the first pos which has a lower cluster.
+     * @param pos the cursor position.
+     * @return the first cursor position with a lower cluster.
+     */
+    int previousCluster(int pos);
+
+    /**
+     * @brief nextLine
+     * get a position on the next line for this position.
+     * @param pos -- cursor position.
+     * @return the pos on the next line;
+     */
+    int nextLine(int pos);
+    /**
+     * @brief previousLine
+     * get a position on the previous line for this position.
+     * @param pos -- cursor position.
+     * @return the pos on the previous line;
+     */
+    int previousLine(int pos);
+
+    /**
+     * @brief wordEnd
+     * return the pos of the first wordbreak.
+     * @param pos -- cursor position.
+     * @return the first wordbreak or line end.
+     */
+    int wordEnd(int pos);
+    /**
+     * @brief wordStart
+     * return the first pos before a wordbreak in the start direction.
+     * @param pos -- cursor position
+     * @return the first position before a wordbreak or the line start.
+     */
+    int wordStart(int pos);
+
+    /**
      * @brief cursorForPos
      * returns the QPainterPath associated with this cursorPosition.
      * @param pos the cursor Position
@@ -265,36 +312,6 @@ private:
      * @return the previous pos;
      */
     int previousPos(int pos, bool visual);
-
-    /**
-     * @brief nextLine
-     * get a position on the next line for this position.
-     * @param pos -- cursor position.
-     * @return the pos on the next line;
-     */
-    int nextLine(int pos);
-    /**
-     * @brief previousLine
-     * get a position on the previous line for this position.
-     * @param pos -- cursor position.
-     * @return the pos on the previous line;
-     */
-    int previousLine(int pos);
-
-    /**
-     * @brief wordEnd
-     * return the pos of the first wordbreak.
-     * @param pos -- cursor position.
-     * @return the first wordbreak or line end.
-     */
-    int wordEnd(int pos);
-    /**
-     * @brief wordStart
-     * return the first pos before a wordbreak in the start direction.
-     * @param pos -- cursor position
-     * @return the first position before a wordbreak or the line start.
-     */
-    int wordStart(int pos);
 
     /**
      * @brief defaultCursorShape

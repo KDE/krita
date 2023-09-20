@@ -5,6 +5,7 @@
  */
 #include "SvgTextCursor.h"
 #include "KoCanvasBase.h"
+#include "KoSvgTextProperties.h"
 #include "SvgTextInsertCommand.h"
 #include "SvgTextRemoveCommand.h"
 #include "kundo2command.h"
@@ -13,6 +14,9 @@
 #include <QClipboard>
 #include <QMimeData>
 #include <QApplication>
+#include <QKeyEvent>
+#include <QKeySequence>
+#include <QAction>
 
 struct Q_DECL_HIDDEN SvgTextCursor::Private {
     KoCanvasBase *canvas;
@@ -110,38 +114,26 @@ void SvgTextCursor::setPosToPoint(QPointF point)
 void SvgTextCursor::moveCursor(MoveMode mode, bool moveAnchor)
 {
     if (d->shape) {
-        if (mode == MoveLeft) {
-            d->pos = d->shape->posLeft(d->pos, d->visualNavigation);
-        } else if (mode == MoveRight) {
-            d->pos = d->shape->posRight(d->pos, d->visualNavigation);
-        } else if (mode == MoveUp) {
-            d->pos = d->shape->posUp(d->pos, d->visualNavigation);
-        } else if (mode == MoveDown) {
-            d->pos = d->shape->posDown(d->pos, d->visualNavigation);
-        } else if (mode == MoveWordLeft) {
-            int pos = d->shape->wordLeft(d->pos, d->visualNavigation);
+        if (mode == MoveWordLeft || mode == MoveWordRight) {
+            int pos = moveModeResult(mode, d->pos, d->visualNavigation);
             if (pos == d->pos) {
-                pos = d->shape->posLeft(d->pos, false);
-                d->pos = d->shape->wordLeft(pos, d->visualNavigation);
+                MoveMode shift = mode == MoveWordLeft? MoveLeft: MoveRight;
+                pos = moveModeResult(shift, pos, false);
+                d->pos = moveModeResult(mode, pos, d->visualNavigation);
             } else {
                 d->pos = pos;
             }
-        } else if (mode == MoveWordRight) {
-            int pos = d->shape->wordRight(d->pos, d->visualNavigation);
+        } else if (mode == MoveWordStart || mode == MoveWordEnd) {
+            int pos = moveModeResult(mode, d->pos, d->visualNavigation);
             if (pos == d->pos) {
-                pos = d->shape->posRight(d->pos, false);
-                d->pos = d->shape->wordRight(pos, d->visualNavigation);
+                MoveMode shift = mode == MoveWordStart? MovePreviousChar: MoveNextChar;
+                pos = moveModeResult(shift, pos, false);
+                d->pos = moveModeResult(mode, pos, d->visualNavigation);
             } else {
                 d->pos = pos;
             }
-        }  else if (mode == MoveLineStart) {
-            d->pos = d->shape->lineStart(d->pos);
-        } else if (mode == MoveLineEnd) {
-            d->pos = d->shape->lineEnd(d->pos);
-        } else if (mode == ParagraphStart) {
-            d->pos = 0;
-        } else if (mode == ParagraphEnd) {
-            d->pos = d->shape->posForIndex(d->shape->plainText().size());
+        } else {
+            d->pos = moveModeResult(mode, d->pos, d->visualNavigation);
         }
         if (moveAnchor) {
             d->anchor = d->pos;
@@ -167,40 +159,22 @@ void SvgTextCursor::insertText(QString text)
     }
 }
 
-void SvgTextCursor::removeLast()
+void SvgTextCursor::removeText(SvgTextCursor::MoveMode first, SvgTextCursor::MoveMode second)
 {
     if (d->shape) {
         SvgTextRemoveCommand *removeCmd;
         if (hasSelection()) {
             removeCmd = removeSelection();
             addCommandToUndoAdapter(removeCmd);
-            updateCursor();
         } else {
-            int oldIndex = d->shape->indexForPos(d->pos);
-            int newPos = d->shape->posForIndex(oldIndex-1, false, false);
-            int newIndex = d->shape->indexForPos(newPos);
-            // using old-new index allows us to remove the whole grapheme.
-            removeCmd = new SvgTextRemoveCommand(d->shape, newPos, d->pos, d->anchor, oldIndex-newIndex);
-            addCommandToUndoAdapter(removeCmd);
-        }
-    }
-}
+            int posA = moveModeResult(first, d->pos, d->visualNavigation);
+            int posB = moveModeResult(second, d->pos, d->visualNavigation);
 
-void SvgTextCursor::removeNext()
-{
-    if (d->shape) {
-        SvgTextRemoveCommand *removeCmd;
-        if (hasSelection()) {
-            removeCmd = removeSelection();
-            addCommandToUndoAdapter(removeCmd);
-            updateCursor();
-        } else {
-            int oldIndex = d->shape->indexForPos(d->pos);
-            int newIndex = d->shape->indexForPos(d->pos+1);
-            if (newIndex == oldIndex) {
-                newIndex = d->shape->indexForPos(d->pos+2);
-            }
-            removeCmd = new SvgTextRemoveCommand(d->shape, d->pos, d->pos, d->anchor, newIndex-oldIndex);
+            int posStart = qMin(posA, posB);
+            int posEnd = qMax(posA, posB);
+            int length = d->shape->indexForPos(posEnd) - d->shape->indexForPos(posStart);
+
+            removeCmd = new SvgTextRemoveCommand(d->shape, posStart, d->pos, d->anchor, length);
             addCommandToUndoAdapter(removeCmd);
         }
     }
@@ -315,6 +289,224 @@ void SvgTextCursor::notifyCursorPosChanged(int pos, int anchor)
     updateSelection();
 }
 
+void SvgTextCursor::keyPressEvent(QKeyEvent *event)
+{
+    bool select = event->modifiers().testFlag(Qt::ShiftModifier);
+
+    if (!((Qt::ControlModifier | Qt::AltModifier | Qt::MetaModifier) & event->modifiers())) {
+
+        switch (event->key()) {
+        case Qt::Key_Right:
+            moveCursor(SvgTextCursor::MoveRight, !select);
+            event->accept();
+            break;
+        case Qt::Key_Left:
+            moveCursor(SvgTextCursor::MoveLeft, !select);
+            event->accept();
+            break;
+        case Qt::Key_Up:
+            moveCursor(SvgTextCursor::MoveUp, !select);
+            event->accept();
+            break;
+        case Qt::Key_Down:
+            moveCursor(SvgTextCursor::MoveDown, !select);
+            event->accept();
+            break;
+        case Qt::Key_Delete:
+            removeText(MoveNone, MoveNextChar);
+            event->accept();
+            break;
+        case Qt::Key_Backspace:
+            removeText(MovePreviousChar, MoveNone);
+            event->accept();
+            break;
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
+            insertText("\n");
+            event->accept();
+            break;
+        default:
+            event->ignore();
+        }
+
+        if (event->isAccepted()) {
+            return;
+        }
+    }
+    if (acceptableInput(event)) {
+        insertText(event->text());
+        event->accept();
+        return;
+    }
+
+    KoSvgTextProperties props = d->shape->textProperties();
+
+    KoSvgText::WritingMode mode = KoSvgText::WritingMode(props.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::Direction direction = KoSvgText::Direction(props.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+
+    // Qt's keysequence stuff doesn't handle vertical, so to test all the standard keyboard shortcuts as if it did,
+    // we reinterpret the direction keys according to direction and writing mode, and test against that.
+
+    int newKey = event->key();
+
+    if (direction == KoSvgText::DirectionRightToLeft) {
+        switch (newKey) {
+        case Qt::Key_Left:
+            newKey = Qt::Key_Right;
+            break;
+        case Qt::Key_Right:
+            newKey = Qt::Key_Left;
+            break;
+        default:
+            break;
+        }
+    }
+
+    if (mode == KoSvgText::VerticalRL) {
+        switch (newKey) {
+        case Qt::Key_Left:
+            newKey = Qt::Key_Down;
+            break;
+        case Qt::Key_Right:
+            newKey = Qt::Key_Up;
+            break;
+        case Qt::Key_Up:
+            newKey = Qt::Key_Left;
+            break;
+        case Qt::Key_Down:
+            newKey = Qt::Key_Right;
+            break;
+        default:
+            break;
+        }
+    } else if (mode == KoSvgText::VerticalRL) {
+        switch (newKey) {
+        case Qt::Key_Left:
+            newKey = Qt::Key_Up;
+            break;
+        case Qt::Key_Right:
+            newKey = Qt::Key_Down;
+            break;
+        case Qt::Key_Up:
+            newKey = Qt::Key_Left;
+            break;
+        case Qt::Key_Down:
+            newKey = Qt::Key_Right;
+            break;
+        default:
+            break;
+        }
+    }
+
+    QKeySequence testSequence(event->modifiers() | newKey);
+
+
+    // Note for future, when we have format changing actions:
+    // We'll need to test format change actions before the standard
+    // keys, as one of the standard keys for deleting a line is ctrl+u
+    // which would probably be expected to do underline before deleting.
+
+    // This first set is already tested above, however, if they still
+    // match, then it's one of the extra sequences for MacOs, which
+    // seem to be purely logical, instead of the visual set we tested
+    // above.
+    if (testSequence == QKeySequence::MoveToNextChar) {
+        moveCursor(SvgTextCursor::MoveNextChar, true);
+        event->accept();
+    } else if (testSequence == QKeySequence::SelectNextChar) {
+        moveCursor(SvgTextCursor::MoveNextChar, false);
+        event->accept();
+    } else if (testSequence == QKeySequence::MoveToPreviousChar) {
+        moveCursor(SvgTextCursor::MovePreviousChar, true);
+        event->accept();
+    } else if (testSequence == QKeySequence::SelectPreviousChar) {
+        moveCursor(SvgTextCursor::MovePreviousChar, false);
+        event->accept();
+    } else if (testSequence == QKeySequence::MoveToNextLine) {
+        moveCursor(SvgTextCursor::MoveNextLine, true);
+        event->accept();
+    } else if (testSequence == QKeySequence::SelectNextLine) {
+        moveCursor(SvgTextCursor::MoveNextLine, false);
+        event->accept();
+    } else if (testSequence == QKeySequence::MoveToPreviousLine) {
+        moveCursor(SvgTextCursor::MovePreviousLine, true);
+        event->accept();
+    } else if (testSequence == QKeySequence::SelectPreviousLine) {
+        moveCursor(SvgTextCursor::MovePreviousLine, false);
+        event->accept();
+
+    } else if (testSequence == QKeySequence::MoveToNextWord) {
+        moveCursor(SvgTextCursor::MoveWordEnd, true);
+        event->accept();
+    } else if (testSequence == QKeySequence::SelectNextWord) {
+        moveCursor(SvgTextCursor::MoveWordEnd, false);
+        event->accept();
+    } else if (testSequence == QKeySequence::MoveToPreviousWord) {
+        moveCursor(SvgTextCursor::MoveWordStart, true);
+        event->accept();
+    } else if (testSequence == QKeySequence::SelectPreviousWord) {
+        moveCursor(SvgTextCursor::MoveWordStart, false);
+        event->accept();
+
+    } else if (testSequence == QKeySequence::MoveToStartOfLine) {
+        moveCursor(SvgTextCursor::MoveLineStart, true);
+        event->accept();
+    } else if (testSequence == QKeySequence::SelectStartOfLine) {
+        moveCursor(SvgTextCursor::MoveLineStart, false);
+        event->accept();
+    } else if (testSequence == QKeySequence::MoveToEndOfLine) {
+        moveCursor(SvgTextCursor::MoveLineEnd, true);
+        event->accept();
+    } else if (testSequence == QKeySequence::SelectEndOfLine) {
+        moveCursor(SvgTextCursor::MoveLineEnd, false);
+        event->accept();
+
+    } else if (testSequence == QKeySequence::MoveToStartOfBlock
+               || testSequence == QKeySequence::MoveToStartOfDocument) {
+        moveCursor(SvgTextCursor::ParagraphStart, true);
+        event->accept();
+    } else if (testSequence == QKeySequence::SelectStartOfBlock
+               || testSequence == QKeySequence::SelectStartOfDocument) {
+        moveCursor(SvgTextCursor::ParagraphStart, false);
+        event->accept();
+
+    } else if (testSequence == QKeySequence::MoveToEndOfBlock
+               || testSequence == QKeySequence::MoveToEndOfDocument) {
+        moveCursor(SvgTextCursor::ParagraphEnd, true);
+        event->accept();
+    } else if (testSequence == QKeySequence::SelectEndOfBlock
+               || testSequence == QKeySequence::SelectEndOfDocument) {
+        moveCursor(SvgTextCursor::ParagraphEnd, false);
+        event->accept();
+
+    }else if (testSequence == QKeySequence::DeleteStartOfWord) {
+        removeText(MoveWordStart, MoveNone);
+        event->accept();
+    } else if (testSequence == QKeySequence::DeleteEndOfWord) {
+        removeText(MoveNone, MoveWordEnd);
+        event->accept();
+    } else if (testSequence == QKeySequence::DeleteEndOfLine) {
+        removeText(MoveNone, MoveLineEnd);
+        event->accept();
+    } else if (testSequence == QKeySequence::DeleteCompleteLine) {
+        removeText(MoveLineStart, MoveLineEnd);
+        event->accept();
+    } else if (testSequence == QKeySequence::Backspace) {
+        removeText(MovePreviousChar, MoveNone);
+        event->accept();
+    } else if (testSequence == QKeySequence::Delete) {
+        removeText(MoveNone, MoveNextChar);
+        event->accept();
+
+    } else if (testSequence == QKeySequence::InsertLineSeparator
+               || testSequence == QKeySequence::InsertParagraphSeparator) {
+        insertText("\n");
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
 void SvgTextCursor::updateCursor()
 {
     if (d->shape) {
@@ -345,4 +537,86 @@ void SvgTextCursor::addCommandToUndoAdapter(KUndo2Command *cmd)
             d->canvas->addCommand(cmd);
         }
     }
+}
+
+int SvgTextCursor::moveModeResult(SvgTextCursor::MoveMode &mode, int &pos, bool visual) const
+{
+    int newPos = pos;
+    switch (mode) {
+        case MoveNone:
+        break;
+    case MoveLeft:
+        newPos = d->shape->posLeft(pos, visual);
+        break;
+    case MoveRight:
+        newPos = d->shape->posRight(pos, visual);
+        break;
+    case MoveUp:
+        newPos = d->shape->posUp(pos, visual);
+        break;
+    case MoveDown:
+        newPos = d->shape->posDown(pos, visual);
+        break;
+    case MovePreviousChar:
+        newPos = d->shape->previousCluster(pos);
+        break;
+    case MoveNextChar:
+        newPos = d->shape->nextCluster(pos);
+        break;
+    case MovePreviousLine:
+        newPos = d->shape->previousLine(pos);
+        break;
+    case MoveNextLine:
+        newPos = d->shape->nextLine(pos);
+        break;
+    case MoveWordLeft:
+        newPos = d->shape->wordLeft(pos, visual);
+        break;
+    case MoveWordRight:
+        newPos = d->shape->wordRight(pos, visual);
+        break;
+    case MoveWordStart:
+        newPos = d->shape->wordStart(pos);
+        break;
+    case MoveWordEnd:
+        newPos = d->shape->wordEnd(pos);
+        break;
+    case MoveLineStart:
+        newPos = d->shape->lineStart(pos);
+        break;
+    case MoveLineEnd:
+        newPos = d->shape->lineEnd(pos);
+        break;
+    case ParagraphStart:
+        newPos = 0;
+        break;
+    case ParagraphEnd:
+        newPos = d->shape->posForIndex(d->shape->plainText().size());
+        break;
+    }
+    return newPos;
+}
+/// More or less copied from bool QInputControl::isAcceptableInput(const QKeyEvent *event) const
+bool SvgTextCursor::acceptableInput(const QKeyEvent *event) const
+{
+    const QString text = event->text();
+    if (text.isEmpty())
+        return false;
+    const QChar c = text.at(0);
+    // Formatting characters such as ZWNJ, ZWJ, RLM, etc. This needs to go before the
+    // next test, since CTRL+SHIFT is sometimes used to input it on Windows.
+    if (c.category() == QChar::Other_Format)
+        return true;
+    // QTBUG-35734: ignore Ctrl/Ctrl+Shift; accept only AltGr (Alt+Ctrl) on German keyboards
+    if (event->modifiers() == Qt::ControlModifier
+            || event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) {
+        return false;
+    }
+    if (c.isPrint())
+        return true;
+    if (c.category() == QChar::Other_PrivateUse)
+        return true;
+    if (c == QLatin1Char('\t'))
+        return true;
+    return false;
 }

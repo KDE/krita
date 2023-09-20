@@ -656,54 +656,11 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
         event->accept();
         return;
     } else {
-
-        bool select = event->modifiers().testFlag(Qt::ShiftModifier);
-        if (event->key() == Qt::Key_Right) {
-            if (event->modifiers().testFlag(Qt::ControlModifier)) {
-                m_textCursor.moveCursor(SvgTextCursor::MoveWordRight, !select);
-            } else {
-                m_textCursor.moveCursor(SvgTextCursor::MoveRight, !select);
-            }
+        if (event->key() == Qt::Key_Escape) {
+            canvas()->shapeManager()->selection()->deselectAll();
             event->accept();
-
-        } else if (event->key() == Qt::Key_Left) {
-            if (event->modifiers().testFlag(Qt::ControlModifier)) {
-                m_textCursor.moveCursor(SvgTextCursor::MoveWordLeft, !select);
-            } else {
-                m_textCursor.moveCursor(SvgTextCursor::MoveLeft, !select);
-            }
-            event->accept();
-        } else if (event->key() == Qt::Key_Up) {
-            m_textCursor.moveCursor(SvgTextCursor::MoveUp, !select);
-            event->accept();
-        } else if (event->key() == Qt::Key_Down) {
-            m_textCursor.moveCursor(SvgTextCursor::MoveDown, !select);
-            event->accept();
-        } else if (event->key() == Qt::Key_Home) {
-            if (event->modifiers().testFlag(Qt::ControlModifier)) {
-                m_textCursor.moveCursor(SvgTextCursor::ParagraphStart, !select);
-            } else {
-                m_textCursor.moveCursor(SvgTextCursor::MoveLineStart, !select);
-            }
-            event->accept();
-        } else if (event->key() == Qt::Key_End) {
-            if (event->modifiers().testFlag(Qt::ControlModifier)) {
-                m_textCursor.moveCursor(SvgTextCursor::ParagraphEnd, !select);
-            } else {
-                m_textCursor.moveCursor(SvgTextCursor::MoveLineEnd, !select);
-            }
-            event->accept();
-        } else if (event->key() == Qt::Key_Backspace) {
-            m_textCursor.removeLast();
-            event->accept();
-        } else if (event->key() == Qt::Key_Delete) {
-            m_textCursor.removeNext();
-            event->accept();
-        } else if (event->key() == Qt::Key_Escape) {
-            event->ignore();
-        } else if (!event->text().isEmpty()) {
-            m_textCursor.insertText(event->text());
-            event->accept();
+        } else {
+            m_textCursor.keyPressEvent(event);
         }
     }
 

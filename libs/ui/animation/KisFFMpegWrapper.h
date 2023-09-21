@@ -96,6 +96,8 @@ private:
      */
     bool ffprobeCheckStreamsValid(const QJsonObject& ffprobeJsonObj, const QString& ffprobeSTDERR);
     
+    static void fixUpNonEmbeddedProcessEnvironment(const QString &processPath, QProcess &process);
+
 private:
     QScopedPointer<QProcess> m_process;
     QSharedPointer<QProgressDialog> m_progress = nullptr;

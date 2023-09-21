@@ -199,7 +199,13 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     {
         KisPropertiesConfigurationSP settings = loadLastConfiguration("VIDEO_ENCODER");
 
+        QStringList encodersPresent;
+        Q_FOREACH(const QString& key, ffmpegEncoderTypes.keys()) {
+            encodersPresent << ffmpegEncoderTypes[key];
+        }
+
         getDefaultVideoEncoderOptions(lastUsedOptions.videoMimeType, settings,
+                                      encodersPresent,
                                       &m_customFFMpegOptionsString,
                                       &m_wantsRenderWithHDR);
     }
@@ -258,16 +264,16 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 }
 
 void KisDlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeType,
-                                                         KisPropertiesConfigurationSP cfg,
-                                                         QString *customFFMpegOptionsString,
-                                                         bool *renderHDR)
+                                                            KisPropertiesConfigurationSP cfg,
+                                                            const QStringList &availableEncoders,
+                                                            QString *customFFMpegOptionsString,
+                                                            bool *renderHDR)
 {
     const KisVideoExportOptionsDialog::ContainerType containerType =
             KisVideoExportOptionsDialog::mimeToContainer(mimeType);
 
-
     QScopedPointer<KisVideoExportOptionsDialog> encoderConfigWidget(
-        new KisVideoExportOptionsDialog(containerType, {},   0));
+        new KisVideoExportOptionsDialog(containerType, availableEncoders,   0));
 
     // we always enable HDR, letting the user to force it
     encoderConfigWidget->setSupportsHDR(true);
@@ -533,8 +539,14 @@ void KisDlgAnimationRenderer::selectRenderType(int index)
         // If this is removed from the configuration, ogg vorbis can fail to render on first attempt. BUG:421658
         // This should be revisited at some point, too much configuration juggling in this class makes it error-prone...
 
+        QStringList encodersPresent;
+        Q_FOREACH(const QString& key, ffmpegEncoderTypes.keys()) {
+            encodersPresent << ffmpegEncoderTypes[key];
+        }
+
         KisPropertiesConfigurationSP settings = loadLastConfiguration("VIDEO_ENCODER");
         getDefaultVideoEncoderOptions(mimeType, settings,
+                                      encodersPresent,
                                       &m_customFFMpegOptionsString,
                                       &m_wantsRenderWithHDR);
     }

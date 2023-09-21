@@ -211,6 +211,7 @@ void KisSelectLayerAction::inputEvent(QEvent *event)
         } else { //LayerSelectionMode_Ask
             QWidget *canvasWidget = inputManager()->canvas()->canvasWidget();
             QMenu *menu = new QMenu(canvasWidget);
+            menu->setAttribute(Qt::WA_DeleteOnClose);
             int numberOfLayers = 0;
 
             // Traverse the list in reverse order so that the menu entries order

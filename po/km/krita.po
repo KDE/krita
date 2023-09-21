@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-19 02:28+0000\n"
+"POT-Creation-Date: 2023-09-21 02:30+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -19630,7 +19630,7 @@ msgstr "លទ្ធផល"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:354
+#: libs/ui/actions/KisPasteActionFactories.cpp:359
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
@@ -20618,18 +20618,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "រាង​សំប៉ែត "
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:361 libs/ui/KisView.cpp:602
+#: libs/ui/actions/KisPasteActionFactories.cpp:273
+#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:602
 #, kde-format
 msgid "(pasted)"
 msgstr "(បាន​បិទភ្ជាប់)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:359
+#: libs/ui/actions/KisPasteActionFactories.cpp:364
 #, fuzzy, kde-format
 msgid "Pasted"
 msgstr "ប៉ាស្តែល​"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:414
+#: libs/ui/actions/KisPasteActionFactories.cpp:419
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Paste Style"

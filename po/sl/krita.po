@@ -4,8 +4,9 @@
 # --- krita_flaketools, krita_karbontools
 # --- krita_shape_vector, krita_shape_paths, krita_shape_artistictext
 #
-# Copyright (C) 2021 This_file_is_part_of_KDE
+# Copyright (C) 2023 This_file_is_part_of_KDE
 # This file is distributed under the same license as the Krita package.
+#
 #
 #
 # Marko Samastur <markos@elite.org>, 2000.
@@ -15,14 +16,14 @@
 # Andrej Mernik <andrejm@ubuntu.si>, 2012, 2013.
 # Jure Repinc <jlp@holodeck1.com>, 2006, 2012.
 # Matjaž Jeran <matjaz.jeran@amis.net>, 2020, 2021, 2022, 2023.
-# Martin Srebotnjak <miles@filmsi.net>, 2020, 2021, 2022.
+# Martin Srebotnjak <miles@filmsi.net>, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-19 02:28+0000\n"
-"PO-Revision-Date: 2023-08-01 10:57+0200\n"
-"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"POT-Creation-Date: 2023-09-21 02:30+0000\n"
+"PO-Revision-Date: 2023-09-20 07:09+0200\n"
+"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -31,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2337,7 +2338,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Move_tool.kpp"
 msgid "Move tool"
-msgstr " Premakni, orodje"
+msgstr "Premakni, orodje"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8218,7 +8219,7 @@ msgstr "Preklopi razhroščevalnik grafične tablice"
 #, kde-format
 msgctxt "action"
 msgid "Show Krita log for bug reports."
-msgstr "Pokaži dnevnik programa Krita za poročila o napaki"
+msgstr "Pokaži dnevnik programa Krita za poročila o napaki."
 
 #. i18n: context: text @ Action (sysinfo), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (sysinfo), Actions (General), ActionCollection (Krita)
@@ -8230,7 +8231,7 @@ msgstr "Pokaži dnevnik programa Krita za poročila o napaki"
 #, kde-format
 msgctxt "action"
 msgid "Show system information for bug reports."
-msgstr "Pokaži sistemske podatke za poročila o napaki"
+msgstr "Pokaži sistemske podatke za poročila o napaki."
 
 #. i18n: context: text @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
@@ -10700,7 +10701,7 @@ msgctxt "action"
 msgid ""
 "Insert column to the left of selection, moving the tail of animation to the "
 "right"
-msgstr "Vstavi stolpec levo od izbora, s premikom repa animacije v desno."
+msgstr "Vstavi stolpec levo od izbora, s premikom repa animacije v desno"
 
 #. i18n: context: text @ Action (insert_column_right), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2077
@@ -10716,7 +10717,7 @@ msgctxt "action"
 msgid ""
 "Insert column to the right of selection, moving the tail of animation to the "
 "right"
-msgstr "Vstavi stolpec desno od izbora, s premikom repa animacije v desno."
+msgstr "Vstavi stolpec desno od izbora, s premikom repa animacije v desno"
 
 #. i18n: context: text @ Action (insert_multiple_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2089
@@ -14922,7 +14923,7 @@ msgstr "Iz&beri iz barvnega obsega ..."
 #, kde-format
 msgctxt "action"
 msgid "Select from Color Range"
-msgstr "Izberi iz barvnega obsega ..."
+msgstr "Izberi iz barvnega obsega"
 
 #. i18n: context: text @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1501
@@ -16179,12 +16180,12 @@ msgstr "Odstrani podpot"
 #: libs/flake/html/HtmlWriter.cpp:70
 #, kde-format
 msgid "Saving KoShapeLayer to html is not implemented yet!"
-msgstr "Oprostite, shranjevanje KoShapeLayer v HTML še ni podprta."
+msgstr "Oprostite, shranjevanje KoShapeLayer v HTML še ni podprta!"
 
 #: libs/flake/html/HtmlWriter.cpp:74
 #, kde-format
 msgid "KoShapeGroup to html is not implemented yet!"
-msgstr "Oprostite, podpora KoShapeGroup v html še ni podprta."
+msgstr "Oprostite, podpora KoShapeGroup v html še ni podprta!"
 
 #: libs/flake/html/HtmlWriter.cpp:80
 #, kde-format
@@ -16254,7 +16255,7 @@ msgstr "Besedilna oblika SVG"
 #: libs/flake/text/KoSvgTextShape.cpp:276
 #, kde-format
 msgid "SVG Text"
-msgstr " Besedilo SVG"
+msgstr "Besedilo SVG"
 
 #: libs/flake/text/KoSvgTextShape.cpp:290
 #: libs/flake/text/KoSvgTextShape.cpp:305
@@ -17716,7 +17717,7 @@ msgid ""
 "the layer will be converted to a paintlayer"
 msgstr ""
 "Datoteka vsebuje plast polnila zvrsti <b>%1</b>, ki ni podprt, ta plast bo "
-"pretvorjena v plast slikanja."
+"pretvorjena v plast slikanja"
 
 #: libs/impex/IntegralFrameDuration.h:32
 #, kde-format
@@ -18840,7 +18841,7 @@ msgstr "Ekvivalenca"
 #, kde-format
 msgctxt "Blending mode - Additive Subtractive"
 msgid "Additive Subtractive"
-msgstr "Seštevno odštevno"
+msgstr "Prištevalno odštevalno"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:105
 #, kde-format
@@ -19312,7 +19313,7 @@ msgstr "Oddalji"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:354
+#: libs/ui/actions/KisPasteActionFactories.cpp:359
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -19447,7 +19448,7 @@ msgstr "2. Na mesto vira (%1) ni možno pisati."
 #: libs/resources/KisResourceLocator.cpp:799
 #, kde-format
 msgid "Could not add %1 to the database"
-msgstr "%1 ni mogoče dodati plasti k zbirki podatkov."
+msgstr "%1 ni mogoče dodati plasti k zbirki podatkov"
 
 #: libs/resources/KisResourceLocator.cpp:843
 #: libs/resources/KisResourceLocator.cpp:1190
@@ -20015,7 +20016,7 @@ msgstr "Dodajanje vira ni uspelo."
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to overwrite the resource"
-msgstr "Vira ni bilo mogoče prepisati."
+msgstr "Vira ni bilo mogoče prepisati"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:193
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:226
@@ -20248,7 +20249,7 @@ msgstr "Kopiraj združeno"
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
-msgstr "Izbor je že v vektorski obliki"
+msgstr "Izbor je že v vektorski obliki "
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:474
 #: libs/ui/actions/kis_selection_action_factories.cpp:494
@@ -20260,7 +20261,7 @@ msgstr "Pretvori v vektorski izbor"
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
-msgstr "Izbor je že v rastrski obliki"
+msgstr "Izbor je že v rastrski obliki "
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:535
 #, kde-format
@@ -20285,18 +20286,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "Prilepi like"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:361 libs/ui/KisView.cpp:602
+#: libs/ui/actions/KisPasteActionFactories.cpp:273
+#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:602
 #, kde-format
 msgid "(pasted)"
 msgstr "(prilepljeno)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:359
+#: libs/ui/actions/KisPasteActionFactories.cpp:364
 #, kde-format
 msgid "Pasted"
 msgstr "Prilepljeno"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:414
+#: libs/ui/actions/KisPasteActionFactories.cpp:419
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "Slog lepljenja"
@@ -20446,7 +20447,7 @@ msgstr ""
 #, kde-format
 msgctxt "FPS as a unit following a value, like 60 FPS"
 msgid " FPS"
-msgstr "sl/s"
+msgstr " sl/s"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:88
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:94
@@ -21586,7 +21587,7 @@ msgstr "Interval preskoka:"
 #: libs/ui/animation/VideoImportDialog.ui:447
 #, kde-format
 msgid "Start at: "
-msgstr "Prični pri:"
+msgstr "Prični pri: "
 
 #. i18n: ectx: property (text), widget (QLabel, exportDurationLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
@@ -21939,7 +21940,7 @@ msgstr "Navzdol"
 #, kde-format
 msgctxt "floating message about mirroring"
 msgid "Horizontal mirroring: %1 "
-msgstr "Vodoravno zrcaljenje: %1"
+msgstr "Vodoravno zrcaljenje: %1 "
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
 #: libs/ui/canvas/kis_canvas_controller.cpp:360
@@ -27050,7 +27051,7 @@ msgstr "Uporabi predogled s sklada v orodju Preoblikuj"
 #: libs/ui/forms/wdgperformancesettings.ui:557
 #, kde-format
 msgid "Force Instant Preview"
-msgstr " Vsili sprotni predogled"
+msgstr "Vsili sprotni predogled"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkFiltersForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:563
@@ -27274,7 +27275,7 @@ msgstr "Vodoravni polmer pravokotnih kotov"
 #: libs/ui/forms/wdgrectangleconstraints.ui:181
 #, kde-format
 msgid "Round X: "
-msgstr "Zaobljeni X:"
+msgstr "Zaobljeni X: "
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intRoundCornersY)
 #: libs/ui/forms/wdgrectangleconstraints.ui:197
@@ -27286,7 +27287,7 @@ msgstr "Navpični polmer pravokotnih kotov"
 #: libs/ui/forms/wdgrectangleconstraints.ui:203
 #, kde-format
 msgid "Round Y: "
-msgstr "Zaobljeni Y:"
+msgstr "Zaobljeni Y: "
 
 #. i18n: ectx: property (text), widget (QLabel, newBrushNameLabel)
 #: libs/ui/forms/wdgsavebrushpreset.ui:35
@@ -29523,27 +29524,7 @@ msgstr ""
 "b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:215
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><table width=\"100%\" cellpadding="
-#| "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
-#| "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#| "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-#| "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#| "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#| "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#| "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
-#| "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
-#| "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
-#| "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
-#| "p><p><a href=\"https://api.kde.org/appscomplete-api/krita-apidocs/libs/"
-#| "libkis/html/index.html\"><span style=\" text-decoration: underline; color:"
-#| "%1;\">Scripting API</span></a></p><p><a href=\"https://scripting.krita."
-#| "org/lessons/introduction\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Scripting School</span></a></p></td></table></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
 "style=\" color:%1;\"><b>Using Krita</b></span></p><p><a href=\"https://krita."
@@ -29568,21 +29549,21 @@ msgstr ""
 "style=\" color:%1;\"><b>Kako uporabljati Krito</b></span></p><p><a href="
 "\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; "
 "color:%1;\">Podprite razvoj Krite!</span></a></p><p><a href=\"https://docs."
-"krita.org/en/user_manual/getting_started.html\"><span style=\" text-"
+"krita.org/sl/user_manual/getting_started.html\"><span style=\" text-"
 "decoration: underline; color:%1;\">Prvi koraki</span></a></p><p><a href="
-"\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:"
-"%1;\">Priročnik</span></a></p><p><a href=\"https://krita.org/\"><span style="
-"\" text-decoration: underline; color:%1;\">Spletišče Krita</span></a></p></"
-"td><td><p><span style=\" color:%1;\"><b>Programiranje Krite</b></span></"
-"p><p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">Skupnost uporabnikov</span></a></p><p><a href="
-"\"https://invent.kde.org/graphics/krita\"><span style=\" text-decoration: "
-"underline; color:%1;\">Izvorna koda</span></a></p><p><a href=\"https://api."
-"kde.org/appscomplete-api/krita-apidocs/libs/libkis/html/index.html\"><span "
-"style=\" text-decoration: underline; color:%1;\">API za skripte</span></a></"
-"p><p><a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-"style=\" text-decoration: underline; color:%1;\">Šola pisanja skriptov</"
-"span></a></p></td></table></body></html>"
+"\"https://docs.krita.org/sl/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Priročnik</span></a></p><p><a href=\"https://krita.org/sl/"
+"\"><span style=\" text-decoration: underline; color:%1;\">Spletišče Krita</"
+"span></a></p></td><td><p><span style=\" color:%1;\"><b>Programiranje Krite</"
+"b></span></p><p><a href=\"https://krita-artists.org\"><span style=\" text-"
+"decoration: underline; color:%1;\">Skupnost uporabnikov</span></a></p><p><a "
+"href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+"decoration: underline; color:%1;\">Izvorna koda</span></a></p><p><a href="
+"\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" text-"
+"decoration: underline; color:%1;\">API za skripte</span></a></p><p><a href="
+"\"https://scripting.krita.org/lessons/introduction\"><span style=\" text-"
+"decoration: underline; color:%1;\">Šola pisanja skriptov</span></a></p></"
+"td></table></body></html>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format
@@ -31711,7 +31692,7 @@ msgid ""
 "Blend inner glow, satin, and overlay with layer before blending with "
 "document."
 msgstr ""
-"Zmešaj notranje žarenje, saten in prekrivanje s plastjo pred zmešanjem z "
+"Zlij notranje žarenje, saten in prekrivanje s plastjo pred zlivanjem z "
 "dokumentom."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_7)
@@ -31724,7 +31705,7 @@ msgstr "Zmešaj notranje uč&inke kot skupino"
 #: libs/ui/layerstyles/wdgblendingoptions.ui:248
 #, kde-format
 msgid "Blend clipping group before blending with document"
-msgstr "Zmešaj porezano skupino pred zmešanjem z dokumentom"
+msgstr "Zlij porezano skupino pred zlivanjem z dokumentom"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_8)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:251
@@ -32736,7 +32717,7 @@ msgstr "Prekrivnost:"
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:164
 #, kde-format
 msgid "Position: "
-msgstr "Položaj:"
+msgstr "Položaj: "
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:39
 #, kde-format
@@ -33067,9 +33048,9 @@ msgid ""
 msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/RGB_color_space\">RGB (rdeča, "
 "zelena, modra)</a></b> je barvni model, ki ga uporabljajo zasloni in drugi "
-"na svetlobi zasnovani mediji.<br/>RGB je aditiven barvni model: dodajanje "
-"barv jih naredi svetlejše. Ta barvni model je najbolj obsežen od vseh "
-"barvnih modelov in je priporočljiv kot model za slikanje, ki ga lahko "
+"na svetlobi zasnovani mediji.<br/>RGB je aditiven, prištevalen barvni model: "
+"dodajanje barv jih naredi svetlejše. Ta barvni model je najbolj obsežen od "
+"vseh barvnih modelov in je priporočljiv kot model za slikanje, ki ga lahko "
 "kasneje pretvorite v druge prostore. RGB je tudi priporočen barvni prostor "
 "za urejanje HDR."
 
@@ -33108,10 +33089,10 @@ msgid ""
 msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/CIE_1931_color_space\">CIE XYZ</"
 "a></b> je prostor, ki ga določi CIE kot prostor, ki zajema vse druge barve, "
-"in se uporablja za pretvorbo barv med profili. XYZ je aditiven barvni model, "
-"kar pomeni, da seštevanje barv naredi le-te svetlejše. XYZ <b>ni</b> "
-"priporočljivo za slikanje, vendar je lahko koristen za prekodiranje. Velja "
-"domneva, da je krivulja odziva tona linearna."
+"in se uporablja za pretvorbo barv med profili. XYZ je aditiven, prištevalen "
+"barvni model, kar pomeni, da seštevanje barv naredi le-te svetlejše. XYZ "
+"<b>ni</b> priporočljivo za slikanje, vendar je lahko koristen za "
+"prekodiranje. Velja domneva, da je krivulja odziva tona linearna."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:424
 #, kde-format
@@ -33788,7 +33769,7 @@ msgstr "Prilagoditev XML za filter"
 #: libs/ui/widgets/kis_filter_selector_widget.cc:214
 #, kde-format
 msgid "No configuration options"
-msgstr "Ni možnosti nastavitev."
+msgstr "Ni možnosti nastavitev"
 
 #: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:148
 #, kde-format
@@ -34365,7 +34346,7 @@ msgstr "Šum"
 #: plugins/filters/palettize/palettize.ui:211
 #, kde-format
 msgid "Amount:  "
-msgstr "Količina:"
+msgstr "Količina: "
 
 #. i18n: ectx: property (text), widget (QLabel, patternValueModeLabel)
 #: libs/ui/widgets/KisDitherWidget.ui:108
@@ -35000,7 +34981,7 @@ msgstr "Novi kontaktni podatki"
 #: libs/widgets/KoConfigAuthorPage.ui:78
 #, kde-format
 msgid "Given Name:"
-msgstr " Ime:"
+msgstr "Ime:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
 #: libs/widgets/KoConfigAuthorPage.ui:101
@@ -35091,7 +35072,7 @@ msgstr "Dodaj barvo k paleti"
 #: libs/widgets/KoEditColorSetDialog.cpp:202
 #, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr "V datoteko palete %1 ni mogoče pisati. Mogoče je samo za branje."
+msgstr "V datoteko palete %1 ni mogoče pisati. Mogoče je samo za branje. "
 
 #. i18n: ectx: property (text), widget (QLabel, paletteLabel)
 #: libs/widgets/KoEditColorSetDialog.cpp:202
@@ -36658,25 +36639,25 @@ msgstr "Besedilo pod ikonami"
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:357
 #, kde-format
 msgid "Small (%1x%2)"
-msgstr "Majhna (%1 × %2)"
+msgstr "Majhna (%1x%2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:338
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:359
 #, kde-format
 msgid "Medium (%1x%2)"
-msgstr "Srednja (%1 × %2)"
+msgstr "Srednja (%1x%2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:340
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:361
 #, kde-format
 msgid "Large (%1x%2)"
-msgstr "Velika (%1 × %2)"
+msgstr "Velika (%1x%2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:342
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:363
 #, kde-format
 msgid "Huge (%1x%2)"
-msgstr "Velikanska (%1 × %2)"
+msgstr "Velikanska (%1x%2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:385
 #, kde-format
@@ -36886,7 +36867,7 @@ msgstr "Shrani pomočnika"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1543
 #, kde-format
 msgid "Density: "
-msgstr "Gostota:"
+msgstr "Gostota: "
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1548
 #, kde-format
@@ -37445,7 +37426,7 @@ msgstr ""
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:211
 #, kde-format
 msgid "Use custom color for selector background."
-msgstr "Uporabi barvo po meri za ozadje izbirnika"
+msgstr "Uporabi barvo po meri za ozadje izbirnika."
 
 #. i18n: ectx: property (title), widget (QGroupBox, useDifferentColorSpaceCheckbox)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:233
@@ -44130,7 +44111,7 @@ msgstr "Ponastavi sence  "
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:399
 #, kde-format
 msgid "Red    "
-msgstr "Rdeča"
+msgstr "Rdeča    "
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #. i18n: ectx: property (text), widget (QLabel, label_22)
@@ -44138,7 +44119,7 @@ msgstr "Rdeča"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:293
 #, kde-format
 msgid "Blue  "
-msgstr "Modra"
+msgstr "Modra  "
 
 #. i18n: ectx: property (text), widget (QPushButton, pushResetMidtones)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:205
@@ -48511,7 +48492,7 @@ msgstr "Vira ni bilo mogoče izvoziti za vdelavo: %1"
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
-msgstr "Virov ni bilo mogoče zapisati: %1."
+msgstr "Virov ni bilo mogoče zapisati: %1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:222
 #, kde-format
@@ -52367,13 +52348,13 @@ msgstr "Nevtralna točka: "
 #, kde-format
 msgctxt "@label:slider"
 msgid "Brightness: "
-msgstr "Svetlost:"
+msgstr "Svetlost: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:256
 #, kde-format
 msgctxt "@label:slider"
 msgid "Contrast: "
-msgstr "Kontrast:"
+msgstr "Kontrast: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:259
 #, kde-format
@@ -53096,7 +53077,7 @@ msgstr "Poteza"
 #, kde-format
 msgctxt "Option Category"
 msgid "Custom"
-msgstr "Po meri ..."
+msgstr "Po meri"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:18
 #, kde-format
@@ -53584,7 +53565,7 @@ msgstr ""
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:91
 #, kde-format
 msgid "Clustering amount: "
-msgstr "Količina kopičenja:"
+msgstr "Količina kopičenja: "
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:95
 #, kde-format
@@ -57136,7 +57117,7 @@ msgstr "Vrednost"
 #: plugins/tools/basictools/wdgcolorsampler.ui:164
 #, kde-format
 msgid "Radius: "
-msgstr "Polmer:"
+msgstr "Polmer: "
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, radius)
 #: plugins/tools/basictools/wdgcolorsampler.ui:183
@@ -57379,7 +57360,7 @@ msgstr ""
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:747
 #, kde-format
 msgid "Click and drag to shear selection."
-msgstr "Kliknite in povlecite za striženje oz. nagib"
+msgstr "Kliknite in povlecite za striženje oz. nagib."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:752
 #, kde-format
@@ -57892,13 +57873,17 @@ msgid "Use selection as boundary"
 msgstr "Uporabi izbor kot mejo"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "The 'grow/shrink' spinbox prefix in selection tools options"
+#| msgid "Grow: "
 msgctxt "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
 msgid "Grow: "
 msgstr "Razširi: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "The 'feather' spinbox prefix in selection tools options"
+#| msgid "Feather: "
 msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
 msgid "Feather: "
 msgstr "Operjanje: "
@@ -58123,7 +58108,7 @@ msgstr "Magnetni izbor"
 #, kde-format
 msgctxt "Filter radius in Magnetic Select Tool settings"
 msgid "Filter Radius: "
-msgstr "Polmer filtra:"
+msgstr "Polmer filtra: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:741
 #, kde-format
@@ -58815,33 +58800,36 @@ msgstr "Navpična postavitev besedila"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:25
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Editor"
 msgid "Editor Mode"
-msgstr "Način urejevalnika"
+msgstr "Urednik"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:31
 #, kde-format
 msgid "Note: the Rich Text editor only supports a subset of SVG."
-msgstr "Opomba: urejevalnik obogatenega besedila podpira samo podnabor SVG."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRichText)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:41
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Text Only"
 msgid "Rich Te&xt Only"
-msgstr "Samo obo&gateno besedilo"
+msgstr "Samo besedilo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBoth)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:48
 #, kde-format
 msgid "Both"
-msgstr "Oboje"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSvgSource)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:55
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "SVG Source"
 msgid "S&VG Source Only"
-msgstr "Samo izvorna koda S&VG"
+msgstr "Vir SVG"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:84
@@ -60380,554 +60368,101 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
 
-#~ msgid "Get your Krita Supporter Badge here!"
-#~ msgstr "Pridobite svojo značko podpornika Krite tukaj!"
-
-#~ msgid "&Canvas"
-#~ msgstr "Pla&tno"
+#~ msgctxt "action"
+#~ msgid "Select eraser preset"
+#~ msgstr "Izberite prednastavitev radirke"
 
 #~ msgctxt "action"
-#~ msgid "&Reset zoom"
-#~ msgstr "Ponas&tavi povečavo"
+#~ msgid "Select eraser preset, along with the freehand brush tool"
+#~ msgstr ""
+#~ "Izberite prednastavitev za brisanje skupaj z orodjem za prostoročni čopič"
 
 #~ msgctxt "action"
-#~ msgid "Reset zoom"
-#~ msgstr "Ponastavi povečavo"
+#~ msgid "Select brush preset"
+#~ msgstr "Izberite prednastavitev čopiča"
 
-#~ msgid ""
-#~ "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on "
-#~ "another free program called FFmpeg to turn frame-by-frame animations into "
-#~ "video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-#~ "i><br><br>            To learn more about setting up Krita for rendering "
-#~ "animations, <a href=\"https://docs.krita.org/en/reference_manual/"
-#~ "render_animation.html#setting-up-krita-for-exporting-animations\">please "
-#~ "visit this section of our User Manual.</a>"
-#~ msgstr ""
-#~ "<b>Krita ne najde FFmpeg-a!</b><br>                <i>Krita je odvisna od "
-#~ "drugega prostega programa, imenovanega FFmpeg, da bi animacije sličico po "
-#~ "sličico spremenili v videodatoteke (<a href=\"https://www.ffmpeg.org"
-#~ "\">www.ffmpeg.org</a>).</i><br><br>               Če želite izvedeti več "
-#~ "o nastavitvah Krite za upodabljanje animacij, obiščite <a href=\"https://"
-#~ "docs.krita.org/en/reference_manual/render_animation.html#setting-up-krita-"
-#~ "for-exporting-animations\">ta razdelek našega Uporabniškega priročnika</"
-#~ "a>."
+#~ msgctxt "action"
+#~ msgid "Select brush preset, along with the freehand brush tool"
+#~ msgstr "Izberite prednastavitev čopiča in orodje za prostoročni čopič"
 
-#~ msgid "Please extract ffmpeg from the archive first."
-#~ msgstr "Najprej izvlecite ffmpeg iz arhiva."
+#~ msgctxt "description of a file type"
+#~ msgid "Radiance RGBE Image"
+#~ msgstr "Slika RGBE Radiance"
 
-#~ msgid ""
-#~ "This is a source code archive. Please download the application archive "
-#~ "('Windows Builds'), unpack it and then provide the path to the extracted "
-#~ "ffmpeg file."
-#~ msgstr ""
-#~ "To je arhiv izvorne kode. Prenesite arhiv programa (»Windows Builds«), ga "
-#~ "razpakirajte in nato navedite pot do izvlečene datoteke ffmpeg."
+#~ msgid "Toggle Previous Brush Preset"
+#~ msgstr "Preklopi prejšnjo prednastavitev čopiča"
 
-#~ msgid "This is a source code archive. Please install ffmpeg instead."
-#~ msgstr "To je arhiv izvorne kode. Namesto tega namestite ffmpeg."
+#~ msgid "Deselect"
+#~ msgstr "Prekliči izbor"
 
-#~ msgctxt "paletegen status mode option name"
-#~ msgid "Difference"
-#~ msgstr "Razlika"
+#~ msgid "Activate Next Layer"
+#~ msgstr "Aktiviraj naslednjo plast"
 
-#~ msgctxt "paleteuse dither option name"
-#~ msgid "none"
-#~ msgstr "brez"
+#~ msgid "Activate Previous Layer"
+#~ msgstr "Aktiviraj predhodno plast"
 
-#~ msgctxt "paleteuse diff mode option name"
-#~ msgid "none"
-#~ msgstr "brez"
+#~ msgid "Activate Freehand Brush Tool"
+#~ msgstr "Aktiviraj orodje Prostoročni čopič"
 
-#~ msgid "Choose a video file"
-#~ msgstr "Izbiranje video datoteko"
+#~ msgid "Activate Transform Tool"
+#~ msgstr "Aktiviraj orodje Preoblikovanje"
 
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
-#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">This video contains "
-#~ "more than 100 frames. Loading too many frames can overload your computer. "
-#~ "Use a</span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;"
-#~ "\"> </span><a href=\"https://kdenlive.org\"><span style=\" font-"
-#~ "size:16pt; font-weight:400; text-decoration: underline; color:#2980b9;"
-#~ "\">video editor </span></a><span style=\" font-size:16pt; font-"
-#~ "weight:400; color:#ff692e;\">instead!</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">OPOZORILO: </span><span "
-#~ "style=\" font-size:16pt; font-weight:400; color:#ff692e;\">Ta video "
-#~ "vsebuje več kot 100 sličic. Nalaganje preveč sličic lahko prekomerno "
-#~ "obremeni vaš računalnik. Raje uporabite </span><span style=\" font-"
-#~ "size:16pt; font-weight:400; color:#ff1500;\"> </span><a href=\"https://"
-#~ "kdenlive.org\"><span style=\" font-size:16pt; font-weight:400; text-"
-#~ "decoration: underline; color:#2980b9;\">program za montažo</span></"
-#~ "a><span style=\" font-size:16pt; font-weight:400; color:#ff692e;\">!</"
-#~ "span></p></body></html>"
-
-#~ msgid "FFMpeg"
-#~ msgstr "FFMpeg"
-
-#~ msgid "Export:"
-#~ msgstr "Izvozi:"
-
-#~ msgid "Image Se&quence"
-#~ msgstr "Se&kvenca slik"
-
-#~ msgid "&Video"
-#~ msgstr "&Video"
-
-#~ msgid "Video Options"
-#~ msgstr "Možnosti videa"
-
-#~ msgid "FF&Mpeg: "
-#~ msgstr "FF&Mpeg: "
-
-#~ msgid "Video Location:"
-#~ msgstr "Mesto videa:"
-
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
-#~ "body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Opozorilo:</span> "
-#~ "FFMpeg mora biti vsaj različice 4.2+, da bo prosojnost gif delovala.</p></"
-#~ "body></html>"
-
-#~ msgid "Image Sequence Options"
-#~ msgstr "Možnosti sekvence slik"
-
-#~ msgctxt "floating on-canvas message"
-#~ msgid ""
-#~ "Cannot open audio: \"%1\"\n"
-#~ "Error: %2"
-#~ msgstr ""
-#~ "Zvoka ni mogoče odpreti: »%1«\n"
-#~ "Napaka: %2"
-
-#~ msgid "Drag an image into the window to open"
-#~ msgstr "Povlecite sliko v okno, da se odpre"
-
-#~ msgid "New File"
-#~ msgstr "Nova datoteka"
-
-#~ msgid "Recent Documents"
-#~ msgstr "Nedavni dokumenti"
-
-#~ msgid "HDR Warning.................................."
-#~ msgstr "Opozorilo HDR.................................."
-
-#~ msgid "Grid Settings"
-#~ msgstr "Nastavitve mreže"
-
-#~ msgid ""
-#~ "<b>Note: Krita will need to be restarted for changes to take effect</b>"
-#~ msgstr ""
-#~ "<b>Opomba: Krito je potrebno za učinkovanje sprememb ponovno zagnati</b>"
-
-#~ msgid "Enable Smooth Zooming"
-#~ msgstr "Omogoči gladko zoomiranje"
-
-#~ msgid "&Description:"
-#~ msgstr "&Opis:"
-
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "&Filter:"
-
-#~ msgid "Duplicate current profile"
-#~ msgstr "Podvoji trenutni profil"
-
-#~ msgid "Select Layer Mode"
-#~ msgstr "Izberite način plasti"
-
-#~ msgid "Select Multiple Layer Mode"
-#~ msgstr "Izberite način več plasti"
-
-#~ msgid "Reset Zoom to 100%"
-#~ msgstr "Ponastavi približevanje na 100%"
-
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr ""
-#~ "Ni bilo mogoče shraniti %1.\n"
-#~ "Razlog: %2"
-
-#~ msgid ""
-#~ "Could not open %2.\n"
-#~ "Reason: %1"
-#~ msgstr ""
-#~ "Ni bilo mogoče odpreti %2.\n"
-#~ "Razlog: %1."
-
-#~ msgid "Unexpected error. Please contact developers."
-#~ msgstr "Nepričakovana napaka. Obrnite se na razvijalce."
-
-#~ msgctxt "Fetching remote image"
-#~ msgid "Do you want to download the image at %1?"
-#~ msgstr "Ali želite prenesti sliko v %1?"
-
-#~ msgid ""
-#~ "Grow (positive values) or shrink (negative values) the selection by the "
-#~ "set amount"
-#~ msgstr ""
-#~ "Razširi (pozitivne vrednosti) ali skrči (negativne vrednosti) izbor za "
-#~ "določeno količino"
-
-#~ msgid "Make the selection using the active layer"
-#~ msgstr "Opravi izbor s pomočjo dejavne plasti"
-
-#~ msgid "Make the selection using a merged copy of all layers"
-#~ msgstr "Opravi izbor s pomočjo združene kopije vseh plasti"
-
-#~ msgid ""
-#~ "Make the selection using a merged copy of the selected color-labeled "
-#~ "layers"
-#~ msgstr ""
-#~ "Opravi izbor s pomočjo združene kopije izbranih barvno označenih plasti"
-
-#~ msgid "Fit Page"
-#~ msgstr "Prilagodi strani"
-
-#~ msgid "Colu&mns:"
-#~ msgstr "Stol&pci:"
-
-#~ msgid "&Rows:"
-#~ msgstr "V&rstice:"
-
-#~ msgid "HSV Sliders to Show"
-#~ msgstr "Prikazani drsniki HSV"
-
-#~ msgid "HSL Sliders to Show"
-#~ msgstr "Prikazani drsniki HSL"
-
-#~ msgid "HSI Sliders to Show"
-#~ msgstr "Prikazani drsniki HSI"
-
-#~ msgid "HSY' Sliders to Show"
-#~ msgstr "Prikazani drsniki HSY’"
-
-#~ msgid "Edit Audio:"
-#~ msgstr "Uredi zvok:"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Audio playback is not supported in this build!"
-#~ msgstr "Predvajanje zvoka ni podprto v tej graditvi!"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "Odpri zvok …"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "Spremeni zvok (%1) ..."
-
-#~ msgid "Start merging time"
-#~ msgstr "Čas pričetka spajanja"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "The amount of time after a merged stroke before merging again"
-#~ msgstr "Pretečeni čas po spojeni potezi čopiča pred ponovnim spajanjem"
-
-#~ msgid "Group time"
-#~ msgstr "Čas skupine"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The amount of time every stroke should be apart from its previous stroke "
-#~ "to be classified in one group"
-#~ msgstr ""
-#~ "Vmesni čas med vsako potezo od prejšnje poteze, da je razvrščena v eno "
-#~ "skupino"
-
-#~ msgid "Split Strokes"
-#~ msgstr "Razdeli potezo"
-
-#~ msgid "The added duration for showing the last frame."
-#~ msgstr "Dodatno trajanje za prikaz zadnje sličice."
-
-#~ msgid ""
-#~ "⚠ Unsupported color space.\n"
-#~ "Only \"RGB/Alpha 8-bit\" is supported."
-#~ msgstr ""
-#~ "⚠ Nepodprti barvni prostor.\n"
-#~ "Podprt je le »RGB/alfa, 8-bitno«."
-
-#~ msgctxt "JPEG-XL errors"
-#~ msgid ""
-#~ "JPEG-XL image is animated, but cannot retrieve animation frame header."
-#~ msgstr ""
-#~ "Slika JPEG-XL je animirana, vendar ne more pridobiti glave sličice "
-#~ "animacije."
-
-#~ msgid "Lossless compression"
-#~ msgstr "Stiskanje brez izgube"
-
-#~ msgid "Information"
-#~ msgstr "Podatki"
-
-#~ msgid "Flip vertically"
-#~ msgstr "Prevrni navpično"
-
-#~ msgid "Bypass filtering"
-#~ msgstr "Izpusti filtriranje"
-
-#~ msgid "Use faster pointwise upsampling"
-#~ msgstr "Uporabite hitrejše točkovno nadvzorčenje"
-
-#~ msgid "Use multithreaded decoding"
-#~ msgstr "Uporabi večnitno dekodiranje"
-
-#~ msgid "Color planes: "
-#~ msgstr "Barvne ravnine: "
-
-#~ msgid "Alpha plane: "
-#~ msgstr "Ravnina alfa:"
-
-#~ msgid "Color Rate"
-#~ msgstr "Barvna mera"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Displacement Option"
-#~ msgstr "Možnost razmestitve"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Total Random"
-#~ msgstr "Vir -> povsem naključno"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern"
-#~ msgstr "Vir -> vzorec"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern Locked"
-#~ msgstr "Vir -> zaklenjen vzorec"
-
-#~ msgid "0 px"
-#~ msgstr "0 sl. točk"
-
-#~ msgid "0 s"
-#~ msgstr "0 s"
-
-#~ msgid "1000"
-#~ msgstr "1000"
-
-#~ msgid "30 px"
-#~ msgstr "30 sl. točk"
-
-#~ msgid "3 s"
-#~ msgstr "3 s"
-
-#~ msgid "%1 s"
-#~ msgstr "%1 s"
-
-#~ msgctxt "option name"
-#~ msgid "Filter"
-#~ msgstr "Filter"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "\"%1\" does not support scaled preview (non-linear filter)"
-#~ msgstr "»%1« ne podpira raztegnjenega predogleda (nelinearni filter)"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Luminosity value of the brush that will not change the painting color. "
-#~ "All brush pixels darker than neutral point will paint with darker color, "
-#~ "pixels lighter than neutral point — lighter."
-#~ msgstr ""
-#~ "Vrednost svetilnosti čopiča, ki ne bo spremenila barve slikanja. Vse "
-#~ "slikovne točke čopiča, temnejše od nevtralne točke, bodo slikale s "
-#~ "temnejšo barvo, slikovne točke, svetlejše od nevtralne točke, pa s "
-#~ "svetlejšo."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Brightness correction for the brush"
-#~ msgstr "Korekcija svetlosti za čopič"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Contrast correction for the brush"
-#~ msgstr "Korekcija kontrasta za krtačo"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush tip does not have color channels. The brush will work "
-#~ "in \"Mask\" mode."
-#~ msgstr ""
-#~ "Izbrana konica čopiča nima barvnih kanalov. Čopič bo deloval v načinu "
-#~ "»Maska«."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush engine does not support \"Color\" or \"Lightness\" "
-#~ "modes. The brush will work in \"Mask\" mode."
-#~ msgstr ""
-#~ "Izbrani ustroj čopičev ne podpira načinov »Barva« ali »Svetlost«. Čopič "
-#~ "bo deloval v načinu »Maska«."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Brush average: %1\n"
-#~ "Adjusted average: %2"
-#~ msgstr ""
-#~ "Povprečje čopiča: %1\n"
-#~ "Prilagojeno povprečje: %2"
-
-#~ msgid "Mirrored"
-#~ msgstr "Zrcaljeno"
-
-#~ msgid "Not mirrored"
-#~ msgstr "Ni zrcaljeno"
-
-#~ msgid "Align the brush preview outline to the pixel grid"
-#~ msgstr "Poravnaj obris predogleda čopiča na mrežo slikovnih točk"
-
-#~ msgid " s"
-#~ msgstr " s"
-
-#~ msgid "Current selection"
-#~ msgstr "Trenutni izbor"
-
-#~ msgid "Contiguous region obtained from the layers"
-#~ msgstr "Zvezno območje, pridobljeno iz plasti"
-
-#~ msgid ""
-#~ "Set how far the region should extend from the selected pixel in terms of "
-#~ "color similarity"
-#~ msgstr ""
-#~ "Nastavite, kako daleč naj se območje razširi od izbrane slikovne točke "
-#~ "glede na podobnost barv"
-
-#~ msgid ""
-#~ "Set how far the fully opaque portion of the region should extend.\n"
-#~ "0% will make opaque only the pixels that are exactly equal to the "
-#~ "selected pixel.\n"
-#~ "100% will make opaque all the pixels in the region up to its boundary."
-#~ msgstr ""
-#~ "Določite, kako daleč naj se razširi popolnoma prekrivni del območja.\n"
-#~ "0 % naredi neprosojne le slikovne točke, ki so popolnoma enake izbrani "
-#~ "slikovni točki.\n"
-#~ "100 % naredi neprosojne vse slikovne točke v območju do njegove meje."
-
-#~ msgid ""
-#~ "Grow (positive values) or shrink (negative values) the region by the set "
-#~ "amount"
-#~ msgstr ""
-#~ "Razširi (pozitivne vrednosti) ali skrči (negativne vrednosti) območja za "
-#~ "določeno količino"
-
-#~ msgid ""
-#~ "Obtain the region using a merged copy of the selected color-labeled layers"
-#~ msgstr ""
-#~ "Pridobi območje s pomočjo združeno kopijo izbranih barvno označenih plasti"
-
-#~ msgctxt "The 'what to fill' section label in fill tool options"
-#~ msgid "What to fill"
-#~ msgstr "Kaj zapolniti"
-
-#~ msgctxt "The 'fill with' section label in fill tool options"
-#~ msgid "Fill with"
-#~ msgstr "Zapolni z"
-
-#~ msgctxt "The 'region extent' section label in fill tool options"
-#~ msgid "Region extent"
-#~ msgstr "Obseg območja"
-
-#~ msgctxt "The 'multiple fill' section label in fill tool options"
-#~ msgid "Multiple fill"
-#~ msgstr "Večkratno polnjenje"
+#~ msgctxt ""
+#~ "The 'spread' spinbox prefix in similar color selection tool options"
+#~ msgid "Spread: "
+#~ msgstr "Širjenje: "
 
 #~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "Striženje X"
+#~ msgid "Adjust text auto wrap"
+#~ msgstr "Prilagodite samodejno oblivanje besedila"
 
 #~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "Striženje Y"
+#~ msgid "Move text"
+#~ msgstr "Premakni besedilo"
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "Spremeni velikost v merilu"
+#~ msgctxt "Default line height for text"
+#~ msgid "Normal"
+#~ msgstr "Navadno"
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "Ponastavi preoblikovanja"
+#~ msgctxt "line height for text"
+#~ msgid "100%"
+#~ msgstr "100 %"
 
+#~ msgctxt "action"
+#~ msgid "Legacy Hard Wrap"
+#~ msgstr "Opuščeno togo oblivanje"
+
+#~ msgctxt "action"
 #~ msgid ""
-#~ "Set how far the selection should extend from the selected pixel in terms "
-#~ "of color similarity"
+#~ "Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
+#~ "are explicitly positioned, but the line height may be slightly inaccurate."
 #~ msgstr ""
-#~ "Nastavite, kako daleč naj se izbor razširi od izbrane slikovne točke "
-#~ "glede na podobnost barv"
+#~ "Uporabite starejši način togega oblivanja (kot v programu Krita 5.1 in "
+#~ "predhodnih izdajah). Vse vrstice so izrecno umeščene, vendar je lahko "
+#~ "višina vrstice nekoliko nenatančna."
 
+#~ msgctxt "action"
+#~ msgid "SVG Hard Wrap"
+#~ msgstr "Togo oblivanje SVG"
+
+#~ msgctxt "action"
+#~ msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
+#~ msgstr "Uporabi način togega oblivanja SVG v CSS z `white-space: pre`"
+
+#~ msgctxt "action"
+#~ msgid "SVG Auto Wrap with Fixed Width"
+#~ msgstr "Samodejno oblivanje s fiksno širino SVG"
+
+#~ msgctxt "action"
 #~ msgid ""
-#~ "Set how far the fully opaque portion of the selection should extend.\n"
-#~ "0% will make the selection opaque only where the pixels are exactly equal "
-#~ "to the selected pixel.\n"
-#~ "100% will make all the selection opaque up to its boundary."
+#~ "Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
+#~ "defining the text width."
 #~ msgstr ""
-#~ "Določite, kako daleč naj se razširi popolnoma prekrivni del izbora.\n"
-#~ "0 % naredi neprosojne le slikovne točke, ki so popolnoma enake izbrani "
-#~ "slikovni točki.\n"
-#~ "100 % naredi neprosojne vse slikovne točke v izboru do njegove meje."
+#~ "Uporabi način togega oblivanja SVG v CSS z `white-space: pre-wrap` in z "
+#~ "določanjem širine besedila s parametrom `inline-size`"
 
-#~ msgid "Set how far the selection should extend in terms of color similarity"
-#~ msgstr "Nastavite, kako daleč naj se izbor razširi glede na podobnost barv"
+#~ msgid "Text W&rapping"
+#~ msgstr "O&blivanje besedila"
 
-#~ msgid "Check this option to fill all the regions except the selected ones"
-#~ msgstr "Potrdite to možnost, če želite zapolniti vsa območja razen izbranih"
-
-#~ msgctxt "The 'what to fill' section label in enclose and fill tool options"
-#~ msgid "What to fill"
-#~ msgstr "Kaj zapolniti"
-
-#~ msgctxt "The 'fill with' section label in enclose and fill tool options"
-#~ msgid "Fill with"
-#~ msgstr "Zapolni z"
-
-#~ msgctxt "The 'region extent' section label in enclose and fill tool options"
-#~ msgid "Region extent"
-#~ msgstr "Obseg območja"
-
-#~ msgctxt "Region selection method in enclose and fill tool"
-#~ msgid "All regions"
-#~ msgstr "Vsa območja"
-
-#~ msgctxt "Region selection method in enclose and fill tool"
-#~ msgid "All regions except the transparent ones"
-#~ msgstr "Vsa območja razen prosojnih"
-
-#~ msgctxt "Region selection method in enclose and fill tool"
-#~ msgid "All regions except those of a specific color or transparent"
-#~ msgstr "Vsa območja razen tistih, ki so določene barve ali prosojna"
-
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "Sli&karska orodja"
-
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "Slikarska orodja"
-
-#~ msgctxt "action"
-#~ msgid "Brush composite"
-#~ msgstr "Sestavljen čopič"
-
-#~ msgctxt "JPEG-XL errors"
-#~ msgid "JPEG-XL encoded profile not implemented"
-#~ msgstr "Kodirani profil JPEG-XL ni implementiran"
+#~ msgid "Edit SVG Source"
+#~ msgstr "Uredi vir SVG"

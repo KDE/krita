@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-19 02:28+0000\n"
+"POT-Creation-Date: 2023-09-21 02:30+0000\n"
 "PO-Revision-Date: 2023-09-12 23:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -19309,7 +19309,7 @@ msgstr "Dış"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:354
+#: libs/ui/actions/KisPasteActionFactories.cpp:359
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20289,18 +20289,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "Şekiller yapıştır"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:361 libs/ui/KisView.cpp:602
+#: libs/ui/actions/KisPasteActionFactories.cpp:273
+#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:602
 #, kde-format
 msgid "(pasted)"
 msgstr "(yapıştırılmış)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:359
+#: libs/ui/actions/KisPasteActionFactories.cpp:364
 #, kde-format
 msgid "Pasted"
 msgstr "Yapıştırılmış"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:414
+#: libs/ui/actions/KisPasteActionFactories.cpp:419
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "Biçem Yapıştır"
@@ -29518,27 +29518,7 @@ msgstr ""
 "span></b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:215
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><table width=\"100%\" cellpadding="
-#| "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
-#| "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#| "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-#| "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#| "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#| "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#| "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
-#| "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
-#| "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
-#| "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
-#| "p><p><a href=\"https://api.kde.org/appscomplete-api/krita-apidocs/libs/"
-#| "libkis/html/index.html\"><span style=\" text-decoration: underline; color:"
-#| "%1;\">Scripting API</span></a></p><p><a href=\"https://scripting.krita."
-#| "org/lessons/introduction\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Scripting School</span></a></p></td></table></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
 "style=\" color:%1;\"><b>Using Krita</b></span></p><p><a href=\"https://krita."
@@ -29562,7 +29542,7 @@ msgstr ""
 "<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
 "style=\" color:%1;\"><b>Krita'yı Kullanmak</b></span></p><p><a href="
 "\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Krita'nın Geliştirilmesini Destekle!</span></a></p><p><a href="
+"color:%1;\">Krita'nın Geliştirmesini Destekle!</span></a></p><p><a href="
 "\"https://docs.krita.org/en/user_manual/getting_started.html\"><span style="
 "\" text-decoration: underline; color:%1;\">Başlarken</span></a></p><p><a "
 "href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; "
@@ -29573,11 +29553,11 @@ msgstr ""
 "decoration: underline; color:%1;\">Kullanıcı Topluluğu</span></a></p><p><a "
 "href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline; color:%1;\">Kaynak Kodu</span></a></p><p><a href="
-"\"https://api.kde.org/appscomplete-api/krita-apidocs/libs/libkis/html/index."
-"html\"><span style=\" text-decoration: underline; color:%1;\">Betik Yazımı "
-"API'si</span></a></p><p><a href=\"https://scripting.krita.org/lessons/"
-"introduction\"><span style=\" text-decoration: underline; color:%1;\">Betik "
-"Yazımı Okulu</span></a></p></td></table></body></html>"
+"\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" text-"
+"decoration: underline; color:%1;\">Betik Yazım API'si</span></a></p><p><a "
+"href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" "
+"text-decoration: underline; color:%1;\">Betik Yazım Okulu</span></a></p></"
+"td></table></body></html>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format

@@ -55,7 +55,7 @@
 # Juan Manuel García Molina <juanma@superiodico.net>, 2006.
 # Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2007, 2009, 2010.
 # Jaime Robles <jaime@kde.org>, 2007.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2011, 2014, 2015, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2008, 2011, 2014, 2015, 2021, 2022, 2023 Eloy Cuadra <ecuadra@eloihr.net>
 # Enrique Matias Sanchez (Quique) <cronopios@gmail.com>, 2009.
 # Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>, 2011.
 # Raul Gonzalez <raulgf83@gmail.com>, 2011, 2012, 2013, 2014, 2015.
@@ -65,15 +65,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-19 02:28+0000\n"
-"PO-Revision-Date: 2023-08-26 18:08+0100\n"
+"POT-Creation-Date: 2023-09-21 02:30+0000\n"
+"PO-Revision-Date: 2023-09-20 22:41+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 23.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -19377,7 +19377,7 @@ msgstr "Fuera"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:354
+#: libs/ui/actions/KisPasteActionFactories.cpp:359
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20353,18 +20353,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "Pegar formas"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:361 libs/ui/KisView.cpp:602
+#: libs/ui/actions/KisPasteActionFactories.cpp:273
+#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:602
 #, kde-format
 msgid "(pasted)"
 msgstr "(pegado)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:359
+#: libs/ui/actions/KisPasteActionFactories.cpp:364
 #, kde-format
 msgid "Pasted"
 msgstr "Pegado"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:414
+#: libs/ui/actions/KisPasteActionFactories.cpp:419
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "Pegar estilo"
@@ -29642,27 +29642,7 @@ msgstr ""
 "span></b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:215
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><table width=\"100%\" cellpadding="
-#| "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
-#| "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#| "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-#| "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#| "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#| "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#| "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
-#| "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
-#| "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
-#| "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
-#| "p><p><a href=\"https://api.kde.org/appscomplete-api/krita-apidocs/libs/"
-#| "libkis/html/index.html\"><span style=\" text-decoration: underline; color:"
-#| "%1;\">Scripting API</span></a></p><p><a href=\"https://scripting.krita."
-#| "org/lessons/introduction\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Scripting School</span></a></p></td></table></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
 "style=\" color:%1;\"><b>Using Krita</b></span></p><p><a href=\"https://krita."
@@ -29697,11 +29677,11 @@ msgstr ""
 "underline; color:%1;\">Comunidad de usuarios</span></a></p><p><a href="
 "\"https://invent.kde.org/graphics/krita\"><span style=\" text-decoration: "
 "underline; color:%1;\">Código fuente</span></a></p><p><a href=\"https://api."
-"kde.org/appscomplete-api/krita-apidocs/libs/libkis/html/index.html\"><span "
-"style=\" text-decoration: underline; color:%1;\">API de guiones</span></a></"
-"p><p><a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-"style=\" text-decoration: underline; color:%1;\">Escuela de guiones</span></"
-"a></p></td></table></body></html>"
+"kde.org/krita/html/classKrita.html\"><span style=\" text-decoration: "
+"underline; color:%1;\">API de guiones</span></a></p><p><a href=\"https://"
+"scripting.krita.org/lessons/introduction\"><span style=\" text-decoration: "
+"underline; color:%1;\">Escuela de guiones</span></a></p></td></table></"
+"body></html>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format

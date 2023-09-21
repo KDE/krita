@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-19 02:28+0000\n"
+"POT-Creation-Date: 2023-09-21 02:30+0000\n"
 "PO-Revision-Date: 2022-11-26 15:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -19384,7 +19384,7 @@ msgstr "Out"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:354
+#: libs/ui/actions/KisPasteActionFactories.cpp:359
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20372,18 +20372,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "Paste shapes"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:361 libs/ui/KisView.cpp:602
+#: libs/ui/actions/KisPasteActionFactories.cpp:273
+#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:602
 #, kde-format
 msgid "(pasted)"
 msgstr "(pasted)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:359
+#: libs/ui/actions/KisPasteActionFactories.cpp:364
 #, kde-format
 msgid "Pasted"
 msgstr "Pasted"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:414
+#: libs/ui/actions/KisPasteActionFactories.cpp:419
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "Paste Style"

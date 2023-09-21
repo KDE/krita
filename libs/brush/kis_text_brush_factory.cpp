@@ -31,8 +31,11 @@ KoResourceLoadResult KisTextBrushFactory::createBrush(const KisBrushModel::Brush
 
     KisTextBrushSP brush = KisTextBrushSP(new KisTextBrush());
 
+    QFont font;
+    font.fromString(data.textBrush.font);
+
     brush->setText(data.textBrush.text);
-    brush->setFont(data.textBrush.font);
+    brush->setFont(font);
     brush->setPipeMode(data.textBrush.usePipeMode);
     brush->setSpacing(data.common.spacing);
     brush->updateBrush();

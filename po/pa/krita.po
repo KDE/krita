@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-19 00:43+0000\n"
+"POT-Creation-Date: 2023-09-21 00:42+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -17704,8 +17704,8 @@ msgstr "ਜ਼ੂਮ"
 #. i18n: ectx: property (text), widget (QToolButton, btnCreateScene)
 #. i18n: ectx: property (text), widget (QToolButton, btnDeleteScene)
 #. i18n: ectx: property (text), widget (QToolButton, btnDeleteField)
-#. i18n: ectx: property (text), widget (QToolButton, bnGetPreview)
 #. i18n: ectx: property (text), widget (QToolButton, bnSelectSaveLocation)
+#. i18n: ectx: property (text), widget (QToolButton, bnGetPreview)
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:71
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:78
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:85
@@ -17760,10 +17760,8 @@ msgstr "ਜ਼ੂਮ"
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:97
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:117
 #: plugins/dockers/svgcollectiondocker/WdgSvgCollection.ui:26
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:74
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:81
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:312
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:387
+#: plugins/extensions/resourcemanager/pagebundlesaver.ui:95
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:287
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:146
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:153
 #: plugins/filters/palettize/palettize.ui:49
@@ -20937,7 +20935,7 @@ msgstr "ਕੱਟੋ"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:354
+#: libs/ui/actions/KisPasteActionFactories.cpp:359
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -21031,15 +21029,17 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #: plugins/extensions/imagesplit/imagesplit.cpp:74
 #: plugins/extensions/imagesplit/imagesplit.cpp:76
 #: plugins/extensions/qmic/QMic.cpp:54 plugins/extensions/qmic/QMic.cpp:79
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:194
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:226
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:299
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:295
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:374
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:381
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:413
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:204
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:231
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:297
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:357
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:362
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:220
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:331
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:338
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:370
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:386
 #: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
@@ -21469,7 +21469,7 @@ msgstr ""
 #: libs/resources/KisStorageModel.cpp:486
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:111
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:75
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:185
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:163
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
 #, fuzzy, kde-format
 #| msgid "Thumbnail View"
@@ -21600,7 +21600,7 @@ msgid "Choose File to Add"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:76
-#: libs/widgets/KisTagSelectionWidget.cpp:121
+#: libs/widgets/KisTagSelectionWidget.cpp:122
 #, fuzzy, kde-format
 #| msgid "Delete shapes"
 msgid "Assign to tag"
@@ -21820,7 +21820,7 @@ msgid ""
 msgstr ""
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:266
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:113
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt ""
@@ -21838,7 +21838,7 @@ msgid "Use existing tag"
 msgstr "ਪਰਤ"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:269
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
 #, fuzzy, kde-format
 #| msgid "Configure..."
 msgctxt "Dialog title"
@@ -21846,14 +21846,14 @@ msgid "Overwrite tag?"
 msgstr "...ਸੰਰਚਨਾ"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:270
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
 #, kde-format
 msgctxt "Question to the user in a dialog about creating a tag"
 msgid "A tag with this unique name already exists. Do you want to replace it?"
 msgstr ""
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:271
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgctxt ""
@@ -21878,7 +21878,7 @@ msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
 #: plugins/dockers/recorder/recorder_export.ui:823
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:113
 #: plugins/generators/seexpr/wdgseexpr.ui:179
 #: plugins/python/krita_script_starter/bbdkss.ui:203
 #, kde-format
@@ -21900,7 +21900,7 @@ msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lneFilterText)
 #: libs/resourcewidgets/KisTagFilterWidget.cpp:53
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:75
+#: plugins/extensions/resourcemanager/wdgresourcepreview.ui:100
 #, kde-format
 msgid "Search"
 msgstr ""
@@ -22031,20 +22031,20 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:361 libs/ui/KisView.cpp:602
+#: libs/ui/actions/KisPasteActionFactories.cpp:273
+#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:602
 #, fuzzy, kde-format
 #| msgid "Paste"
 msgid "(pasted)"
 msgstr "ਚੇਪੋ"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:359
+#: libs/ui/actions/KisPasteActionFactories.cpp:364
 #, fuzzy, kde-format
 #| msgid "Paste"
 msgid "Pasted"
 msgstr "ਚੇਪੋ"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:414
+#: libs/ui/actions/KisPasteActionFactories.cpp:419
 #, fuzzy
 #| msgid "Master Slide"
 msgctxt "(qtundo-format)"
@@ -24380,7 +24380,7 @@ msgstr ""
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:369
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:244
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:249
 #, fuzzy, kde-format
 #| msgid "Page"
 msgctxt "@title:window"
@@ -25620,10 +25620,9 @@ msgstr "ਰੇਖਾ ਭਾਰ"
 #: libs/ui/widgets/KoFillConfigWidget.ui:222
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:357
 #: plugins/dockers/griddocker/grid_config_widget.ui:90
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:254
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:134
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:282
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:58
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:248
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:226
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.ui:39
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:24
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:76
@@ -25652,7 +25651,7 @@ msgstr "ਆਬਜੈਕਟ ਨਾਂ"
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:128
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:200
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:387
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:415
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgid "Created:"
@@ -25676,7 +25675,7 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 #: libs/ui/forms/wdgnewimage.ui:596
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:90
 #: plugins/extensions/pykrita/plugin/info.ui:48
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:173
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:72
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Description:"
@@ -27863,12 +27862,10 @@ msgstr "ਸਥਿਤੀ"
 #. i18n: ectx: property (text), widget (QLabel, lblDatabaseVersion)
 #. i18n: ectx: property (text), widget (QLabel, lblKritaVersion)
 #. i18n: ectx: property (text), widget (QLabel, lblCreationDate)
-#. i18n: ectx: property (text), widget (QLabel, lblSaveLocation)
 #: libs/ui/forms/wdgimageproperties.ui:414 plugins/dockers/lut/wdglut.ui:364
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:179
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:193
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:207
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:374
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgid "TextLabel"
@@ -28394,7 +28391,7 @@ msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 #: libs/ui/forms/wdgstopgradienteditor.ui:41
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:200
 #: plugins/extensions/pykrita/plugin/info.ui:217
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:262
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:240
 #: plugins/impex/brush/wdg_export_gih.ui:41
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
@@ -28450,6 +28447,7 @@ msgstr "...ਸੰਰਚਨਾ"
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:78
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:164
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:139
@@ -28728,7 +28726,7 @@ msgstr "ਸਕ੍ਰਿਪਟ ਫਾਇਲ"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgperformancesettings.ui:224
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:269
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:247
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Location:"
@@ -29054,10 +29052,18 @@ msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, QuickSettingsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WGConfigWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgResourcePreview)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgSide)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgTagPreview)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisResourceItemViewer)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:14
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:14
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:14
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:14
+#: plugins/extensions/resourcemanager/kisresourceitemviewer.ui:16
+#: plugins/extensions/resourcemanager/wdgresourcepreview.ui:26
+#: plugins/extensions/resourcemanager/wdgside.ui:23
+#: plugins/extensions/resourcemanager/wdgtagpreview.ui:20
 #, fuzzy, kde-format
 #| msgid "Show Master Pages"
 msgid "Form"
@@ -31078,7 +31084,8 @@ msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 #: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:350
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:64
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
 msgid "Patterns"
@@ -31093,7 +31100,8 @@ msgstr "ਟੂਲ ਚੋਣਾਂ"
 #: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:335
 #: libs/ui/KisApplication.cpp:336
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:263
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
 msgid "Gradients"
@@ -31930,7 +31938,7 @@ msgid "Zoom: %1 %"
 msgstr "ਜ਼ੂਮ"
 
 #: libs/ui/KisApplication.cpp:327
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:257
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Brush presets"
@@ -31938,7 +31946,7 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
 #: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
 #: libs/ui/KisApplication.cpp:332 libs/ui/KisApplication.cpp:333
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgid "Brush tips"
@@ -31946,7 +31954,8 @@ msgstr "ਸ਼ਕਲ"
 
 #: libs/ui/KisApplication.cpp:338
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:65
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, fuzzy, kde-format
 #| msgid "Page %1"
 msgid "Palettes"
@@ -31954,7 +31963,8 @@ msgstr "ਸਫ਼ਾ %1"
 
 #: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:66
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:259
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Workspaces"
@@ -31973,7 +31983,7 @@ msgid "Window layouts"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
 #: libs/ui/KisApplication.cpp:355
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:264
 #, fuzzy, kde-format
 #| msgid "Delete shapes"
 msgid "Gamut masks"
@@ -32993,8 +33003,8 @@ msgid "Layers/Masks"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #: libs/ui/KisMainWindow.cpp:2003
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:194
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:350
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -33013,8 +33023,8 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisMainWindow.cpp:2017
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:204
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:362
 #, kde-format
 msgid ""
 "\n"
@@ -36193,6 +36203,7 @@ msgstr "ਸਲਾਈਡ ਬੈਕਗਰਾਊਂਡ ਵੇਖਾਓ"
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:44
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:169
+#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:28
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgctxt "@title Which elements to display (e.g., thumbnails or details)"
@@ -36202,6 +36213,7 @@ msgstr "ਤਬਦੀਲ"
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:169
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:177
+#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:40
 #, fuzzy, kde-format
 #| msgid "Thumbnail View"
 msgid "Thumbnails"
@@ -36211,7 +36223,8 @@ msgstr "ਥੰਮਨੇਲ ਝਲਕ"
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:177
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:183
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:228
+#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:46
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
 #, fuzzy, kde-format
 #| msgid "Detailed View"
 msgid "Details"
@@ -36493,7 +36506,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ੇ ਵੇਖੋ"
 #. i18n: ectx: property (title), widget (QGroupBox, BundleSelectedGroupBox)
 #: libs/ui/widgets/kis_utility_title_bar.cpp:18
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:137
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:144
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:166
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgid "Title"
@@ -41165,6 +41178,7 @@ msgstr "ਸਫ਼ਾ %1"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:57
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:64
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:63
 #, fuzzy, kde-format
 #| msgid "Delete shapes"
 msgid "Gamut Masks"
@@ -45633,7 +45647,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/pykrita/plugin/info.ui:121
 #: plugins/extensions/pykrita/plugin/info.ui:188
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:254
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:220
 #, fuzzy, kde-format
 #| msgid "Size"
 msgid "Icon:"
@@ -45949,20 +45963,20 @@ msgstr ""
 msgid "Krita cannot launch the gmic-qt plugin. No bundled library found."
 msgstr ""
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:134
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:135
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgid "Manage Resource Libraries"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:141
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:142
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
 msgctxt "In bundle manager; press button to import a resource library"
 msgid "Import"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:146
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:147
 #, fuzzy, kde-format
 #| msgid "Object Name"
 msgctxt ""
@@ -45971,15 +45985,22 @@ msgctxt ""
 msgid "Deactivate"
 msgstr "ਆਬਜੈਕਟ ਨਾਂ"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:150
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:151
 #, fuzzy, kde-format
 #| msgid "Create object"
 msgctxt "In bundle manager; press button to create a new bundle"
 msgid "Create Bundle"
 msgstr "ਆਬਜੈਕਟ ਬਣਾਓ"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:193
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:155
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgctxt "In bundle manager; press button to edit existing bundle"
+msgid "Edit Bundle"
+msgstr "ਸ਼ਕਲ"
+
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:198
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:356
 #, kde-format
 msgid ""
 "\n"
@@ -45988,19 +46009,21 @@ msgid ""
 "If there are no bundles, please import a bundle before continuing."
 msgstr ""
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:207
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:212
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgid "Choose the resource library to import"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:211
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:216
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:283
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgid "Select the bundle"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:227
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:232
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -46010,14 +46033,20 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:245
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:250
 #, kde-format
 msgid ""
 "There is already a bundle with this name installed. Do you want to overwrite "
 "it?"
 msgstr ""
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:346
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:279
+#, fuzzy, kde-format
+#| msgid "Change Connection"
+msgid "Choose the bundle to edit"
+msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
+
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:414
 #, fuzzy, kde-format
 #| msgid "Object Name"
 msgctxt ""
@@ -46026,7 +46055,7 @@ msgctxt ""
 msgid "Deactivate"
 msgstr "ਆਬਜੈਕਟ ਨਾਂ"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:350
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:419
 #, fuzzy, kde-format
 #| msgid "Object Name"
 msgctxt ""
@@ -46035,19 +46064,73 @@ msgctxt ""
 msgid "Activate"
 msgstr "ਆਬਜੈਕਟ ਨਾਂ"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:65
-#, fuzzy, kde-format
-#| msgid "Delete shape"
-msgid "Edit Resource Bundle"
-msgstr "ਸ਼ਕਲ ਹਟਾਓ"
-
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:145
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:127
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgid "Create Resource Bundle"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:296
+#. i18n: ectx: property (text), widget (QToolButton, btnChooseRes)
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:130
+#: plugins/extensions/resourcemanager/wdgside.ui:137
+#, fuzzy, kde-format
+#| msgid "Delete shape"
+msgid "Choose Resources"
+msgstr "ਸ਼ਕਲ ਹਟਾਓ"
+
+#. i18n: ectx: property (text), widget (QToolButton, btnChooseTags)
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:131
+#: plugins/extensions/resourcemanager/wdgside.ui:80
+#, fuzzy, kde-format
+#| msgid "D&elete"
+msgid "Choose Tags"
+msgstr "ਹਟਾਓ(&e)"
+
+#. i18n: ectx: property (text), widget (QToolButton, btnBundleInfo)
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:132
+#: plugins/extensions/resourcemanager/wdgside.ui:99
+#, fuzzy, kde-format
+#| msgid "Document Settings"
+msgid "Enter Bundle Details"
+msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
+
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:133
+#, fuzzy, kde-format
+#| msgid "Change Connection"
+msgid "Enter Save Location"
+msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
+
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:138
+#, fuzzy, kde-format
+#| msgid "Delete shape"
+msgid "Edit Resource Bundle"
+msgstr "ਸ਼ਕਲ ਹਟਾਓ"
+
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:141
+#, fuzzy, kde-format
+#| msgid "Delete shape"
+msgid "Edit Resources"
+msgstr "ਸ਼ਕਲ ਹਟਾਓ"
+
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
+#, fuzzy, kde-format
+#| msgid "New Layer"
+msgid "Edit Tags"
+msgstr "ਨਵੀਂ ਲੇਅਰ"
+
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:143
+#, fuzzy, kde-format
+#| msgid "Document Settings"
+msgid "Edit Bundle Details"
+msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
+
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:144
+#, fuzzy, kde-format
+#| msgid "Change Connection"
+msgid "Edit Save Location"
+msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
+
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:221
 #, kde-format
 msgctxt "Warning message"
 msgid ""
@@ -46055,24 +46138,24 @@ msgid ""
 "separate bundles."
 msgstr ""
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:374
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:331
 #, kde-format
 msgid "The resource bundle name cannot be empty."
 msgstr ""
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:381
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:338
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgid "The save location cannot be empty."
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:392
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:349
 #, kde-format
 msgctxt "In a dialog asking whether to overwrite a bundle (resource pack)"
 msgid "A bundle with this name already exists."
 msgstr ""
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:393
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:350
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -46083,7 +46166,8 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:414
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:371
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:387
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #, fuzzy, kde-format
 #| msgid ""
@@ -46094,37 +46178,27 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:463
-#, fuzzy, kde-format
-#| msgid "Import Document"
-msgid "Select a directory to save the bundle"
-msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
-
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:557
-#, fuzzy, kde-format
-#| msgid "Import Document"
-msgid "Select file to use as bundle icon"
-msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
-
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:61
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
 msgid "Brushes"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:62
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Brush Presets"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:36
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:37
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgid "Manage Resources"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:223
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:116
 #, fuzzy, kde-format
 #| msgid "Delete the current page"
 msgctxt ""
@@ -46134,7 +46208,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "ਮੌਜੂਦਾ ਸਫ਼ਾ ਹਟਾਓ"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:135
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgctxt ""
@@ -46143,21 +46217,21 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgid "Undelete Resources"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:383
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:244
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:297
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgid "Delete Resources"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:401
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:262
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "Brush engine type, in resource manager"
@@ -46197,6 +46271,106 @@ msgctxt ""
 "type %1 belongs to; % will be rather untranslatable noun (a mimetype)"
 msgid "What resource do you want to import these %1 files as?"
 msgstr ""
+
+#: plugins/extensions/resourcemanager/page_bundle_saver.cpp:93
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "Select a directory to save the bundle"
+msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
+
+#: plugins/extensions/resourcemanager/page_metadata_info.cpp:107
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "Select file to use as bundle icon"
+msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
+
+#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
+#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
+#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
+#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
+#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
+#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
+#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
+#, kde-format
+msgid "WizardPage"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
+#, fuzzy, kde-format
+#| msgid "Save"
+msgid "Save to:"
+msgstr "ਸੰਭਾਲੋ"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/extensions/resourcemanager/pagebundlesaver.ui:104
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:324
+#, kde-format
+msgid "Summary:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, bundleName)
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:46
+#, fuzzy, kde-format
+#| msgid "Name"
+msgid "Bundle Name:"
+msgstr "ਨਾਂ"
+
+#. i18n: ectx: property (text), widget (QLabel, author)
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:95
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:308
+#, fuzzy, kde-format
+#| msgid "Object Name"
+msgid "Author:"
+msgstr "ਆਬਜੈਕਟ ਨਾਂ"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:130
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:389
+#, kde-format
+msgid "Email:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, website)
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:156
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:363
+#, fuzzy, kde-format
+#| msgid "Configure"
+msgid "Website:"
+msgstr "ਸੰਰਚਨਾ"
+
+#. i18n: ectx: property (text), widget (QLineEdit, editWebsite)
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:175
+#, kde-format
+msgid "http://"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, license)
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:185
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:337
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:410
+#, fuzzy, kde-format
+#| msgid "Line Weight"
+msgid "License:"
+msgstr "ਰੇਖਾ ਭਾਰ"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:294
+#, kde-format
+msgid "(256 x 256)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, btnRemoveSelected)
+#: plugins/extensions/resourcemanager/pageresourcechooser.ui:74
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Remove Selected"
+msgstr "ਸਫ਼ਾ ਹਟਾਓ"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:39
 #, kde-format
@@ -46272,65 +46446,36 @@ msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 msgid "&Resources"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
+#. i18n: ectx: property (toolTip), widget (QPushButton, bnEdit)
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:92
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "Edit a resource library"
+msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:108
+#, fuzzy, kde-format
+#| msgid "Delete shape"
+msgid "Create a resource library"
+msgstr "ਸ਼ਕਲ ਹਟਾਓ"
+
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnAdd)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:86
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:128
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Import a resource library"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnToggle)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:106
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:148
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgid "Delete a resource library"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
-#. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:126
-#, fuzzy, kde-format
-#| msgid "Delete shape"
-msgid "Create a resource library"
-msgstr "ਸ਼ਕਲ ਹਟਾਓ"
-
-#. i18n: ectx: property (text), widget (QLabel, author)
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:280
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:190
-#, fuzzy, kde-format
-#| msgid "Object Name"
-msgid "Author:"
-msgstr "ਆਬਜੈਕਟ ਨਾਂ"
-
-#. i18n: ectx: property (text), widget (QLabel, license)
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:309
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:234
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:410
-#, fuzzy, kde-format
-#| msgid "Line Weight"
-msgid "License:"
-msgstr "ਰੇਖਾ ਭਾਰ"
-
-#. i18n: ectx: property (text), widget (QLabel, website)
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:335
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:220
-#, fuzzy, kde-format
-#| msgid "Configure"
-msgid "Website:"
-msgstr "ਸੰਰਚਨਾ"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:361
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:210
-#, kde-format
-msgid "Email:"
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:413
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:441
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgid "Updated:"
@@ -46338,92 +46483,54 @@ msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDlgCreateBundle)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDlgEmbedTags)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:16
+#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:30
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:24
 #, fuzzy, kde-format
 #| msgid "Create object"
 msgid "New Bundle..."
 msgstr "ਆਬਜੈਕਟ ਬਣਾਓ"
 
+#. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:34
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:106
+#: plugins/extensions/resourcemanager/wdgtagpreview.ui:40
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgid "Available"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:108
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:193
+#: plugins/extensions/resourcemanager/wdgtagpreview.ui:72
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgid "Selected"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
-#. i18n: ectx: property (text), widget (QLabel, bundleName)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:163
-#, fuzzy, kde-format
-#| msgid "Name"
-msgid "Bundle Name:"
-msgstr "ਨਾਂ"
-
-#. i18n: ectx: property (text), widget (QLineEdit, editWebsite)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:227
-#, kde-format
-msgid "http://"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:319
-#, kde-format
-msgid "(256 x 256)"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:341
-#, fuzzy, kde-format
-#| msgid "Save"
-msgid "Save to:"
-msgstr "ਸੰਭਾਲੋ"
-
-#. i18n: ectx: property (text), widget (QPushButton, bnEmbedTags)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:396
-#, fuzzy, kde-format
-#| msgid "Set border"
-msgid "Embed tags..."
-msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkShowDeleted)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:82
-#, fuzzy, kde-format
-#| msgid "Delete shape"
-msgid "Show deleted resources"
-msgstr "ਸ਼ਕਲ ਹਟਾਓ"
-
 #. i18n: ectx: property (text), widget (QPushButton, btnImportResources)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:114
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:92
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Import Resources"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnOpenResourceFolder)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:121
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:99
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgid "Open Resource Folder"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnCreateBundle)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:128
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:106
 #, fuzzy, kde-format
 #| msgid "Create object"
 msgid "Create a Bundle"
 msgstr "ਆਬਜੈਕਟ ਬਣਾਓ"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnExtractTagsToResourceFolder)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:138
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:116
 #, kde-format
 msgid ""
 "Make a backup of all your tags in the resource folder so they won't get lost "
@@ -46431,38 +46538,52 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnExtractTagsToResourceFolder)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:141
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:119
 #, fuzzy, kde-format
 #| msgid "D&elete"
 msgid "Save Tags to Folder"
 msgstr "ਹਟਾਓ(&e)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:234
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:212
 #, kde-format
 msgid "ID:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:255
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:233
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Filename:"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:276
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:254
 #, kde-format
 msgid "Tags:"
 msgstr ""
 
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:244
+#. i18n: ectx: property (text), widget (QCheckBox, chkShowDeleted)
+#: plugins/extensions/resourcemanager/wdgresourcepreview.ui:107
+#, fuzzy, kde-format
+#| msgid "Delete shape"
+msgid "Show deleted resources"
+msgstr "ਸ਼ਕਲ ਹਟਾਓ"
+
+#. i18n: ectx: property (text), widget (QToolButton, btnSaveLocation)
+#: plugins/extensions/resourcemanager/wdgside.ui:118
+#, fuzzy, kde-format
+#| msgid "Change Connection"
+msgid "Choose Save Location"
+msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
+
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:262
 #, fuzzy, kde-format
 #| msgid "Line Style"
 msgid "Layer styles"
 msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:247
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:265
 #, fuzzy, kde-format
 #| msgid "Script"
 msgid "SeExpr scripts"
@@ -58656,10 +58777,6 @@ msgstr ""
 msgid "Cover page:"
 msgstr "ਸਫ਼ਾ"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:324
-msgid "Summary:"
-msgstr ""
-
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:325
 #, fuzzy
 #| msgid "Master Page"
@@ -64991,6 +65108,11 @@ msgstr "ਜ਼ੂਮ"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "ਤਬਦੀਲ"
+
+#, fuzzy
+#~| msgid "Set border"
+#~ msgid "Embed tags..."
+#~ msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
 #, fuzzy
 #~| msgid "Grid"

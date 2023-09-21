@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-19 00:43+0000\n"
+"POT-Creation-Date: 2023-09-21 00:42+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -17106,8 +17106,8 @@ msgstr "ب&عّد"
 #. i18n: ectx: property (text), widget (QToolButton, btnCreateScene)
 #. i18n: ectx: property (text), widget (QToolButton, btnDeleteScene)
 #. i18n: ectx: property (text), widget (QToolButton, btnDeleteField)
-#. i18n: ectx: property (text), widget (QToolButton, bnGetPreview)
 #. i18n: ectx: property (text), widget (QToolButton, bnSelectSaveLocation)
+#. i18n: ectx: property (text), widget (QToolButton, bnGetPreview)
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:71
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:78
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:85
@@ -17162,10 +17162,8 @@ msgstr "ب&عّد"
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:97
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:117
 #: plugins/dockers/svgcollectiondocker/WdgSvgCollection.ui:26
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:74
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:81
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:312
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:387
+#: plugins/extensions/resourcemanager/pagebundlesaver.ui:95
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:287
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:146
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:153
 #: plugins/filters/palettize/palettize.ui:49
@@ -20115,7 +20113,7 @@ msgstr "خارج"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:354
+#: libs/ui/actions/KisPasteActionFactories.cpp:359
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20208,15 +20206,17 @@ msgstr "يحمّل حزم الموارد..."
 #: plugins/extensions/imagesplit/imagesplit.cpp:74
 #: plugins/extensions/imagesplit/imagesplit.cpp:76
 #: plugins/extensions/qmic/QMic.cpp:54 plugins/extensions/qmic/QMic.cpp:79
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:194
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:226
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:299
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:295
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:374
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:381
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:413
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:204
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:231
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:297
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:357
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:362
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:220
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:331
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:338
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:370
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:386
 #: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
@@ -20606,7 +20606,7 @@ msgstr "متوازٍ"
 #: libs/resources/KisStorageModel.cpp:486
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:111
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:75
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:185
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:163
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
 #, kde-format
 msgid "Thumbnail"
@@ -20736,7 +20736,7 @@ msgid "Choose File to Add"
 msgstr "اختر ملفًّا لإضافته"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:76
-#: libs/widgets/KisTagSelectionWidget.cpp:121
+#: libs/widgets/KisTagSelectionWidget.cpp:122
 #, fuzzy, kde-format
 #| msgid "Load Image"
 msgid "Assign to tag"
@@ -20961,7 +20961,7 @@ msgid ""
 msgstr ""
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:266
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:113
 #, fuzzy, kde-format
 #| msgid "Go to previous page"
 msgctxt ""
@@ -20979,7 +20979,7 @@ msgid "Use existing tag"
 msgstr "أضف طبقة موجود"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:269
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
 #, fuzzy, kde-format
 #| msgid "Overwrite Brush"
 msgctxt "Dialog title"
@@ -20987,7 +20987,7 @@ msgid "Overwrite tag?"
 msgstr "استبدل"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:270
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
 #, fuzzy, kde-format
 #| msgid ""
 #| "A profile with that name already exists.\n"
@@ -20999,7 +20999,7 @@ msgstr ""
 "أتريد الكتابة فوقها؟"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:271
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
 #, fuzzy, kde-format
 msgctxt ""
 "Option in a dialog to discard the previously existing tag and creating a new "
@@ -21023,7 +21023,7 @@ msgstr "استبدل (الاختصار R)"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
 #: plugins/dockers/recorder/recorder_export.ui:823
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:113
 #: plugins/generators/seexpr/wdgseexpr.ui:179
 #: plugins/python/krita_script_starter/bbdkss.ui:203
 #, kde-format
@@ -21045,7 +21045,7 @@ msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lneFilterText)
 #: libs/resourcewidgets/KisTagFilterWidget.cpp:53
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:75
+#: plugins/extensions/resourcemanager/wdgresourcepreview.ui:100
 #, kde-format
 msgid "Search"
 msgstr "ابحث"
@@ -21158,18 +21158,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "لصق الأشكال"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:361 libs/ui/KisView.cpp:602
+#: libs/ui/actions/KisPasteActionFactories.cpp:273
+#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:602
 #, kde-format
 msgid "(pasted)"
 msgstr "(ملصقة)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:359
+#: libs/ui/actions/KisPasteActionFactories.cpp:364
 #, kde-format
 msgid "Pasted"
 msgstr "ملصقة"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:414
+#: libs/ui/actions/KisPasteActionFactories.cpp:419
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "نمط اللصق"
@@ -23467,7 +23467,7 @@ msgid "Could not load layer style library %1."
 msgstr "تعذّر تحميل التّحديد %1 المتّجهيّ."
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:369
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:244
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:249
 #, kde-format
 msgctxt "@title:window"
 msgid "Warning"
@@ -24704,10 +24704,9 @@ msgstr "الرّخصة/الحقوق:"
 #: libs/ui/widgets/KoFillConfigWidget.ui:222
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:357
 #: plugins/dockers/griddocker/grid_config_widget.ui:90
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:254
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:134
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:282
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:58
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:248
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:226
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.ui:39
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:24
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:76
@@ -24733,7 +24732,7 @@ msgstr "رقم المراجعة:"
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:128
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:200
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:387
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:415
 #, kde-format
 msgid "Created:"
 msgstr "أُنشئ في:"
@@ -24755,7 +24754,7 @@ msgstr "و&قت التحرير الكلي:"
 #: libs/ui/forms/wdgnewimage.ui:596
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:90
 #: plugins/extensions/pykrita/plugin/info.ui:48
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:173
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:72
 #, kde-format
 msgid "Description:"
 msgstr "الوصف:"
@@ -26878,12 +26877,10 @@ msgstr "الشروح"
 #. i18n: ectx: property (text), widget (QLabel, lblDatabaseVersion)
 #. i18n: ectx: property (text), widget (QLabel, lblKritaVersion)
 #. i18n: ectx: property (text), widget (QLabel, lblCreationDate)
-#. i18n: ectx: property (text), widget (QLabel, lblSaveLocation)
 #: libs/ui/forms/wdgimageproperties.ui:414 plugins/dockers/lut/wdglut.ui:364
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:179
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:193
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:207
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:374
 #, kde-format
 msgid "TextLabel"
 msgstr "لصيقة نصّيّة"
@@ -27369,7 +27366,7 @@ msgstr "خلفية النافذة:"
 #: libs/ui/forms/wdgstopgradienteditor.ui:41
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:200
 #: plugins/extensions/pykrita/plugin/info.ui:217
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:262
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:240
 #: plugins/impex/brush/wdg_export_gih.ui:41
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
@@ -27422,6 +27419,7 @@ msgstr "اختر مساحة عمل"
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:78
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:164
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:139
@@ -27693,7 +27691,7 @@ msgstr "حدّ حجم الملفّ:"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgperformancesettings.ui:224
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:269
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:247
 #, fuzzy, kde-format
 #| msgid "Video Location:"
 msgid "Location:"
@@ -28053,10 +28051,18 @@ msgstr "أداة التّحريك"
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, QuickSettingsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WGConfigWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgResourcePreview)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgSide)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgTagPreview)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisResourceItemViewer)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:14
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:14
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:14
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:14
+#: plugins/extensions/resourcemanager/kisresourceitemviewer.ui:16
+#: plugins/extensions/resourcemanager/wdgresourcepreview.ui:26
+#: plugins/extensions/resourcemanager/wdgside.ui:23
+#: plugins/extensions/resourcemanager/wdgtagpreview.ui:20
 #, kde-format
 msgid "Form"
 msgstr "استمارة"
@@ -29954,7 +29960,8 @@ msgstr "لون الخلفيّة"
 #: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:350
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:64
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
 #, kde-format
 msgid "Patterns"
 msgstr "النّقوش"
@@ -29967,7 +29974,8 @@ msgstr "اللوحة الحاليّة"
 #: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:335
 #: libs/ui/KisApplication.cpp:336
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:263
 #, kde-format
 msgid "Gradients"
 msgstr "التّدرّجات"
@@ -30781,14 +30789,14 @@ msgid "Zoom: %1 %"
 msgstr "مستوى التّقريب: %1 ٪"
 
 #: libs/ui/KisApplication.cpp:327
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:257
 #, kde-format
 msgid "Brush presets"
 msgstr "الفُرش مسبقة الضّبط"
 
 #: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
 #: libs/ui/KisApplication.cpp:332 libs/ui/KisApplication.cpp:333
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Brush tips"
@@ -30796,14 +30804,16 @@ msgstr "حجم الفرشاة"
 
 #: libs/ui/KisApplication.cpp:338
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:65
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Palettes"
 msgstr "اللوحات"
 
 #: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:66
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:259
 #, kde-format
 msgid "Workspaces"
 msgstr "مساحات العمل"
@@ -30821,7 +30831,7 @@ msgid "Window layouts"
 msgstr "خلفية النافذة:"
 
 #: libs/ui/KisApplication.cpp:355
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:264
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Mask"
@@ -31816,8 +31826,8 @@ msgid "Layers/Masks"
 msgstr "احفظ الطّبقة/القناع"
 
 #: libs/ui/KisMainWindow.cpp:2003
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:194
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:350
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "ليس لديك أي حزم موارد ممكّنة."
@@ -31831,8 +31841,8 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisMainWindow.cpp:2017
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:204
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:362
 #, kde-format
 msgid ""
 "\n"
@@ -34813,6 +34823,7 @@ msgstr "اعرض المستويات:"
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:44
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:169
+#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:28
 #, kde-format
 msgctxt "@title Which elements to display (e.g., thumbnails or details)"
 msgid "Display"
@@ -34821,6 +34832,7 @@ msgstr "العرض"
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:169
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:177
+#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:40
 #, kde-format
 msgid "Thumbnails"
 msgstr "المصغّرات"
@@ -34829,7 +34841,8 @@ msgstr "المصغّرات"
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:177
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:183
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:228
+#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:46
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
 #, kde-format
 msgid "Details"
 msgstr "التّفاصيل"
@@ -35086,7 +35099,7 @@ msgstr "تخطى للأمام"
 #. i18n: ectx: property (title), widget (QGroupBox, BundleSelectedGroupBox)
 #: libs/ui/widgets/kis_utility_title_bar.cpp:18
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:137
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:144
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:166
 #, kde-format
 msgid "Title"
 msgstr "عنوان"
@@ -39560,6 +39573,7 @@ msgstr "حرّر البيانات الوصفيّة"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:57
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:64
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:63
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Mask"
@@ -43809,7 +43823,7 @@ msgstr "القائمة:"
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/pykrita/plugin/info.ui:121
 #: plugins/extensions/pykrita/plugin/info.ui:188
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:254
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:220
 #, kde-format
 msgid "Icon:"
 msgstr "الأيقونة:"
@@ -44122,20 +44136,20 @@ msgstr "يمكن استرجاع ملفّات الحفظ الآليّ الآتي�
 msgid "Krita cannot launch the gmic-qt plugin. No bundled library found."
 msgstr "تعذّر على «كريتا» العثور على ملحقة gmic-qt."
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:134
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:135
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Manage Resources"
 msgid "Manage Resource Libraries"
 msgstr "أدر الموارد"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:141
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:142
 #, kde-format
 msgctxt "In bundle manager; press button to import a resource library"
 msgid "Import"
 msgstr "استورد"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:146
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:147
 #, kde-format
 msgctxt ""
 "In bundle manager; press button to deactivate the resource library(remove "
@@ -44143,15 +44157,23 @@ msgctxt ""
 msgid "Deactivate"
 msgstr "تعطيل"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:150
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:151
 #, fuzzy, kde-format
 #| msgid "Create New Bundle"
 msgctxt "In bundle manager; press button to create a new bundle"
 msgid "Create Bundle"
 msgstr "أنشئ حزمة جديدة"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:193
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:155
+#, fuzzy, kde-format
+#| msgctxt "Button to edit the selected handle in the segment gradient editor"
+#| msgid "Edit handle"
+msgctxt "In bundle manager; press button to edit existing bundle"
+msgid "Edit Bundle"
+msgstr "حرر المقبض"
+
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:198
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:356
 #, kde-format
 msgid ""
 "\n"
@@ -44160,24 +44182,26 @@ msgid ""
 "If there are no bundles, please import a bundle before continuing."
 msgstr ""
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:207
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:212
 #, fuzzy, kde-format
 #| msgid "Create Resource Bundle"
 msgid "Choose the resource library to import"
 msgstr "أنشئ حزمة موارد"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:211
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:216
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:283
 #, fuzzy, kde-format
 #| msgid "Selected Bundle"
 msgid "Select the bundle"
 msgstr "الحزمة المحدّدة"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:227
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:232
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
 #, kde-format
 msgid "Could not load bundle %1."
 msgstr "تعذّر تحميل الحزمة %1."
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:245
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:250
 #, fuzzy, kde-format
 #| msgid ""
 #| "A profile with that name already exists.\n"
@@ -44189,7 +44213,13 @@ msgstr ""
 "هناك لاحة بالاسم هذا بالفعل.\n"
 "أتريد الكتابة فوقها؟"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:346
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:279
+#, fuzzy, kde-format
+#| msgid "Choose channels to blend"
+msgid "Choose the bundle to edit"
+msgstr "اختر القنوات لمزجها"
+
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:414
 #, kde-format
 msgctxt ""
 "In bundle manager; press button to deactivate the bundle (remove resources "
@@ -44197,7 +44227,7 @@ msgctxt ""
 msgid "Deactivate"
 msgstr "تعطيل"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:350
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:419
 #, kde-format
 msgctxt ""
 "In bundle manager; press button to activate the bundle (add resources from "
@@ -44205,17 +44235,72 @@ msgctxt ""
 msgid "Activate"
 msgstr "نشّط"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:65
-#, kde-format
-msgid "Edit Resource Bundle"
-msgstr "حرّر حزمة الموارد"
-
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:145
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:127
 #, kde-format
 msgid "Create Resource Bundle"
 msgstr "أنشئ حزمة موارد"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:296
+#. i18n: ectx: property (text), widget (QToolButton, btnChooseRes)
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:130
+#: plugins/extensions/resourcemanager/wdgside.ui:137
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Manage Resources"
+msgid "Choose Resources"
+msgstr "أدر الموارد"
+
+#. i18n: ectx: property (text), widget (QToolButton, btnChooseTags)
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:131
+#: plugins/extensions/resourcemanager/wdgside.ui:80
+#, fuzzy, kde-format
+#| msgid "Choose a color"
+msgid "Choose Tags"
+msgstr "اختر لونًا"
+
+#. i18n: ectx: property (text), widget (QToolButton, btnBundleInfo)
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:132
+#: plugins/extensions/resourcemanager/wdgside.ui:99
+#, fuzzy, kde-format
+#| msgid "Brush Settings"
+msgid "Enter Bundle Details"
+msgstr "إعدادات الفرشاة"
+
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:133
+#, fuzzy, kde-format
+#| msgid "Save Location:"
+msgid "Enter Save Location"
+msgstr "مكان الحفظ:"
+
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:138
+#, kde-format
+msgid "Edit Resource Bundle"
+msgstr "حرّر حزمة الموارد"
+
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:141
+#, fuzzy, kde-format
+#| msgid "Resources"
+msgid "Edit Resources"
+msgstr "الموارد"
+
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
+#, fuzzy, kde-format
+#| msgid "Edit Text"
+msgid "Edit Tags"
+msgstr "حرّر النّصّ"
+
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:143
+#, fuzzy, kde-format
+#| msgid "Brush Settings"
+msgid "Edit Bundle Details"
+msgstr "إعدادات الفرشاة"
+
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:144
+#, fuzzy, kde-format
+#| msgid "Save Location:"
+msgid "Edit Save Location"
+msgstr "مكان الحفظ:"
+
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:221
 #, kde-format
 msgctxt "Warning message"
 msgid ""
@@ -44223,64 +44308,57 @@ msgid ""
 "separate bundles."
 msgstr ""
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:374
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:331
 #, kde-format
 msgid "The resource bundle name cannot be empty."
 msgstr "لا يمكن أن يكون اسم حزمة الموارد فارغًا."
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:381
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:338
 #, fuzzy, kde-format
 #| msgid "The resource bundle name cannot be empty."
 msgid "The save location cannot be empty."
 msgstr "لا يمكن أن يكون اسم حزمة الموارد فارغًا."
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:392
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:349
 #, fuzzy, kde-format
 #| msgid "A bundle with this name already exists."
 msgctxt "In a dialog asking whether to overwrite a bundle (resource pack)"
 msgid "A bundle with this name already exists."
 msgstr "ثمّة حزمة بهذا الاسم بالفعل."
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:393
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:350
 #, fuzzy, kde-format
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgctxt "In a dialog regarding overwriting a bundle (resource pack)"
 msgid "Do you want to overwrite the existing bundle?"
 msgstr "أمتأكّد من الكتابة فوق القالب ’%1‘ الموجود؟"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:414
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:371
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:387
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not open '%1' for saving."
 msgstr "تعذر إنشاء الملف للحفظ"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:463
-#, kde-format
-msgid "Select a directory to save the bundle"
-msgstr "اختر دليلًا لحفظ الحزمة فيه"
-
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:557
-#, kde-format
-msgid "Select file to use as bundle icon"
-msgstr "اختر ملفًّا لاستخدامه كأيقونة للحزمة"
-
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:61
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
 #, kde-format
 msgid "Brushes"
 msgstr "الفُرش"
 
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:62
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #, kde-format
 msgid "Brush Presets"
 msgstr "الفُرش مسبقة الضّبط"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:36
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:37
 #, kde-format
 msgid "Manage Resources"
 msgstr "أدر الموارد"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:223
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:116
 #, fuzzy, kde-format
 #| msgid "Duplicate layer or mask"
 msgctxt ""
@@ -44290,7 +44368,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "كرّر الطّبقة أو القناع"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:135
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -44298,7 +44376,7 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "(بدون تجديد)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Delete resource"
@@ -44306,13 +44384,13 @@ msgid "Undelete Resources"
 msgstr "احذف المورد"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:383
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:244
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:297
 #, kde-format
 msgid "Delete Resources"
 msgstr "احذف الموارد"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:401
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:262
 #, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "
@@ -44347,6 +44425,99 @@ msgctxt ""
 "type %1 belongs to; % will be rather untranslatable noun (a mimetype)"
 msgid "What resource do you want to import these %1 files as?"
 msgstr ""
+
+#: plugins/extensions/resourcemanager/page_bundle_saver.cpp:93
+#, kde-format
+msgid "Select a directory to save the bundle"
+msgstr "اختر دليلًا لحفظ الحزمة فيه"
+
+#: plugins/extensions/resourcemanager/page_metadata_info.cpp:107
+#, kde-format
+msgid "Select file to use as bundle icon"
+msgstr "اختر ملفًّا لاستخدامه كأيقونة للحزمة"
+
+#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
+#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
+#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
+#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
+#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
+#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
+#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
+#, kde-format
+msgid "WizardPage"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
+#, kde-format
+msgid "Save to:"
+msgstr "احفظ في:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/extensions/resourcemanager/pagebundlesaver.ui:104
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:324
+#, kde-format
+msgid "Summary:"
+msgstr "الملخّص:"
+
+#. i18n: ectx: property (text), widget (QLabel, bundleName)
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:46
+#, kde-format
+msgid "Bundle Name:"
+msgstr "اسم الحزمة:"
+
+#. i18n: ectx: property (text), widget (QLabel, author)
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:95
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:308
+#, kde-format
+msgid "Author:"
+msgstr "المؤلّف:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:130
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:389
+#, kde-format
+msgid "Email:"
+msgstr "البريد الإلكتروني:"
+
+#. i18n: ectx: property (text), widget (QLabel, website)
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:156
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:363
+#, kde-format
+msgid "Website:"
+msgstr "موقع الوبّ:"
+
+#. i18n: ectx: property (text), widget (QLineEdit, editWebsite)
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:175
+#, kde-format
+msgid "http://"
+msgstr "http://"
+
+#. i18n: ectx: property (text), widget (QLabel, license)
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:185
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:337
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:410
+#, kde-format
+msgid "License:"
+msgstr "الرّخصة:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:294
+#, kde-format
+msgid "(256 x 256)"
+msgstr "(256 × 256)"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnRemoveSelected)
+#: plugins/extensions/resourcemanager/pageresourcechooser.ui:74
+#, fuzzy, kde-format
+#| msgid "Remove selected keyframes"
+msgid "Remove Selected"
+msgstr "أزل الإطارات المفتاحيّة المحدّدة"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:39
 #, kde-format
@@ -44415,8 +44586,23 @@ msgstr "أدر الموارد..."
 msgid "&Resources"
 msgstr "الموار&د"
 
+#. i18n: ectx: property (toolTip), widget (QPushButton, bnEdit)
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:92
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Import resource"
+msgid "Edit a resource library"
+msgstr "استورد موردًا"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:108
+#, fuzzy, kde-format
+#| msgid "Create Resource Bundle"
+msgid "Create a resource library"
+msgstr "أنشئ حزمة موارد"
+
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnAdd)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:86
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:128
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Import resource"
@@ -44424,122 +44610,45 @@ msgid "Import a resource library"
 msgstr "استورد موردًا"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnToggle)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:106
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:148
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Delete resource"
 msgid "Delete a resource library"
 msgstr "احذف المورد"
 
-#. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:126
-#, fuzzy, kde-format
-#| msgid "Create Resource Bundle"
-msgid "Create a resource library"
-msgstr "أنشئ حزمة موارد"
-
-#. i18n: ectx: property (text), widget (QLabel, author)
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:280
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:190
-#, kde-format
-msgid "Author:"
-msgstr "المؤلّف:"
-
-#. i18n: ectx: property (text), widget (QLabel, license)
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:309
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:234
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:410
-#, kde-format
-msgid "License:"
-msgstr "الرّخصة:"
-
-#. i18n: ectx: property (text), widget (QLabel, website)
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:335
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:220
-#, kde-format
-msgid "Website:"
-msgstr "موقع الوبّ:"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:361
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:210
-#, kde-format
-msgid "Email:"
-msgstr "البريد الإلكتروني:"
-
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:413
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:441
 #, kde-format
 msgid "Updated:"
 msgstr "حُدّثت:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDlgCreateBundle)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDlgEmbedTags)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:16
+#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:30
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:24
 #, kde-format
 msgid "New Bundle..."
 msgstr "حزمة جديدة..."
 
+#. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:34
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:106
+#: plugins/extensions/resourcemanager/wdgtagpreview.ui:40
 #, kde-format
 msgid "Available"
 msgstr "المتوفّر"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:108
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:193
+#: plugins/extensions/resourcemanager/wdgtagpreview.ui:72
 #, kde-format
 msgid "Selected"
 msgstr "المحدّد"
 
-#. i18n: ectx: property (text), widget (QLabel, bundleName)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:163
-#, kde-format
-msgid "Bundle Name:"
-msgstr "اسم الحزمة:"
-
-#. i18n: ectx: property (text), widget (QLineEdit, editWebsite)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:227
-#, kde-format
-msgid "http://"
-msgstr "http://"
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:319
-#, kde-format
-msgid "(256 x 256)"
-msgstr "(256 × 256)"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:341
-#, kde-format
-msgid "Save to:"
-msgstr "احفظ في:"
-
-#. i18n: ectx: property (text), widget (QPushButton, bnEmbedTags)
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:396
-#, fuzzy, kde-format
-#| msgid "Add images..."
-msgid "Embed tags..."
-msgstr "أضف صورًا..."
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkShowDeleted)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:82
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Delete resource"
-msgid "Show deleted resources"
-msgstr "احذف المورد"
-
 #. i18n: ectx: property (text), widget (QPushButton, btnImportResources)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:114
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:92
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Import resource"
@@ -44547,20 +44656,20 @@ msgid "Import Resources"
 msgstr "استورد موردًا"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnOpenResourceFolder)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:121
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:99
 #, kde-format
 msgid "Open Resource Folder"
 msgstr "افتح مجلّد الموارد"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnCreateBundle)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:128
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:106
 #, fuzzy, kde-format
 #| msgid "Create New Bundle"
 msgid "Create a Bundle"
 msgstr "أنشئ حزمة جديدة"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnExtractTagsToResourceFolder)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:138
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:116
 #, kde-format
 msgid ""
 "Make a backup of all your tags in the resource folder so they won't get lost "
@@ -44568,36 +44677,51 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnExtractTagsToResourceFolder)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:141
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:119
 #, fuzzy, kde-format
 #| msgid "Select a color"
 msgid "Save Tags to Folder"
 msgstr "اختر لونًا"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:234
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:212
 #, kde-format
 msgid "ID:"
 msgstr "المعرّف:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:255
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:233
 #, kde-format
 msgid "Filename:"
 msgstr "اسم ملف:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:276
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:254
 #, kde-format
 msgid "Tags:"
 msgstr "الوسوم:"
 
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:244
+#. i18n: ectx: property (text), widget (QCheckBox, chkShowDeleted)
+#: plugins/extensions/resourcemanager/wdgresourcepreview.ui:107
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Delete resource"
+msgid "Show deleted resources"
+msgstr "احذف المورد"
+
+#. i18n: ectx: property (text), widget (QToolButton, btnSaveLocation)
+#: plugins/extensions/resourcemanager/wdgside.ui:118
+#, fuzzy, kde-format
+#| msgid "Save Location:"
+msgid "Choose Save Location"
+msgstr "مكان الحفظ:"
+
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:262
 #, kde-format
 msgid "Layer styles"
 msgstr "أنماط الطّبقة"
 
-#: plugins/extensions/resourcemanager/wdgtagselection.cpp:247
+#: plugins/extensions/resourcemanager/wdgtagselection.cpp:265
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Ten Scripts"
@@ -56108,10 +56232,6 @@ msgstr ""
 msgid "Cover page:"
 msgstr "الصّفحة:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:324
-msgid "Summary:"
-msgstr "الملخّص:"
-
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:325
 msgid "Language:"
 msgstr "اللغة:"
@@ -62091,6 +62211,11 @@ msgstr "أداة العدسة"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "الصّور المرجع"
+
+#, fuzzy
+#~| msgid "Add images..."
+#~ msgid "Embed tags..."
+#~ msgstr "أضف صورًا..."
 
 #, fuzzy
 #~| msgctxt "Open the folder when the new created video is placed"

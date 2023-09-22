@@ -581,8 +581,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     Q_FOREACH (QWidget* it, guiFactory()->containers("ToolBar")) {
         KisToolBar * toolBar = ::qobject_cast<KisToolBar *>(it);
         if (toolBar) {
-            toolBar->setMovable(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
-
             KToggleAction* act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
             actionCollection()->addAction(toolBar->objectName().toUtf8(), act);
             act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", toolBar->windowTitle())));
@@ -2351,7 +2349,7 @@ void KisMainWindow::viewFullscreen(bool fullScreen)
 QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
-    bool lockAllDockers = KisConfig(true).readEntry<bool>("LockAllDockerPanels", false);
+    const bool lockAllDockers = KisToolBar::toolBarsLocked();
 
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();

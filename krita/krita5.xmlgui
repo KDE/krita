@@ -370,6 +370,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Separator/>
       <Action name="options_configure_toolbars"/>
       <Merge name="StandardToolBarMenuHandler" />
+      <Action name="lock_toolbars"/>
       <Separator/>
       <Action name="view_toggledockers"/>
       <Action name="settings_dockers_menu"/>

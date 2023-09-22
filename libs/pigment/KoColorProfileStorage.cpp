@@ -76,9 +76,8 @@ void KoColorProfileStorage::removeProfile(KoColorProfile *profile)
     QWriteLocker locker(&d->lock);
 
     d->profileMap.remove(profile->name());
-    if (!d->profileUniqueIdMap.isEmpty()) {
-        d->profileUniqueIdMap.remove(profile->uniqueId());
-    }
+    d->profileUniqueIdMap.remove(profile->uniqueId());
+    d->duplicates.removeAll(profile);
 }
 
 bool KoColorProfileStorage::containsProfile(const KoColorProfile *profile)

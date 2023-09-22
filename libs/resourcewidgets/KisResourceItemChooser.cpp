@@ -29,6 +29,8 @@
 #include <QComboBox>
 #include <QStandardPaths>
 
+#include "ksharedconfig.h"
+#include "kconfiggroup.h"
 #include <klocalizedstring.h>
 
 #include <KoIcon.h>
@@ -107,6 +109,8 @@ public:
 
     QToolButton* scroll_left {0};
     QToolButton* scroll_right {0};
+
+    bool restoreSplitterState(Layout layout);
 };
 
 KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool usePreview, QWidget *parent)
@@ -225,6 +229,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
         // Splitter
         d->horzSplitter = new QSplitter(this);
         d->horzSplitter->setOrientation(Qt::Orientation::Horizontal);
+        connect(d->horzSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(slotSaveSplitterState()));
 
         // Horizontal 1 row
         d->left = new QFrame(this);
@@ -786,6 +791,8 @@ void KisResourceItemChooser::changeLayoutBasedOnSize()
             d->viewModeButton->setVisible(false);
             d->storagePopupButton->setVisible(d->showStoragePopupBtn);
 
+            const bool splitterRestored = d->restoreSplitterState(Layout::Horizontal2Rows);
+
             d->horzSplitter->show();
             d->left->show();
             d->scroll_left->show();
@@ -793,6 +800,10 @@ void KisResourceItemChooser::changeLayoutBasedOnSize()
             d->right2Rows->show();
 
             d->layout = Layout::Horizontal2Rows;
+
+            if (!splitterRestored) {
+                slotSaveSplitterState();
+            }
         }
         // Horizontal 1 row
         else {
@@ -829,6 +840,8 @@ void KisResourceItemChooser::changeLayoutBasedOnSize()
             d->viewModeButton->setVisible(false);
             d->storagePopupButton->setVisible(d->showStoragePopupBtn);
 
+            const bool splitterRestored = d->restoreSplitterState(Layout::Horizontal1Row);
+
             d->horzSplitter->show();
             d->left->show();
             d->scroll_left->show();
@@ -836,7 +849,43 @@ void KisResourceItemChooser::changeLayoutBasedOnSize()
             d->right->show();
 
             d->layout = Layout::Horizontal1Row;
+
+            if (!splitterRestored) {
+                slotSaveSplitterState();
+            }
         }
+    }
+}
+
+bool KisResourceItemChooser::Private::restoreSplitterState(Layout layout)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(layout > Layout::Vertical, false);
+
+    KConfigGroup group = KSharedConfig::openConfig()->group(QString("KisResourceItemChooser_%1").arg(resourceType));
+
+    const QLatin1String key(
+        layout == Layout::Horizontal1Row ? "splitterState_1row" : "splitterState_2row");
+
+    bool splitterRestored = false;
+    QByteArray state = group.readEntry(key, QByteArray());
+    if (!state.isEmpty()) {
+        splitterRestored = horzSplitter->restoreState(state);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(splitterRestored);
+    }
+
+    return splitterRestored;
+}
+
+void KisResourceItemChooser::slotSaveSplitterState()
+{
+    if (d->layout > Layout::Vertical) {
+        KConfigGroup group = KSharedConfig::openConfig()->group(QString("KisResourceItemChooser_%1").arg(d->resourceType));
+        const QByteArray state = d->horzSplitter->saveState();
+
+        const QLatin1String key(
+            d->layout == Layout::Horizontal1Row ? "splitterState_1row" : "splitterState_2row");
+
+        group.writeEntry(key, state);
     }
 }
 

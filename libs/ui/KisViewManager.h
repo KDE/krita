@@ -161,6 +161,8 @@ public:  // Krita specific interfaces
      */
     void blockUntilOperationsFinishedForced(KisImageSP image);
 
+    void notifyWorkspaceLoaded();
+
 public:
 
     KisGridManager * gridManager() const;

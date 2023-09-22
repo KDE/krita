@@ -2036,6 +2036,8 @@ bool KisMainWindow::restoreWorkspace(KoResourceSP res)
         activeKisView()->resourceProvider()->notifyLoadingWorkspace(workspace);
     }
 
+    d->viewManager->notifyWorkspaceLoaded();
+
     return success;
 }
 

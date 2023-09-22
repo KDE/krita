@@ -238,10 +238,35 @@ public:
     KSelectAction *actionAuthor {nullptr}; // Select action for author profile.
     KisAction *showPixelGrid {nullptr};
 
-    QByteArray canvasState;
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-    QFlags<Qt::WindowState> windowFlags;
-#endif
+    QByteArray canvasStateInNormalMode;
+    QByteArray canvasStateInCanvasOnlyMode;
+
+    struct CanvasOnlyOptions : boost::equality_comparable<CanvasOnlyOptions>
+    {
+        CanvasOnlyOptions(const KisConfig &cfg)
+            : hideStatusbarFullscreen(cfg.hideStatusbarFullscreen())
+            , hideDockersFullscreen(cfg.hideDockersFullscreen())
+            , hideTitlebarFullscreen(cfg.hideTitlebarFullscreen())
+            , hideMenuFullscreen(cfg.hideMenuFullscreen())
+            , hideToolbarFullscreen(cfg.hideToolbarFullscreen())
+        {
+        }
+
+        bool hideStatusbarFullscreen = false;
+        bool hideDockersFullscreen = false;
+        bool hideTitlebarFullscreen = false;
+        bool hideMenuFullscreen = false;
+        bool hideToolbarFullscreen = false;
+
+        bool operator==(const CanvasOnlyOptions &rhs) {
+            return hideStatusbarFullscreen == rhs.hideStatusbarFullscreen &&
+                hideDockersFullscreen == rhs.hideDockersFullscreen &&
+                hideTitlebarFullscreen == rhs.hideTitlebarFullscreen &&
+                hideMenuFullscreen == rhs.hideMenuFullscreen &&
+                hideToolbarFullscreen == rhs.hideToolbarFullscreen;
+        }
+    };
+    std::optional<CanvasOnlyOptions> canvasOnlyOptions;
 
     bool blockUntilOperationsFinishedImpl(KisImageSP image, bool force);
 };
@@ -1219,6 +1244,13 @@ void KisViewManager::showStatusBar(bool toggled)
     }
 }
 
+void KisViewManager::notifyWorkspaceLoaded()
+{
+    d->canvasStateInNormalMode.clear();
+    d->canvasStateInCanvasOnlyMode.clear();
+    d->canvasOnlyOptions = std::nullopt;
+}
+
 void KisViewManager::switchCanvasOnly(bool toggled)
 {
     KisConfig cfg(false);
@@ -1231,14 +1263,16 @@ void KisViewManager::switchCanvasOnly(bool toggled)
 
     cfg.writeEntry("CanvasOnlyActive", toggled);
 
+    KisViewManagerPrivate::CanvasOnlyOptions options(cfg);
+
     if (toggled) {
-        d->canvasState = qtMainWindow()->saveState();
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-        d->windowFlags = main->windowState();
-#endif
+        d->canvasStateInNormalMode = qtMainWindow()->saveState();
+    } else {
+        d->canvasStateInCanvasOnlyMode = qtMainWindow()->saveState();
+        d->canvasOnlyOptions = options;
     }
 
-    if (cfg.hideStatusbarFullscreen()) {
+    if (options.hideStatusbarFullscreen) {
         if (main->statusBar()) {
             if (!toggled) {
                 if (main->statusBar()->dynamicPropertyNames().contains("wasvisible")) {
@@ -1254,7 +1288,7 @@ void KisViewManager::switchCanvasOnly(bool toggled)
         }
     }
 
-    if (cfg.hideDockersFullscreen()) {
+    if (options.hideDockersFullscreen) {
         KisAction* action = qobject_cast<KisAction*>(main->actionCollection()->action("view_toggledockers"));
         if (action) {
             action->setCheckable(true);
@@ -1273,21 +1307,15 @@ void KisViewManager::switchCanvasOnly(bool toggled)
 
     // QT in windows does not return to maximized upon 4th tab in a row
     // https://bugreports.qt.io/browse/QTBUG-57882, https://bugreports.qt.io/browse/QTBUG-52555, https://codereview.qt-project.org/#/c/185016/
-    if (cfg.hideTitlebarFullscreen() && !cfg.fullscreenMode()) {
+    if (options.hideTitlebarFullscreen && !cfg.fullscreenMode()) {
         if(toggled) {
             main->setWindowState( main->windowState() | Qt::WindowFullScreen);
         } else {
             main->setWindowState( main->windowState() & ~Qt::WindowFullScreen);
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-            // If window was maximized prior to fullscreen, restore that
-            if (d->windowFlags & Qt::WindowMaximized) {
-                main->setWindowState( main->windowState() | Qt::WindowMaximized);
-            }
-#endif
         }
     }
 
-    if (cfg.hideMenuFullscreen()) {
+    if (options.hideMenuFullscreen) {
         if (!toggled) {
             if (main->menuBar()->dynamicPropertyNames().contains("wasvisible")) {
                 if (main->menuBar()->property("wasvisible").toBool()) {
@@ -1301,7 +1329,7 @@ void KisViewManager::switchCanvasOnly(bool toggled)
         }
     }
 
-    if (cfg.hideToolbarFullscreen()) {
+    if (options.hideToolbarFullscreen) {
         QList<QToolBar*> toolBars = main->findChildren<QToolBar*>();
         Q_FOREACH (QToolBar* toolbar, toolBars) {
             if (!toggled) {
@@ -1321,15 +1349,23 @@ void KisViewManager::switchCanvasOnly(bool toggled)
     showHideScrollbars();
 
     if (toggled) {
-        // show a fading heads-up display about the shortcut to go back
+        if (!d->canvasStateInCanvasOnlyMode.isEmpty() &&
+            d->canvasOnlyOptions &&
+            *d->canvasOnlyOptions == options) {
 
+            main->restoreState(d->canvasStateInCanvasOnlyMode);
+        }
+
+               // show a fading heads-up display about the shortcut to go back
         showFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
                                  actionCollection()->action("view_show_canvas_only")->shortcut().toString(QKeySequence::NativeText)), QIcon(),
                             2000,
                             KisFloatingMessage::Low);
     }
     else {
-        main->restoreState(d->canvasState);
+        if (!d->canvasStateInNormalMode.isEmpty()) {
+            main->restoreState(d->canvasStateInNormalMode);
+        }
     }
 
 }

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-21 02:30+0000\n"
+"POT-Creation-Date: 2023-09-22 02:26+0000\n"
 "PO-Revision-Date: 2023-09-12 23:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -19310,7 +19310,7 @@ msgstr "Dış"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1175
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:501 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19346,9 +19346,9 @@ msgstr "Yerel Özkaynaklar"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:701
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:727
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20383,12 +20383,12 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "YOK"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:389
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:395
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Geçerli bir FFmpeg ikilisi verilmedi..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:462
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:468
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
@@ -20396,7 +20396,7 @@ msgstr ""
 "GIF saydamlığının çalışması için FFmpeg sürümünün en az 4.2 veya sonrası "
 "olması gerekir"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:469
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:475
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -20406,13 +20406,13 @@ msgstr ""
 "Canlandırılmış GIF görseller 50'den daha yüksek kare hızına sahip olamaz. "
 "Kare hızı saniyede 50 kareye düşürülür"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:476
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:482
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgid "Warning(s):"
 msgstr "Uyarılar:"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:701
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20421,7 +20421,7 @@ msgstr ""
 "Bize verdiğiniz FFmpeg ikilisi sıkıştırılmış gibi görünüyor. Lütfen önce "
 "FFmpeg'i arşivden çıkarmayı deneyin."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -20430,7 +20430,7 @@ msgstr ""
 "Bize verdiğiniz FFmpeg geçersiz gibi görünüyor. Lütfen sisteminizdeki FFmpeg "
 "yürütülebilirinin doğru konumunu seçin."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:727
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Sunumun yapılacağı dosyanın adını girin."
@@ -20674,12 +20674,12 @@ msgstr "Video akışı bulunamadı!"
 msgid "Failed to load video information"
 msgstr "Video bilgisi yüklenemedi"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:352
+#: libs/ui/animation/KisFFMpegWrapper.cpp:354
 #, kde-format
 msgid "FFMpeg Crashed"
 msgstr "FFmpeg Çöktü"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:620
+#: libs/ui/animation/KisFFMpegWrapper.cpp:666
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."

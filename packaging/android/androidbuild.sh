@@ -187,6 +187,7 @@ build_kf5() {
     cmake --build . --config $BUILD_TYPE --target ext_kcoreaddons -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_kguiaddons -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_ki18n -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_kitemmodels -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_kitemviews -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_kwindowsystem -- -j$PROC_COUNT
 

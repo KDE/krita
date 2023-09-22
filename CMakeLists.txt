@@ -403,6 +403,7 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         CoreAddons
         GuiAddons
         I18n
+        ItemModels
         ItemViews
         WindowSystem
 )

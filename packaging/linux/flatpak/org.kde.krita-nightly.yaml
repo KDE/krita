@@ -234,6 +234,16 @@ modules:
         url: https://download.kde.org/stable/frameworks/5.74/ki18n-5.74.0.tar.xz
         sha256: bcbb95a81cd8f808fc8314741309c4b4ec25fc1c347e285a7cfefc006df3009c
 
+  - name: kitemmodels
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DBUILD_TESTING=OFF
+    sources:
+      - type: archive
+        url: https://download.kde.org/stable/frameworks/5.74/kitemmodels-5.74.0.tar.xz
+        sha256: 89c91051445137959e3dd7276d428adaff09b1ca9980f37d4a66d0c34c7b36c1
+        
   - name: kitemviews
     buildsystem: cmake-ninja
     builddir: true

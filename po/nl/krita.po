@@ -61,8 +61,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-21 00:42+0000\n"
-"PO-Revision-Date: 2023-09-19 10:02+0200\n"
+"POT-Creation-Date: 2023-09-22 00:42+0000\n"
+"PO-Revision-Date: 2023-09-21 22:47+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -19447,7 +19447,7 @@ msgstr "Uit"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1175
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:501 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19483,9 +19483,9 @@ msgstr "Lokale hulpbronnen"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:701
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:727
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20522,19 +20522,19 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "N.v.t."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:389
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:395
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Geen geldig binair bestand FFmpeg geleverd..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:462
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:468
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 "FFMpeg moet minstens versie 4.2+ zijn om gif-transparantie te laten werken"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:469
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:475
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -20544,13 +20544,13 @@ msgstr ""
 "Geanimeerde GIF-afbeeldingen kunnen geen framesnelheid hoger dan 50 hebben. "
 "De framesnelheid zal gereduceerd worden tot 50 frames per seconde"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:476
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:482
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgid "Warning(s):"
 msgstr "Waarschuwing(en):"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:701
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20559,7 +20559,7 @@ msgstr ""
 "De FFmpeg die u ons hebt gegeven lijkt te zijn gecomprimeerd. Probeer eerst "
 "FFmpeg uit het archief uit te pakken."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -20568,7 +20568,7 @@ msgstr ""
 "De FFmpeg die u ons hebt gegeven lijkt ongeldig te zijn. Selecteer de juiste "
 "locatie van een uitvoerbaar programma FFmpeg op uw systeem."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:727
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Voer een bestandsnaam waarnaar te renderen."
@@ -20814,12 +20814,12 @@ msgstr "Geen video-stream gevonden!"
 msgid "Failed to load video information"
 msgstr "Video-informatie laden is mislukt"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:352
+#: libs/ui/animation/KisFFMpegWrapper.cpp:354
 #, kde-format
 msgid "FFMpeg Crashed"
 msgstr "FFMpeg is gecrasht"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:620
+#: libs/ui/animation/KisFFMpegWrapper.cpp:666
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -43156,12 +43156,10 @@ msgid "Create Bundle"
 msgstr "Bundel aanmaken"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:155
-#, fuzzy, kde-format
-#| msgctxt "Button to edit the selected handle in the segment gradient editor"
-#| msgid "Edit handle"
+#, kde-format
 msgctxt "In bundle manager; press button to edit existing bundle"
 msgid "Edit Bundle"
-msgstr "Hendel bewerken"
+msgstr "Bundel bewerken"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:198
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:356
@@ -43203,10 +43201,9 @@ msgstr ""
 "Er is al een bundel met deze naam geïnstalleerd. Wilt u het overschrijven?"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:279
-#, fuzzy, kde-format
-#| msgid "Choose channels to blend"
+#, kde-format
 msgid "Choose the bundle to edit"
-msgstr "De te mengen kanalen kiezen"
+msgstr "De te bewerken bundel kiezen"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:414
 #, kde-format
@@ -43232,35 +43229,28 @@ msgstr "Bundel hulpdata aanmaken"
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseRes)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:130
 #: plugins/extensions/resourcemanager/wdgside.ui:137
-#, fuzzy, kde-format
-#| msgid "Storage Resources"
+#, kde-format
 msgid "Choose Resources"
-msgstr "Opslaghulpbronnen"
+msgstr "Hulpbronnen kiezen"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseTags)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:131
 #: plugins/extensions/resourcemanager/wdgside.ui:80
-#, fuzzy, kde-format
-#| msgid "Choose a color"
+#, kde-format
 msgid "Choose Tags"
-msgstr "Kies een kleur"
+msgstr "Tags kiezen"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnBundleInfo)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:132
 #: plugins/extensions/resourcemanager/wdgside.ui:99
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Bristle_Details.kpp"
-#| msgid "Bristle Details"
+#, kde-format
 msgid "Enter Bundle Details"
-msgstr "Borstel details"
+msgstr "Bundeldetails invoeren"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:133
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Enter Save Location"
-msgstr "Opslaglocatie:"
+msgstr "Opslaglocatie invoeren"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:138
 #, kde-format
@@ -43268,31 +43258,24 @@ msgid "Edit Resource Bundle"
 msgstr "Bundel hulpdata bewerken"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:141
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Edit Resources"
-msgstr "Hulpbronnen"
+msgstr "Hulpbronnen bewerken"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
-#, fuzzy, kde-format
-#| msgid "Edit Cage"
+#, kde-format
 msgid "Edit Tags"
-msgstr "Kooi bewerken"
+msgstr "Tags bewerken"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:143
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Bristle_Details.kpp"
-#| msgid "Bristle Details"
+#, kde-format
 msgid "Edit Bundle Details"
-msgstr "Borstel details"
+msgstr "Bundeldetails bewerken"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:144
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Edit Save Location"
-msgstr "Opslaglocatie:"
+msgstr "Opslaglocatie bewerken"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:221
 #, kde-format
@@ -43434,7 +43417,7 @@ msgstr "Selecteer bestand om te gebruiken als pictogram van bundel"
 #: plugins/extensions/resourcemanager/pagetagchooser.ui:20
 #, kde-format
 msgid "WizardPage"
-msgstr ""
+msgstr "Assistentpagina"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -43502,11 +43485,9 @@ msgstr "(256 x 256)"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnRemoveSelected)
 #: plugins/extensions/resourcemanager/pageresourcechooser.ui:74
-#, fuzzy, kde-format
-#| msgctxt "Group as Swatch Group in a Palette"
-#| msgid "Remove selected group"
+#, kde-format
 msgid "Remove Selected"
-msgstr "De geselecteerde groep verwijderen"
+msgstr "Geselecteerde verwijderen"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:39
 #, kde-format
@@ -43572,10 +43553,9 @@ msgstr "&Bronnen"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnEdit)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:92
-#, fuzzy, kde-format
-#| msgid "Import a resource library"
+#, kde-format
 msgid "Edit a resource library"
-msgstr "Een hulpbronbibliotheek importeren"
+msgstr "Een hulpbronbibliotheek bewerken"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:108
@@ -43685,10 +43665,9 @@ msgstr "Verwijderde hulpbronnen tonen"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnSaveLocation)
 #: plugins/extensions/resourcemanager/wdgside.ui:118
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Choose Save Location"
-msgstr "Opslaglocatie:"
+msgstr "Opslaglocatie kiezen"
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:262
 #, kde-format

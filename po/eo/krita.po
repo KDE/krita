@@ -42,8 +42,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-21 00:42+0000\n"
-"PO-Revision-Date: 2023-09-19 07:51+0100\n"
+"POT-Creation-Date: 2023-09-22 00:42+0000\n"
+"PO-Revision-Date: 2023-09-21 08:21+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -19373,7 +19373,7 @@ msgstr "Elen"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1175
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:501 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19409,9 +19409,9 @@ msgstr "Lokaj Rimedoj"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:701
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:727
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20444,18 +20444,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "N/A"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:389
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:395
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Ne donis validan FFmpeg-binarprogramon..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:462
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:468
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr "FFmpeg devas esti almenaŭ versio 4.2+ por ke GIF-travideblo funkciu"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:469
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:475
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -20465,13 +20465,13 @@ msgstr ""
 "Viglaj GIF-bildoj ne povas havi bildrapidecon pli altan ol 50. La "
 "bildfrekvenco estos reduktita al 50 bildoj sekunde"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:476
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:482
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgid "Warning(s):"
 msgstr "Averto(j):"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:701
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20480,7 +20480,7 @@ msgstr ""
 "La FFmpeg, kiun vi donis, ŝajnas esti kunpremita. Bonvolu unue provu "
 "ekstrakti FFmpeg de la arkivo."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -20489,7 +20489,7 @@ msgstr ""
 "La FFmpeg, kiun vi donis, ŝajnas esti nevalida. Bonvolu elekti la ĝustan "
 "lokon de FFmpeg-binarprogramo en via sistemo."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:727
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Bonvolu enigi dosiernomon por bildigi."
@@ -20733,12 +20733,12 @@ msgstr "Neniu videofluo troveblas!"
 msgid "Failed to load video information"
 msgstr "Malsukcesis ŝargi videoinformojn"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:352
+#: libs/ui/animation/KisFFMpegWrapper.cpp:354
 #, kde-format
 msgid "FFMpeg Crashed"
 msgstr "FFMpeg paneis"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:620
+#: libs/ui/animation/KisFFMpegWrapper.cpp:666
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -42933,12 +42933,10 @@ msgid "Create Bundle"
 msgstr "Krei Pakaĵon"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:155
-#, fuzzy, kde-format
-#| msgctxt "Button to edit the selected handle in the segment gradient editor"
-#| msgid "Edit handle"
+#, kde-format
 msgctxt "In bundle manager; press button to edit existing bundle"
 msgid "Edit Bundle"
-msgstr "Redakti tenilon"
+msgstr "Redakti Pakaĵon"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:198
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:356
@@ -42980,8 +42978,7 @@ msgstr ""
 "Jam estas instalita pakaĵo kun ĉi tiu nomo. Ĉu vi volas anstataŭigi ĝin?"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:279
-#, fuzzy, kde-format
-#| msgid "Choose channels to blend"
+#, kde-format
 msgid "Choose the bundle to edit"
 msgstr "Elekti kanalojn por miksi"
 
@@ -43009,35 +43006,28 @@ msgstr "Krei Rimedan Pakon"
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseRes)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:130
 #: plugins/extensions/resourcemanager/wdgside.ui:137
-#, fuzzy, kde-format
-#| msgid "Storage Resources"
+#, kde-format
 msgid "Choose Resources"
-msgstr "Konservado-Rimedoj"
+msgstr "Elekti Rimedojn"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseTags)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:131
 #: plugins/extensions/resourcemanager/wdgside.ui:80
-#, fuzzy, kde-format
-#| msgid "Choose a color"
+#, kde-format
 msgid "Choose Tags"
-msgstr "Elekti koloron"
+msgstr "Elekti Etikedojn"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnBundleInfo)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:132
 #: plugins/extensions/resourcemanager/wdgside.ui:99
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Bristle_Details.kpp"
-#| msgid "Bristle Details"
+#, kde-format
 msgid "Enter Bundle Details"
-msgstr "Porkino Detaloj"
+msgstr "Enigi Pakaĵ-Detalojn"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:133
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Enter Save Location"
-msgstr "Konservi Lokon:"
+msgstr "Enigu Konservejon:"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:138
 #, kde-format
@@ -43045,31 +43035,24 @@ msgid "Edit Resource Bundle"
 msgstr "Redakti Rimedan Pakon"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:141
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Edit Resources"
-msgstr "Rimedoj"
+msgstr "Redakti Rimedojn"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
-#, fuzzy, kde-format
-#| msgid "Edit Text"
+#, kde-format
 msgid "Edit Tags"
-msgstr "Redakti Tekston"
+msgstr "Redakti Etikedojn"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:143
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Bristle_Details.kpp"
-#| msgid "Bristle Details"
+#, kde-format
 msgid "Edit Bundle Details"
-msgstr "Porkino Detaloj"
+msgstr "Redakti Pakaĵ-Detalojn"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:144
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Edit Save Location"
-msgstr "Konservi Lokon:"
+msgstr "Redakti Konservejon:"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:221
 #, kde-format
@@ -43211,7 +43194,7 @@ msgstr "Elekti dosieron uzendan kiel pak-piktogramo"
 #: plugins/extensions/resourcemanager/pagetagchooser.ui:20
 #, kde-format
 msgid "WizardPage"
-msgstr ""
+msgstr "SorĉistoPaĝo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -43279,11 +43262,9 @@ msgstr "(256 x 256)"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnRemoveSelected)
 #: plugins/extensions/resourcemanager/pageresourcechooser.ui:74
-#, fuzzy, kde-format
-#| msgctxt "Group as Swatch Group in a Palette"
-#| msgid "Remove selected group"
+#, kde-format
 msgid "Remove Selected"
-msgstr "Forigi elektitan grupon"
+msgstr "Forigi Elektitan"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:39
 #, kde-format
@@ -43349,10 +43330,9 @@ msgstr "&Rimedoj"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnEdit)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:92
-#, fuzzy, kde-format
-#| msgid "Import a resource library"
+#, kde-format
 msgid "Edit a resource library"
-msgstr "Importi rimedan bibliotekon"
+msgstr "Redakti rimedan bibliotekon"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:108
@@ -43462,10 +43442,9 @@ msgstr "Montri forigitajn rimedojn"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnSaveLocation)
 #: plugins/extensions/resourcemanager/wdgside.ui:118
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Choose Save Location"
-msgstr "Konservi Lokon:"
+msgstr "Elekti Konservejon"
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:262
 #, kde-format
@@ -60570,6 +60549,3 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
-
-#~ msgid "Embed tags..."
-#~ msgstr "Enigi etikedojn..."

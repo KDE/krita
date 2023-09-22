@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-21 00:42+0000\n"
+"POT-Creation-Date: 2023-09-22 00:42+0000\n"
 "PO-Revision-Date: 2023-08-27 09:41+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -19386,7 +19386,7 @@ msgstr "Ut"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1175
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:501 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19422,9 +19422,9 @@ msgstr "Lokala resurser"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:701
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:727
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20454,19 +20454,19 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "Inte tillgänglig"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:389
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:395
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Inget giltigt FFmpeg binärprogram angivet..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:462
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:468
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 "FFmpeg måste ha minst version 4.2+ för att GIF genomskinlighet ska fungera"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:469
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:475
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -20476,13 +20476,13 @@ msgstr ""
 "Animerade GIF-bilder kan inte ha en bildfrekvens större än 50. "
 "Bildfrekvensen kommer att minskas till 50 bilder per sekund."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:476
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:482
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgid "Warning(s):"
 msgstr "Varning(ar):"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:701
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20491,7 +20491,7 @@ msgstr ""
 "FFmpeg som är angivet verkar vara komprimerat. Försök att extrahera FFmpeg "
 "från arkivet först."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -20500,7 +20500,7 @@ msgstr ""
 "FFmpeg som är angivet verkar vara ogiltigt. Välj aktuell plats för det "
 "körbara FFmpeg-programmet på systemet."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:727
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Ange ett filnamn att återge i."
@@ -20743,12 +20743,12 @@ msgstr "Ingen videoström kunde hittas."
 msgid "Failed to load video information"
 msgstr "Misslyckades läsa in videoinformation"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:352
+#: libs/ui/animation/KisFFMpegWrapper.cpp:354
 #, kde-format
 msgid "FFMpeg Crashed"
 msgstr "FFmpeg kraschade"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:620
+#: libs/ui/animation/KisFFMpegWrapper.cpp:666
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."

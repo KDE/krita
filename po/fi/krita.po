@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-21 00:42+0000\n"
+"POT-Creation-Date: 2023-09-22 00:42+0000\n"
 "PO-Revision-Date: 2023-07-27 20:09+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -20626,7 +20626,7 @@ msgstr "Ulos"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:495 libs/ui/KisView.cpp:1175
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:501 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -20663,9 +20663,9 @@ msgstr "Ladataan resursseja…"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:701
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:727
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -21784,18 +21784,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:389
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:395
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Kelvollista FFmpeg-ohjelmatiedostoa ei annettu…"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:462
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:468
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr "GIF-läpikuultavuutta varten FFmpegin on oltava vähintään versiota 4.2+"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:469
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:475
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> This "
@@ -21810,14 +21810,14 @@ msgstr ""
 "muuttaa vain hahmonnetun kuvan väriavaruutta. Muuntaaksesi tasojen "
 "väriavaruuksia käytä ”Muunna kuvan väriavaruutta”.</p></body></html>"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:476
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:482
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Warning(s):"
 msgstr "Varoitus"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:701
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -21825,7 +21825,7 @@ msgid ""
 msgstr ""
 "Antamasi FFmpeg vaikuttaa pakatulta. Yritä ensin purkaa FFmpeg arkistosta."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
 #, fuzzy, kde-format
 #| msgid ""
 #| "The location of FFmpeg is invalid. Please select the correct location of "
@@ -21837,7 +21837,7 @@ msgstr ""
 "FFmpegin sijainti on virheellinen. Valitse FFmpeg-ohjelmatiedoston oikea "
 "sijainti järjestelmässäsi."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:727
 #, fuzzy, kde-format
 #| msgid "Please enter a name for the filter effect"
 msgid "Please enter a file name to render to."
@@ -22099,13 +22099,13 @@ msgstr "”text”-solmua ei löytynyt!"
 msgid "Failed to load video information"
 msgstr "Etätiedoston lataus epäonnistui"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:352
+#: libs/ui/animation/KisFFMpegWrapper.cpp:354
 #, fuzzy, kde-format
 #| msgid "FF&Mpeg: "
 msgid "FFMpeg Crashed"
 msgstr "FF&Mpeg"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:620
+#: libs/ui/animation/KisFFMpegWrapper.cpp:666
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
 
 set(SUPPORTED_LANGUAGES CXX C)
 

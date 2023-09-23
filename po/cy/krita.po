@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-22 02:26+0000\n"
+"POT-Creation-Date: 2023-09-23 02:23+0000\n"
 "PO-Revision-Date: 2004-07-06 17:18+0100\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -20056,29 +20056,29 @@ msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
 msgstr "&Gwaredu Plygell"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:123
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:127
 #, fuzzy, kde-format
 msgid "Display settings"
 msgstr "Dyblyg"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:130
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:134
 #, fuzzy, kde-format
 msgid "Storage Resources"
 msgstr "&Adnoddau"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:191
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:195
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
 msgstr "Mewnforio Dogfen"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:196
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:200
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Dileu Testun"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:335
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:340
 #: libs/ui/KisMainWindow.cpp:2653
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, fuzzy, kde-format

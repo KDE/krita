@@ -1476,10 +1476,30 @@ bool KoColorSet::Private::loadPsp()
     return true;
 }
 
+const KoColorProfile *KoColorSet::Private::loadColorProfile(QScopedPointer<KoStore> &store,
+                                                            const QString &path,
+                                                            const QString &modelId,
+                                                            const QString &colorDepthId)
+{
+    if (!store->open(path)) {
+        return nullptr;
+    }
+
+    QByteArray bytes = store->read(store->size());
+    store->close();
+
+    const KoColorProfile *profile = KoColorSpaceRegistry::instance()
+        ->createColorProfile(modelId, colorDepthId, bytes);
+    if (!profile || !profile->valid()) {
+        return nullptr;
+    }
+
+    KoColorSpaceRegistry::instance()->addProfile(profile);
+    return profile;
+}
+
 bool KoColorSet::Private::loadKplProfiles(QScopedPointer<KoStore> &store)
 {
-    KoColorSpaceRegistry *colorSpaceRegistry = KoColorSpaceRegistry::instance();
-
     if (!store->open("profiles.xml")) {
         return false;
     }
@@ -1501,19 +1521,12 @@ bool KoColorSet::Private::loadKplProfiles(QScopedPointer<KoStore> &store)
         QString colorModelId = c.attribute(KPL_COLOR_MODEL_ID_ATTR);
         QString colorDepthId = c.attribute(KPL_COLOR_DEPTH_ID_ATTR);
 
-        if (colorSpaceRegistry->profileByName(name)) {
+        if (KoColorSpaceRegistry::instance()->profileByName(name)) {
             continue;
         }
 
-        store->open(filename);
-        bytes = store->read(store->size());
-        store->close();
-
-        const KoColorProfile *profile = colorSpaceRegistry
-            ->createColorProfile(colorModelId, colorDepthId, bytes);
-        if (profile && profile->valid()) {
-            colorSpaceRegistry->addProfile(profile);
-        }
+        loadColorProfile(store, filename, colorModelId, colorDepthId);
+        // TODO: What should happen if this fails?
     }
 
     return true;
@@ -1672,26 +1685,6 @@ bool KoColorSet::Private::loadAco()
     return true;
 }
 
-const KoColorProfile *KoColorSet::Private::loadColorProfile(QScopedPointer<KoStore> &store,
-                                                            const QString &modelId,
-                                                            const QString &colorDepthId,
-                                                            const QString &space)
-{
-    store->enterDirectory("profiles");
-    store->open(space);
-    QByteArray bytes = store->read(store->size());
-    store->close();
-
-    const KoColorProfile *profile = KoColorSpaceRegistry::instance()
-        ->createColorProfile(modelId, colorDepthId, bytes);
-    if (!profile || !profile->valid()) {
-        return nullptr;
-    }
-
-    KoColorSpaceRegistry::instance()->addProfile(profile);
-    return profile;
-}
-
 bool KoColorSet::Private::loadSbzSwatchbook(QScopedPointer<KoStore> &store)
 {
     if (!store->open("swatchbook.xml")) {
@@ -1769,7 +1762,7 @@ bool KoColorSet::Private::loadSbzSwatchbook(QScopedPointer<KoStore> &store)
     QHash<QString, const KoColorSpace*> fileColorSpaces;
 
     // Color processing
-    store->enterDirectory("profiles");
+    store->enterDirectory("profiles"); // Color profiles (icc files) live here
     for (QDomElement colorElement = materials.firstChildElement("color");
          !colorElement.isNull();
          colorElement = colorElement.nextSiblingElement("color")) {
@@ -1853,7 +1846,7 @@ bool KoColorSet::Private::loadSbzSwatchbook(QScopedPointer<KoStore> &store)
                     colorSpace = fileColorSpaces.value(space);
                 } else {
                     // Try loading the profile and add it to the registry
-                    profile = loadColorProfile(store, modelId, colorDepthId, space);
+                    profile = loadColorProfile(store, space, modelId, colorDepthId);
                     if (profile) {
                         colorSpace = colorSpaceRegistry->colorSpace(modelId, colorDepthId, profile);
                         fileColorSpaces.insert(space, colorSpace);
@@ -1900,6 +1893,8 @@ bool KoColorSet::Private::loadSbzSwatchbook(QScopedPointer<KoStore> &store)
             return false;
         }
     }
+
+    store->leaveDirectory(); // Return to root
     // End colors
     // Now decide which ones will go into the palette
 

@@ -27,9 +27,9 @@ index 91a4ba8..10a3f4d 100644
 +  target_include_directories(webp_wasm PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${SDL_INCLUDE_DIR})
    set_target_properties(
      webp_wasm
-     PROPERTIES LINK_FLAGS "-s WASM=1 \
-        -s EXPORTED_FUNCTIONS='[\"_WebpToSDL\"]' -s INVOKE_RUN=0 \
-        -s EXPORTED_RUNTIME_METHODS='[\"cwrap\"]'")
+     PROPERTIES LINK_FLAGS "-sWASM=1 ${emscripten_stack_size} \
+        -sEXPORTED_FUNCTIONS=_WebPToSDL -sINVOKE_RUN=0 \
+        -sEXPORTED_RUNTIME_METHODS=cwrap")
 -  target_compile_definitions(webp_wasm PUBLIC EMSCRIPTEN WEBP_HAVE_SDL)
 +  target_compile_definitions(webp_wasm PUBLIC EMSCRIPTEN WEBP_HAVE_SDL WEBP_HAVE_JUST_SDL_H)
  

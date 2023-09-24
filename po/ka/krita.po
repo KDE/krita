@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-23 00:42+0000\n"
-"PO-Revision-Date: 2023-08-21 06:39+0200\n"
+"PO-Revision-Date: 2023-09-23 04:09+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -8025,7 +8025,7 @@ msgstr "კასკადი"
 #, kde-format
 msgctxt "action"
 msgid "&Tile"
-msgstr ""
+msgstr "&ფილა"
 
 #. i18n: context: toolTip @ Action (windows_tile), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (windows_tile), Actions (General), ActionCollection (Krita)
@@ -8073,11 +8073,10 @@ msgstr ""
 #. i18n: context: toolTip @ Action (lock_toolbars), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (lock_toolbars), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:65 krita/krita.action:67 krita/krita.action:68
-#, fuzzy, kde-format
-#| msgid "Toolbars"
+#, kde-format
 msgctxt "action"
 msgid "Lock Toolbars"
-msgstr "&ხელსაწყოთა ზოლები"
+msgstr "ხელსაწყოთა ზოლების დაბლოკვა"
 
 #. i18n: context: text @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
@@ -21013,7 +21012,7 @@ msgstr "არა"
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "sub"
-msgstr ""
+msgstr "ქვე"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:80
 #, kde-format
@@ -30056,7 +30055,7 @@ msgstr "სტილები"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
-msgstr ""
+msgstr "&პანელები"
 
 #: libs/ui/KisMainWindow.cpp:189
 #, kde-format
@@ -41866,12 +41865,10 @@ msgid "Create Bundle"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:155
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Edit Guides"
+#, kde-format
 msgctxt "In bundle manager; press button to edit existing bundle"
 msgid "Edit Bundle"
-msgstr "გიდების ჩასწორება"
+msgstr "პაკეტის ჩასწორება"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:198
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:356
@@ -41908,11 +41905,9 @@ msgid ""
 msgstr ""
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:279
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Choose File to Add"
+#, kde-format
 msgid "Choose the bundle to edit"
-msgstr "აირჩიეთ დასამატებელი ფაილი"
+msgstr "აირჩიეთ ჩასასწორებელი პაკეტი"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:414
 #, kde-format
@@ -41938,18 +41933,16 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseRes)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:130
 #: plugins/extensions/resourcemanager/wdgside.ui:137
-#, fuzzy, kde-format
-#| msgid "Storage Resources"
+#, kde-format
 msgid "Choose Resources"
-msgstr "შენახვის რესურსები"
+msgstr "აირჩიეთ რესურსები"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseTags)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:131
 #: plugins/extensions/resourcemanager/wdgside.ui:80
-#, fuzzy, kde-format
-#| msgid "Choose a color"
+#, kde-format
 msgid "Choose Tags"
-msgstr "აირჩიეთ ფერი"
+msgstr "აირჩიეთ ჭდეები"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnBundleInfo)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:132
@@ -41959,10 +41952,9 @@ msgid "Enter Bundle Details"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:133
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Enter Save Location"
-msgstr "შენახვის მდებარეობა:"
+msgstr "შეიყვანეთ შენახვის მდებარეობა"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:138
 #, kde-format
@@ -41970,16 +41962,14 @@ msgid "Edit Resource Bundle"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:141
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Edit Resources"
-msgstr "რესურსები"
+msgstr "რესურსების ჩასწორება"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
-#, fuzzy, kde-format
-#| msgid "Edit Layers:"
+#, kde-format
 msgid "Edit Tags"
-msgstr "ფენების ჩასწორება:"
+msgstr "ჭდეების ჩასწორება"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:143
 #, kde-format
@@ -41987,10 +41977,9 @@ msgid "Edit Bundle Details"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:144
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Edit Save Location"
-msgstr "შენახვის მდებარეობა:"
+msgstr "შენახვის მდებარეობის ჩასწორება"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:221
 #, kde-format
@@ -42198,11 +42187,9 @@ msgstr "(256 x 256)"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnRemoveSelected)
 #: plugins/extensions/resourcemanager/pageresourcechooser.ui:74
-#, fuzzy, kde-format
-#| msgctxt "Group as Swatch Group in a Palette"
-#| msgid "Remove selected group"
+#, kde-format
 msgid "Remove Selected"
-msgstr "მონიშნული ჯგუფის წაშლა"
+msgstr "მონიშნულის წაშლა"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:39
 #, kde-format
@@ -42266,10 +42253,9 @@ msgstr "&რესურსები"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnEdit)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:92
-#, fuzzy, kde-format
-#| msgid "Import a resource library"
+#, kde-format
 msgid "Edit a resource library"
-msgstr "რესურსის ბიბლიოთეკის შემოტანა"
+msgstr "რესურსის ბიბლიოთეკის ჩასწორება"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:108
@@ -42377,10 +42363,9 @@ msgstr "წაშლილი რესურსების ჩვენებ�
 
 #. i18n: ectx: property (text), widget (QToolButton, btnSaveLocation)
 #: plugins/extensions/resourcemanager/wdgside.ui:118
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Choose Save Location"
-msgstr "შენახვის მდებარეობა:"
+msgstr "არჩიეთ შენახვის მდებარეობა"
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:262
 #, kde-format
@@ -45407,7 +45392,7 @@ msgstr ""
 #, kde-format
 msgctxt "Screentone Pattern - Curtains Lines"
 msgid "Curtains"
-msgstr ""
+msgstr "ფარდები"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:53
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:58

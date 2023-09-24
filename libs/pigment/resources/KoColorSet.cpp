@@ -1476,81 +1476,110 @@ bool KoColorSet::Private::loadPsp()
     return true;
 }
 
+bool KoColorSet::Private::loadKplProfiles(QScopedPointer<KoStore> &store)
+{
+    KoColorSpaceRegistry *colorSpaceRegistry = KoColorSpaceRegistry::instance();
+
+    if (!store->open("profiles.xml")) {
+        return false;
+    }
+
+    QByteArray bytes = store->read(store->size());
+    store->close();
+
+    QDomDocument doc;
+    if(!doc.setContent(bytes)) {
+        return false;
+    }
+
+    QDomElement root = doc.documentElement();
+    for (QDomElement c = root.firstChildElement(KPL_PALETTE_PROFILE_TAG);
+         !c.isNull();
+         c = c.nextSiblingElement(KPL_PALETTE_PROFILE_TAG)) {
+        QString name         = c.attribute(KPL_PALETTE_NAME_ATTR);
+        QString filename     = c.attribute(KPL_PALETTE_FILENAME_ATTR);
+        QString colorModelId = c.attribute(KPL_COLOR_MODEL_ID_ATTR);
+        QString colorDepthId = c.attribute(KPL_COLOR_DEPTH_ID_ATTR);
+
+        if (colorSpaceRegistry->profileByName(name)) {
+            continue;
+        }
+
+        store->open(filename);
+        bytes = store->read(store->size());
+        store->close();
+
+        const KoColorProfile *profile = colorSpaceRegistry
+            ->createColorProfile(colorModelId, colorDepthId, bytes);
+        if (profile && profile->valid()) {
+            colorSpaceRegistry->addProfile(profile);
+        }
+    }
+
+    return true;
+}
+
+bool KoColorSet::Private::loadKplColorset(QScopedPointer<KoStore> &store)
+{
+    if (!store->open("colorset.xml")) {
+        return false;
+    }
+
+    QByteArray bytes = store->read(store->size());
+    store->close();
+
+    QDomDocument doc;
+    if (!doc.setContent(bytes)) {
+        return false;
+    }
+
+    QDomElement root = doc.documentElement();
+    colorSet->setName(root.attribute(KPL_PALETTE_NAME_ATTR));
+    QString version = root.attribute(KPL_VERSION_ATTR);
+    comment         = root.attribute(KPL_PALETTE_COMMENT_ATTR);
+
+    int desiredColumnCount = root.attribute(KPL_PALETTE_COLUMN_COUNT_ATTR).toInt();
+    if (desiredColumnCount > MAXIMUM_ALLOWED_COLUMNS) {
+        warnPigment << "Refusing to set unreasonable number of columns (" << desiredColumnCount
+                    << ") in KPL palette file " << colorSet->filename()
+                    << " - setting maximum allowed column count instead.";
+        colorSet->setColumnCount(MAXIMUM_ALLOWED_COLUMNS);
+    } else {
+        colorSet->setColumnCount(desiredColumnCount);
+    }
+
+    loadKplGroup(doc, root, colorSet->getGlobalGroup(), version);
+
+    for (QDomElement g = root.firstChildElement(KPL_GROUP_TAG);
+         !g.isNull();
+         g = g.nextSiblingElement(KPL_GROUP_TAG)) {
+        QString groupName = g.attribute(KPL_GROUP_NAME_ATTR);
+        colorSet->addGroup(groupName);
+        loadKplGroup(doc, g, colorSet->getGroup(groupName), version);
+    }
+
+    return true;
+}
+
 bool KoColorSet::Private::loadKpl()
 {
     QBuffer buf(&data);
     buf.open(QBuffer::ReadOnly);
 
-    QScopedPointer<KoStore> store(KoStore::createStore(&buf, KoStore::Read, "application/x-krita-palette", KoStore::Zip));
-    if (!store || store->bad()) { return false; }
-
-    if (store->hasFile("profiles.xml")) {
-        if (!store->open("profiles.xml")) { return false; }
-        QByteArray data;
-        data.resize(store->size());
-        QByteArray ba = store->read(store->size());
-        store->close();
-
-        QDomDocument doc;
-        doc.setContent(ba);
-        QDomElement e = doc.documentElement();
-        QDomElement c = e.firstChildElement(KPL_PALETTE_PROFILE_TAG);
-        while (!c.isNull()) {
-            QString name = c.attribute(KPL_PALETTE_NAME_ATTR);
-            QString filename = c.attribute(KPL_PALETTE_FILENAME_ATTR);
-            QString colorModelId = c.attribute(KPL_COLOR_MODEL_ID_ATTR);
-            QString colorDepthId = c.attribute(KPL_COLOR_DEPTH_ID_ATTR);
-            if (!KoColorSpaceRegistry::instance()->profileByName(name)) {
-                store->open(filename);
-                QByteArray data;
-                data.resize(store->size());
-                data = store->read(store->size());
-                store->close();
-
-                const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(colorModelId, colorDepthId, data);
-                if (profile && profile->valid()) {
-                    KoColorSpaceRegistry::instance()->addProfile(profile);
-                }
-            }
-
-            c = c.nextSiblingElement();
-        }
+    QScopedPointer<KoStore> store(
+        KoStore::createStore(&buf, KoStore::Read,
+                             "application/x-krita-palette",
+                             KoStore::Zip));
+    if (!store || store->bad()) {
+        return false;
     }
 
-    {
-        if (!store->open("colorset.xml")) { return false; }
-        QByteArray data;
-        data.resize(store->size());
-        QByteArray ba = store->read(store->size());
-        store->close();
+    if (store->hasFile("profiles.xml") && !loadKplProfiles(store)) {
+        return false;
+    }
 
-        int desiredColumnCount;
-
-        QDomDocument doc;
-        doc.setContent(ba);
-        QDomElement e = doc.documentElement();
-        colorSet->setName(e.attribute(KPL_PALETTE_NAME_ATTR));
-        QString version = e.attribute(KPL_VERSION_ATTR);
-        comment = e.attribute(KPL_PALETTE_COMMENT_ATTR);
-
-        desiredColumnCount = e.attribute(KPL_PALETTE_COLUMN_COUNT_ATTR).toInt();
-        if (desiredColumnCount > MAXIMUM_ALLOWED_COLUMNS) {
-            warnPigment << "Refusing to set unreasonable number of columns (" << desiredColumnCount << ") in KPL palette file " << colorSet->filename() << " - setting maximum allowed column count instead.";
-            colorSet->setColumnCount(MAXIMUM_ALLOWED_COLUMNS);
-        }
-        else {
-            colorSet->setColumnCount(desiredColumnCount);
-        }
-
-        loadKplGroup(doc, e, colorSet->getGlobalGroup(), version);
-
-        QDomElement g = e.firstChildElement(KPL_GROUP_TAG);
-        while (!g.isNull()) {
-            QString groupName = g.attribute(KPL_GROUP_NAME_ATTR);
-            colorSet->addGroup(groupName);
-            loadKplGroup(doc, g, colorSet->getGroup(groupName), version);
-            g = g.nextSiblingElement(KPL_GROUP_TAG);
-        }
+    if (!loadKplColorset(store)) {
+        return false;
     }
 
     buf.close();

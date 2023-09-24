@@ -90,6 +90,8 @@ private:
 
     void saveKplGroup(QDomDocument &doc, QDomElement &groupEle,
                       const KisSwatchGroupSP group, QSet<const KoColorSpace *> &colorSetSet) const;
+    bool loadKplProfiles(QScopedPointer<KoStore> &store);
+    bool loadKplColorset(QScopedPointer<KoStore> &store);
     const KoColorProfile *loadColorProfile(QScopedPointer<KoStore> &store,
                                            const QString &modelId,
                                            const QString &colorDepthId,

@@ -63,10 +63,10 @@ KisAsyncAnimationFramesSavingRenderer::KisAsyncAnimationFramesSavingRenderer(Kis
                                                                              const QString &fileNameSuffix,
                                                                              const QByteArray &outputMimeType,
                                                                              const KisTimeSpan &range,
-                                                                             const int startNumberingAt,
+                                                                             const int sequenceNumberingOffset,
                                                                              const bool onlyNeedsUniqueFrames,
                                                                              KisPropertiesConfigurationSP exportConfiguration)
-    : m_d(new Private(image, range, qMax(startNumberingAt - range.start(), range.start() * -1), onlyNeedsUniqueFrames, exportConfiguration))
+    : m_d(new Private(image, range, sequenceNumberingOffset, onlyNeedsUniqueFrames, exportConfiguration))
 {
     m_d->filenamePrefix = fileNamePrefix;
     m_d->filenameSuffix = fileNameSuffix;

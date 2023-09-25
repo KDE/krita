@@ -114,9 +114,8 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
 
         } else if(encoderOptions.wantsOnlyUniqueFrameSequence) {
 
-            const QList<int> uniques = exporter.getUniqueFrames();
             const QStringList fileNames = exporter.savedFiles();
-            QStringList uniqueFrameNames = getNamesForFrames(encoderOptions.basename, extension, encoderOptions.sequenceStart, uniques);
+            const QStringList uniqueFrameNames = exporter.savedUniqueFiles();
 
             Q_FOREACH(const QString &f, fileNames) {
                 if (!uniqueFrameNames.contains(f)) {
@@ -137,21 +136,6 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
     } else if (result == KisAsyncAnimationFramesSaveDialog::RenderFailed) {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Rendering error"), i18n("Failed to render animation frames! Output files are incomplete."));
     }
-}
-
-QString KisAnimationRender::getNameForFrame(const QString &basename, const QString &extension, int sequenceStart, int frame)
-{
-    QString frameNumberText = QString("%1").arg(frame + sequenceStart, 4, 10, QChar('0'));
-    return basename + frameNumberText + "." + extension;
-}
-
-QStringList KisAnimationRender::getNamesForFrames(const QString &basename, const QString &extension, int sequenceStart, const QList<int> &frames)
-{
-    QStringList list;
-    Q_FOREACH(const int &i, frames) {
-        list.append(getNameForFrame(basename, extension, sequenceStart, i));
-    }
-    return list;
 }
 
 bool KisAnimationRender::mustHaveEvenDimensions(const QString &mimeType, KisAnimationRenderingOptions::RenderMode renderMode)

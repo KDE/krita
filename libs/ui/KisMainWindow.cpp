@@ -2351,7 +2351,7 @@ void KisMainWindow::viewFullscreen(bool fullScreen)
 QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
-    const bool lockAllDockers = KisToolBar::toolBarsLocked();
+    const bool showTitlebars = KisConfig(false).showDockerTitleBars();
 
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
@@ -2381,7 +2381,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
-        if (lockAllDockers) {
+        if (!showTitlebars) {
             if (dockWidget->titleBarWidget() && !dockWidget->titleBarWidget()->inherits("KisUtilityTitleBar")) {
                 dockWidget->titleBarWidget()->setVisible(false);
             }

@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-23 00:42+0000\n"
+"POT-Creation-Date: 2023-09-26 00:41+0000\n"
 "PO-Revision-Date: 2023-07-27 20:09+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -21738,15 +21738,15 @@ msgid ""
 "%1"
 msgstr "Animaatiota ei voitu hahmontaa: %1"
 
-#: libs/ui/animation/KisAnimationRender.cpp:136
-#: libs/ui/animation/KisAnimationRender.cpp:138
+#: libs/ui/animation/KisAnimationRender.cpp:135
+#: libs/ui/animation/KisAnimationRender.cpp:137
 #, fuzzy, kde-format
 #| msgid "Parsing error"
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Jäsennysvirhe"
 
-#: libs/ui/animation/KisAnimationRender.cpp:138
+#: libs/ui/animation/KisAnimationRender.cpp:137
 #, fuzzy, kde-format
 #| msgid "Failed to render animation frames!"
 msgid "Failed to render animation frames! Output files are incomplete."
@@ -24588,14 +24588,14 @@ msgstr ""
 msgid "Saving frames..."
 msgstr "Vie vain avainkuvat"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:119
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:106
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Delete keyframe"
 msgid "Delete old frames?"
 msgstr "Poista avainkuva"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:120
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:107
 #, kde-format
 msgid ""
 "Frames with the same naming scheme exist in the destination directory. They "
@@ -24605,13 +24605,13 @@ msgid ""
 "Files: %2"
 msgstr ""
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:134
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:121
 #, fuzzy, kde-format
 #| msgid "Unable to undelete tag"
 msgid "Failed to delete"
 msgstr "Tunnisteen palauttaminen epäonnistui"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:135
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
 #, kde-format
 msgid ""
 "Failed to delete an old frame file:\n"

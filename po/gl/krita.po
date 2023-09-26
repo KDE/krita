@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-23 00:42+0000\n"
+"POT-Creation-Date: 2023-09-26 00:41+0000\n"
 "PO-Revision-Date: 2023-09-03 12:19+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -21818,15 +21818,15 @@ msgstr ""
 "Non se puido renderizar a animación:\n"
 "%1"
 
-#: libs/ui/animation/KisAnimationRender.cpp:136
-#: libs/ui/animation/KisAnimationRender.cpp:138
+#: libs/ui/animation/KisAnimationRender.cpp:135
+#: libs/ui/animation/KisAnimationRender.cpp:137
 #, fuzzy, kde-format
 #| msgid "Parsing error"
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Erro de procesamento"
 
-#: libs/ui/animation/KisAnimationRender.cpp:138
+#: libs/ui/animation/KisAnimationRender.cpp:137
 #, fuzzy, kde-format
 #| msgid "Failed to render animation frames!"
 msgid "Failed to render animation frames! Output files are incomplete."
@@ -24684,12 +24684,12 @@ msgstr "Xerando de novo a caché…"
 msgid "Saving frames..."
 msgstr "Gardando os fotogramas…"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:119
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:106
 #, kde-format
 msgid "Delete old frames?"
 msgstr "Eliminar os fotogramas vellos?"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:120
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:107
 #, kde-format
 msgid ""
 "Frames with the same naming scheme exist in the destination directory. They "
@@ -24704,12 +24704,12 @@ msgstr ""
 "Directorio: %1\n"
 "Ficheiros: %2"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:134
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:121
 #, kde-format
 msgid "Failed to delete"
 msgstr "Non se puido eliminar"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:135
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
 #, kde-format
 msgid ""
 "Failed to delete an old frame file:\n"

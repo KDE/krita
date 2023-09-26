@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-23 00:42+0000\n"
+"POT-Creation-Date: 2023-09-26 00:41+0000\n"
 "PO-Revision-Date: 2002-11-08 16:00+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -20459,14 +20459,14 @@ msgid ""
 "%1"
 msgstr "Iikona:"
 
-#: libs/ui/animation/KisAnimationRender.cpp:136
-#: libs/ui/animation/KisAnimationRender.cpp:138
+#: libs/ui/animation/KisAnimationRender.cpp:135
+#: libs/ui/animation/KisAnimationRender.cpp:137
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Rhweba ngaphandle Umfanekiso..."
 
-#: libs/ui/animation/KisAnimationRender.cpp:138
+#: libs/ui/animation/KisAnimationRender.cpp:137
 #, fuzzy, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Yenza ulwaleko olutsha"
@@ -23130,12 +23130,12 @@ msgstr ""
 msgid "Saving frames..."
 msgstr "Rhweba ngaphandle Umfanekiso..."
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:119
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:106
 #, fuzzy, kde-format
 msgid "Delete old frames?"
 msgstr "Imposiso Yolwaleko"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:120
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:107
 #, kde-format
 msgid ""
 "Frames with the same naming scheme exist in the destination directory. They "
@@ -23145,12 +23145,12 @@ msgid ""
 "Files: %2"
 msgstr ""
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:134
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:121
 #, fuzzy, kde-format
 msgid "Failed to delete"
 msgstr "Ayinakuyivula ifayile %1"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:135
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
 #, kde-format
 msgid ""
 "Failed to delete an old frame file:\n"

@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-23 00:42+0000\n"
+"POT-Creation-Date: 2023-09-26 00:41+0000\n"
 "PO-Revision-Date: 2023-09-23 08:39+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -20401,14 +20401,14 @@ msgstr ""
 "Ne eblis bildigi animacion:\n"
 "%1"
 
-#: libs/ui/animation/KisAnimationRender.cpp:136
-#: libs/ui/animation/KisAnimationRender.cpp:138
+#: libs/ui/animation/KisAnimationRender.cpp:135
+#: libs/ui/animation/KisAnimationRender.cpp:137
 #, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Eraro de bildigo"
 
-#: libs/ui/animation/KisAnimationRender.cpp:138
+#: libs/ui/animation/KisAnimationRender.cpp:137
 #, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr ""
@@ -23169,12 +23169,12 @@ msgstr "Regenerante kaŝmemoron..."
 msgid "Saving frames..."
 msgstr "Konservante kadrojn..."
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:119
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:106
 #, kde-format
 msgid "Delete old frames?"
 msgstr "Ĉu forigi malnovajn kadrojn?"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:120
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:107
 #, kde-format
 msgid ""
 "Frames with the same naming scheme exist in the destination directory. They "
@@ -23189,12 +23189,12 @@ msgstr ""
 "Dosierujo: %1\n"
 "Dosieroj: %2"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:134
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:121
 #, kde-format
 msgid "Failed to delete"
 msgstr "Malsukcesis forigi"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:135
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
 #, kde-format
 msgid ""
 "Failed to delete an old frame file:\n"

@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-23 00:42+0000\n"
+"POT-Creation-Date: 2023-09-26 00:41+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -21094,15 +21094,15 @@ msgid ""
 "%1"
 msgstr "Νέα διαμόρφωση %1"
 
-#: libs/ui/animation/KisAnimationRender.cpp:136
-#: libs/ui/animation/KisAnimationRender.cpp:138
+#: libs/ui/animation/KisAnimationRender.cpp:135
+#: libs/ui/animation/KisAnimationRender.cpp:137
 #, fuzzy, kde-format
 #| msgid "Parsing error"
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Σφάλμα ανάλυσης"
 
-#: libs/ui/animation/KisAnimationRender.cpp:138
+#: libs/ui/animation/KisAnimationRender.cpp:137
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to render animation frames! Output files are incomplete."
@@ -23884,12 +23884,12 @@ msgstr ""
 msgid "Saving frames..."
 msgstr "Εξαγωγή στρώματος"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:119
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:106
 #, fuzzy, kde-format
 msgid "Delete old frames?"
 msgstr "Εισαγωγή ονόματος"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:120
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:107
 #, kde-format
 msgid ""
 "Frames with the same naming scheme exist in the destination directory. They "
@@ -23899,13 +23899,13 @@ msgid ""
 "Files: %2"
 msgstr ""
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:134
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:121
 #, fuzzy, kde-format
 #| msgid "Unable to undelete tag"
 msgid "Failed to delete"
 msgstr "Αδυναμία αναίρεσης διαγραφής ετικέτας"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:135
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
 #, kde-format
 msgid ""
 "Failed to delete an old frame file:\n"

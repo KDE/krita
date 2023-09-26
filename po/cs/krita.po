@@ -48,7 +48,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-23 00:42+0000\n"
+"POT-Creation-Date: 2023-09-26 00:41+0000\n"
 "PO-Revision-Date: 2023-06-28 14:15+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -8114,11 +8114,10 @@ msgstr ""
 #. i18n: context: toolTip @ Action (lock_toolbars), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (lock_toolbars), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:65 krita/krita.action:67 krita/krita.action:68
-#, fuzzy, kde-format
-#| msgid "Toolbars"
+#, kde-format
 msgctxt "action"
 msgid "Lock Toolbars"
-msgstr "Panely nástrojů"
+msgstr ""
 
 #. i18n: context: text @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
@@ -20301,14 +20300,14 @@ msgid ""
 "%1"
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:136
-#: libs/ui/animation/KisAnimationRender.cpp:138
+#: libs/ui/animation/KisAnimationRender.cpp:135
+#: libs/ui/animation/KisAnimationRender.cpp:137
 #, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Chyba vykreslování"
 
-#: libs/ui/animation/KisAnimationRender.cpp:138
+#: libs/ui/animation/KisAnimationRender.cpp:137
 #, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr ""
@@ -22978,12 +22977,12 @@ msgstr "Znovu vytvářím mezipaměť..."
 msgid "Saving frames..."
 msgstr ""
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:119
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:106
 #, kde-format
 msgid "Delete old frames?"
 msgstr "Smazat staré rámce?"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:120
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:107
 #, kde-format
 msgid ""
 "Frames with the same naming scheme exist in the destination directory. They "
@@ -22993,12 +22992,12 @@ msgid ""
 "Files: %2"
 msgstr ""
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:134
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:121
 #, kde-format
 msgid "Failed to delete"
 msgstr "Nelze smazat"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:135
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
 #, kde-format
 msgid ""
 "Failed to delete an old frame file:\n"
@@ -29215,27 +29214,7 @@ msgstr ""
 "b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:215
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><table width=\"100%\" cellpadding="
-#| "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
-#| "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#| "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-#| "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#| "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#| "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#| "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
-#| "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
-#| "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
-#| "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
-#| "p><p><a href=\"https://api.kde.org/appscomplete-api/krita-apidocs/libs/"
-#| "libkis/html/index.html\"><span style=\" text-decoration: underline; color:"
-#| "%1;\">Scripting API</span></a></p><p><a href=\"https://scripting.krita."
-#| "org/lessons/introduction\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Scripting School</span></a></p></td></table></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
 "style=\" color:%1;\"><b>Using Krita</b></span></p><p><a href=\"https://krita."
@@ -29256,25 +29235,6 @@ msgid ""
 "lessons/introduction\"><span style=\" text-decoration: underline; color:%1;"
 "\">Scripting School</span></a></p></td></table></body></html>"
 msgstr ""
-"<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
-"style=\" color:%1;\"><b>Použití aplikace Krita</b></span></p><p><a href="
-"\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Podpořte vývoj aplikace Krita.</span></a></p><p><a href="
-"\"https://docs.krita.org/en/user_manual/getting_started.html\"><span style="
-"\" text-decoration: underline; color:%1;\">Začínáme</span></a></p><p><a href="
-"\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:"
-"%1;\">Manuál</span></a></p><p><a href=\"https://krita.org/\"><span style=\" "
-"text-decoration: underline; color:%1;\">Webové stránky Krita</span></a></p></"
-"td><td><p><span style=\" color:%1;\"><b>Programování aplikace Krita</b></"
-"span></p><p><a href=\"https://krita-artists.org\"><span style=\" text-"
-"decoration: underline; color:%1;\">Komunita uživatelů</span></a></p><p><a "
-"href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-"decoration: underline; color:%1;\">Zdrojové kódy</span></a></p><p><a href="
-"\"https://api.kde.org/appscomplete-api/krita-apidocs/libs/libkis/html/index."
-"html\"><span style=\" text-decoration: underline; color:%1;\">Skriptovací "
-"API</span></a></p><p><a href=\"https://scripting.krita.org/lessons/"
-"introduction\"><span style=\" text-decoration: underline; color:%1;\">Škola "
-"skriptování</span></a></p></td></table></body></html>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format
@@ -42046,12 +42006,10 @@ msgid "Create Bundle"
 msgstr "Vytvořit balíček"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:155
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Edit Guides"
+#, kde-format
 msgctxt "In bundle manager; press button to edit existing bundle"
 msgid "Edit Bundle"
-msgstr "Upravit vodítka"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:198
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:356
@@ -42088,11 +42046,9 @@ msgid ""
 msgstr ""
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:279
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Choose File to Add"
+#, kde-format
 msgid "Choose the bundle to edit"
-msgstr "Zvolte soubor pro přidání"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:414
 #, kde-format
@@ -42118,18 +42074,16 @@ msgstr "Vytvořit balíček zdrojů"
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseRes)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:130
 #: plugins/extensions/resourcemanager/wdgside.ui:137
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Choose Resources"
-msgstr "Zdroje"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseTags)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:131
 #: plugins/extensions/resourcemanager/wdgside.ui:80
-#, fuzzy, kde-format
-#| msgid "Choose a color"
+#, kde-format
 msgid "Choose Tags"
-msgstr "Vybrat barvu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, btnBundleInfo)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:132
@@ -42139,10 +42093,9 @@ msgid "Enter Bundle Details"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:133
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Enter Save Location"
-msgstr "Umístění ukládaných souborů:"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:138
 #, kde-format
@@ -42150,16 +42103,14 @@ msgid "Edit Resource Bundle"
 msgstr "Vytvořit balíček zdrojů"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:141
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Edit Resources"
-msgstr "Zdroje"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
-#, fuzzy, kde-format
-#| msgid "Edit Text"
+#, kde-format
 msgid "Edit Tags"
-msgstr "Upravit text"
+msgstr "Upravit značky"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:143
 #, kde-format
@@ -42167,10 +42118,9 @@ msgid "Edit Bundle Details"
 msgstr ""
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:144
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Edit Save Location"
-msgstr "Umístění ukládaných souborů:"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:221
 #, kde-format
@@ -42310,7 +42260,7 @@ msgstr ""
 #: plugins/extensions/resourcemanager/pagetagchooser.ui:20
 #, kde-format
 msgid "WizardPage"
-msgstr ""
+msgstr "Stránka průvodce"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -42378,11 +42328,9 @@ msgstr "(256 x 256)"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnRemoveSelected)
 #: plugins/extensions/resourcemanager/pageresourcechooser.ui:74
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Remove Template"
+#, kde-format
 msgid "Remove Selected"
-msgstr "Odstranit šablonu"
+msgstr "Odstranit vybrané"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:39
 #, kde-format
@@ -42446,10 +42394,9 @@ msgstr "Zd&roje"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnEdit)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:92
-#, fuzzy, kde-format
-#| msgid "Edit Resource Bundle"
+#, kde-format
 msgid "Edit a resource library"
-msgstr "Vytvořit balíček zdrojů"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:108
@@ -42557,10 +42504,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, btnSaveLocation)
 #: plugins/extensions/resourcemanager/wdgside.ui:118
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Choose Save Location"
-msgstr "Umístění ukládaných souborů:"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:262
 #, kde-format

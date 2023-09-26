@@ -826,7 +826,10 @@ void KisWelcomePageWidget::setupBanner()
     m_bannerUrl = "https://krita.org/support-us/donations";
     m_bannerImage = QImage(QStringLiteral(":/default_banner.png"));
     KisApplication *kisApp = static_cast<KisApplication*>(qApp);
-    m_showBanner = !kisApp->isStoreApplication();
+
+    KisConfig cfg(true);
+
+    m_showBanner = (!kisApp->isStoreApplication() && !cfg.hideDevFundBanner());
 
 //    if (m_networkIsAllowed) {
 //        QByteArray ba = KisRemoteFileFetcher::fetchFile("https://download.kde.org/stable/krita/banner/banner.xml");

@@ -292,6 +292,9 @@ public:
     bool saveSessionOnQuit(bool defaultValue) const;
     void setSaveSessionOnQuit(bool value);
 
+    bool hideDevFundBanner(bool defaultValue = false) const;
+    void setHideDevFundBanner(bool value = true);
+
     qreal outlineSizeMinimum(bool defaultValue = false) const;
     void setOutlineSizeMinimum(qreal outlineSizeMinimum) const;
 

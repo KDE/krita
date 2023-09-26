@@ -1198,6 +1198,16 @@ void KisConfig::setSaveSessionOnQuit(bool value)
     m_cfg.writeEntry("saveSessionOnQuit", value);
 }
 
+bool KisConfig::hideDevFundBanner(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("hideDevFundBanner", false);
+}
+
+void KisConfig::setHideDevFundBanner(bool value)
+{
+    m_cfg.writeEntry("hideDevFundBanner", value);
+}
+
 qreal KisConfig::outlineSizeMinimum(bool defaultValue) const
 {
     return (defaultValue ? 1.0 : m_cfg.readEntry("OutlineSizeMinimum", 1.0));

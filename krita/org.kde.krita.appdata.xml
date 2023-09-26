@@ -643,10 +643,10 @@
           <location>https://download.kde.org/stable/krita/5.1.5/krita-x86-5.1.5-setup.exe</location>
         </artifact>
         <artifact type="binary" platform="android-arm64_v8a">
-          <location>https://download.kde.org/stable/krita/5.1.5/krita_build_apk-release-arm64_v8a-release.apk</location>
+          <location>https://download.kde.org/stable/krita/5.1.5/krita-arm64-v8a-5.1.5-release-signed.apk</location>
         </artifact>
         <artifact type="binary" platform="android-armeabi_v7a">
-          <location>https://download.kde.org/stable/krita/5.1.5/krita_build_apk-release-armeabi_v7a-release.apk</location>
+          <location>https://download.kde.org/stable/krita/5.1.5/krita-armeabi-v7a-5.1.5-release-signed.apk</location>
         </artifact>
         <artifact type="source">
           <location>https://download.kde.org/stable/krita/5.1.5/krita-5.1.5.tar.xz</location>

@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-26 00:41+0000\n"
+"POT-Creation-Date: 2023-09-27 00:41+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -20726,7 +20726,7 @@ msgstr "Kohalikud ressurssid"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:693
-#: libs/ui/KisView.cpp:1178 libs/ui/KisWelcomePageWidget.cpp:740
+#: libs/ui/KisView.cpp:1178 libs/ui/KisWelcomePageWidget.cpp:746
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -25018,7 +25018,7 @@ msgid "Start"
 msgstr "Alustamine"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:213 libs/ui/KisWelcomePageWidget.cpp:634
+#: libs/ui/forms/KisWelcomePage.ui:213 libs/ui/KisWelcomePageWidget.cpp:640
 #, kde-format
 msgid "DEV BUILD"
 msgstr "DEV BUILD"
@@ -25059,43 +25059,43 @@ msgid "Community"
 msgstr "Kogukond"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:393
+#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:399
 #, kde-format
 msgid "User Manual"
 msgstr "Kasutaja käsiraamat "
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:396
+#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:402
 #, kde-format
 msgid "Support Krita"
 msgstr "Krita toetamine"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:405
+#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:411
 #, kde-format
 msgid "Powered by KDE"
 msgstr "KDE igakülgsel toetusel"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:751 libs/ui/KisWelcomePageWidget.cpp:402
+#: libs/ui/forms/KisWelcomePage.ui:751 libs/ui/KisWelcomePageWidget.cpp:408
 #, kde-format
 msgid "Source Code"
 msgstr "Lähtekood"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:838 libs/ui/KisWelcomePageWidget.cpp:390
+#: libs/ui/forms/KisWelcomePage.ui:838 libs/ui/KisWelcomePageWidget.cpp:396
 #, kde-format
 msgid "Getting Started"
 msgstr "Alustamine"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:925 libs/ui/KisWelcomePageWidget.cpp:387
+#: libs/ui/forms/KisWelcomePage.ui:925 libs/ui/KisWelcomePageWidget.cpp:393
 #, kde-format
 msgid "User Community"
 msgstr "Kasutajate kogukond"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:1012 libs/ui/KisWelcomePageWidget.cpp:399
+#: libs/ui/forms/KisWelcomePage.ui:1012 libs/ui/KisWelcomePageWidget.cpp:405
 #, kde-format
 msgid "Krita Website"
 msgstr "Krita veebileht"
@@ -25156,7 +25156,7 @@ msgid "Show details"
 msgstr "Näita üksikasju"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1533 libs/ui/KisWelcomePageWidget.cpp:407
+#: libs/ui/forms/KisWelcomePage.ui:1533 libs/ui/KisWelcomePageWidget.cpp:413
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -32993,24 +32993,24 @@ msgstr "Keel"
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:657
+#: libs/ui/KisWelcomePageWidget.cpp:663
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, fuzzy, kde-format
 #| msgid "Export \"%1\""
 msgid "Forget \"%1\""
 msgstr "\"%1\" eksport"
 
-#: libs/ui/KisWelcomePageWidget.cpp:759
+#: libs/ui/KisWelcomePageWidget.cpp:765
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Saadaval on Krita uus versioon."
 
-#: libs/ui/KisWelcomePageWidget.cpp:788
+#: libs/ui/KisWelcomePageWidget.cpp:794
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Uuendamisel tekkis tõrge."
 
-#: libs/ui/KisWelcomePageWidget.cpp:794
+#: libs/ui/KisWelcomePageWidget.cpp:800
 #, kde-format
 msgid "Restart is required."
 msgstr "Vajalik on taaskäivitus."

@@ -380,6 +380,12 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
     lblBanner->setUnscaledPixmap(QPixmap::fromImage(m_bannerImage));
     connect(lblBanner, SIGNAL(clicked()), this, SLOT(slotBannerClicked()));
+    connect(lblBanner, &KisClickableLabel::dismissed, this, [&](){
+        lblBanner->setVisible(false);
+
+        KisConfig cfg(false);
+        cfg.setHideDevFundBanner(true);
+    });
     lblBanner->setVisible(m_showBanner);
 
     // HTML links seem to be a bit more stubborn with theme changes... setting inline styles to help with color change

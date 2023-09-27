@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QObject>
 #include <QWidget>
+#include <QPushButton>
 
 #include <kritawidgetutils_export.h>
 
@@ -29,8 +30,12 @@ public:
     void setUnscaledPixmap(QPixmap pixmap);
     void updatePixmap();
 
+    void setDismissable(bool value = true);
+    bool isDismissable();
+
 Q_SIGNALS:
     void clicked();
+    void dismissed();
 
 protected:
     void mousePressEvent(QMouseEvent* event) override;
@@ -38,6 +43,9 @@ protected:
 
 private:
     QPixmap m_pixmap;
+
+    bool m_dismissable = false;
+    QPushButton *m_closeButton;
 };
 
 #endif // KISCLICKABLELABEL_H

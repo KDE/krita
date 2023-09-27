@@ -7,10 +7,21 @@
 
 #include <QResizeEvent>
 #include <QtMath>
+#include <QBoxLayout>
+#include <kis_icon_utils.h>
 
 KisClickableLabel::KisClickableLabel(QWidget* parent)
     : QLabel(parent)
 {
+    m_closeButton = new QPushButton(this);
+    m_closeButton->setGeometry(0,0,16,16);
+    m_closeButton->setFlat(true);
+    m_closeButton->setIcon(KisIconUtils::loadIcon("dark_close-tab"));
+    connect(m_closeButton, &QPushButton::clicked, this, [&](){
+        emit dismissed();
+    });
+
+    setDismissable(true);
 }
 
 KisClickableLabel::~KisClickableLabel() {}
@@ -34,7 +45,7 @@ QSize KisClickableLabel::minimumSizeHint() const
 }
 
 QSize KisClickableLabel::sizeHint() const
-{
+{   
     return {};
 }
 
@@ -53,7 +64,19 @@ void KisClickableLabel::updatePixmap()
     }
 }
 
-void KisClickableLabel::mousePressEvent(QMouseEvent* event)
+void KisClickableLabel::setDismissable(bool value)
+{
+    m_dismissable = value;
+
+    m_closeButton->setVisible(m_dismissable);
+}
+
+bool KisClickableLabel::isDismissable()
+{
+    return m_dismissable;
+}
+
+void KisClickableLabel::mousePressEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
     emit clicked();

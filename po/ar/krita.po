@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-26 02:38+0000\n"
+"POT-Creation-Date: 2023-09-27 02:26+0000\n"
 "PO-Revision-Date: 2022-10-02 19:59+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -29630,7 +29630,7 @@ msgstr "حجّم الطّبقة إلى المقاس الجديد"
 msgid "Select from Menu (Add to Selection)"
 msgstr "اطرح &من التّحديد الحاليّ"
 
-#: libs/ui/input/kis_select_layer_action.cpp:246
+#: libs/ui/input/kis_select_layer_action.cpp:247
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Select all layers"

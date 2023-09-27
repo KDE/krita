@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-26 02:38+0000\n"
+"POT-Creation-Date: 2023-09-27 02:26+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -28298,7 +28298,7 @@ msgstr "Simpan Lapisan sebagai Imej..."
 msgid "Select from Menu (Add to Selection)"
 msgstr "&Tolak daripada pemilihan semasa"
 
-#: libs/ui/input/kis_select_layer_action.cpp:246
+#: libs/ui/input/kis_select_layer_action.cpp:247
 #, fuzzy, kde-format
 msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"

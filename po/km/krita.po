@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-26 02:38+0000\n"
+"POT-Creation-Date: 2023-09-27 02:26+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -28513,7 +28513,7 @@ msgstr "រក្សា​ទុក​ស្រទាប់​ជា​រូប
 msgid "Select from Menu (Add to Selection)"
 msgstr "ដក​ពី​ជម្រើស​បច្ចុប្បន្ន"
 
-#: libs/ui/input/kis_select_layer_action.cpp:246
+#: libs/ui/input/kis_select_layer_action.cpp:247
 #, fuzzy, kde-format
 msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"

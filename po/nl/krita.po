@@ -61,7 +61,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-27 00:41+0000\n"
+"POT-Creation-Date: 2023-09-28 00:40+0000\n"
 "PO-Revision-Date: 2023-09-24 21:20+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -19530,7 +19530,7 @@ msgstr "Lokale hulpbronnen"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:693
-#: libs/ui/KisView.cpp:1178 libs/ui/KisWelcomePageWidget.cpp:746
+#: libs/ui/KisView.cpp:1178 libs/ui/KisWelcomePageWidget.cpp:748
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -23712,7 +23712,7 @@ msgid "Start"
 msgstr "Starten"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:213 libs/ui/KisWelcomePageWidget.cpp:640
+#: libs/ui/forms/KisWelcomePage.ui:213 libs/ui/KisWelcomePageWidget.cpp:642
 #, kde-format
 msgid "DEV BUILD"
 msgstr "DEV BUILD"
@@ -23752,43 +23752,43 @@ msgid "Community"
 msgstr "Gemeenschap"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:399
+#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:401
 #, kde-format
 msgid "User Manual"
 msgstr "Gebruikershandleiding"
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:402
+#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:404
 #, kde-format
 msgid "Support Krita"
 msgstr "Krita ondersteunen"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:411
+#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:413
 #, kde-format
 msgid "Powered by KDE"
 msgstr "Powered by KDE"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:751 libs/ui/KisWelcomePageWidget.cpp:408
+#: libs/ui/forms/KisWelcomePage.ui:751 libs/ui/KisWelcomePageWidget.cpp:410
 #, kde-format
 msgid "Source Code"
 msgstr "Broncode"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:838 libs/ui/KisWelcomePageWidget.cpp:396
+#: libs/ui/forms/KisWelcomePage.ui:838 libs/ui/KisWelcomePageWidget.cpp:398
 #, kde-format
 msgid "Getting Started"
 msgstr "Hoe te beginnen"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:925 libs/ui/KisWelcomePageWidget.cpp:393
+#: libs/ui/forms/KisWelcomePage.ui:925 libs/ui/KisWelcomePageWidget.cpp:395
 #, kde-format
 msgid "User Community"
 msgstr "Gebruikersgemeenschap"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:1012 libs/ui/KisWelcomePageWidget.cpp:405
+#: libs/ui/forms/KisWelcomePage.ui:1012 libs/ui/KisWelcomePageWidget.cpp:407
 #, kde-format
 msgid "Krita Website"
 msgstr "Website van Krita"
@@ -23847,7 +23847,7 @@ msgid "Show details"
 msgstr "Details tonen"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1533 libs/ui/KisWelcomePageWidget.cpp:413
+#: libs/ui/forms/KisWelcomePage.ui:1533 libs/ui/KisWelcomePageWidget.cpp:415
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -31532,23 +31532,23 @@ msgstr "Taal"
 msgid "English news is always up to date."
 msgstr "Engels nieuws is altijd bijgewerkt."
 
-#: libs/ui/KisWelcomePageWidget.cpp:663
+#: libs/ui/KisWelcomePageWidget.cpp:665
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "\"%1\" vergeten"
 
-#: libs/ui/KisWelcomePageWidget.cpp:765
+#: libs/ui/KisWelcomePageWidget.cpp:767
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Nieuwe versie van Krita is beschikbaar."
 
-#: libs/ui/KisWelcomePageWidget.cpp:794
+#: libs/ui/KisWelcomePageWidget.cpp:796
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Er deed zich een fout voor bij het bijwerken"
 
-#: libs/ui/KisWelcomePageWidget.cpp:800
+#: libs/ui/KisWelcomePageWidget.cpp:802
 #, kde-format
 msgid "Restart is required."
 msgstr "Een herstart is vereist."

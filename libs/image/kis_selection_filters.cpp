@@ -1236,6 +1236,13 @@ void KisGrowUntilDarkestPixelSelectionFilter::process(KisPixelSelectionSP pixelS
             if (*testMaskPixel) {
                 const quint8 testOpacity = referenceColorSpace->opacityU8(testReferencePixel);
                 if (pixelOpacity >= testOpacity) {
+                    // Special case for when the neighbor pixel is fully transparent.
+                    // In that case do not compare the intensity
+                    if (testOpacity == MIN_SELECTED) {
+                        return true;
+                    }
+                    // If the opacity test passes we still have to perform the
+                    // intensity test
                     const quint8 testIntensity = referenceColorSpace->intensity8(testReferencePixel);
                     if (pixelIntensity <= testIntensity) {
                         return true;

@@ -224,7 +224,7 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
         cfgFFmpegPath = (ffmpegInfo["enabled"].toBool()) ? ffmpegInfo["path"].toString() : "";
     }
 #endif
-    const QString likelyFFmpegPath = [&]() {
+    QString likelyFFmpegPath = [&]() {
         if (!cfgFFmpegPath.isEmpty()) {
             return cfgFFmpegPath;
         }
@@ -235,6 +235,12 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 
         return QStandardPaths::findExecutable("ffmpeg");
     }();
+
+    if (likelyFFmpegPath.isEmpty() || !QFileInfo(likelyFFmpegPath).isExecutable()) {
+        QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg("");
+
+        likelyFFmpegPath = (ffmpegJsonObj["enabled"].toBool()) ? ffmpegJsonObj["path"].toString() : "";
+    }
 
     m_page->ffmpegLocation->setFileName(likelyFFmpegPath);
     m_page->ffmpegLocation->setStartDir(QFileInfo(m_doc->localFilePath()).path());

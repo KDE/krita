@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-28 00:40+0000\n"
+"POT-Creation-Date: 2023-09-30 00:41+0000\n"
 "PO-Revision-Date: 2023-09-23 13:37+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -19401,7 +19401,7 @@ msgstr "Allunya"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:501 libs/ui/KisView.cpp:1175
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19437,9 +19437,9 @@ msgstr "Recursos locals"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:701
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:727
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:707
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:733
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20477,12 +20477,12 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "N/A"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:395
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:401
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "No s'ha proporcionat un binari vàlid del FFmpeg..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:468
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:474
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
@@ -20491,7 +20491,7 @@ msgstr ""
 "transparència en els GIF"
 
 # skip-rule: punctuation-period-no
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:475
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:481
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -20501,13 +20501,13 @@ msgstr ""
 "Les imatges GIF animades no poden tenir una velocitat de fotogrames superior "
 "a 50. La velocitat dels fotogrames es reduirà a 50 fotogrames per segon."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:482
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:488
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgid "Warning(s):"
 msgstr "Avís/os:"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:701
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:707
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20516,7 +20516,7 @@ msgstr ""
 "El FFmpeg indicat sembla que està comprimit. Primer intenteu extreure'l de "
 "l'arxiu."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -20525,7 +20525,7 @@ msgstr ""
 "El FFmpeg indicat sembla que no és vàlid. Seleccioneu la ubicació correcta "
 "de l'executable en aquest sistema."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:727
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:733
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Si us plau, introduïu un nom de fitxer a representar."

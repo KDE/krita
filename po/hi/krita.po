@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-28 00:40+0000\n"
+"POT-Creation-Date: 2023-09-30 00:41+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -19404,7 +19404,7 @@ msgstr "बाहर"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:501 libs/ui/KisView.cpp:1175
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1175
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19440,9 +19440,9 @@ msgstr "स्थानीय संसाधन"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:701
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:727
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:707
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:733
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20469,18 +20469,18 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "एन / ए"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:395
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:401
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:468
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:474
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:475
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:481
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -20488,20 +20488,20 @@ msgid ""
 "will be reduced to 50 frames per second"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:482
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:488
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgid "Warning(s):"
 msgstr "चेतावनियां"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:701
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:707
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:715
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
 #, fuzzy, kde-format
 #| msgid ""
 #| "The location of FFmpeg is invalid. Please select the correct location of "
@@ -20513,7 +20513,7 @@ msgstr ""
 "एफएफएमपेग का स्थान अमान्य है। कृपया अपने तंत्र पर एफएफएमपेग निष्पादन योग्य फ़ाइल के सही "
 "स्थान का चयन करें।"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:727
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:733
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "कृपया रेंडर करने के लिए एक फ़ाइल नाम दर्ज करें।"

@@ -14236,7 +14236,7 @@ msgstr "Gardar unha copia de &seguridade incremental"
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental Backup"
-msgstr "Gardar unha copia de seguridade incremental"
+msgstr "Gardar unha salvagarda incremental"
 
 #. i18n: context: text @ Action (create_template), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:189
@@ -16983,8 +16983,8 @@ msgid ""
 "have a drawing tablet, please make sure the tablet driver is properly "
 "installed."
 msgstr ""
-"Non se pode cargar o controlador de WinTab e non se atoparon dispositivos de "
-"bolígrafo Windows Ink. Se ten unha tableta de debuxo asegúrese de que o "
+"Non é posíbel cargar o controlador de WinTab e non se atoparon dispositivos "
+"de bolígrafo Windows Ink. Se ten unha tableta de debuxo asegúrese de que o "
 "controlador da tableta está correctamente instalado."
 
 #: krita/main.cc:696
@@ -16993,7 +16993,7 @@ msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
 "the tablet driver is properly installed."
 msgstr ""
-"Non se pode cargar o controlador de WinTab. Se ten unha tableta de debuxo "
+"Non é posíbel cargar o controlador de WinTab. Se ten unha tableta de debuxo "
 "asegúrese de que o controlador da tableta está correctamente instalado."
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:547
@@ -17395,7 +17395,7 @@ msgstr "gardar como HTML fallou"
 #: libs/flake/html/HtmlWriter.cpp:84
 #, kde-format
 msgid "Cannot save %1 to html"
-msgstr "Non se pode gardar %1 como HTML"
+msgstr "Non é posíbel gardar %1 como HTML"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:123
@@ -17694,7 +17694,7 @@ msgstr "Krita: erro interno"
 #: libs/global/kis_dom_utils.cpp:127
 #, kde-format
 msgid "Could not find \"%1\" XML tag in \"%2\""
-msgstr "Non se puido atopar a etiqueta XML «%1» en «%2»."
+msgstr "Non foi posíbel atopar a etiqueta XML «%1» en «%2»."
 
 #: libs/global/kis_dom_utils.cpp:157
 #, kde-format
@@ -21815,7 +21815,7 @@ msgid ""
 "Could not render animation:\n"
 "%1"
 msgstr ""
-"Non se puido renderizar a animación:\n"
+"Non foi posíbel renderizar a animación:\n"
 "%1"
 
 #: libs/ui/animation/KisAnimationRender.cpp:135
@@ -22199,7 +22199,7 @@ msgstr ""
 #: libs/ui/animation/KisVideoSaver.cpp:52
 #, kde-format
 msgid "ffmpeg could not be found at %1"
-msgstr "Non se puido atopar ffmpeg en %1"
+msgstr "Non foi posíbel atopar ffmpeg en %1"
 
 #: libs/ui/animation/KisVideoSaver.cpp:141
 #, kde-format
@@ -24707,7 +24707,7 @@ msgstr ""
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:121
 #, kde-format
 msgid "Failed to delete"
-msgstr "Non se puido eliminar"
+msgstr "Non foi posíbel eliminar"
 
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
 #, kde-format
@@ -24718,7 +24718,7 @@ msgid ""
 "\n"
 "Rendering cancelled."
 msgstr ""
-"Non se puido eliminar un ficheiro vello de fotograma:\n"
+"Non foi posíbel eliminar un ficheiro vello de fotograma:\n"
 "\n"
 "%1\n"
 "\n"
@@ -25779,7 +25779,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:106
 #, kde-format
 msgid "Use Blackpoint Compensation"
-msgstr "Utilizar compensación de punto negro"
+msgstr "Usar compensación de punto negro"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgcolorsettings.ui:116
@@ -26110,7 +26110,7 @@ msgstr ""
 #: libs/ui/forms/wdgconvertcolorspace.ui:133
 #, kde-format
 msgid "Use Blackpoint &Compensation"
-msgstr "Utilizar &compensación de punto negro"
+msgstr "Usar &compensación de punto negro"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgconvertcolorspace.ui:140
@@ -27019,13 +27019,13 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:912
 #, kde-format
 msgid "Create a Backup File on Saving"
-msgstr "Crear un ficheiro de copia de seguridade ao gardar"
+msgstr "Crear un ficheiro de salvagarda ao gardar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: libs/ui/forms/wdggeneralsettings.ui:921
 #, kde-format
 msgid "Backup File Location"
-msgstr "Ruta do ficheiro de copia de seguridade"
+msgstr "Ruta do ficheiro de salvagarda"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
 #: libs/ui/forms/wdggeneralsettings.ui:929
@@ -27049,7 +27049,7 @@ msgstr "Ruta do ficheiro temporal"
 #: libs/ui/forms/wdggeneralsettings.ui:947
 #, kde-format
 msgid "Backup File Suffix:"
-msgstr "Sufixo do ficheiro de copia de seguridade:"
+msgstr "Sufixo do ficheiro de salvagarda:"
 
 #. i18n: ectx: property (text), widget (QLineEdit, txtBackupFileSuffix)
 #: libs/ui/forms/wdggeneralsettings.ui:954
@@ -27061,7 +27061,7 @@ msgstr "~"
 #: libs/ui/forms/wdggeneralsettings.ui:964
 #, kde-format
 msgid "Number of Backup Files Kept:"
-msgstr "Número de ficheiros de copia de seguridade que conservar:"
+msgstr "Número de ficheiros de salvagarda que conservar:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdggeneralsettings.ui:984
@@ -30708,7 +30708,7 @@ msgid ""
 "Could not open %2.\n"
 "Reason: %1."
 msgstr ""
-"Non se puido abrir %2.\n"
+"Non foi posíbel abrir %2.\n"
 "Motivo: %1."
 
 #: libs/ui/kis_composite_ops_model.cc:22
@@ -30824,7 +30824,7 @@ msgstr "Non foi posíbel descargar o ficheiro remoto."
 #: libs/ui/kis_filter_manager.cc:190
 #, kde-format
 msgid "Cannot apply filter to locked layer."
-msgstr "Non se pode aplicar o filtro a unha capa bloqueada."
+msgstr "Non é posíbel aplicar o filtro a unha capa bloqueada."
 
 #: libs/ui/kis_filter_manager.cc:235
 #, kde-format
@@ -31123,7 +31123,7 @@ msgstr "Exportar «%1»"
 #: libs/ui/kis_node_manager.cpp:1219
 #, kde-format
 msgid "Could not save the layer. %1"
-msgstr "Non se puido gardar a capa. %1"
+msgstr "Non foi posíbel gardar a capa. %1"
 
 #: libs/ui/kis_node_manager.cpp:1237
 #, fuzzy, kde-format
@@ -31142,7 +31142,7 @@ msgstr "Exportar para SVG"
 #: libs/ui/kis_node_manager.cpp:1281
 #, kde-format
 msgid "Could not save to svg: %1"
-msgstr "Non se puido gardar en SVG: %1"
+msgstr "Non foi posíbel gardar en SVG: %1"
 
 #: libs/ui/kis_node_manager.cpp:1307
 #, kde-format
@@ -31156,7 +31156,7 @@ msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
-"Non se pode escribir a canle alfa na capa superior «%1».\n"
+"Non é posíbel escribir a canle alfa na capa superior «%1».\n"
 "Cancelarase a operación."
 
 #: libs/ui/kis_node_manager.cpp:1339
@@ -31704,7 +31704,7 @@ msgstr "Non se atopou o mimetype así que inténteo usando a opción -mimetype"
 #: libs/ui/KisApplication.cpp:637
 #, kde-format
 msgid "Failed to render animation frames!"
-msgstr "Non se puideron renderizar os fotogramas da animación!"
+msgstr "Non foi posíbel renderizar os fotogramas da animación!"
 
 #: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:883
 #, fuzzy, kde-format
@@ -31776,7 +31776,7 @@ msgstr "Atopáronse demasiados modelos para: %1"
 #: libs/ui/KisApplication.cpp:1031
 #, kde-format
 msgid "Template %1 failed to load."
-msgstr "Non se puido cargar o modelo %1."
+msgstr "Non foi posíbel cargar o modelo %1."
 
 #: libs/ui/KisApplication.cpp:1063
 #, kde-format
@@ -31795,7 +31795,7 @@ msgid ""
 "\n"
 "Please make sure no other program is using the file and try again."
 msgstr ""
-"Non se puido baleirar %1.\n"
+"Non foi posíbel baleirar %1.\n"
 "\n"
 "Asegúrese de que non hai outro programa usando o ficheiro, e volva intentalo."
 
@@ -31959,7 +31959,7 @@ msgstr "Clonar o documento"
 #: libs/ui/KisDocument.cpp:733
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
-msgstr "Non se pode escribir en %1. Gárdeo cun nome distinto."
+msgstr "Non é posíbel escribir en %1. Gárdeo cun nome distinto."
 
 #: libs/ui/KisDocument.cpp:783
 #, fuzzy, kde-format
@@ -32147,7 +32147,7 @@ msgstr "Esgotáronse os recursos (p. ex. esgotouse a memoria)."
 #: libs/ui/KisImportExportErrorCode.cpp:34
 #, kde-format
 msgid "The file could not be opened."
-msgstr "Non se puido abrir o ficheiro."
+msgstr "Non foi posíbel abrir o ficheiro."
 
 #: libs/ui/KisImportExportErrorCode.cpp:36
 #, kde-format
@@ -32162,22 +32162,22 @@ msgstr "Esgotouse o tempo límite."
 #: libs/ui/KisImportExportErrorCode.cpp:42
 #, kde-format
 msgid "The file could not be removed."
-msgstr "Non se puido eliminar o ficheiro."
+msgstr "Non foi posíbel eliminar o ficheiro."
 
 #: libs/ui/KisImportExportErrorCode.cpp:44
 #, kde-format
 msgid "The file could not be renamed."
-msgstr "Non se puido cambiar o nome do ficheiro."
+msgstr "Non foi posíbel cambiar o nome do ficheiro."
 
 #: libs/ui/KisImportExportErrorCode.cpp:46
 #, kde-format
 msgid "The position in the file could not be changed."
-msgstr "Non se puido cambiar a posición no ficheiro."
+msgstr "Non foi posíbel cambiar a posición no ficheiro."
 
 #: libs/ui/KisImportExportErrorCode.cpp:48
 #, kde-format
 msgid "The file could not be resized."
-msgstr "Non se puido cambiar o tamaño do ficheiro."
+msgstr "Non foi posíbel cambiar o tamaño do ficheiro."
 
 #: libs/ui/KisImportExportErrorCode.cpp:50
 #, kde-format
@@ -32188,17 +32188,17 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:52
 #, kde-format
 msgid "The file could not be copied."
-msgstr "Non se puido copiar o ficheiro."
+msgstr "Non foi posíbel copiar o ficheiro."
 
 #: libs/ui/KisImportExportErrorCode.cpp:65
 #, kde-format
 msgid "Cannot open file for reading. Reason: %1"
-msgstr "Non se pode abrir o ficheiro para ler. Motivo: %1"
+msgstr "Non é posíbel abrir o ficheiro para ler. Motivo: %1"
 
 #: libs/ui/KisImportExportErrorCode.cpp:81
 #, kde-format
 msgid "Cannot open file for writing. Reason: %1"
-msgstr "Non se pode abrir o ficheiro para escribir. Motivo: %1"
+msgstr "Non é posíbel abrir o ficheiro para escribir. Motivo: %1"
 
 #: libs/ui/KisImportExportErrorCode.cpp:139
 #, fuzzy, kde-format
@@ -32220,7 +32220,7 @@ msgstr "Permiso denegado: Krita non ten permiso para ler o ficheiro."
 #: libs/ui/KisImportExportErrorCode.cpp:152
 #, kde-format
 msgid "The file format cannot be parsed."
-msgstr "Non se pode procesar o formato do ficheiro."
+msgstr "Non é posíbel procesar o formato do ficheiro."
 
 #: libs/ui/KisImportExportErrorCode.cpp:154
 #, kde-format
@@ -32240,7 +32240,7 @@ msgstr "Produciuse un erro ao ler do ficheiro."
 #: libs/ui/KisImportExportErrorCode.cpp:162
 #, kde-format
 msgid "The file cannot be created."
-msgstr "Non se pode crear o ficheiro."
+msgstr "Non é posíbel crear o ficheiro."
 
 #: libs/ui/KisImportExportErrorCode.cpp:164
 #, kde-format
@@ -32359,8 +32359,8 @@ msgid ""
 "Could not open the saved file %1. Please try to save again in a different "
 "location."
 msgstr ""
-"Non se puido abrir o ficheiro gardado %1. Intente gardalo de novo nun lugar "
-"distinto."
+"Non foi posíbel abrir o ficheiro gardado %1. Intente gardalo de novo nun "
+"lugar distinto."
 
 #: libs/ui/KisImportExportFilter.cpp:286
 #, kde-format
@@ -32644,7 +32644,7 @@ msgid ""
 "Could not finish import animation:\n"
 "%1"
 msgstr ""
-"Non se puido finalizar a importación da animación:\n"
+"Non foi posíbel finalizar a importación da animación:\n"
 "%1"
 
 #: libs/ui/KisMainWindow.cpp:2219
@@ -32859,7 +32859,7 @@ msgid ""
 "Could not create document from template\n"
 "%1"
 msgstr ""
-"Non se puido crear o documento a partir do modelo\n"
+"Non foi posíbel crear o documento a partir do modelo\n"
 "%1"
 
 #: libs/ui/KisPart.cpp:581
@@ -32869,7 +32869,7 @@ msgid ""
 "%1\n"
 "Reason: %2"
 msgstr ""
-"Non se puido crear o documento a partir do modelo\n"
+"Non foi posíbel crear o documento a partir do modelo\n"
 "%1\n"
 "Motivo: %2"
 
@@ -32881,7 +32881,7 @@ msgstr "Definir a saturación"
 #: libs/ui/KisReferenceImage.cpp:175
 #, kde-format
 msgid "Could not load %1."
-msgstr "Non se puido cargar %1."
+msgstr "Non foi posíbel cargar %1."
 
 #: libs/ui/KisRemoteFileFetcher.cpp:41
 #, kde-format
@@ -33030,7 +33030,7 @@ msgstr "Eliminar o modelo"
 #: libs/ui/KisTemplateCreateDia.cpp:495
 #, kde-format
 msgid "Could not load picture."
-msgstr "Non se puido abrir a imaxe."
+msgstr "Non foi posíbel abrir a imaxe."
 
 #: libs/ui/KisTemplateCreateDia.cpp:499
 #, kde-format
@@ -33126,13 +33126,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
-msgstr "Non se puido gardar a versión incremental"
+msgstr "Non foi posíbel gardar a versión incremental"
 
 #: libs/ui/KisViewManager.cpp:1168
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
-msgstr "Non se puido gardar unha copia de seguridade incremental"
+msgstr "Non foi posíbel gardar unha salvagarda incremental"
 
 #: libs/ui/KisViewManager.cpp:1360
 #, kde-format
@@ -37220,7 +37220,8 @@ msgstr "Engadir á Paleta de Cores"
 #, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only. "
 msgstr ""
-"Non se pode escribir no ficheiro de paleta %1. Poida que só sexa de lectura."
+"Non é posíbel escribir no ficheiro de paleta %1. Poida que só sexa de "
+"lectura."
 
 #. i18n: ectx: property (text), widget (QLabel, paletteLabel)
 #: libs/widgets/KoEditColorSetDialog.cpp:202
@@ -40699,7 +40700,7 @@ msgstr "Máscaras de gama"
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:129
 #, kde-format
 msgid "Could not open gamut mask for editing."
-msgstr "Non se puido abrir a máscara de gama para editala."
+msgstr "Non foi posíbel abrir a máscara de gama para editala."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:130
 #, kde-format
@@ -43714,7 +43715,7 @@ msgid ""
 "Could not save\n"
 "%1"
 msgstr ""
-"Non se puido gardar\n"
+"Non foi posíbel gardar\n"
 "%1"
 
 #: plugins/extensions/imagesplit/imagesplit.cpp:76
@@ -43723,7 +43724,7 @@ msgid ""
 "Could not save %1\n"
 "Reason: %2"
 msgstr ""
-"Non se puido gardar %1\n"
+"Non foi posíbel gardar %1\n"
 "Motivo: %2"
 
 #: plugins/extensions/imagesplit/imagesplit.cpp:172
@@ -45008,19 +45009,19 @@ msgstr "Inverter por x/2 e y/2"
 #: plugins/extensions/pykrita/plugin/plugin.cpp:33
 #, kde-format
 msgid "Cannot load Python library"
-msgstr "Non se pode cargar a biblioteca de Python"
+msgstr "Non é posíbel cargar a biblioteca de Python"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:80
 #: plugins/extensions/pykrita/plugin/plugin.cpp:36
 #, kde-format
 msgid "Cannot set Python paths"
-msgstr "Non se poden definir as rutas de Python"
+msgstr "Non é posíbel definir as rutas de Python"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:83
 #: plugins/extensions/pykrita/plugin/plugin.cpp:39
 #, kde-format
 msgid "Cannot load built-in pykrita module"
-msgstr "Non se pode cargar o módulo incluído de pykrita"
+msgstr "Non é posíbel cargar o módulo incluído de pykrita"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:86
 #: plugins/extensions/pykrita/plugin/plugin.cpp:42
@@ -45313,7 +45314,8 @@ msgstr "Xestión de complementos de Python"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Unable to find the module specified <application>%1</application>"
-msgstr "Non se pode atopar o módulo <application>%1</application> especificado"
+msgstr ""
+"Non é posíbel atopar o módulo <application>%1</application> especificado"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:154
 #, kde-format
@@ -45477,7 +45479,7 @@ msgstr "Paquete seleccionado"
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
 #, kde-format
 msgid "Could not load bundle %1."
-msgstr "Non se puido cargar o paquete %1."
+msgstr "Non foi posíbel cargar o paquete %1."
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:250
 #, fuzzy, kde-format
@@ -45618,7 +45620,7 @@ msgstr "Seguro que quere sobrescribir o modelo «%1»?"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #, kde-format
 msgid "Could not open '%1' for saving."
-msgstr "Non se puido abrir «%1» para gardar."
+msgstr "Non foi posíbel abrir «%1» para gardar."
 
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:61
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -49517,12 +49519,12 @@ msgstr "A&chatar a imaxe "
 #: plugins/impex/heif/HeifError.cpp:37
 #, kde-format
 msgid "Could not allocate memory."
-msgstr "Non se puido reservar memoria."
+msgstr "Non foi posíbel reservar memoria."
 
 #: plugins/impex/heif/HeifError.cpp:41
 #, kde-format
 msgid "Could not encode or write image."
-msgstr "Non se puido codificar ou escribir a imaxe."
+msgstr "Non foi posíbel codificar ou escribir a imaxe."
 
 #: plugins/impex/heif/HeifError.cpp:45
 #, kde-format
@@ -49830,7 +49832,7 @@ msgid ""
 "Unable to calculate an appropriate height. File does not contain enough "
 "pixels to form a rectangle."
 msgstr ""
-"Non se pode calcular unha altura axeitada. O ficheiro non contén píxeles "
+"Non é posíbel calcular unha altura axeitada. O ficheiro non contén píxeles "
 "dabondo para formar un rectángulo."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:207
@@ -49844,7 +49846,7 @@ msgid ""
 "Unable to calculate an appropriate width. File does not contain enough "
 "pixels to form a rectangle."
 msgstr ""
-"Non se pode calcular unha anchura axeitada O ficheiro non contén píxeles "
+"Non é posíbel calcular unha anchura axeitada O ficheiro non contén píxeles "
 "dabondo para formar un rectángulo."
 
 #. i18n: ectx: property (text), widget (QLabel, fileSizeDescLabel)
@@ -50973,7 +50975,7 @@ msgstr "Filtros:"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:139
 #, kde-format
 msgid "Could not load embedded reference image %1 "
-msgstr "Non se puido cargar a imaxe de referencia incrustada %1 "
+msgstr "Non foi posíbel cargar a imaxe de referencia incrustada %1 "
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:144
 #, kde-format
@@ -50985,7 +50987,8 @@ msgid ""
 "\n"
 "Do you want to select another location?"
 msgstr ""
-"Non se puido cargar unha imaxe de referencia ligada a un ficheiro externo.\n"
+"Non foi posíbel cargar unha imaxe de referencia ligada a un ficheiro "
+"externo.\n"
 "\n"
 "Ruta: %1\n"
 "\n"
@@ -51018,66 +51021,66 @@ msgstr ""
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
-msgstr "Non se puido cargar o identificador da máscara de transformación."
+msgstr "Non foi posíbel cargar o identificador da máscara de transformación."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
 #, kde-format
 msgid "Could not create transform mask params"
-msgstr "Non se puideron crear os párametros da máscara de transformación."
+msgstr "Non foi posíbel crear os párametros da máscara de transformación."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr ""
-"Non se puideron atopar os datos de píxeles de fotograma clave no fotograma "
+"Non foi posíbel atopar os datos de píxeles de fotograma clave no fotograma "
 "%1 en %2."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr ""
-"Non se puideron cargar os datos de píxeles de fotograma clave no fotograma "
+"Non foi posíbel cargar os datos de píxeles de fotograma clave no fotograma "
 "%1 en %2."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
 #, kde-format
 msgid "Could not read pixel data: %1."
-msgstr "Non se puideron ler os datos dos píxeles: %1."
+msgstr "Non foi posíbel ler os datos dos píxeles: %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
 #, kde-format
 msgid "Could not load pixel data: %1."
-msgstr "Non se puideron cargar os datos dos píxeles: %1."
+msgstr "Non foi posíbel cargar os datos dos píxeles: %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
 #, kde-format
 msgid "Could not load profile: %1."
-msgstr "Non se puido cargar o perfil: %1."
+msgstr "Non foi posíbel cargar o perfil: %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
 #, kde-format
 msgid "Could not filter configuration %1."
-msgstr "Non se puido filtrar a configuración: %1."
+msgstr "Non foi posíbel filtrar a configuración: %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
 #, kde-format
 msgid "Could not load metadata for layer %1."
-msgstr "Non se puideron cargar os metadatos da capa %1."
+msgstr "Non foi posíbel cargar os metadatos da capa %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
 #, kde-format
 msgid "Could not load vector selection %1."
-msgstr "Non se puido cargar a selección vectorial %1."
+msgstr "Non foi posíbel cargar a selección vectorial %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
 #, kde-format
 msgid "Could not load raster selection %1."
-msgstr "Non se puido cargar a selección raster %1."
+msgstr "Non foi posíbel cargar a selección raster %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
 #, kde-format
 msgid "Could not load keyframes from %1."
-msgstr "Non se puideron cargar os fotogramas clave de %1."
+msgstr "Non foi posíbel cargar os fotogramas clave de %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
 #, kde-format
@@ -51208,7 +51211,7 @@ msgstr ""
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:93
 #, kde-format
 msgid "Failed to save reference image %1."
-msgstr "Non se puido gardar a imaxe de referencia %1."
+msgstr "Non foi posíbel gardar a imaxe de referencia %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:100
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:132
@@ -51218,83 +51221,84 @@ msgstr "Non se puido gardar a imaxe de referencia %1."
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:189
 #, kde-format
 msgid "Failed to save the metadata for layer %1."
-msgstr "Non se puideron gardar os metadatos da capa %1."
+msgstr "Non foi posíbel gardar os metadatos da capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:107
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:270
 #, kde-format
 msgid "Failed to open %1."
-msgstr "Non se puido abrir %1."
+msgstr "Non foi posíbel abrir %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:124
 #, kde-format
 msgid "Failed to save the pixel data for layer %1."
-msgstr "Non se puideron gardar datos dos píxeles da capa %1."
+msgstr "Non foi posíbel gardar datos dos píxeles da capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:128
 #, kde-format
 msgid "Failed to save the annotations for layer %1."
-msgstr "Non se puideron gardar as anotacións da capa %1."
+msgstr "Non foi posíbel gardar as anotacións da capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:150
 #, kde-format
 msgid "Failed to save the filter layer %1: it has no filter."
-msgstr "Non se puido gardar a capa de filtro %1: non ten filtro."
+msgstr "Non foi posíbel gardar a capa de filtro %1: non ten filtro."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:154
 #, kde-format
 msgid "Failed to save the selection for filter layer %1."
-msgstr "Non se puido gardar a selección para a capa de filtro %1."
+msgstr "Non foi posíbel gardar a selección para a capa de filtro %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:158
 #, kde-format
 msgid "Failed to save the filter configuration for filter layer %1."
-msgstr "Non se puido gardar a configuración de filtro da capa de filtro %1."
+msgstr "Non foi posíbel gardar a configuración de filtro da capa de filtro %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:171
 #, kde-format
 msgid "Failed to save the selection for layer %1."
-msgstr "Non se puido gardar a selección para a capa %1."
+msgstr "Non foi posíbel gardar a selección para a capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:175
 #, kde-format
 msgid "Failed to save the generator configuration for layer %1."
-msgstr "Non se puido gardar a configuración do xerador da capa %1."
+msgstr "Non foi posíbel gardar a configuración do xerador da capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:198
 #, kde-format
 msgid "Failed to save filter mask %1. It has no filter."
-msgstr "Non se puido gardar a máscara de filtro %1. Non ten filtro."
+msgstr "Non foi posíbel gardar a máscara de filtro %1. Non ten filtro."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:202
 #, kde-format
 msgid "Failed to save the selection for filter mask %1."
-msgstr "Non se puido gardar a selección para a máscara de filtro %1."
+msgstr "Non foi posíbel gardar a selección para a máscara de filtro %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:206
 #, kde-format
 msgid "Failed to save the filter configuration for filter mask %1."
-msgstr "Non se puido gardar a configuración de filtro da máscara de filtro %1."
+msgstr ""
+"Non foi posíbel gardar a configuración de filtro da máscara de filtro %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:248
 #, kde-format
 msgid "Failed to save the selection for transparency mask %1."
-msgstr "Non se puido gardar a selección para a máscara de transparencia %1."
+msgstr "Non foi posíbel gardar a selección para a máscara de transparencia %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:257
 #, kde-format
 msgid "Failed to save the selection for local selection %1."
-msgstr "Non se puido gardar a selección para a selección local %1."
+msgstr "Non foi posíbel gardar a selección para a selección local %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:452
 #, kde-format
 msgid "Failed to save the pixel selection data for layer %1."
-msgstr "Non se puideron gardar datos da selección de píxeles da capa %1."
+msgstr "Non foi posíbel gardar datos da selección de píxeles da capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:466
 #, kde-format
 msgid "Failed to save the vector selection data for layer %1."
-msgstr "Non se puideron gardar datos da selección de vectores da capa %1."
+msgstr "Non foi posíbel gardar datos da selección de vectores da capa %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:520
 #, kde-format
@@ -51304,7 +51308,7 @@ msgstr "A infraestrutura de metadatos non puido gardar os metadatos de %1."
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:531
 #, kde-format
 msgid "Could not write for %1 metadata to the file."
-msgstr "Non se puideron escribir os metadatos de %1 no ficheiro."
+msgstr "Non foi posíbel escribir os metadatos de %1 no ficheiro."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:195
 #, fuzzy, kde-format
@@ -51425,17 +51429,17 @@ msgstr "Documento incorrecto: non existe o ficheiro «maindoc.xml»."
 #: plugins/impex/libkra/kra_converter.cpp:149
 #, kde-format
 msgid "Could not create the file for saving"
-msgstr "Non se puido crear un ficheiro para gardar"
+msgstr "Non foi posíbel crear un ficheiro para gardar"
 
 #: plugins/impex/libkra/kra_converter.cpp:228
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr "Non se pode escribir en '%1'. Está a partición chea?"
+msgstr "Non é posíbel escribir en '%1'. Está a partición chea?"
 
 #: plugins/impex/libkra/kra_converter.cpp:320
 #, kde-format
 msgid "Could not find %1"
-msgstr "Non se puido atopar %1"
+msgstr "Non foi posíbel atopar %1"
 
 #: plugins/impex/libkra/kra_converter.cpp:332
 #, kde-format
@@ -57513,7 +57517,7 @@ msgstr "Gardando EPUB"
 #: plugins/python/comics_project_management_tools/comics_exporter.py:207
 #: plugins/python/comics_project_management_tools/comics_exporter.py:366
 msgid "Export not Possible"
-msgstr "Non se pode exportar"
+msgstr "Non é posíbel exportar"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:173
 msgid "Nothing to export, URL not set."
@@ -59654,7 +59658,7 @@ msgstr "Ferramenta de pincel a man alzada"
 #, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only."
 msgstr ""
-"Non se pode gardar no ficheiro de paleta %1. Quizais sexa só para lectura."
+"Non é posíbel gardar no ficheiro de paleta %1. Quizais sexa só para lectura."
 
 #: plugins/tools/basictools/kis_tool_colorsampler.h:122
 #, fuzzy, kde-format
@@ -60704,7 +60708,7 @@ msgid ""
 "The following reference images could not be loaded:\n"
 "%1"
 msgstr ""
-"Non se puideron cargar as seguintes imaxes de referencia:\n"
+"Non foi posíbel cargar as seguintes imaxes de referencia:\n"
 "%1"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:98
@@ -60726,12 +60730,12 @@ msgstr "Cargar as imaxes de referencia"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:166
 #, kde-format
 msgid "Could not open '%1'."
-msgstr "Non se puido abrir: «%1»."
+msgstr "Non foi posíbel abrir: «%1»."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #, kde-format
 msgid "Could not load reference images from '%1'."
-msgstr "Non se puideron cargar as imaxes de referencia de «%1»."
+msgstr "Non foi posíbel cargar as imaxes de referencia de «%1»."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:204
 #, kde-format
@@ -60741,7 +60745,7 @@ msgstr "Gardar as imaxes de referencia"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
 #, kde-format
 msgid "Failed to save reference images."
-msgstr "Non se puideron gardar as imaxes de referencia."
+msgstr "Non foi posíbel gardar as imaxes de referencia."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:305
 #, fuzzy, kde-format

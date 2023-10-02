@@ -650,7 +650,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         graphemeBreakNext = graphemeBreaks[i] == GRAPHEMEBREAK_BREAK;
     }
     int fC = qMax(0, firstCluster);
-    if (result.at(fC).cursorInfo.graphemeIndices.isEmpty()) {
+    if (result.at(fC).cursorInfo.graphemeIndices.isEmpty() || graphemeBreakNext) {
         result[fC].cursorInfo.graphemeIndices.append(plainText.size());
     }
 

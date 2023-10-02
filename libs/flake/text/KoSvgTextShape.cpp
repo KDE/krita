@@ -126,8 +126,13 @@ int KoSvgTextShape::posRight(int pos, bool visual)
 int KoSvgTextShape::posUp(int pos, bool visual)
 {
     KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::Direction direction = KoSvgText::Direction(this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
     if (mode == KoSvgText::VerticalRL || mode == KoSvgText::VerticalLR) {
-        return previousPos(pos, visual);
+        if (direction == KoSvgText::DirectionRightToLeft) {
+            return nextPos(pos, visual);
+        } else {
+            return previousPos(pos, visual);
+        }
     } else {
         return previousLine(pos);
     }
@@ -136,8 +141,13 @@ int KoSvgTextShape::posUp(int pos, bool visual)
 int KoSvgTextShape::posDown(int pos, bool visual)
 {
     KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::Direction direction = KoSvgText::Direction(this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
     if (mode == KoSvgText::VerticalRL || mode == KoSvgText::VerticalLR) {
-        return nextPos(pos, visual);
+        if (direction == KoSvgText::DirectionRightToLeft) {
+            return previousPos(pos, visual);
+        } else {
+            return nextPos(pos, visual);
+        }
     } else {
         return nextLine(pos);
     }

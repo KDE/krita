@@ -223,14 +223,10 @@ kis_ExternalProject_Add_with_separate_builds_apple(
     MESON
 
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    GIT_REPOSITORY https://gitlab.freedesktop.org/amyspark/libvpx.git
+    GIT_REPOSITORY https://github.com/dimula73/libvpx.git
     GIT_TAG meson
 
     WORKING_DIRECTORY <BINARY_DIR>
-
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-libvpx-Fix-build-on-Linux.patch
-          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-libvpx-Disable-_FILE_OFFSET_BITS-on-x86-Android.patch
-          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-libvpx-Force-enable-PIC-for-assembler-code-on-x86_32.patch
 
     CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
             -Ddefault_library=shared

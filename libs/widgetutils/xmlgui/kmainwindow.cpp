@@ -507,8 +507,9 @@ void KisKMainWindow::saveMainWindowSettings(KConfigGroup &cg)
         }
     }
 
-    {
-        if (!cg.hasDefault("ToolBarsMovable") && KisToolBar::toolBarsLocked()) {
+    if (!autoSaveSettings() || cg.name() == autoSaveGroup()) {
+        // TODO should be cg == d->autoSaveGroup, to compare both kconfig and group name
+        if (!cg.hasDefault("ToolBarsMovable") && !KisToolBar::toolBarsLocked()) {
             cg.revertToDefault("ToolBarsMovable");
         } else {
             cg.writeEntry("ToolBarsMovable", KisToolBar::toolBarsLocked() ? "Disabled" : "Enabled");
@@ -597,7 +598,7 @@ void KisKMainWindow::applyMainWindowSettings(const KConfigGroup &cg)
         mb->setVisible( entry != QLatin1String("Disabled") );
     }
 
-    {
+    if (!autoSaveSettings() || cg.name() == autoSaveGroup()) {   // TODO should be cg == d->autoSaveGroup, to compare both kconfig and group name
         QString entry = cg.readEntry("ToolBarsMovable", "Disabled");
         KisToolBar::setToolBarsLocked(entry == QLatin1String("Disabled"));
     }

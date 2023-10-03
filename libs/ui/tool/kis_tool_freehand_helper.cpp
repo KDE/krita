@@ -892,6 +892,9 @@ void KisToolFreehandHelper::doAirbrushing()
                                       prevPaint.perspective(),
                                       elapsedStrokeTime(),
                                       0.0);
+        nextPaint.setCanvasRotation(prevPaint.canvasRotation());
+        nextPaint.setCanvasMirroredH(prevPaint.canvasMirroredH());
+        nextPaint.setCanvasMirroredV(prevPaint.canvasMirroredV());
         paint(nextPaint);
     }
 }

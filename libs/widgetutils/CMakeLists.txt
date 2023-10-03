@@ -83,7 +83,6 @@ set(kritawidgetutils_LIB_SRCS
     xmlgui/ktoggletoolbaraction.cpp
     xmlgui/ktoolbar.cpp
     xmlgui/ktoolbarhandler.cpp
-    xmlgui/KisToolBarStateModel.cpp
     xmlgui/kundoactions.cpp
     xmlgui/kxmlguibuilder.cpp
     xmlgui/kxmlguiclient.cpp

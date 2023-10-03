@@ -60,16 +60,6 @@
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
-    <Action name="lock_toolbars">
-    <icon/>
-    <text>Lock Toolbars</text>
-    <whatsThis/>
-    <toolTip>Lock Toolbars</toolTip>
-    <iconText>Lock Toolbars</iconText>
-    <shortcut/>
-    <isCheckable>true</isCheckable>
-    <statusTip/>
-    </Action>
     <Action name="show_color_selector">
       <icon/>
       <text>Show color selector</text>

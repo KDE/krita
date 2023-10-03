@@ -49,10 +49,6 @@
 
 #include <kis_icon_utils.h>
 
-#include "KisToolBarStateModel.h"
-
-Q_GLOBAL_STATIC(KisToolBarStateModel, s_toolBarsModel)
-
 /*
  Toolbar settings (e.g. icon size or toolButtonStyle)
  =====================================================
@@ -149,6 +145,7 @@ public:
     bool isMainToolBar : 1;
     bool unlockedMovable : 1;
     static bool s_editable;
+    static bool s_locked;
 
     QSet<KisKXMLGUIClient *> xmlguiClients;
 
@@ -225,30 +222,10 @@ public:
     QMenu *context;
     QAction *dragAction;
     QPoint dragStartPosition;
-
-    struct ToolBarsStateUpdater;
-    static ToolBarsStateUpdater s_toolBarsStateUpdater;
 };
 
 bool KisToolBar::Private::s_editable = false;
-
-struct KisToolBar::Private::ToolBarsStateUpdater
-{
-    ToolBarsStateUpdater()
-    {
-        s_toolBarsModel->LAGER_QT(toolBarsLocked).bind(std::bind(&ToolBarsStateUpdater::updateToolbars, this, std::placeholders::_1));
-    }
-
-    void updateToolbars(bool locked) {
-        Q_FOREACH (KisKMainWindow *mw, KisKMainWindow::memberList()) {
-            Q_FOREACH (KisToolBar *toolbar, mw->findChildren<KisToolBar *>()) {
-                toolbar->d->setLocked(locked);
-            }
-        }
-    }
-};
-
-KisToolBar::Private::ToolBarsStateUpdater KisToolBar::Private::s_toolBarsStateUpdater = {};
+bool KisToolBar::Private::s_locked = true;
 
 void KisToolBar::Private::init(bool readConfig, bool _isMainToolBar)
 {
@@ -1403,12 +1380,20 @@ void KisToolBar::setToolBarsEditable(bool editable)
 
 void KisToolBar::setToolBarsLocked(bool locked)
 {
-    s_toolBarsModel->settoolBarsLocked(locked);
+    if (KisToolBar::Private::s_locked != locked) {
+        KisToolBar::Private::s_locked = locked;
+
+        Q_FOREACH (KisKMainWindow *mw, KisKMainWindow::memberList()) {
+            Q_FOREACH (KisToolBar *toolbar, mw->findChildren<KisToolBar *>()) {
+                toolbar->d->setLocked(locked);
+            }
+        }
+    }
 }
 
 bool KisToolBar::toolBarsLocked()
 {
-    return s_toolBarsModel->toolBarsLocked();
+    return KisToolBar::Private::s_locked;
 }
 
 void KisToolBar::emitToolbarStyleChanged()
@@ -1417,11 +1402,6 @@ void KisToolBar::emitToolbarStyleChanged()
     QDBusMessage message = QDBusMessage::createSignal(QStringLiteral("/KisToolBar"), QStringLiteral("org.kde.KisToolBar"), QStringLiteral("styleChanged"));
     QDBusConnection::sessionBus().send(message);
 #endif
-}
-
-KisToolBarStateModel* KisToolBar::toolBarStateModel()
-{
-    return s_toolBarsModel;
 }
 
 #include "moc_ktoolbar.cpp"

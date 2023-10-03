@@ -153,8 +153,6 @@
 #include "KisUiFont.h"
 #include <KisResourceUserOperations.h>
 #include "KisRecentFilesManager.h"
-#include "KisWidgetConnectionUtils.h"
-#include "KisToolBarStateModel.h"
 
 
 #include <mutex>
@@ -3063,17 +3061,12 @@ void KisMainWindow::createActions()
         d->expandingSpacers[i]->defaultWidget()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         actionManager->addAction(QString("expanding_spacer_%1").arg(i), d->expandingSpacers[i]);
     }
-
-    {
-        using namespace KisWidgetConnectionUtils;
-
-        QAction *action = actionManager->createAction("lock_toolbars");
-        connectControl(action, KisToolBar::toolBarStateModel(), "toolBarsLocked");
-    }
 }
 
 void KisMainWindow::applyToolBarLayout()
 {
+    KisToolBar::setToolBarsLocked(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
+
     Q_FOREACH (KisToolBar *toolBar, toolBars()) {
         toolBar->layout()->setSpacing(4);
         toolBar->setStyleSheet("QToolBar { border: none }"); // has a border in "Fusion" style that people don't like

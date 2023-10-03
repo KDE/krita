@@ -22,17 +22,17 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-30 02:28+0000\n"
-"PO-Revision-Date: 2023-09-26 17:13+0200\n"
-"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
+"PO-Revision-Date: 2023-10-02 09:36+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8090,11 +8090,10 @@ msgstr "Pokaži orodno vrstico Datoteka"
 #. i18n: context: toolTip @ Action (lock_toolbars), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (lock_toolbars), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:65 krita/krita.action:67 krita/krita.action:68
-#, fuzzy, kde-format
-#| msgid "Toolbars"
+#, kde-format
 msgctxt "action"
 msgid "Lock Toolbars"
-msgstr "Orodne vrstice"
+msgstr "Zakleni orodne vrstice"
 
 #. i18n: context: text @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
@@ -20914,8 +20913,8 @@ msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
 "destination streams of the FFmpeg instance"
 msgstr ""
-"Tukaj dodajte vse možnosti filtriranja FFmpeg. Vstavi se med izvorne in "
-"ciljne tokove instance FFmpeg."
+"Tukaj dodajte vse možnosti filtriranja FFmpeg. Bo vstavljeno med izvorne in "
+"ciljne tokove instance FFmpeg"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)

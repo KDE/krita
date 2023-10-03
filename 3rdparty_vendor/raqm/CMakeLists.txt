@@ -43,19 +43,28 @@ if(NOT DEFINED PATCH_COMMAND)
     endif()
 endif()
 
-FetchContent_Declare(
-    libraqm_src
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/HOST-Oman/libraqm/releases/download/v0.10.1/raqm-0.10.1.tar.xz
+
+if (USE_EXTERNAL_RAQM)
+    set(RAQM_FETCHCONTENT_ARGS
+        URL https://github.com/HOST-Oman/libraqm/releases/download/v0.10.1/raqm-0.10.1.tar.xz
         # HACK: Whenever you change this file to add patch commands, it causes
         # CMake to rerun the patch commands on the already-patched source, which
         # results in a failure. Changing the following fake URL tricks CMake
         # into re-extracting the source so the patch commands can succeed.
         http://:0/hack_to_trigger_re-extract-source/20230914
-    URL_HASH SHA256=4d76a358358d67c5945684f2f10b3b08fb80e924371bf3ebf8b15cd2e321d05d
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Add-arbitrary-run-break-function.patch
-          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Fix-Unicode-codepoint-conversion-from-UTF-16.patch
+        URL_HASH SHA256=4d76a358358d67c5945684f2f10b3b08fb80e924371bf3ebf8b15cd2e321d05d
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Add-arbitrary-run-break-function.patch
+              COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Fix-Unicode-codepoint-conversion-from-UTF-16.patch)
+else ()
+    set(RAQM_FETCHCONTENT_ARGS SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/raqm-0.10.1)
+endif ()
+
+FetchContent_Declare(
+    libraqm_src
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    ${RAQM_FETCHCONTENT_ARGS}
 )
+
 FetchContent_MakeAvailable(libraqm_src)
 if(NOT libraqm_src_POPULATED)
     message(FATAL_ERROR "Missing libraqm source.")

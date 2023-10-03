@@ -264,6 +264,8 @@ add_feature_info("Precompiled Headers" KRITA_ENABLE_PCH "precompiled headers mak
 
 option(DISABLE_PO_INSTALLATION "Disable installation of po files" OFF)
 
+option(USE_EXTERNAL_RAQM "Fetch Raqm dependency online instead of the embedded one" OFF)
+
 set(ADDRESS_SANITIZER_ENABLED FALSE)
 if (ECM_ENABLE_SANITIZERS MATCHES address)
     set(ADDRESS_SANITIZER_ENABLED TRUE)

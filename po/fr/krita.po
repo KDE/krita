@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-30 00:41+0000\n"
-"PO-Revision-Date: 2023-09-20 17:32+0200\n"
+"PO-Revision-Date: 2023-10-02 13:07+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -43470,10 +43470,9 @@ msgstr "Ressources disponibles"
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseTags)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:131
 #: plugins/extensions/resourcemanager/wdgside.ui:80
-#, fuzzy, kde-format
-#| msgid "Choose a color"
+#, kde-format
 msgid "Choose Tags"
-msgstr "Choisir une couleur"
+msgstr "Sélectionner des étiquettes"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnBundleInfo)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:132
@@ -43504,9 +43503,9 @@ msgid "Edit Resources"
 msgstr "Ressources"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit Tags"
-msgstr "Modifier la palette"
+msgstr "Modifier les étiquettes"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:143
 #, fuzzy, kde-format
@@ -43663,7 +43662,7 @@ msgstr "Sélectionner un fichier pour l'utiliser comme icône du pack"
 #: plugins/extensions/resourcemanager/pagetagchooser.ui:20
 #, kde-format
 msgid "WizardPage"
-msgstr ""
+msgstr "Page d'assistant"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46

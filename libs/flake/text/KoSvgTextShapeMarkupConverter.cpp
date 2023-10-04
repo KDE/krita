@@ -1255,33 +1255,42 @@ QString stylesForPSDParagraphSheet(QJsonObject PSDParagraphSheet) {
         double val = PSDParagraphSheet.value(key).toDouble();
         if (key == "Justification") {
             QString textAlign = "start";
+            QString textAnchor = "start";
             switch (PSDParagraphSheet.value(key).toInt()) {
             case 0:
                 textAlign = "start";
+                textAnchor = "start";
                 break;
             case 1:
                 textAlign = "end";
+                textAnchor = "end";
                 break;
             case 2:
                 textAlign = "center";
+                textAnchor = "middle";
                 break;
             case 3:
                 textAlign = "justify start";
+                textAnchor = "start";
                 break;
             case 4:
                 textAlign = "justify end"; // guess
+                textAnchor = "end";
                 break;
             case 5:
                 textAlign = "justify center"; // guess
+                textAnchor = "middle";
                 break;
             case 6:
                 textAlign = "justify";
+                textAnchor = "middle";
                 break;
             default:
                 textAlign = "start";
             }
 
             styles.append("text-align:"+textAlign);
+            styles.append("text-anchor:"+textAnchor);
         } else if (key == "FirstLineIndent") {
             styles.append("text-indent:"+QString::number(val));
             continue;
@@ -1324,13 +1333,14 @@ QString stylesForPSDParagraphSheet(QJsonObject PSDParagraphSheet) {
             // val 0 is minimum allowed spacing, and val 2 is maximum allowed spacing, both for justified text.
             // 0 to 1000%, 100% default.
             val = PSDParagraphSheet.value(key).toArray()[1].toDouble();
-            styles.append("word-spacing:"+QString::number(val));
+            val -= 1.0;
+            styles.append("word-spacing:"+QString::number(val)+"em");
             continue;
         } else if (key == "LetterSpacing") {
             // val 0 is minimum allowed spacing, and val 2 is maximum allowed spacing, both for justified text.
             // -100% to 500%, 0% default.
             val = PSDParagraphSheet.value(key).toArray()[1].toDouble();
-            styles.append("letter-spacing:"+QString::number(val));
+            styles.append("letter-spacing:"+QString::number(val)+"em");
             continue;
         } else if (key == "GlyphSpacing") {
             // scaling of the glyphs, list of vals, 50% to 200%, default 100%.
@@ -1338,17 +1348,23 @@ QString stylesForPSDParagraphSheet(QJsonObject PSDParagraphSheet) {
         } else if (key == "AutoLeading") {
             styles.append("line-height:"+QString::number(val));
             continue;
+        } else if (key == "LeadingType") {
+            // Probably how leading is measured for asian glyphs.
+            // 0 = top-to-top, 1 = bottom-to-bottom. CSS can only do the second.
+            continue;
         } else if (key == "Hanging") {
-            // Roman hanging punctuation, bool
+            // Roman hanging punctuation (?), bool
             continue;
         } else if (key == "Burasagari") {
             // CJK hanging punctuation, bool
+            // options are none, regular (allow-end) and force (force-end).
             if (PSDParagraphSheet.value(key).toBool()) {
                 styles.append("hanging-punctuation:allow-end");
             }
             continue;
         } else if (key == "KinsokuOrder") {
             // strict vs loose linebreaking... sorta.
+            // might be 0 = pushInFirst, 1 = pushOutFirst, 2 = pushOutOnly, if so, Krita only supports 2.
             continue;
         } else if (key == "EveryLineComposer") {
             // bool representing which text-wrapping method to use.
@@ -1389,7 +1405,7 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
         if (key == "Font") {
             font_info_psd fontInfo = fontNames.value(PSDStyleSheet.value(key).toInt());
             weight = fontInfo.weight;
-            italic = fontInfo.italic;
+            italic = italic? true: fontInfo.italic;
             styles.append("font-family:"+fontInfo.familyName);
             if (fontInfo.width != 100) {
                 styles.append("font-width:"+QString::number(fontInfo.width));
@@ -1426,7 +1442,7 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
             }
             if (!autoleading) {
                 double val = PSDStyleSheet.value(key).toDouble();
-                styles.append("line-height:"+QString::number(val));
+                styles.append("line-height:"+QString::number(val)+"pt");
             }
             // value for line-height
             continue;
@@ -1439,9 +1455,9 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
             unsupportedStyles << key;
             continue;
         } else if (key == "Tracking") {
-            double fontSize = PSDStyleSheet.value("FontSize").toDouble();
-            double letterSpacing = fontSize * (0.01 * PSDStyleSheet.value(key).toDouble());
-            styles.append("letter-spacing:"+QString::number(letterSpacing));
+            // tracking is in 1/1000 of an EM (as is kerning for that matter...)
+            double letterSpacing = (0.001 * PSDStyleSheet.value(key).toDouble());
+            styles.append("letter-spacing:"+QString::number(letterSpacing)+"em");
             continue;
         } else if (key == "BaselineShift") {
             if (PSDStyleSheet.value(key).toDouble() > 0) {
@@ -1453,10 +1469,10 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
             case 0:
                 break;
             case 1:
-                styles.append("text-transform:uppercase");
+                styles.append("font-variant-caps:all-small-caps");
                 break;
             case 2:
-                styles.append("font-varriant-caps:all-small-caps");
+                styles.append("text-transform:uppercase");
                 break;
             default:
                 qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
@@ -1501,20 +1517,49 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
             }
             continue;
         } /* else if (key == "BaselineDirection") {
-            // 1: vertical, 2: horizontal... but why is this a character style?
+            // unsure, might be vertical vs horizontal, but also might be default (2), ltr (1), rtl(0)?
             continue;
         }*/ else if (key == "Tsume") {
-            // Reduce spacing around a single character. Might be related to css-4-text text-spacing?
+            // Reduce spacing around a single character. Partially related to text-spacing,
+            // Tsume is reduction, Aki expansion, and both can be used as part of Mojikumi
+            // However, in this particular case, the property seems to just reduce the space 
+            // of a single character, and may not be possible to support (as in CSS that'd
+            // just be padding/margin-reduction, but SVG cannot do that).
             unsupportedStyles << key;
             continue;
         }/* else if (key == "StyleRunAlignment") {
             // No idea?
+            // maybe mojisoroe? which would make it dominant-baseline.
+            // 0 = roman
+            // 1 = em-box top/right, 2 = em-box center, 3 = em-box bottom/left
+            // 4 = icf-top/right, 5 icf-bottom/left?
+            QString dominantBaseline;
+            switch(PSDStyleSheet.value(key).toInt()) {
+            case 0:
+                dominantBaseline = "alphabetic";
+            case 2:
+                dominantBaseline = "center";
+            case 3:
+                dominantBaseline = "ideographic";
+            case 4:
+                dominantBaseline = "text-top";
+            case 5:
+                dominantBaseline = "text-bottom";
+            default:
+                dominantBaseline = QString();
+            }
+            if (!dominantBaseline.isEmpty()) {
+                styles.append("dominant-baseline: "+dominantBaseline);
+            }
             continue;
         } else if (key == "Language") {
             // This is an enum... which terrifies me.
             continue;
         }*/ else if (key == "NoBreak") {
             // Prevents word from breaking... I guess word-break???
+            if (PSDStyleSheet.value(key).toBool()) {
+                styles.append("word-break: keep-all");
+            }
             continue;
         }  else if (key == "FillColor") {
             bool fill = true;
@@ -1546,22 +1591,31 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
             continue;
         } else if (key == "YUnderline") {
             // Option relating to vertical underline left or right
+            if (PSDStyleSheet.value(key).toInt()) {
+                styles.append("text-underline-position:auto right");
+            } else {
+                styles.append("text-underline-position:auto left");
+            }
             continue;
         } else if (key == "CharacterDirection") {
             // text-orientation?
+            // text-orientation itself is called  "Standard Vertical Roman Alignment", but no idea if it is this option.
             continue;
         } else if (key == "HindiNumbers") {
-            // bool, might be opentype feature.
+            // bool. Looks like this automatically selects hindi numbers for arabic. There also
+            // seems to be a more complex option to automatically have arabic numbers for hebrew, and an option for farsi numbers, but this might be a different bool alltogether.
             continue;
         }*/ else if (key == "Kashida") {
             // number, s related to drawing/inserting Kashida/Tatweel into Arabic justified text... We don't support this.
+            // options are none, short, medium, long, stylistic, indesign apparantly has a 'naskh' option, which is what toggles jalt usage.
             unsupportedStyles << key;
             continue;
         } /*else if (key == "DiacriticPos") {
-            // number, but no clue...
+            // number, which is odd, because it looks like it should be a point.
+            // this controls how high or low the diacritic is on arabic text.
             continue;
         }*/ else {
-            if (key != "FillFlag" && key != "StrokeFlag" && key == "AutoLeading") {
+            if (key != "FillFlag" && key != "StrokeFlag" && key != "AutoLeading") {
                 qWarning() << "Unknown PSD character stylesheet style key" << key << PSDStyleSheet.value(key);
             }
         }
@@ -1585,7 +1639,7 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
     return styles.join("; ");
 }
 
-bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba, QString *svgText)
+bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba, QString *svgText, bool isHorizontal)
 {
     debugFlake << "Convert from psd engine data";
 
@@ -1630,7 +1684,8 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
             fontNames.insert(i, fontInfo);
         }
     }
-    QString paragraphStyle;
+    QString paragraphStyle = isHorizontal? "writing-mode: horizontal-tb;": "writing-mode: vertical-rl;";
+    QString inlineSize;
 
     QJsonObject rendered = engineDict["Rendered"].toObject();
     // rendering info...
@@ -1639,14 +1694,23 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
         int shapeType = shapeChild["ShapeType"].toInt();
         if (shapeType == 1) {
             QJsonArray BoxBounds = shapeChild["Cookie"].toObject()["Photoshop"].toObject()["BoxBounds"].toArray();
-            paragraphStyle = "inline-size:"+QString::number(BoxBounds[2].toInt());
+            
+            if (isHorizontal) {
+                inlineSize = " inline-size:"+QString::number(BoxBounds[2].toDouble())+";";
+            } else {
+                inlineSize = " inline-size:"+QString::number(BoxBounds[3].toDouble())+";";
+            }
         }
     }
 
-    QPainterPath textCurve;
+    
+    KoPathShape *textShape = nullptr;
+    // For some reason, the easiest way to tell if shape-inside is to check whether the character range is set.
+    double textPathStartOffset = -3;
     bool reversed = false;
     QJsonObject curve = root["Curve"].toObject();
     if (!curve.isEmpty()) {
+        QPainterPath textCurve;
         QJsonArray points = curve["Points"].toArray();
         QJsonArray range = curve["TextOnPathTRange"].toArray();
         reversed = curve["Reversed"].toBool();
@@ -1667,6 +1731,11 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
                 textCurve.cubicTo(p2, p3, p4);
             }
         }
+        // When there's text-in-shape (instead of text-on-path), range seems to be between -3 and -3.
+        if (!range.isEmpty()) {
+            textPathStartOffset = range[0].toDouble();
+        }
+        textShape = KoPathShape::createShapeFromPainterPath(textCurve);
         qDebug() << curve;
     }
 
@@ -1707,15 +1776,25 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
         //QJsonArray runLengthArray = paragraphRun.value("RunLengthArray").toArray();
         QJsonArray runArray = paragraphRun["RunArray"].toArray();
         QJsonObject styleSheet = runArray[0].toObject()["ParagraphSheet"].toObject()["Properties"].toObject();
-        svgWriter.writeAttribute("style", stylesForPSDParagraphSheet(styleSheet));
+
+        if (textShape && textPathStartOffset < 0) {
+            paragraphStyle += " shape-inside:path('"+textShape->toString()+"'); ";
+        } else {
+            paragraphStyle += inlineSize;
+        }
+        paragraphStyle += stylesForPSDParagraphSheet(styleSheet);
+        svgWriter.writeAttribute("style", paragraphStyle);
     }
 
-    if (!textCurve.isEmpty()) {
+    bool textPathCreated = false;
+    if (textShape && textPathStartOffset >= 0) {
         svgWriter.writeStartElement("textPath");
-        svgWriter.writeAttribute("path", KoPathShape::createShapeFromPainterPath(textCurve)->toString());
+        textPathCreated = true;
+        svgWriter.writeAttribute("path", textShape->toString());
         if (reversed) {
             svgWriter.writeAttribute("side", "right");
         }
+        svgWriter.writeAttribute("startOffset", QString::number(textPathStartOffset));
     }
 
     QJsonObject styleRun = engineDict.value("StyleRun").toObject();
@@ -1753,7 +1832,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
         }
     }
 
-    if (!textCurve.isEmpty()) {
+    if (textPathCreated) {
         svgWriter.writeEndElement();
     }
 
@@ -1979,7 +2058,7 @@ void gatherStyles(QDomElement el, QString &text, QJsonObject parentStyle, QMap<Q
     }
 }
 
-QJsonObject gatherParagraphStyle(QDomElement el, QJsonObject defaultProperties) {
+QJsonObject gatherParagraphStyle(QDomElement el, QJsonObject defaultProperties, bool &isHorizontal) {
     QString cssStyle = el.attribute("style");
     QStringList dummy = cssStyle.split(";");
     QMap<QString, QString> cssStyles;
@@ -2004,11 +2083,18 @@ QJsonObject gatherParagraphStyle(QDomElement el, QJsonObject defaultProperties) 
             if (val == "justify") {alignVal = 6;}
             paragraphStyleSheet["Justification"] = alignVal;
         }
+        if (key == "writing-mode") {
+            if (val == "horizontal-tb") {
+                isHorizontal = true;
+            } else {
+                isHorizontal = false;
+            }
+        }
     }
     return QJsonObject{{"DefaultStyleSheet", 0},{"Properties", paragraphStyleSheet}};
 }
 
-bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &svgText, QByteArray *ba, QString &textTotal)
+bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &svgText, QByteArray *ba, QString &textTotal, bool &isHorizontal)
 {
     QJsonObject root;
 
@@ -2099,7 +2185,7 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     QDomDocument doc;
     doc.setContent(svgText);
     gatherStyles(doc.documentElement(), text, QJsonObject(), QMap<QString, QString>(), styles, styleRunArray, fontSet);
-    QJsonObject paragraphStyle = gatherParagraphStyle(doc.documentElement(), defaultParagraphProps);
+    QJsonObject paragraphStyle = gatherParagraphStyle(doc.documentElement(), defaultParagraphProps, isHorizontal);
 
     QJsonObject editor;
     editor["Text"] = text;
@@ -2182,19 +2268,24 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
 
     // default resoure dict
 
-    QJsonObject kinsokuHard;
+    QJsonObject kinsokuHard; // line-break: 'strict'
     kinsokuHard["Name"] = "PhotoshopKinsokuHard";
     kinsokuHard["Hanging"] = "、。.,";
     kinsokuHard["Keep"] = "―‥";
     kinsokuHard["NoEnd"] = "‘“（〔［｛〈〰రะက尨[{￥＄£＠§〒＃";
     kinsokuHard["NoStart"] = "、。，．・：；？！ー―’”）〕］｝〉》」』】ヽヾゝゞ々ぁぃぅぇぉっゃゅょゎァィゥェォッャュョヮヵヶ゛゜?!\\⤀崀紀Ⰰ⸀㨀㬡̡ऀꋿԠ";
-    QJsonObject kinsokuSoft;
+    QJsonObject kinsokuSoft;  // line-break: 'normal'
     kinsokuSoft["Name"] = "PhotoshopKinsokuSoft";
     kinsokuSoft["Hanging"] = "、。.,";
     kinsokuSoft["Keep"] = "―‥";
     kinsokuSoft["NoEnd"] = "‘“（〔［｛〈〰రะ";
     kinsokuSoft["NoStart"] = "、。，．・：；？！’”）〕］｝〉》」』】ヽヾゝゞ々";
     resourceDict["KinsokuSet"] = QJsonArray({kinsokuHard, kinsokuSoft});
+    //Mojikumi is the same kind of thing as CSS-Text-4 text-spacing
+    // 1 = text-spacing-trim: trim-auto
+    // 2 = full width for most except characters end of line. allow end?
+    // 3 = full width for most including characters end of line (seems to skip space)
+    // 4 = text-spacing-trim: space-all
     resourceDict["MojiKumiSet"] = QJsonArray( {QJsonObject{{"InternalName", "Photoshop6MojiKumiSet1"}},
                                                QJsonObject{{"InternalName", "Photoshop6MojiKumiSet2"}},
                                                QJsonObject{{"InternalName", "Photoshop6MojiKumiSet3"}},

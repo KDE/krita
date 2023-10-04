@@ -642,6 +642,7 @@ struct KRITAPSD_EXPORT psd_layer_type_shape {
     QRectF boundingBox; //actual bounds
     int textIndex;
     QString text;
+    bool isHorizontal;
 
     void setEngineData(QByteArray ba) {
         engineData = ba;
@@ -658,6 +659,13 @@ struct KRITAPSD_EXPORT psd_layer_type_shape {
     void setBottom(float val) {
         bounds.setBottom(val);
     }
+    void setWritingMode(const QString val) {
+        if (val == "Hrzn") {
+            isHorizontal = true;
+        } else {
+            isHorizontal = false;
+        }
+    }
 
     QDomDocument textDataASLXML() {
         KisAslXmlWriter w;
@@ -665,7 +673,11 @@ struct KRITAPSD_EXPORT psd_layer_type_shape {
 
         w.writeText("Txt ", text);
         w.writeEnum("textGridding", "textGridding", "none");
-        w.writeEnum("Ornt", "Ornt", "Hrzn");
+        if (isHorizontal) {
+            w.writeEnum("Ornt", "Ornt", "Hrzn");
+        } else {
+            w.writeEnum("Ornt", "Ornt", "Vrtc");
+        }
         w.writeEnum("AntA", "Annt", "AnCr");
         if (!bounds.isEmpty()) {
             w.enterDescriptor("bounds", "", "bounds");

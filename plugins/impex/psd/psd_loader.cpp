@@ -370,13 +370,14 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 KisAslCallbackObjectCatcher catcher;
                 psd_layer_type_shape text;
                 catcher.subscribeRawData("/TxLr/EngineData", std::bind(&psd_layer_type_shape::setEngineData, &text, _1));
+                catcher.subscribeEnum("/TxLr/Ornt", "Ornt", std::bind(&psd_layer_type_shape::setWritingMode, &text, _1));
                 KisAslXmlParser parser;
                 parser.parseXML(layerRecord->infoBlocks.textData, catcher);
                 KoSvgTextShape *shape = new KoSvgTextShape();
                 KoSvgTextShapeMarkupConverter converter(shape);
                 QString svg;
                 QString styles;
-                bool res = converter.convertPSDTextEngineDataToSVG(text.engineData, &svg);
+                bool res = converter.convertPSDTextEngineDataToSVG(text.engineData, &svg, text.isHorizontal);
                 if (!res) {
                     qDebug() << converter.errors();
                 }

@@ -658,7 +658,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                             QString svgtext;
                             QString styles;
                             convert.convertToSvg(&svgtext, &styles);
-                            convert.convertToPSDTextEngineData(svgtext, &textData.engineData, textData.text);
+                            convert.convertToPSDTextEngineData(svgtext, &textData.engineData, textData.text, textData.isHorizontal);
                             textData.boundingBox = text->outlineRect();
                             textData.textIndex = 0;
                             textData.transform = text->absoluteTransformation()/* * FlaketoPixels*/;

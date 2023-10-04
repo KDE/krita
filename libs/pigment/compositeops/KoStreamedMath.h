@@ -258,7 +258,7 @@ struct KoStreamedMath {
     {
         using U = typename std::conditional<aligned, xsimd::aligned_mode, xsimd::unaligned_mode>::type;
         const auto data_i = uint_v::load(static_cast<const typename uint_v::value_type *>(data), U{});
-        return xsimd::to_float(xsimd::bitwise_cast<int_v>(data_i >> 24));
+        return xsimd::to_float(xsimd::bitwise_cast_compat<int>(data_i >> 24));
     }
 
     /**
@@ -282,9 +282,9 @@ struct KoStreamedMath {
 
         const uint_v mask(0xFF);
 
-        c1 = xsimd::to_float(xsimd::bitwise_cast<int_v>((data_i >> 16) & mask));
-        c2 = xsimd::to_float(xsimd::bitwise_cast<int_v>((data_i >> 8) & mask));
-        c3 = xsimd::to_float(xsimd::bitwise_cast<int_v>((data_i) & mask));
+        c1 = xsimd::to_float(xsimd::bitwise_cast_compat<int>((data_i >> 16) & mask));
+        c2 = xsimd::to_float(xsimd::bitwise_cast_compat<int>((data_i >> 8) & mask));
+        c3 = xsimd::to_float(xsimd::bitwise_cast_compat<int>((data_i) & mask));
     }
 
     /**
@@ -627,10 +627,10 @@ struct PixelWrapper<quint16, _impl> {
         const auto pixelsC3Alpha = uint_v::gather(srcPtr, idx2);
 #endif
 
-        dst_c1 = xsimd::to_float(xsimd::bitwise_cast<int_v>(pixelsC1C2 & mask)); // r
-        dst_c2 = xsimd::to_float(xsimd::bitwise_cast<int_v>((pixelsC1C2 >> 16) & mask)); // g
-        dst_c3 = xsimd::to_float(xsimd::bitwise_cast<int_v>((pixelsC3Alpha & mask))); // b
-        dst_alpha = xsimd::to_float(xsimd::bitwise_cast<int_v>((pixelsC3Alpha >> 16) & mask)); // a
+        dst_c1 = xsimd::to_float(xsimd::bitwise_cast_compat<int>(pixelsC1C2 & mask)); // r
+        dst_c2 = xsimd::to_float(xsimd::bitwise_cast_compat<int>((pixelsC1C2 >> 16) & mask)); // g
+        dst_c3 = xsimd::to_float(xsimd::bitwise_cast_compat<int>((pixelsC3Alpha & mask))); // b
+        dst_alpha = xsimd::to_float(xsimd::bitwise_cast_compat<int>((pixelsC3Alpha >> 16) & mask)); // a
 
         dst_alpha *= uint16Rec1;
     }
@@ -639,10 +639,10 @@ struct PixelWrapper<quint16, _impl> {
     {
         const auto alpha = a * uint16Max;
 
-        const auto v1 = xsimd::bitwise_cast<uint_v>(xsimd::nearbyint_as_int(c1));
-        const auto v2 = xsimd::bitwise_cast<uint_v>(xsimd::nearbyint_as_int(c2));
-        const auto v3 = xsimd::bitwise_cast<uint_v>(xsimd::nearbyint_as_int(c3));
-        const auto v4 = xsimd::bitwise_cast<uint_v>(xsimd::nearbyint_as_int(alpha));
+        const auto v1 = xsimd::bitwise_cast_compat<unsigned int>(xsimd::nearbyint_as_int(c1));
+        const auto v2 = xsimd::bitwise_cast_compat<unsigned int>(xsimd::nearbyint_as_int(c2));
+        const auto v3 = xsimd::bitwise_cast_compat<unsigned int>(xsimd::nearbyint_as_int(c3));
+        const auto v4 = xsimd::bitwise_cast_compat<unsigned int>(xsimd::nearbyint_as_int(alpha));
 
         const auto c1c2 = ((v2 & mask) << 16) | (v1 & mask);
         const auto c3ca = ((v4 & mask) << 16) | (v3 & mask);

@@ -79,11 +79,11 @@ struct KoAlphaMaskApplicator<
 
             auto data_i = uint_v::load_unaligned(reinterpret_cast<const quint32 *>(pixels));
 
-            const auto pixelAlpha = xsimd::to_float(xsimd::bitwise_cast<int_v>(data_i >> 24U)) * (float_v(1.0f) - maskAlpha);
+            const auto pixelAlpha = xsimd::to_float(xsimd::bitwise_cast_compat<int>(data_i >> 24U)) * (float_v(1.0f) - maskAlpha);
 
             const quint32 colorChannelsMask = 0x00FFFFFF;
 
-            const uint_v pixelAlpha_i = xsimd::bitwise_cast<uint_v>(xsimd::nearbyint_as_int(pixelAlpha));
+            const uint_v pixelAlpha_i = xsimd::bitwise_cast_compat<unsigned int>(xsimd::nearbyint_as_int(pixelAlpha));
             data_i = (data_i & colorChannelsMask) | (pixelAlpha_i << 24);
             data_i.store_unaligned(reinterpret_cast<typename uint_v::value_type *>(pixels));
 
@@ -108,7 +108,7 @@ struct KoAlphaMaskApplicator<
             const auto maskAlpha = float_v::load_unaligned(alpha);
             const auto pixelAlpha = float_v(255.0f) * (float_v(1.0f) - maskAlpha);
 
-            const uint_v pixelAlpha_i = xsimd::bitwise_cast<uint_v>(xsimd::nearbyint_as_int(pixelAlpha));
+            const uint_v pixelAlpha_i = xsimd::bitwise_cast_compat<unsigned int>(xsimd::nearbyint_as_int(pixelAlpha));
             const uint_v data_i = brushColor_i | (pixelAlpha_i << 24);
             data_i.store_unaligned(reinterpret_cast<typename uint_v::value_type *>(pixels));
 

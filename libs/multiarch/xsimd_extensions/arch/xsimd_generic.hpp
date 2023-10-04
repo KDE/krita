@@ -127,6 +127,26 @@ inline batch<T, A> pow2 (batch<T, A> const& self) noexcept
 {
     return self * self;
 }
+
+#if XSIMD_VERSION_MAJOR <= 10
+
+template <class B, class T, class A>
+inline batch<B, A> bitwise_cast_compat(batch<T, A> const& x) noexcept
+{
+    return bitwise_cast<batch<B, A>>(x);
+}
+
+#else
+
+template <class B, class T, class A>
+inline batch<B, A> bitwise_cast_compat(batch<T, A> const& x) noexcept
+{
+    return bitwise_cast<B>(x);
+}
+
+
+#endif
+
 }; // namespace xsimd
 
 #endif

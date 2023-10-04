@@ -60,50 +60,6 @@
 
 #include <math.h>
 
-static const char *const needle_xpm[] = {
-    "16 16 2 1",
-    "  c None",
-    "# c #000000",
-    "                ",
-    "    #           ",
-    "     #          ",
-    "     ##         ",
-    "      ##        ",
-    "      ###       ",
-    "       ###      ",
-    "       ####     ",
-    "        ####    ",
-    "        #####   ",
-    "         #####  ",
-    "         ###### ",
-    "          ##### ",
-    "          ###   ",
-    "           ##   ",
-    "                "
-};
-
-static const char *const needle_move_xpm[] = {
-    "16 16 2 1",
-    "  c None",
-    "# c #000000",
-    "                ",
-    "    #           ",
-    "     #          ",
-    "     ##         ",
-    "      ##        ",
-    "      ###       ",
-    "       ###      ",
-    "       ####     ",
-    "    #   ####    ",
-    "   ###  #####   ",
-    "  # # #  #####  ",
-    " ####### ###### ",
-    "  # # #   ##### ",
-    "   ###    ###   ",
-    "    #      ##   ",
-    "                "
-};
-
 // helper function to calculate the squared distance between two points
 qreal squaredDistance(const QPointF& p1, const QPointF &p2)
 {
@@ -148,8 +104,8 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 
     m_contextMenu.reset(new QMenu());
 
-    m_selectCursor = QCursor(QPixmap(needle_xpm), 2, 0);
-    m_moveCursor = QCursor(QPixmap(needle_move_xpm), 2, 0);
+    m_selectCursor = QCursor(QIcon(":/cursor-needle.svg").pixmap(32), 0, 0);
+    m_moveCursor = QCursor(QIcon(":/cursor-needle-move.svg").pixmap(32), 0, 0);
 
     connect(&m_pointSelection, SIGNAL(selectionChanged()), SLOT(repaintDecorations()));
 }

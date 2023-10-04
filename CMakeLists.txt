@@ -1057,7 +1057,7 @@ endif()
 ##
 ## Test for xsimd
 ##
-foreach(xsimd_version 8.1.0 9 10)
+foreach(xsimd_version 8.1.0 9 10 11)
     if(NOT xsimd_FOUND)
         find_package(xsimd ${xsimd_version})
     endif()

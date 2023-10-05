@@ -491,6 +491,18 @@ void PsdAdditionalLayerInfoBlock::writeTypeToolBlockEx(QIODevice &io, psd_layer_
     }
 }
 
+void PsdAdditionalLayerInfoBlock::writeVectorStrokeDataEx(QIODevice &io, const QDomDocument &vectorStroke)
+{
+    switch (m_header.byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        writeVectorStrokeDataImpl<psd_byte_order::psdLittleEndian>(io, vectorStroke);
+        break;
+    default:
+        writeVectorStrokeDataImpl(io, vectorStroke);
+        break;
+    }
+}
+
 template<psd_byte_order byteOrder>
 void PsdAdditionalLayerInfoBlock::writePattBlockExImpl(QIODevice &io, const QDomDocument &patternsXmlDoc)
 {
@@ -654,6 +666,25 @@ void PsdAdditionalLayerInfoBlock::writeTypeToolImpl(QIODevice &io, psd_layer_typ
 
     } catch (KisAslWriterUtils::ASLWriteException &e) {
         warnKrita << "WARNING: Couldn't save text layer block:" << PREPEND_METHOD(e.what());
+
+        // TODO: make this error recoverable!
+        throw e;
+    }
+}
+
+template<psd_byte_order byteOrder>
+void PsdAdditionalLayerInfoBlock::writeVectorStrokeDataImpl(QIODevice &io, const QDomDocument &vectorStroke)
+{
+    KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+    KisAslWriterUtils::writeFixedString<byteOrder>("vstk", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> strokeSizeTag(io, 2);
+    try {
+        KisAslWriter writer(byteOrder);
+
+        writer.writeVectorStrokeDataEx(io, vectorStroke);
+
+    } catch (KisAslWriterUtils::ASLWriteException &e) {
+        warnKrita << "WARNING: Couldn't save vector stroke layer block:" << PREPEND_METHOD(e.what());
 
         // TODO: make this error recoverable!
         throw e;

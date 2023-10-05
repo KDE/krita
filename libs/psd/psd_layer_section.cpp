@@ -26,6 +26,11 @@
 #include <kis_shape_layer.h>
 #include <KoSvgTextShape.h>
 #include <KoSvgTextShapeMarkupConverter.h>
+#include <KoShapeBackground.h>
+#include <KoColorBackground.h>
+#include <KoPatternBackground.h>
+#include <KoGradientBackground.h>
+#include <KoShapeStroke.h>
 
 #include <KoPathShape.h>
 
@@ -649,6 +654,9 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
 
                 const KisShapeLayer *shapeLayer = qobject_cast<KisShapeLayer*>(node.data());
                 psd_layer_type_shape textData;
+                psd_vector_mask vectorMask;
+                QDomDocument strokeData;
+
                 if (shapeLayer) {
                     // only store the first shape.
                     if (shapeLayer->shapes().size() == 1) {
@@ -662,6 +670,43 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                             textData.boundingBox = text->outlineRect();
                             textData.textIndex = 0;
                             textData.transform = text->absoluteTransformation()/* * FlaketoPixels*/;
+                        } else {
+                            KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shapeLayer->shapes().first());
+                            if (pathShape){
+                                layerRecord->addPathShapeToPSDPath(vectorMask.path, pathShape, vectorWidth, vectorHeight);
+                                KoColorBackground *b = dynamic_cast<KoColorBackground *>(pathShape->background().data());
+                                if (b) {
+                                    psd_layer_solid_color fill;
+
+                                    if (node->image()) {
+                                        fill.cs = node->image()->colorSpace();
+                                    } else {
+                                        fill.cs = node->colorSpace();
+                                    }
+                                    fill.setColor(KoColor(b->color(), fill.cs));
+                                    fillConfig = fill.getASLXML();
+                                    fillType = psd_fill_solid_color;
+                                } else if (!pathShape->background()) {
+                                    psd_layer_solid_color fill;
+
+                                    if (node->image()) {
+                                        fill.cs = node->image()->colorSpace();
+                                    } else {
+                                        fill.cs = node->colorSpace();
+                                    }
+                                    fill.setColor(KoColor(Qt::transparent, fill.cs));
+                                    fillConfig = fill.getASLXML();
+                                    fillType = psd_fill_solid_color;
+                                }
+                                KoShapeStrokeSP shapeStroke = qSharedPointerDynamicCast<KoShapeStroke>(pathShape->stroke());
+                                if (shapeStroke) {
+                                    psd_vector_stroke_data strokeDataStruct;
+                                    strokeDataStruct.loadFromShapeStroke(shapeStroke);
+                                    strokeDataStruct.strokeEnabled = true;
+                                    strokeDataStruct.fillEnabled = pathShape->background()? true: false;
+                                    strokeData = strokeDataStruct.getASLXML();
+                                }
+                            }
                         }
                     }
                 }
@@ -678,7 +723,6 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 QString nodeName;
                 KisPaintDeviceSP layerContentDevice;
                 psd_section_type sectionType;
-                psd_vector_mask vectorMask;
 
                 if (item.type == FlattenedNode::RASTER_LAYER) {
                     nodeIrrelevant = false;
@@ -701,6 +745,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                                             KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
                                             if (pathShape){
                                                 layerRecord->addPathShapeToPSDPath(vectorMask.path, pathShape, vectorWidth, vectorHeight);
+
                                             }
                                         }
                                     }
@@ -793,6 +838,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 layerRecord->fillConfig = fillConfig;
 
                 layerRecord->vectorMask = vectorMask;
+                layerRecord->vectorStroke = strokeData;
 
                 layerRecord->textShape = textData;
 

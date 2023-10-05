@@ -694,6 +694,11 @@ void PSDLayerRecord::writeImpl(QIODevice &io,
                 additionalInfoBlock.writeTypeToolBlockEx(io, textShape);
             }
 
+            // write 'vstk' data block
+            if (!vectorStroke.isNull()) {
+                additionalInfoBlock.writeVectorStrokeDataEx(io, vectorStroke);
+            }
+
         }
     } catch (KisAslWriterUtils::ASLWriteException &e) {
         throw KisAslWriterUtils::ASLWriteException(PREPEND_METHOD(e.what()));

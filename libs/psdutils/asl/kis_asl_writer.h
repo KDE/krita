@@ -23,6 +23,7 @@ public:
     void writeFillLayerSectionEx(QIODevice &device, const QDomDocument &doc);
     void writePsdLfx2SectionEx(QIODevice &device, const QDomDocument &doc);
     void writeTypeToolObjectSettings(QIODevice &device, const QDomDocument &doc, const QDomDocument &warpDoc, const QTransform tf, const QRectF bounds);
+    void writeVectorStrokeDataEx(QIODevice &device, const QDomDocument &doc);
 
 private:
     psd_byte_order m_byteOrder;

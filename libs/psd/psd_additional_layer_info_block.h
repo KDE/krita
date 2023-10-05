@@ -24,9 +24,14 @@
 #include <KisGlobalResourcesInterface.h>
 #include <KoStopGradient.h>
 #include <KoSegmentGradient.h>
+#include <KoShapeBackground.h>
+#include <KoColorBackground.h>
+#include <KoGradientBackground.h>
+#include <KoPatternBackground.h>
 #include <psd.h>
 
 #include <asl/kis_asl_xml_writer.h>
+#include <asl/kis_asl_callback_object_catcher.h>
 
 #include "psd_header.h"
 
@@ -174,6 +179,11 @@ struct KRITAPSD_EXPORT psd_layer_solid_color {
                                  colorSpace(LABAColorModelID.id(), Float32BitsColorDepthID.id(), 0));
         }
     }
+
+    static void setupCatcher(const QString path, KisAslCallbackObjectCatcher &catcher, psd_layer_solid_color *data) {
+        catcher.subscribeColor(path + "/Clr ", std::bind(&psd_layer_solid_color::setColor, data, std::placeholders::_1));
+    }
+
     QDomDocument getFillLayerConfig() {
         KisFilterConfigurationSP cfg;
         cfg = KisGeneratorRegistry::instance()->value("color")->defaultConfiguration(KisGlobalResourcesInterface::instance());
@@ -205,6 +215,16 @@ struct KRITAPSD_EXPORT psd_layer_solid_color {
         w.leaveDescriptor();
 
         return w.document();
+    }
+
+    QBrush getBrush() {
+        QColor c;
+        fill_color.toQColor(&c);
+        return QBrush(c, Qt::SolidPattern);
+    }
+
+    QSharedPointer<KoShapeBackground> getBackground() {
+        return QSharedPointer<KoColorBackground>(new KoColorBackground(getBrush().color()));
     }
 };
 
@@ -277,6 +297,17 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
 
     void setOffset(QPointF Ofst) {
         offset = Ofst;
+    }
+
+    static void setupCatcher(const QString path, KisAslCallbackObjectCatcher &catcher, psd_layer_gradient_fill *data) {
+        catcher.subscribeGradient(path + "/Grad", std::bind(&psd_layer_gradient_fill::setGradient, data, std::placeholders::_1));
+        catcher.subscribeBoolean(path + "/Dthr", std::bind(&psd_layer_gradient_fill::setDither, data, std::placeholders::_1));
+        catcher.subscribeBoolean(path + "/Rvrs", std::bind(&psd_layer_gradient_fill::setReverse, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(path + "/Angl", "#Ang", std::bind(&psd_layer_gradient_fill::setAngle, data, std::placeholders::_1));
+        catcher.subscribeEnum(path + "/Type", "GrdT", std::bind(&psd_layer_gradient_fill::setType, data, std::placeholders::_1));
+        catcher.subscribeBoolean(path + "/Algn", std::bind(&psd_layer_gradient_fill::setAlignWithLayer, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(path + "/Scl ", "#Prc", std::bind(&psd_layer_gradient_fill::setScale, data, std::placeholders::_1));
+        catcher.subscribePoint(path + "/Ofst", std::bind(&psd_layer_gradient_fill::setOffset, data, std::placeholders::_1));
     }
 
     QDomDocument getFillLayerConfig() {
@@ -474,6 +505,46 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
 
         return w.document();
     }
+
+    QBrush getBrush() {
+        QGradient *grad = getGradient();
+        if (grad) {
+            grad->setCoordinateMode(QGradient::ObjectBoundingMode);
+            QBrush brush = *grad;
+            return brush;
+        }
+        return QBrush(Qt::transparent);
+    }
+    QGradient *getGradient() {
+        QGradient *pointer = nullptr;
+        if (!gradient.isNull()) {
+            const QDomElement gradientElement = gradient.firstChildElement();
+            if (!gradientElement.isNull()) {
+                const QString gradientType = gradientElement.attribute("type");
+                if (gradientType == "stop") {
+                    const KoStopGradient grad = KoStopGradient::fromXML(gradientElement);
+                    if (grad.valid()) {
+                        pointer = grad.toQGradient();
+                    }
+                } else if (gradientType == "segment") {
+                    const KoSegmentGradient grad = KoSegmentGradient::fromXML(gradientElement);
+                    if (grad.valid()) {
+                        pointer = grad.toQGradient();
+                    }
+                }
+            }
+        }
+        return pointer;
+    }
+    QSharedPointer<KoShapeBackground> getBackground() {
+        QGradient *pointer = getGradient();
+        pointer->setCoordinateMode(QGradient::ObjectBoundingMode);
+        if (repeat == "alternate") {
+            pointer->setSpread(QGradient::RepeatSpread);
+        }
+        QSharedPointer<KoGradientBackground> bg = QSharedPointer<KoGradientBackground>(new KoGradientBackground(pointer));
+        return bg;
+    }
 };
 
 struct KRITAPSD_EXPORT psd_layer_pattern_fill {
@@ -502,6 +573,14 @@ struct KRITAPSD_EXPORT psd_layer_pattern_fill {
 
     void setAlignWithLayer(bool align) {
         align_with_layer = align;
+    }
+
+    static void setupCatcher(const QString path, KisAslCallbackObjectCatcher &catcher, psd_layer_pattern_fill *data) {
+        catcher.subscribeUnitFloat(path + "/Angl", "#Ang", std::bind(&psd_layer_pattern_fill::setAngle, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(path + "/Scl ", "#Prc", std::bind(&psd_layer_pattern_fill::setScale, data, std::placeholders::_1));
+        catcher.subscribeBoolean(path + "/Algn", std::bind(&psd_layer_pattern_fill::setAlignWithLayer, data, std::placeholders::_1));
+        catcher.subscribePoint(path + "/phase", std::bind(&psd_layer_pattern_fill::setOffset, data, std::placeholders::_1));
+        catcher.subscribePatternRef(path + "/Ptrn", std::bind(&psd_layer_pattern_fill::setPatternRef, data, std::placeholders::_1, std::placeholders::_2));
     }
     
     QDomDocument getFillLayerConfig() const {
@@ -581,6 +660,21 @@ struct KRITAPSD_EXPORT psd_layer_pattern_fill {
         w.leaveDescriptor();
 
         return w.document();
+    }
+
+    QSharedPointer<KoShapeBackground> getBackground() {
+        QSharedPointer<KoPatternBackground> bg = QSharedPointer<KoPatternBackground>(new KoPatternBackground());
+
+        const QString patternMD5 = "";
+        const QString patternNameTemp = QString(patternID + ".pat");
+        const QString patternFileName = patternName;
+        KoResourceLoadResult res = KisGlobalResourcesInterface::instance()->source(ResourceType::Patterns).bestMatchLoadResult(patternMD5, patternFileName, patternNameTemp);
+        pattern = res.resource<KoPattern>();
+        if (pattern) {
+            bg->setPattern(pattern->pattern());
+        }
+        bg->setTileRepeatOffset(offset);
+        return bg;
     }
 };
 
@@ -745,6 +839,123 @@ struct KRITAPSD_EXPORT psd_vector_mask {
     psd_path path;
 };
 
+struct KRITAPSD_EXPORT psd_vector_stroke_data {
+    bool strokeEnabled {false};
+    bool fillEnabled {true};
+    
+    QPen pen;
+
+    QVector<double> dashPattern;
+    
+    double opacity {1.0};
+    
+    double resolution {72};
+    
+    void setStrokeEnabled(bool enabled) {
+        strokeEnabled = enabled;
+    }
+    void setFillEnabled(bool enabled) {
+        fillEnabled = enabled;
+    }
+    void setStrokeWidth(double width) {
+        pen.setWidthF(width);
+    }
+
+    void setStrokeDashOffset(double dashOffset) {
+        pen.setDashOffset(dashOffset);
+    }
+    void setStrokeMiterLimit(double limit) {
+        pen.setMiterLimit(limit);
+    }
+    void setLineCapType(const QString val) {
+        if (val == "strokeStyleButtCap") {
+            pen.setCapStyle(Qt::FlatCap);
+        } else if (val == "strokeStyleSquareCap") {
+            pen.setCapStyle(Qt::SquareCap);
+        } else if (val == "strokeStyleRoundCap") {
+            pen.setCapStyle(Qt::RoundCap);
+        }
+    }
+    void setLineJoinType(const QString val) {
+        if (val == "strokeStyleMiterJoin") {
+            pen.setJoinStyle(Qt::MiterJoin);
+        } else if (val == "strokeStyleBevelJoin") {
+            pen.setJoinStyle(Qt::BevelJoin);
+        } else if (val == "strokeStyleRoundJoin") {
+            pen.setJoinStyle(Qt::RoundJoin);
+        }
+    }
+
+    void appendToDashPattern(double val) {
+        dashPattern.append(val);
+    }
+    void setOpacityFromPercentage(double o) {
+        opacity = o * 0.01;
+    }
+    void setResolution(double res) {
+        resolution = res;
+    }
+
+    static void setupCatcher(const QString path, KisAslCallbackObjectCatcher &catcher, psd_vector_stroke_data *data) {
+        catcher.subscribeBoolean(path + "/strokeStyle/strokeEnabled", std::bind(&psd_vector_stroke_data::setStrokeEnabled, data, std::placeholders::_1));
+        catcher.subscribeBoolean(path + "/strokeStyle/fillEnabled", std::bind(&psd_vector_stroke_data::setFillEnabled, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(path + "/strokeStyle/strokeStyleLineWidth", "#Pnt", std::bind(&psd_vector_stroke_data::setStrokeWidth, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(path + "/strokeStyle/strokeStyleLineDashOffset", "#Pnt", std::bind(&psd_vector_stroke_data::setStrokeDashOffset, data, std::placeholders::_1));
+        catcher.subscribeDouble(path + "/strokeStyle/strokeStyleMiterLimit", std::bind(&psd_vector_stroke_data::setStrokeMiterLimit, data, std::placeholders::_1));
+        catcher.subscribeEnum(path + "/strokeStyle/strokeStyleLineCapType", "strokeStyleLineCapType", std::bind(&psd_vector_stroke_data::setLineCapType, data, std::placeholders::_1));
+        catcher.subscribeEnum(path + "/strokeStyle/strokeStyleLineJoinType", "strokeStyleLineJoinType", std::bind(&psd_vector_stroke_data::setLineJoinType, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(path + "/strokeStyle/strokeStyleLineDashSet/", "#Nne", std::bind(&psd_vector_stroke_data::appendToDashPattern, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(path + "/strokeStyle/strokeStyleOpacity", "#Prc", std::bind(&psd_vector_stroke_data::setOpacityFromPercentage, data, std::placeholders::_1));
+        catcher.subscribeDouble(path + "/strokeStyle/strokeStyleResolution", std::bind(&psd_vector_stroke_data::setResolution, data, std::placeholders::_1));
+    }
+    
+    QDomDocument ASLXML() {
+        KisAslXmlWriter w;
+        w.enterDescriptor("", "", "strokeStyle");
+        
+        w.writeInteger("strokeStyleVersion", 2);
+        w.writeBoolean("strokeEnabled", strokeEnabled);
+        w.writeBoolean("fillEnabled", fillEnabled);
+        
+        w.writeUnitFloat("strokeStyleLineWidth", "#Pnt", pen.widthF());
+        w.writeUnitFloat("strokeStyleLineDashOffset ", "#Pnt", pen.dashOffset());
+        w.writeDouble("strokeStyleMiterLimit", pen.miterLimit());
+        
+        QString linecap = "strokeStyleButtCap";
+        QString linejoin = "strokeStyleMiterJoin";
+        w.writeEnum("strokeStyleLineCapType", "strokeStyleLineCapType", linecap);
+        w.writeEnum("strokeStyleLineJoinType", "strokeStyleLineJoinType", linejoin);
+        
+        // Other values are "strokeStyleAlignInside" and "strokeStyleAlignOutside" but we don't support these.
+        w.writeEnum("strokeStyleLineAlignment", "strokeStyleLineAlignment", "strokeStyleAlignCenter");
+        
+        w.writeBoolean("strokeStyleScaleLock", false);
+        w.writeBoolean("strokeStyleStrokeAdjust", false);
+        
+        w.enterList("strokeStyleLineDashSet");
+        Q_FOREACH(qreal val, dashPattern) {
+            w.writeUnitFloat("", "#Nne", val);
+        }
+        w.leaveList();
+        
+        w.writeEnum("strokeStyleBlendMode", "BlnM", "Nrml");
+        w.writeUnitFloat("strokeStyleOpacity ", "#Prc", opacity * 100.0);
+        
+        // Color Descriptor
+        // Others are "gradientLayer" and "patternLayer"
+        w.enterDescriptor("strokeStyleContent", "", "solidColorLayer");
+        w.writeColor("Clr ", KoColor());
+        w.leaveDescriptor();
+        
+        w.writeDouble("strokeStyleResolution", resolution);
+        
+        
+        w.leaveDescriptor();
+
+        return w.document();
+    }
+};
+
 /**
  * @brief The PsdAdditionalLayerInfoBlock class implements the Additional Layer Information block
  *
@@ -792,6 +1003,7 @@ public:
     QDomDocument textData;
 
     psd_vector_mask vectorMask;
+    QDomDocument vectorStroke;
 
     psd_section_type sectionDividerType;
     QString sectionDividerBlendMode;

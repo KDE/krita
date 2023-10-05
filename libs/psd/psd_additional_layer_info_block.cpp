@@ -321,7 +321,8 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         } else if (key == "anFX") {
         } else if (key == "FMsk") {
         } else if (key == "SoLd") {
-        } else if (key == "vstk") {
+        } else if (key == "vstk") { // vector stroke info
+            vectorStroke = KisAslReader::readVectorStroke(io, byteOrder);
         } else if (key == "vsCg") {
         } else if (key == "sn2P") {
         } else if (key == "vogk") {

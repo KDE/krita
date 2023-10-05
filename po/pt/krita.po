@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-30 00:41+0000\n"
+"POT-Creation-Date: 2023-10-05 00:41+0000\n"
 "PO-Revision-Date: 2023-07-13 00:28+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -16320,7 +16320,7 @@ msgstr "Modificar o parâmetro"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:354
+#: libs/flake/tools/KoPathTool.cpp:310
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Converter para um Caminho"
@@ -16654,41 +16654,41 @@ msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Mudar o segmento"
 
-#: libs/flake/tools/KoPathTool.cpp:170
+#: libs/flake/tools/KoPathTool.cpp:126
 #, kde-format
 msgid "Edit Shape"
 msgstr "Editar a Forma"
 
-#: libs/flake/tools/KoPathTool.cpp:652
+#: libs/flake/tools/KoPathTool.cpp:608
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Arrastar para mover a pega."
 
-#: libs/flake/tools/KoPathTool.cpp:706
+#: libs/flake/tools/KoPathTool.cpp:662
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Arrastar para mover o ponto. Carregue e pressione o Shift para mudar o tipo "
 "de ponto."
 
-#: libs/flake/tools/KoPathTool.cpp:708
+#: libs/flake/tools/KoPathTool.cpp:664
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Arrastar para mover o ponto de controlo."
 
-#: libs/flake/tools/KoPathTool.cpp:731
+#: libs/flake/tools/KoPathTool.cpp:687
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Arraste para mudar directamente a curva. Faça duplo-click para inserir um "
 "novo ponto no caminho."
 
-#: libs/flake/tools/KoPathTool.cpp:739
+#: libs/flake/tools/KoPathTool.cpp:695
 #, kde-format
 msgid "Press B to break path at selected point."
 msgstr "Carregar em B para quebrar o caminho no ponto seleccionado."
 
-#: libs/flake/tools/KoPathTool.cpp:741
+#: libs/flake/tools/KoPathTool.cpp:697
 #, kde-format
 msgid "Press B to break path at selected segments."
 msgstr "Carregue em B para quebrar o caminho em segmentos seleccionados."

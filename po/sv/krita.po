@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-30 00:41+0000\n"
+"POT-Creation-Date: 2023-10-05 00:41+0000\n"
 "PO-Revision-Date: 2023-09-23 20:15+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -16033,7 +16033,7 @@ msgstr "Ändra parameter"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:354
+#: libs/flake/tools/KoPathTool.cpp:310
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Konvertera till kontur"
@@ -16367,39 +16367,39 @@ msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Ändra segment"
 
-#: libs/flake/tools/KoPathTool.cpp:170
+#: libs/flake/tools/KoPathTool.cpp:126
 #, kde-format
 msgid "Edit Shape"
 msgstr "Redigera form"
 
-#: libs/flake/tools/KoPathTool.cpp:652
+#: libs/flake/tools/KoPathTool.cpp:608
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Dra för att flytta grepp."
 
-#: libs/flake/tools/KoPathTool.cpp:706
+#: libs/flake/tools/KoPathTool.cpp:662
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr "Dra för att flytta punkt. Skiftklicka för att ändra punktens typ."
 
-#: libs/flake/tools/KoPathTool.cpp:708
+#: libs/flake/tools/KoPathTool.cpp:664
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Dra för att flytta styrpunkt."
 
-#: libs/flake/tools/KoPathTool.cpp:731
+#: libs/flake/tools/KoPathTool.cpp:687
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Dra för att direkt ändra kurvan. Dubbelklicka för att infoga en ny "
 "konturpunkt."
 
-#: libs/flake/tools/KoPathTool.cpp:739
+#: libs/flake/tools/KoPathTool.cpp:695
 #, kde-format
 msgid "Press B to break path at selected point."
 msgstr "Tryck på B för att dela upp kontur vid markerad punkt."
 
-#: libs/flake/tools/KoPathTool.cpp:741
+#: libs/flake/tools/KoPathTool.cpp:697
 #, kde-format
 msgid "Press B to break path at selected segments."
 msgstr "Tryck på B för att dela upp kontur vid markerade segment."

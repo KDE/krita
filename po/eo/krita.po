@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-30 00:41+0000\n"
+"POT-Creation-Date: 2023-10-05 00:41+0000\n"
 "PO-Revision-Date: 2023-09-23 08:39+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -16021,7 +16021,7 @@ msgstr "Ŝanĝi parametron"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:354
+#: libs/flake/tools/KoPathTool.cpp:310
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Konverti al Pado"
@@ -16355,38 +16355,38 @@ msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Ŝanĝi Segmenton"
 
-#: libs/flake/tools/KoPathTool.cpp:170
+#: libs/flake/tools/KoPathTool.cpp:126
 #, kde-format
 msgid "Edit Shape"
 msgstr "Redakti Formon"
 
-#: libs/flake/tools/KoPathTool.cpp:652
+#: libs/flake/tools/KoPathTool.cpp:608
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Trenu por movi tenilon."
 
-#: libs/flake/tools/KoPathTool.cpp:706
+#: libs/flake/tools/KoPathTool.cpp:662
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr "Trenu por movi punkton. Shift klako por ŝanĝi punktotipo."
 
-#: libs/flake/tools/KoPathTool.cpp:708
+#: libs/flake/tools/KoPathTool.cpp:664
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Trenu por movi kontrolpunkton."
 
-#: libs/flake/tools/KoPathTool.cpp:731
+#: libs/flake/tools/KoPathTool.cpp:687
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Trenu por ŝanĝi kurbon rekte. Duoble alklaku por enmeti novan vojpunkton."
 
-#: libs/flake/tools/KoPathTool.cpp:739
+#: libs/flake/tools/KoPathTool.cpp:695
 #, kde-format
 msgid "Press B to break path at selected point."
 msgstr "Premu B por rompi vojon ĉe elektita punkto."
 
-#: libs/flake/tools/KoPathTool.cpp:741
+#: libs/flake/tools/KoPathTool.cpp:697
 #, kde-format
 msgid "Press B to break path at selected segments."
 msgstr "Premu B por rompi vojon ĉe elektitaj segmentoj."

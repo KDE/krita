@@ -252,12 +252,6 @@ public Q_SLOTS:
     void slotPreferences();
 
     /**
-     * Update caption from document info - call when document info
-     * (title in the about page) changes.
-     */
-    void updateCaption();
-
-    /**
      *  Saves the current document with the current name.
      */
     void slotFileSave();
@@ -276,6 +270,7 @@ public Q_SLOTS:
 
     /// Set the active view, this will update the undo/redo actions
     void setActiveView(KisView *view);
+    void unsetActiveView();
 
     void subWindowActivated();
 
@@ -308,10 +303,7 @@ private Q_SLOTS:
 
     void slotUpdateWidgetStyle();
 
-    /**
-     * @internal
-     */
-    void slotDocumentTitleModified();
+    void slotUpdateSaveActionTitle(const QString &documentPath);
 
     /**
      *  Saves the current document with a new name.

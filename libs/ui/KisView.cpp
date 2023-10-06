@@ -94,6 +94,9 @@
 #include <commands_new/kis_update_command.h>
 #include <kis_command_utils.h>
 #include <KisScreenMigrationTracker.h>
+#include "kis_memory_statistics_server.h"
+#include "kformat.h"
+
 
 //static
 QString KisView::newObjectName()
@@ -209,7 +212,6 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
     , d(new Private(this, document, viewManager))
 {
     Q_ASSERT(document);
-    connect(document, SIGNAL(titleModified(QString,bool)), this, SIGNAL(titleModified(QString,bool)));
     setObjectName(newObjectName());
 
     d->document = document;
@@ -240,7 +242,6 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
     setAcceptDrops(true);
 
     connect(d->document, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
-    connect(d->document, SIGNAL(sigSavingFinished(QString)), this, SLOT(slotSavingFinished()));
 
     d->referenceImagesDecoration = new KisReferenceImagesDecoration(this, document, /* viewReady = */ false);
     d->canvas.addDecoration(d->referenceImagesDecoration);
@@ -252,6 +253,16 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
 
     d->showFloatingMessage = cfg.showCanvasMessages();
     d->zoomManager.updateScreenResolution(this);
+
+    connect(document, SIGNAL(sigReadWriteChanged(bool)), this, SLOT(slotUpdateDocumentTitle()));
+    connect(document, SIGNAL(sigRecoveredChanged(bool)), this, SLOT(slotUpdateDocumentTitle()));
+    connect(document, SIGNAL(sigPathChanged(QString)), this, SLOT(slotUpdateDocumentTitle()));
+    connect(KisMemoryStatisticsServer::instance(),
+            SIGNAL(sigUpdateMemoryStatistics()),
+            SLOT(slotUpdateDocumentTitle()));
+    connect(document, SIGNAL(modified(bool)), this, SLOT(setWindowModified(bool)));
+    slotUpdateDocumentTitle();
+    setWindowModified(document->isModified());
 }
 
 KisView::~KisView()
@@ -1240,6 +1251,30 @@ void KisView::slotThemeChanged(QPalette pal)
     }
 }
 
+void KisView::slotUpdateDocumentTitle()
+{
+    QString title = d->document->caption();
+
+    if (!d->document->isReadWrite()) {
+        title += " " + i18n("Write Protected");
+    }
+
+    if (d->document->isRecovered()) {
+        title += " " + i18n("Recovered");
+    }
+
+    // show the file size for the document
+    KisMemoryStatisticsServer::Statistics fileSizeStats = KisMemoryStatisticsServer::instance()->fetchMemoryStatistics(d->document->image());
+
+    if (fileSizeStats.imageSize) {
+        title += QString(" (").append( KFormat().formatByteSize(qreal(fileSizeStats.imageSize))).append( ") ");
+    }
+
+    title += "[*]";
+
+    this->setWindowTitle(title);
+}
+
 void KisView::resetImageSizeAndScroll(bool changeCentering,
                                       const QPointF &oldImageStillPoint,
                                       const QPointF &newImageStillPoint)
@@ -1470,13 +1505,6 @@ void KisView::slotLoadingFinished()
     connect(&d->screenMigrationTracker, SIGNAL(sigScreenChanged(QScreen*)), this, SLOT(slotMigratedToScreen(QScreen*)));
     connect(&d->screenMigrationTracker, SIGNAL(sigScreenOrResolutionChanged(QScreen*)), this, SLOT(slotScreenOrResolutionChanged()));
     zoomManager()->updateImageBoundsSnapping();
-}
-
-void KisView::slotSavingFinished()
-{
-    if (d->viewManager && d->viewManager->mainWindow()) {
-        d->viewManager->mainWindow()->updateCaption();
-    }
 }
 
 void KisView::slotImageResolutionChanged()

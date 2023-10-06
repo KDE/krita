@@ -451,9 +451,8 @@ QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI);
     configure_file(config_use_qt_tablet_windows.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_use_qt_tablet_windows.h)
 endif ()     
 
-
-set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
-set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES})
+set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
+set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES})
 
 CHECK_CXX_SOURCE_COMPILES("
 #include <QSurfaceFormat>
@@ -478,6 +477,17 @@ QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRound
 HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
 )
 configure_file(config-high-dpi-scale-factor-rounding-policy.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-high-dpi-scale-factor-rounding-policy.h)
+
+CHECK_CXX_SOURCE_COMPILES("
+#include <QMdiArea>
+int main(int argc, char *argv[]) {
+QMdiArea area;
+area.setOption(QMdiArea::AlwaysShowSubwindowNameInTitleBar);
+}
+"
+HAVE_QMDIAREA_ALWAYS_SHOW_SUBWINDOW_TITLE
+)
+configure_file(config-qmdiarea-always-show-subwindow-title.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qmdiarea-always-show-subwindow-title.h)
 
 if (WIN32)
     CHECK_CXX_SOURCE_COMPILES("

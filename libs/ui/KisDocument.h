@@ -235,13 +235,6 @@ public:
     QPixmap generatePreview(const QSize& size);
 
     /**
-     *  Tells the document that its title has been modified, either because
-     *  the modified status changes (this is done by setModified() ) or
-     *  because the Path or the document-info's title changed.
-     */
-    void setTitleModified();
-
-    /**
      *  @brief Sets the document to empty.
      *
      *  Used after loading a template
@@ -472,7 +465,9 @@ Q_SIGNALS:
     */
     void modified(bool);
 
-    void titleModified(const QString &caption, bool isModified);
+    void sigReadWriteChanged(bool value);
+    void sigRecoveredChanged(bool value);
+    void sigPathChanged(const QString &path);
 
     void sigLoadingFinished();
 

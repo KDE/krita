@@ -69,7 +69,6 @@
 #include <kxmlguiclient.h>
 #include <kguiitem.h>
 #include <kwindowconfig.h>
-#include <kformat.h>
 #include <kacceleratormanager.h>
 
 #include <KoResourcePaths.h>
@@ -126,7 +125,6 @@
 #include <KisImportExportFilter.h>
 #include "KisImportExportManager.h"
 #include "kis_mainwindow_observer.h"
-#include "kis_memory_statistics_server.h"
 #include "kis_node.h"
 #include "KisOpenPane.h"
 #include "kis_paintop_box.h"
@@ -155,7 +153,7 @@
 #include "KisRecentFilesManager.h"
 #include "KisWidgetConnectionUtils.h"
 #include "KisToolBarStateModel.h"
-
+#include <config-qmdiarea-always-show-subwindow-title.h>
 
 #include <mutex>
 
@@ -209,6 +207,9 @@ public:
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
         mdiArea->setDocumentMode(true);
         mdiArea->setOption(QMdiArea::DontMaximizeSubWindowOnActivation);
+#ifdef HAVE_QMDIAREA_ALWAYS_SHOW_SUBWINDOW_TITLE
+        mdiArea->setOption(QMdiArea::AlwaysShowSubwindowNameInTitleBar);
+#endif /* HAVE_QMDIAREA_ALWAYS_SHOW_SUBWINDOW_TITLE */
 
         commandBar = new KateCommandBar(parent);
     }
@@ -223,6 +224,7 @@ public:
     KisViewManager *viewManager {nullptr};
 
     QPointer<KisView> activeView;
+    KisSignalAutoConnectionsStore activeViewConnections;
 
     QList<QAction *> toolbarList;
 
@@ -706,13 +708,7 @@ void KisMainWindow::addView(KisView *view, QMdiSubWindow *subWindow)
     viewManager()->inputManager()->addTrackedCanvas(view->canvasBase());
 
     showView(view, subWindow);
-    updateCaption();
     emit restoringDone();
-
-    if (d->activeView) {
-        connect(d->activeView, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified()));
-        connect(d->viewManager->statusBar(), SIGNAL(memoryStatusUpdated()), this, SLOT(updateCaption()));
-    }
 
 //    QTabBar *tabBar = d->findTabBarHACK();
 //    Q_FOREACH(QObject *c, tabBar->children()) {
@@ -806,7 +802,8 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
         setActiveView(imageView);
 
         updateWindowMenu();
-        updateCaption();
+    } else {
+        unsetActiveView();
     }
 }
 
@@ -1001,7 +998,6 @@ void KisMainWindow::setReadWrite(bool readwrite)
 {
     d->saveAction->setEnabled(readwrite);
     d->importFile->setEnabled(readwrite);
-    updateCaption();
 }
 
 void KisMainWindow::clearRecentFiles()
@@ -1014,62 +1010,17 @@ void KisMainWindow::removeRecentFile(QString url)
     KisRecentFilesManager::instance()->remove(QUrl::fromLocalFile(url));
 }
 
-void KisMainWindow::updateCaption()
+void KisMainWindow::slotUpdateSaveActionTitle(const QString &documentPath)
 {
-    if (!d->mdiArea->activeSubWindow()) {
-        setWindowTitle("");
-   }
-    else if (d->activeView && d->activeView->document() && d->activeView->image()){
-        KisDocument *doc = d->activeView->document();
+    const QString fileName = QFileInfo(documentPath).fileName();
 
-        QString caption = doc->caption();
-
-        if (d->mdiArea->activeSubWindow() && d->mdiArea->activeSubWindow()->isMaximized() && d->mdiArea->viewMode() == QMdiArea::SubWindowView) {
-            caption = "";
-        }
-        if (!doc->isReadWrite()) {
-            caption += " " + i18n("Write Protected") + " ";
-        }
-
-        if (doc->isRecovered()) {
-            caption += " " + i18n("Recovered") + " ";
-        }
-
-        // show the file size for the document
-        KisMemoryStatisticsServer::Statistics m_fileSizeStats = KisMemoryStatisticsServer::instance()->fetchMemoryStatistics(d->activeView ? d->activeView->image() : 0);
-
-        if (m_fileSizeStats.imageSize) {
-            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ") ");
-        }
-
-        if (doc->isModified()) {
-            caption += " *";
-        }
-
-#ifdef Q_OS_ANDROID
-        // there's no way to view mainwindow title on Android, so we need to do with mdiArea title.
-        d->mdiArea->activeSubWindow()->setWindowTitle(caption);
-#else
-        if (doc->isModified()) {
-            d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption() + " *");
-        }
-        else {
-            d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption());
-        }
-#endif
-
-
-        setWindowTitle(caption);
-
-        if (!QFileInfo(doc->path()).fileName().isEmpty()) {
-            d->saveAction->setToolTip(i18n("Save as %1", QFileInfo(doc->path()).fileName()));
-        }
-        else {
-            d->saveAction->setToolTip(i18n("Save"));
-        }
+    if (!fileName.isEmpty()) {
+        d->saveAction->setToolTip(i18n("Save as %1", fileName));
+    }
+    else {
+        d->saveAction->setToolTip(i18n("Save"));
     }
 }
-
 
 KisView *KisMainWindow::activeView() const
 {
@@ -1489,8 +1440,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         }
     }
 
-    updateCaption();
-
     return ret;
 }
 
@@ -1678,7 +1627,6 @@ void KisMainWindow::adjustLayoutForWelcomePage()
 void KisMainWindow::setActiveView(KisView* view)
 {
     d->activeView = view;
-    updateCaption();
 
     if (d->undoActionsUpdateManager) {
         d->undoActionsUpdateManager->setCurrentDocument(view ? view->document() : 0);
@@ -1686,9 +1634,21 @@ void KisMainWindow::setActiveView(KisView* view)
 
     d->viewManager->setCurrentView(view);
 
+    d->activeViewConnections.clear();
+    d->activeViewConnections.addConnection(view->document(),
+                                           SIGNAL(sigPathChanged(QString)),
+                                           this, SLOT(slotUpdateSaveActionTitle(QString)));
+    slotUpdateSaveActionTitle(view->document()->path());
+
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
 
     emit activeViewChanged();
+}
+
+void KisMainWindow::unsetActiveView()
+{
+    d->activeViewConnections.clear();
+    slotUpdateSaveActionTitle(QString());
 }
 
 void KisMainWindow::dragMove(QDragMoveEvent * event)
@@ -2099,7 +2059,6 @@ void KisMainWindow::slotDocumentInfo()
         } else {
             d->activeView->document()->setModified(true);
         }
-        d->activeView->document()->setTitleModified();
     }
 
     delete dlg;
@@ -2114,7 +2073,6 @@ bool KisMainWindow::slotFileCloseAll()
         }
     }
 
-    updateCaption();
     return true;
 }
 
@@ -2514,12 +2472,6 @@ void KisMainWindow::toggleDockersVisibility(bool visible)
     }
 }
 
-void KisMainWindow::slotDocumentTitleModified()
-{
-    updateCaption();
-}
-
-
 void KisMainWindow::subWindowActivated()
 {
     bool enabled = (activeKisView() != 0);
@@ -2554,7 +2506,6 @@ void KisMainWindow::subWindowActivated()
         }
     }
 
-    updateCaption();
     d->actionManager()->updateGUI();
 }
 
@@ -2736,8 +2687,6 @@ void KisMainWindow::updateWindowMenu()
             }
         }
     }
-
-    updateCaption();
 }
 
 void KisMainWindow::updateSubwindowFlags()
@@ -2758,7 +2707,10 @@ void KisMainWindow::updateSubwindowFlags()
 
 void KisMainWindow::setActiveSubWindow(QWidget *window)
 {
-    if (!window) return;
+    if (!window) {
+        unsetActiveView();
+        return;
+    }
     QMdiSubWindow *subwin = qobject_cast<QMdiSubWindow *>(window);
     //dbgKrita << "setActiveSubWindow();" << subwin << d->activeSubWindow;
 

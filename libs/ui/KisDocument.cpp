@@ -1676,11 +1676,17 @@ void KisDocument::finishExportInBackground()
 
 void KisDocument::setReadWrite(bool readwrite)
 {
+    const bool changed = readwrite != d->readwrite;
+
     d->readwrite = readwrite;
     setNormalAutoSaveInterval();
 
     Q_FOREACH (KisMainWindow *mainWindow, KisPart::instance()->mainWindows()) {
         mainWindow->setReadWrite(readwrite);
+    }
+
+    if (changed) {
+        Q_EMIT sigReadWriteChanged(readwrite);
     }
 }
 
@@ -1821,7 +1827,6 @@ bool KisDocument::importDocument(const QString &_path)
     if (ret) {
         dbgUI << "success, resetting url";
         resetPath();
-        setTitleModified();
     }
 
     return ret;
@@ -2051,14 +2056,18 @@ void KisDocument::setModified(bool mod)
         documentInfo()->updateParameters();
     }
 
-    // This influences the title
-    setTitleModified();
     emit modified(mod);
 }
 
 void KisDocument::setRecovered(bool value)
 {
+    const bool changed = value != d->isRecovered;
+
     d->isRecovered = value;
+
+    if (changed) {
+        Q_EMIT sigRecoveredChanged(value);
+    }
 }
 
 bool KisDocument::isRecovered() const
@@ -2106,11 +2115,6 @@ QString KisDocument::caption() const
     }
 
     return c;
-}
-
-void KisDocument::setTitleModified()
-{
-    emit titleModified(caption(), isModified());
 }
 
 QDomDocument KisDocument::createDomDocument(const QString& tagName, const QString& version) const
@@ -2466,7 +2470,13 @@ bool KisDocument::closePath(bool promptToSave)
 
 void KisDocument::setPath(const QString &path)
 {
+    const bool changed = path != d->m_path;
+
     d->m_path = path;
+
+    if (changed) {
+        Q_EMIT sigPathChanged(path);
+    }
 }
 
 QString KisDocument::localFilePath() const

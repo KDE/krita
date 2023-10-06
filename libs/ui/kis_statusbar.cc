@@ -334,8 +334,6 @@ void KisStatusBar::updateMemoryStatus()
     m_memoryReportBox->setMaximumMemory(stats.totalMemoryLimit);
     m_memoryReportBox->setCurrentMemory(stats.totalMemorySize);
     m_memoryReportBox->setImageWeight(stats.imageSize);
-
-    emit memoryStatusUpdated();
 }
 
 void KisStatusBar::showMemoryInfoToolTip()

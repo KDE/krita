@@ -1093,11 +1093,6 @@ void KisViewManager::slotSaveIncremental()
     document()->setFileBatchMode(false);
     KisPart::instance()->queueAddRecentURLToAllMainWindowsOnFileSaved(QUrl::fromLocalFile(newFilePath),
                                                                       QUrl::fromLocalFile(document()->path()));
-
-    if (mainWindow()) {
-        mainWindow()->updateCaption();
-    }
-
 }
 
 void KisViewManager::slotSaveIncrementalBackup()
@@ -1170,8 +1165,6 @@ void KisViewManager::slotSaveIncrementalBackup()
         }
         QFile::copy(path + '/' + fileName, path + '/' + backupFileName);
         document()->saveAs(path + '/' + fileName, document()->mimeType(), true);
-
-        if (mainWindow()) mainWindow()->updateCaption();
     }
     else { // if NOT working on a backup...
         // Navigate directory searching for latest backup version, ignore letters
@@ -1209,8 +1202,6 @@ void KisViewManager::slotSaveIncrementalBackup()
         QFile::copy(path + '/' + fileName, path + '/' + backupFileName);
         document()->saveAs(path + '/' + fileName, document()->mimeType(), true);
         document()->setFileBatchMode(false);
-
-        if (mainWindow()) mainWindow()->updateCaption();
     }
 }
 

@@ -690,7 +690,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                                     fillType = psd_fill_solid_color;
                                 } else if (g) {
                                     psd_layer_gradient_fill fill;
-                                    fill.setGradient(KoStopGradient::fromQGradient(g->gradient()));
+                                    fill.setFromQGradient(g->gradient());
                                     fillConfig = fill.getASLXML();
                                     fillType = psd_fill_gradient;
                                 } else if (p) {

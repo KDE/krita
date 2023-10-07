@@ -541,20 +541,72 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
             }
         }
         if (pointer) {
-            if (repeat == "alternate") {
-                pointer->setSpread(QGradient::ReflectSpread);
-            }
             pointer->setCoordinateMode(QGradient::ObjectBoundingMode);
+
+            if (reverse) {
+                QGradientStops newStops;
+                Q_FOREACH(QGradientStop stop, pointer->stops()) {
+                    newStops.append(QPair<double, QColor>(1.0-stop.first, stop.second));
+                }
+                pointer->setStops(newStops);
+            }
+
             QLinearGradient *g = static_cast<QLinearGradient*>(pointer);
-            if (g) {
-                g->setStart(QPointF(0,0.5));
-                g->setFinalStop(QPointF(1.0, 0.5));
-                pointer = g;
+            QLineF line = QLineF::fromPolar(0.5*(scale*0.01), angle);
+            line.translate(QPointF(0.5, 0.5)+(offset*0.01));
+
+            if (style == "radial") {
+                QRadialGradient *r = new QRadialGradient(line.p1(), line.length());
+                r->setCoordinateMode(QGradient::ObjectBoundingMode);
+
+                r->setSpread(pointer->spread());
+                r->setStops(pointer->stops());
+                pointer = r;
+
+            } else if (style == "bilinear") {
+                QLinearGradient *b = new QLinearGradient();
+                Q_FOREACH(QGradientStop stop, pointer->stops()) {
+                    double pos = 0.5 - stop.first*0.5;
+                    b->setColorAt(pos, stop.second);
+                    double pos2 = 1.0 - pos;
+                    if (pos != pos2) {
+                        b->setColorAt(pos2, stop.second);
+                    }
+                }
+                b->setCoordinateMode(QGradient::ObjectBoundingMode);
+
+                b->setFinalStop(line.p2());
+                line.setAngle(180+angle);
+                b->setStart(line.p2());
+                pointer = b;
+            } else if (g) {
+                g->setFinalStop(line.p2());
+                line.setAngle(180+angle);
+                g->setStart(line.p2());
             }
         }
 
         return pointer;
     }
+
+    void setFromQGradient(const QGradient *gradient) {
+        setGradient(KoStopGradient::fromQGradient(gradient));
+        if (gradient->type() == QGradient::LinearGradient) {
+            const QLinearGradient *g = static_cast<const QLinearGradient*>(gradient);
+            QLineF line(g->start(), g->finalStop());
+            offset = (line.center()-QPointF(0.5, 0.5))*100.0;
+            angle = line.angle();
+            scale = (line.length())*100.0;
+            style = "linear";
+        } else {
+            const QRadialGradient *g = static_cast<const QRadialGradient*>(gradient);
+            offset = (g->center()-QPointF(0.5, 0.5)) * 100.0;
+            angle = 0;
+            scale = (g->radius()*2) * 100.0;
+            style = "radial";
+        }
+    }
+
     QSharedPointer<KoShapeBackground> getBackground() {
         QGradient *pointer = getGradient();
         QSharedPointer<KoGradientBackground> bg = QSharedPointer<KoGradientBackground>(new KoGradientBackground(pointer));
@@ -1028,7 +1080,7 @@ struct KRITAPSD_EXPORT psd_vector_stroke_data {
         if (gradient) {
             w.enterDescriptor("strokeStyleContent", "", "gradientLayer");
             psd_layer_gradient_fill fill;
-            fill.setGradient(KoStopGradient::fromQGradient(pen.brush().gradient()));
+            fill.setFromQGradient(pen.brush().gradient());
             fill.writeASL(w);
             w.leaveDescriptor();
         } else {

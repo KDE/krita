@@ -675,6 +675,8 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                             if (pathShape){
                                 layerRecord->addPathShapeToPSDPath(vectorMask.path, pathShape, vectorWidth, vectorHeight);
                                 KoColorBackground *b = dynamic_cast<KoColorBackground *>(pathShape->background().data());
+                                KoGradientBackground *g = dynamic_cast<KoGradientBackground *>(pathShape->background().data());
+                                KoPatternBackground *p = dynamic_cast<KoPatternBackground *>(pathShape->background().data());
                                 if (b) {
                                     psd_layer_solid_color fill;
 
@@ -686,6 +688,15 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                                     fill.setColor(KoColor(b->color(), fill.cs));
                                     fillConfig = fill.getASLXML();
                                     fillType = psd_fill_solid_color;
+                                } else if (g) {
+                                    psd_layer_gradient_fill fill;
+                                    fill.setGradient(KoStopGradient::fromQGradient(g->gradient()));
+                                    fillConfig = fill.getASLXML();
+                                    fillType = psd_fill_gradient;
+                                } else if (p) {
+                                    psd_layer_pattern_fill fill;
+                                    fillConfig = fill.getASLXML();
+                                    fillType = psd_fill_pattern;
                                 } else if (!pathShape->background()) {
                                     psd_layer_solid_color fill;
 

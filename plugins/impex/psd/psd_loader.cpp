@@ -389,24 +389,13 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                             QColor c = fill.getBrush().color();
                             c.setAlphaF(data.opacity);
                             stroke->setColor(c);
-                            if (!grad.getBrush().isOpaque()) {
-                                stroke->setLineBrush(fill.getBrush());
-                            } else {
+                            if (grad.getBrush().gradient()) {
                                 stroke->setLineBrush(grad.getBrush());
                             }
                         } else {
                             stroke->setColor(Qt::transparent);
                         }
-                        stroke->setLineWidth(data.pen.widthF());
-                        stroke->setCapStyle(data.pen.capStyle());
-                        stroke->setJoinStyle(data.pen.joinStyle());
-                        stroke->setDashOffset(data.pen.dashOffset());
-                        stroke->setMiterLimit(data.pen.miterLimit());
-                        if (data.dashPattern.isEmpty()) {
-                            stroke->setLineStyle(Qt::SolidLine, QVector<double>());
-                        } else {
-                            stroke->setLineStyle(Qt::CustomDashLine, data.dashPattern);
-                        }
+                        data.setupShapeStroke(stroke);
 
                         vectorMask->setStroke(stroke);
                     }

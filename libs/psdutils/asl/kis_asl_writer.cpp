@@ -81,7 +81,9 @@ void parseElement(const QDomElement &el, QIODevice &device, bool forceTypeInfo =
         double v = KisDomUtils::toDouble(el.attribute("value", "0"));
         QString unit = el.attribute("unit", "#Pxl");
 
-        writeVarString<byteOrder>(key, device);
+        if (!key.isEmpty()) {
+            writeVarString<byteOrder>(key, device);
+        }
         writeFixedString<byteOrder>("UntF", device);
         writeFixedString<byteOrder>(unit, device);
         SAFE_WRITE_EX(byteOrder, device, v);

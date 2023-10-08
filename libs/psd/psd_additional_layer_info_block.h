@@ -541,7 +541,8 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
             }
         }
         if (pointer) {
-            pointer->setCoordinateMode(QGradient::ObjectBoundingMode);
+            QGradient::CoordinateMode mode = QGradient::ObjectBoundingMode;
+            pointer->setCoordinateMode(mode);
 
             if (reverse) {
                 QGradientStops newStops;
@@ -557,7 +558,7 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
 
             if (style == "radial") {
                 QRadialGradient *r = new QRadialGradient(line.p1(), line.length());
-                r->setCoordinateMode(QGradient::ObjectBoundingMode);
+                r->setCoordinateMode(mode);
 
                 r->setSpread(pointer->spread());
                 r->setStops(pointer->stops());
@@ -573,7 +574,7 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
                         b->setColorAt(pos2, stop.second);
                     }
                 }
-                b->setCoordinateMode(QGradient::ObjectBoundingMode);
+                b->setCoordinateMode(mode);
 
                 b->setFinalStop(line.p2());
                 line.setAngle(180+angle);
@@ -591,6 +592,9 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
 
     void setFromQGradient(const QGradient *gradient) {
         setGradient(KoStopGradient::fromQGradient(gradient));
+        if (gradient->coordinateMode() == QGradient::ObjectBoundingMode) {
+            align_with_layer = true;
+        }
         if (gradient->type() == QGradient::LinearGradient) {
             const QLinearGradient *g = static_cast<const QLinearGradient*>(gradient);
             QLineF line(g->start(), g->finalStop());

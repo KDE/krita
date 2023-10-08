@@ -415,20 +415,31 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 KisShapeLayerSP textLayer = new KisShapeLayer(m_doc->shapeController(), m_image, layerRecord->layerName, layerRecord->opacity);
                 KisAslCallbackObjectCatcher catcher;
                 psd_layer_type_shape text;
-                catcher.subscribeRawData("/TxLr/EngineData", std::bind(&psd_layer_type_shape::setEngineData, &text, _1));
-                catcher.subscribeEnum("/TxLr/Ornt", "Ornt", std::bind(&psd_layer_type_shape::setWritingMode, &text, _1));
+                psd_layer_type_shape::setupCatcher(QString(), catcher, &text);
                 KisAslXmlParser parser;
                 parser.parseXML(layerRecord->infoBlocks.textData, catcher);
                 KoSvgTextShape *shape = new KoSvgTextShape();
                 KoSvgTextShapeMarkupConverter converter(shape);
                 QString svg;
                 QString styles;
-                bool res = converter.convertPSDTextEngineDataToSVG(text.engineData, &svg, text.isHorizontal);
+                QPointF offset1;
+                bool res = converter.convertPSDTextEngineDataToSVG(text.engineData, &svg, &styles, offset1, text.isHorizontal);
                 if (!res) {
                     qDebug() << converter.errors();
                 }
                 converter.convertFromSvg(svg, styles, m_image->bounds(), m_image->xRes()*72.0);
-                shape->setTransformation(layerRecord->infoBlocks.textTransform);
+                if (!offset1.isNull()) {
+                    QPointF offset2 = shape->position() - shape->boundingRect().topLeft();
+                    if (text.isHorizontal) {
+                        offset2.setX(offset1.x());
+                    } else {
+                        offset2.setY(offset1.x());
+                    }
+                    shape->setTransformation(QTransform::fromTranslate(offset2.x(), offset2.y())
+                                             * layerRecord->infoBlocks.textTransform);
+                } else {
+                    shape->setTransformation(layerRecord->infoBlocks.textTransform);
+                }
                 textLayer->addShape(shape);
                 layer = textLayer;
             } else {

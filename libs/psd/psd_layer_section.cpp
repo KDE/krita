@@ -666,10 +666,18 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                             QString svgtext;
                             QString styles;
                             convert.convertToSvg(&svgtext, &styles);
-                            convert.convertToPSDTextEngineData(svgtext, &textData.engineData, textData.text, textData.isHorizontal);
-                            textData.boundingBox = text->outlineRect();
+                            // unsure about the bounds, needs more research.
+                            textData.boundingBox = text->boundingRect().normalized();
+                            textData.bounds = text->outlineRect().normalized();
+                            textData.bounds.setTopLeft(QPointF());
+                            convert.convertToPSDTextEngineData(svgtext, textData.bounds, &textData.engineData, textData.text, textData.isHorizontal);
                             textData.textIndex = 0;
-                            textData.transform = text->absoluteTransformation()/* * FlaketoPixels*/;
+                            if (text->outlineRect().topLeft().isNull()) {
+                                textData.transform = text->absoluteTransformation()/* * FlaketoPixels*/;
+                            } else {
+                                QTransform offset = QTransform::fromTranslate(text->outlineRect().topLeft().x(), text->outlineRect().topLeft().y());
+                                textData.transform = offset * text->absoluteTransformation()/* * FlaketoPixels*/;
+                            }
                         } else {
                             KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shapeLayer->shapes().first());
                             if (pathShape){

@@ -1639,7 +1639,7 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
     return styles.join("; ");
 }
 
-bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba, QString *svgText, bool isHorizontal)
+bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba, QString *svgText, QString *svgStyles, QPointF &offset, bool isHorizontal)
 {
     debugFlake << "Convert from psd engine data";
 
@@ -1685,7 +1685,9 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
         }
     }
     QString paragraphStyle = isHorizontal? "writing-mode: horizontal-tb;": "writing-mode: vertical-rl;";
+    paragraphStyle += " white-space: pre-wrap;";
     QString inlineSize;
+    QRectF bounds;
 
     QJsonObject rendered = engineDict["Rendered"].toObject();
     // rendering info...
@@ -1694,11 +1696,11 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
         int shapeType = shapeChild["ShapeType"].toInt();
         if (shapeType == 1) {
             QJsonArray BoxBounds = shapeChild["Cookie"].toObject()["Photoshop"].toObject()["BoxBounds"].toArray();
-            
+            bounds = QRectF(BoxBounds[0].toDouble(), BoxBounds[1].toDouble(), BoxBounds[2].toDouble(), BoxBounds[3].toDouble());
             if (isHorizontal) {
-                inlineSize = " inline-size:"+QString::number(BoxBounds[2].toDouble())+";";
+                inlineSize = " inline-size:"+QString::number(bounds.width())+";";
             } else {
-                inlineSize = " inline-size:"+QString::number(BoxBounds[3].toDouble())+";";
+                inlineSize = " inline-size:"+QString::number(bounds.height())+";";
             }
         }
     }
@@ -1742,9 +1744,30 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
     QJsonObject documentResources = root["DocumentResources"].toObject();
 
     QBuffer svgBuffer;
+    QBuffer styleBuffer;
     svgBuffer.open(QIODevice::WriteOnly);
+    styleBuffer.open(QIODevice::WriteOnly);
 
     QXmlStreamWriter svgWriter(&svgBuffer);
+    QXmlStreamWriter stylesWriter(&styleBuffer);
+    stylesWriter.writeStartElement("defs");
+    if (bounds.isValid()) {
+        stylesWriter.writeStartElement("rect");
+        stylesWriter.writeAttribute("id", "bounds");
+        stylesWriter.writeAttribute("x", QString::number(bounds.x()));
+        stylesWriter.writeAttribute("y", QString::number(bounds.y()));
+        stylesWriter.writeAttribute("width", QString::number(bounds.width()));
+        stylesWriter.writeAttribute("height", QString::number(bounds.height()));
+        stylesWriter.writeEndElement();
+    }
+    if (textShape) {
+        stylesWriter.writeStartElement("path");
+        stylesWriter.writeAttribute("id", "textShape");
+        stylesWriter.writeAttribute("d", textShape->toString());
+        stylesWriter.writeAttribute("sodipodi:nodetypes", textShape->nodeTypes());
+        stylesWriter.writeEndElement();
+    }
+
 
     // disable auto-formatting to avoid axtra spaces appearing here and there
     svgWriter.setAutoFormatting(false);
@@ -1777,13 +1800,26 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
         QJsonArray runArray = paragraphRun["RunArray"].toArray();
         QJsonObject styleSheet = runArray[0].toObject()["ParagraphSheet"].toObject()["Properties"].toObject();
 
+        QString styleString = stylesForPSDParagraphSheet(styleSheet);
         if (textShape && textPathStartOffset < 0) {
-            paragraphStyle += " shape-inside:path('"+textShape->toString()+"'); ";
-        } else {
+            paragraphStyle += " shape-inside:url(#textShape);";
+        } else if (styleString.contains("text-align:justify") && bounds.isValid()) {
+            paragraphStyle += " shape-inside:url(#bounds);";
+        } else if (bounds.isValid()){
+            offset = isHorizontal? bounds.topLeft(): bounds.topRight();
+            if (styleString.contains("text-anchor:middle")) {
+                offset = isHorizontal? QPointF(bounds.center().x(), offset.y()):
+                                       QPointF(offset.x(), bounds.center().y());
+            } else if (styleString.contains("text-anchor:end")) {
+                offset = isHorizontal? QPointF(bounds.right(), offset.y()):
+                                       QPointF(offset.x(), bounds.bottom());
+            }
             paragraphStyle += inlineSize;
+            svgWriter.writeAttribute("transform", QString("translate(%1, %2)").arg(offset.x()).arg(offset.y()));
         }
-        paragraphStyle += stylesForPSDParagraphSheet(styleSheet);
+        paragraphStyle += styleString;
         svgWriter.writeAttribute("style", paragraphStyle);
+
     }
 
     bool textPathCreated = false;
@@ -1837,12 +1873,14 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
     }
 
     svgWriter.writeEndElement();//text root element.
+    stylesWriter.writeEndElement();
 
-    if (svgWriter.hasError()) {
+    if (svgWriter.hasError() || stylesWriter.hasError()) {
         d->errors << i18n("Unknown error writing SVG text element");
         return false;
     }
     *svgText = QString::fromUtf8(svgBuffer.data()).trimmed();
+    *svgStyles = QString::fromUtf8(styleBuffer.data()).trimmed();
 
     return true;
 }
@@ -2058,7 +2096,7 @@ void gatherStyles(QDomElement el, QString &text, QJsonObject parentStyle, QMap<Q
     }
 }
 
-QJsonObject gatherParagraphStyle(QDomElement el, QJsonObject defaultProperties, bool &isHorizontal) {
+QJsonObject gatherParagraphStyle(QDomElement el, QJsonObject defaultProperties, bool &isHorizontal, QString *inlineSize) {
     QString cssStyle = el.attribute("style");
     QStringList dummy = cssStyle.split(";");
     QMap<QString, QString> cssStyles;
@@ -2067,13 +2105,17 @@ QJsonObject gatherParagraphStyle(QDomElement el, QJsonObject defaultProperties, 
         QString val = style.split(":").last().trimmed();
         cssStyles.insert(key, val);
     }
+    if (el.hasAttribute("text-anchor")) {
+        cssStyles.insert("text-anchor", el.attribute("text-anchor", "start"));
+    }
+    int alignVal = 0;
+    int anchorVal = 0;
 
     QJsonObject paragraphStyleSheet = defaultProperties;
     Q_FOREACH(QString key, cssStyles.keys()) {
         QString val = cssStyles.value(key);
 
         if (key == "text-align") {
-            int alignVal = 0;
             if (val == "start") {alignVal = 0;}
             if (val == "center") {alignVal = 2;}
             if (val == "end") {alignVal = 1;}
@@ -2081,7 +2123,11 @@ QJsonObject gatherParagraphStyle(QDomElement el, QJsonObject defaultProperties, 
             if (val == "justify center") {alignVal = 4;}
             if (val == "justify end") {alignVal = 5;}
             if (val == "justify") {alignVal = 6;}
-            paragraphStyleSheet["Justification"] = alignVal;
+        }
+        if (key == "text-anchor") {
+            if (val == "start") {anchorVal = 0;}
+            if (val == "middle") {anchorVal = 2;}
+            if (val == "end") {anchorVal = 1;}
         }
         if (key == "writing-mode") {
             if (val == "horizontal-tb") {
@@ -2090,11 +2136,19 @@ QJsonObject gatherParagraphStyle(QDomElement el, QJsonObject defaultProperties, 
                 isHorizontal = false;
             }
         }
+        if (key == "inline-size") {
+            *inlineSize = val;
+        }
+    }
+    if (cssStyles.keys().contains("shape-inside")) {
+        paragraphStyleSheet["Justification"] = alignVal;
+    } else {
+        paragraphStyleSheet["Justification"] = anchorVal;
     }
     return QJsonObject{{"DefaultStyleSheet", 0},{"Properties", paragraphStyleSheet}};
 }
 
-bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &svgText, QByteArray *ba, QString &textTotal, bool &isHorizontal)
+bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &svgText, const QRectF boundingBox, QByteArray *ba, QString &textTotal, bool &isHorizontal)
 {
     QJsonObject root;
 
@@ -2185,7 +2239,9 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     QDomDocument doc;
     doc.setContent(svgText);
     gatherStyles(doc.documentElement(), text, QJsonObject(), QMap<QString, QString>(), styles, styleRunArray, fontSet);
-    QJsonObject paragraphStyle = gatherParagraphStyle(doc.documentElement(), defaultParagraphProps, isHorizontal);
+
+    QString inlineSize;
+    QJsonObject paragraphStyle = gatherParagraphStyle(doc.documentElement(), defaultParagraphProps, isHorizontal, &inlineSize);
 
     QJsonObject editor;
     editor["Text"] = text;
@@ -2240,8 +2296,22 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
 
     resourceDict["FontSet"] = fontSet;
 
+    QRectF bounds;
+    if (!(inlineSize.isEmpty() || inlineSize == "auto")) {
+        bounds = boundingBox;
+        bool ok;
+        double inlineSizeVal = inlineSize.toDouble(&ok);
+        if (ok) {
+            if (isHorizontal) {
+                bounds.setWidth(inlineSizeVal);
+            } else {
+                bounds.setHeight(inlineSizeVal);
+            }
+        }
+    }
+
     QJsonObject rendered;
-    int shapeType = 0; // 0 point, 1 paragraph, but what does that make text-on-path?
+    int shapeType = bounds.isEmpty()? 0: 1; // 0 point, 1 paragraph, but what does that make text-on-path?
     int writingDirection = 0;
     QJsonObject photoshop = QJsonObject {{"ShapeType", shapeType},
     {"TransformPoint0", QJsonArray({1.0, 0.0})},
@@ -2251,7 +2321,7 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
         photoshop["PointBase"] = QJsonArray({0.0, 0.0});
     } else if (shapeType == 1) {
         // this is the bounding box of the paragraph shape.
-        photoshop["BoxBounds"] = QJsonArray({0.0, 0.0, 100, 50});
+        photoshop["BoxBounds"] = QJsonArray({bounds.x(), bounds.y(), bounds.width(), bounds.height()});
     }
     QJsonObject renderChild = QJsonObject{
     {"ShapeType", shapeType},

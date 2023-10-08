@@ -849,6 +849,15 @@ struct KRITAPSD_EXPORT psd_layer_type_shape {
         }
     }
 
+    static void setupCatcher(const QString path, KisAslCallbackObjectCatcher &catcher, psd_layer_type_shape *data) {
+        catcher.subscribeRawData(path + "/TxLr/EngineData", std::bind(&psd_layer_type_shape::setEngineData, data, std::placeholders::_1));
+        catcher.subscribeEnum(path + "/TxLr/Ornt", "Ornt", std::bind(&psd_layer_type_shape::setWritingMode, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(path + "/TxLr/bounds/Left", "#Pnt", std::bind(&psd_layer_type_shape::setLeft, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(path + "/TxLr/bounds/Top ", "#Pnt", std::bind(&psd_layer_type_shape::setTop, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(path + "/TxLr/bounds/Rght", "#Pnt", std::bind(&psd_layer_type_shape::setRight, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(path + "/TxLr/bounds/Btom", "#Pnt", std::bind(&psd_layer_type_shape::setBottom, data, std::placeholders::_1));
+    }
+
     QDomDocument textDataASLXML() {
         KisAslXmlWriter w;
         w.enterDescriptor("", "", "TxLr");

@@ -1554,6 +1554,7 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
             continue;
         } else if (key == "Language") {
             // This is an enum... which terrifies me.
+            // language is one of pt, pt-BR, fr, fr-CA, de, de-1901, gsw, nl, en-UK, en-US, fi, it, nb, nn, es, sv
             continue;
         }*/ else if (key == "NoBreak") {
             // Prevents word from breaking... I guess word-break???
@@ -1703,6 +1704,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
                 inlineSize = " inline-size:"+QString::number(bounds.height())+";";
             }
         }
+        qDebug() << bounds;
     }
 
     
@@ -1801,21 +1803,23 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
         QJsonObject styleSheet = runArray[0].toObject()["ParagraphSheet"].toObject()["Properties"].toObject();
 
         QString styleString = stylesForPSDParagraphSheet(styleSheet);
-        if (textShape && textPathStartOffset < 0) {
-            paragraphStyle += " shape-inside:url(#textShape);";
-        } else if (styleString.contains("text-align:justify") && bounds.isValid()) {
-            paragraphStyle += " shape-inside:url(#bounds);";
-        } else if (bounds.isValid()){
-            offset = isHorizontal? bounds.topLeft(): bounds.topRight();
-            if (styleString.contains("text-anchor:middle")) {
-                offset = isHorizontal? QPointF(bounds.center().x(), offset.y()):
-                                       QPointF(offset.x(), bounds.center().y());
-            } else if (styleString.contains("text-anchor:end")) {
-                offset = isHorizontal? QPointF(bounds.right(), offset.y()):
-                                       QPointF(offset.x(), bounds.bottom());
+        if (textPathStartOffset < 0) {
+            if (textShape) {
+                paragraphStyle += " shape-inside:url(#textShape);";
+            } else if (styleString.contains("text-align:justify") && bounds.isValid()) {
+                paragraphStyle += " shape-inside:url(#bounds);";
+            } else if (bounds.isValid()){
+                offset = isHorizontal? bounds.topLeft(): bounds.topRight();
+                if (styleString.contains("text-anchor:middle")) {
+                    offset = isHorizontal? QPointF(bounds.center().x(), offset.y()):
+                                           QPointF(offset.x(), bounds.center().y());
+                } else if (styleString.contains("text-anchor:end")) {
+                    offset = isHorizontal? QPointF(bounds.right(), offset.y()):
+                                           QPointF(offset.x(), bounds.bottom());
+                }
+                paragraphStyle += inlineSize;
+                svgWriter.writeAttribute("transform", QString("translate(%1, %2)").arg(offset.x()).arg(offset.y()));
             }
-            paragraphStyle += inlineSize;
-            svgWriter.writeAttribute("transform", QString("translate(%1, %2)").arg(offset.x()).arg(offset.y()));
         }
         paragraphStyle += styleString;
         svgWriter.writeAttribute("style", paragraphStyle);

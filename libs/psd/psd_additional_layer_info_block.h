@@ -596,6 +596,9 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
             QLineF line(g->start(), g->finalStop());
             offset = (line.center()-QPointF(0.5, 0.5))*100.0;
             angle = line.angle();
+            if (angle > 180) {
+                angle = (0.0 - fmod(angle, 180.0));
+            }
             scale = (line.length())*100.0;
             style = "linear";
         } else {
@@ -993,9 +996,9 @@ struct KRITAPSD_EXPORT psd_vector_stroke_data {
     }
 
     void appendToDashPattern(double val) {
-        if (val > 0) {
-            dashPattern.append(val);
-        }
+        // QPen doesn't like 0 in the dash pattern,
+        // even though it's necessary for some styles
+        dashPattern.append(qMax(val, 1e-6));
     }
     void setOpacityFromPercentage(double o) {
         opacity = o * 0.01;
@@ -1067,8 +1070,12 @@ struct KRITAPSD_EXPORT psd_vector_stroke_data {
         w.writeBoolean("strokeStyleStrokeAdjust", false);
         
         w.enterList("strokeStyleLineDashSet");
-        Q_FOREACH(double val, dashPattern) {
-            w.writeUnitFloat("", "#Nne", val);
+        Q_FOREACH(const double val, dashPattern) {
+            if (val <= 1e-6) {
+                 w.writeUnitFloat("", "#Nne", 0);
+            } else {
+                w.writeUnitFloat("", "#Nne", val);
+            }
         }
         w.leaveList();
         

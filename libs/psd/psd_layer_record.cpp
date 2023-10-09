@@ -947,7 +947,11 @@ KoPathShape *PSDLayerRecord::constructPathShape(psd_path path, double shapeWidth
                 shape->moveTo(tf.map(node.node));
             } else {
                 psd_path_node previousNode = subPath.nodes.at(i-1);
-                shape->curveTo(tf.map(previousNode.control2), tf.map(node.control1), tf.map(node.node));
+                if (previousNode.node == previousNode.control2 && node.node == node.control1) {
+                    shape->lineTo(tf.map(node.node));
+                } else {
+                    shape->curveTo(tf.map(previousNode.control2), tf.map(node.control1), tf.map(node.node));
+                }
             }
             if (node.isSmooth) {
                 nodeTypes.append("s");
@@ -956,7 +960,13 @@ KoPathShape *PSDLayerRecord::constructPathShape(psd_path path, double shapeWidth
             }
         }
         if (subPath.isClosed) {
-            shape->curveTo(tf.map(subPath.nodes.last().control2), tf.map(subPath.nodes.first().control1), tf.map(subPath.nodes.first().node));
+            psd_path_node lastNode = subPath.nodes.last();
+            psd_path_node firstNode = subPath.nodes.first();
+            if (lastNode.node == lastNode.control2 && firstNode.node == firstNode.control1) {
+                shape->lineTo(tf.map(firstNode.node));
+            } else {
+                shape->curveTo(tf.map(lastNode.control2), tf.map(firstNode.control1), tf.map(firstNode.node));
+            }
             shape->closeMerge();
         }
     }

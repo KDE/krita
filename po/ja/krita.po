@@ -14061,12 +14061,10 @@ msgstr "カーソル周辺を上下/左右対称表示"
 #. i18n: context: iconText @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:752 krita/kritamenu.action:754
 #: krita/kritamenu.action:755
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror View Around Cursor"
+#, kde-format
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr "カーソル周辺を上下/左右対称表示"
+msgstr "キャンバス周辺を左右反転表示"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
@@ -16077,10 +16075,9 @@ msgstr ""
 
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:28
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:35
-#, fuzzy, kde-format
-#| msgid "could not save palettes"
+#, kde-format
 msgid "Could not access brush tip metadata"
-msgstr "パレットを保存できませんでした"
+msgstr "ブラシ形状のメタデータにアクセスできませんでした"
 
 #: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
 #, kde-format
@@ -17206,8 +17203,7 @@ msgstr "選択マスク"
 
 #: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2577
 #: plugins/impex/psd/psd_loader.cpp:193
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "背景"
@@ -20054,8 +20050,7 @@ msgid "Tag Url"
 msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:670
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource"
 msgstr "リソース"
 
@@ -25947,9 +25942,7 @@ msgstr "累積で元に戻すを有効化"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1511
-#, fuzzy, kde-format
-#| msgctxt "Tablet mapping settings"
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "詳細..."
 
@@ -29419,10 +29412,9 @@ msgid "Mirror View Around Cursor"
 msgstr "カーソル周辺を左右反転表示"
 
 #: libs/ui/kis_mirror_manager.cpp:48
-#, fuzzy, kde-format
-#| msgid "Mirror View Around Cursor"
+#, kde-format
 msgid "Mirror View Around Canvas"
-msgstr "カーソル周辺を左右反転表示"
+msgstr "キャンバス周辺を左右反転表示"
 
 #: libs/ui/kis_node_manager.cpp:453
 #, kde-format
@@ -30353,18 +30345,16 @@ msgid "%1 cannot be written to. Please save under a different name."
 msgstr "%1 には書き込みできません。別の名前で保存してください。"
 
 #: libs/ui/KisDocument.cpp:783
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL errors"
-#| msgid "Unable to read the image profile."
+#, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr "画像プロファイルを読み込めませんでした。"
+msgstr "バックアップファイルの作成に失敗しました。"
 
 #: libs/ui/KisDocument.cpp:800
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr ""
+msgstr "番号付きバックアップファイルの作成に失敗しました。"
 
 #: libs/ui/KisDocument.cpp:822
 #, kde-format
@@ -30391,14 +30381,9 @@ msgid "Error during saving %1: %2"
 msgstr "保存中のエラー %1: %2"
 
 #: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save\n"
-#| "%1"
+#, kde-format
 msgid "Could not save %1."
-msgstr ""
-"保存に失敗しました\n"
-"%1"
+msgstr "%1 の保存に失敗しました。"
 
 #: libs/ui/KisDocument.cpp:999
 #, kde-format
@@ -30409,19 +30394,11 @@ msgid "%1 has been saved but is incomplete."
 msgstr ""
 
 #: libs/ui/KisDocument.cpp:1005
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "dialog box shown to the user if there were warnings while saving the "
-#| "document, %1 is the file path"
-#| msgid ""
-#| "%1 has been saved but is incomplete.\n"
-#| "The following problems were encountered when saving:"
+#, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
-msgstr ""
-"%1 は保存されましたが、不完全です。\n"
-"保存時に次の問題が発生しました:"
+msgstr "保存時に問題が発生しました。"
 
 #: libs/ui/KisDocument.cpp:1022
 #, kde-format
@@ -34322,24 +34299,22 @@ msgid "Symmetric Difference"
 msgstr "対称差分"
 
 #: libs/ui/widgets/kis_selection_options.cc:233
-#, fuzzy, kde-format
-#| msgid "Set line width of actual selection"
+#, kde-format
 msgid "Smooths the edges of the selection"
-msgstr "実際の選択オブジェクトの線幅を設定"
+msgstr "選択範囲の沿面を平滑化"
 
 #: libs/ui/widgets/kis_selection_options.cc:235
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Grow or shrink the selection by the set amount"
-msgstr "設定した値だけ選択範囲をぼかします"
+msgstr "設定された量で選択範囲を拡大/縮小"
 
 #: libs/ui/widgets/kis_selection_options.cc:237
 #: plugins/tools/basictools/kis_tool_fill.cc:628
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
-msgstr ""
+msgstr "最も暗い、または最も不透明なピクセルで拡張を停止します"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
@@ -34348,22 +34323,21 @@ msgid "Blur the selection by the set amount"
 msgstr "設定した値だけ選択範囲をぼかします"
 
 #: libs/ui/widgets/kis_selection_options.cc:242
-#, fuzzy, kde-format
-#| msgid "Obtain the region using the active layer"
+#, kde-format
 msgid "Select regions found from the active layer"
-msgstr "アクティブなレイヤーを用いて領域を取得する"
+msgstr "アクティブなレイヤーに存在する領域を選択します"
 
 #: libs/ui/widgets/kis_selection_options.cc:244
-#, fuzzy, kde-format
-#| msgid "Obtain the region using a merged copy of all layers"
+#, kde-format
 msgid "Select regions found from the merging of all layers"
-msgstr "すべてのレイヤーの統合済みコピーを用いて領域を取得する"
+msgstr "すべてのレイヤーを統合したものに存在する領域を選択します"
 
 #: libs/ui/widgets/kis_selection_options.cc:246
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
+"特定の色ラベルが付いているレイヤーを統合したものに存在する領域を選択します"
 
 #: libs/ui/widgets/kis_selection_options.cc:254
 #, kde-format
@@ -38254,13 +38228,11 @@ msgid "Dropped frames are not available in this Krita instance"
 msgstr "フレーム落ちしたフレームはこの Krita インスタンスでは使用できません"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:876
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add blank frame"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
-msgstr[0] "空フレームを挿入"
+msgstr[0] "%1 空フレームを 追加"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
@@ -38706,16 +38678,14 @@ msgid "Select a Directory"
 msgstr "ディレクトリを選択"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
-#, fuzzy, kde-format
-#| msgid "Export Composition"
+#, kde-format
 msgid "Exporting Compositions..."
-msgstr "レイヤー表示構成をエクスポート"
+msgstr "レイヤー表示構成をエクスポート..."
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
-#, fuzzy, kde-format
-#| msgid "Export Composition"
+#, kde-format
 msgid "Exporting composition: %1..."
-msgstr "レイヤー表示構成をエクスポート"
+msgstr "レイヤー表示構成をエクスポート: %1..."
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
 #, kde-format
@@ -39911,11 +39881,10 @@ msgstr "録画を削除"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRenderTimeTitle)
 #: plugins/dockers/recorder/recorder_export.ui:1026
-#, fuzzy, kde-format
-#| msgid "Render as:"
+#, kde-format
 msgctxt "How long it took to render the video"
 msgid "Render time:"
-msgstr "出力:"
+msgstr "レンダリング時間:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRestart)
 #: plugins/dockers/recorder/recorder_export.ui:1053
@@ -40309,9 +40278,7 @@ msgid "Snapshot Docker"
 msgstr "スナップショットドッキングパネル"
 
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:70
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - category HSY"
-#| msgid "HSY"
+#, kde-format
 msgid "HSY"
 msgstr "HSY"
 
@@ -40841,10 +40808,9 @@ msgstr "段階表示(&R)"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:560
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:767
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Orientation:"
-msgstr "方向"
+msgstr "向き:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryHorizontal)
@@ -40920,10 +40886,9 @@ msgstr "見本"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:356
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:687
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:894
-#, fuzzy, kde-format
-#| msgid "Max Patches: "
+#, kde-format
 msgid "Max Patches:"
-msgstr "最大表示色数: "
+msgstr "最大表示色数:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
@@ -40955,8 +40920,7 @@ msgstr "繰り返し処理数"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
-#, fuzzy, kde-format
-#| msgid "Line Count: "
+#, kde-format
 msgid "Line Count:"
 msgstr "列の数:"
 
@@ -41010,10 +40974,9 @@ msgstr "オフセット:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDisplay)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:157
-#, fuzzy, kde-format
-#| msgid "Display"
+#, kde-format
 msgid "Display:"
-msgstr "表示"
+msgstr "表示:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbSlider)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
@@ -41528,8 +41491,7 @@ msgstr "バージョン"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "File name"
 msgstr "ファイル名"
 
@@ -50583,10 +50545,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, haveAnimation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:37
-#, fuzzy, kde-format
-#| msgid "Save as animated JPEG-XL"
+#, kde-format
 msgid "Save as animated WebP"
-msgstr "アニメーション JPEG-XL として保存"
+msgstr "アニメーション WebP として保存"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreset)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:50
@@ -51020,9 +50981,7 @@ msgstr "最大幅"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:829
-#, fuzzy, kde-format
-#| msgctxt "JPEG metadata filter"
-#| msgid "Filters:"
+#, kde-format
 msgctxt "WebP metadata options"
 msgid "Filters:"
 msgstr "フィルタ:"
@@ -53235,15 +53194,13 @@ msgid "Hard"
 msgstr "ハード"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:74
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgctxt "Background painting color"
 msgid "Background"
-msgstr "背景"
+msgstr "背景色"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:75
-#, fuzzy, kde-format
-#| msgid "Foreground"
+#, kde-format
 msgctxt "Foreground painting color"
 msgid "Foreground"
 msgstr "描画色"
@@ -57221,10 +57178,9 @@ msgstr "特定色の範囲"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:621
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgid "Boundary color"
-msgstr "背景色"
+msgstr "境界の色"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:622
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
@@ -57244,37 +57200,31 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:624
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set if the contour of the current selection should be treated as a "
-#| "boundary when obtaining the region"
+#, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when filling the region"
 msgstr ""
-"チェックすると、領域を取得する際に現在の選択範囲の境界線を境界として扱いま"
-"す。"
+"チェックすると、領域を塗りつぶす際にアクティブな選択範囲の境界線を境界として"
+"扱います。"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:626
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
-#, fuzzy, kde-format
-#| msgid "Smooth the jagged edges"
+#, kde-format
 msgid "Smooths the edges of the fill"
-msgstr "ギザギザな沿面を平滑化"
+msgstr "塗りつぶしの沿面を平滑化"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:627
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Grow or shrink the fill by the set amount"
-msgstr "設定した値だけ選択範囲をぼかします"
+msgstr "設定された量で塗りつぶしを拡大/縮小"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:629
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Blur the fill by the set amount"
-msgstr "設定した値だけ選択範囲をぼかします"
+msgstr "設定した量だけ，塗りつぶしをぼかす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:631
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
@@ -57320,18 +57270,16 @@ msgid "Reset the options to their default values"
 msgstr "設定項目をデフォルトの値に戻す"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:647
-#, fuzzy, kde-format
-#| msgid "Simple mode"
+#, kde-format
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
-msgstr "シンプルモード"
+msgstr "塗りつぶしモード"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:654
-#, fuzzy, kde-format
-#| msgid "All Resources"
+#, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
-msgstr "すべてのリソース"
+msgstr "塗りつぶしのソース"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:668
 #, kde-format
@@ -57340,11 +57288,10 @@ msgid "Reference"
 msgstr "参照"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:677
-#, fuzzy, kde-format
-#| msgid "File extension:"
+#, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
-msgstr "ファイルの拡張子:"
+msgstr "塗りつぶしの範囲"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:689
 #, kde-format
@@ -57356,7 +57303,7 @@ msgstr "調整"
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
-msgstr ""
+msgstr "ドラッグ塗りつぶしモード"
 
 #: plugins/tools/basictools/kis_tool_fill.h:234
 #, kde-format
@@ -58467,15 +58414,12 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:410
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set if the contour of the current selection should be treated as a "
-#| "boundary when obtaining the region"
+#, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
-"チェックすると、領域を取得する際に現在の選択範囲の境界線を境界として扱いま"
+"チェックすると、新たに選択する際に現在の選択範囲の境界線を境界として扱いま"
 "す。"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
@@ -59782,26 +59726,22 @@ msgid "Reference"
 msgstr "参照"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:561
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparent regions"
+#, kde-format
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
-msgstr "透過の範囲"
+msgstr "対象の領域"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:571
-#, fuzzy, kde-format
-#| msgid "All Resources"
+#, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
-msgstr "すべてのリソース"
+msgstr "塗りつぶしのソース"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:585
-#, fuzzy, kde-format
-#| msgid "File extension:"
+#, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
-msgstr "ファイルの拡張子:"
+msgstr "塗りつぶしの範囲"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:594
 #, kde-format
@@ -59810,55 +59750,46 @@ msgid "Adjustments"
 msgstr "調整"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:848
-#, fuzzy, kde-format
-#| msgid "All"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "すべて"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:851
-#, fuzzy, kde-format
-#| msgid "Specific Color Selector"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
-msgstr "詳細色選択"
+msgstr "特定色"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "透過"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "All regions except those of a specific color or transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
-msgstr "特定色か透過を含むすべての範囲"
+msgstr "特定色もしくは透過"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions of a specific color"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
-msgstr "特定色の範囲"
+msgstr "すべて。特定色を含まない"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
-msgstr ""
+msgstr "すべて。透過を含まない"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "All regions except those of a specific color or transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
-msgstr "特定色か透過を含むすべての範囲"
+msgstr "すべて。特定色もしくは透過を含まない"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
 #, fuzzy, kde-format
@@ -60960,515 +60891,3 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
-
-#, fuzzy
-#~| msgid "Toolbars"
-#~ msgctxt "action"
-#~ msgid "Lock Toolbars"
-#~ msgstr "ツールバー"
-
-#~ msgid "Get your Krita Supporter Badge here!"
-#~ msgstr "あなたの支援者の証はここにあります!"
-
-#~ msgid "&Canvas"
-#~ msgstr "キャンバス(&C)"
-
-#~ msgctxt "action"
-#~ msgid "&Reset zoom"
-#~ msgstr "表示倍率をリセット(&R)"
-
-#~ msgctxt "action"
-#~ msgid "Reset zoom"
-#~ msgstr "表示倍率をリセット"
-
-#~ msgid ""
-#~ "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on "
-#~ "another free program called FFmpeg to turn frame-by-frame animations into "
-#~ "video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-#~ "i><br><br>            To learn more about setting up Krita for rendering "
-#~ "animations, <a href=\"https://docs.krita.org/en/reference_manual/"
-#~ "render_animation.html#setting-up-krita-for-exporting-animations\">please "
-#~ "visit this section of our User Manual.</a>"
-#~ msgstr ""
-#~ "<b>Krita は FFmpeg を見つけられませんでした!</b><br>                "
-#~ "<i>Krita はフレームごとのアニメーションを動画ファイルに変換する作業に、"
-#~ "FFmpeg という別のフリーソフトを使用しています。(<a href=\"https://www."
-#~ "ffmpeg.org\">www.ffmpeg.org</a>)</i><br><br>               アニメーション"
-#~ "をレンダリングするための Krita の設定の詳細については <a href=\"https://"
-#~ "docs.krita.org/en/reference_manual/render_animation.html#setting-up-krita-"
-#~ "for-exporting-animations\"> ユーザマニュアルのこの項目を参照してください。"
-#~ "</a>"
-
-#~ msgid "Please extract ffmpeg from the archive first."
-#~ msgstr "まずアーカイブから ffmpeg を取り出してください。"
-
-#~ msgid ""
-#~ "This is a source code archive. Please download the application archive "
-#~ "('Windows Builds'), unpack it and then provide the path to the extracted "
-#~ "ffmpeg file."
-#~ msgstr ""
-#~ "これはソースコード圧縮ファイルです。アプリケーションアーカイブ ('Windows "
-#~ "用ビルド') をダウンロードして展開し、取り出した ffmpeg ファイルへのパスを"
-#~ "指定してください。"
-
-#~ msgid "This is a source code archive. Please install ffmpeg instead."
-#~ msgstr ""
-#~ "これはソースコードのアーカイブです。代わりに ffmpeg をインストールしてくだ"
-#~ "さい。"
-
-#~ msgctxt "paletegen status mode option name"
-#~ msgid "Difference"
-#~ msgstr "Difference"
-
-#~ msgctxt "paleteuse dither option name"
-#~ msgid "none"
-#~ msgstr "none"
-
-#~ msgctxt "paleteuse diff mode option name"
-#~ msgid "none"
-#~ msgstr "none"
-
-#~ msgid "Choose a video file"
-#~ msgstr "動画ファイルを選択"
-
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
-#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">This video contains "
-#~ "more than 100 frames. Loading too many frames can overload your computer. "
-#~ "Use a</span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;"
-#~ "\"> </span><a href=\"https://kdenlive.org\"><span style=\" font-"
-#~ "size:16pt; font-weight:400; text-decoration: underline; color:#2980b9;"
-#~ "\">video editor </span></a><span style=\" font-size:16pt; font-"
-#~ "weight:400; color:#ff692e;\">instead!</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
-#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">この動画は100フレーム"
-#~ "以上あります。大量のフレームの読み込みは PC に負荷をかけます。Krita より</"
-#~ "span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;\"> </"
-#~ "span><a href=\"https://kdenlive.org\"><span style=\" font-size:16pt; font-"
-#~ "weight:400; text-decoration: underline; color:#2980b9;\">動画エディタ </"
-#~ "span></a><span style=\" font-size:16pt; font-weight:400; color:#ff692e;\">"
-#~ "を使用してください!</span></p></body></html>"
-
-#~ msgid "FFMpeg"
-#~ msgstr "FFMpeg"
-
-#~ msgid "Export:"
-#~ msgstr "エクスポート:"
-
-#~ msgid "Image Se&quence"
-#~ msgstr "画像シーケンス"
-
-#~ msgid "&Video"
-#~ msgstr "動画(&V)"
-
-#~ msgid "Video Options"
-#~ msgstr "動画のオプション"
-
-#~ msgid "FF&Mpeg: "
-#~ msgstr "FFMpeg(&M):"
-
-#~ msgid "Video Location:"
-#~ msgstr "動画の保存場所:"
-
-#, fuzzy
-#~| msgid ""
-#~| "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> you "
-#~| "need to restart Krita to enable or disable plugins.</p></body></html>"
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
-#~ "body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">注意: </span>プラ"
-#~ "グインを有効または無効にするには、Krita を再起動する必要があります。</p></"
-#~ "body></html>"
-
-#~ msgid "Image Sequence Options"
-#~ msgstr "連番画像のオプション"
-
-#~ msgctxt "floating on-canvas message"
-#~ msgid ""
-#~ "Cannot open audio: \"%1\"\n"
-#~ "Error: %2"
-#~ msgstr ""
-#~ "音声ファイル\"%1\"を開けません\n"
-#~ "エラー: %2"
-
-#~ msgid "Drag an image into the window to open"
-#~ msgstr "ウィンドウに画像をドラッグして開く"
-
-#~ msgid "New File"
-#~ msgstr "新しいファイル"
-
-#~ msgid "Recent Documents"
-#~ msgstr "最近開いたドキュメント"
-
-#~ msgid "HDR Warning.................................."
-#~ msgstr "HDR Warning.................................."
-
-#~ msgid "Grid Settings"
-#~ msgstr "グリッド設定"
-
-#~ msgid ""
-#~ "<b>Note: Krita will need to be restarted for changes to take effect</b>"
-#~ msgstr "<b>ノート: 変更を反映するには、Krita の再起動が必要です</b>"
-
-#~ msgid "Enable Smooth Zooming"
-#~ msgstr "滑らかなズームを有効化"
-
-#~ msgid "&Description:"
-#~ msgstr "付記(&D):"
-
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "フィルタ(&F):"
-
-#~ msgid "Duplicate current profile"
-#~ msgstr "現在のプロファイルを複製"
-
-#~ msgid "Select Layer Mode"
-#~ msgstr "レイヤー選択モード"
-
-#~ msgid "Select Multiple Layer Mode"
-#~ msgstr "複数レイヤー選択モード"
-
-#~ msgid "Reset Zoom to 100%"
-#~ msgstr "倍率を100%にリセット"
-
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr ""
-#~ "%1 の保存に失敗しました\n"
-#~ "理由: %2"
-
-#~ msgid ""
-#~ "Could not open %2.\n"
-#~ "Reason: %1"
-#~ msgstr ""
-#~ "%2 を開けませんでした。\n"
-#~ "理由: %1"
-
-#~ msgid "Unexpected error. Please contact developers."
-#~ msgstr "予期しないエラーが発生しました。開発者に連絡してください。"
-
-#~ msgctxt "Fetching remote image"
-#~ msgid "Do you want to download the image at %1?"
-#~ msgstr "画像を %1 からダウンロードしますか？"
-
-#~ msgid ""
-#~ "Grow (positive values) or shrink (negative values) the selection by the "
-#~ "set amount"
-#~ msgstr ""
-#~ "設定された値だけ選択範囲を拡張（正の値の場合）または縮小（負の値の場合）し"
-#~ "ます。"
-
-#~ msgid "Make the selection using the active layer"
-#~ msgstr "アクティブなレイヤーを使用して選択範囲を作成します"
-
-#~ msgid "Make the selection using a merged copy of all layers"
-#~ msgstr "すべてのレイヤーを統合した際のコピーを使用して選択範囲を作成します"
-
-#~ msgid ""
-#~ "Make the selection using a merged copy of the selected color-labeled "
-#~ "layers"
-#~ msgstr ""
-#~ "選択した色ラベルが付いているレイヤーを統合した際のコピーを使用して選択範囲"
-#~ "を作成します"
-
-#~ msgid "Fit Page"
-#~ msgstr "ページに合わせる"
-
-#~ msgid "Colu&mns:"
-#~ msgstr "列数(&M):"
-
-#~ msgid "&Rows:"
-#~ msgstr "行数(&R):"
-
-#~ msgid "HSV Sliders to Show"
-#~ msgstr "HSV スライダーを表示"
-
-#~ msgid "HSL Sliders to Show"
-#~ msgstr "HSL スライダーを表示"
-
-#~ msgid "HSI Sliders to Show"
-#~ msgstr "HSI スライダーを表示"
-
-#~ msgid "HSY' Sliders to Show"
-#~ msgstr "HSY' スライダーを表示"
-
-# normal distance + absolute value
-#~ msgid "Edit Audio:"
-#~ msgstr "音声を編集:"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Audio playback is not supported in this build!"
-#~ msgstr "このビルドでは音声の再生に対応していません!"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "音声を開く..."
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "音声を変更 (%1)..."
-
-#~ msgid "Start merging time"
-#~ msgstr "統合時間の開始"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "The amount of time after a merged stroke before merging again"
-#~ msgstr "描線が統合された後、再度統合されるまでの時間"
-
-#~ msgid "Group time"
-#~ msgstr "グループ化の時間"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The amount of time every stroke should be apart from its previous stroke "
-#~ "to be classified in one group"
-#~ msgstr ""
-#~ "すべての描線がその前の描線と分離され、一つのグループに分類されるまでの時間"
-
-#~ msgid "Split Strokes"
-#~ msgstr "描線を分離"
-
-#~ msgid ""
-#~ "⚠ Unsupported color space.\n"
-#~ "Only \"RGB/Alpha 8-bit\" is supported."
-#~ msgstr ""
-#~ "⚠ 色空間がサポートされていません。.\n"
-#~ "\"RGB/Alpha 8-bit\" のみサポートされています。"
-
-#, fuzzy
-#~| msgid "Kra File Compression"
-#~ msgid "Lossless compression"
-#~ msgstr "Kra ファイルの圧縮"
-
-#~ msgid "Information"
-#~ msgstr "情報"
-
-#~ msgid "Flip vertically"
-#~ msgstr "垂直方向に反転"
-
-#~ msgid "Bypass filtering"
-#~ msgstr "バイパスフィルタリング"
-
-#~ msgid "Use multithreaded decoding"
-#~ msgstr "マルチスレッドデコードを使用"
-
-#, fuzzy
-#~| msgid "Color space:"
-#~ msgid "Color planes: "
-#~ msgstr "色空間:"
-
-#, fuzzy
-#~| msgid "Alpha darken"
-#~ msgid "Alpha plane: "
-#~ msgstr "相対暗色(アルファ)"
-
-#~ msgid "Color Rate"
-#~ msgstr "描画色の割合"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Displacement Option"
-#~ msgstr "変位のオプション"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Total Random"
-#~ msgstr "参照点⇒完全ランダム"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern"
-#~ msgstr "参照点⇒パターンとして使う"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern Locked"
-#~ msgstr "参照点⇒ロックされたパターン"
-
-#~ msgid "0 px"
-#~ msgstr "0 px"
-
-#~ msgid "0 s"
-#~ msgstr "0 s"
-
-#~ msgid "1000"
-#~ msgstr "1000"
-
-#~ msgid "30 px"
-#~ msgstr "30 px"
-
-#~ msgid "3 s"
-#~ msgstr "3 s"
-
-#~ msgid "%1 s"
-#~ msgstr "%1 s"
-
-#~ msgctxt "option name"
-#~ msgid "Filter"
-#~ msgstr "フィルタ"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "\"%1\" does not support scaled preview (non-linear filter)"
-#~ msgstr "%1は高速プレビューをサポートしていません (非線形フィルタ)"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Luminosity value of the brush that will not change the painting color. "
-#~ "All brush pixels darker than neutral point will paint with darker color, "
-#~ "pixels lighter than neutral point — lighter."
-#~ msgstr ""
-#~ "描画色を変更しないブラシの光度値です。中間点より暗いすべてのブラシピクセル"
-#~ "は、より暗い色で描画されます。中間点より明るいピクセルは、より明るく描画さ"
-#~ "れます。"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Brightness correction for the brush"
-#~ msgstr "ブラシの明度補正"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Contrast correction for the brush"
-#~ msgstr "ブラシのコントラスト補正"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush tip does not have color channels. The brush will work "
-#~ "in \"Mask\" mode."
-#~ msgstr ""
-#~ "選択されたブラシ形状には色チャンネルがありません。ブラシは「マスク」モード"
-#~ "で動作します。"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush engine does not support \"Color\" or \"Lightness\" "
-#~ "modes. The brush will work in \"Mask\" mode."
-#~ msgstr ""
-#~ "選択されたブラシエンジンは、「色」または「光度」モードをサポートしていませ"
-#~ "ん。ブラシは「マスク」モードで動作します。"
-
-#~ msgid "Mirrored"
-#~ msgstr "100%の割合で反転される"
-
-#~ msgid "Not mirrored"
-#~ msgstr "100%割合で反転されない"
-
-#~ msgid " s"
-#~ msgstr " s"
-
-#~ msgid "Current selection"
-#~ msgstr "現在の選択範囲"
-
-#~ msgid "Contiguous region obtained from the layers"
-#~ msgstr "レイヤーから得られる連続した領域"
-
-#~ msgid ""
-#~ "Set how far the region should extend from the selected pixel in terms of "
-#~ "color similarity"
-#~ msgstr ""
-#~ "選択したピクセルから、色の類似度に基づいて範囲をどの程度広げるかを設定しま"
-#~ "す"
-
-#~ msgid ""
-#~ "Set how far the fully opaque portion of the region should extend.\n"
-#~ "0% will make opaque only the pixels that are exactly equal to the "
-#~ "selected pixel.\n"
-#~ "100% will make opaque all the pixels in the region up to its boundary."
-#~ msgstr ""
-#~ "完全に不透明な領域をどの程度広げるかを設定します。\n"
-#~ "0%にすると、選択したピクセルと完全に等しいピクセルのみを不透明にします。\n"
-#~ "100%にすると、境界までの領域内のすべてのピクセルを不透明にします。"
-
-#~ msgid ""
-#~ "Grow (positive values) or shrink (negative values) the region by the set "
-#~ "amount"
-#~ msgstr "設定した量だけ、領域を拡大(正の値)または縮小(負の値)する"
-
-#~ msgid ""
-#~ "Obtain the region using a merged copy of the selected color-labeled layers"
-#~ msgstr "選択した色ラベル付きレイヤーの統合済みコピーを用いて範囲を取得する"
-
-#~ msgctxt "The 'what to fill' section label in fill tool options"
-#~ msgid "What to fill"
-#~ msgstr "何を塗りつぶすか"
-
-#~ msgctxt "The 'fill with' section label in fill tool options"
-#~ msgid "Fill with"
-#~ msgstr "何で塗りつぶすか"
-
-#~ msgctxt "The 'region extent' section label in fill tool options"
-#~ msgid "Region extent"
-#~ msgstr "領域"
-
-#~ msgctxt "The 'multiple fill' section label in fill tool options"
-#~ msgid "Multiple fill"
-#~ msgstr "並列塗りつぶし"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "X 方向に切断"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "Y 方向に切断"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "スケール"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "変形をリセット"
-
-#~ msgid ""
-#~ "Set how far the selection should extend from the selected pixel in terms "
-#~ "of color similarity"
-#~ msgstr ""
-#~ "選択したピクセルから、色の類似性でどの程度まで選択範囲を広げるかを設定する"
-
-#~ msgid ""
-#~ "Set how far the fully opaque portion of the selection should extend.\n"
-#~ "0% will make the selection opaque only where the pixels are exactly equal "
-#~ "to the selected pixel.\n"
-#~ "100% will make all the selection opaque up to its boundary."
-#~ msgstr ""
-#~ "選択範囲内で、どこまで完全に不透明な部分を広げるかを設定する。0%では選択範"
-#~ "囲内のうち、選択したピクセルに完全に一致しているピクセルのみを不透明にす"
-#~ "る。100%では、選択範囲の境界までを不透明にする。"
-
-#~ msgid "Set how far the selection should extend in terms of color similarity"
-#~ msgstr "色の類似度に基づいて選択をどの程度拡張するかを設定します"
-
-#~ msgctxt "The 'what to fill' section label in enclose and fill tool options"
-#~ msgid "What to fill"
-#~ msgstr "何を塗りつぶすか"
-
-#~ msgctxt "The 'fill with' section label in enclose and fill tool options"
-#~ msgid "Fill with"
-#~ msgstr "何で塗りつぶすか"
-
-#~ msgctxt "The 'region extent' section label in enclose and fill tool options"
-#~ msgid "Region extent"
-#~ msgstr "領域"
-
-#~ msgctxt "Region selection method in enclose and fill tool"
-#~ msgid "All regions"
-#~ msgstr "すべての範囲"

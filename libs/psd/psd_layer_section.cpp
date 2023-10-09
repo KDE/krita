@@ -669,7 +669,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                             // unsure about the bounds, needs more research.
                             textData.boundingBox = text->boundingRect().normalized();
                             textData.bounds = text->outlineRect().normalized();
-                            textData.bounds.setTopLeft(QPointF());
+                            textData.bounds.translate(-text->outlineRect().topLeft());
                             convert.convertToPSDTextEngineData(svgtext, textData.bounds, &textData.engineData, textData.text, textData.isHorizontal);
                             textData.textIndex = 0;
                             if (text->outlineRect().topLeft().isNull()) {

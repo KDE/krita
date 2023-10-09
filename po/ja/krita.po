@@ -29090,9 +29090,7 @@ msgid "Color Sampler"
 msgstr "色採取"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Deselect"
+#, kde-format
 msgid "Deselect"
 msgstr "選択解除"
 
@@ -61184,72 +61182,3 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
-
-#~ msgid "Embed tags..."
-#~ msgstr "タグを埋め込む..."
-
-#, fuzzy
-#~| msgctxt "Open the folder when the new created video is placed"
-#~| msgid "Show in folder"
-#~ msgid "Show line boxes"
-#~ msgstr "フォルダに表示"
-
-#~ msgid "Editor Mode"
-#~ msgstr "編集モード"
-
-#~ msgid "Note: the Rich Text editor only supports a subset of SVG."
-#~ msgstr ""
-#~ "注: リッチテキストエディタは、SVG のサブセットのみをサポートします。"
-
-#~ msgid "Rich Te&xt Only"
-#~ msgstr "リッチテキストのみ(&X)"
-
-#~ msgid "Both"
-#~ msgstr "両方"
-
-#~ msgid "S&VG Source Only"
-#~ msgstr "SVG ソースのみ(&V)"
-
-#~ msgctxt ""
-#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-#~ msgid "Grow: "
-#~ msgstr "拡大:"
-
-#~ msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
-#~ msgid "Feather: "
-#~ msgstr "塗り広げ:"
-
-#~ msgid "Get your Krita Supporter Badge here!"
-#~ msgstr "あなたの支援者の証はここにあります!"
-
-#~ msgid "Drag an image into the window to open"
-#~ msgstr "ウィンドウに画像をドラッグして開く"
-
-#~ msgid "New File"
-#~ msgstr "新しいファイル"
-
-#~ msgid "Recent Documents"
-#~ msgstr "最近開いたドキュメント"
-
-#~ msgid ""
-#~ "⚠ Unsupported color space.\n"
-#~ "Only \"RGB/Alpha 8-bit\" is supported."
-#~ msgstr ""
-#~ "⚠ 色空間がサポートされていません。.\n"
-#~ "\"RGB/Alpha 8-bit\" のみサポートされています。"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "X 方向に切断"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "Y 方向に切断"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "スケール"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "変形をリセット"

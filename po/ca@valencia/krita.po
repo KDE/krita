@@ -13603,7 +13603,7 @@ msgstr "Traça les formes seleccionades"
 #, kde-format
 msgctxt "action"
 msgid "Stroke Selec&tion..."
-msgstr "Seleccioneu el &traç..."
+msgstr "Selecciona el &traç..."
 
 #. i18n: context: toolTip @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
@@ -15050,7 +15050,7 @@ msgstr "Fa encollir la selecció"
 #, kde-format
 msgctxt "action"
 msgid "&Border Selection..."
-msgstr "Seleccioneu les &vores..."
+msgstr "Selecciona les &vores..."
 
 #. i18n: context: toolTip @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
@@ -19122,7 +19122,7 @@ msgstr "Disminuïx la lluminositat"
 #, kde-format
 msgctxt "Blending mode - Increase Luminosity HSY"
 msgid "Increase Luminosity"
-msgstr "Augmenta la lluminositat"
+msgstr "Augmenta la brillantor"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:153
 #, kde-format
@@ -58192,7 +58192,7 @@ msgstr "Selecció poligonal"
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:70
 msgctxt "(qtundo-format)"
 msgid "Select Polygon"
-msgstr "Seleccioneu el polígon"
+msgstr "Seleccioneu un polígon"
 
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
 #, kde-format
@@ -58218,7 +58218,7 @@ msgstr "Eina de selecció rectangular"
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:87
 #, kde-format
 msgid "Similar Color Selection"
-msgstr "Seleccioneu el color similar"
+msgstr "Seleccioneu un color similar"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:137
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:429
@@ -60565,7 +60565,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgctxt "action"
-#~ msgid "Lock Toolbars"
-#~ msgstr "Bloqueja les barres d'eines"

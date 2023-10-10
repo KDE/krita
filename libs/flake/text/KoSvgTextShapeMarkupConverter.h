@@ -84,8 +84,19 @@ public:
      */
     bool convertSvgToDocument(const QString &svgText, QTextDocument *doc);
 
-    bool convertPSDTextEngineDataToSVG(QByteArray ba, QString *svgText, QString *svgStyles, QPointF &offset, bool isHorizontal);
-    bool convertToPSDTextEngineData(const QString &svgText, const QRectF boundingBox, QByteArray *ba, QString &textTotal, bool &isHorizontal);
+    bool convertPSDTextEngineDataToSVG(QByteArray ba,
+                                       QString *svgText,
+                                       QString *svgStyles,
+                                       QPointF &offset,
+                                       bool &offsetByAscent,
+                                       bool &isHorizontal,
+                                       QTransform scaleToPt = QTransform());
+    bool convertToPSDTextEngineData(const QString &svgText,
+                                    QRectF &boundingBox,
+                                    QByteArray *ba,
+                                    QString &textTotal,
+                                    bool &isHorizontal,
+                                    QTransform scaleToPx = QTransform());
 
     /**
      * A list of errors happened during loading the user's text

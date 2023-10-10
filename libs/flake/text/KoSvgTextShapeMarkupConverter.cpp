@@ -1247,8 +1247,9 @@ QColor colorFromPSDStyleSheet(QJsonObject color) {
     }
     return c;
 }
-QString stylesForPSDParagraphSheet(QJsonObject PSDParagraphSheet) {
+QString stylesForPSDParagraphSheet(QJsonObject PSDParagraphSheet, QTransform scaleToPt) {
     QStringList styles;
+    QStringList unsupportedStyles;
 
     for (int i=0; i < PSDParagraphSheet.keys().size(); i++) {
         const QString key = PSDParagraphSheet.keys().at(i);
@@ -1291,43 +1292,54 @@ QString stylesForPSDParagraphSheet(QJsonObject PSDParagraphSheet) {
 
             styles.append("text-align:"+textAlign);
             styles.append("text-anchor:"+textAnchor);
-        } else if (key == "FirstLineIndent") {
+        } else if (key == "FirstLineIndent") { //-1296..1296
+            val = scaleToPt.map(QPointF(val, val)).x();
             styles.append("text-indent:"+QString::number(val));
             continue;
         } else if (key == "StartIndent") {
-            // left margin (also for rtl?)
+            // left margin (also for rtl?), pixels -1296..1296
+            unsupportedStyles << key;
             continue;
         } else if (key == "EndIndent") {
-            // right margin (also for rtl?)
+            // right margin (also for rtl?), pixels -1296..1296
+            unsupportedStyles << key;
             continue;
         } else if (key == "SpaceBefore") {
-            // top margin for paragraph
+            // top margin for paragraph, pixels -1296..1296
+            unsupportedStyles << key;
             continue;
         } else if (key == "SpaceAfter") {
-            // bottom margin for paragraph
+            // bottom margin for paragraph, pixels -1296..1296
+            unsupportedStyles << key;
             continue;
         } else if (key == "AutoHyphenate") {
             // hyphenate: auto;
+            unsupportedStyles << key;
             continue;
         } else if (key == "HyphenatedWordSize") {
-            // minimum wordsize at which to start hyphenating.
+            // minimum wordsize at which to start hyphenating. 2-25
+            unsupportedStyles << key;
             continue;
         } else if (key == "PreHyphen") {
-            // minimum number of letters before hyphenation is allowed to start in a word.
+            // minimum number of letters before hyphenation is allowed to start in a word. 1-15
             // CSS-Text-4 hyphenate-limit-chars value 1.
+            unsupportedStyles << key;
             continue;
         } else if (key == "PostHyphen") {
-            // minimum amount of letters a hyphnated word is allowed to end with.
+            // minimum amount of letters a hyphnated word is allowed to end with. 1-15
             // CSS-Text-4 hyphenate-limit-chars value 2.
+            unsupportedStyles << key;
             continue;
         } else if (key == "ConsecutiveHyphens") {
-            // maximum consequetive lines with hyphenation.
+            // maximum consequetive lines with hyphenation. 2-25
             // CSS-Text-4 hyphenate-limit-lines.
+            unsupportedStyles << key;
             continue;
         } else if (key == "Zone") {
-            // Hyphenation zone to control where hyphenation is allowed to start.
+            // Hyphenation zone to control where hyphenation is allowed to start, pixels. 0..8640 for 72ppi
             // CSS-Text-4 hyphenation-limit-zone.
             // Note: there's also a hyphenate capitalized words, but no idea which key.
+            unsupportedStyles << key;
             continue;
         } else if (key == "WordSpacing") {
             // val 0 is minimum allowed spacing, and val 2 is maximum allowed spacing, both for justified text.
@@ -1344,6 +1356,7 @@ QString stylesForPSDParagraphSheet(QJsonObject PSDParagraphSheet) {
             continue;
         } else if (key == "GlyphSpacing") {
             // scaling of the glyphs, list of vals, 50% to 200%, default 100%.
+            unsupportedStyles << key;
             continue;
         } else if (key == "AutoLeading") {
             styles.append("line-height:"+QString::number(val));
@@ -1351,6 +1364,7 @@ QString stylesForPSDParagraphSheet(QJsonObject PSDParagraphSheet) {
         } else if (key == "LeadingType") {
             // Probably how leading is measured for asian glyphs.
             // 0 = top-to-top, 1 = bottom-to-bottom. CSS can only do the second.
+            unsupportedStyles << key;
             continue;
         } else if (key == "Hanging") {
             // Roman hanging punctuation (?), bool
@@ -1365,16 +1379,19 @@ QString stylesForPSDParagraphSheet(QJsonObject PSDParagraphSheet) {
         } else if (key == "KinsokuOrder") {
             // strict vs loose linebreaking... sorta.
             // might be 0 = pushInFirst, 1 = pushOutFirst, 2 = pushOutOnly, if so, Krita only supports 2.
+            unsupportedStyles << key;
             continue;
         } else if (key == "EveryLineComposer") {
             // bool representing which text-wrapping method to use.
             //'single-line' is 'stable/greedy' line breaking,
             //'everyline' uses a penalty based system like Knuth's method.
+            unsupportedStyles << key;
             continue;
         } else {
-            qWarning() << "Unsupported PSD paragraph style key" << key << PSDParagraphSheet.value(key);
+            qWarning() << "Unknown PSD paragraph style key" << key << PSDParagraphSheet.value(key);
         }
     }
+    qWarning() << "Unsupported paragraph styles" << unsupportedStyles;
 
     return styles.join("; ");
 }
@@ -1390,7 +1407,7 @@ struct font_info_psd {
     bool italic {false};
 };
 
-QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_psd> fontNames) {
+QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_psd> fontNames, QTransform scale) {
     QStringList styles;
 
     QStringList unsupportedStyles;
@@ -1412,8 +1429,9 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
             }
             continue;
         } else if (key == "FontSize") {
-            // Note: FontSize might be in real points (72.27), but no idea where this is defined.
-            styles.append("font-size:"+QString::number(PSDStyleSheet.value(key).toDouble()));
+            double val = PSDStyleSheet.value(key).toDouble();
+            val = scale.map(QPointF(val, val)).y();
+            styles.append("font-size:"+QString::number(val));
             continue;
         } else if (key == "AutoKerning") {
             if (!PSDStyleSheet.value(key).toBool()) {
@@ -1441,8 +1459,9 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
                 autoleading = PSDStyleSheet.value("AutoLeading").toBool();
             }
             if (!autoleading) {
+                double fontSize = PSDStyleSheet.value("FontSize").toDouble();
                 double val = PSDStyleSheet.value(key).toDouble();
-                styles.append("line-height:"+QString::number(val)+"pt");
+                styles.append("line-height:"+QString::number(val/fontSize));
             }
             // value for line-height
             continue;
@@ -1461,7 +1480,9 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
             continue;
         } else if (key == "BaselineShift") {
             if (PSDStyleSheet.value(key).toDouble() > 0) {
-                baselineShift.append(QString::number(PSDStyleSheet.value(key).toDouble()));
+                double val = PSDStyleSheet.value(key).toDouble();
+                val = scale.map(QPointF(val, val)).y();
+                baselineShift.append(QString::number(val));
             }
             continue;
         } else if (key == "FontCaps") {
@@ -1586,7 +1607,9 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
             }
             continue;
         } else if (key == "OutlineWidth") {
-            styles.append("stroke-width:"+QString::number(PSDStyleSheet.value(key).toDouble()));
+            double val = PSDStyleSheet.value(key).toDouble();
+            val = scale.map(QPointF(val, val)).y();
+            styles.append("stroke-width:"+QString::number(val));
         } /*else if (key == "FillFirst") {
             // draw fill on top of stroke? paint-order: stroke markers fill, I guess.
             continue;
@@ -1640,9 +1663,16 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
     return styles.join("; ");
 }
 
-bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba, QString *svgText, QString *svgStyles, QPointF &offset, bool isHorizontal)
+bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
+                                                                  QString *svgText,
+                                                                  QString *svgStyles,
+                                                                  QPointF &offset,
+                                                                  bool &offsetByAscent,
+                                                                  bool &isHorizontal,
+                                                                  QTransform scaleToPt)
 {
     debugFlake << "Convert from psd engine data";
+    
 
     QJsonObject root;
     QBuffer dev(&ba);
@@ -1658,7 +1688,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
         d->errors << dev.errorString();
         return false;
     }
-    qDebug() << "Parsed JSON Object" << root;
+    //qDebug() << "Parsed JSON Object" << root;
 
     QJsonObject engineDict = root["EngineDict"].toObject();
     if (engineDict.isEmpty()) {
@@ -1677,17 +1707,23 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
         for (int i = 0; i < fonts.size(); i++) {
             QJsonObject font = fonts.at(i).toObject();
             font_info_psd fontInfo;
-            KoFontRegistry::instance()->getCssDataForPostScriptName(font.value("Name").toString(),
+            QString postScriptName = font.value("Name").toString();
+            QString foundPostScriptName;
+            KoFontRegistry::instance()->getCssDataForPostScriptName(postScriptName,
+                                                                    &foundPostScriptName,
                                                                     &fontInfo.familyName,
                                                                     fontInfo.weight,
                                                                     fontInfo.width,
                                                                     fontInfo.italic);
+            if (postScriptName != foundPostScriptName) {
+                d->errors << QString("Font %1 not found, substituting %2").arg(postScriptName).arg(foundPostScriptName);
+            }
             fontNames.insert(i, fontInfo);
         }
     }
     QString paragraphStyle = isHorizontal? "writing-mode: horizontal-tb;": "writing-mode: vertical-rl;";
     paragraphStyle += " white-space: pre-wrap;";
-    QString inlineSize;
+    QString inlineSizeString;
     QRectF bounds;
 
     QJsonObject rendered = engineDict["Rendered"].toObject();
@@ -1698,10 +1734,11 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
         if (shapeType == 1) {
             QJsonArray BoxBounds = shapeChild["Cookie"].toObject()["Photoshop"].toObject()["BoxBounds"].toArray();
             bounds = QRectF(BoxBounds[0].toDouble(), BoxBounds[1].toDouble(), BoxBounds[2].toDouble(), BoxBounds[3].toDouble());
+            bounds = scaleToPt.mapRect(bounds);
             if (isHorizontal) {
-                inlineSize = " inline-size:"+QString::number(bounds.width())+";";
+                inlineSizeString = " inline-size:"+QString::number(bounds.width())+";";
             } else {
-                inlineSize = " inline-size:"+QString::number(bounds.height())+";";
+                inlineSizeString = " inline-size:"+QString::number(bounds.height())+";";
             }
         }
         qDebug() << bounds;
@@ -1727,12 +1764,12 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
             QPointF p4(points[iAdjust+6].toDouble(), points[iAdjust+7].toDouble());
 
             if (i == 0 || textCurve.currentPosition() != p1) {
-                textCurve.moveTo(p1);
+                textCurve.moveTo(scaleToPt.map(p1));
             }
             if (p1==p2 && p3==p4) {
-                textCurve.lineTo(p4);
+                textCurve.lineTo(scaleToPt.map(p4));
             } else {
-                textCurve.cubicTo(p2, p3, p4);
+                textCurve.cubicTo(scaleToPt.map(p2), scaleToPt.map(p3), scaleToPt.map(p4));
             }
         }
         // When there's text-in-shape (instead of text-on-path), range seems to be between -3 and -3.
@@ -1802,13 +1839,16 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
         QJsonArray runArray = paragraphRun["RunArray"].toArray();
         QJsonObject styleSheet = runArray[0].toObject()["ParagraphSheet"].toObject()["Properties"].toObject();
 
-        QString styleString = stylesForPSDParagraphSheet(styleSheet);
+        QString styleString = stylesForPSDParagraphSheet(styleSheet, scaleToPt);
         if (textPathStartOffset < 0) {
             if (textShape) {
+                offsetByAscent = false;
                 paragraphStyle += " shape-inside:url(#textShape);";
             } else if (styleString.contains("text-align:justify") && bounds.isValid()) {
+                offsetByAscent = false;
                 paragraphStyle += " shape-inside:url(#bounds);";
             } else if (bounds.isValid()){
+                offsetByAscent = true;
                 offset = isHorizontal? bounds.topLeft(): bounds.topRight();
                 if (styleString.contains("text-anchor:middle")) {
                     offset = isHorizontal? QPointF(bounds.center().x(), offset.y()):
@@ -1817,7 +1857,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
                     offset = isHorizontal? QPointF(bounds.right(), offset.y()):
                                            QPointF(offset.x(), bounds.bottom());
                 }
-                paragraphStyle += inlineSize;
+                paragraphStyle += inlineSizeString;
                 svgWriter.writeAttribute("transform", QString("translate(%1, %2)").arg(offset.x()).arg(offset.y()));
             }
         }
@@ -1857,7 +1897,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
                     length += runLengthArray.at(i).toInt();
                 } else {
                     svgWriter.writeStartElement("tspan");
-                    svgWriter.writeAttribute("style", stylesForPSDStyleSheet(styleSheet, fontNames));
+                    svgWriter.writeAttribute("style", stylesForPSDStyleSheet(styleSheet, fontNames, scaleToPt));
                     svgWriter.writeCharacters(text.mid(pos, length));
                     svgWriter.writeEndElement();
                     styleSheet = newStyle;
@@ -1866,7 +1906,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
                 }
             }
             svgWriter.writeStartElement("tspan");
-            svgWriter.writeAttribute("style", stylesForPSDStyleSheet(styleSheet, fontNames));
+            svgWriter.writeAttribute("style", stylesForPSDStyleSheet(styleSheet, fontNames, scaleToPt));
             svgWriter.writeCharacters(text.mid(pos));
             svgWriter.writeEndElement();
         }
@@ -1960,7 +2000,7 @@ void gatherFonts(const QMap<QString, QString> cssStyles, const QString text, QJs
                                                       QMap<QString, qreal>(),
                                                       text, 72, 72, fontSize, 1.0,
                                                       fontWeight, fontWidth, false, 0, "");
-        for (int i = 0; i < faces.size(); i++) {
+        for (uint i = 0; i < faces.size(); i++) {
             const FT_FaceUP &face = faces.at(static_cast<size_t>(i));
             QString postScriptName = face->family_name;
             if (FT_Get_Postscript_Name(face.data())) {
@@ -1990,7 +2030,7 @@ void gatherFonts(const QMap<QString, QString> cssStyles, const QString text, QJs
 }
 
 QJsonObject styleToPSDStylesheet(const QMap<QString, QString> cssStyles,
-                                 QJsonObject parentStyle) {
+                                 QJsonObject parentStyle, QTransform scaleToPx) {
     QJsonObject styleSheet = parentStyle;
 
     styleSheet["Leading"] = 0.0;
@@ -1999,7 +2039,9 @@ QJsonObject styleToPSDStylesheet(const QMap<QString, QString> cssStyles,
         QString val = cssStyles.value(key);
 
         if (key == "font-size") {
-            styleSheet["FontSize"] = val.toInt();
+            double size = val.toDouble();
+            size = scaleToPx.map(QPointF(size, size)).x();
+            styleSheet["FontSize"] = int(size);
         } else if (key == "font-kerning") {
             if (val == "none") {
                 styleSheet["AutoKerning"] = false;
@@ -2053,7 +2095,11 @@ void gatherFills(QDomElement el, QJsonObject &styleDict) {
     }
 }
 
-void gatherStyles(QDomElement el, QString &text, QJsonObject parentStyle, QMap<QString, QString> parentCssStyles, QJsonArray &styles, QJsonArray &runs, QJsonArray &fontSet) {
+void gatherStyles(QDomElement el, QString &text,
+                  QJsonObject parentStyle,
+                  QMap<QString, QString> parentCssStyles,
+                  QJsonArray &styles, QJsonArray &runs,
+                  QJsonArray &fontSet, QTransform scaleToPx) {
     QMap<QString, QString> cssStyles = parentCssStyles;
     if (el.hasAttribute("style")) {
         QString style = el.attribute("style");
@@ -2076,7 +2122,7 @@ void gatherStyles(QDomElement el, QString &text, QJsonObject parentStyle, QMap<Q
         QString currentText = textNode.data();
         text += currentText;
 
-        QJsonObject styleDict = styleToPSDStylesheet(cssStyles, parentStyle);
+        QJsonObject styleDict = styleToPSDStylesheet(cssStyles, parentStyle, scaleToPx);
         gatherFills(el, styleDict);
 
         QVector<int> lengths;
@@ -2090,17 +2136,21 @@ void gatherStyles(QDomElement el, QString &text, QJsonObject parentStyle, QMap<Q
         }
 
     } else if (el.childNodes().size()>0) {
-        QJsonObject styleDict = styleToPSDStylesheet(cssStyles, parentStyle);
+        QJsonObject styleDict = styleToPSDStylesheet(cssStyles, parentStyle, scaleToPx);
         gatherFills(el, styleDict);
         QDomElement childEl = el.firstChildElement();
         while(!childEl.isNull()) {
-            gatherStyles(childEl, text, styleDict, cssStyles, styles, runs, fontSet);
+            gatherStyles(childEl, text, styleDict, cssStyles, styles, runs, fontSet, scaleToPx);
             childEl = childEl.nextSiblingElement();
         }
     }
 }
 
-QJsonObject gatherParagraphStyle(QDomElement el, QJsonObject defaultProperties, bool &isHorizontal, QString *inlineSize) {
+QJsonObject gatherParagraphStyle(QDomElement el,
+                                 QJsonObject defaultProperties,
+                                 bool &isHorizontal,
+                                 QString *inlineSize,
+                                 QTransform scaleToPx) {
     QString cssStyle = el.attribute("style");
     QStringList dummy = cssStyle.split(";");
     QMap<QString, QString> cssStyles;
@@ -2152,7 +2202,12 @@ QJsonObject gatherParagraphStyle(QDomElement el, QJsonObject defaultProperties, 
     return QJsonObject{{"DefaultStyleSheet", 0},{"Properties", paragraphStyleSheet}};
 }
 
-bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &svgText, const QRectF boundingBox, QByteArray *ba, QString &textTotal, bool &isHorizontal)
+bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &svgText,
+                                                               QRectF &boundingBox,
+                                                               QByteArray *ba,
+                                                               QString &textTotal,
+                                                               bool &isHorizontal,
+                                                               QTransform scaleToPx)
 {
     QJsonObject root;
 
@@ -2205,7 +2260,7 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     defaultStyle["Kashida"] = 1;
     defaultStyle["DiacriticPos"] = 2;
     defaultStyle = styleToPSDStylesheet(KoSvgTextProperties::defaultProperties().convertToSvgTextAttributes(),
-                                        defaultStyle);
+                                        defaultStyle, scaleToPx);
     QVector<int> lengths;
     QVector<int> fontIndices;
     gatherFonts(KoSvgTextProperties::defaultProperties().convertToSvgTextAttributes(), "", fontSet, lengths, fontIndices);
@@ -2242,10 +2297,13 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     // go down the document children to get the style.
     QDomDocument doc;
     doc.setContent(svgText);
-    gatherStyles(doc.documentElement(), text, QJsonObject(), QMap<QString, QString>(), styles, styleRunArray, fontSet);
+    gatherStyles(doc.documentElement(), text, QJsonObject(), QMap<QString, QString>(), styles, styleRunArray, fontSet, scaleToPx);
 
     QString inlineSize;
-    QJsonObject paragraphStyle = gatherParagraphStyle(doc.documentElement(), defaultParagraphProps, isHorizontal, &inlineSize);
+    QJsonObject paragraphStyle = gatherParagraphStyle(doc.documentElement(),
+                                                      defaultParagraphProps,
+                                                      isHorizontal, &inlineSize,
+                                                      scaleToPx);
 
     QJsonObject editor;
     editor["Text"] = text;
@@ -2312,6 +2370,8 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
                 bounds.setHeight(inlineSizeVal);
             }
         }
+    } else {
+        bounds = QRectF();
     }
 
     QJsonObject rendered;
@@ -2325,7 +2385,8 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
         photoshop["PointBase"] = QJsonArray({0.0, 0.0});
     } else if (shapeType == 1) {
         // this is the bounding box of the paragraph shape.
-        photoshop["BoxBounds"] = QJsonArray({bounds.x(), bounds.y(), bounds.width(), bounds.height()});
+        QRectF boundsPix = scaleToPx.mapRect(bounds);
+        photoshop["BoxBounds"] = QJsonArray({0, 0, boundsPix.width(), boundsPix.height()});
     }
     QJsonObject renderChild = QJsonObject{
     {"ShapeType", shapeType},

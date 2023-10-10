@@ -649,15 +649,14 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
 
                 double vectorWidth = rootLayer->image()? rootLayer->image()->width() / rootLayer->image()->xRes(): 1;
                 double vectorHeight = rootLayer->image()? rootLayer->image()->height() / rootLayer->image()->yRes(): 1;
-                // TODO: Figure out whether this should be done or not.
-                // QTransform FlaketoPixels = QTransform::fromScale(rootLayer->image()->xRes(), rootLayer->image()->yRes());
+                QTransform FlaketoPixels = QTransform::fromScale(rootLayer->image()->xRes(), rootLayer->image()->yRes());
 
                 const KisShapeLayer *shapeLayer = qobject_cast<KisShapeLayer*>(node.data());
                 psd_layer_type_shape textData;
                 psd_vector_mask vectorMask;
                 QDomDocument strokeData;
 
-                if (shapeLayer) {
+                if (shapeLayer && !shapeLayer->isFakeNode()) {
                     // only store the first shape.
                     if (shapeLayer->shapes().size() == 1) {
                         KoSvgTextShape * text = dynamic_cast<KoSvgTextShape*>(shapeLayer->shapes().first());
@@ -666,18 +665,30 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                             QString svgtext;
                             QString styles;
                             convert.convertToSvg(&svgtext, &styles);
-                            // unsure about the bounds, needs more research.
+                            // unsure about the boundingBox, needs more research.
                             textData.boundingBox = text->boundingRect().normalized();
                             textData.bounds = text->outlineRect().normalized();
-                            textData.bounds.translate(-text->outlineRect().topLeft());
-                            convert.convertToPSDTextEngineData(svgtext, textData.bounds, &textData.engineData, textData.text, textData.isHorizontal);
+                            convert.convertToPSDTextEngineData(svgtext, textData.bounds, &textData.engineData, textData.text, textData.isHorizontal, FlaketoPixels);
                             textData.textIndex = 0;
-                            if (text->outlineRect().topLeft().isNull()) {
-                                textData.transform = text->absoluteTransformation()/* * FlaketoPixels*/;
-                            } else {
-                                QTransform offset = QTransform::fromTranslate(text->outlineRect().topLeft().x(), text->outlineRect().topLeft().y());
-                                textData.transform = offset * text->absoluteTransformation()/* * FlaketoPixels*/;
+                            QTransform offset;
+                            if (!text->shapesInside().isEmpty()) {
+                                textData.bounds = text->outlineRect().normalized();
                             }
+                            if (!textData.bounds.isEmpty()) {
+                                if (text->shapesInside().isEmpty()) {
+                                    offset = QTransform::fromTranslate(textData.bounds.left(), textData.bounds.top());
+                                }
+                                if (textData.isHorizontal) {
+                                    textData.bounds.translate(QPointF(-textData.bounds.left(), 0));
+                                } else {
+                                    textData.bounds.translate(QPointF(0, -textData.bounds.top()));
+                                }
+                                textData.boundingBox = FlaketoPixels.mapRect(textData.boundingBox);
+                                textData.bounds = FlaketoPixels.mapRect(textData.bounds);
+                            } else {
+                                textData.boundingBox = QRectF();
+                            }
+                            textData.transform = FlaketoPixels.inverted() * offset * text->absoluteTransformation() * FlaketoPixels;
                         } else {
                             KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shapeLayer->shapes().first());
                             if (pathShape){

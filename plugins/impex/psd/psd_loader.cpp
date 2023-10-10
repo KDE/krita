@@ -422,23 +422,32 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 KoSvgTextShapeMarkupConverter converter(shape);
                 QString svg;
                 QString styles;
+                // This is to align inlinesize appropriately.
+                bool offsetByAscent = false;
                 QPointF offset1;
-                bool res = converter.convertPSDTextEngineDataToSVG(text.engineData, &svg, &styles, offset1, text.isHorizontal);
-                if (!res) {
+                // PSD text layers have all their coordinates in pixels, and because fonts can be very precise-unit sensitive,
+                // we want to ensure all values are scaled appropriately.
+
+                QTransform scaleToPt = QTransform::fromScale(m_image->xRes(), m_image->yRes()).inverted();
+                bool res = converter.convertPSDTextEngineDataToSVG(text.engineData,
+                                                                   &svg, &styles,
+                                                                   offset1, offsetByAscent,
+                                                                   text.isHorizontal, scaleToPt);
+                if (!res || !converter.errors().isEmpty()) {
                     qDebug() << converter.errors();
                 }
                 converter.convertFromSvg(svg, styles, m_image->bounds(), m_image->xRes()*72.0);
-                if (!offset1.isNull()) {
-                    QPointF offset2 = shape->position() - shape->boundingRect().topLeft();
+                if (offsetByAscent) {
+                    QPointF offset2 = QPointF() - shape->outlineRect().topLeft();
                     if (text.isHorizontal) {
                         offset2.setX(offset1.x());
                     } else {
-                        offset2.setY(offset1.x());
+                        offset2.setY(offset1.y());
                     }
-                    shape->setTransformation(QTransform::fromTranslate(offset2.x(), offset2.y())
-                                             * layerRecord->infoBlocks.textTransform);
+                    shape->setTransformation(QTransform::fromTranslate(offset2.x(), offset2.y()) * scaleToPt.inverted()
+                                             * layerRecord->infoBlocks.textTransform * scaleToPt);
                 } else {
-                    shape->setTransformation(layerRecord->infoBlocks.textTransform);
+                    shape->setTransformation(scaleToPt.inverted() * layerRecord->infoBlocks.textTransform * scaleToPt);
                 }
                 textLayer->addShape(shape);
                 layer = textLayer;

@@ -820,11 +820,11 @@ struct KRITAPSD_EXPORT psd_layer_type_shape {
     QTransform transform;
 
     QByteArray engineData;
-    QRectF bounds; // textBounds;
-    QRectF boundingBox; //actual bounds
+    QRectF bounds; // bounding box of the text in pixels, relative to first baseline, absent in point text.
+    QRectF boundingBox; //no clue, maybe relative to topleft of first glyph(?), same size as bounds, absent in point text.
     int textIndex;
     QString text;
-    bool isHorizontal;
+    bool isHorizontal {true};
 
     void setEngineData(QByteArray ba) {
         engineData = ba;

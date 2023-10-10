@@ -113,6 +113,7 @@ public:
     // For PSD we only get the postscript name, and we'll need a bit
     // more information to get a proper css representation.
     void getCssDataForPostScriptName (const QString postScriptName,
+                                      QString *foundPostScriptName,
                                       QString *cssFontFamily,
                                       int &cssFontWeight,
                                       int &cssFontWidth,

@@ -1129,7 +1129,7 @@ int32_t KoFontRegistry::loadFlagsForFace(FT_Face face, bool isHorizontal, int32_
     return faceLoadFlags;
 }
 
-void KoFontRegistry::getCssDataForPostScriptName(const QString postScriptName, QString *cssFontFamily, int &cssFontWeight, int &cssFontWidth, bool &cssItalic)
+void KoFontRegistry::getCssDataForPostScriptName(const QString postScriptName, QString *foundPostScriptName, QString *cssFontFamily, int &cssFontWeight, int &cssFontWidth, bool &cssItalic)
 {
     FcPatternUP p(FcPatternCreate());
     QByteArray utfData = postScriptName.toUtf8();
@@ -1145,6 +1145,11 @@ void KoFontRegistry::getCssDataForPostScriptName(const QString postScriptName, Q
             *cssFontFamily = QString(reinterpret_cast<char *>(fileValue));
         } else {
             *cssFontFamily = postScriptName;
+        }
+        if (FcPatternGetString(match.data(), FC_POSTSCRIPT_NAME, 0, &fileValue) == FcResultMatch) {
+            *foundPostScriptName = QString(reinterpret_cast<char *>(fileValue));
+        } else {
+            *foundPostScriptName = postScriptName;
         }
         int value;
         if (FcPatternGetInteger(match.data(), FC_WEIGHT, 0, &value) == FcResultMatch) {

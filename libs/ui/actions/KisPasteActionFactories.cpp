@@ -236,8 +236,7 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
                     view->canvasBase()->coordinatesConverter()->documentToImage(
                         docPos);
 
-            } else if (!clip->exactBounds().contains(image->bounds()) &&
-                       !clip->exactBounds().intersects(image->bounds())) {
+            } else if (!clip->exactBounds().intersects(image->bounds())) {
                  // BUG:459111
                 pasteAtCursorPosition = true;
                 imagePos = QPointF(image->bounds().center());
@@ -316,27 +315,28 @@ void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
     KisImageSP image = viewManager->image();
     if (!image) return;
 
-    if (!KisClipboard::instance()->hasLayers()) return;
+    QRect imageBounds = image->bounds();
 
-    KisPaintDeviceSP clipdev = KisClipboard::instance()->clipFromKritaLayers(image->bounds(),
-                                                                            image->colorSpace()).data();
+    KisPaintDeviceSP clipdev = KisClipboard::instance()->clipFromKritaLayers(imageBounds, image->colorSpace());
     KisPaintDeviceSP clip = clipdev ? new KisPaintDevice(*clipdev) : nullptr;
 
-    if (!clip->exactBounds().contains(image->bounds()) &&
-                           !clip->exactBounds().intersects(image->bounds()))
+    if (clip)
     {
         QRect clipBounds = clip->exactBounds();
-        QPoint diff = image->bounds().center() - clipBounds.center();
-        clip->setX(diff.x());
-        clip->setY(diff.y());
+
+        if (!clipBounds.intersects(imageBounds))
+        {
+            QPoint diff = imageBounds.center() - clipBounds.center();
+            clip->setX(diff.x());
+            clip->setY(diff.y());
+        }
+    }
+    else
+    {
+        clip = KisClipboard::instance()->clip(imageBounds, true, -1, nullptr);
     }
 
-    if (!clip)
-        clip =
-            KisClipboard::instance()->clip(image->bounds(), true, -1, nullptr);
-
-    if (!clip)
-        return;
+    if (!clip) return;
 
     KisImportCatcher::adaptClipToImageColorSpace(clip, image);
 

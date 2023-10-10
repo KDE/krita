@@ -8750,7 +8750,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Select brush preset"
-msgstr "Seleccioneu l'el pinzell predefinit"
+msgstr "Selecció d'el pinzell predefinit"
 
 #. i18n: context: toolTip @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:562
@@ -13654,7 +13654,7 @@ msgstr "Traça les formes seleccionades"
 #, kde-format
 msgctxt "action"
 msgid "Stroke Selec&tion..."
-msgstr "Seleccioneu el &traç..."
+msgstr "Selecciona el &traç..."
 
 #. i18n: context: toolTip @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
@@ -15110,7 +15110,7 @@ msgstr "Fa encollir la selecció"
 #, kde-format
 msgctxt "action"
 msgid "&Border Selection..."
-msgstr "Seleccioneu les &vores..."
+msgstr "Selecciona les &vores..."
 
 #. i18n: context: toolTip @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
@@ -43222,7 +43222,7 @@ msgstr "Edició de recursos"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
 #, kde-format
 msgid "Edit Tags"
-msgstr "Editeu les d'etiquetes"
+msgstr "Editeu les etiquetes"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:143
 #, kde-format
@@ -58391,7 +58391,7 @@ msgstr "Selecció poligonal"
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:70
 msgctxt "(qtundo-format)"
 msgid "Select Polygon"
-msgstr "Seleccioneu el polígon"
+msgstr "Seleccioneu un polígon"
 
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
 #, kde-format
@@ -58417,7 +58417,7 @@ msgstr "Eina de selecció rectangular"
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, kde-format
 msgid "Similar Color Selection"
-msgstr "Seleccioneu el color similar"
+msgstr "Seleccioneu un color similar"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:196

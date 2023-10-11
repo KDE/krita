@@ -423,15 +423,14 @@ QWidget* KisToolMultihand::createOptionWidget()
     customUI->multihandTypeCombobox->addItem(i18n("Copy Translate"),int(COPYTRANSLATE));
     connect(customUI->multihandTypeCombobox,SIGNAL(currentIndexChanged(int)),this, SLOT(slotSetTransformMode(int)));
     customUI->multihandTypeCombobox->setCurrentIndex(m_configGroup.readEntry("transformMode", 0));
-    slotSetTransformMode(customUI->multihandTypeCombobox->currentIndex());
 
 
     customUI->axisRotationAngleSelector->setRange(0.0, 90.0);
     customUI->axisRotationAngleSelector->setDecimals(1);
     customUI->axisRotationAngleSelector->setWrapping(false);
     customUI->axisRotationAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_NoFlipOptions);
+    connect(customUI->axisRotationAngleSelector, SIGNAL(angleChanged(qreal)), this, SLOT(slotSetAxesAngle(qreal)));
     customUI->axisRotationAngleSelector->setAngle(m_configGroup.readEntry("axesAngle", 0.0));
-    connect( customUI->axisRotationAngleSelector, SIGNAL(angleChanged(qreal)),this, SLOT(slotSetAxesAngle(qreal)));
 
 
     // symmetry mode options
@@ -449,9 +448,9 @@ QWidget* KisToolMultihand::createOptionWidget()
     // translate mode options
     customUI->translationRadiusSpinbox->setRange(0, 200);
     customUI->translationRadiusSpinbox->setSuffix(i18n(" px"));
-    customUI->translationRadiusSpinbox->setValue(m_configGroup.readEntry("translateRadius", 0));
 
     connect(customUI->translationRadiusSpinbox,SIGNAL(valueChanged(int)),this,SLOT(slotSetTranslateRadius(int)));
+    customUI->translationRadiusSpinbox->setValue(m_configGroup.readEntry("translateRadius", 0));
 
     // Copy translate mode options and actions
     connect(customUI->addSubbrushButton, &QPushButton::clicked, this, &KisToolMultihand::slotAddSubbrushesMode);

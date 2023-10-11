@@ -539,28 +539,34 @@ QRect KisTransformMask::sourceDataBounds() const
     return partialChangeRect;
 }
 
+void KisTransformMask::setImage(KisImageWSP image)
+{
+    m_d->offset.setDefaultBounds(new KisDefaultBounds(image));
+    KisEffectMask::setImage(image);
+}
+
 qint32 KisTransformMask::x() const
 {
-    return m_d->offset.x();
+    return m_d->offset->x();
 }
 
 qint32 KisTransformMask::y() const
 {
-    return m_d->offset.y();
+    return m_d->offset->y();
 }
 
 void KisTransformMask::setX(qint32 x)
 {
     m_d->params->translateSrcAndDst(QPointF(x - this->x(), 0));
     setTransformParams(m_d->params);
-    m_d->offset.setX(x);
+    m_d->offset->setX(x);
 }
 
 void KisTransformMask::setY(qint32 y)
 {
     m_d->params->translateSrcAndDst(QPointF(0, y - this->y()));
     setTransformParams(m_d->params);
-    m_d->offset.setY(y);
+    m_d->offset->setY(y);
 }
 
 void KisTransformMask::forceUpdateTimedNode()
@@ -585,7 +591,7 @@ void KisTransformMask::threadSafeForceStaticImageUpdate()
 
 void KisTransformMask::syncLodCache()
 {
-    m_d->offset.syncLodOffset();
+    m_d->offset.syncLodCache();
     KisEffectMask::syncLodCache();
 }
 

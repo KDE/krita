@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-05 00:41+0000\n"
-"PO-Revision-Date: 2023-09-16 10:08\n"
+"PO-Revision-Date: 2023-10-10 14:27\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -8072,11 +8072,10 @@ msgstr "显示文件工具栏"
 #. i18n: context: toolTip @ Action (lock_toolbars), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (lock_toolbars), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:65 krita/krita.action:67 krita/krita.action:68
-#, fuzzy, kde-format
-#| msgid "Toolbars"
+#, kde-format
 msgctxt "action"
 msgid "Lock Toolbars"
-msgstr "工具栏"
+msgstr "锁定工具栏"
 
 #. i18n: context: text @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
@@ -29405,27 +29404,7 @@ msgstr ""
 "</span></b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:215
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><table width=\"100%\" cellpadding="
-#| "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
-#| "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#| "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-#| "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#| "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#| "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#| "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
-#| "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
-#| "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
-#| "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
-#| "p><p><a href=\"https://api.kde.org/appscomplete-api/krita-apidocs/libs/"
-#| "libkis/html/index.html\"><span style=\" text-decoration: underline; color:"
-#| "%1;\">Scripting API</span></a></p><p><a href=\"https://scripting.krita."
-#| "org/lessons/introduction\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Scripting School</span></a></p></td></table></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
 "style=\" color:%1;\"><b>Using Krita</b></span></p><p><a href=\"https://krita."
@@ -29459,12 +29438,11 @@ msgstr ""
 "href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">用户社区</span></a></p><p><a href=\"https://invent."
 "kde.org/graphics/krita\"><span style=\" text-decoration: underline; color:%1;"
-"\">源代码下载</span></a></p><p><a href=\"https://api.kde.org/appscomplete-"
-"api/krita-apidocs/libs/libkis/html/index.html\"><span style=\" text-"
-"decoration: underline; color:%1;\">脚本编程 API</span></a></p><p><a href="
-"\"https://scripting.krita.org/lessons/introduction\"><span style=\" text-"
-"decoration: underline; color:%1;\">脚本编程教学网站</span></a></p></td></"
-"table></body></html>"
+"\">源代码下载</span></a></p><p><a href=\"https://api.kde.org/krita/html/"
+"classKrita.html\"><span style=\" text-decoration: underline; color:%1;\">脚本"
+"编程 API</span></a></p><p><a href=\"https://scripting.krita.org/lessons/"
+"introduction\"><span style=\" text-decoration: underline; color:%1;\">脚本编"
+"程教学网站</span></a></p></td></table></body></html>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format
@@ -42530,12 +42508,10 @@ msgid "Create Bundle"
 msgstr "创建资源包"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:155
-#, fuzzy, kde-format
-#| msgctxt "Button to edit the selected handle in the segment gradient editor"
-#| msgid "Edit handle"
+#, kde-format
 msgctxt "In bundle manager; press button to edit existing bundle"
 msgid "Edit Bundle"
-msgstr "编辑控制点"
+msgstr "编辑资源包"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:198
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:356
@@ -42575,10 +42551,9 @@ msgid ""
 msgstr "已安装同名资源包。您想要覆盖它吗？"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:279
-#, fuzzy, kde-format
-#| msgid "Choose channels to blend"
+#, kde-format
 msgid "Choose the bundle to edit"
-msgstr "选择要混合的通道"
+msgstr "选择要编辑的资源包"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:414
 #, kde-format
@@ -42604,35 +42579,28 @@ msgstr "创建资源包"
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseRes)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:130
 #: plugins/extensions/resourcemanager/wdgside.ui:137
-#, fuzzy, kde-format
-#| msgid "Storage Resources"
+#, kde-format
 msgid "Choose Resources"
-msgstr "启用/禁用资源包"
+msgstr "选择资源"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseTags)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:131
 #: plugins/extensions/resourcemanager/wdgside.ui:80
-#, fuzzy, kde-format
-#| msgid "Choose a color"
+#, kde-format
 msgid "Choose Tags"
-msgstr "选择颜色"
+msgstr "选择标签"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnBundleInfo)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:132
 #: plugins/extensions/resourcemanager/wdgside.ui:99
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Bristle_Details.kpp"
-#| msgid "Bristle Details"
+#, kde-format
 msgid "Enter Bundle Details"
-msgstr "鬃毛 精细"
+msgstr "输入资源包详细信息"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:133
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Enter Save Location"
-msgstr "参考图像存储位置："
+msgstr "输入保存位置"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:138
 #, kde-format
@@ -42640,31 +42608,24 @@ msgid "Edit Resource Bundle"
 msgstr "编辑资源包"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:141
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Edit Resources"
-msgstr "资源"
+msgstr "编辑资源"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
-#, fuzzy, kde-format
-#| msgid "Edit Text"
+#, kde-format
 msgid "Edit Tags"
-msgstr "编辑选中文字"
+msgstr "编辑标签"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:143
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Bristle_Details.kpp"
-#| msgid "Bristle Details"
+#, kde-format
 msgid "Edit Bundle Details"
-msgstr "鬃毛 精细"
+msgstr "编辑资源包详细信息"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:144
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Edit Save Location"
-msgstr "参考图像存储位置："
+msgstr "编辑保存位置"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:221
 #, kde-format
@@ -42804,7 +42765,7 @@ msgstr "请选择用作资源包图标的文件"
 #: plugins/extensions/resourcemanager/pagetagchooser.ui:20
 #, kde-format
 msgid "WizardPage"
-msgstr ""
+msgstr "向导页面"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -42872,11 +42833,9 @@ msgstr "(256x256 像素)"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnRemoveSelected)
 #: plugins/extensions/resourcemanager/pageresourcechooser.ui:74
-#, fuzzy, kde-format
-#| msgctxt "Group as Swatch Group in a Palette"
-#| msgid "Remove selected group"
+#, kde-format
 msgid "Remove Selected"
-msgstr "移除所选色块组"
+msgstr "移除选中项"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:39
 #, kde-format
@@ -42940,10 +42899,9 @@ msgstr "资源(&R)"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnEdit)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:92
-#, fuzzy, kde-format
-#| msgid "Import a resource library"
+#, kde-format
 msgid "Edit a resource library"
-msgstr "导入资源库"
+msgstr "编辑资源库"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:108
@@ -43051,10 +43009,9 @@ msgstr "显示已删除资源"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnSaveLocation)
 #: plugins/extensions/resourcemanager/wdgside.ui:118
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Choose Save Location"
-msgstr "参考图像存储位置："
+msgstr "选择保存位置"
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:262
 #, kde-format
@@ -59863,6 +59820,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgid "Embed tags..."
-#~ msgstr "嵌入标签..."

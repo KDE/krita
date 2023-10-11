@@ -58700,9 +58700,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Toolbars"
-#~ msgctxt "action"
-#~ msgid "Lock Toolbars"
-#~ msgstr "Panely nástrojů"

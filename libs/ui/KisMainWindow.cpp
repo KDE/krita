@@ -74,11 +74,11 @@
 #include <KoResourcePaths.h>
 #include <KoToolFactoryBase.h>
 #include <KoToolRegistry.h>
-#include "KoDockFactoryBase.h"
-#include "KoDockWidgetTitleBar.h"
-#include "KoDocumentInfoDlg.h"
-#include "KoDocumentInfo.h"
-#include "KoFileDialog.h"
+#include <KoDockFactoryBase.h>
+#include <KoDockWidgetTitleBar.h>
+#include <KoDocumentInfoDlg.h>
+#include <KoDocumentInfo.h>
+#include <KoFileDialog.h>
 #include <kis_icon.h>
 #include <KoToolManager.h>
 #include <KoZoomController.h>
@@ -2459,7 +2459,7 @@ void KisMainWindow::toggleDockersVisibility(bool visible)
         Q_FOREACH (QObject* widget, children()) {
             if (widget->inherits("QDockWidget")) {
                 QDockWidget* dw = static_cast<QDockWidget*>(widget);
-                if (dw->isVisible()) {
+                if (dw->isVisible() && !dw->property("ShowOnWelcomePage").toBool()) {
                     dw->hide();
                 }
             }

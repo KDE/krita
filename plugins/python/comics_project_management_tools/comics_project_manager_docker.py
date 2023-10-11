@@ -196,6 +196,7 @@ class comics_project_manager_docker(DockWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle(self.stringName)
+        self.setProperty("ShowOnWelcomePage", True);
 
         # Setup layout:
         base = QHBoxLayout()

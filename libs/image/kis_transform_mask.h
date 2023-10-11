@@ -54,6 +54,7 @@ public:
     QRect exactBounds() const override;
     QRect sourceDataBounds() const;
 
+    void setImage(KisImageWSP image) override;
     void setTransformParams(KisTransformMaskParamsInterfaceSP params);
     KisTransformMaskParamsInterfaceSP transformParams() const;
 

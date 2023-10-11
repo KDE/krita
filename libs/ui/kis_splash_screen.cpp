@@ -216,7 +216,7 @@ void KisSplashScreen::displayLinks(bool show) {
                                "<head/>"
                                "<body><table width=\"100%\" cellpadding=\"30\"><tr><td>"
                                "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
-                               "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita's Development!</span></a></p>"
+//                               "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita's Development!</span></a></p>"
                                "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>"
                                "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></a></p>"
                                "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>"

@@ -370,7 +370,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     btnNewsOptions->setIcon(KisIconUtils::loadIcon("view-choose"));
     btnNewsOptions->setFlat(true);
 
-    supportKritaIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("support-krita")));
+//    supportKritaIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("support-krita")));
     const QIcon &linkIcon = KisIconUtils::loadIcon(QStringLiteral("bookmarks"));
     userManualIcon->setIcon(linkIcon);
     gettingStartedIcon->setIcon(linkIcon);
@@ -380,15 +380,15 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
     kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")));
 
-    lblBanner->setUnscaledPixmap(QPixmap::fromImage(m_bannerImage));
-    connect(lblBanner, SIGNAL(clicked()), this, SLOT(slotBannerClicked()));
-    connect(lblBanner, &KisClickableLabel::dismissed, this, [&](){
-        lblBanner->setVisible(false);
+//    lblBanner->setUnscaledPixmap(QPixmap::fromImage(m_bannerImage));
+//    connect(lblBanner, SIGNAL(clicked()), this, SLOT(slotBannerClicked()));
+//    connect(lblBanner, &KisClickableLabel::dismissed, this, [&](){
+//        lblBanner->setVisible(false);
 
-        KisConfig cfg(false);
-        cfg.setHideDevFundBanner(true);
-    });
-    lblBanner->setVisible(m_showBanner);
+//        KisConfig cfg(false);
+//        cfg.setHideDevFundBanner(true);
+//    });
+//    lblBanner->setVisible(m_showBanner);
 
     // HTML links seem to be a bit more stubborn with theme changes... setting inline styles to help with color change
     userCommunityLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita-artists.org\">")
@@ -400,8 +400,8 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     manualLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org\">")
                         .append(i18n("User Manual")).append("</a>"));
 
-    supportKritaLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita.org/support-us/donations?" + analyticsString + "donations" + "\">")
-                              .append(i18n("Support Krita")).append("</a>"));
+//    supportKritaLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita.org/support-us/donations?" + analyticsString + "donations" + "\">")
+//                              .append(i18n("Support Krita")).append("</a>"));
 
     kritaWebsiteLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://www.krita.org?" + analyticsString + "marketing-site" + "\">")
                               .append(i18n("Krita Website")).append("</a>"));
@@ -831,13 +831,13 @@ QFont KisWelcomePageWidget::largerFont()
 
 void KisWelcomePageWidget::setupBanner()
 {
-    m_bannerUrl = "https://krita.org/support-us/donations";
-    m_bannerImage = QImage(QStringLiteral(":/default_banner.png"));
-    KisApplication *kisApp = static_cast<KisApplication*>(qApp);
+//    m_bannerUrl = "https://krita.org/support-us/donations";
+//    m_bannerImage = QImage(QStringLiteral(":/default_banner.png"));
+//    KisApplication *kisApp = static_cast<KisApplication*>(qApp);
 
-    KisConfig cfg(true);
+//    KisConfig cfg(true);
 
-    m_showBanner = (!kisApp->isStoreApplication() && !cfg.hideDevFundBanner());
+//    m_showBanner = (!kisApp->isStoreApplication() && !cfg.hideDevFundBanner());
 
 //    if (m_networkIsAllowed) {
 //        QByteArray ba = KisRemoteFileFetcher::fetchFile("https://download.kde.org/stable/krita/banner/banner.xml");

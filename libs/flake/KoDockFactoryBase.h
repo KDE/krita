@@ -9,8 +9,9 @@
 
 #include "kritaflake_export.h"
 
+#include <QString>
+
 class QDockWidget;
-class QString;
 
 /**
  * Base class for factories used to create new dock widgets.

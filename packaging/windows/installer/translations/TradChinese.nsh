@@ -18,9 +18,6 @@ LangString SectionRemoveOldVerDesc ${CURRENT_LANG} "解除安裝先前曾安裝�
 LangString SectionShellEx ${CURRENT_LANG} "系統介面整合"
 LangString SectionShellExDesc ${CURRENT_LANG} "安裝整合元件 (Shell Extension) 以在 Window 檔案總管中顯示 Krita 檔案的縮圖和屬性資訊。$\r$\n$\r$\n版本: ${KRITASHELLEX_VERSION}"
 LangString SectionMainDesc ${CURRENT_LANG} "${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}$\r$\n$\r$\n版本: ${KRITA_VERSION}"
-# We don't actually bundle FFmpeg so these are not shown.
-LangString SectionBundledFfmpeg ${CURRENT_LANG} "內置 FFmpeg"
-LangString SectionBundledFfmpegDesc ${CURRENT_LANG} "安裝包含在本安裝程式中的 FFmpeg 以用作匯出動畫檔案。"
 
 # Main dialog strings:
 LangString SetupLangPrompt ${CURRENT_LANG} "請選擇安裝過程使用的語言:"

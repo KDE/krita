@@ -18,9 +18,6 @@ LangString SectionRemoveOldVerDesc ${CURRENT_LANG} "Remove previously installed 
 LangString SectionShellEx ${CURRENT_LANG} "Shell Integration"
 LangString SectionShellExDesc ${CURRENT_LANG} "Shell Extension component to provide thumbnails and file properties display for Krita files.$\r$\n$\r$\nVersion: ${KRITASHELLEX_VERSION}"
 LangString SectionMainDesc ${CURRENT_LANG} "${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}$\r$\n$\r$\nVersion: ${KRITA_VERSION}"
-# We don't actually bundle FFmpeg so these are not shown.
-LangString SectionBundledFfmpeg ${CURRENT_LANG} "Bundled FFmpeg"
-LangString SectionBundledFfmpegDesc ${CURRENT_LANG} "Install a bundled version of FFmpeg for exporting animations."
 
 # Main dialog strings:
 LangString SetupLangPrompt ${CURRENT_LANG} "Choose the language to be used for the setup process:"

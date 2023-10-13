@@ -340,22 +340,3 @@ quint64 KisAnimatedTransformMaskParameters::generateStateHash() const
             ^ qHash(transformArgs()->alpha());
 }
 
-#include "kis_transform_mask_params_factory_registry.h"
-
-namespace {
-
-KisAnimatedTransformParamsInterfaceSP createAnimatedParams(KisDefaultBoundsBaseSP defaultBounds)
-{
-    return toQShared(new KisAnimatedTransformMaskParameters(defaultBounds));
-}
-
-} // namespace
-
-class AnimatedTransformParamsRegistrar {
-public:
-    AnimatedTransformParamsRegistrar() {
-        KisTransformMaskParamsFactoryRegistry::instance()->setAnimatedParamsFactory(&createAnimatedParams);
-
-    }
-};
-static AnimatedTransformParamsRegistrar __animatedTransformParamsRegistrar;

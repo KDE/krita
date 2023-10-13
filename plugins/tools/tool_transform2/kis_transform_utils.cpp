@@ -30,29 +30,6 @@
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 
-
-struct TransformTransactionPropertiesRegistrar {
-    TransformTransactionPropertiesRegistrar() {
-        qRegisterMetaType<TransformTransactionProperties>("TransformTransactionProperties");
-    }
-};
-static TransformTransactionPropertiesRegistrar __registrar1;
-
-struct ToolTransformArgsRegistrar {
-    ToolTransformArgsRegistrar() {
-        qRegisterMetaType<ToolTransformArgs>("ToolTransformArgs");
-    }
-};
-static ToolTransformArgsRegistrar __registrar2;
-
-struct QPainterPathRegistrar {
-    QPainterPathRegistrar() {
-        qRegisterMetaType<QPainterPath>("QPainterPath");
-    }
-};
-static QPainterPathRegistrar __registrar3;
-
-
 const int KisTransformUtils::rotationHandleVisualRadius = 12;
 const int KisTransformUtils::rotationHandleRadius = 8;
 const int KisTransformUtils::handleVisualRadius = 12;

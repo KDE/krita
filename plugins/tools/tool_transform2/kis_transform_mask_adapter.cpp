@@ -140,14 +140,3 @@ KisKeyframeChannel *KisTransformMaskAdapter::getKeyframeChannel(const QString &i
 KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::clone() const {
     return toQShared(new KisTransformMaskAdapter(*this->transformArgs(), this->isHidden(), this->isInitialized()));
 }
-
-#include "kis_transform_mask_params_factory_registry.h"
-
-struct ToolTransformParamsRegistrar {
-    ToolTransformParamsRegistrar() {
-        KisTransformMaskParamsFactory f(KisTransformMaskAdapter::fromXML);
-        KisTransformMaskParamsFactoryRegistry::instance()->addFactory("tooltransformparams", f);
-    }
-};
-static ToolTransformParamsRegistrar __toolTransformParamsRegistrar;
-

@@ -37,7 +37,7 @@
 #include "kis_shape_selection.h"
 #include "kis_default_bounds.h"
 #include "KisImageResolutionProxy.h"
-#include "kis_transform_mask_params_interface.h"
+#include "KisDumbTransformMaskParams.h"
 #include <KisGlobalResourcesInterface.h>
 
 

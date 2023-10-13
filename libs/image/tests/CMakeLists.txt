@@ -138,8 +138,14 @@ kis_add_test(
     NAME_PREFIX "libs-image-"
     )
 
-krita_add_broken_unit_tests(
+krita_add_broken_unit_test(
     kis_transform_mask_test.cpp
+    LINK_LIBRARIES kritaimage kritatestsdk kritaglobal kritatransformmaskstubs
+    NAME_PREFIX "libs-image-"
+    )
+
+
+krita_add_broken_unit_tests(
     kis_perspective_transform_worker_test.cpp
     LINK_LIBRARIES kritaimage kritatestsdk
     NAME_PREFIX "libs-image-"

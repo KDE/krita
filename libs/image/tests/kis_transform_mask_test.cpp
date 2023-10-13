@@ -14,16 +14,22 @@
 #include "kis_transform_mask.h"
 #include "kis_transform_mask_params_interface.h"
 
+
 #include "testutil.h"
 #include "kistest.h"
 
-#include "kis_algebra_2d.h"
 #include "kis_safe_transform.h"
 #include "kis_clone_layer.h"
 #include "kis_group_layer.h"
 #include "kis_paint_device_debug_utils.h"
 
+#include "KritaTransformMaskStubs.h"
+#include "KisDumbTransformMaskParams.h"
 
+void KisTransformMaskTest::initTestCase()
+{
+    TestUtil::registerTransformMaskStubs();
+}
 
 inline QString toOctaveFormat(const QTransform &t)
 {
@@ -339,8 +345,7 @@ bool doPartialTests(const QString &prefix, KisImageSP image, KisLayerSP paintLay
     result &= chk.checkImage(image, testName);
 
 
-    KisDumbTransformMaskParams *params =
-        dynamic_cast<KisDumbTransformMaskParams*>(mask->transformParams().data());
+    QSharedPointer<KisDumbTransformMaskParams> params = mask->transformParams().dynamicCast<KisDumbTransformMaskParams>();
 
     QTransform t = params->testingGetTransform();
     t *= QTransform::fromTranslate(400, 300);

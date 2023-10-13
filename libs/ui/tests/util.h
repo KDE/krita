@@ -40,6 +40,7 @@
 #include "kis_shape_controller.h"
 #include <KisGlobalResourcesInterface.h>
 #include <KisImageResolutionProxy.h>
+#include "KisDumbTransformMaskParams.h"
 
 KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 {
@@ -75,7 +76,7 @@ QTransform createTestingTransform() {
     return QTransform(1,2,3,4,5,6,7,8,9);
 }
 
-KisDocument* createCompleteDocument(bool shouldMaskToShapeLayer = false)
+inline KisDocument* createCompleteDocument(bool shouldMaskToShapeLayer = false)
 {
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip");
 

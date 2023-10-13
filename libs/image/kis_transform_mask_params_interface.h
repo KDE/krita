@@ -64,7 +64,7 @@ class KRITAIMAGE_EXPORT KisAnimatedTransformParamsInterface
 public:
     virtual ~KisAnimatedTransformParamsInterface();
 
-    virtual KisKeyframeChannel* requestKeyframeChannel(const QString &id, KisNodeWSP parent) = 0;
+    virtual KisKeyframeChannel* requestKeyframeChannel(const QString &id) = 0;
     virtual KisKeyframeChannel* getKeyframeChannel(const QString &id) const = 0;
 
     virtual KisTransformMaskParamsInterfaceSP bakeIntoParams() const = 0;

@@ -61,6 +61,7 @@ struct KisAnimatedTransformMaskParameters::Private
     KisLogCapableTransformArgs baseArgs;
     KisDefaultBoundsBaseSP defaultBounds;
     bool isHidden {false};
+    bool isInitialized {false};
 
     quint64 hash;
 };
@@ -177,28 +178,14 @@ KisDefaultBoundsBaseSP KisAnimatedTransformMaskParameters::defaultBounds() const
     return m_d->defaultBounds;
 }
 
-KisKeyframeChannel *KisAnimatedTransformMaskParameters::requestKeyframeChannel(const QString &id, KisNodeWSP parent)
+KisKeyframeChannel *KisAnimatedTransformMaskParameters::requestKeyframeChannel(const QString &id)
 {
-    // TODO: remove `parent`
-
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!m_d->transformChannels.contains(id), m_d->transformChannels.value(id).data());
 
-    const bool isTheFirstChannel = m_d->transformChannels.isEmpty();
-
-    if (isTheFirstChannel) {
-        /**
-         * We shouldn't create the channels in lodN mode
-         */
-        KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->defaultBounds->currentLevelOfDetail() <= 0);
-
-        KisTransformMask *mask = dynamic_cast<KisTransformMask*>(parent.data());
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(mask, nullptr);
-
-        const QRect srcDataBounds = mask->sourceDataBounds();
-
-        m_d->baseArgs->setOriginalCenter(srcDataBounds.center());
-        m_d->baseArgs->setTransformedCenter(srcDataBounds.center());
-    }
+    /**
+     * We shouldn't create the channels in lodN mode
+     */
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->defaultBounds->currentLevelOfDetail() <= 0);
 
     const KoID channelId = KisKeyframeChannel::channelIdToKoId(id);
     KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(channelId, m_d->defaultBounds);
@@ -256,7 +243,7 @@ KisAnimatedTransformParamsInterfaceSP KisAnimatedTransformMaskParameters::clone(
 
 KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParameters::bakeIntoParams() const
 {
-    return toQShared(new KisTransformMaskAdapter(*transformArgs(), m_d->isHidden));
+    return toQShared(new KisTransformMaskAdapter(*transformArgs(), m_d->isHidden, m_d->isInitialized));
 }
 
 void KisAnimatedTransformMaskParameters::setParamsAtCurrentPosition(const KisTransformMaskParamsInterface *params, KUndo2Command *parentCommand)
@@ -267,6 +254,7 @@ void KisAnimatedTransformMaskParameters::setParamsAtCurrentPosition(const KisTra
     KIS_SAFE_ASSERT_RECOVER_RETURN(adapter);
 
     makeChangeValueCommand<&Private::isHidden>(m_d.data(), adapter->isHidden(), parentCommand);
+    makeChangeValueCommand<&Private::isInitialized>(m_d.data(), adapter->isInitialized(), parentCommand);
 
     ToolTransformArgs args = *adapter->transformArgs();
 

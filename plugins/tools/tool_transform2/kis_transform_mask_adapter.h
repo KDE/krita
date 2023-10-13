@@ -18,11 +18,13 @@ class KRITATOOLTRANSFORM_EXPORT KisTransformMaskAdapter : public KisTransformMas
 {
 public:
     KisTransformMaskAdapter();
-    KisTransformMaskAdapter(const ToolTransformArgs &args, bool isHidden = false);
+    KisTransformMaskAdapter(const ToolTransformArgs &args, bool isHidden = false, bool isInitialized = true);
     ~KisTransformMaskAdapter() override;
 
     QTransform finalAffineTransform() const override;
     bool isAffine() const override;
+
+    bool isInitialized() const;
 
     void setHidden(bool value) override;
     bool isHidden() const override;

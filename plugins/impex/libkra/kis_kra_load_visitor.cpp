@@ -390,6 +390,10 @@ bool KisKraLoadVisitor::visit(KisTransformMask *mask)
 
             QString id = main.attribute("id", "not-valid");
 
+            // backward compatibility
+            if (id == "animatedtransformparams") {
+                id = "tooltransformparams";
+            }
             if (id == "not-valid") {
                 m_errorMessages << i18n("Could not load \"id\" of the transform mask");
                 return false;
@@ -412,7 +416,6 @@ bool KisKraLoadVisitor::visit(KisTransformMask *mask)
             mask->setTransformParams(params);
 
             loadNodeKeyframes(mask);
-            params->clearChangedFlag();
 
             return true;
         }

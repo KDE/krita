@@ -18,6 +18,15 @@ class QTransform;
 class QDomElement;
 class KisKeyframeChannel;
 
+class KisTransformMaskParamsInterface;
+typedef QSharedPointer<KisTransformMaskParamsInterface> KisTransformMaskParamsInterfaceSP;
+typedef QWeakPointer<KisTransformMaskParamsInterface> KisTransformMaskParamsInterfaceWSP;
+
+class KisAnimatedTransformParamsInterface;
+typedef QSharedPointer<KisAnimatedTransformParamsInterface> KisAnimatedTransformParamsInterfaceSP;
+typedef QWeakPointer<KisAnimatedTransformParamsInterface> KisAnimatedTransformParamsInterfaceWSP;
+
+
 class KRITAIMAGE_EXPORT KisTransformMaskParamsInterface
 {
 public:
@@ -39,8 +48,6 @@ public:
     virtual QRect nonAffineChangeRect(const QRect &rc) = 0;
     virtual QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds) = 0;
 
-    virtual void clearChangedFlag() = 0;
-    virtual bool hasChanged() const = 0;
 
     virtual KisTransformMaskParamsInterfaceSP clone() const = 0;
 };
@@ -51,12 +58,21 @@ public:
     virtual ~KisAnimatedTransformParamsInterface();
 
     virtual KisKeyframeChannel* requestKeyframeChannel(const QString &id, KisNodeWSP parent) = 0;
-    virtual KisKeyframeChannel* getKeyframeChannel(const KoID& koid) const = 0;
-    virtual void setKeyframeChannel(const QString &name, QSharedPointer<KisKeyframeChannel> kcsp) = 0;
-    virtual QList<KisKeyframeChannel*> copyChannelsFrom(const KisAnimatedTransformParamsInterface* other) = 0;
+    virtual KisKeyframeChannel* getKeyframeChannel(const QString &id) const = 0;
 
-    virtual void initializeKeyframes(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, KUndo2Command* cmnd = nullptr) = 0;
-    virtual void setKeyframeData(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, KUndo2Command* cmnd = nullptr) = 0;
+    virtual KisTransformMaskParamsInterfaceSP bakeIntoParams() const = 0;
+    virtual void setParamsAtCurrentPosition(const KisTransformMaskParamsInterface *params, KUndo2Command *parentCommand) = 0;
+
+    virtual void clearChangedFlag() = 0;
+    virtual bool hasChanged() const = 0;
+
+    virtual KisAnimatedTransformParamsInterfaceSP clone() const = 0;
+
+    virtual void setDefaultBounds(KisDefaultBoundsBaseSP bounds) = 0;
+    virtual KisDefaultBoundsBaseSP defaultBounds() const = 0;
+
+    virtual void syncLodCache() = 0;
+
 };
 
 class QDomElement;
@@ -92,8 +108,6 @@ public:
 
     bool isAnimated() const;
     KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds);
-    void clearChangedFlag() override;
-    bool hasChanged() const override;
 
     KisTransformMaskParamsInterfaceSP clone() const override;
 

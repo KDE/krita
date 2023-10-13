@@ -100,6 +100,26 @@ public:
                 m_data, m_defaultBounds->currentLevelOfDetail());
     }
 
+    using LodState = std::pair<int, T>;
+
+    void setLodState(const LodState &state) {
+        (state.first > 0 ? m_lodNData : m_data) = state.second;
+    }
+
+    LodState lodState() const {
+        return std::make_pair(m_defaultBounds->currentLevelOfDetail(), *(*this));
+    }
+
+    operator LodState() const {
+        return lodState();
+    }
+
+    KisLodSwitchingWrapper& operator=(const LodState &rhs)
+    {
+        setLodState(rhs);
+        return *this;
+    }
+
 
 private:
     KisDefaultBoundsBaseSP m_defaultBounds;

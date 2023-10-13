@@ -10,10 +10,15 @@
 #include <kis_transform_mask.h>
 
 
-KisSimpleModifyTransformMaskCommand::KisSimpleModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP oldParams, KisTransformMaskParamsInterfaceSP newParams)
-    : m_mask(mask),
-      m_oldParams(oldParams),
-      m_newParams(newParams)
+KisSimpleModifyTransformMaskCommand::KisSimpleModifyTransformMaskCommand(KisTransformMaskSP mask,
+                                                                         KisTransformMaskParamsInterfaceSP newParams,
+                                                                         QWeakPointer<boost::none_t> updatesBlockerCookie,
+                                                                         KUndo2Command *parent)
+    : KUndo2Command(parent),
+      m_mask(mask),
+      m_oldParams(m_mask->transformParams()),
+      m_newParams(newParams),
+      m_updatesBlockerCookie(updatesBlockerCookie)
 {
 }
 
@@ -24,17 +29,21 @@ int KisSimpleModifyTransformMaskCommand::id() const
 
 bool KisSimpleModifyTransformMaskCommand::mergeWith(const KUndo2Command *other)
 {
-    const KisSimpleModifyTransformMaskCommand *otherCommand =
+    const KisSimpleModifyTransformMaskCommand *otherCommandConst =
             dynamic_cast<const KisSimpleModifyTransformMaskCommand*>(other);
 
     bool retval = false;
 
-    if (otherCommand &&
-            otherCommand->m_mask == m_mask &&
-            otherCommand->m_oldParams == m_newParams) {
+    if (otherCommandConst &&
+            otherCommandConst->m_mask == m_mask &&
+            otherCommandConst->m_oldParams == m_newParams) {
 
+        KisSimpleModifyTransformMaskCommand *otherCommand =
+                const_cast<KisSimpleModifyTransformMaskCommand*>(otherCommandConst);
 
         m_newParams = otherCommand->m_newParams;
+        std::move(otherCommand->m_undoCommands.begin(), otherCommand->m_undoCommands.end(),
+                  std::back_inserter(m_undoCommands));
 
         retval = true;
     }
@@ -42,14 +51,31 @@ bool KisSimpleModifyTransformMaskCommand::mergeWith(const KUndo2Command *other)
     return retval;
 }
 
-void KisSimpleModifyTransformMaskCommand::undo()
-{
-    m_mask->setTransformParams(m_oldParams);
-    m_mask->threadSafeForceStaticImageUpdate();
-}
-
 void KisSimpleModifyTransformMaskCommand::redo()
 {
-    m_mask->setTransformParams(m_newParams);
-    m_mask->threadSafeForceStaticImageUpdate();
+    if (!m_isInitialized) {
+        std::unique_ptr<KUndo2Command> parent(new KUndo2Command);
+        m_mask->setTransformParamsWithUndo(m_newParams, parent.get());
+        m_undoCommands.emplace_back(parent.release());
+        m_isInitialized = true;
+    }
+
+    KUndo2Command::redo();
+    std::for_each(m_undoCommands.begin(), m_undoCommands.end(), std::mem_fn(&KUndo2Command::redo));
+
+    if (!m_updatesBlockerCookie) {
+        m_mask->threadSafeForceStaticImageUpdate();
+    }
+}
+
+void KisSimpleModifyTransformMaskCommand::undo()
+{
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_isInitialized);
+
+    std::for_each(m_undoCommands.begin(), m_undoCommands.end(), std::mem_fn(&KUndo2Command::undo));
+    KUndo2Command::undo();
+
+    if (!m_updatesBlockerCookie) {
+        m_mask->threadSafeForceStaticImageUpdate();
+    }
 }

@@ -140,6 +140,8 @@ public:
     virtual QDomElement toXML(QDomDocument doc, const QString &layerFilename);
     virtual void loadXML(const QDomElement &channelNode);
 
+    static KoID channelIdToKoId(const QString &id);
+
 Q_SIGNALS:
     /** @brief This signal is emitted just AFTER a keyframe was added to the channel. */
     void sigAddedKeyframe(const KisKeyframeChannel *channel, int time);

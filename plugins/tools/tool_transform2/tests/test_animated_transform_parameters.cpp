@@ -9,7 +9,8 @@
 #include "kis_transform_mask.h"
 #include <testutil.h>
 #include "tool_transform_args.h"
-#include "kis_modify_transform_mask_command.h"
+#include "commands_new/KisSimpleModifyTransformMaskCommand.h"
+#include "commands_new/KisLazyCreateTransformMaskKeyframesCommand.h"
 #include "kis_image_animation_interface.h"
 #include "kis_transform_mask_params_interface.h"
 #include "kis_animated_transform_parameters.h"
@@ -36,14 +37,11 @@ void KisAnimatedTransformParametersTest::testTransformKeyframing()
         args.setMode(ToolTransformArgs::FREE_TRANSFORM);
         args.setScaleX(0.75);
 
-        QScopedPointer<KisInitializeTransformMaskKeyframesCommand> command0(
-                    new KisInitializeTransformMaskKeyframesCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
-        QScopedPointer<KisSetTransformMaskKeyframesCommand> command1(
-                    new KisSetTransformMaskKeyframesCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
-        QScopedPointer<KisModifyTransformMaskCommand> command2(
-                    new KisModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
+        QScopedPointer<KisLazyCreateTransformMaskKeyframesCommand> command0(
+                    new KisLazyCreateTransformMaskKeyframesCommand(mask));
+        QScopedPointer<KisSimpleModifyTransformMaskCommand> command2(
+                    new KisSimpleModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
         command0->redo();
-        command1->redo();
         command2->redo();
     }
 
@@ -53,14 +51,11 @@ void KisAnimatedTransformParametersTest::testTransformKeyframing()
 
         args.setScaleX(0.5);
 
-        QScopedPointer<KisInitializeTransformMaskKeyframesCommand> command0(
-                    new KisInitializeTransformMaskKeyframesCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
-        QScopedPointer<KisSetTransformMaskKeyframesCommand> command1(
-                    new KisSetTransformMaskKeyframesCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
-        QScopedPointer<KisModifyTransformMaskCommand> command2(
-                    new KisModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
+        QScopedPointer<KisLazyCreateTransformMaskKeyframesCommand> command0(
+                    new KisLazyCreateTransformMaskKeyframesCommand(mask));
+        QScopedPointer<KisSimpleModifyTransformMaskCommand> command2(
+                    new KisSimpleModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
         command0->redo();
-        command1->redo();
         command2->redo();
     }
 

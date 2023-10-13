@@ -393,10 +393,12 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         } else if (KisTransformMask *transformMask =
                    dynamic_cast<KisTransformMask*>(csd->node.data())) {
 
+            KisTransformMaskParamsInterfaceSP params = transformMask->transformParams();
+            params->setHidden(true);
+
             runAndSaveCommand(KUndo2CommandSP(
                                   new KisSimpleModifyTransformMaskCommand(transformMask,
-                                                                          KisTransformMaskParamsInterfaceSP(
-                                                                              new KisDumbTransformMaskParams(true)))),
+                                                                          params)),
                                   KisStrokeJobData::SEQUENTIAL,
                                   KisStrokeJobData::NORMAL);
         }

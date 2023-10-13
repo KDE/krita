@@ -26,7 +26,9 @@ set(kritatooltransform_static_SRCS
 
 ki18n_wrap_ui(kritatooltransform_static_SRCS wdg_tool_transform.ui)
 
-kis_add_library(kritatooltransform_static STATIC ${kritatooltransform_static_SRCS})
+## TODO: refactor registrars to be in the main tool_transform.cc file to avoid
+##       replacing STATIC->OBJECT, also write a policy about that
+kis_add_library(kritatooltransform_static OBJECT ${kritatooltransform_static_SRCS})
 generate_export_header(kritatooltransform_static BASE_NAME kritatooltransform)
 
 set(kritatooltransform_SOURCES

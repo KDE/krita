@@ -61,6 +61,7 @@ KisFrameDisplayProxy::KisFrameDisplayProxy(KisCanvas2* canvas, QObject *parent)
     });
 
     m_d->displayedFrame = m_d->canvas->image()->animationInterface()->currentUITime();
+    m_d->intendedFrame = m_d->displayedFrame;
 }
 
 KisFrameDisplayProxy::~KisFrameDisplayProxy()

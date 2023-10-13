@@ -13,7 +13,7 @@ KisTransformMaskParamsInterface::~KisTransformMaskParamsInterface()
 {
 }
 
-KisAnimatedTransformParamsInterface::~KisAnimatedTransformParamsInterface()
+KisAnimatedTransformParamsHolderInterface::~KisAnimatedTransformParamsHolderInterface()
 {
 }
 

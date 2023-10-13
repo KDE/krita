@@ -22,9 +22,9 @@ class KisTransformMaskParamsInterface;
 typedef QSharedPointer<KisTransformMaskParamsInterface> KisTransformMaskParamsInterfaceSP;
 typedef QWeakPointer<KisTransformMaskParamsInterface> KisTransformMaskParamsInterfaceWSP;
 
-class KisAnimatedTransformParamsInterface;
-typedef QSharedPointer<KisAnimatedTransformParamsInterface> KisAnimatedTransformParamsInterfaceSP;
-typedef QWeakPointer<KisAnimatedTransformParamsInterface> KisAnimatedTransformParamsInterfaceWSP;
+class KisAnimatedTransformParamsHolderInterface;
+typedef QSharedPointer<KisAnimatedTransformParamsHolderInterface> KisAnimatedTransformParamsHolderInterfaceSP;
+typedef QWeakPointer<KisAnimatedTransformParamsHolderInterface> KisAnimatedTransformParamsHolderInterfaceWSP;
 
 
 class KRITAIMAGE_EXPORT KisTransformMaskParamsInterface
@@ -59,10 +59,10 @@ public:
     virtual KisTransformMaskParamsInterfaceSP clone() const = 0;
 };
 
-class KRITAIMAGE_EXPORT KisAnimatedTransformParamsInterface
+class KRITAIMAGE_EXPORT KisAnimatedTransformParamsHolderInterface
 {
 public:
-    virtual ~KisAnimatedTransformParamsInterface();
+    virtual ~KisAnimatedTransformParamsHolderInterface();
 
     virtual KisKeyframeChannel* requestKeyframeChannel(const QString &id) = 0;
     virtual KisKeyframeChannel* getKeyframeChannel(const QString &id) const = 0;
@@ -73,7 +73,7 @@ public:
     virtual void clearChangedFlag() = 0;
     virtual bool hasChanged() const = 0;
 
-    virtual KisAnimatedTransformParamsInterfaceSP clone() const = 0;
+    virtual KisAnimatedTransformParamsHolderInterfaceSP clone() const = 0;
 
     virtual void setDefaultBounds(KisDefaultBoundsBaseSP bounds) = 0;
     virtual KisDefaultBoundsBaseSP defaultBounds() const = 0;

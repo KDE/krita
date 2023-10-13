@@ -38,7 +38,7 @@ void KisTransformMaskParamsFactoryRegistry::setAnimatedParamsFactory(const KisAn
     m_animatedParamsFactory = factory;
 }
 
-KisAnimatedTransformParamsInterfaceSP KisTransformMaskParamsFactoryRegistry::createAnimatedParams(KisDefaultBoundsBaseSP defaultBounds)
+KisAnimatedTransformParamsHolderInterfaceSP KisTransformMaskParamsFactoryRegistry::createAnimatedParams(KisDefaultBoundsBaseSP defaultBounds)
 {
     return m_animatedParamsFactory(defaultBounds);
 }

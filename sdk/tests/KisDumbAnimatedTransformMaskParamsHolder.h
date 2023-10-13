@@ -11,7 +11,7 @@
 #include "kis_transform_mask_params_interface.h"
 
 
-class KRITATRANSFORMMASKSTUBS_EXPORT KisDumbAnimatedTransformMaskParamsHolder : public KisAnimatedTransformParamsInterface
+class KRITATRANSFORMMASKSTUBS_EXPORT KisDumbAnimatedTransformMaskParamsHolder : public KisAnimatedTransformParamsHolderInterface
 {
 public:
     KisDumbAnimatedTransformMaskParamsHolder(KisDefaultBoundsBaseSP bounds);
@@ -32,7 +32,7 @@ public:
         return false;
     }
 
-    KisAnimatedTransformParamsInterfaceSP clone() const;
+    KisAnimatedTransformParamsHolderInterfaceSP clone() const;
 
     void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
 

@@ -17,6 +17,9 @@
 #include <testutil.h>
 #include <testui.h>
 
+#include "KritaTransformMaskStubs.h"
+#include "KisDumbTransformMaskParams.h"
+
 #include "config-limit-long-tests.h"
 
 void waitForMaskUpdates(KisNodeSP root) {
@@ -27,6 +30,11 @@ void waitForMaskUpdates(KisNodeSP root) {
     Q_UNUSED(root);
     QTest::qWait(100);
 #endif /* LIMIT_LONG_TESTS */
+}
+
+void KisFileLayerTest::initTestCase()
+{
+    TestUtil::registerTransformMaskStubs();
 }
 
 void KisFileLayerTest::testFileLayerPlusTransformMaskOffImage()

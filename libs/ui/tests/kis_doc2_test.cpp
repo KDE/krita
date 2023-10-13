@@ -19,15 +19,16 @@
 #include <KisViewManager.h>
 #include <kis_config.h>
 #include <testui.h>
+#include "KritaTransformMaskStubs.h"
 
 
 void silenceReignsSupreme(QtMsgType /*type*/, const QMessageLogContext &/*context*/, const QString &/*msg*/)
 {
-
 }
 
-void KisDocumentTest::init()
+void KisDocumentTest::initTestCase()
 {
+    TestUtil::registerTransformMaskStubs();
     qInstallMessageHandler(silenceReignsSupreme);
 }
 

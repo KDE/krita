@@ -28,7 +28,7 @@ public:
     void setDefaultBounds(KisDefaultBoundsBaseSP bounds) override;
     KisDefaultBoundsBaseSP defaultBounds() const override;
 
-    KisKeyframeChannel *requestKeyframeChannel(const QString &id, KisNodeWSP parent) override;
+    KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
     KisKeyframeChannel* getKeyframeChannel(const QString &id) const override;
 
     void clearChangedFlag() override;

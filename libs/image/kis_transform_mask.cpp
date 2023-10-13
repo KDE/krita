@@ -671,7 +671,7 @@ KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
         id == KisKeyframeChannel::RotationY.id() ||
         id == KisKeyframeChannel::RotationZ.id()) {
 
-        KisKeyframeChannel *channel = m_d->paramsHolder->requestKeyframeChannel(id, this);
+        KisKeyframeChannel *channel = m_d->paramsHolder->requestKeyframeChannel(id);
         KIS_SAFE_ASSERT_RECOVER_NOOP(channel);
         return channel;
     }

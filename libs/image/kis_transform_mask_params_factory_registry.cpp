@@ -33,13 +33,14 @@ KisTransformMaskParamsFactoryRegistry::createParams(const QString &id, const QDo
     return it != m_map.end() ? (*it)(e) : KisTransformMaskParamsInterfaceSP(0);
 }
 
-void KisTransformMaskParamsFactoryRegistry::setAnimatedParamsFactory(const KisAnimatedTransformMaskParamsFactory &factory)
+void KisTransformMaskParamsFactoryRegistry::setAnimatedParamsHolderFactory(const KisAnimatedTransformMaskParamsHolderFactory &factory)
 {
     m_animatedParamsFactory = factory;
 }
 
-KisAnimatedTransformParamsHolderInterfaceSP KisTransformMaskParamsFactoryRegistry::createAnimatedParams(KisDefaultBoundsBaseSP defaultBounds)
+KisAnimatedTransformParamsHolderInterfaceSP KisTransformMaskParamsFactoryRegistry::createAnimatedParamsHolder(KisDefaultBoundsBaseSP defaultBounds)
 {
+    KIS_ASSERT(m_animatedParamsFactory);
     return m_animatedParamsFactory(defaultBounds);
 }
 

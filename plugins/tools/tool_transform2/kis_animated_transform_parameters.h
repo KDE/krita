@@ -16,12 +16,12 @@
 
 class KisKeyframeChannel;
 
-class KRITATOOLTRANSFORM_EXPORT KisAnimatedTransformMaskParameters : public KisAnimatedTransformParamsHolderInterface
+class KRITATOOLTRANSFORM_EXPORT KisAnimatedTransformMaskParamsHolder : public KisAnimatedTransformParamsHolderInterface
 {
 public:
-    KisAnimatedTransformMaskParameters(KisDefaultBoundsBaseSP defaultBounds);
-    KisAnimatedTransformMaskParameters(const KisAnimatedTransformMaskParameters& rhs);
-    ~KisAnimatedTransformMaskParameters() override;
+    KisAnimatedTransformMaskParamsHolder(KisDefaultBoundsBaseSP defaultBounds);
+    KisAnimatedTransformMaskParamsHolder(const KisAnimatedTransformMaskParamsHolder& rhs);
+    ~KisAnimatedTransformMaskParamsHolder() override;
 
     const QSharedPointer<ToolTransformArgs> transformArgs() const;
 

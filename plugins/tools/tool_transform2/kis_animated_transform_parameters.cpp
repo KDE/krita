@@ -31,7 +31,7 @@ ToolTransformArgs syncLodNValue<ToolTransformArgs>(const ToolTransformArgs &valu
 
 using KisLogCapableTransformArgs = KisLodSwitchingWrapper<ToolTransformArgs>;
 
-struct KisAnimatedTransformMaskParameters::Private
+struct KisAnimatedTransformMaskParamsHolder::Private
 {
     using TransformChannels = QHash<QString, QSharedPointer<KisScalarKeyframeChannel>>;
 
@@ -66,21 +66,21 @@ struct KisAnimatedTransformMaskParameters::Private
     quint64 hash;
 };
 
-KisAnimatedTransformMaskParameters::KisAnimatedTransformMaskParameters(KisDefaultBoundsBaseSP defaultBounds)
+KisAnimatedTransformMaskParamsHolder::KisAnimatedTransformMaskParamsHolder(KisDefaultBoundsBaseSP defaultBounds)
     : m_d(new Private(defaultBounds))
 {
 }
 
-KisAnimatedTransformMaskParameters::KisAnimatedTransformMaskParameters(const KisAnimatedTransformMaskParameters &rhs)
+KisAnimatedTransformMaskParamsHolder::KisAnimatedTransformMaskParamsHolder(const KisAnimatedTransformMaskParamsHolder &rhs)
     : m_d(new Private(*rhs.m_d))
 {
 }
 
-KisAnimatedTransformMaskParameters::~KisAnimatedTransformMaskParameters()
+KisAnimatedTransformMaskParamsHolder::~KisAnimatedTransformMaskParamsHolder()
 {
 }
 
-const QSharedPointer<ToolTransformArgs> KisAnimatedTransformMaskParameters::transformArgs() const
+const QSharedPointer<ToolTransformArgs> KisAnimatedTransformMaskParamsHolder::transformArgs() const
 {
     QSharedPointer<ToolTransformArgs> args(new ToolTransformArgs(*m_d->baseArgs));
 
@@ -163,7 +163,7 @@ const QSharedPointer<ToolTransformArgs> KisAnimatedTransformMaskParameters::tran
     return args;
 }
 
-void KisAnimatedTransformMaskParameters::setDefaultBounds(KisDefaultBoundsBaseSP bounds)
+void KisAnimatedTransformMaskParamsHolder::setDefaultBounds(KisDefaultBoundsBaseSP bounds)
 {
     m_d->defaultBounds = bounds;
     m_d->baseArgs.setDefaultBounds(bounds);
@@ -173,12 +173,12 @@ void KisAnimatedTransformMaskParameters::setDefaultBounds(KisDefaultBoundsBaseSP
     }
 }
 
-KisDefaultBoundsBaseSP KisAnimatedTransformMaskParameters::defaultBounds() const
+KisDefaultBoundsBaseSP KisAnimatedTransformMaskParamsHolder::defaultBounds() const
 {
     return m_d->defaultBounds;
 }
 
-KisKeyframeChannel *KisAnimatedTransformMaskParameters::requestKeyframeChannel(const QString &id)
+KisKeyframeChannel *KisAnimatedTransformMaskParamsHolder::requestKeyframeChannel(const QString &id)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!m_d->transformChannels.contains(id), m_d->transformChannels.value(id).data());
 
@@ -203,12 +203,12 @@ KisKeyframeChannel *KisAnimatedTransformMaskParameters::requestKeyframeChannel(c
     return channel;
 }
 
-KisKeyframeChannel *KisAnimatedTransformMaskParameters::getKeyframeChannel(const QString &id) const
+KisKeyframeChannel *KisAnimatedTransformMaskParamsHolder::getKeyframeChannel(const QString &id) const
 {
     return m_d->transformChannels.value(id, nullptr).data();
 }
 
-qreal KisAnimatedTransformMaskParameters::defaultValueForScalarChannel(const KoID &id)
+qreal KisAnimatedTransformMaskParamsHolder::defaultValueForScalarChannel(const KoID &id)
 {
     QSharedPointer<ToolTransformArgs> args = transformArgs();
 
@@ -235,32 +235,32 @@ qreal KisAnimatedTransformMaskParameters::defaultValueForScalarChannel(const KoI
     }
 }
 
-void KisAnimatedTransformMaskParameters::clearChangedFlag()
+void KisAnimatedTransformMaskParamsHolder::clearChangedFlag()
 {
     m_d->hash = generateStateHash();
 }
 
-bool KisAnimatedTransformMaskParameters::hasChanged() const
+bool KisAnimatedTransformMaskParamsHolder::hasChanged() const
 {
     return m_d->hash != generateStateHash();
 }
 
-void KisAnimatedTransformMaskParameters::syncLodCache()
+void KisAnimatedTransformMaskParamsHolder::syncLodCache()
 {
     m_d->baseArgs.syncLodCache();
 }
 
-KisAnimatedTransformParamsHolderInterfaceSP KisAnimatedTransformMaskParameters::clone() const
+KisAnimatedTransformParamsHolderInterfaceSP KisAnimatedTransformMaskParamsHolder::clone() const
 {
-    return toQShared(new KisAnimatedTransformMaskParameters(*this));
+    return toQShared(new KisAnimatedTransformMaskParamsHolder(*this));
 }
 
-KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParameters::bakeIntoParams() const
+KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParamsHolder::bakeIntoParams() const
 {
     return toQShared(new KisTransformMaskAdapter(*transformArgs(), m_d->isHidden, m_d->isInitialized));
 }
 
-void KisAnimatedTransformMaskParameters::setParamsAtCurrentPosition(const KisTransformMaskParamsInterface *params, KUndo2Command *parentCommand)
+void KisAnimatedTransformMaskParamsHolder::setParamsAtCurrentPosition(const KisTransformMaskParamsInterface *params, KUndo2Command *parentCommand)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->transformChannels.isEmpty() || m_d->transformChannels.size() == 9);
 
@@ -275,7 +275,7 @@ void KisAnimatedTransformMaskParameters::setParamsAtCurrentPosition(const KisTra
     setNewTransformArgs(*adapter->transformArgs(), parentCommand);
 }
 
-void KisAnimatedTransformMaskParameters::setNewTransformArgs(const ToolTransformArgs &args, KUndo2Command *parentCommand)
+void KisAnimatedTransformMaskParamsHolder::setNewTransformArgs(const ToolTransformArgs &args, KUndo2Command *parentCommand)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->transformChannels.isEmpty() || m_d->transformChannels.size() == 9);
 
@@ -324,7 +324,7 @@ void KisAnimatedTransformMaskParameters::setNewTransformArgs(const ToolTransform
     setKeyframe(KisKeyframeChannel::RotationZ, currentTime, kisRadiansToDegrees(args.aZ()), parentCommand);
 }
 
-quint64 KisAnimatedTransformMaskParameters::generateStateHash() const
+quint64 KisAnimatedTransformMaskParamsHolder::generateStateHash() const
 {
     return qHash(transformArgs()->transformedCenter().x())
             ^ qHash(transformArgs()->transformedCenter().y())

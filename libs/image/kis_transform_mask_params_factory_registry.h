@@ -21,7 +21,7 @@ class QDomElement;
 
 using KisTransformMaskParamsFactory    = std::function<KisTransformMaskParamsInterfaceSP (const QDomElement &)>;
 using KisTransformMaskParamsFactoryMap = QMap<QString, KisTransformMaskParamsFactory>;
-using KisAnimatedTransformMaskParamsFactory = std::function<KisAnimatedTransformParamsHolderInterfaceSP (KisDefaultBoundsBaseSP)>;
+using KisAnimatedTransformMaskParamsHolderFactory = std::function<KisAnimatedTransformParamsHolderInterfaceSP (KisDefaultBoundsBaseSP)>;
 
 class KRITAIMAGE_EXPORT KisTransformMaskParamsFactoryRegistry
 {
@@ -33,14 +33,14 @@ public:
     void addFactory(const QString &id, const KisTransformMaskParamsFactory &factory);
     KisTransformMaskParamsInterfaceSP createParams(const QString &id, const QDomElement &e);
 
-    void setAnimatedParamsFactory(const KisAnimatedTransformMaskParamsFactory &factory);
-    KisAnimatedTransformParamsHolderInterfaceSP createAnimatedParams(KisDefaultBoundsBaseSP defaultBounds);
+    void setAnimatedParamsHolderFactory(const KisAnimatedTransformMaskParamsHolderFactory &factory);
+    KisAnimatedTransformParamsHolderInterfaceSP createAnimatedParamsHolder(KisDefaultBoundsBaseSP defaultBounds);
 
     static KisTransformMaskParamsFactoryRegistry* instance();
 
 private:
     KisTransformMaskParamsFactoryMap m_map;
-    KisAnimatedTransformMaskParamsFactory m_animatedParamsFactory;
+    KisAnimatedTransformMaskParamsHolderFactory m_animatedParamsFactory;
 };
 
 #endif /* __KIS_TRANSFORM_MASK_PARAMS_FACTORY_REGISTRY_H */

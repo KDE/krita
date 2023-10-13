@@ -48,7 +48,7 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
 {
     Private(KisImageSP image)
         : worker(0, QTransform(), true, 0),
-          paramsHolder(KisTransformMaskParamsFactoryRegistry::instance()->createAnimatedParams(new KisDefaultBounds(image))),
+          paramsHolder(KisTransformMaskParamsFactoryRegistry::instance()->createAnimatedParamsHolder(new KisDefaultBounds(image))),
           staticCacheValid(false),
           recalculatingStaticImage(false),
           offset(new KisDefaultBounds(image)),

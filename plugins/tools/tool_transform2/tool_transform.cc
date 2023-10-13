@@ -27,9 +27,9 @@ K_PLUGIN_FACTORY_WITH_JSON(ToolTransformFactory, "kritatooltransform.json", regi
 
 namespace {
 
-KisAnimatedTransformParamsHolderInterfaceSP createAnimatedParams(KisDefaultBoundsBaseSP defaultBounds)
+KisAnimatedTransformParamsHolderInterfaceSP createAnimatedParamsHolder(KisDefaultBoundsBaseSP defaultBounds)
 {
-    return toQShared(new KisAnimatedTransformMaskParameters(defaultBounds));
+    return toQShared(new KisAnimatedTransformMaskParamsHolder(defaultBounds));
 }
 
 } // namespace
@@ -40,7 +40,7 @@ ToolTransform::ToolTransform(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     KoToolRegistry::instance()->add(new KisToolTransformFactory());
-    KisTransformMaskParamsFactoryRegistry::instance()->setAnimatedParamsFactory(&createAnimatedParams);
+    KisTransformMaskParamsFactoryRegistry::instance()->setAnimatedParamsHolderFactory(&createAnimatedParamsHolder);
     KisTransformMaskParamsFactoryRegistry::instance()->addFactory("tooltransformparams", &KisTransformMaskAdapter::fromXML);
     qRegisterMetaType<TransformTransactionProperties>("TransformTransactionProperties");
     qRegisterMetaType<ToolTransformArgs>("ToolTransformArgs");

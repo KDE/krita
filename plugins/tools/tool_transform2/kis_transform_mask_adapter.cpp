@@ -54,6 +54,9 @@ bool KisTransformMaskAdapter::isAffine() const
 
 bool KisTransformMaskAdapter::isHidden() const
 {
+    /**
+     * Hiding is used only in KisDumbTransformMaskParams
+     */
     return false;
 }
 

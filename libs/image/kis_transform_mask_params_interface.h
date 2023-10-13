@@ -34,6 +34,12 @@ public:
 
     virtual QTransform finalAffineTransform() const = 0;
     virtual bool isAffine() const = 0;
+
+    /**
+     * Hides the transform mask from the rendering stack. It is used by the
+     * legacy transform tool strategy to hide the mask during the overlay
+     * preview.
+     */
     virtual bool isHidden() const = 0;
 
     virtual void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const = 0;

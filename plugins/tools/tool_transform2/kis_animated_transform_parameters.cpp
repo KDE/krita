@@ -210,12 +210,26 @@ KisKeyframeChannel *KisAnimatedTransformMaskParameters::getKeyframeChannel(const
 
 qreal KisAnimatedTransformMaskParameters::defaultValueForScalarChannel(const KoID &id)
 {
+    QSharedPointer<ToolTransformArgs> args = transformArgs();
+
     if (id == KisKeyframeChannel::PositionX) {
-        return transformArgs()->transformedCenter().x();
+        return args->transformedCenter().x();
     } else if (id == KisKeyframeChannel::PositionY) {
-        return transformArgs()->transformedCenter().y();
-    } else if (id == KisKeyframeChannel::ScaleX || id == KisKeyframeChannel::ScaleY) {
-        return 1.0f;
+        return args->transformedCenter().y();
+    } else if (id == KisKeyframeChannel::ScaleX) {
+        return args->scaleX();
+    } else if (id == KisKeyframeChannel::ScaleY) {
+        return args->scaleY();
+    } else if (id == KisKeyframeChannel::ShearX) {
+        return args->shearX();
+    } else if (id == KisKeyframeChannel::ShearY) {
+        return args->shearY();
+    } else if (id == KisKeyframeChannel::RotationX) {
+        return kisRadiansToDegrees(args->aX());
+    } else if (id == KisKeyframeChannel::RotationY) {
+        return kisRadiansToDegrees(args->aY());
+    } else if (id == KisKeyframeChannel::RotationZ) {
+        return kisRadiansToDegrees(args->aZ());
     } else {
         return 0.0f;
     }

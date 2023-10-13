@@ -657,7 +657,7 @@ void KisAnimCurvesDocker::slotAddAllEnabledKeys()
      * we should add a dropdown check-box set of actions that can
      * enable and disable keys. For now, we will just consider all channels
      * enabled. */
-    KUndo2Command* parentCMD = new KUndo2Command; //TODO: give undo name once out of string freeze...
+    KUndo2Command* parentCMD = new KUndo2Command(kundo2_i18n("Add Scalar Keyframes"));
 
     //This should eventually be a list of all currently enabled channels.
     QList<KoID> ids = {

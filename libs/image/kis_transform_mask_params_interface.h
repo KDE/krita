@@ -41,6 +41,7 @@ public:
      * preview.
      */
     virtual bool isHidden() const = 0;
+    virtual void setHidden(bool value) = 0;
 
     virtual void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const = 0;
 
@@ -95,6 +96,7 @@ public:
     QTransform finalAffineTransform() const override;
     bool isAffine() const override;
     bool isHidden() const override;
+    void setHidden(bool value) override;
     void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const override;
 
     QString id() const override;

@@ -19,6 +19,7 @@
 struct KisTransformMaskAdapter::Private
 {
     QSharedPointer<ToolTransformArgs> args;
+    bool isHidden {false};
 };
 
 
@@ -28,10 +29,11 @@ KisTransformMaskAdapter::KisTransformMaskAdapter()
     m_d->args.reset(new ToolTransformArgs());
 }
 
-KisTransformMaskAdapter::KisTransformMaskAdapter(const ToolTransformArgs &args)
+KisTransformMaskAdapter::KisTransformMaskAdapter(const ToolTransformArgs &args, bool isHidden)
     : m_d(new Private)
 {
     m_d->args = toQShared(new ToolTransformArgs(args));
+    m_d->isHidden = isHidden;
 }
 
 KisTransformMaskAdapter::~KisTransformMaskAdapter()
@@ -49,15 +51,17 @@ bool KisTransformMaskAdapter::isAffine() const
     const ToolTransformArgs args = *transformArgs();
 
     return args.mode() == ToolTransformArgs::FREE_TRANSFORM ||
-        args.mode() == ToolTransformArgs::PERSPECTIVE_4POINT;
+            args.mode() == ToolTransformArgs::PERSPECTIVE_4POINT;
+}
+
+void KisTransformMaskAdapter::setHidden(bool value)
+{
+    m_d->isHidden = value;
 }
 
 bool KisTransformMaskAdapter::isHidden() const
 {
-    /**
-     * Hiding is used only in KisDumbTransformMaskParams
-     */
-    return false;
+    return m_d->isHidden;
 }
 
 void KisTransformMaskAdapter::transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const
@@ -127,7 +131,7 @@ KisKeyframeChannel *KisTransformMaskAdapter::getKeyframeChannel(const QString &i
 }
 
 KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::clone() const {
-    return toQShared(new KisTransformMaskAdapter(*this->transformArgs()));
+    return toQShared(new KisTransformMaskAdapter(*this->transformArgs(), this->isHidden()));
 }
 
 #include "kis_transform_mask_params_factory_registry.h"

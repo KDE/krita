@@ -72,6 +72,11 @@ bool KisDumbTransformMaskParams::isHidden() const
     return m_d->isHidden;
 }
 
+void KisDumbTransformMaskParams::setHidden(bool value)
+{
+    m_d->isHidden = true;
+}
+
 void KisDumbTransformMaskParams::transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const
 {
     Q_UNUSED(node);

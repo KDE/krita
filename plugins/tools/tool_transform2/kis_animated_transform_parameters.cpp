@@ -45,6 +45,7 @@ struct KisAnimatedTransformMaskParameters::Private
     Private(Private& rhs)
         : baseArgs(rhs.baseArgs)
         , defaultBounds(rhs.defaultBounds)
+        , isHidden(rhs.isHidden)
         , hash(rhs.hash)
     {
 
@@ -59,6 +60,7 @@ struct KisAnimatedTransformMaskParameters::Private
     TransformChannels transformChannels;
     KisLogCapableTransformArgs baseArgs;
     KisDefaultBoundsBaseSP defaultBounds;
+    bool isHidden {false};
 
     quint64 hash;
 };
@@ -254,7 +256,7 @@ KisAnimatedTransformParamsInterfaceSP KisAnimatedTransformMaskParameters::clone(
 
 KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParameters::bakeIntoParams() const
 {
-    return toQShared(new KisTransformMaskAdapter(*transformArgs()));
+    return toQShared(new KisTransformMaskAdapter(*transformArgs(), m_d->isHidden));
 }
 
 void KisAnimatedTransformMaskParameters::setParamsAtCurrentPosition(const KisTransformMaskParamsInterface *params, KUndo2Command *parentCommand)
@@ -263,6 +265,8 @@ void KisAnimatedTransformMaskParameters::setParamsAtCurrentPosition(const KisTra
 
     const KisTransformMaskAdapter *adapter = dynamic_cast<const KisTransformMaskAdapter*>(params);
     KIS_SAFE_ASSERT_RECOVER_RETURN(adapter);
+
+    makeChangeValueCommand<&Private::isHidden>(m_d.data(), adapter->isHidden(), parentCommand);
 
     ToolTransformArgs args = *adapter->transformArgs();
 

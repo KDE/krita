@@ -6,7 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_animated_transform_parameters.h"
+#include "KisAnimatedTransformMaskParamsHolder.h"
 #include "kis_scalar_keyframe_channel.h"
 #include "tool_transform_args.h"
 #include "kis_time_span.h"

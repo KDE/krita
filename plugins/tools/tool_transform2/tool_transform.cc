@@ -21,7 +21,7 @@
 #include "kis_tool_transform.h"
 #include "kis_transform_mask_params_factory_registry.h"
 #include "kis_transform_mask_adapter.h"
-#include "kis_animated_transform_parameters.h"
+#include "KisAnimatedTransformMaskParamsHolder.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(ToolTransformFactory, "kritatooltransform.json", registerPlugin<ToolTransform>();)
 

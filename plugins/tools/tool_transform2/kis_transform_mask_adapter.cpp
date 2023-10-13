@@ -11,7 +11,7 @@
 
 #include "tool_transform_args.h"
 #include "kis_transform_utils.h"
-#include "kis_animated_transform_parameters.h"
+#include "KisAnimatedTransformMaskParamsHolder.h"
 
 #include "kis_node.h"
 

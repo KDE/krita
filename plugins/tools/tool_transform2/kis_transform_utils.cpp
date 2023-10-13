@@ -27,6 +27,8 @@
 #include "kis_transform_mask_adapter.h"
 #include "krita_container_utils.h"
 #include "kis_selection.h"
+#include "kis_image.h"
+#include "kis_image_animation_interface.h"
 
 
 struct TransformTransactionPropertiesRegistrar {
@@ -655,8 +657,12 @@ KisNodeSP KisTransformUtils::tryOverrideRootToTransformMask(KisNodeSP root)
 int KisTransformUtils::fetchCurrentImageTime(KisNodeList rootNodes)
 {
     Q_FOREACH(KisNodeSP node, rootNodes) {
-        if (node && node->projection()) {
-            return node->projection()->defaultBounds()->currentTime();
+        /**
+         * We cannot just use projection's default bounds, because masks don't have
+         * any projection
+         */
+        if (node && node->image()) {
+            return node->image()->animationInterface()->currentTime();
         }
     }
     return -1;

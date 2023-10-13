@@ -668,7 +668,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                             // unsure about the boundingBox, needs more research.
                             textData.boundingBox = text->boundingRect().normalized();
                             textData.bounds = text->outlineRect().normalized();
-                            convert.convertToPSDTextEngineData(svgtext, textData.bounds, &textData.engineData, textData.text, textData.isHorizontal, FlaketoPixels);
+                            convert.convertToPSDTextEngineData(svgtext, textData.bounds, textData.engineData, textData.text, textData.isHorizontal, FlaketoPixels);
                             textData.textIndex = 0;
                             QTransform offset;
                             if (!text->shapesInside().isEmpty()) {

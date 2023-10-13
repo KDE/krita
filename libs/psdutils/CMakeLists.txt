@@ -9,6 +9,9 @@ set(kritapsdutils_LIB_SRCS
     asl/kis_asl_xml_writer.cpp
     asl/kis_asl_patterns_writer.cpp
     asl/kis_asl_writer.cpp
+
+    cos/kis_cos_parser.cpp
+    cos/kis_cos_writer.cpp
 )
 
 kis_add_library(kritapsdutils SHARED ${kritapsdutils_LIB_SRCS})

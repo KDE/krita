@@ -30,7 +30,6 @@
 #include "kis_image_animation_interface.h"
 #include "commands_new/KisSimpleModifyTransformMaskCommand.h"
 #include "commands_new/KisLazyCreateTransformMaskKeyframesCommand.h"
-#include "KisAnimAutoKey.h"
 
 /* MoveNodeStrategyBase and descendants
  *

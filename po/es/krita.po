@@ -66,8 +66,8 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-05 02:24+0000\n"
-"PO-Revision-Date: 2023-10-01 18:14+0100\n"
-"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2023-10-12 21:36+0200\n"
+"Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -7681,7 +7681,7 @@ msgstr "Crear unión booleana de múltiples objetos"
 #, kde-format
 msgctxt "action"
 msgid "Intersect"
-msgstr "Intersectar"
+msgstr "Intersección"
 
 #. i18n: context: toolTip @ Action (object_intersect), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:272
@@ -9040,7 +9040,7 @@ msgstr "Modo de selección: Sustraer"
 #, kde-format
 msgctxt "action"
 msgid "Selection Mode: Intersect"
-msgstr "Modo de selección: Intersectar"
+msgstr "Modo de selección: Intersección"
 
 #. i18n: context: text @ Action (selection_tool_mode_replace), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (selection_tool_mode_replace), Actions (Painting), ActionCollection (Krita)
@@ -15041,7 +15041,7 @@ msgstr "Seleccionar opaco (Sustraer)"
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Intersect)"
-msgstr "Seleccionar opaco (&Intersectar)"
+msgstr "Seleccionar opaco (&Intersección)"
 
 #. i18n: context: toolTip @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
@@ -15051,7 +15051,7 @@ msgstr "Seleccionar opaco (&Intersectar)"
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Intersect)"
-msgstr "Seleccionar opaco (Intersectar)"
+msgstr "Seleccionar opaco (Intersección)"
 
 #. i18n: context: text @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1549
@@ -29614,7 +29614,7 @@ msgstr "Seleccionar opaco (Sustraer)"
 #: libs/ui/kis_selection_manager.cc:716
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Intersect)"
-msgstr "Seleccionar opaco (Intersectar)"
+msgstr "Seleccionar opaco (Intersección)"
 
 #: libs/ui/kis_selection_manager.cc:719
 msgctxt "(qtundo-format)"
@@ -34140,7 +34140,7 @@ msgstr "Sustituir"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Intersect"
-msgstr "Intersectar"
+msgstr "Intersección"
 
 #: libs/ui/widgets/kis_selection_options.cc:226
 #: libs/ui/widgets/kis_selection_options.cc:463
@@ -34251,7 +34251,7 @@ msgstr "Sustraer (%1)"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Intersect (%1)"
-msgstr "Intersectar (%1)"
+msgstr "Intersección (%1)"
 
 #: libs/ui/widgets/kis_selection_options.cc:480
 #, kde-format
@@ -46118,7 +46118,7 @@ msgstr "Índice:"
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:51
 #, kde-format
 msgid "Intersect:"
-msgstr "Intersectar:"
+msgstr "Intersección:"
 
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:53
 #, kde-format
@@ -57705,7 +57705,7 @@ msgstr "Unir formas"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1400
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
-msgstr "Intersectar formas"
+msgstr "Intersección de formas"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1410
 msgctxt "(qtundo-format)"

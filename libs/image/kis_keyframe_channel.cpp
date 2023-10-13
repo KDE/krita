@@ -35,6 +35,40 @@ const KoID KisKeyframeChannel::RotationX = KoID("transform_rotation_x", ki18n("R
 const KoID KisKeyframeChannel::RotationY = KoID("transform_rotation_y", ki18n("Rotation (Y)"));
 const KoID KisKeyframeChannel::RotationZ = KoID("transform_rotation_z", ki18n("Rotation (Z)"));
 
+KoID KisKeyframeChannel::channelIdToKoId(const QString &id)
+{
+    KoID channelId;
+
+    if (id == KisKeyframeChannel::Raster.id()) {
+        channelId = KisKeyframeChannel::Raster;
+    } else if (id == KisKeyframeChannel::Opacity.id()) {
+        channelId = KisKeyframeChannel::Opacity;
+    } else if (id == KisKeyframeChannel::PositionX.id()) {
+        channelId = KisKeyframeChannel::PositionX;
+    } else if (id == KisKeyframeChannel::PositionY.id()) {
+        channelId = KisKeyframeChannel::PositionY;
+    } else if (id == KisKeyframeChannel::ScaleX.id()) {
+        channelId = KisKeyframeChannel::ScaleX;
+    } else if (id == KisKeyframeChannel::ScaleY.id()) {
+        channelId = KisKeyframeChannel::ScaleY;
+    } else if (id == KisKeyframeChannel::ShearX.id()) {
+        channelId = KisKeyframeChannel::ShearX;
+    } else if (id == KisKeyframeChannel::ShearY.id()) {
+        channelId = KisKeyframeChannel::ShearY;
+    } else if (id == KisKeyframeChannel::RotationX.id()) {
+        channelId = KisKeyframeChannel::RotationX;
+    } else if (id == KisKeyframeChannel::RotationY.id()) {
+        channelId = KisKeyframeChannel::RotationY;
+    } else if (id == KisKeyframeChannel::RotationZ.id()) {
+        channelId = KisKeyframeChannel::RotationZ;
+
+    } else {
+        channelId = KoID();
+    }
+
+    return channelId;
+}
+
 
 struct KisKeyframeChannel::Private
 {

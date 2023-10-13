@@ -25,7 +25,7 @@
 #include "kis_recalculate_transform_mask_job.h"
 
 #include "kis_projection_leaf.h"
-#include "kis_modify_transform_mask_command.h"
+#include "commands_new/KisSimpleModifyTransformMaskCommand.h"
 #include "KisAnimAutoKey.h"
 
 #include "kis_sequential_iterator.h"
@@ -37,6 +37,7 @@
 #include "transform_transaction_properties.h"
 #include "krita_container_utils.h"
 #include "commands_new/kis_saved_commands.h"
+#include "commands_new/KisLazyCreateTransformMaskKeyframesCommand.h"
 #include "kis_command_ids.h"
 #include "KisRunnableStrokeJobUtils.h"
 #include "commands_new/KisHoldUIUpdatesCommand.h"
@@ -383,26 +384,27 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
         });
     }
 
-    if (KisAutoKey::activeMode() > KisAutoKey::NONE) {
-        KritaUtils::addJobSequential(extraInitJobs, [this]() {
-            // When dealing with animated transform mask layers, create keyframe and save the command for undo.
-            Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
-                if (KisTransformMask* transformMask = dynamic_cast<KisTransformMask*>(node.data())) {
-                    QSharedPointer<KisInitializeTransformMaskKeyframesCommand> addKeyCommand(new KisInitializeTransformMaskKeyframesCommand(transformMask,
-                                                                                                                                            KisTransformMaskParamsInterfaceSP(
-                                                                                                                                                new KisTransformMaskAdapter(m_d->initialTransformArgs))));
-                    runAndSaveCommand( addKeyCommand, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
-                } else if (node->hasEditablePaintDevice()){
-                    KUndo2Command *autoKeyframeCommand =
+    KritaUtils::addJobSequential(extraInitJobs, [this]() {
+        // When dealing with animated transform mask layers, create keyframe and save the command for undo.
+        // NOTE: for transform masks we create a keyframe no matter what the user
+        //       settigs are
+        Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
+            if (KisTransformMask* transformMask = dynamic_cast<KisTransformMask*>(node.data())) {
+                if (KisLazyCreateTransformMaskKeyframesCommand::maskHasAnimation(transformMask)) {
+                    runAndSaveCommand(toQShared(new KisLazyCreateTransformMaskKeyframesCommand(transformMask)), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+                }
+            } else if (KisAutoKey::activeMode() > KisAutoKey::NONE &&
+                       node->hasEditablePaintDevice()){
+
+                KUndo2Command *autoKeyframeCommand =
                         KisAutoKey::tryAutoCreateDuplicatedFrame(node->paintDevice(),
                                                                  KisAutoKey::SupportsLod);
-                    if (autoKeyframeCommand) {
-                        runAndSaveCommand(toQShared(autoKeyframeCommand), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
-                    }
+                if (autoKeyframeCommand) {
+                    runAndSaveCommand(toQShared(autoKeyframeCommand), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
                 }
             }
-        });
-    }
+        }
+    });
 
     KritaUtils::addJobSequential(extraInitJobs, [this]() {
         /**
@@ -754,26 +756,11 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
             transformMask->overrideStaticCacheDevice(dst);
         }
 
-
-        if (commandGroup == Transform) { // Set Keyframe Data.
-            ToolTransformArgs unscaled = ToolTransformArgs(config);
-
-            if (levelOfDetail > 0) {
-                unscaled.scale3dSrcAndDst(KisLodTransform::lodToInvScale(levelOfDetail));
-            }
-
-            KUndo2Command* cmd = new KisSetTransformMaskKeyframesCommand(transformMask,
-                                                          KisTransformMaskParamsInterfaceSP(
-                                                                new KisTransformMaskAdapter(unscaled)));
-            executeAndAddCommand(cmd, commandGroup, KisStrokeJobData::BARRIER);
-        }
-
-
         {
-            KUndo2Command *cmd = new KisModifyTransformMaskCommand(transformMask,
-                                                                   KisTransformMaskParamsInterfaceSP(
-                                                                       new KisTransformMaskAdapter(config)),
-                                                                   m_d->commandUpdatesBlockerCookie);
+            KUndo2Command *cmd = new KisSimpleModifyTransformMaskCommand(transformMask,
+                                                                         KisTransformMaskParamsInterfaceSP(
+                                                                             new KisTransformMaskAdapter(config)),
+                                                                         m_d->commandUpdatesBlockerCookie);
             executeAndAddCommand(cmd, commandGroup, KisStrokeJobData::CONCURRENT);
             addDirtyRect(node, oldDirtyRect | transformMask->extent(), levelOfDetail);
         }

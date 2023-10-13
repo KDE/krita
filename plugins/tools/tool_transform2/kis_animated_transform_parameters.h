@@ -16,53 +16,34 @@
 
 class KisKeyframeChannel;
 
-class KRITATOOLTRANSFORM_EXPORT KisAnimatedTransformMaskParameters : public KisTransformMaskAdapter, public KisAnimatedTransformParamsInterface
+class KRITATOOLTRANSFORM_EXPORT KisAnimatedTransformMaskParameters : public KisAnimatedTransformParamsInterface
 {
 public:
-    KisAnimatedTransformMaskParameters();
-    KisAnimatedTransformMaskParameters(const KisTransformMaskAdapter *staticTransform);
+    KisAnimatedTransformMaskParameters(KisDefaultBoundsBaseSP defaultBounds);
     KisAnimatedTransformMaskParameters(const KisAnimatedTransformMaskParameters& rhs);
     ~KisAnimatedTransformMaskParameters() override;
 
-    const QSharedPointer<ToolTransformArgs> transformArgs() const override;
+    const QSharedPointer<ToolTransformArgs> transformArgs() const;
 
-    QString id() const override;
-    void toXML(QDomElement *e) const override;
+    void setDefaultBounds(KisDefaultBoundsBaseSP bounds) override;
+    KisDefaultBoundsBaseSP defaultBounds() const override;
 
     KisKeyframeChannel *requestKeyframeChannel(const QString &id, KisNodeWSP parent) override;
-    void setKeyframeChannel(const QString &name, QSharedPointer<KisKeyframeChannel> kcsp) override;
-    KisKeyframeChannel* getKeyframeChannel(const KoID& koid) const override;
-    QList<KisKeyframeChannel*> copyChannelsFrom(const KisAnimatedTransformParamsInterface *other) override;
-
-    void initializeKeyframes(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, KUndo2Command* cmnd = nullptr) override;
-    void setKeyframeData(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, KUndo2Command* cmnd = nullptr) override;
-
-    qreal defaultValueForScalarChannel(QString name);
-
-    bool isHidden() const override;
-    void setHidden(bool hidden);
+    KisKeyframeChannel* getKeyframeChannel(const QString &id) const override;
 
     void clearChangedFlag() override;
     bool hasChanged() const override;
-    bool isAnimated() const;
 
-    QPointF getRotationalTranslationOffset(const ToolTransformArgs& args) const;
+    void syncLodCache() override;
 
-    KisTransformMaskParamsInterfaceSP clone() const override;
+    KisAnimatedTransformParamsInterfaceSP clone() const override;
 
-    void translateKeyframesOnChannel(qreal translation, const KoID& channelID);
-    void translateSrcAndDst(const QPointF &offset) override;
+    KisTransformMaskParamsInterfaceSP bakeIntoParams() const override;
+    void setParamsAtCurrentPosition(const KisTransformMaskParamsInterface *params, KUndo2Command *parentCommand) override;
 
-    static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
-
-    /*** Some utility methods for creating an animated transform mask and for creating keyframes using a reference
-     * set of parameters. Used by the transform mask and stroke respectively to update keyframe data. */
-    static KisTransformMaskParamsInterfaceSP makeAnimated(KisTransformMaskParamsInterfaceSP params, const KisTransformMaskSP mask);
-    static void addKeyframes(KisTransformMaskSP mask, int currentTime, KisTransformMaskParamsInterfaceSP desiredParams, KUndo2Command *parentCommand);
-    static void setKeyframes(KisTransformMaskSP mask, int currentTime, KisTransformMaskParamsInterfaceSP desiredParams, KUndo2Command *parentCommand);
-    static void removeKeyframes(KisTransformMaskSP mask, int currentTime);
-    static qreal degToRad(qreal degrees) {return degrees / 180 * M_PI;}
-    static qreal radToDeg(qreal rad) {return rad * 180 / M_PI;}
+private:
+    void setNewTransformArgs(const ToolTransformArgs &args, KUndo2Command *parentCommand);
+    qreal defaultValueForScalarChannel(const KoID &id);
 
 private:
     quint64 generateStateHash() const;

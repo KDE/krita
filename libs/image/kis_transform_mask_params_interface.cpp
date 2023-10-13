@@ -13,7 +13,6 @@ KisTransformMaskParamsInterface::~KisTransformMaskParamsInterface()
 {
 }
 
-
 KisAnimatedTransformParamsInterface::~KisAnimatedTransformParamsInterface()
 {
 }
@@ -170,14 +169,6 @@ bool KisDumbTransformMaskParams::isAnimated() const
 KisKeyframeChannel *KisDumbTransformMaskParams::getKeyframeChannel(const QString&, KisDefaultBoundsBaseSP)
 {
     return 0;
-}
-
-void KisDumbTransformMaskParams::clearChangedFlag()
-{}
-
-bool KisDumbTransformMaskParams::hasChanged() const
-{
-    return false;
 }
 
 KisTransformMaskParamsInterfaceSP KisDumbTransformMaskParams::clone() const

@@ -42,10 +42,7 @@ public:
     QRect nonAffineChangeRect(const QRect &rc) override;
     QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds) override;
 
-    bool isAnimated() const;
     KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds);
-    void clearChangedFlag() override;
-    bool hasChanged() const override;
 
     KisTransformMaskParamsInterfaceSP clone() const override;
 

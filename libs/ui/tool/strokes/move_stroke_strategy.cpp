@@ -29,6 +29,7 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_image_animation_interface.h"
 #include "commands_new/KisSimpleModifyTransformMaskCommand.h"
+#include "commands_new/KisLazyCreateTransformMaskKeyframesCommand.h"
 #include "KisAnimAutoKey.h"
 
 /* MoveNodeStrategyBase and descendants
@@ -118,20 +119,10 @@ struct MoveTransformMaskStrategy : public MoveNodeStrategyBase
         KisTransformMaskParamsInterfaceSP params = oldParams->clone();
         params->translateDstSpace(offset - m_currentOffset);
 
-        if (mask->isAnimated()) {
-            KUndo2Command* parent = new KUndo2Command();
-            KisAnimatedTransformParamsInterface* animInterface = dynamic_cast<KisAnimatedTransformParamsInterface*>(mask->transformParams().data());
-            KIS_ASSERT(animInterface);
-            animInterface->initializeKeyframes(mask, params, parent);
-            cmd.reset(parent);
-        } else {
-            mask->setTransformParams(params);
-            cmd.reset(new KisSimpleModifyTransformMaskCommand(mask, oldParams, params));
-        }
+        cmd.reset(new KisSimpleModifyTransformMaskCommand(mask, params));
+        cmd->redo();
 
-        KIS_ASSERT(cmd);
-
-        if (m_undoCommand && !mask->isAnimated()) {
+        if (m_undoCommand) {
             const bool mergeResult = m_undoCommand->mergeWith(cmd.get());
             KIS_SAFE_ASSERT_RECOVER_NOOP(mergeResult);
             cmd.reset();
@@ -333,13 +324,19 @@ void MoveStrokeStrategy::initStrokeCallback()
         KisStrokeStrategyUndoCommandBased::initStrokeCallback();
 
         Q_FOREACH(KisNodeSP node, m_nodes) {
-            KIS_SAFE_ASSERT_RECOVER(node->hasEditablePaintDevice()) { continue; }
+            if (node->hasEditablePaintDevice()) {
+                KUndo2Command *autoKeyframeCommand =
+                        KisAutoKey::tryAutoCreateDuplicatedFrame(node->paintDevice(),
+                                                                 KisAutoKey::SupportsLod);
+                if (autoKeyframeCommand) {
+                    runAndSaveCommand(toQShared(autoKeyframeCommand), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+                }
+            } else if (KisTransformMask *mask = dynamic_cast<KisTransformMask*>(node.data())) {
+                const bool maskAnimated = KisLazyCreateTransformMaskKeyframesCommand::maskHasAnimation(mask);
 
-            KUndo2Command *autoKeyframeCommand =
-                KisAutoKey::tryAutoCreateDuplicatedFrame(node->paintDevice(),
-                                                         KisAutoKey::SupportsLod);
-            if (autoKeyframeCommand) {
-                runAndSaveCommand(toQShared(autoKeyframeCommand), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+                if (maskAnimated) {
+                    runAndSaveCommand(toQShared(new KisLazyCreateTransformMaskKeyframesCommand(mask)), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+                }
             }
         }
 

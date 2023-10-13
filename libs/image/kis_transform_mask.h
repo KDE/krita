@@ -55,6 +55,8 @@ public:
     QRect sourceDataBounds() const;
 
     void setImage(KisImageWSP image) override;
+
+    void setTransformParamsWithUndo(KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand);
     void setTransformParams(KisTransformMaskParamsInterfaceSP params);
     KisTransformMaskParamsInterfaceSP transformParams() const;
 

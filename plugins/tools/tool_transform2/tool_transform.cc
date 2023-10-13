@@ -27,7 +27,7 @@ K_PLUGIN_FACTORY_WITH_JSON(ToolTransformFactory, "kritatooltransform.json", regi
 
 namespace {
 
-KisAnimatedTransformParamsInterfaceSP createAnimatedParams(KisDefaultBoundsBaseSP defaultBounds)
+KisAnimatedTransformParamsHolderInterfaceSP createAnimatedParams(KisDefaultBoundsBaseSP defaultBounds)
 {
     return toQShared(new KisAnimatedTransformMaskParameters(defaultBounds));
 }

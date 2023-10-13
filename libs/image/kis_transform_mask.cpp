@@ -85,7 +85,7 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
     }
 
     KisPerspectiveTransformWorker worker;
-    KisAnimatedTransformParamsInterfaceSP paramsHolder;
+    KisAnimatedTransformParamsHolderInterfaceSP paramsHolder;
 
     bool staticCacheValid;
     bool recalculatingStaticImage;

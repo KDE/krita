@@ -41,7 +41,7 @@ void KisDumbAnimatedTransformMaskParamsHolder::setParamsAtCurrentPosition(const 
                 this, params->clone(), parentCommand);
 }
 
-KisAnimatedTransformParamsInterfaceSP KisDumbAnimatedTransformMaskParamsHolder::clone() const {
+KisAnimatedTransformParamsHolderInterfaceSP KisDumbAnimatedTransformMaskParamsHolder::clone() const {
     return toQShared(new KisDumbAnimatedTransformMaskParamsHolder(*this));
 }
 

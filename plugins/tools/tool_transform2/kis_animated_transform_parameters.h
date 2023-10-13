@@ -16,7 +16,7 @@
 
 class KisKeyframeChannel;
 
-class KRITATOOLTRANSFORM_EXPORT KisAnimatedTransformMaskParameters : public KisAnimatedTransformParamsInterface
+class KRITATOOLTRANSFORM_EXPORT KisAnimatedTransformMaskParameters : public KisAnimatedTransformParamsHolderInterface
 {
 public:
     KisAnimatedTransformMaskParameters(KisDefaultBoundsBaseSP defaultBounds);
@@ -36,7 +36,7 @@ public:
 
     void syncLodCache() override;
 
-    KisAnimatedTransformParamsInterfaceSP clone() const override;
+    KisAnimatedTransformParamsHolderInterfaceSP clone() const override;
 
     KisTransformMaskParamsInterfaceSP bakeIntoParams() const override;
     void setParamsAtCurrentPosition(const KisTransformMaskParamsInterface *params, KUndo2Command *parentCommand) override;

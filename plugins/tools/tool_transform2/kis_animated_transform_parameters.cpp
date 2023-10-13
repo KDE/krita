@@ -250,7 +250,7 @@ void KisAnimatedTransformMaskParameters::syncLodCache()
     m_d->baseArgs.syncLodCache();
 }
 
-KisAnimatedTransformParamsInterfaceSP KisAnimatedTransformMaskParameters::clone() const
+KisAnimatedTransformParamsHolderInterfaceSP KisAnimatedTransformMaskParameters::clone() const
 {
     return toQShared(new KisAnimatedTransformMaskParameters(*this));
 }

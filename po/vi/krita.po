@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-05 00:41+0000\n"
+"POT-Creation-Date: 2023-10-13 00:40+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -12954,7 +12954,12 @@ msgstr "Ẩ&n"
 msgid "File"
 msgstr "&Bộ lọc"
 
-#: krita/krita5.xmlgui:421
+#: krita/krita5.xmlgui:417
+#, fuzzy, kde-format
+msgid "Edit"
+msgstr "Sửa"
+
+#: krita/krita5.xmlgui:422
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "Định sẵn:"

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-05 00:41+0000\n"
+"POT-Creation-Date: 2023-10-13 00:40+0000\n"
 "PO-Revision-Date: 2023-07-24 21:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -13692,7 +13692,14 @@ msgstr "도움말(&H)"
 msgid "File"
 msgstr "파일"
 
-#: krita/krita5.xmlgui:421
+#: krita/krita5.xmlgui:417
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Edit"
+msgid "Edit"
+msgstr "편집"
+
+#: krita/krita5.xmlgui:422
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "브러시와 도장"

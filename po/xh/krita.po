@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-05 00:41+0000\n"
+"POT-Creation-Date: 2023-10-13 00:40+0000\n"
 "PO-Revision-Date: 2002-11-08 16:00+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -12907,7 +12907,12 @@ msgstr "&Fihla/Bonisa Ulwaleko"
 msgid "File"
 msgstr "&Mhlophe"
 
-#: krita/krita5.xmlgui:421
+#: krita/krita5.xmlgui:417
+#, fuzzy, kde-format
+msgid "Edit"
+msgstr "Yongeza Isigqumathelo"
+
+#: krita/krita5.xmlgui:422
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "Izinto zobumnini Zolwaleko..."

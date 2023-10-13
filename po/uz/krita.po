@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-05 00:41+0000\n"
+"POT-Creation-Date: 2023-10-13 00:40+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -12993,7 +12993,12 @@ msgstr "Koʻrsatish/&bekitish"
 msgid "File"
 msgstr "&Filter"
 
-#: krita/krita5.xmlgui:421
+#: krita/krita5.xmlgui:417
+#, fuzzy, kde-format
+msgid "Edit"
+msgstr "Palitrani tahrirlash..."
+
+#: krita/krita5.xmlgui:422
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "Choʻtka va boshqa ish qurollari"

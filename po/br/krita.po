@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-05 00:41+0000\n"
+"POT-Creation-Date: 2023-10-13 00:40+0000\n"
 "PO-Revision-Date: 2004-05-25 15:34+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -12994,7 +12994,12 @@ msgstr "&Kuzhat"
 msgid "File"
 msgstr "&Sil"
 
-#: krita/krita5.xmlgui:421
+#: krita/krita5.xmlgui:417
+#, fuzzy, kde-format
+msgid "Edit"
+msgstr "&Aozañ"
+
+#: krita/krita5.xmlgui:422
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "Perzhioù ..."

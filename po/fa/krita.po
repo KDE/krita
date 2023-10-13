@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-05 00:41+0000\n"
+"POT-Creation-Date: 2023-10-13 00:40+0000\n"
 "PO-Revision-Date: 2011-09-26 14:11+0330\n"
 "Last-Translator: Mohamad Reza Mirdamadi <mohi@ubuntu.ir>\n"
 "Language-Team: Farsi (Persian) <>\n"
@@ -13063,7 +13063,12 @@ msgstr "&مخفی کردن‌"
 msgid "File"
 msgstr "&پالایه‌"
 
-#: krita/krita5.xmlgui:421
+#: krita/krita5.xmlgui:417
+#, fuzzy, kde-format
+msgid "Edit"
+msgstr "&ویرایش‌"
+
+#: krita/krita5.xmlgui:422
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "قلم‌موها و ماده"

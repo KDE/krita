@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-05 00:41+0000\n"
+"POT-Creation-Date: 2023-10-13 00:40+0000\n"
 "PO-Revision-Date: 2021-05-15 15:07+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -13041,7 +13041,12 @@ msgstr "&Ascunde/afișează plan..."
 msgid "File"
 msgstr "&Fișier"
 
-#: krita/krita5.xmlgui:421
+#: krita/krita5.xmlgui:417
+#, fuzzy, kde-format
+msgid "Edit"
+msgstr "&Editare"
+
+#: krita/krita5.xmlgui:422
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Pensule și chestii"

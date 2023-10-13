@@ -15,7 +15,7 @@
 namespace TestUtil {
 void registerTransformMaskStubs()
 {
-    KisTransformMaskParamsFactoryRegistry::instance()->setAnimatedParamsFactory(
+    KisTransformMaskParamsFactoryRegistry::instance()->setAnimatedParamsHolderFactory(
         [] (KisDefaultBoundsBaseSP bounds) {
             return toQShared(new KisDumbAnimatedTransformMaskParamsHolder(bounds));
         });

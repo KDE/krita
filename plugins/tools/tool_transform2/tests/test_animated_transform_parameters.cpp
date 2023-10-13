@@ -14,7 +14,7 @@
 #include "commands_new/KisLazyCreateTransformMaskKeyframesCommand.h"
 #include "kis_image_animation_interface.h"
 #include "kis_transform_mask_params_interface.h"
-#include "kis_animated_transform_parameters.h"
+#include "KisAnimatedTransformMaskParamsHolder.h"
 #include "kis_keyframe_channel.h"
 
 #include <KoToolRegistry.h>

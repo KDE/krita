@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-13 00:40+0000\n"
-"PO-Revision-Date: 2023-09-23 08:39+0100\n"
+"PO-Revision-Date: 2023-10-13 22:03+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -12900,9 +12900,7 @@ msgid "File"
 msgstr "Dosiero"
 
 #: krita/krita5.xmlgui:417
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "Redakti"
 

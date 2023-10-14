@@ -7,14 +7,14 @@
 # Pau Tallada Crespí <pau_tallada@telefonica.net>, 2006, 2007.
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
-# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Josep M. Ferrer <txemaq@gmail.com>
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-13 00:40+0000\n"
-"PO-Revision-Date: 2023-09-23 13:37+0200\n"
+"PO-Revision-Date: 2023-10-13 16:14+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8878,7 +8878,7 @@ msgstr "Bloqueja la línia Y"
 #, kde-format
 msgctxt "action"
 msgid "Move to Canvas Center X"
-msgstr "Mou al centre X del llenç"
+msgstr "Mou cap al centre X del llenç"
 
 #. i18n: context: text @ Action (mirrorY-moveToCenter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorY-moveToCenter), Actions (Painting), ActionCollection (Krita)
@@ -8890,7 +8890,7 @@ msgstr "Mou al centre X del llenç"
 #, kde-format
 msgctxt "action"
 msgid "Move to Canvas Center Y"
-msgstr "Mou al centre Y del llenç"
+msgstr "Mou cap al centre Y del llenç"
 
 #. i18n: context: text @ Action (toggle-selection-overlay-mode), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:693
@@ -12628,7 +12628,7 @@ msgstr "Estil de la capa"
 #, kde-format
 msgctxt "action"
 msgid "Move into previous group"
-msgstr "Mou al grup anterior"
+msgstr "Mou cap a dins del grup anterior"
 
 #. i18n: context: text @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
@@ -12640,7 +12640,7 @@ msgstr "Mou al grup anterior"
 #, kde-format
 msgctxt "action"
 msgid "Move into next group"
-msgstr "Mou al grup posterior"
+msgstr "Mou cap a dins del grup posterior"
 
 #. i18n: context: text @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
@@ -12895,9 +12895,7 @@ msgid "File"
 msgstr "Fitxer"
 
 #: krita/krita5.xmlgui:417
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "Edita"
 
@@ -16403,12 +16401,12 @@ msgstr ""
 #: libs/flake/tools/KoPathTool.cpp:695
 #, kde-format
 msgid "Press B to break path at selected point."
-msgstr "Premeu «B» per a trencar el camí al punt seleccionat."
+msgstr "Premeu «B» per a trencar el camí cap al punt seleccionat."
 
 #: libs/flake/tools/KoPathTool.cpp:697
 #, kde-format
 msgid "Press B to break path at selected segments."
-msgstr "Teclegeu B per a trencar el camí als segments seleccionats."
+msgstr "Teclegeu B per a trencar el camí cap als segments seleccionats."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format
@@ -20547,7 +20545,8 @@ msgstr "Importeu una animació de vídeo"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #, kde-format
 msgid "FFMpeg not found! Please add a path to FFMpeg in the \"Advanced\" tab"
-msgstr "No s'ha trobat FFmpeg! Afegiu un camí a FFmpeg a la pestanya «Avançat»"
+msgstr ""
+"No s'ha trobat FFmpeg! Afegiu un camí cap a FFmpeg en la pestanya «Avançat»"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:81
 #, kde-format
@@ -28380,12 +28379,12 @@ msgstr "Mode desplaçar"
 #: libs/ui/input/kis_pan_action.cpp:45
 #, kde-format
 msgid "Pan Left"
-msgstr "Desplaça a l'esquerra"
+msgstr "Desplaça cap a l'esquerra"
 
 #: libs/ui/input/kis_pan_action.cpp:46
 #, kde-format
 msgid "Pan Right"
-msgstr "Desplaça a la dreta"
+msgstr "Desplaça cap a la dreta"
 
 #: libs/ui/input/kis_pan_action.cpp:47
 #, kde-format
@@ -28583,22 +28582,22 @@ msgstr "Cap"
 #: libs/ui/input/kis_shortcut_configuration.cpp:409
 #, kde-format
 msgid "Mouse Wheel Up"
-msgstr "Moure amunt la roda del ratolí"
+msgstr "Moure cap amunt la roda del ratolí"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:413
 #, kde-format
 msgid "Mouse Wheel Down"
-msgstr "Moure avall la roda del ratolí"
+msgstr "Moure cap avall la roda del ratolí"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:417
 #, kde-format
 msgid "Mouse Wheel Left"
-msgstr "Moure a l'esquerra la roda del ratolí"
+msgstr "Moure cap a l'esquerra la roda del ratolí"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:421
 #, kde-format
 msgid "Mouse Wheel Right"
-msgstr "Moure a la dreta la roda del ratolí"
+msgstr "Moure cap a la dreta la roda del ratolí"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:425
 #, kde-format
@@ -35770,17 +35769,17 @@ msgstr "Va a la pàgina següent"
 #: libs/widgetutils/config/kstandardaction_p.h:71
 #, kde-format
 msgid "&Go To..."
-msgstr "&Ves a..."
+msgstr "&Ves fins a..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:72
 #, kde-format
 msgid "&Go to Page..."
-msgstr "&Ves a la pàgina..."
+msgstr "&Ves fins a la pàgina..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:73
 #, kde-format
 msgid "&Go to Line..."
-msgstr "&Ves a la línia..."
+msgstr "&Ves fins a la línia..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:74
 #, kde-format
@@ -38179,8 +38178,8 @@ msgstr "Edita les capes:"
 msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
-"Zoom de la línia de temps. Mantindre premut i arrossegar a l'esquerra o a la "
-"dreta."
+"Zoom de la línia de temps. Mantindre premut i arrossegar cap a l'esquerra o "
+"a la dreta."
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
 #, kde-format
@@ -39609,7 +39608,7 @@ msgstr "fotogrames"
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
-msgstr "No hi ha cap fotograma que s'haja dimportar."
+msgstr "No hi ha cap fotograma que s'haja d'importar."
 
 #: plugins/dockers/recorder/recorder_export.cpp:522
 #, kde-format
@@ -41122,7 +41121,7 @@ msgstr "Per favor, apegueu esta informació a l'informe d'error"
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:38
 #, kde-format
 msgid "Copy to clipboard"
-msgstr "Copia al porta-retalls"
+msgstr "Copia a dins del porta-retalls"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:39
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:73
@@ -41583,12 +41582,12 @@ msgstr "Guarda automàticament quan es dividix"
 #: plugins/extensions/layergroupswitcher/layergroupswitcher.cpp:31
 #, kde-format
 msgid "Move into previous group"
-msgstr "Mou al grup anterior"
+msgstr "Mou cap a dins del grup anterior"
 
 #: plugins/extensions/layergroupswitcher/layergroupswitcher.cpp:35
 #, kde-format
 msgid "Move into next group"
-msgstr "Mou al grup posterior"
+msgstr "Mou cap a dins del grup posterior"
 
 #: plugins/extensions/layersplit/dlg_layersplit.cpp:30
 #, kde-format
@@ -54879,7 +54878,7 @@ msgstr "Preparant l'exportació."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:139
 msgid "Exporting Comic..."
-msgstr "Exportant a Comic..."
+msgstr "Exportant cap a Comic..."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:157
 msgid ""
@@ -57592,7 +57591,7 @@ msgid ""
 "Move the layer that you have currently selected in the layerbox with its "
 "masks. Shortcut: ctrl-click."
 msgstr ""
-"Mou la capa que teniu actualment seleccionada a la caixa de capes amb les "
+"Mou la capa que teniu actualment seleccionada en la caixa de capes amb les "
 "seues màscares. Drecera: «Ctrl+clic»."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSelectedLayer)
@@ -57605,7 +57604,7 @@ msgstr "&Mou la capa actual"
 #: plugins/tools/basictools/wdgmovetool.ui:46
 #, kde-format
 msgid "Move the first layer with visible content at the place where you click."
-msgstr "Mou la primera capa amb contingut visible al lloc on heu fet clic."
+msgstr "Mou la primera capa amb contingut visible cap al lloc on heu fet clic."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioFirstLayer)
 #: plugins/tools/basictools/wdgmovetool.ui:49

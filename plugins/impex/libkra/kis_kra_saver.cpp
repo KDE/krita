@@ -802,7 +802,7 @@ bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
                 assist->saveXmlList(doc, assistantsElement, count_perspectiveellipse);
                 count_perspectiveellipse++;
             }
-            else if (assist->id() == "curvilinear-perpsective"){
+            else if (assist->id() == "curvilinear-perspective"){
                 assist->saveXmlList(doc, assistantsElement, count_curvilinearperspective);
                 count_curvilinearperspective++;
             }

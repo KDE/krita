@@ -2052,8 +2052,7 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
 
                 if (m_newAssistant->id() == "ellipse" ||
                     m_newAssistant->id() == "concentric ellipse" ||
-                    m_newAssistant->id() == "fisheye-point" ||
-                    m_newAssistant->id() == "curvilinear-perspective") {
+                    m_newAssistant->id() == "fisheye-point") {
                     QPointF center = QLineF(*handles[0], *handles[1]).center();
                     QLineF radius = QLineF(center,*handles[0]);
                     QLineF dragRadius = QLineF(center, event->point);

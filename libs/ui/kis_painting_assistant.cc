@@ -787,6 +787,12 @@ void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistant
         assistantElement.setAttribute("filename", QString("perspective ellipse%1.assistant").arg(count));
         assistantsElement.appendChild(assistantElement);
     }
+    else if (d->s->id == "curvilinear-perspective"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "curvilinear-perspective");
+        assistantElement.setAttribute("filename", QString("curvilinear-perspective%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
 }
 
 void KisPaintingAssistant::findPerspectiveAssistantHandleLocation() {

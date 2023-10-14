@@ -254,7 +254,8 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
         else if (m_handleDrag && assistant->handles().size()>1 && (assistant->id() == "ruler" ||
                                                                    assistant->id() == "parallel ruler" ||
                                                                    assistant->id() == "infinite ruler" ||
-                                                                   assistant->id() == "spline")){
+                                                                   assistant->id() == "spline" ||
+                                                                   assistant->id() == "curvilinear-perspective")){
             if (m_handleDrag == assistant->handles()[0]) {
                 m_dragStart = *assistant->handles()[1];
             } else if (m_handleDrag == assistant->handles()[1]) {
@@ -2051,7 +2052,8 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
 
                 if (m_newAssistant->id() == "ellipse" ||
                     m_newAssistant->id() == "concentric ellipse" ||
-                    m_newAssistant->id() == "fisheye-point") {
+                    m_newAssistant->id() == "fisheye-point" ||
+                    m_newAssistant->id() == "curvilinear-perspective") {
                     QPointF center = QLineF(*handles[0], *handles[1]).center();
                     QLineF radius = QLineF(center,*handles[0]);
                     QLineF dragRadius = QLineF(center, event->point);

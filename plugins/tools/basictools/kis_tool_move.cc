@@ -259,7 +259,7 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
         m_asyncUpdateHelper.startUpdateStream(image.data(), m_strokeId);
     }
 
-    KIS_SAFE_ASSERT_RECOVER(m_changesTracker.isEmpty(true)) {
+    KIS_SAFE_ASSERT_RECOVER(m_changesTracker.isEmpty()) {
         m_changesTracker.reset();
     }
     commitChanges();
@@ -468,7 +468,7 @@ void KisToolMove::requestUndoDuringStroke()
 {
     if (!m_strokeId) return;
 
-    if (m_changesTracker.isEmpty(true)) {
+    if (!m_changesTracker.canUndo()) {
         cancelStroke();
     } else {
         m_changesTracker.requestUndo();
@@ -479,7 +479,9 @@ void KisToolMove::requestRedoDuringStroke()
 {
     if (!m_strokeId) return;
 
-    m_changesTracker.requestRedo();
+    if (m_changesTracker.canRedo()) {
+        m_changesTracker.requestRedo();
+    }
 }
 
 void KisToolMove::beginPrimaryAction(KoPointerEvent *event)

@@ -786,7 +786,7 @@ void KisToolTransform::requestUndoDuringStroke()
 {
     if (!m_strokeId || m_transaction.rootNodes().isEmpty()) return;
 
-    if (m_changesTracker.isEmpty(true)) {
+    if (!m_changesTracker.canUndo()) {
         cancelStroke();
     } else {
         m_changesTracker.requestUndo();
@@ -797,7 +797,9 @@ void KisToolTransform::requestRedoDuringStroke()
 {
     if (!m_strokeId || m_transaction.rootNodes().isEmpty()) return;
 
-    m_changesTracker.requestRedo();
+    if (m_changesTracker.canRedo()) {
+        m_changesTracker.requestRedo();
+    }
 }
 
 void KisToolTransform::requestStrokeEnd()
@@ -940,8 +942,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         m_asyncUpdateHelper.initUpdateStreamLowLevel(image().data(), m_strokeId);
     }
 
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty(true));
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty(false));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty());
 
     slotPreviewDeviceGenerated(0);
 }
@@ -998,7 +999,7 @@ void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties t
         m_asyncUpdateHelper.startUpdateStreamLowLevel();
     }
 
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty(true));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty());
     commitChanges();
 
     initGuiAfterTransformMode();

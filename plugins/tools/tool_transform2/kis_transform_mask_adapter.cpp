@@ -149,5 +149,5 @@ bool KisTransformMaskAdapter::compareTransform(KisTransformMaskParamsInterfaceSP
     QSharedPointer<ToolTransformArgs> lhsArgs = transformArgs();
     QSharedPointer<ToolTransformArgs> rhsArgs = adapter->transformArgs();
 
-    return *lhsArgs == *rhsArgs;
+    return lhsArgs->isSameMode(*rhsArgs);
 }

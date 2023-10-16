@@ -82,6 +82,7 @@ const QSharedPointer<ToolTransformArgs> KisAnimatedTransformMaskParamsHolder::tr
 
     if (m_d->transformChannels.isEmpty()) return args;
     if (m_d->defaultBounds->currentLevelOfDetail() > 0) return args;
+    if (args->mode() != ToolTransformArgs::FREE_TRANSFORM) return args;
 
 
     auto channelFor = [this] (const QString &id) -> KisScalarKeyframeChannel* {
@@ -280,6 +281,7 @@ void KisAnimatedTransformMaskParamsHolder::setNewTransformArgs(const ToolTransfo
 
     if (m_d->transformChannels.isEmpty()) return;
     if (m_d->defaultBounds->currentLevelOfDetail() > 0) return;
+    if (args.mode() != ToolTransformArgs::FREE_TRANSFORM) return;
 
     const int currentTime = m_d->defaultBounds->currentTime();
 

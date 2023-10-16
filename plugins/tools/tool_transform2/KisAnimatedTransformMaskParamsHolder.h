@@ -31,9 +31,6 @@ public:
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
     KisKeyframeChannel* getKeyframeChannel(const QString &id) const override;
 
-    void clearChangedFlag() override;
-    bool hasChanged() const override;
-
     void syncLodCache() override;
 
     KisAnimatedTransformParamsHolderInterfaceSP clone() const override;
@@ -46,8 +43,6 @@ private:
     qreal defaultValueForScalarChannel(const KoID &id);
 
 private:
-    quint64 generateStateHash() const;
-
     struct Private;
     const QScopedPointer<Private> m_d;
 };

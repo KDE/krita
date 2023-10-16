@@ -55,6 +55,7 @@ public:
     virtual QRect nonAffineChangeRect(const QRect &rc) = 0;
     virtual QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds) = 0;
 
+    virtual bool compareTransform(KisTransformMaskParamsInterfaceSP rhs) const = 0;
 
     virtual KisTransformMaskParamsInterfaceSP clone() const = 0;
 };
@@ -69,9 +70,6 @@ public:
 
     virtual KisTransformMaskParamsInterfaceSP bakeIntoParams() const = 0;
     virtual void setParamsAtCurrentPosition(const KisTransformMaskParamsInterface *params, KUndo2Command *parentCommand) = 0;
-
-    virtual void clearChangedFlag() = 0;
-    virtual bool hasChanged() const = 0;
 
     virtual KisAnimatedTransformParamsHolderInterfaceSP clone() const = 0;
 

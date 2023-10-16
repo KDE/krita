@@ -20,7 +20,6 @@
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
 #include "kis_node_progress_proxy.h"
-#include "kis_transaction.h"
 #include "kis_painter.h"
 
 #include "kis_busy_progress_indicator.h"
@@ -55,7 +54,6 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
           updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
           offBoundsReadArea(0.5)
     {
-        reloadParameters();
     }
 
     Private(const Private &rhs)
@@ -70,20 +68,6 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
     {
     }
 
-    void reloadParameters()
-    {
-        KisTransformMaskParamsInterfaceSP params = paramsHolder->bakeIntoParams();
-
-        QTransform affineTransform;
-        if (params->isAffine()) {
-            affineTransform = params->finalAffineTransform();
-        }
-        worker.setForwardTransform(affineTransform);
-
-        paramsHolder->clearChangedFlag();
-        staticCacheValid = false;
-    }
-
     KisPerspectiveTransformWorker worker;
     KisAnimatedTransformParamsHolderInterfaceSP paramsHolder;
 
@@ -91,6 +75,7 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
     bool recalculatingStaticImage;
     KisPaintDeviceSP staticCacheDevice;
     bool staticCacheIsOverridden = false;
+    KisTransformMaskParamsInterfaceSP paramsForStaticImage;
 
     KisLodCapableLayerOffset offset;
 
@@ -157,8 +142,10 @@ void KisTransformMask::setTransformParamsWithUndo(KisTransformMaskParamsInterfac
     KIS_SAFE_ASSERT_RECOVER_RETURN(params);
 
     m_d->paramsHolder->setParamsAtCurrentPosition(params.data(), parentCommand);
-    m_d->reloadParameters();
-    m_d->updateSignalCompressor.stop();
+
+    m_d->staticCacheValid = false;
+    m_d->paramsForStaticImage.clear();
+    m_d->updateSignalCompressor.start();
 }
 
 void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP params)
@@ -353,8 +340,6 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
                             maskPos == N_ABOVE_FILTHY ||
                             maskPos == N_BELOW_FILTHY);
 
-    if (m_d->paramsHolder->hasChanged()) m_d->reloadParameters();
-
     /**
      * We shouldn't reset or use the static image when rendering the animation
      * frames.
@@ -362,7 +347,9 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
      * TODO: implement proper high-quality rendering for animation frames
      */
     if (m_d->paramsHolder->defaultBounds()->externalFrameActive()) {
+
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(params->isAffine(), rc);
+        m_d->worker.setForwardTransform(params->finalAffineTransform());
         m_d->worker.runPartialDst(src, dst, rc);
 
         #ifdef DEBUG_RENDERING
@@ -374,11 +361,19 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         return rc;
     }
 
+    /**
+     * Hold the shared pointer in case some other thread will also try to release it
+     */
+    KisTransformMaskParamsInterfaceSP localParamsForStaticImage = m_d->paramsForStaticImage;
+
     if (!m_d->staticCacheIsOverridden &&
         !m_d->recalculatingStaticImage &&
-        (maskPos == N_FILTHY || maskPos == N_ABOVE_FILTHY)) {
+        ((maskPos == N_FILTHY || maskPos == N_ABOVE_FILTHY) ||
+         (localParamsForStaticImage &&
+          !localParamsForStaticImage->compareTransform(params)))) {
 
         m_d->staticCacheValid = false;
+        m_d->paramsForStaticImage.clear();
         m_d->updateSignalCompressor.start();
     }
 
@@ -388,6 +383,9 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         QRect updatedRect = m_d->staticCacheDevice->extent();
         KisPainter::copyAreaOptimized(updatedRect.topLeft(), m_d->staticCacheDevice, dst, updatedRect);
 
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->paramsForStaticImage);
+        m_d->paramsForStaticImage = params;
+
 #ifdef DEBUG_RENDERING
         qDebug() << "Recalculate" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
         KIS_DUMP_DEVICE_2(src, DUMP_RECT, "recalc_src", "dd");
@@ -395,6 +393,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
 #endif /* DEBUG_RENDERING */
 
     } else if (!m_d->staticCacheValid && !m_d->staticCacheIsOverridden && params->isAffine()) {
+        m_d->worker.setForwardTransform(params->finalAffineTransform());
         m_d->worker.runPartialDst(src, dst, rc);
 
 #ifdef DEBUG_RENDERING
@@ -462,8 +461,7 @@ QRect KisTransformMask::changeRect(const QRect &rect, PositionToFilthy pos) cons
 
         const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
 
-        if (m_d->paramsHolder->hasChanged()) m_d->reloadParameters();
-        KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
+        KisSafeTransform transform(params->finalAffineTransform(), limitingRect, interestRect);
         changeRect = transform.mapRectForward(rect);
     } else {
         QRect interestRect;
@@ -507,8 +505,7 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
     if (params->isAffine()) {
         const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
 
-        if (m_d->paramsHolder->hasChanged()) m_d->reloadParameters();
-        KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
+        KisSafeTransform transform(params->finalAffineTransform(), limitingRect, interestRect);
         needRect = transform.mapRectBackward(rect);
 
         /**

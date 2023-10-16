@@ -139,11 +139,146 @@ QRect KisBezierTransformMesh::approxNeedRect(const QRect &rc) const
     const QRectF unitRect(0, 0, 1, 1);
     const int samplesLimit = sampleRect.width() * sampleRect.height() / 2;
 
+    QRectF stepRect;
+
+    {
+        /**
+         * First, try to approximate the bounding need rect by sampling
+         * control points. That is the main property of bezier curves:
+         * the resulting curve is **always** contained inside the control
+         * polygon.
+         *
+         * TODO: sample the whole wrapping polygon in a more uniform way,
+         * that is, sample the whole perimeter of the patch.
+         */
+
+        const QRectF dstRect = rc;
+
+        auto tryAddHandle = [&dstRect, &stepRect] (const KisBezierPatch &patch, KisBezierPatch::ControlPointType controlType) {
+
+            auto fetchLocalPoint =
+                    [] (const KisBezierPatch &patch,
+                        KisBezierPatch::ControlPointType c0,
+                        KisBezierPatch::ControlPointType c1,
+                        KisBezierPatch::ControlPointType c2,
+                        KisBezierPatch::ControlPointType c3) {
+
+                const qreal handleLength = kisDistance(patch.points[c0], patch.points[c1]);
+                const qreal totalLength = handleLength +
+                        kisDistance(patch.points[c1], patch.points[c2]) +
+                        kisDistance(patch.points[c2], patch.points[c3]);
+
+                return KisAlgebra2D::lerp(patch.originalRect.topLeft(), patch.originalRect.topRight(),
+                                          handleLength / totalLength);
+            };
+
+            if (dstRect.contains(patch.points[controlType])) {
+                QPointF localPoint;
+
+                switch (controlType) {
+                case KisBezierPatch::TL:
+                    localPoint = patch.originalRect.topLeft();
+                    break;
+                case KisBezierPatch::TL_HC: {
+                    localPoint = fetchLocalPoint(patch,
+                                                 KisBezierPatch::TL,
+                                                 KisBezierPatch::TL_HC,
+                                                 KisBezierPatch::TR_HC,
+                                                 KisBezierPatch::TR);
+                    break;
+                }
+                case KisBezierPatch::TL_VC:
+                    localPoint = fetchLocalPoint(patch,
+                                                 KisBezierPatch::TL,
+                                                 KisBezierPatch::TL_VC,
+                                                 KisBezierPatch::BL_VC,
+                                                 KisBezierPatch::BL);
+                    break;
+                case KisBezierPatch::TR:
+                    localPoint = patch.originalRect.topRight();
+                    break;
+                case KisBezierPatch::TR_HC:
+                    localPoint = fetchLocalPoint(patch,
+                                                 KisBezierPatch::TR,
+                                                 KisBezierPatch::TR_HC,
+                                                 KisBezierPatch::TL_HC,
+                                                 KisBezierPatch::TL);
+                    break;
+                case KisBezierPatch::TR_VC:
+                    localPoint = fetchLocalPoint(patch,
+                                                 KisBezierPatch::TR,
+                                                 KisBezierPatch::TR_VC,
+                                                 KisBezierPatch::BR_VC,
+                                                 KisBezierPatch::BR);
+
+                    break;
+                case KisBezierPatch::BL:
+                    localPoint = patch.originalRect.bottomLeft();
+                    break;
+                case KisBezierPatch::BL_HC:
+                    localPoint = fetchLocalPoint(patch,
+                                                 KisBezierPatch::BL,
+                                                 KisBezierPatch::BL_HC,
+                                                 KisBezierPatch::BR_HC,
+                                                 KisBezierPatch::BR);
+                    break;
+                case KisBezierPatch::BL_VC:
+                    localPoint = fetchLocalPoint(patch,
+                                                 KisBezierPatch::BL,
+                                                 KisBezierPatch::BL_VC,
+                                                 KisBezierPatch::TL_VC,
+                                                 KisBezierPatch::TL);
+                    break;
+                case KisBezierPatch::BR:
+                    localPoint = patch.originalRect.bottomRight();
+                    break;
+                case KisBezierPatch::BR_HC:
+                    localPoint = fetchLocalPoint(patch,
+                                                 KisBezierPatch::BR,
+                                                 KisBezierPatch::BR_HC,
+                                                 KisBezierPatch::BL_HC,
+                                                 KisBezierPatch::BL);
+                    break;
+                case KisBezierPatch::BR_VC:
+                    localPoint = fetchLocalPoint(patch,
+                                                 KisBezierPatch::BR,
+                                                 KisBezierPatch::BR_VC,
+                                                 KisBezierPatch::TR_VC,
+                                                 KisBezierPatch::TR);
+
+                    break;
+                }
+
+                KisAlgebra2D::accumulateBounds(localPoint, &stepRect);
+            }
+        };
+
+        for (auto it = beginPatches(); it != endPatches(); ++it) {
+            tryAddHandle(*it, KisBezierPatch::TL);
+            tryAddHandle(*it, KisBezierPatch::TL_HC);
+            tryAddHandle(*it, KisBezierPatch::TL_VC);
+
+            tryAddHandle(*it, KisBezierPatch::TR);
+            tryAddHandle(*it, KisBezierPatch::TR_HC);
+            tryAddHandle(*it, KisBezierPatch::TR_VC);
+
+            tryAddHandle(*it, KisBezierPatch::BL);
+            tryAddHandle(*it, KisBezierPatch::BL_HC);
+            tryAddHandle(*it, KisBezierPatch::BL_VC);
+
+            tryAddHandle(*it, KisBezierPatch::BR);
+            tryAddHandle(*it, KisBezierPatch::BR_HC);
+            tryAddHandle(*it, KisBezierPatch::BR_VC);
+        }
+    }
+
     KisSampleRectIterator dstRectSampler(sampleRect);
     KisBezierPatch patch = *beginPatches();
     KisBezierPatchParamToSourceSampler patchSampler(patch);
 
-    QRectF stepRect;
+    /// the number of points that has actually been
+    /// sampled from the destination rect
+    int hitPoints = 0;
 
     while (1) {
         for (int i = 0; i < 10; i++) {
@@ -153,6 +288,7 @@ QRect KisBezierTransformMesh::approxNeedRect(const QRect &rc) const
                 const QPointF localPoint = patch.globalToLocal(dstPoint);
                 if (unitRect.contains(localPoint)) {
                     KisAlgebra2D::accumulateBounds(patchSampler.point(localPoint), &stepRect);
+                    hitPoints++;
                     continue;
                 }
             }
@@ -165,13 +301,14 @@ QRect KisBezierTransformMesh::approxNeedRect(const QRect &rc) const
                     patchSampler = KisBezierPatchParamToSourceSampler(patch);
 
                     KisAlgebra2D::accumulateBounds(patchSampler.point(localPoint), &stepRect);
+                    hitPoints++;
                 }
             }
         }
 
         QRect alignedRect = stepRect.toAlignedRect();
 
-        if (!alignedRect.isEmpty() && alignedRect == result) {
+        if (hitPoints > 20 && !alignedRect.isEmpty() && alignedRect == result) {
             break;
         }
 
@@ -184,7 +321,7 @@ QRect KisBezierTransformMesh::approxNeedRect(const QRect &rc) const
              */
             if (!result.isEmpty()) {
                 qWarning() << "KisBezierTransformMesh::approxNeedRect: the algorithm hasn't converged!"
-                           << ppVar(stepRect) << ppVar(alignedRect) << ppVar(result);
+                           << ppVar(hitPoints) << ppVar(stepRect) << ppVar(alignedRect) << ppVar(result);
             }
             break;
         }

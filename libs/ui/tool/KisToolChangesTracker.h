@@ -25,7 +25,10 @@ public:
     KisToolChangesTrackerDataSP lastState() const;
     void reset();
 
-    bool isEmpty(bool undo) const;
+    bool isEmpty() const;
+
+    bool canUndo() const;
+    bool canRedo() const;
 
 Q_SIGNALS:
     void sigConfigChanged(KisToolChangesTrackerDataSP state);

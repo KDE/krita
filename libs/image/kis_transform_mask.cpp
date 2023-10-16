@@ -614,9 +614,19 @@ void KisTransformMask::setY(qint32 y)
 
 void KisTransformMask::forceUpdateTimedNode()
 {
-    if (hasPendingTimedUpdates()) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->staticCacheValid);
+    KisTransformMaskParamsInterfaceSP localParamsForStaticImage = m_d->paramsForStaticImage;
 
+    /**
+     * When flattening the layer with animated transform mask we should
+     * actually rerender the static image
+     */
+    if (hasPendingTimedUpdates() ||
+        !m_d->staticCacheValid ||
+        !localParamsForStaticImage ||
+        !localParamsForStaticImage->compareTransform(m_d->paramsHolder->bakeIntoParams())) {
+
+        m_d->staticCacheValid = false;
+        m_d->paramsForStaticImage.clear();
         m_d->updateSignalCompressor.stop();
         slotDelayedStaticUpdate();
     }

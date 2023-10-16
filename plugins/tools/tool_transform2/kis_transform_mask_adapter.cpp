@@ -140,3 +140,14 @@ KisKeyframeChannel *KisTransformMaskAdapter::getKeyframeChannel(const QString &i
 KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::clone() const {
     return toQShared(new KisTransformMaskAdapter(*this->transformArgs(), this->isHidden(), this->isInitialized()));
 }
+
+bool KisTransformMaskAdapter::compareTransform(KisTransformMaskParamsInterfaceSP rhs) const
+{
+    QSharedPointer<KisTransformMaskAdapter> adapter = rhs.dynamicCast<KisTransformMaskAdapter>();
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(adapter, false);
+
+    QSharedPointer<ToolTransformArgs> lhsArgs = transformArgs();
+    QSharedPointer<ToolTransformArgs> rhsArgs = adapter->transformArgs();
+
+    return *lhsArgs == *rhsArgs;
+}

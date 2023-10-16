@@ -38,7 +38,6 @@ struct KisAnimatedTransformMaskParamsHolder::Private
     Private(KisDefaultBoundsBaseSP _defaultBounds)
         : baseArgs(_defaultBounds)
         , defaultBounds(_defaultBounds)
-        , hash()
     {
     }
 
@@ -46,7 +45,6 @@ struct KisAnimatedTransformMaskParamsHolder::Private
         : baseArgs(rhs.baseArgs)
         , defaultBounds(rhs.defaultBounds)
         , isHidden(rhs.isHidden)
-        , hash(rhs.hash)
     {
 
         Q_FOREACH(QString otherKey, rhs.transformChannels.keys()) {
@@ -62,8 +60,6 @@ struct KisAnimatedTransformMaskParamsHolder::Private
     KisDefaultBoundsBaseSP defaultBounds;
     bool isHidden {false};
     bool isInitialized {false};
-
-    quint64 hash;
 };
 
 KisAnimatedTransformMaskParamsHolder::KisAnimatedTransformMaskParamsHolder(KisDefaultBoundsBaseSP defaultBounds)
@@ -235,16 +231,6 @@ qreal KisAnimatedTransformMaskParamsHolder::defaultValueForScalarChannel(const K
     }
 }
 
-void KisAnimatedTransformMaskParamsHolder::clearChangedFlag()
-{
-    m_d->hash = generateStateHash();
-}
-
-bool KisAnimatedTransformMaskParamsHolder::hasChanged() const
-{
-    return m_d->hash != generateStateHash();
-}
-
 void KisAnimatedTransformMaskParamsHolder::syncLodCache()
 {
     m_d->baseArgs.syncLodCache();
@@ -322,21 +308,5 @@ void KisAnimatedTransformMaskParamsHolder::setNewTransformArgs(const ToolTransfo
     setKeyframe(KisKeyframeChannel::RotationX, currentTime, kisRadiansToDegrees(args.aX()), parentCommand);
     setKeyframe(KisKeyframeChannel::RotationY, currentTime, kisRadiansToDegrees(args.aY()), parentCommand);
     setKeyframe(KisKeyframeChannel::RotationZ, currentTime, kisRadiansToDegrees(args.aZ()), parentCommand);
-}
-
-quint64 KisAnimatedTransformMaskParamsHolder::generateStateHash() const
-{
-    return qHash(transformArgs()->transformedCenter().x())
-            ^ qHash(transformArgs()->transformedCenter().y())
-            ^ qHash(transformArgs()->originalCenter().x())
-            ^ qHash(transformArgs()->originalCenter().y())
-            ^ qHash(transformArgs()->rotationCenterOffset().x())
-            ^ qHash(transformArgs()->rotationCenterOffset().y())
-            ^ qHash(transformArgs()->scaleX())
-            ^ qHash(transformArgs()->scaleY())
-            ^ qHash(transformArgs()->aX())
-            ^ qHash(transformArgs()->aY())
-            ^ qHash(transformArgs()->aZ())
-            ^ qHash(transformArgs()->alpha());
 }
 

@@ -7,6 +7,7 @@
 #include "KisDumbTransformMaskParams.h"
 
 #include <QDomElement>
+#include "kis_algebra_2d.h"
 #include "kis_dom_utils.h"
 #include "kis_node.h"
 #include "kis_painter.h"
@@ -164,6 +165,14 @@ KisKeyframeChannel *KisDumbTransformMaskParams::getKeyframeChannel(const QString
 KisTransformMaskParamsInterfaceSP KisDumbTransformMaskParams::clone() const
 {
     return toQShared(new KisDumbTransformMaskParams(m_d->transform));
+}
+
+bool KisDumbTransformMaskParams::compareTransform(KisTransformMaskParamsInterfaceSP rhs) const
+{
+    QSharedPointer<KisDumbTransformMaskParams> rhsParams =
+            rhs.dynamicCast<KisDumbTransformMaskParams>();
+
+    return KisAlgebra2D::fuzzyMatrixCompare(m_d->transform, rhsParams->m_d->transform, 1e-5);
 }
 
 QTransform KisDumbTransformMaskParams::testingGetTransform() const

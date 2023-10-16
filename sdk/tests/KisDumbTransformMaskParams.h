@@ -48,6 +48,8 @@ public:
 
     KisTransformMaskParamsInterfaceSP clone() const override;
 
+    bool compareTransform(KisTransformMaskParamsInterfaceSP rhs) const override;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

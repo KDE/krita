@@ -25,13 +25,6 @@ public:
 
     void setParamsAtCurrentPosition(const KisTransformMaskParamsInterface *params, KUndo2Command *parentCommand);
 
-    void clearChangedFlag() {
-    }
-
-    virtual bool hasChanged() const {
-        return false;
-    }
-
     KisAnimatedTransformParamsHolderInterfaceSP clone() const;
 
     void setDefaultBounds(KisDefaultBoundsBaseSP bounds);

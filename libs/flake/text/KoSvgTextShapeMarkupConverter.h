@@ -84,7 +84,9 @@ public:
      */
     bool convertSvgToDocument(const QString &svgText, QTextDocument *doc);
 
-    bool convertPSDTextEngineDataToSVG(QJsonDocument tySh,
+    bool convertPSDTextEngineDataToSVG(const QJsonDocument tySh,
+                                       const QJsonDocument txt2,
+                                       const int textIndex,
                                        QString *svgText,
                                        QString *svgStyles,
                                        QPointF &offset,

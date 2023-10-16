@@ -833,6 +833,9 @@ struct KRITAPSD_EXPORT psd_layer_type_shape {
         KisCosParser parser;
         engineData = parser.parseCosToJson(&ba);
     }
+    void setIndex(int val) {
+        textIndex = val;
+    }
     void setTop(float val) {
         bounds.setTop(val);
     }
@@ -854,6 +857,7 @@ struct KRITAPSD_EXPORT psd_layer_type_shape {
     }
 
     static void setupCatcher(const QString path, KisAslCallbackObjectCatcher &catcher, psd_layer_type_shape *data) {
+        catcher.subscribeInteger(path + "/TxLr/TextIndex", std::bind(&psd_layer_type_shape::setIndex, data, std::placeholders::_1));
         catcher.subscribeRawData(path + "/TxLr/EngineData", std::bind(&psd_layer_type_shape::setEngineData, data, std::placeholders::_1));
         catcher.subscribeEnum(path + "/TxLr/Ornt", "Ornt", std::bind(&psd_layer_type_shape::setWritingMode, data, std::placeholders::_1));
         catcher.subscribeUnitFloat(path + "/TxLr/bounds/Left", "#Pnt", std::bind(&psd_layer_type_shape::setLeft, data, std::placeholders::_1));
@@ -1188,7 +1192,10 @@ public:
 
     QString unicodeLayerName;
     QDomDocument layerStyleXml;
+
     QVector<QDomDocument> embeddedPatterns;
+    QJsonDocument txt2Data;
+
     quint16 labelColor{0}; // layer color.
 
     QDomDocument fillConfig;

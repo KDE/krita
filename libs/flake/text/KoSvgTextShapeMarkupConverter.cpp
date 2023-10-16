@@ -1122,9 +1122,12 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
 
 QColor colorFromPSDStyleSheet(QJsonObject color) {
     QColor c(Qt::black);
+    if (color.keys().contains("/Color")) {
+        color = color["/Color"].toObject();
+    }
     if (color.value("/Type").toInt() == 1) {
         QJsonArray values = color.value("/Values").toArray();
-        c = QColor::fromRgbF(values.at(1).toDouble(), values.at(2).toDouble(), values.at(3).toDouble(), values.at(0).toDouble());
+        c = QColor::fromRgbF(values.at(1).toDouble(), values.at(2).toDouble(), values.at(3).toDouble(), 1);
     }
     return c;
 }
@@ -1268,6 +1271,26 @@ QString stylesForPSDParagraphSheet(QJsonObject PSDParagraphSheet, QTransform sca
             //'everyline' uses a penalty based system like Knuth's method.
             unsupportedStyles << key;
             continue;
+        } else if (key == "/ComposerEngine") {
+            unsupportedStyles << key;
+            continue;
+        } else if (key == "/KurikaeshiMojiShori") {
+            unsupportedStyles << key;
+            continue;
+        } else if (key == "/MojiKumiTable") {
+            unsupportedStyles << key;
+            continue;
+        } else if (key == "/ParagraphDirection") {
+            switch (PSDParagraphSheet.value(key).toInt()) {
+            case 1:
+                styles.append("direction:rtl");
+                break;
+            case 0:
+                styles.append("direction:ltr");
+                break;
+            default:
+                break;
+            }
         } else {
             qWarning() << "Unknown PSD paragraph style key" << key << PSDParagraphSheet.value(key);
         }
@@ -1298,6 +1321,8 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
     QStringList textDecor;
     QStringList baselineShift;
     QStringList fontVariantLigatures;
+    QStringList fontVariantNumeric;
+    QStringList fontFeatureSettings;
     for (int i=0; i < PSDStyleSheet.keys().size(); i++) {
         const QString key = PSDStyleSheet.keys().at(i);
         if (key == "/Font") {
@@ -1314,7 +1339,7 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
             val = scale.map(QPointF(val, val)).y();
             styles.append("font-size:"+QString::number(val));
             continue;
-        } else if (key == "/AutoKerning") {
+        } else if (key == "/AutoKerning" || key == "/AutoKern") {
             if (!PSDStyleSheet.value(key).toBool()) {
                 styles.append("font-kerning: none");
             }
@@ -1359,7 +1384,7 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
             double letterSpacing = (0.001 * PSDStyleSheet.value(key).toDouble());
             styles.append("letter-spacing:"+QString::number(letterSpacing)+"em");
             continue;
-        } else if (key == "BaselineShift") {
+        } else if (key == "/BaselineShift") {
             if (PSDStyleSheet.value(key).toDouble() > 0) {
                 double val = PSDStyleSheet.value(key).toDouble();
                 val = scale.map(QPointF(val, val)).y();
@@ -1383,6 +1408,7 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
         } else if (key == "/FontBaseline") {
             // NOTE: This might also be better done with font-variant-position, though
             // we don't support synthetic font stuff, including super and sub script.
+            // Actually, seems like this is specifically font-synthesis
             switch (PSDStyleSheet.value(key).toInt()) {
             case 0:
                 break;
@@ -1396,32 +1422,123 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
                 qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
             }
             continue;
-        } else if (key == "/Underline") {
+        } else if (key == "/FontOTPosition") {
+            // NOTE: This might also be better done with font-variant-position, though
+            // we don't support synthetic font stuff, including super and sub script.
+            switch (PSDStyleSheet.value(key).toInt()) {
+            case 0:
+                break;
+            case 1:
+                styles.append("font-variant-position:super");
+                break;
+            case 2:
+                styles.append("font-variant-position:sub");
+                break;
+            case 3:
+                fontFeatureSettings.append("'numr' 1");
+                break;
+            case 4:
+                fontFeatureSettings.append("'dnum' 1");
+                break;
+            default:
+                qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
+            }
+            continue;
+        } else if (key == "/Underline" || key == "/UnderlinePosition") {
             if (PSDStyleSheet.value(key).toBool()) {
                 textDecor.append("underline");
             }
             continue;
-        } else if (key == "/Strikethrough") {
+        } else if (key == "/Strikethrough" || key == "/StrikethroughPosition") {
             if (PSDStyleSheet.value(key).toBool()) {
                 textDecor.append("line-through");
             }
             continue;
         } else if (key == "/Ligatures") {
-            // font-variant: common-ligatures
             if (!PSDStyleSheet.value(key).toBool()) {
                 fontVariantLigatures.append("no-common-ligatures");
             }
             continue;
-        } else if (key == "/DLigatures") {
-            // font-variant: discretionary ligatures
+        } else if (key == "/DLigatures" || key == "/DiscretionaryLigatures" || key == "/AlternateLigatures") {
             if (PSDStyleSheet.value(key).toBool()) {
                 fontVariantLigatures.append("discretionary-ligatures");
             }
             continue;
-        } /* else if (key == "BaselineDirection") {
-            // unsure, might be vertical vs horizontal, but also might be default (2), ltr (1), rtl(0)?
+        } else if (key == "/ContextualLigatures") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontVariantLigatures.append("contextual");
+            }
             continue;
-        }*/ else if (key == "/Tsume") {
+        } else if (key == "/Fractions") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontVariantNumeric.append("diagonal-fractions");
+            }
+            continue;
+        } else if (key == "/Ordinals") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontVariantNumeric.append("ordinal");
+            }
+            continue;
+        } else if (key == "/Swash") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontFeatureSettings.append("'swsh' 1");
+            }
+            continue;
+        } else if (key == "/Titling") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontFeatureSettings.append("'titl' 1");
+            }
+            continue;
+        } else if (key == "/StylisticAlternates") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontFeatureSettings.append("'salt' 1");
+            }
+            continue;
+        } else if (key == "/Ornaments") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontFeatureSettings.append("'ornm' 1");
+            }
+            continue;
+        }  else if (key == "/FigureStyle") {
+            switch (PSDStyleSheet.value(key).toInt()) {
+            case 0:
+                break;
+            case 1:
+                fontVariantNumeric.append("tabular-nums");
+                fontVariantNumeric.append("lining-nums");
+                break;
+            case 2:
+                fontVariantNumeric.append("proportional-nums");
+                fontVariantNumeric.append("oldstyle-nums");
+                break;
+            case 3:
+                fontVariantNumeric.append("proportional-nums");
+                fontVariantNumeric.append("lining-nums");
+                break;
+            case 4:
+                fontVariantNumeric.append("tabular-nums");
+                fontVariantNumeric.append("oldstyle-nums");
+                break;
+            default:
+                qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
+            }
+            continue;
+        } else if (key == "/Italics") {
+            // This is an educated guess: other italic happens via postscript name.
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontFeatureSettings.append("'ital' 1");
+            }
+            continue;
+        } else if (key == "/BaselineDirection") {
+            if (PSDStyleSheet.value(key).toInt() == 1) {
+                styles.append("text-orientation: upright");
+            } else if (PSDStyleSheet.value(key).toInt() == 2) {
+                styles.append("text-orientation: mixed");
+            } else {
+                qDebug() << key << PSDStyleSheet.value(key);
+            }
+            continue;
+        } else if (key == "/Tsume") {
             // Reduce spacing around a single character. Partially related to text-spacing,
             // Tsume is reduction, Aki expansion, and both can be used as part of Mojikumi
             // However, in this particular case, the property seems to just reduce the space 
@@ -1487,7 +1604,7 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
                 styles.append("stroke:none");
             }
             continue;
-        } else if (key == "/OutlineWidth") {
+        } else if (key == "/OutlineWidth" || key == "/LineWidth") {
             double val = PSDStyleSheet.value(key).toDouble();
             val = scale.map(QPointF(val, val)).y();
             styles.append("stroke-width:"+QString::number(val));
@@ -1519,7 +1636,30 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
             // number, which is odd, because it looks like it should be a point.
             // this controls how high or low the diacritic is on arabic text.
             continue;
-        }*/ else {
+        }*/  else if (key == "/SlashedZero") {
+            // font-variant: common-ligatures
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontVariantNumeric.append("slashed-zero");
+            }
+            continue;
+        } else if (key == "/StylisticSets") {
+            int flags = PSDStyleSheet.value(key).toInt();
+            if (flags & 1) {
+                fontFeatureSettings.append("'ss01' 1");
+            }
+            if (flags & 2) {
+                fontFeatureSettings.append("'ss02' 1");
+            }
+            if (flags & 4) {
+                fontFeatureSettings.append("'ss03' 1");
+            }
+            if (flags & 8) {
+                fontFeatureSettings.append("'ss04' 1");
+            }
+            // TODO: extend till ss20.
+
+            continue;
+        } else {
             if (key != "/FillFlag" && key != "/StrokeFlag" && key != "/AutoLeading") {
                 qWarning() << "Unknown PSD character stylesheet style key" << key << PSDStyleSheet.value(key);
             }
@@ -1540,11 +1680,19 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
     if (!fontVariantLigatures.isEmpty()) {
         styles.append("font-variant-ligatures:"+fontVariantLigatures.join(" "));
     }
+    if (!fontVariantNumeric.isEmpty()) {
+        styles.append("font-variant-numeric:"+fontVariantNumeric.join(" "));
+    }
+    if (!fontFeatureSettings.isEmpty()) {
+        styles.append("font-feature-settings:"+fontFeatureSettings.join(", "));
+    }
     qWarning() << "Unsupported styles" << unsupportedStyles;
     return styles.join("; ");
 }
 
-bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QJsonDocument tySh,
+bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDocument tySh,
+                                                                  const QJsonDocument txt2,
+                                                                  const int textIndex,
                                                                   QString *svgText,
                                                                   QString *svgStyles,
                                                                   QPointF &offset,
@@ -1554,25 +1702,33 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QJsonDocument 
 {
     debugFlake << "Convert from psd engine data";
     
+
     QJsonObject root = tySh.object();
     //qDebug() << "Parsed JSON Object" << root;
+    bool loadFallback = txt2.isEmpty();
+    QJsonObject docObjects = txt2.object().value("/DocumentObjects").toObject();
 
-    QJsonObject engineDict = root["/EngineDict"].toObject();
-    if (engineDict.isEmpty()) {
+    QJsonObject textObject = docObjects.value("/TextObjects").toArray().at(textIndex).toObject();
+    if (textObject.isEmpty() || loadFallback) {
+        textObject = root["/EngineDict"].toObject();
+        loadFallback = true;
+    }
+    if (textObject.isEmpty()) {
         d->errors << "No engine dict found in PSD engine data";
         return false;
     }
 
     QMap<int, font_info_psd> fontNames;
-    QJsonObject resourceDict = root["/ResourceDict"].toObject();
+    QJsonObject resourceDict = loadFallback? root["/DocumentResources"].toObject(): txt2.object()["/DocumentResources"].toObject();
     if (resourceDict.isEmpty()) {
         d->errors << "No engine dict found in PSD engine data";
         return false;
     } else {
         // PSD only stores the postscript name, and we'll need a bit more information than that.
-        QJsonArray fonts = resourceDict["/FontSet"].toArray();
+        QJsonArray fonts = loadFallback? resourceDict["/FontSet"].toArray(): resourceDict["/FontSet"].toObject()["/Resources"].toArray();
         for (int i = 0; i < fonts.size(); i++) {
-            QJsonObject font = fonts.at(i).toObject();
+            QJsonObject font = loadFallback? fonts.at(i).toObject(): fonts.at(i).toObject()["/Resource"].toObject()["/Identifier"].toObject();
+            //qDebug() << font;
             font_info_psd fontInfo;
             QString postScriptName = font.value("/Name").toString();
             QString foundPostScriptName;
@@ -1582,72 +1738,101 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QJsonDocument 
                                                                     fontInfo.weight,
                                                                     fontInfo.width,
                                                                     fontInfo.italic);
+
             if (postScriptName != foundPostScriptName) {
-                d->errors << QString("Font %1 not found, substituting %2").arg(postScriptName).arg(foundPostScriptName);
+                fontInfo.familyName = "sans-serif";
+                d->errors << QString("Font %1 not found, substituting %2").arg(postScriptName).arg(fontInfo.familyName);
             }
             fontNames.insert(i, fontInfo);
         }
     }
-    QString paragraphStyle = isHorizontal? "writing-mode: horizontal-tb;": "writing-mode: vertical-rl;";
-    paragraphStyle += " white-space: pre-wrap;";
+
     QString inlineSizeString;
     QRectF bounds;
 
-    QJsonObject rendered = engineDict["/Rendered"].toObject();
-    // rendering info...
-    if (!rendered.isEmpty()) {
-        QJsonObject shapeChild = rendered["/Shapes"].toObject()["/Children"].toArray()[0].toObject();
-        int shapeType = shapeChild["/ShapeType"].toInt();
-        if (shapeType == 1) {
-            QJsonArray BoxBounds = shapeChild["/Cookie"].toObject()["/Photoshop"].toObject()["/BoxBounds"].toArray();
-            bounds = QRectF(BoxBounds[0].toDouble(), BoxBounds[1].toDouble(), BoxBounds[2].toDouble(), BoxBounds[3].toDouble());
-            bounds = scaleToPt.mapRect(bounds);
-            if (isHorizontal) {
-                inlineSizeString = " inline-size:"+QString::number(bounds.width())+";";
-            } else {
-                inlineSizeString = " inline-size:"+QString::number(bounds.height())+";";
-            }
-        }
-        qDebug() << bounds;
-    }
-
-    
+    // load text shape
     KoPathShape *textShape = nullptr;
-    // For some reason, the easiest way to tell if shape-inside is to check whether the character range is set.
     double textPathStartOffset = -3;
+    int textType = 0;
     bool reversed = false;
-    QJsonObject curve = root["/Curve"].toObject();
-    if (!curve.isEmpty()) {
-        QPainterPath textCurve;
-        QJsonArray points = curve["/Points"].toArray();
-        QJsonArray range = curve["/TextOnPathTRange"].toArray();
-        reversed = curve["/Reversed"].toBool();
-        int length = points.size()/8;
-        for (int i = 0; i < length; i++) {
-            int iAdjust = i*8;
-            QPointF p1(points[iAdjust  ].toDouble(), points[iAdjust+1].toDouble());
-            QPointF p2(points[iAdjust+2].toDouble(), points[iAdjust+3].toDouble());
-            QPointF p3(points[iAdjust+4].toDouble(), points[iAdjust+5].toDouble());
-            QPointF p4(points[iAdjust+6].toDouble(), points[iAdjust+7].toDouble());
+    if (loadFallback) {
+        QJsonObject rendered = textObject["/Rendered"].toObject();
+        // rendering info...
+        if (!rendered.isEmpty()) {
+            QJsonObject shapeChild = rendered["/Shapes"].toObject()["/Children"].toArray()[0].toObject();
+            int shapeType = shapeChild["/ShapeType"].toInt();
+            if (shapeType == 1) {
+                QJsonArray BoxBounds = shapeChild["/Cookie"].toObject()["/Photoshop"].toObject()["/BoxBounds"].toArray();
+                bounds = QRectF(BoxBounds[0].toDouble(), BoxBounds[1].toDouble(), BoxBounds[2].toDouble(), BoxBounds[3].toDouble());
+                bounds = scaleToPt.mapRect(bounds);
+                if (isHorizontal) {
+                    inlineSizeString = " inline-size:"+QString::number(bounds.width())+";";
+                } else {
+                    inlineSizeString = " inline-size:"+QString::number(bounds.height())+";";
+                }
+            }
+            qDebug() << bounds;
+        }
+    } else {
+        QJsonObject view = textObject["/View"].toObject();
+        int textFrameIndex = view["/Frames"].toArray()[0].toObject()["/Resource"].toInt();
+        QJsonArray textFrameSet = resourceDict["/TextFrameSet"].toObject()["/Resources"].toArray();
+        QJsonObject textFrame = textFrameSet.at(textFrameIndex).toObject()["/Resource"].toObject();
 
-            if (i == 0 || textCurve.currentPosition() != p1) {
-                textCurve.moveTo(scaleToPt.map(p1));
-            }
-            if (p1==p2 && p3==p4) {
-                textCurve.lineTo(scaleToPt.map(p4));
-            } else {
-                textCurve.cubicTo(scaleToPt.map(p2), scaleToPt.map(p3), scaleToPt.map(p4));
+
+        if (!textFrame.isEmpty()) {
+            textType = textFrame["/Data"].toObject()["/Type"].toInt();
+            //qDebug() << textFrame;
+
+            if (textType > 0) {
+                QPainterPath textCurve;
+                QJsonObject data = textFrame["/Data"].toObject();
+                QJsonArray points = textFrame["/Bezier"].toObject()["/Points"].toArray();
+                QJsonArray range = data["/TextOnPathTRange"].toArray();
+                QJsonArray fm = data["/FrameMatrix"].toArray();
+                QJsonObject pathData = data["/PathData"].toObject();
+                reversed = pathData["/Flip"].toBool();
+
+                QJsonValue lineOrientation = data["/LineOrientation"];
+                if (!lineOrientation.isUndefined()) {
+                    if (lineOrientation.toInt() == 2) {
+                        isHorizontal = false;
+                    }
+                }
+                QTransform frameMatrix = scaleToPt;
+                if (fm.size() == 6) {
+                    frameMatrix = QTransform(fm[0].toDouble(), fm[1].toDouble(), fm[2].toDouble(), fm[3].toDouble(), fm[4].toDouble(), fm[5].toDouble());
+                    frameMatrix = frameMatrix * scaleToPt;
+                }
+
+                int length = points.size()/8;
+                for (int i = 0; i < length; i++) {
+                    int iAdjust = i*8;
+                    QPointF p1(points[iAdjust  ].toDouble(), points[iAdjust+1].toDouble());
+                    QPointF p2(points[iAdjust+2].toDouble(), points[iAdjust+3].toDouble());
+                    QPointF p3(points[iAdjust+4].toDouble(), points[iAdjust+5].toDouble());
+                    QPointF p4(points[iAdjust+6].toDouble(), points[iAdjust+7].toDouble());
+
+                    if (i == 0 || textCurve.currentPosition() != frameMatrix.map(p1)) {
+                        textCurve.moveTo(frameMatrix.map(p1));
+                    }
+                    if (p1==p2 && p3==p4) {
+                        textCurve.lineTo(frameMatrix.map(p4));
+                    } else {
+                        textCurve.cubicTo(frameMatrix.map(p2), frameMatrix.map(p3), frameMatrix.map(p4));
+                    }
+                }
+                if (textCurve.elementCount() > 1) {
+                    textShape = KoPathShape::createShapeFromPainterPath(textCurve);
+                }
+                if (!range.isEmpty()) {
+                    textPathStartOffset = range[0].toDouble();
+                }
             }
         }
-        // When there's text-in-shape (instead of text-on-path), range seems to be between -3 and -3.
-        if (!range.isEmpty()) {
-            textPathStartOffset = range[0].toDouble();
-        }
-        textShape = KoPathShape::createShapeFromPainterPath(textCurve);
-        qDebug() << curve;
     }
-
-    QJsonObject documentResources = root["/DocumentResources"].toObject();
+    QString paragraphStyle = isHorizontal? "writing-mode: horizontal-tb;": "writing-mode: vertical-rl;";
+    paragraphStyle += " white-space: pre-wrap;";
 
     QBuffer svgBuffer;
     QBuffer styleBuffer;
@@ -1680,7 +1865,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QJsonDocument 
 
     svgWriter.writeStartElement("text");
 
-    QJsonObject editor = engineDict["/Editor"].toObject();
+    QJsonObject editor = loadFallback? textObject["/Editor"].toObject() : textObject["/Model"].toObject();
     QString text = "";
     if (editor.isEmpty()) {
         d->errors << "No editor dict found in PSD engine data";
@@ -1690,24 +1875,27 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QJsonDocument 
         text.replace("\r", "\n");
     }
 
-    if (engineDict.contains("/AntiAlias")) {
-        int antiAliasing = engineDict["/AntiAlias"].toInt();
-        //0 = None, 1 = Sharp, 2 = Crisp, 3 = Strong, 4 = Smooth
-        if (antiAliasing) {
-            svgWriter.writeAttribute("text-rendering", "auto");
-        } else {
-            svgWriter.writeAttribute("text-rendering", "OptimizeSpeed");
-        }
+    int antiAliasing = 0;
+        antiAliasing = loadFallback? textObject["/AntiAlias"].toInt() : textObject["/StorySheet"].toObject()["/AntiAlias"].toInt();
+    //0 = None, 1 = Sharp, 2 = Crisp, 3 = Strong, 4 = Smooth
+    if (antiAliasing == 4) {
+        svgWriter.writeAttribute("text-rendering", "auto");
+    } else {
+        svgWriter.writeAttribute("text-rendering", "OptimizeSpeed");
     }
 
-    QJsonObject paragraphRun = engineDict["/ParagraphRun"].toObject();
+    QJsonObject paragraphRun = loadFallback? textObject["/ParagraphRun"].toObject() : editor["/ParagraphRun"].toObject();
     if (!paragraphRun.isEmpty()) {
         //QJsonArray runLengthArray = paragraphRun.value("RunLengthArray").toArray();
         QJsonArray runArray = paragraphRun["/RunArray"].toArray();
-        QJsonObject styleSheet = runArray[0].toObject()["/ParagraphSheet"].toObject()["/Properties"].toObject();
+        QString features = loadFallback? "/Properties": "/Features";
+        QJsonObject style = loadFallback? runArray.at(0).toObject() : runArray.at(0).toObject()["/RunData"].toObject();
+        QJsonObject parasheet = loadFallback? runArray[0].toObject()["/ParagraphSheet"].toObject():
+                runArray.at(0).toObject()["/RunData"].toObject()["/ParagraphSheet"].toObject();
+        QJsonObject styleSheet = parasheet[features].toObject();
 
         QString styleString = stylesForPSDParagraphSheet(styleSheet, scaleToPt);
-        if (textPathStartOffset < 0) {
+        if (textType < 2) {
             if (textShape) {
                 offsetByAscent = false;
                 paragraphStyle += " shape-inside:url(#textShape);";
@@ -1734,7 +1922,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QJsonDocument 
     }
 
     bool textPathCreated = false;
-    if (textShape && textPathStartOffset >= 0) {
+    if (textShape && textType == 2) {
         svgWriter.writeStartElement("textPath");
         textPathCreated = true;
         svgWriter.writeAttribute("path", textShape->toString());
@@ -1744,32 +1932,37 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QJsonDocument 
         svgWriter.writeAttribute("startOffset", QString::number(textPathStartOffset));
     }
 
-    QJsonObject styleRun = engineDict.value("/StyleRun").toObject();
+    QJsonObject styleRun = loadFallback? textObject.value("/StyleRun").toObject(): editor.value("/StyleRun").toObject();
     if (styleRun.isEmpty()) {
         d->errors << "No styleRun dict found in PSD engine data";
         return false;
     } else {
+        QString features = loadFallback? "/StyleSheetData": "/Features";
         QJsonArray runLengthArray = styleRun.value("/RunLengthArray").toArray();
         QJsonArray runArray = styleRun.value("/RunArray").toArray();
-        if (runLengthArray.isEmpty() && runArray.isEmpty()) {
+        if (runArray.isEmpty()) {
             d->errors << "No styleRun dict found in PSD engine data";
             return false;
         } else {
-            QJsonObject styleSheet = runArray.at(0).toObject().value("/StyleSheet").toObject().value("/StyleSheetData").toObject();
+            QJsonObject style = loadFallback? runArray.at(0).toObject() : runArray.at(0).toObject()["/RunData"].toObject();
+            QJsonObject styleSheet = style.value("/StyleSheet").toObject().value(features).toObject();
             int length = 0;
             int pos = 0;
             for (int i = 0; i < runArray.size(); i++) {
-                QJsonObject newStyle = runArray.at(i).toObject().value("/StyleSheet").toObject().value("/StyleSheetData").toObject();
-                if (newStyle == styleSheet) {
-                    length += runLengthArray.at(i).toInt();
+                style = loadFallback? runArray.at(i).toObject() : runArray.at(i).toObject()["/RunData"].toObject();
+                int l = loadFallback? runLengthArray.at(i).toInt(): runArray.at(i).toObject().value("/Length").toInt();
+
+                QJsonObject newStyleSheet = style.value("/StyleSheet").toObject().value(features).toObject();
+                if (newStyleSheet == styleSheet) {
+                    length += l;
                 } else {
                     svgWriter.writeStartElement("tspan");
                     svgWriter.writeAttribute("style", stylesForPSDStyleSheet(styleSheet, fontNames, scaleToPt));
                     svgWriter.writeCharacters(text.mid(pos, length));
                     svgWriter.writeEndElement();
-                    styleSheet = newStyle;
+                    styleSheet = newStyleSheet;
                     pos += length;
-                    length = runLengthArray.at(i).toInt();
+                    length = l;
                 }
             }
             svgWriter.writeStartElement("tspan");
@@ -1792,6 +1985,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QJsonDocument 
     }
     *svgText = QString::fromUtf8(svgBuffer.data()).trimmed();
     *svgStyles = QString::fromUtf8(styleBuffer.data()).trimmed();
+    //qDebug() << *svgText;
 
     return true;
 }

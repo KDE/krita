@@ -17,6 +17,7 @@
 #include <asl/kis_asl_reader_utils.h>
 #include <asl/kis_asl_writer.h>
 #include <asl/kis_asl_writer_utils.h>
+#include <cos/kis_txt2_utls.h>
 
 
 PsdAdditionalLayerInfoBlock::PsdAdditionalLayerInfoBlock(const PSDHeader &header)
@@ -318,9 +319,9 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         } else if (key == "CgEd") {
         } else if (key == "Txt2") { // global text data, basically the same as an Illustrator text object.
             // Docs say "first 4 are length", this is not true for this particular block, only when in ASL is first 4 length.
-            //QByteArray ba = io.read(blockSize);
-            //KisCosParser p;
-            //qDebug() << p.parseCosToJson(&ba);
+            QByteArray ba = io.read(blockSize);
+            KisCosParser p;
+            txt2Data = KisTxt2Utils::uncompressKeys(p.parseCosToJson(&ba));
         } else if (key == "pths") {
         } else if (key == "anFX") {
         } else if (key == "FMsk") {

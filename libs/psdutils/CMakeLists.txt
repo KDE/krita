@@ -12,6 +12,7 @@ set(kritapsdutils_LIB_SRCS
 
     cos/kis_cos_parser.cpp
     cos/kis_cos_writer.cpp
+    cos/kis_txt2_utls.cpp
 )
 
 kis_add_library(kritapsdutils SHARED ${kritapsdutils_LIB_SRCS})

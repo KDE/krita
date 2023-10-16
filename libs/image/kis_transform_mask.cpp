@@ -332,9 +332,6 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
 
     KisTransformMaskParamsInterfaceSP params = m_d->paramsHolder->bakeIntoParams();
 
-    KisAlgebra2D::DecomposedMatrix m(params->finalAffineTransform());
-
-
     if (params->isHidden()) return rc;
     KIS_ASSERT_RECOVER_NOOP(maskPos == N_FILTHY ||
                             maskPos == N_ABOVE_FILTHY ||
@@ -348,15 +345,17 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
      */
     if (m_d->paramsHolder->defaultBounds()->externalFrameActive()) {
 
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(params->isAffine(), rc);
-        m_d->worker.setForwardTransform(params->finalAffineTransform());
-        m_d->worker.runPartialDst(src, dst, rc);
+        // no preview for non-affine transforms currently...
+        if (params->isAffine()) {
+            m_d->worker.setForwardTransform(params->finalAffineTransform());
+            m_d->worker.runPartialDst(src, dst, rc);
 
-        #ifdef DEBUG_RENDERING
-                qDebug() << "Partial for external frame" << name() << ppVar(src->exactBounds()) << ppVar(src->extent()) << ppVar(dst->exactBounds()) << ppVar(dst->extent()) << ppVar(rc);
-                KIS_DUMP_DEVICE_2(src, DUMP_RECT, "partial_ext_src", "dd");
-                KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "partial_ext_dst", "dd");
-        #endif /* DEBUG_RENDERING */
+#ifdef DEBUG_RENDERING
+            qDebug() << "Partial for external frame" << name() << ppVar(src->exactBounds()) << ppVar(src->extent()) << ppVar(dst->exactBounds()) << ppVar(dst->extent()) << ppVar(rc);
+            KIS_DUMP_DEVICE_2(src, DUMP_RECT, "partial_ext_src", "dd");
+            KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "partial_ext_dst", "dd");
+#endif /* DEBUG_RENDERING */
+        }
 
         return rc;
     }

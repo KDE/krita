@@ -57,9 +57,9 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
 
     KisImageAnimationInterface *animation = m_image->animationInterface();
 
-    const int sequenceNumberingOffset = options.sequenceStart;
-    const KisTimeSpan clipRange = KisTimeSpan::fromTimeToTime(sequenceNumberingOffset + options.firstFrame,
-                                                        sequenceNumberingOffset + options.lastFrame);
+    const int sequenceStart = options.sequenceStart;
+    const KisTimeSpan clipRange = KisTimeSpan::fromTimeToTime(options.firstFrame,
+                                                              options.lastFrame);
 
      // export dimensions could be off a little bit, so the last force option tweaks the pixels for the export to work
     const QString exportDimensions =
@@ -95,7 +95,7 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
         
         args << "-y" // Auto Confirm...
              << "-r" << QString::number(options.frameRate) // Frame rate for video...
-             //<< "-start_number" << QString::number(clipRange.start() // Starting number for first frame for batch of frames. **TODO** Not working???
+             << "-start_number" << QString::number(sequenceStart) << "-start_number_range" << "1"
              << "-i" << savedFilesMask; // Input frame(s) file mask..
 
         const int lavfiOptionsIndex = additionalOptionsList.indexOf("-lavfi");
@@ -108,7 +108,7 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
       
         if ( suffix == "gif" ) {
             paletteArgs << "-r" << QString::number(options.frameRate)
-                        << "-start_number" << QString::number(clipRange.start())
+                        << "-start_number" << QString::number(sequenceStart) << "-start_number_range" << "1"
                         << "-i" << savedFilesMask;
             
             const int paletteOptionsIndex = additionalOptionsList.indexOf("-palettegen");
@@ -187,7 +187,8 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
         
         args << additionalOptionsList;
 
-        dbgFile << "savedFilesMask" << savedFilesMask 
+        dbgFile << "savedFilesMask" << savedFilesMask
+                << "save files offset" << sequenceStart
                 << "start" << QString::number(clipRange.start()) 
                 << "duration" << clipRange.duration();
 

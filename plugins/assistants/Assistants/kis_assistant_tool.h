@@ -39,7 +39,8 @@ class KisAssistantTool : public KisTool
         MODE_EDITING, // This is the mode when the grid has been created, and we are waiting for the user to click on a control box
         MODE_DRAGGING_NODE, // In this mode one node is translated
         MODE_DRAGGING_TRANSLATING_TWONODES, // This mode is used when creating a new sub perspective grid
-        MODE_DRAGGING_EDITOR_WIDGET // This mode is used when dragging/moving the little editor widget
+        MODE_DRAGGING_EDITOR_WIDGET, // This mode is used when dragging/moving the little editor widget
+        MODE_DUPLICATING_ASSISTANT // This mode is used when duplicating an assistant.
     };
 public:
     KisAssistantTool(KoCanvasBase * canvas);
@@ -88,7 +89,8 @@ private:
     void beginActionImpl(KoPointerEvent *event);
     void continueActionImpl(KoPointerEvent *event);
     void endActionImpl(KoPointerEvent *event);
-
+    //function to calculate new button positions for editor widget
+    void updateEditorWidgetData();
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
@@ -120,6 +122,14 @@ private Q_SLOTS:
     void slotSelectedAssistantTypeChanged();
     void slotChangeFixedLengthUnit(int index);
 
+    //When the user checks an editor widget button checkbox, update the AssistantEditorData
+    //struct within the current document's KisPaintingAssistantsDecoration instance
+    void slotToggleMoveButton(int index);
+    void slotToggleSnapButton(int index);
+    void slotToggleLockButton(int index);
+    void slotToggleDuplicateButton(int index);
+    void slotToggleDeleteButton(int index);
+    
 protected:
     /// Draws the editor widget controls with move, activate, and delete
     /// This also creates a lot of assistant specific stuff for vanishing points and perspective grids

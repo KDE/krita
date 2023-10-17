@@ -24,6 +24,8 @@
 #include <QDomElement>
 #include <QDomDocument>
 #include <QPainterPath>
+#include <QDebug>
+#include <memory>
 
 Q_GLOBAL_STATIC(KisPaintingAssistantFactoryRegistry, s_instance)
 
@@ -130,6 +132,8 @@ struct KisPaintingAssistant::Private {
         bool outlineVisible {true};
         bool isLocal {false};
         bool isLocked {false};
+        //The isDuplicating flag only exists to draw the duplicate button depressed when pressed
+        bool isDuplicating {false};
 
         KisCanvas2* m_canvas {nullptr};
 
@@ -176,6 +180,31 @@ KisPaintingAssistant::Private::Private()
 KisPaintingAssistant::Private::Private(const Private &rhs)
     : s(rhs.s)
 {
+}
+
+void KisPaintingAssistant::copySharedData(KisPaintingAssistantSP assistant)
+{
+    /*Clones do not get a copy of the shared data, so this function is nessesary to copy
+    the SharedData struct from the old assistant to this one. The function returns a reference to
+    a new SharedData object copied from the original*/
+    this->d->s = (QSharedPointer<KisPaintingAssistant::Private::SharedData>)new KisPaintingAssistant::Private::SharedData;
+    QSharedPointer<KisPaintingAssistant::Private::SharedData> sd = assistant->d->s;
+    this->d->s->id = sd->id;
+    this->d->s->name = sd->name;
+    this->d->s->isSnappingActive = sd->isSnappingActive;
+    this->d->s->outlineVisible = sd->outlineVisible;
+    this->d->s->isLocal = sd->isLocal;
+    this->d->s->isLocked = sd->isLocked;
+    this->d->s->isDuplicating = sd->isDuplicating;
+    this->d->s->m_canvas = sd->m_canvas;
+    this->d->s->editorWidgetOffset = sd->editorWidgetOffset;
+    this->d->s->cachedTransform.m11 = sd->cachedTransform.m11;
+    this->d->s->cachedTransform.m12 = sd->cachedTransform.m12;
+    this->d->s->cachedTransform.m21 = sd->cachedTransform.m21;
+    this->d->s->cachedTransform.m22 = sd->cachedTransform.m22;
+    this->d->s->assistantGlobalColorCache = sd->assistantGlobalColorCache;
+    this->d->s->useCustomColor = sd->useCustomColor;
+    this->d->s->assistantCustomColor = sd->assistantCustomColor;
 }
 
 KisPaintingAssistantHandleSP KisPaintingAssistant::Private::reuseOrCreateHandle(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap, KisPaintingAssistantHandleSP origHandle, KisPaintingAssistant *q, bool registerAssistant)
@@ -322,6 +351,16 @@ bool KisPaintingAssistant::isLocked()
 void KisPaintingAssistant::setLocked(bool value)
 {
     d->s->isLocked = value;
+}
+
+void KisPaintingAssistant::setDuplicating(bool value)
+{
+    d->s->isDuplicating = value;
+}
+
+bool KisPaintingAssistant::isDuplicating()
+{
+    return d->s->isDuplicating;
 }
 
 QPointF KisPaintingAssistant::editorWidgetOffset()

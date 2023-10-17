@@ -97,6 +97,8 @@ public:
     const QString& name() const;
     bool isSnappingActive() const;
     void setSnappingActive(bool set);
+    //copy SharedData from an assistant to this
+    void copySharedData(KisPaintingAssistantSP assistant);
 
 
     /**
@@ -145,6 +147,16 @@ public:
      * @param value set the indication if the assistant is locked (= cannot be moved, or edited in any way) or not
      */
     void setLocked(bool value);
+    /**
+     * @brief isDuplicating
+     * @return If the duplication button is pressed
+     */
+    bool isDuplicating();
+    /**
+     * @brief setDuplicating
+     * @param value set the indication that the duplication button is pressed
+     */
+    void setDuplicating(bool value);
 
     QPointF editorWidgetOffset();
     void setEditorWidgetOffset(QPointF offset);

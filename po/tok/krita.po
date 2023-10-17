@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-13 00:40+0000\n"
+"POT-Creation-Date: 2023-10-17 00:40+0000\n"
 "PO-Revision-Date: 2022-07-08 04:45+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Toki Pona <http://weblate.blackquill.cc/projects/ante-toki-pi-"
@@ -20229,7 +20229,7 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr ""
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:273
+#: libs/ui/actions/KisPasteActionFactories.cpp:272
 #: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:602
 #, kde-format
 msgid "(pasted)"

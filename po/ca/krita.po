@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-13 00:40+0000\n"
+"POT-Creation-Date: 2023-10-17 00:40+0000\n"
 "PO-Revision-Date: 2023-10-13 16:14+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -20386,7 +20386,7 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "Enganxa les formes"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:273
+#: libs/ui/actions/KisPasteActionFactories.cpp:272
 #: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:602
 #, kde-format
 msgid "(pasted)"

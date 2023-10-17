@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-13 00:40+0000\n"
+"POT-Creation-Date: 2023-10-17 00:40+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -21178,7 +21178,7 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "لصق الأشكال"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:273
+#: libs/ui/actions/KisPasteActionFactories.cpp:272
 #: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:602
 #, kde-format
 msgid "(pasted)"

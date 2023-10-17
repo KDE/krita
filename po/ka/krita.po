@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-13 00:40+0000\n"
-"PO-Revision-Date: 2023-09-23 04:09+0200\n"
+"POT-Creation-Date: 2023-10-17 00:40+0000\n"
+"PO-Revision-Date: 2023-10-16 06:11+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -12846,9 +12846,7 @@ msgid "File"
 msgstr "ფაილი"
 
 #: krita/krita5.xmlgui:417
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "ჩასწორება"
 
@@ -20223,7 +20221,7 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr ""
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:273
+#: libs/ui/actions/KisPasteActionFactories.cpp:272
 #: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:602
 #, kde-format
 msgid "(pasted)"
@@ -48700,7 +48698,7 @@ msgstr ""
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:42
 #, kde-format
 msgid "Compression type"
-msgstr ""
+msgstr "შეკუმშვის ტიპი"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPredictor)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:56

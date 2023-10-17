@@ -1,160 +1,241 @@
+# Rebuild now that manual review passed
+---
 name: krita
 grade: stable
 adopt-info: krita
-
-base: core18
+base: core22
 confinement: strict
-compression: lzo
-
+version: 5.2
 apps:
-  krita:
-    common-id: org.kde.krita
-    command: usr/bin/krita
-    command-chain:
-      - snap/command-chain/add-qt-shortcuts
-    extensions:
-      - kde-neon
-    plugs:
-      - home
-      - opengl
-      - network
-      - network-bind
-      - removable-media
-      - audio-playback
-    environment:
-      QT_QPA_PLATFORMTHEME: gtk3
-
-layout:
-  /usr/bin/ffmpeg:
-    bind-file: $SNAP/usr/bin/ffmpeg
-
-parts:
-  libheif:
-    plugin: autotools
-    source: https://github.com/strukturag/libheif.git
-    source-tag: v1.7.0
-    build-packages:
-      - libde265-dev
-      - pkg-config
-      - g++
-      - libx265-dev
-      - libjpeg8-dev
-      - libpng-dev
-    stage-packages:
-      - libde265-0
-      - libx265-146
-      - libjpeg8
-      - libpng16-16
-
-  krita:
-    after:
-      - libheif
-    source: https://download.kde.org/stable/krita/5.2.0/krita-5.2.0.tar.xz
-    # # Use these instead to build from the git source
-    # source: https://anongit.kde.org/krita.git
-    # source-type: git
-    # source-branch: master  
-    plugin: cmake
-    configflags:
-      - "-DCMAKE_INSTALL_PREFIX=/usr"
-      - "-DCMAKE_BUILD_TYPE=Release"
-      - "-DENABLE_TESTING=OFF"
-      - "-DBUILD_TESTING=OFF"
-      - "-DHIDE_SAFE_ASSERTS=OFF"
-      - "-DKDE_SKIP_TEST_SETTINGS=ON"
-    build-snaps: [kde-frameworks-5-core18-sdk]
-    build-packages:
-      - libboost-dev
-      - libboost-system-dev
-      - libeigen3-dev
-      - libfftw3-dev
-      - libgif-dev
-      - libglew-dev
-      - libgsf-1-dev
-      - libgsl-dev
-      - libjpeg-dev  # This is part of the sdk, but the build crashes if not included..
-      - libopencolorio-dev
-      - libopenexr-dev
-      - libopenimageio-dev
-      - libopenjp2-7-dev
-      - libquazip5-dev
-      - libraw-dev
-      - libtiff-dev
-      - libvc-dev
-      - libx11-dev
-      - libxi-dev
-      - vc-dev
-      - libmypaint-dev
-    parse-info: [usr/share/metainfo/org.kde.krita.appdata.xml]
-
-
-  runtime:
-    plugin: nil
-    stage-packages:
-      - freeglut3 
-      - libboost-system1.65.1
-      - libfftw3-double3
-      - libgif7
-      - libgsl23
-      - libgslcblas0
-      - libilmbase12
-      - libopencolorio1v5
-      - libopenexr22
-      - libquazip5-1
-      - libraw16
-      - libtinyxml2.6.2v5
-      - libxi6
-      - libyaml-cpp0.5v5
-      - zlib1g
-      - libmypaint-1.3-0
-      # Required for rendering animations
-      - ffmpeg
-      - libglu1-mesa
-      - libslang2
-    prime:
-      - "-usr/share/fonts/*"
-      # libquazip5-1 pulls in Qt5 from bionic as a dependency. We don't
-      # want it in our snap, however, because we get a newer Qt5 from the
-      # kde-kf5 platform snap.
-      - "-usr/lib/x86_64-linux-gnu/libQt5*"
-      - "-usr/lib/x86_64-linux-gnu/libqt5*"
-
-  launcher:
-    source: scripts
-    plugin: dump
-    organize:
-      add-qt-shortcuts: snap/command-chain/add-qt-shortcuts
-    stage-packages:
-      - xdg-user-dirs
-
-  qtctl:
-    source: https://github.com/snapcrafters/qtctl.git
-    plugin: cmake
-    build-snaps: [kde-frameworks-5-core18-sdk]
-
-  # This part removes all the files in this snap which already exist in
-  # connected content and base snaps. Since these files will be available
-  # at runtime from the content and base snaps, they do not need to be
-  # included in this snap itself.
-  #
-  # More info: https://snapcraft-utils-library.readthedocs.io/en/latest/lib/cleanup.html 
-  #
-  cleanup:
-    after:  # Make this part run last; list all your other parts here
-      - krita
-      - runtime
-    plugin: nil
-    build-snaps:  # List all content-snaps and base snaps you're using here
-      - core18
-      - kde-frameworks-5-core18
-    override-prime: |
-      set -eux
-      for snap in "core18" "kde-frameworks-5-core18"; do  # List all content-snaps and base snaps you're using here
-        cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
-      done
-
+    krita:
+        common-id: org.kde.krita
+        desktop: usr/share/applications/org.kde.krita.desktop
+        command: usr/bin/krita
+        # extensions:
+        # - kde-neon
+        plugs:
+        - desktop
+        - desktop-legacy
+        - opengl
+        - wayland
+        - x11
+        - home
+        - network
+        - network-bind
+        - audio-playback
+        - removable-media
+        - unity7
+        - cups
+        command-chain:
+        - snap/command-chain/desktop-launch
+assumes:
+- snapd2.58.3
+compression: lzo
 plugs:
-  gtk-3-themes:
-    interface: content
-    target: $SNAP/data-dir/themes
-    default-provider: gtk-common-themes
+    desktop:
+        mount-host-font-cache: false
+    icon-themes:
+        interface: content
+        target: $SNAP/data-dir/icons
+        default-provider: gtk-common-themes
+    sound-themes:
+        interface: content
+        target: $SNAP/data-dir/sounds
+        default-provider: gtk-common-themes
+    kf5-5-110-qt-5-15-11-core22:
+        content: kf5-5-110-qt-5-15-11-core22-all
+        interface: content
+        default-provider: kf5-5-110-qt-5-15-11-core22
+        target: $SNAP/kf5
+    foo-install-cups:
+        interface: content
+        content: foo
+        default-provider: cups
+        target: $SNAP_DATA/foo
+environment:
+    SNAP_DESKTOP_RUNTIME: $SNAP/kf5
+    QML2_IMPORT_PATH: "$QML2_IMPORT_PATH:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qml:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml:$SNAP/kf5/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml"
+    QT_PLUGIN_PATH: "$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/plugins:$SNAP/kf5/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/plugins/kf5:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml/org/kde/kirigami.2:$SNAP/kf5/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/plugins"
+    PATH: $SNAP/usr/bin:$PATH
+hooks:
+    configure:
+        plugs:
+        - desktop
+        command-chain:
+        - snap/command-chain/hooks-configure-desktop
+layout:
+    /usr/bin/ffmpeg:
+        symlink: $SNAP/usr/bin/ffmpeg
+    /usr/share/X11:
+        symlink: $SNAP/kf5/usr/share/X11
+slots:
+     session-dbus-interface:
+         interface: dbus
+         name: org.kde.krita
+         bus: session
+package-repositories:
+-   type: apt
+    components:
+    - main
+    suites:
+    - jammy
+    key-id: 444DABCF3667D0283F894EDDE6D4736255751E5D
+    url: http://origin.archive.neon.kde.org/user
+    key-server: keyserver.ubuntu.com
+parts:
+    kde-neon:
+        source: /snap/snapcraft/current/share/snapcraft/extensions/desktop/kde-neon
+        source-type: local
+        plugin: make
+        make-parameters:
+        - PLATFORM_PLUG=kf5-5-110-qt-5-15-11-core22
+        build-snaps:
+        - kf5-5-110-qt-5-15-11-core22-sdk
+        build-environment:
+        - &id001
+            PATH: /snap/kf5-5-110-qt-5-15-11-core22-sdk/current/usr/bin${PATH:+:$PATH}
+        - &id002
+            XDG_DATA_DIRS: $CRAFT_STAGE/usr/share:/snap/kf5-5-110-qt-5-15-11-core22-sdk/current/usr/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}
+        - &id003
+            XDG_CONFIG_HOME: $CRAFT_STAGE/etc/xdg:/snap/kf5-5-110-qt-5-15-11-core22-sdk/current/etc/xdg:/etc/xdg${XDG_CONFIG_HOME:+:$XDG_CONFIG_HOME}
+        - &id004
+            CRAFT_CMAKE_ARGS: -DCMAKE_FIND_ROOT_PATH=/snap/kf5-5-110-qt-5-15-11-core22-sdk/current${CRAFT_CMAKE_ARGS:+:$CRAFT_CMAKE_ARGS}
+    patches:
+        after:
+        - kde-neon
+        source: .
+        source-type: local
+        plugin: dump
+        stage:
+        - packaging/linux/snap/patches/krita_dont_use_native_file_chooser.patch
+    harfbuzz:
+        after:
+        - kde-neon
+        source: https://github.com/harfbuzz/harfbuzz.git
+        source-tag: 8.2.1
+        plugin: cmake
+        cmake-parameters:
+        - -DKDE_INSTALL_USE_QT_SYS_PATHS=FALSE
+        - -DCMAKE_INSTALL_PREFIX=/usr
+        - -DCMAKE_BUILD_TYPE=Release
+        - -DENABLE_TESTING=OFF
+        - -DBUILD_TESTING=OFF
+        - -DKDE_SKIP_TEST_SETTINGS=ON
+        - -DCMAKE_FIND_ROOT_PATH=/usr\;$CRAFT_STAGE\;/snap/kf5-5-110-qt-5-15-11-core22-sdk/current
+        - -DBUILD_KRITA_QT_DESIGNER_PLUGINS=OFF
+        build-packages:
+        - cmake
+        - meson
+        - pkg-config
+        - libglib2.0-dev
+        - libcairo2-dev
+        - libchafa-dev
+        - libfreetype-dev
+        - libicu-dev
+        - libgraphite2-dev
+        - libgirepository1.0-dev
+        - gtk-doc-tools
+    krita:
+        after:
+        - kde-neon
+        - patches
+        - harfbuzz
+        source: .
+        source-type: local
+        plugin: cmake
+        cmake-parameters:
+        - -DKDE_INSTALL_USE_QT_SYS_PATHS=FALSE
+        - -DCMAKE_INSTALL_PREFIX=/usr
+        - -DCMAKE_BUILD_TYPE=Release
+        - -DENABLE_TESTING=OFF
+        - -DBUILD_TESTING=OFF
+        - -DKDE_SKIP_TEST_SETTINGS=ON
+        - -DCMAKE_FIND_ROOT_PATH=/usr\;$CRAFT_STAGE\;/snap/kf5-5-110-qt-5-15-11-core22-sdk/current
+        - -DBUILD_KRITA_QT_DESIGNER_PLUGINS=OFF
+        build-packages:
+        - cmake
+        - libboost-dev
+        - libboost-system-dev
+        - libeigen3-dev
+        - libfftw3-dev
+        - libgif-dev
+        - libglew-dev
+        - libgsf-1-dev
+        - libgsl-dev
+        - libjpeg-dev
+        - libopencolorio-dev
+        - libopenexr-dev
+        - libopenimageio-dev
+        - libopenjp2-7-dev
+        - libquazip5-dev
+        - libraw-dev
+        - libtiff-dev
+        - libvc-dev
+        - libx11-dev
+        - libxi-dev
+        - vc-dev
+        - libmypaint-dev
+        - libwebp-dev
+        - python3-dev
+        - libswscale-dev
+        - libjpeg-turbo8-dev
+        - pyqt5-dev
+        - libxsimd-dev
+        - libpoppler-qt5-dev
+        - libheif-dev
+        build-snaps:
+        - ffmpeg-2204
+        parse-info:
+        - usr/share/metainfo/org.kde.krita.appdata.xml
+        stage-packages:
+        - freeglut3
+        - libboost-system1.74.0
+        - libfftw3-double3
+        - libgif7
+        - libgsl27
+        - libgslcblas0
+        - libilmbase25
+        - libopencolorio1v5
+        - libopenexr25
+        - libquazip5-1
+        - libraw20
+        - libtinyxml2.6.2v5
+        - libxi6
+        - libyaml-cpp0.7
+        - zlib1g
+        - libmypaint-1.5-1
+        - ffmpeg
+        - libglu1-mesa
+        - libslang2
+        - webp
+        - libjpeg-turbo8
+        - libde265-0
+        - libheif1
+        stage-snaps:
+        - ffmpeg-2204
+        prime:
+        - -usr/lib/*/cmake/*
+        - -usr/include/*
+        - -usr/share/ECM/*
+        - -usr/share/doc/*
+        - -usr/share/man/*
+        - -usr/share/icons/breeze-dark*
+        - -usr/bin/X11
+        - -usr/lib/gcc/$CRAFT_ARCH_TRIPLET/6.0.0
+        - -usr/lib/aspell/*
+        override-pull: |
+            craftctl default
+            patch -p1 < ../../patches/src/patches/krita_dont_use_native_file_chooser.patch
+        build-environment: &id005
+        - *id001
+        - *id002
+        - *id003
+        - *id004
+    cleanup:
+        after:
+        - krita
+        plugin: nil
+        override-prime: |
+            set -eux
+            #unused libs found by linter
+

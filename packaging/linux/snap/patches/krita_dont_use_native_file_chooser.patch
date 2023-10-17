@@ -1,0 +1,28 @@
+diff --git a/libs/ui/dialogs/kis_dlg_preferences.cc b/libs/ui/dialogs/kis_dlg_preferences.cc
+index 916cf4f8dd..643a3f8e89 100644
+--- a/libs/ui/dialogs/kis_dlg_preferences.cc
++++ b/libs/ui/dialogs/kis_dlg_preferences.cc
+@@ -376,6 +376,9 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
+     if (qgetenv("XDG_CURRENT_DESKTOP") == "KDE") {
+         dontUseNative = false;
+     }
++    if (!qEnvironmentVariable("SNAP").isEmpty()) {
++        dontUseNative = true;
++    }
+ #endif
+ #ifdef Q_OS_MACOS
+     dontUseNative = false;
+diff --git a/libs/widgetutils/KoFileDialog.cpp b/libs/widgetutils/KoFileDialog.cpp
+index f401b39a70..0a13c16419 100644
+--- a/libs/widgetutils/KoFileDialog.cpp
++++ b/libs/widgetutils/KoFileDialog.cpp
+@@ -139,6 +139,9 @@ void KoFileDialog::createFileDialog()
+     if (qgetenv("XDG_CURRENT_DESKTOP") == "KDE") {
+         dontUseNative = false;
+     }
++    if (!qEnvironmentVariable("SNAP").isEmpty()) {
++        dontUseNative = true;
++    }
+ #endif
+ #ifdef Q_OS_MACOS
+     dontUseNative = false;

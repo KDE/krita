@@ -43,7 +43,7 @@ public:
     virtual bool isHidden() const = 0;
     virtual void setHidden(bool value) = 0;
 
-    virtual void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const = 0;
+    virtual void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool forceSubPixelTranslation) const = 0;
 
     virtual QString id() const = 0;
     virtual void toXML(QDomElement *e) const = 0;
@@ -64,6 +64,8 @@ class KRITAIMAGE_EXPORT KisAnimatedTransformParamsHolderInterface
 {
 public:
     virtual ~KisAnimatedTransformParamsHolderInterface();
+
+    virtual bool isAnimated() const = 0;
 
     virtual KisKeyframeChannel* requestKeyframeChannel(const QString &id) = 0;
     virtual KisKeyframeChannel* getKeyframeChannel(const QString &id) const = 0;

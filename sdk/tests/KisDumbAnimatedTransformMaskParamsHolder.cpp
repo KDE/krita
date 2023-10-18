@@ -22,6 +22,11 @@ KisDumbAnimatedTransformMaskParamsHolder::KisDumbAnimatedTransformMaskParamsHold
 {
 }
 
+bool KisDumbAnimatedTransformMaskParamsHolder::isAnimated() const
+{
+    return false;
+}
+
 KisKeyframeChannel *KisDumbAnimatedTransformMaskParamsHolder::requestKeyframeChannel(const QString &id) {
     Q_UNUSED(id);
     return nullptr;

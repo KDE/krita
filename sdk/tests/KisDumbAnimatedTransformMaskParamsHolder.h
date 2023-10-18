@@ -18,6 +18,8 @@ public:
 
     KisDumbAnimatedTransformMaskParamsHolder(const KisDumbAnimatedTransformMaskParamsHolder &rhs);
 
+    bool isAnimated() const override;
+
     KisKeyframeChannel* requestKeyframeChannel(const QString &id);
     KisKeyframeChannel* getKeyframeChannel(const QString &id) const;
 

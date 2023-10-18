@@ -63,9 +63,10 @@ void KisDumbTransformMaskParams::setHidden(bool value)
     m_d->isHidden = value;
 }
 
-void KisDumbTransformMaskParams::transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const
+void KisDumbTransformMaskParams::transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool forceSubPixelTranslation) const
 {
     Q_UNUSED(node);
+    Q_UNUSED(forceSubPixelTranslation);
 
     QRect rc = src->exactBounds();
     QPoint dstTopLeft = rc.topLeft();

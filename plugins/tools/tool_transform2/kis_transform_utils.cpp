@@ -264,7 +264,8 @@ void transformDeviceImpl(const ToolTransformArgs &config,
                          KisPaintDeviceSP srcDevice,
                          KisPaintDeviceSP dstDevice,
                          KisProcessingVisitor::ProgressHelper *helper,
-                         bool cropDst)
+                         bool cropDst,
+                         bool forceSubPixelTranslation)
 {
     if (config.mode() == ToolTransformArgs::WARP) {
         KoUpdaterPtr updater = helper->updater();
@@ -312,6 +313,7 @@ void transformDeviceImpl(const ToolTransformArgs &config,
         KisTransformWorker transformWorker =
             KisTransformUtils::createTransformWorker(config, dstDevice, updater1, &transformedCenter);
 
+        transformWorker.setForceSubPixelTranslation(forceSubPixelTranslation);
         transformWorker.run();
 
         KisPerspectiveTransformWorker::SampleType sampleType =
@@ -327,6 +329,7 @@ void transformDeviceImpl(const ToolTransformArgs &config,
                                                             config.cameraPos().z(),
                                                             cropDst,
                                                             updater2);
+            perspectiveWorker.setForceSubPixelTranslation(forceSubPixelTranslation);
             perspectiveWorker.run(sampleType);
         } else if (config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
             QTransform T =
@@ -337,6 +340,7 @@ void transformDeviceImpl(const ToolTransformArgs &config,
                                                             T.inverted() * config.flattenedPerspectiveTransform() * T,
                                                             cropDst,
                                                             updater2);
+            perspectiveWorker.setForceSubPixelTranslation(forceSubPixelTranslation);
             perspectiveWorker.run(sampleType);
         }
     }
@@ -349,12 +353,12 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
                                         KisPaintDeviceSP dstDevice,
                                         KisProcessingVisitor::ProgressHelper *helper)
 {
-    transformDeviceImpl(config, srcDevice, dstDevice, helper, false);
+    transformDeviceImpl(config, srcDevice, dstDevice, helper, false, false);
 }
 
-void KisTransformUtils::transformDeviceWithCroppedDst(const ToolTransformArgs &config, KisPaintDeviceSP srcDevice, KisPaintDeviceSP dstDevice, KisProcessingVisitor::ProgressHelper *helper)
+void KisTransformUtils::transformDeviceWithCroppedDst(const ToolTransformArgs &config, KisPaintDeviceSP srcDevice, KisPaintDeviceSP dstDevice, KisProcessingVisitor::ProgressHelper *helper, bool forceSubPixelTranslation)
 {
-    transformDeviceImpl(config, srcDevice, dstDevice, helper, true);
+    transformDeviceImpl(config, srcDevice, dstDevice, helper, true, forceSubPixelTranslation);
 }
 
 QRect KisTransformUtils::needRect(const ToolTransformArgs &config,

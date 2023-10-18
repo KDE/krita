@@ -347,6 +347,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
 
         // no preview for non-affine transforms currently...
         if (params->isAffine()) {
+            m_d->worker.setForceSubPixelTranslation(m_d->paramsHolder->isAnimated());
             m_d->worker.setForwardTransform(params->finalAffineTransform());
             m_d->worker.runPartialDst(src, dst, rc);
 
@@ -378,7 +379,8 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
 
     if (m_d->recalculatingStaticImage) {
         m_d->staticCacheDevice->clear();
-        params->transformDevice(const_cast<KisTransformMask*>(this), src, m_d->staticCacheDevice);
+        params->transformDevice(const_cast<KisTransformMask*>(this), src,
+                                m_d->staticCacheDevice, m_d->paramsHolder->isAnimated());
         QRect updatedRect = m_d->staticCacheDevice->extent();
         KisPainter::copyAreaOptimized(updatedRect.topLeft(), m_d->staticCacheDevice, dst, updatedRect);
 
@@ -392,6 +394,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
 #endif /* DEBUG_RENDERING */
 
     } else if (!m_d->staticCacheValid && !m_d->staticCacheIsOverridden && params->isAffine()) {
+        m_d->worker.setForceSubPixelTranslation(m_d->paramsHolder->isAnimated());
         m_d->worker.setForwardTransform(params->finalAffineTransform());
         m_d->worker.runPartialDst(src, dst, rc);
 

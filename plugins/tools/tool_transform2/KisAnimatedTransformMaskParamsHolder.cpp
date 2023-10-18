@@ -76,6 +76,11 @@ KisAnimatedTransformMaskParamsHolder::~KisAnimatedTransformMaskParamsHolder()
 {
 }
 
+bool KisAnimatedTransformMaskParamsHolder::isAnimated() const
+{
+    return !m_d->transformChannels.isEmpty();
+}
+
 const QSharedPointer<ToolTransformArgs> KisAnimatedTransformMaskParamsHolder::transformArgs() const
 {
     QSharedPointer<ToolTransformArgs> args(new ToolTransformArgs(*m_d->baseArgs));

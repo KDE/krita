@@ -23,6 +23,8 @@ public:
     KisAnimatedTransformMaskParamsHolder(const KisAnimatedTransformMaskParamsHolder& rhs);
     ~KisAnimatedTransformMaskParamsHolder() override;
 
+    bool isAnimated() const override;
+
     const QSharedPointer<ToolTransformArgs> transformArgs() const;
 
     void setDefaultBounds(KisDefaultBoundsBaseSP bounds) override;

@@ -857,19 +857,30 @@ void KisLayerManager::mergeLayer()
         if (!layer->prevSibling()) return;
         KisLayer *prevLayer = qobject_cast<KisLayer*>(layer->prevSibling().data());
         if (!prevLayer) return;
+
         if (prevLayer->userLocked()) {
             m_view->showFloatingMessage(
                         i18nc("floating message in layer manager when previous layer is locked",
                               "Layer is locked"),
                         QIcon(), 2000, KisFloatingMessage::Low);
-        }
+        } else {
+            const KisMetaData::MergeStrategy* strategy = nullptr;
 
-        else if (layer->metaData()->isEmpty() && prevLayer->metaData()->isEmpty()) {
-            image->mergeDown(layer, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
-        }
-        else {
-            const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view->mainWindow());
+            if (layer->metaData()->isEmpty() && prevLayer->metaData()->isEmpty()) {
+                strategy = KisMetaData::MergeStrategyRegistry::instance()->get("Drop");
+            }
+            else {
+                strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view->mainWindow());
+            }
+
             if (!strategy) return;
+
+            if (!layer->isAnimated() && prevLayer->isAnimated()) {
+                m_view->showFloatingMessage(
+                            i18nc("floating message in layer manager when trying to merge a non-animated layer into an animated one",
+                                  "Non-animated layer is merged into the current frame. To merge it into the whole clip, create at least one frame"),
+                            QIcon(), 5000, KisFloatingMessage::Medium);
+            }
             image->mergeDown(layer, strategy);
         }
     }

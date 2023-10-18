@@ -326,10 +326,10 @@ KisLayerSP KisShapeLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
         return KisExternalLayer::createMergedLayerTemplate(prevLayer);
 }
 
-void KisShapeLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer)
+void KisShapeLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer, bool skipPaintingThisLayer)
 {
     if (!dynamic_cast<KisShapeLayer*>(dstLayer.data())) {
-        KisLayer::fillMergedLayerTemplate(dstLayer, prevLayer);
+        KisLayer::fillMergedLayerTemplate(dstLayer, prevLayer, skipPaintingThisLayer);
     }
 }
 

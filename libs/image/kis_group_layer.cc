@@ -176,10 +176,10 @@ KisLayerSP KisGroupLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
         return KisLayer::createMergedLayerTemplate(prevLayer);
 }
 
-void KisGroupLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer)
+void KisGroupLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer, bool skipPaintingThisLayer)
 {
     if (!dynamic_cast<KisGroupLayer*>(dstLayer.data())) {
-        KisLayer::fillMergedLayerTemplate(dstLayer, prevLayer);
+        KisLayer::fillMergedLayerTemplate(dstLayer, prevLayer, skipPaintingThisLayer);
     }
 }
 

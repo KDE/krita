@@ -138,9 +138,18 @@ namespace KisLayerUtils {
               prevLayer(_prevLayer),
               currLayer(_currLayer)
         {
-            frames =
-                fetchLayerFramesRecursive(prevLayer) |
+            frames = fetchLayerFramesRecursive(prevLayer) |
                 fetchLayerFramesRecursive(currLayer);
+
+            /**
+             * If source layer is not animated, then just merge that into the current frame
+             * only. See the other part of this feature in mergeDown() itself
+             *
+             * See https://bugs.kde.org/show_bug.cgi?id=475550
+             */
+            if (!currLayer->isAnimated()) {
+                frames.insert(image->animationInterface()->currentTime());
+            }
 
             pinnedToTimeline = prevLayer->isPinnedToTimeline() || currLayer->isPinnedToTimeline();
 
@@ -668,15 +677,17 @@ namespace KisLayerUtils {
     };
 
     struct MergeLayers : public KisCommandUtils::AggregateCommand {
-        MergeLayers(MergeDownInfoSP info) : m_info(info) {}
+        MergeLayers(MergeDownInfoSP info, bool skipMergingSourceLayer)
+            : m_info(info), m_skipMergingSourceLayer(skipMergingSourceLayer) {}
 
         void populateChildCommands() override {
             // actual merging done by KisLayer::createMergedLayer (or specialized descendant)
-            m_info->currLayer->fillMergedLayerTemplate(m_info->dstLayer(), m_info->prevLayer);
+            m_info->currLayer->fillMergedLayerTemplate(m_info->dstLayer(), m_info->prevLayer, m_skipMergingSourceLayer);
         }
 
     private:
         MergeDownInfoSP m_info;
+        bool m_skipMergingSourceLayer {false};
     };
 
     struct MergeLayersMultiple : public KisCommandUtils::AggregateCommand {
@@ -1407,14 +1418,26 @@ namespace KisLayerUtils {
                     applicator.applyCommand(new AddNewFrame(info, frame));
                     applicator.applyCommand(new RefreshHiddenAreas(info));
                     applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
-                    applicator.applyCommand(new MergeLayers(info), KisStrokeJobData::BARRIER);
+
+                    /**
+                     * If source layer is **not** animated, then just merge that into the
+                     * current frame to avoid unintentional destruction of the animation
+                     * on the layer below. To merge the source into all the frames, just
+                     * make the source animated.
+                     *
+                     * See https://bugs.kde.org/show_bug.cgi?id=475550
+                     */
+                    const bool skipMergingSourceLayer = !layer->isAnimated() &&
+                            frame != info->image->animationInterface()->currentTime();
+
+                    applicator.applyCommand(new MergeLayers(info, skipMergingSourceLayer), KisStrokeJobData::BARRIER);
 
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage), KisStrokeJobData::BARRIER);
                 }
             } else {
                 applicator.applyCommand(new RefreshHiddenAreas(info));
                 applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
-                applicator.applyCommand(new MergeLayers(info), KisStrokeJobData::BARRIER);
+                applicator.applyCommand(new MergeLayers(info, false), KisStrokeJobData::BARRIER);
             }
 
             applicator.applyCommand(new MergeMetaData(info, strategy), KisStrokeJobData::BARRIER);

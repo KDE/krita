@@ -25,6 +25,7 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QTextCodec>
+#include <QtMath>
 
 #include <QTextBlock>
 #include <QTextLayout>
@@ -40,6 +41,8 @@
 #endif
 
 #include <KoSvgTextShape.h>
+#include <KoPathSegment.h>
+#include <KoPathPoint.h>
 #include <KoXmlWriter.h>
 #include <KoDocumentResourceManager.h>
 #include <KoFontRegistry.h>
@@ -1753,15 +1756,16 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
     // load text shape
     KoPathShape *textShape = nullptr;
     double textPathStartOffset = -3;
-    int textType = 0;
+    double shapePadding = 0.0;
+    int textType = 0; ///< 0 = point text, 1 = paragraph text (including text in shape), 2 = text on path.
     bool reversed = false;
     if (loadFallback) {
         QJsonObject rendered = textObject["/Rendered"].toObject();
         // rendering info...
         if (!rendered.isEmpty()) {
             QJsonObject shapeChild = rendered["/Shapes"].toObject()["/Children"].toArray()[0].toObject();
-            int shapeType = shapeChild["/ShapeType"].toInt();
-            if (shapeType == 1) {
+            textType = shapeChild["/ShapeType"].toInt();
+            if (textType == 1) {
                 QJsonArray BoxBounds = shapeChild["/Cookie"].toObject()["/Photoshop"].toObject()["/BoxBounds"].toArray();
                 bounds = QRectF(BoxBounds[0].toDouble(), BoxBounds[1].toDouble(), BoxBounds[2].toDouble(), BoxBounds[3].toDouble());
                 bounds = scaleToPt.mapRect(bounds);
@@ -1775,6 +1779,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
         }
     } else {
         QJsonObject view = textObject["/View"].toObject();
+        // todo: if multiple frames in frames array, there's multiple shapes in shape-inside.
         int textFrameIndex = view["/Frames"].toArray()[0].toObject()["/Resource"].toInt();
         QJsonArray textFrameSet = resourceDict["/TextFrameSet"].toObject()["/Resources"].toArray();
         QJsonObject textFrame = textFrameSet.at(textFrameIndex).toObject()["/Resource"].toObject();
@@ -1785,11 +1790,12 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
             //qDebug() << textFrame;
 
             if (textType > 0) {
-                QPainterPath textCurve;
+                KoPathShape *textCurve = new KoPathShape();
                 QJsonObject data = textFrame["/Data"].toObject();
                 QJsonArray points = textFrame["/Bezier"].toObject()["/Points"].toArray();
                 QJsonArray range = data["/TextOnPathTRange"].toArray();
                 QJsonArray fm = data["/FrameMatrix"].toArray();
+                shapePadding = data["/Spacing"].toDouble();
                 QJsonObject pathData = data["/PathData"].toObject();
                 reversed = pathData["/Flip"].toBool();
 
@@ -1806,6 +1812,9 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
                 }
 
                 int length = points.size()/8;
+
+                QPointF startPoint;
+                QPointF endPoint;
                 for (int i = 0; i < length; i++) {
                     int iAdjust = i*8;
                     QPointF p1(points[iAdjust  ].toDouble(), points[iAdjust+1].toDouble());
@@ -1813,20 +1822,42 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
                     QPointF p3(points[iAdjust+4].toDouble(), points[iAdjust+5].toDouble());
                     QPointF p4(points[iAdjust+6].toDouble(), points[iAdjust+7].toDouble());
 
-                    if (i == 0 || textCurve.currentPosition() != frameMatrix.map(p1)) {
-                        textCurve.moveTo(frameMatrix.map(p1));
+                    if (i == 0 || endPoint != frameMatrix.map(p1)) {
+                        if (endPoint == startPoint && i > 0) {
+                            textCurve->closeMerge();
+                        }
+                        textCurve->moveTo(frameMatrix.map(p1));
+                        startPoint = frameMatrix.map(p1);
                     }
                     if (p1==p2 && p3==p4) {
-                        textCurve.lineTo(frameMatrix.map(p4));
+                        textCurve->lineTo(frameMatrix.map(p4));
                     } else {
-                        textCurve.cubicTo(frameMatrix.map(p2), frameMatrix.map(p3), frameMatrix.map(p4));
+                        textCurve->curveTo(frameMatrix.map(p2), frameMatrix.map(p3), frameMatrix.map(p4));
                     }
+                    endPoint = frameMatrix.map(p4);
                 }
-                if (textCurve.elementCount() > 1) {
-                    textShape = KoPathShape::createShapeFromPainterPath(textCurve);
+                if (points.size() > 8) {
+                    if (endPoint == startPoint) {
+                        textCurve->closeMerge();
+                    }
+                    textShape = textCurve;
                 }
                 if (!range.isEmpty()) {
                     textPathStartOffset = range[0].toDouble();
+                    int segment = qFloor(textPathStartOffset);
+                    double t = textPathStartOffset - segment;
+                    double length = 0;
+                    double totalLength = 0;
+                    for (int i=0; i<textShape->subpathPointCount(0); i++) {
+                        double l = textShape->segmentByIndex(KoPathPointIndex(0, i)).length();
+                        totalLength += l;
+                        if (i < segment) {
+                            length += l;
+                        } else if (i == segment) {
+                            length += (l*t);
+                        }
+                    }
+                    textPathStartOffset = (length/totalLength) * 100.0;
                 }
             }
         }
@@ -1899,6 +1930,10 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
             if (textShape) {
                 offsetByAscent = false;
                 paragraphStyle += " shape-inside:url(#textShape);";
+                if (shapePadding > 0) {
+                    QPointF sPadding = scaleToPt.map(QPointF(shapePadding, shapePadding));
+                    paragraphStyle += " shape-padding:"+QString::number(sPadding.x())+";";
+                }
             } else if (styleString.contains("text-align:justify") && bounds.isValid()) {
                 offsetByAscent = false;
                 paragraphStyle += " shape-inside:url(#bounds);";
@@ -1929,7 +1964,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
         if (reversed) {
             svgWriter.writeAttribute("side", "right");
         }
-        svgWriter.writeAttribute("startOffset", QString::number(textPathStartOffset));
+        svgWriter.writeAttribute("startOffset", QString::number(textPathStartOffset)+"%");
     }
 
     QJsonObject styleRun = loadFallback? textObject.value("/StyleRun").toObject(): editor.value("/StyleRun").toObject();

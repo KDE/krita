@@ -26,7 +26,7 @@ public:
     bool isAffine() const override;
     bool isHidden() const override;
     void setHidden(bool value) override;
-    void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const override;
+    void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool forceSubPixelTranslation) const override;
 
     QString id() const override;
     void toXML(QDomElement *e) const override;

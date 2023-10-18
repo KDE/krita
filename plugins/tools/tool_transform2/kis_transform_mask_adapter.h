@@ -29,7 +29,7 @@ public:
     void setHidden(bool value) override;
     bool isHidden() const override;
 
-    void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const override;
+    void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool forceSubPixelTranslation) const override;
 
     virtual const QSharedPointer<ToolTransformArgs> transformArgs() const;
     void setBaseArgs(const ToolTransformArgs& args);

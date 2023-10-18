@@ -98,7 +98,8 @@ public:
     static void transformDeviceWithCroppedDst(const ToolTransformArgs &config,
                                               KisPaintDeviceSP srcDevice,
                                               KisPaintDeviceSP dstDevice,
-                                              KisProcessingVisitor::ProgressHelper *helper);
+                                              KisProcessingVisitor::ProgressHelper *helper,
+                                              bool forceSubPixelTranslation);
 
     static QRect needRect(const ToolTransformArgs &config,
                           const QRect &rc,

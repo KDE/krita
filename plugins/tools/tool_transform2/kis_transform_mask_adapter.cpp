@@ -71,13 +71,13 @@ bool KisTransformMaskAdapter::isHidden() const
     return m_d->isHidden;
 }
 
-void KisTransformMaskAdapter::transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const
+void KisTransformMaskAdapter::transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool forceSubPixelTranslation) const
 {
     dst->prepareClone(src);
 
     KisProcessingVisitor::ProgressHelper helper(node);
 
-    KisTransformUtils::transformDeviceWithCroppedDst(*transformArgs(), src, dst, &helper);
+    KisTransformUtils::transformDeviceWithCroppedDst(*transformArgs(), src, dst, &helper, forceSubPixelTranslation);
 }
 
 const QSharedPointer<ToolTransformArgs> KisTransformMaskAdapter::transformArgs() const {

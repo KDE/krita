@@ -106,6 +106,9 @@ public:
      */
     void transformPixelSelectionOutline(KisPixelSelectionSP pixelSelection) const;
 
+    bool forceSubPixelTranslation() const;
+    void setForceSubPixelTranslation(bool value);
+
 private:
     // XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?
     // CBR: because the template functions used within don't work if it's not true pointers
@@ -143,6 +146,7 @@ private:
     KoUpdaterPtr m_progressUpdater;
     KisFilterStrategy *m_filter;
     QRect m_boundRect;
+    bool m_forceSubPixelTranslation {false};
 };
 
 #endif // KIS_TRANSFORM_VISITOR_H_

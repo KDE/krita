@@ -409,7 +409,7 @@ KisLayerSP KisLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
     return newLayer;
 }
 
-void KisLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer)
+void KisLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer, bool skipPaintingThisLayer)
 {
     const bool keepBlendingOptions = canMergeAndKeepBlendOptions(prevLayer);
 
@@ -436,24 +436,28 @@ void KisLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer
         //Restore the previous prevLayer disableAlpha status for correct undo/redo
         prevLayer->disableAlphaChannel(prevAlphaDisabled);
 
-        //Paint the pixels of the current layer, using their actual alpha value
-        if (alphaDisabled == prevAlphaDisabled) {
-            this->disableAlphaChannel(false);
+        if (!skipPaintingThisLayer) {
+            //Paint the pixels of the current layer, using their actual alpha value
+            if (alphaDisabled == prevAlphaDisabled) {
+                this->disableAlphaChannel(false);
+            }
+
+            this->projectionPlane()->apply(&gc, layerProjectionExtent | imageSP->bounds());
+
+            //Restore the layer disableAlpha status for correct undo/redo
+            this->disableAlphaChannel(alphaDisabled);
         }
-
-        this->projectionPlane()->apply(&gc, layerProjectionExtent | imageSP->bounds());
-
-        //Restore the layer disableAlpha status for correct undo/redo
-        this->disableAlphaChannel(alphaDisabled);
     }
     else {
         //Copy prevLayer
         KisPaintDeviceSP srcDev = prevLayer->projection();
         mergedDevice->makeCloneFrom(srcDev, srcDev->extent());
 
-        //Paint layer on the copy
-        KisPainter gc(mergedDevice);
-        gc.bitBlt(layerProjectionExtent.topLeft(), this->projection(), layerProjectionExtent);
+        if (!skipPaintingThisLayer) {
+            //Paint layer on the copy
+            KisPainter gc(mergedDevice);
+            gc.bitBlt(layerProjectionExtent.topLeft(), this->projection(), layerProjectionExtent);
+        }
     }
 }
 

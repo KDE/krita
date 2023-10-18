@@ -77,7 +77,7 @@ public:
     void setImage(KisImageWSP image) override;
 
     KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer) override;
-    void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer) override;
+    void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer, bool skipPaintingThisLayer) override;
 public:
 
     // KoShape overrides

@@ -172,6 +172,36 @@ Boolean operators
     Use the standard !, !=, ==, && etc style, not the "not", "and" etc. style. Keep krita code
     using one, easily recognizable, C++ style.
 
+Static registrars
+
+    Sometimes we need to declare a static object that performs some actions on Krita
+    loading, e.g. to register Qt's metatype for a Krita type. We call this pattern as
+    "registrar" and have a special macro for that:
+
+    KIS_DECLARE_STATIC_REGISTRAR {
+        qRegisterMetaType<KoResourceSP>("KoResourceSP");
+    }
+
+    What the macro does is basically defining a static variable that is initialized
+    on loading of the library:
+
+    struct KoResourceSPStaticRegistrar {
+        KoResourceSPStaticRegistrar() {
+            qRegisterMetaType<KoResourceSP>("KoResourceSP");
+        }
+    };
+    static KoResourceSPStaticRegistrar __registrar1;
+
+    This macro is usually added to the same .cpp file as the class itself.
+
+    WARNING: do not use this pattern in **plugins**. All Krita's plugins are
+    actually static libraries that are pulled into dynamic .so libraries at the
+    linking stage. It means that all "unused" objects will never be pulled
+    into the final plugin. Instead, do all the initialization in the "plugin"
+    class (the one that is passed to registerPlugin<>() in
+    K_PLUGIN_FACTORY_WITH_JSON). The problem can be worked around with
+    `$<LINK_LIBRARY:WHOLE_ARCHIVE,...>` CMake feature, but it is available only
+    since CMake 3.24, so for now just avoid using registrars in plugins.
 
 With Krita now supporting Python scripting, we need guidelines for these as well.
 These guidelines are preliminary and may be further refined in the future.

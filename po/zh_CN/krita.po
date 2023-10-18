@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-17 00:40+0000\n"
+"POT-Creation-Date: 2023-10-18 00:40+0000\n"
 "PO-Revision-Date: 2023-10-10 14:27\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -20663,7 +20663,7 @@ msgctxt "Animation export dialog for palette exporting. arg1: file-suffix"
 msgid "Creating palette for %1 file format."
 msgstr "正在为 %1 文件格式创建色板。"
 
-#: libs/ui/animation/KisVideoSaver.cpp:202
+#: libs/ui/animation/KisVideoSaver.cpp:203
 #, kde-format
 msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "

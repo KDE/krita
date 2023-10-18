@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-05 02:24+0000\n"
+"POT-Creation-Date: 2023-10-18 02:29+0000\n"
 "PO-Revision-Date: 2023-10-15 02:06+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -20289,7 +20289,7 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "Şekilleri Yapıştır"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:273
+#: libs/ui/actions/KisPasteActionFactories.cpp:272
 #: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:602
 #, kde-format
 msgid "(pasted)"
@@ -20696,7 +20696,7 @@ msgctxt "Animation export dialog for palette exporting. arg1: file-suffix"
 msgid "Creating palette for %1 file format."
 msgstr "%1 dosya biçimi için palet oluşturuluyor."
 
-#: libs/ui/animation/KisVideoSaver.cpp:202
+#: libs/ui/animation/KisVideoSaver.cpp:203
 #, kde-format
 msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "

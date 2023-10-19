@@ -12887,9 +12887,7 @@ msgid "File"
 msgstr "Soubor"
 
 #: krita/krita5.xmlgui:417
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "Upravit"
 

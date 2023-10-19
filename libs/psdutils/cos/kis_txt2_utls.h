@@ -7,7 +7,7 @@
 #ifndef KIS_TXT2_UTLS_H
 #define KIS_TXT2_UTLS_H
 
-#include  <QJsonDocument>
+#include <QVariantHash>
 #include "kritapsdutils_export.h"
 
 /**
@@ -36,7 +36,7 @@ public:
      * @param doc input txt2 doc.
      * @return documented with keys translated to names.
      */
-    static QJsonDocument uncompressKeys(QJsonDocument doc);
+    static QVariantHash uncompressKeys(QVariantHash doc);
 };
 
 #endif // KIS_TXT2_UTLS_H

@@ -21,9 +21,9 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QJsonDocument>
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QJsonValue>
+#include <QVariantList>
+#include <QVariantHash>
+#include <QVariant>
 #include <QTextCodec>
 #include <QtMath>
 
@@ -1123,18 +1123,18 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
     return true;
 }
 
-QColor colorFromPSDStyleSheet(QJsonObject color) {
+QColor colorFromPSDStyleSheet(QVariantHash color) {
     QColor c(Qt::black);
     if (color.keys().contains("/Color")) {
-        color = color["/Color"].toObject();
+        color = color["/Color"].toHash();
     }
     if (color.value("/Type").toInt() == 1) {
-        QJsonArray values = color.value("/Values").toArray();
+        QVariantList values = color.value("/Values").toList();
         c = QColor::fromRgbF(values.at(1).toDouble(), values.at(2).toDouble(), values.at(3).toDouble(), 1);
     }
     return c;
 }
-QString stylesForPSDParagraphSheet(QJsonObject PSDParagraphSheet, QTransform scaleToPt) {
+QString stylesForPSDParagraphSheet(QVariantHash PSDParagraphSheet, QTransform scaleToPt) {
     QStringList styles;
     QStringList unsupportedStyles;
 
@@ -1231,14 +1231,14 @@ QString stylesForPSDParagraphSheet(QJsonObject PSDParagraphSheet, QTransform sca
         } else if (key == "/WordSpacing") {
             // val 0 is minimum allowed spacing, and val 2 is maximum allowed spacing, both for justified text.
             // 0 to 1000%, 100% default.
-            val = PSDParagraphSheet.value(key).toArray()[1].toDouble();
+            val = PSDParagraphSheet.value(key).toList()[1].toDouble();
             val -= 1.0;
             styles.append("word-spacing:"+QString::number(val)+"em");
             continue;
         } else if (key == "/LetterSpacing") {
             // val 0 is minimum allowed spacing, and val 2 is maximum allowed spacing, both for justified text.
             // -100% to 500%, 0% default.
-            val = PSDParagraphSheet.value(key).toArray()[1].toDouble();
+            val = PSDParagraphSheet.value(key).toList()[1].toDouble();
             styles.append("letter-spacing:"+QString::number(val)+"em");
             continue;
         } else if (key == "/GlyphSpacing") {
@@ -1314,7 +1314,7 @@ struct font_info_psd {
     bool italic {false};
 };
 
-QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_psd> fontNames, QTransform scale) {
+QString stylesForPSDStyleSheet(QVariantHash PSDStyleSheet, QMap<int, font_info_psd> fontNames, QTransform scale) {
     QStringList styles;
 
     QStringList unsupportedStyles;
@@ -1590,7 +1590,7 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
                 fill = PSDStyleSheet.value("/FillFlag").toBool();
             }
             if (fill) {
-                QJsonObject color = PSDStyleSheet.value(key).toObject();
+                QVariantHash color = PSDStyleSheet.value(key).toHash();
                 styles.append("fill:"+colorFromPSDStyleSheet(color).name());
             } else {
                 styles.append("fill:none");
@@ -1601,7 +1601,7 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
                 fill = PSDStyleSheet.value("/StrokeFlag").toBool();
             }
             if (fill) {
-                QJsonObject color = PSDStyleSheet.value(key).toObject();
+                QVariantHash color = PSDStyleSheet.value(key).toHash();
                 styles.append("stroke:"+colorFromPSDStyleSheet(color).name());
             } else {
                 styles.append("stroke:none");
@@ -1693,8 +1693,8 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_ps
     return styles.join("; ");
 }
 
-bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDocument tySh,
-                                                                  const QJsonDocument txt2,
+bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariantHash tySh,
+                                                                  const QVariantHash txt2,
                                                                   const int textIndex,
                                                                   QString *svgText,
                                                                   QString *svgStyles,
@@ -1706,14 +1706,14 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
     debugFlake << "Convert from psd engine data";
     
 
-    QJsonObject root = tySh.object();
+    QVariantHash root = tySh;
     //qDebug() << "Parsed JSON Object" << root;
     bool loadFallback = txt2.isEmpty();
-    QJsonObject docObjects = txt2.object().value("/DocumentObjects").toObject();
+    QVariantHash docObjects = txt2.value("/DocumentObjects").toHash();
 
-    QJsonObject textObject = docObjects.value("/TextObjects").toArray().at(textIndex).toObject();
+    QVariantHash textObject = docObjects.value("/TextObjects").toList().at(textIndex).toHash();
     if (textObject.isEmpty() || loadFallback) {
-        textObject = root["/EngineDict"].toObject();
+        textObject = root["/EngineDict"].toHash();
         loadFallback = true;
     }
     if (textObject.isEmpty()) {
@@ -1722,15 +1722,15 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
     }
 
     QMap<int, font_info_psd> fontNames;
-    QJsonObject resourceDict = loadFallback? root["/DocumentResources"].toObject(): txt2.object()["/DocumentResources"].toObject();
+    QVariantHash resourceDict = loadFallback? root["/DocumentResources"].toHash(): txt2["/DocumentResources"].toHash();
     if (resourceDict.isEmpty()) {
         d->errors << "No engine dict found in PSD engine data";
         return false;
     } else {
         // PSD only stores the postscript name, and we'll need a bit more information than that.
-        QJsonArray fonts = loadFallback? resourceDict["/FontSet"].toArray(): resourceDict["/FontSet"].toObject()["/Resources"].toArray();
+        QVariantList fonts = loadFallback? resourceDict["/FontSet"].toList(): resourceDict["/FontSet"].toHash()["/Resources"].toList();
         for (int i = 0; i < fonts.size(); i++) {
-            QJsonObject font = loadFallback? fonts.at(i).toObject(): fonts.at(i).toObject()["/Resource"].toObject()["/Identifier"].toObject();
+            QVariantHash font = loadFallback? fonts.at(i).toHash(): fonts.at(i).toHash()["/Resource"].toHash()["/Identifier"].toHash();
             //qDebug() << font;
             font_info_psd fontInfo;
             QString postScriptName = font.value("/Name").toString();
@@ -1760,13 +1760,13 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
     int textType = 0; ///< 0 = point text, 1 = paragraph text (including text in shape), 2 = text on path.
     bool reversed = false;
     if (loadFallback) {
-        QJsonObject rendered = textObject["/Rendered"].toObject();
+        QVariantHash rendered = textObject["/Rendered"].toHash();
         // rendering info...
         if (!rendered.isEmpty()) {
-            QJsonObject shapeChild = rendered["/Shapes"].toObject()["/Children"].toArray()[0].toObject();
+            QVariantHash shapeChild = rendered["/Shapes"].toHash()["/Children"].toList()[0].toHash();
             textType = shapeChild["/ShapeType"].toInt();
             if (textType == 1) {
-                QJsonArray BoxBounds = shapeChild["/Cookie"].toObject()["/Photoshop"].toObject()["/BoxBounds"].toArray();
+                QVariantList BoxBounds = shapeChild["/Cookie"].toHash()["/Photoshop"].toHash()["/BoxBounds"].toList();
                 bounds = QRectF(BoxBounds[0].toDouble(), BoxBounds[1].toDouble(), BoxBounds[2].toDouble(), BoxBounds[3].toDouble());
                 bounds = scaleToPt.mapRect(bounds);
                 if (isHorizontal) {
@@ -1778,29 +1778,29 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
             qDebug() << bounds;
         }
     } else {
-        QJsonObject view = textObject["/View"].toObject();
+        QVariantHash view = textObject["/View"].toHash();
         // todo: if multiple frames in frames array, there's multiple shapes in shape-inside.
-        int textFrameIndex = view["/Frames"].toArray()[0].toObject()["/Resource"].toInt();
-        QJsonArray textFrameSet = resourceDict["/TextFrameSet"].toObject()["/Resources"].toArray();
-        QJsonObject textFrame = textFrameSet.at(textFrameIndex).toObject()["/Resource"].toObject();
+        int textFrameIndex = view["/Frames"].toList()[0].toHash()["/Resource"].toInt();
+        QVariantList textFrameSet = resourceDict["/TextFrameSet"].toHash()["/Resources"].toList();
+        QVariantHash textFrame = textFrameSet.at(textFrameIndex).toHash()["/Resource"].toHash();
 
 
         if (!textFrame.isEmpty()) {
-            textType = textFrame["/Data"].toObject()["/Type"].toInt();
+            textType = textFrame["/Data"].toHash()["/Type"].toInt();
             //qDebug() << textFrame;
 
             if (textType > 0) {
                 KoPathShape *textCurve = new KoPathShape();
-                QJsonObject data = textFrame["/Data"].toObject();
-                QJsonArray points = textFrame["/Bezier"].toObject()["/Points"].toArray();
-                QJsonArray range = data["/TextOnPathTRange"].toArray();
-                QJsonArray fm = data["/FrameMatrix"].toArray();
+                QVariantHash data = textFrame["/Data"].toHash();
+                QVariantList points = textFrame["/Bezier"].toHash()["/Points"].toList();
+                QVariantList range = data["/TextOnPathTRange"].toList();
+                QVariantList fm = data["/FrameMatrix"].toList();
                 shapePadding = data["/Spacing"].toDouble();
-                QJsonObject pathData = data["/PathData"].toObject();
+                QVariantHash pathData = data["/PathData"].toHash();
                 reversed = pathData["/Flip"].toBool();
 
-                QJsonValue lineOrientation = data["/LineOrientation"];
-                if (!lineOrientation.isUndefined()) {
+                QVariant lineOrientation = data["/LineOrientation"];
+                if (!lineOrientation.isNull()) {
                     if (lineOrientation.toInt() == 2) {
                         isHorizontal = false;
                     }
@@ -1896,7 +1896,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
 
     svgWriter.writeStartElement("text");
 
-    QJsonObject editor = loadFallback? textObject["/Editor"].toObject() : textObject["/Model"].toObject();
+    QVariantHash editor = loadFallback? textObject["/Editor"].toHash() : textObject["/Model"].toHash();
     QString text = "";
     if (editor.isEmpty()) {
         d->errors << "No editor dict found in PSD engine data";
@@ -1907,7 +1907,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
     }
 
     int antiAliasing = 0;
-        antiAliasing = loadFallback? textObject["/AntiAlias"].toInt() : textObject["/StorySheet"].toObject()["/AntiAlias"].toInt();
+        antiAliasing = loadFallback? textObject["/AntiAlias"].toInt() : textObject["/StorySheet"].toHash()["/AntiAlias"].toInt();
     //0 = None, 1 = Sharp, 2 = Crisp, 3 = Strong, 4 = Smooth
     if (antiAliasing == 4) {
         svgWriter.writeAttribute("text-rendering", "auto");
@@ -1915,15 +1915,15 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
         svgWriter.writeAttribute("text-rendering", "OptimizeSpeed");
     }
 
-    QJsonObject paragraphRun = loadFallback? textObject["/ParagraphRun"].toObject() : editor["/ParagraphRun"].toObject();
+    QVariantHash paragraphRun = loadFallback? textObject["/ParagraphRun"].toHash() : editor["/ParagraphRun"].toHash();
     if (!paragraphRun.isEmpty()) {
-        //QJsonArray runLengthArray = paragraphRun.value("RunLengthArray").toArray();
-        QJsonArray runArray = paragraphRun["/RunArray"].toArray();
+        //QVariantList runLengthArray = paragraphRun.value("RunLengthArray").toList();
+        QVariantList runArray = paragraphRun["/RunArray"].toList();
         QString features = loadFallback? "/Properties": "/Features";
-        QJsonObject style = loadFallback? runArray.at(0).toObject() : runArray.at(0).toObject()["/RunData"].toObject();
-        QJsonObject parasheet = loadFallback? runArray[0].toObject()["/ParagraphSheet"].toObject():
-                runArray.at(0).toObject()["/RunData"].toObject()["/ParagraphSheet"].toObject();
-        QJsonObject styleSheet = parasheet[features].toObject();
+        QVariantHash style = loadFallback? runArray.at(0).toHash() : runArray.at(0).toHash()["/RunData"].toHash();
+        QVariantHash parasheet = loadFallback? runArray[0].toHash()["/ParagraphSheet"].toHash():
+                runArray.at(0).toHash()["/RunData"].toHash()["/ParagraphSheet"].toHash();
+        QVariantHash styleSheet = parasheet[features].toHash();
 
         QString styleString = stylesForPSDParagraphSheet(styleSheet, scaleToPt);
         if (textType < 2) {
@@ -1967,27 +1967,27 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
         svgWriter.writeAttribute("startOffset", QString::number(textPathStartOffset)+"%");
     }
 
-    QJsonObject styleRun = loadFallback? textObject.value("/StyleRun").toObject(): editor.value("/StyleRun").toObject();
+    QVariantHash styleRun = loadFallback? textObject.value("/StyleRun").toHash(): editor.value("/StyleRun").toHash();
     if (styleRun.isEmpty()) {
         d->errors << "No styleRun dict found in PSD engine data";
         return false;
     } else {
         QString features = loadFallback? "/StyleSheetData": "/Features";
-        QJsonArray runLengthArray = styleRun.value("/RunLengthArray").toArray();
-        QJsonArray runArray = styleRun.value("/RunArray").toArray();
+        QVariantList runLengthArray = styleRun.value("/RunLengthArray").toList();
+        QVariantList runArray = styleRun.value("/RunArray").toList();
         if (runArray.isEmpty()) {
             d->errors << "No styleRun dict found in PSD engine data";
             return false;
         } else {
-            QJsonObject style = loadFallback? runArray.at(0).toObject() : runArray.at(0).toObject()["/RunData"].toObject();
-            QJsonObject styleSheet = style.value("/StyleSheet").toObject().value(features).toObject();
+            QVariantHash style = loadFallback? runArray.at(0).toHash() : runArray.at(0).toHash()["/RunData"].toHash();
+            QVariantHash styleSheet = style.value("/StyleSheet").toHash().value(features).toHash();
             int length = 0;
             int pos = 0;
             for (int i = 0; i < runArray.size(); i++) {
-                style = loadFallback? runArray.at(i).toObject() : runArray.at(i).toObject()["/RunData"].toObject();
-                int l = loadFallback? runLengthArray.at(i).toInt(): runArray.at(i).toObject().value("/Length").toInt();
+                style = loadFallback? runArray.at(i).toHash() : runArray.at(i).toHash()["/RunData"].toHash();
+                int l = loadFallback? runLengthArray.at(i).toInt(): runArray.at(i).toHash().value("/Length").toInt();
 
-                QJsonObject newStyleSheet = style.value("/StyleSheet").toObject().value(features).toObject();
+                QVariantHash newStyleSheet = style.value("/StyleSheet").toHash().value(features).toHash();
                 if (newStyleSheet == styleSheet) {
                     length += l;
                 } else {
@@ -2027,7 +2027,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QJsonDoc
 
 
 
-void gatherFonts(const QMap<QString, QString> cssStyles, const QString text, QJsonArray &fontSet,
+void gatherFonts(const QMap<QString, QString> cssStyles, const QString text, QVariantList &fontSet,
                  QVector<int> &lengths, QVector<int> &fontIndices) {
     if (cssStyles.contains("font-family")) {
         QStringList families = cssStyles.value("font-family").split(",");
@@ -2048,13 +2048,13 @@ void gatherFonts(const QMap<QString, QString> cssStyles, const QString text, QJs
 
             int fontIndex = -1;
             for(int j=0; j<fontSet.size(); j++) {
-                if (fontSet[j].toObject()["/Name"] == postScriptName) {
+                if (fontSet[j].toHash()["/Name"] == postScriptName) {
                     fontIndex = j;
                     break;
                 }
             }
             if (fontIndex < 0) {
-                QJsonObject font;
+                QVariantHash font;
                 font["/Name"] = postScriptName;
                 font["/Script"] = 0;
                 font["/Synthetic"] = 0;
@@ -2067,9 +2067,9 @@ void gatherFonts(const QMap<QString, QString> cssStyles, const QString text, QJs
     }
 }
 
-QJsonObject styleToPSDStylesheet(const QMap<QString, QString> cssStyles,
-                                 QJsonObject parentStyle, QTransform scaleToPx) {
-    QJsonObject styleSheet = parentStyle;
+QVariantHash styleToPSDStylesheet(const QMap<QString, QString> cssStyles,
+                                 QVariantHash parentStyle, QTransform scaleToPx) {
+    QVariantHash styleSheet = parentStyle;
 
     styleSheet["/Leading"] = 0.0;
 
@@ -2101,15 +2101,15 @@ QJsonObject styleToPSDStylesheet(const QMap<QString, QString> cssStyles,
     return styleSheet;
 }
 
-void gatherFills(QDomElement el, QJsonObject &styleDict) {
+void gatherFills(QDomElement el, QVariantHash &styleDict) {
     if (el.hasAttribute("fill")) {
         if (el.attribute("fill") != "none") {
             QColor c = QColor(el.attribute("fill"));
             double opacity = el.attribute("fill-opacity", "1").toDouble();
             styleDict["/FillFlag"] = true;
-            styleDict["/FillColor"] = QJsonObject {
+            styleDict["/FillColor"] = QVariantHash {
             {"/Type", 1},
-            {"/Values", QJsonArray({opacity, c.redF(), c.greenF(), c.blueF()})}
+            {"/Values", QVariantList({opacity, c.redF(), c.greenF(), c.blueF()})}
         };
         } else {
             styleDict["/FillFlag"] = false;
@@ -2120,9 +2120,9 @@ void gatherFills(QDomElement el, QJsonObject &styleDict) {
             QColor c = QColor(el.attribute("stroke"));
             double opacity = el.attribute("stroke-opacity").toDouble();
             styleDict["/StrokeFlag"] = true;
-            styleDict["/StrokeColor"] = QJsonObject {
+            styleDict["/StrokeColor"] = QVariantHash {
             {"/Type", 1},
-            {"/Values", QJsonArray({opacity, c.redF(), c.greenF(), c.blueF()})}
+            {"/Values", QVariantList({opacity, c.redF(), c.greenF(), c.blueF()})}
         };
         } else {
             styleDict["/StrokeFlag"] = false;
@@ -2134,10 +2134,10 @@ void gatherFills(QDomElement el, QJsonObject &styleDict) {
 }
 
 void gatherStyles(QDomElement el, QString &text,
-                  QJsonObject parentStyle,
+                  QVariantHash parentStyle,
                   QMap<QString, QString> parentCssStyles,
-                  QJsonArray &styles, QJsonArray &runs,
-                  QJsonArray &fontSet, QTransform scaleToPx) {
+                  QVariantList &styles, QVariantList &runs,
+                  QVariantList &fontSet, QTransform scaleToPx) {
     QMap<QString, QString> cssStyles = parentCssStyles;
     if (el.hasAttribute("style")) {
         QString style = el.attribute("style");
@@ -2160,21 +2160,21 @@ void gatherStyles(QDomElement el, QString &text,
         QString currentText = textNode.data();
         text += currentText;
 
-        QJsonObject styleDict = styleToPSDStylesheet(cssStyles, parentStyle, scaleToPx);
+        QVariantHash styleDict = styleToPSDStylesheet(cssStyles, parentStyle, scaleToPx);
         gatherFills(el, styleDict);
 
         QVector<int> lengths;
         QVector<int> fontIndices;
         gatherFonts(cssStyles, currentText, fontSet, lengths, fontIndices);
         for (int i = 0; i< fontIndices.size(); i++) {
-            QJsonObject curDict = styleDict;
+            QVariantHash curDict = styleDict;
             curDict["/Font"] = fontIndices.at(i);
             styles.append(curDict);
-            runs.append(QJsonValue{lengths.at(i)});
+            runs.append(QVariant{lengths.at(i)});
         }
 
     } else if (el.childNodes().size()>0) {
-        QJsonObject styleDict = styleToPSDStylesheet(cssStyles, parentStyle, scaleToPx);
+        QVariantHash styleDict = styleToPSDStylesheet(cssStyles, parentStyle, scaleToPx);
         gatherFills(el, styleDict);
         QDomElement childEl = el.firstChildElement();
         while(!childEl.isNull()) {
@@ -2184,8 +2184,8 @@ void gatherStyles(QDomElement el, QString &text,
     }
 }
 
-QJsonObject gatherParagraphStyle(QDomElement el,
-                                 QJsonObject defaultProperties,
+QVariantHash gatherParagraphStyle(QDomElement el,
+                                 QVariantHash defaultProperties,
                                  bool &isHorizontal,
                                  QString *inlineSize,
                                  QTransform scaleToPx) {
@@ -2203,7 +2203,7 @@ QJsonObject gatherParagraphStyle(QDomElement el,
     int alignVal = 0;
     int anchorVal = 0;
 
-    QJsonObject paragraphStyleSheet = defaultProperties;
+    QVariantHash paragraphStyleSheet = defaultProperties;
     Q_FOREACH(QString key, cssStyles.keys()) {
         QString val = cssStyles.value(key);
 
@@ -2237,32 +2237,32 @@ QJsonObject gatherParagraphStyle(QDomElement el,
     } else {
         paragraphStyleSheet["/Justification"] = anchorVal;
     }
-    return QJsonObject{{"/DefaultStyleSheet", 0},{"/Properties", paragraphStyleSheet}};
+    return QVariantHash{{"/DefaultStyleSheet", 0},{"/Properties", paragraphStyleSheet}};
 }
 
 bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &svgText,
                                                                QRectF &boundingBox,
-                                                               QJsonDocument &tySh,
+                                                               QVariantHash &tySh,
                                                                QString &textTotal,
                                                                bool &isHorizontal,
                                                                QTransform scaleToPx)
 {
-    QJsonObject root;
+    QVariantHash root;
 
-    QJsonObject engineDict;
-    QJsonObject resourceDict;
+    QVariantHash engineDict;
+    QVariantHash resourceDict;
 
     QString text;
-    QJsonArray styles;
-    QJsonArray styleRunArray;
-    QJsonArray fontSet;
+    QVariantList styles;
+    QVariantList styleRunArray;
+    QVariantList fontSet;
 
     // default fonts.
-    fontSet.append(QJsonObject{{"/Name", "AdobeInvisFont"}, {"/FontType", 0}, {"/Script", 0}, {"/Synthetic", 0}});
-    fontSet.append(QJsonObject{{"/Name", "MyriadPro-Regular"}, {"/FontType", 0}, {"/Script", 0}, {"/Synthetic", 0}});
+    fontSet.append(QVariantHash{{"/Name", "AdobeInvisFont"}, {"/FontType", 0}, {"/Script", 0}, {"/Synthetic", 0}});
+    fontSet.append(QVariantHash{{"/Name", "MyriadPro-Regular"}, {"/FontType", 0}, {"/Script", 0}, {"/Synthetic", 0}});
 
     // We're creating the default character and paragraph style sheets here.
-    QJsonObject defaultStyle;
+    QVariantHash defaultStyle;
     defaultStyle["/Font"] = 1;
     defaultStyle["/FontSize"] = 12;
     defaultStyle["/FauxBold"] = false;
@@ -2286,8 +2286,8 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     defaultStyle["/StyleRunAlignment"] = 2;
     defaultStyle["/Language"] = 0;
     defaultStyle["/NoBreak"] = false;
-    defaultStyle["/FillColor"] =   QJsonObject{{"/Type", 1}, {"/Values", QJsonArray({1, 0, 0, 0})}};
-    defaultStyle["/StrokeColor"] = QJsonObject{{"/Type", 1}, {"/Values", QJsonArray({1, 0, 0, 0})}};
+    defaultStyle["/FillColor"] =   QVariantHash{{"/Type", 1}, {"/Values", QVariantList({1, 0, 0, 0})}};
+    defaultStyle["/StrokeColor"] = QVariantHash{{"/Type", 1}, {"/Values", QVariantList({1, 0, 0, 0})}};
     defaultStyle["/FillFlag"] = true;
     defaultStyle["/StrokeFlag"] = false;
     defaultStyle["/FillFirst"] = true;
@@ -2306,10 +2306,10 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
         defaultStyle["/Font"] = fontIndices.first();
     }
 
-    QJsonObject defaultParagraph;
+    QVariantHash defaultParagraph;
     defaultParagraph["/Name"] = "Default";
     defaultParagraph["/DefaultStyleSheet"] = 0;
-    QJsonObject defaultParagraphProps = QJsonObject{
+    QVariantHash defaultParagraphProps = QVariantHash{
     {"/Justification", 0},
     {"/FirstLineIndent", 0},
     {"/StartIndent", 0},
@@ -2320,9 +2320,9 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     {"/PreHyphen", 2},
     {"/PostHyphen", 2},
     {"/Zone", 36.0},
-    {"/WordSpacing", QJsonArray({0.8, 1.0, 1.3})},
-    {"/LetterSpacing", QJsonArray({0, 0, 0})},
-    {"/GlyphSpacing", QJsonArray({1.0, 1.0, 1.0})},
+    {"/WordSpacing", QVariantList({0.8, 1.0, 1.3})},
+    {"/LetterSpacing", QVariantList({0, 0, 0})},
+    {"/GlyphSpacing", QVariantList({1.0, 1.0, 1.0})},
     {"/SpaceAfter", 0},
     {"/AutoLeading", 1.0},
     {"/LeadingType", 0},
@@ -2335,62 +2335,62 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     // go down the document children to get the style.
     QDomDocument doc;
     doc.setContent(svgText);
-    gatherStyles(doc.documentElement(), text, QJsonObject(), QMap<QString, QString>(), styles, styleRunArray, fontSet, scaleToPx);
+    gatherStyles(doc.documentElement(), text, QVariantHash(), QMap<QString, QString>(), styles, styleRunArray, fontSet, scaleToPx);
 
     QString inlineSize;
-    QJsonObject paragraphStyle = gatherParagraphStyle(doc.documentElement(),
+    QVariantHash paragraphStyle = gatherParagraphStyle(doc.documentElement(),
                                                       defaultParagraphProps,
                                                       isHorizontal, &inlineSize,
                                                       scaleToPx);
 
-    QJsonObject editor;
+    QVariantHash editor;
     editor["/Text"] = text;
     engineDict["/Editor"] = editor;
 
-    QJsonObject grid;
+    QVariantHash grid;
     grid["/GridIsOn"] = false;
     grid["/ShowGrid"] = false;
     grid["/GridSize"] = 18.0;
     grid["/GridLeading"] = 22.0;
-    grid["/GridColor"] = QJsonObject{{"/Type", 1}, {"/Values", QJsonArray({0, 0, 0, 1})}};
-    grid["/GridLeadingFillColor"] = QJsonObject{{"/Type", 1}, {"/Values", QJsonArray({0, 0, 0, 1})}};
+    grid["/GridColor"] = QVariantHash{{"/Type", 1}, {"/Values", QVariantList({0, 0, 0, 1})}};
+    grid["/GridLeadingFillColor"] = QVariantHash{{"/Type", 1}, {"/Values", QVariantList({0, 0, 0, 1})}};
     grid["/AlignLineHeightToGridFlags"] = false;
     engineDict["/GridInfo"] = grid;
 
-    QJsonObject paragraphRun;
-    paragraphRun["/RunLengthArray"] = QJsonArray({QJsonValue(text.length())});
-    QJsonObject paragraphAdjustments  = QJsonObject {
-    {"/Axis", QJsonArray({1, 0, 1})},
-    {"/XY", QJsonArray({0, 0})}
+    QVariantHash paragraphRun;
+    paragraphRun["/RunLengthArray"] = QVariantList({QVariant(text.length())});
+    QVariantHash paragraphAdjustments  = QVariantHash {
+    {"/Axis", QVariantList({1, 0, 1})},
+    {"/XY", QVariantList({0, 0})}
     };
-    paragraphRun["/RunArray"] = QJsonArray({ QJsonObject{
+    paragraphRun["/RunArray"] = QVariantList({ QVariantHash{
                                                 {"/ParagraphSheet", paragraphStyle},
                                                 {"/Adjustments", paragraphAdjustments}
                                             }
                                             });
     paragraphRun["/IsJoinable"] = 1; //no idea what this means.
-    paragraphRun["/DefaultRunData"] = QJsonObject{
+    paragraphRun["/DefaultRunData"] = QVariantHash{
     {"/ParagraphSheet",
-            QJsonObject{{"/DefaultStyleSheet", 0},
-                        {"/Properties", QJsonObject()}} },
+            QVariantHash{{"/DefaultStyleSheet", 0},
+                        {"/Properties", QVariantHash()}} },
     {"/Adjustments", paragraphAdjustments}};
 
     engineDict["/ParagraphRun"] = paragraphRun;
 
-    QJsonObject styleRun;
+    QVariantHash styleRun;
     styleRun["/RunLengthArray"] = styleRunArray;
-    QJsonArray properStyleRun;
-    Q_FOREACH(QJsonValue entry, styles) {
-        QJsonObject properStyle;
+    QVariantList properStyleRun;
+    Q_FOREACH(QVariant entry, styles) {
+        QVariantHash properStyle;
         properStyle["/StyleSheetData"] = entry;
-        QJsonObject s;
+        QVariantHash s;
         s["/StyleSheet"] = properStyle;
         properStyleRun.append(s);
     }
     styleRun["/RunArray"] = properStyleRun;
     styleRun["/IsJoinable"] = 2;
 
-    styleRun["/DefaultRunData"] = QJsonObject{{"/StyleSheet", QJsonObject{{"/StyleSheetData", QJsonObject()}} }};
+    styleRun["/DefaultRunData"] = QVariantHash{{"/StyleSheet", QVariantHash{{"/StyleSheetData", QVariantHash()}} }};
 
     engineDict["/StyleRun"] = styleRun;
 
@@ -2412,27 +2412,27 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
         bounds = QRectF();
     }
 
-    QJsonObject rendered;
+    QVariantHash rendered;
     int shapeType = bounds.isEmpty()? 0: 1; // 0 point, 1 paragraph, but what does that make text-on-path?
     int writingDirection = isHorizontal? 0: 2;
-    QJsonObject photoshop = QJsonObject {{"/ShapeType", shapeType},
-    {"/TransformPoint0", QJsonArray({1.0, 0.0})},
-    {"/TransformPoint1", QJsonArray({0.0, 1.0})},
-    {"/TransformPoint2", QJsonArray({0.0, 0.0})}};
+    QVariantHash photoshop = QVariantHash {{"/ShapeType", shapeType},
+    {"/TransformPoint0", QVariantList({1.0, 0.0})},
+    {"/TransformPoint1", QVariantList({0.0, 1.0})},
+    {"/TransformPoint2", QVariantList({0.0, 0.0})}};
     if (shapeType == 0) {
-        photoshop["/PointBase"] = QJsonArray({0.0, 0.0});
+        photoshop["/PointBase"] = QVariantList({0.0, 0.0});
     } else if (shapeType == 1) {
         // this is the bounding box of the paragraph shape.
         QRectF boundsPix = scaleToPx.mapRect(bounds);
-        photoshop["/BoxBounds"] = QJsonArray({0, 0, boundsPix.width(), boundsPix.height()});
+        photoshop["/BoxBounds"] = QVariantList({0, 0, boundsPix.width(), boundsPix.height()});
     }
-    QJsonObject renderChild = QJsonObject{
+    QVariantHash renderChild = QVariantHash{
     {"/ShapeType", shapeType},
     {"/Procession", 0},
-    {"/Lines", QJsonObject{{"/WritingDirection", writingDirection}, {"/Children", QJsonArray()}}},
-    {"/Cookie", QJsonObject{{"/Photoshop", photoshop}}}};
+    {"/Lines", QVariantHash{{"/WritingDirection", writingDirection}, {"/Children", QVariantList()}}},
+    {"/Cookie", QVariantHash{{"/Photoshop", photoshop}}}};
     rendered["/Version"] = 1;
-    rendered["/Shapes"] = QJsonObject{{"/WritingDirection", writingDirection}, {"/Children", QJsonArray({renderChild})}};
+    rendered["/Shapes"] = QVariantHash{{"/WritingDirection", writingDirection}, {"/Children", QVariantList({renderChild})}};
 
     engineDict["/Rendered"] = rendered;
     engineDict["/UseFractionalGlyphWidths"] = true;
@@ -2441,28 +2441,28 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
 
     // default resoure dict
 
-    QJsonObject kinsokuHard; // line-break: 'strict'
+    QVariantHash kinsokuHard; // line-break: 'strict'
     kinsokuHard["/Name"] = "PhotoshopKinsokuHard";
     kinsokuHard["/Hanging"] = "、。.,";
     kinsokuHard["/Keep"] = "―‥";
     kinsokuHard["/NoEnd"] = "‘“（〔［｛〈〰రะက尨[{￥＄£＠§〒＃";
     kinsokuHard["/NoStart"] = "、。，．・：；？！ー―’”）〕］｝〉》」』】ヽヾゝゞ々ぁぃぅぇぉっゃゅょゎァィゥェォッャュョヮヵヶ゛゜?!\\⤀崀紀Ⰰ⸀㨀㬡̡ऀꋿԠ";
-    QJsonObject kinsokuSoft;  // line-break: 'normal'
+    QVariantHash kinsokuSoft;  // line-break: 'normal'
     kinsokuSoft["/Name"] = "PhotoshopKinsokuSoft";
     kinsokuSoft["/Hanging"] = "、。.,";
     kinsokuSoft["/Keep"] = "―‥";
     kinsokuSoft["/NoEnd"] = "‘“（〔［｛〈〰రะ";
     kinsokuSoft["/NoStart"] = "、。，．・：；？！’”）〕］｝〉》」』】ヽヾゝゞ々";
-    resourceDict["/KinsokuSet"] = QJsonArray({kinsokuHard, kinsokuSoft});
+    resourceDict["/KinsokuSet"] = QVariantList({kinsokuHard, kinsokuSoft});
     //Mojikumi is the same kind of thing as CSS-Text-4 text-spacing
     // 1 = text-spacing-trim: trim-auto
     // 2 = full width for most except characters end of line. allow end?
     // 3 = full width for most including characters end of line (seems to skip space)
     // 4 = text-spacing-trim: space-all
-    resourceDict["/MojiKumiSet"] = QJsonArray( {QJsonObject{{"/InternalName", "Photoshop6MojiKumiSet1"}},
-                                               QJsonObject{{"/InternalName", "Photoshop6MojiKumiSet2"}},
-                                               QJsonObject{{"/InternalName", "Photoshop6MojiKumiSet3"}},
-                                               QJsonObject{{"/InternalName", "Photoshop6MojiKumiSet4"}}
+    resourceDict["/MojiKumiSet"] = QVariantList( {QVariantHash{{"/InternalName", "Photoshop6MojiKumiSet1"}},
+                                               QVariantHash{{"/InternalName", "Photoshop6MojiKumiSet2"}},
+                                               QVariantHash{{"/InternalName", "Photoshop6MojiKumiSet3"}},
+                                               QVariantHash{{"/InternalName", "Photoshop6MojiKumiSet4"}}
                                               });
     resourceDict["/SubscriptPosition"] = 0.333;
     resourceDict["/SubscriptSize"] = 0.583;
@@ -2472,18 +2472,17 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     resourceDict["/TheNormalParagraphSheet"] = 0;
     resourceDict["/TheNormalStyleSheet"] = 0;
 
-    QJsonObject resourceStyleSheet = QJsonObject{{"/Name", "Default"}, {"/StyleSheetData", defaultStyle}};
-    resourceDict["/StyleSheetSet"] = QJsonArray({resourceStyleSheet});
-    resourceDict["/ParagraphSheetSet"] = QJsonArray({defaultParagraph});
+    QVariantHash resourceStyleSheet = QVariantHash{{"/Name", "Default"}, {"/StyleSheetData", defaultStyle}};
+    resourceDict["/StyleSheetSet"] = QVariantList({resourceStyleSheet});
+    resourceDict["/ParagraphSheetSet"] = QVariantList({defaultParagraph});
 
     // documentResources and ResourceDict always seem to be the same...?
 
     root["/ResourceDict"] = resourceDict;
     root["/DocumentResources"] = resourceDict;
 
-    tySh.setObject(root);
-
     textTotal = text;
+    tySh = root;
 
     return true;
 }

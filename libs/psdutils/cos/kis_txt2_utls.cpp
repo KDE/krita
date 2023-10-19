@@ -5,18 +5,18 @@
  */
 
 #include "kis_txt2_utls.h"
-#include <QJsonObject>
-#include <QJsonValue>
-#include <QJsonArray>
+#include <QVariantHash>
+#include <QVariant>
+#include <QVariantList>
 
-QJsonObject uncompressColor(const QJsonObject object) {
+QVariantHash uncompressColor(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
     Q_FOREACH(QString key, object.keys()) {
-        QJsonValue val = object.value(key);
+        QVariant val = object.value(key);
         if (key == "/0") {
-            QJsonObject color = val.toObject();
-            QJsonObject newColor;
+            QVariantHash color = val.toHash();
+            QVariantHash newColor;
             Q_FOREACH(QString key, color.keys()) {
                 if (key == "/1") {
                     newColor.insert("/Values", color.value(key));
@@ -36,9 +36,9 @@ QJsonObject uncompressColor(const QJsonObject object) {
     return newObject;
 }
 
-QJsonObject uncompressStyleSheetFeatures(const QJsonObject object) {
+QVariantHash uncompressStyleSheetFeatures(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
 
     const QMap<QString, QString> keyList{
         {"/0", "/Font"},
@@ -155,13 +155,13 @@ QJsonObject uncompressStyleSheetFeatures(const QJsonObject object) {
     };
 
     Q_FOREACH(QString key, object.keys()) {
-        QJsonValue val = object.value(key);
+        QVariant val = object.value(key);
         if (key == "/53") {
-            newObject.insert("/FillColor", uncompressColor(val.toObject()));
+            newObject.insert("/FillColor", uncompressColor(val.toHash()));
         } else if (key == "/54") {
-            newObject.insert("/StrokeColor", uncompressColor(val.toObject()));
+            newObject.insert("/StrokeColor", uncompressColor(val.toHash()));
         } else if (key == "/79") {
-            newObject.insert("/FillBackgroundColor", uncompressColor(val.toObject()));
+            newObject.insert("/FillBackgroundColor", uncompressColor(val.toHash()));
         } else if (keyList.keys().contains(key)) {
             newObject.insert(keyList.value(key), val);
         } else {
@@ -171,9 +171,9 @@ QJsonObject uncompressStyleSheetFeatures(const QJsonObject object) {
     return newObject;
 }
 
-QJsonObject uncompressParagraphSheetFeatures(const QJsonObject object) {
+QVariantHash uncompressParagraphSheetFeatures(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
 
     const QMap<QString, QString> keyList{
         {"/0", "/Justification"},
@@ -228,9 +228,9 @@ QJsonObject uncompressParagraphSheetFeatures(const QJsonObject object) {
     };
 
     Q_FOREACH(QString key, object.keys()) {
-        QJsonValue val = object.value(key);
+        QVariant val = object.value(key);
         if (key == "/32") {
-            newObject.insert("/DefaultStyle", uncompressStyleSheetFeatures(val.toObject()));
+            newObject.insert("/DefaultStyle", uncompressStyleSheetFeatures(val.toHash()));
         } else if (keyList.keys().contains(key)) {
             newObject.insert(keyList.value(key), val);
         } else {
@@ -240,21 +240,21 @@ QJsonObject uncompressParagraphSheetFeatures(const QJsonObject object) {
     return newObject;
 }
 
-QJsonObject uncompressKeysStyleSheetSet(const QJsonObject object) {
+QVariantHash uncompressKeysStyleSheetSet(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
 
-    QJsonArray resources = object.value("/0").toArray();
-    QJsonArray newResources;
+    QVariantList resources = object.value("/0").toList();
+    QVariantList newResources;
 
-    Q_FOREACH(QJsonValue val, resources) {
-        QJsonObject resource = val.toObject().value("/0").toObject();
-        QJsonObject newResource;
+    Q_FOREACH(QVariant val, resources) {
+        QVariantHash resource = val.toHash().value("/0").toHash();
+        QVariantHash newResource;
         Q_FOREACH(QString key, resource.keys()) {
             QMap<QString, QString> keyList {{"/0", "/Name"}, {"/5", "/Parent"}, {"/97", "/UUID"}};
-            QJsonValue rdVal = resource.value(key);
+            QVariant rdVal = resource.value(key);
             if (key == "/6") {
-                newResource.insert("/Features", uncompressStyleSheetFeatures(rdVal.toObject()));
+                newResource.insert("/Features", uncompressStyleSheetFeatures(rdVal.toHash()));
             } else if (keyList.keys().contains(key)) {
                 newResource.insert(keyList.value(key), rdVal);
             } else {
@@ -262,27 +262,27 @@ QJsonObject uncompressKeysStyleSheetSet(const QJsonObject object) {
             }
         }
 
-        newResources.append(QJsonObject({{"/Resource", newResource}}));
+        newResources.append(QVariantHash({{"/Resource", newResource}}));
     }
     newObject.insert("/Resources", newResources);
     return newObject;
 }
 
-QJsonObject uncompressKeysParagraphSheetSet(const QJsonObject object) {
-    qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
-    QJsonArray resources = object.value("/0").toArray();
-    QJsonArray newResources;
+QVariantHash uncompressKeysParagraphSheetSet(const QVariantHash object) {
+    //qDebug() << Q_FUNC_INFO;
+    QVariantHash newObject;
+    QVariantList resources = object.value("/0").toList();
+    QVariantList newResources;
 
     const QMap<QString, QString> keyList {{"/0", "/Name"}, {"/6", "/Parent"}, {"/97", "/UUID"}};
 
-    Q_FOREACH(QJsonValue val, resources) {
-        QJsonObject resource = val.toObject().value("/0").toObject();
-        QJsonObject newResource;
+    Q_FOREACH(QVariant val, resources) {
+        QVariantHash resource = val.toHash().value("/0").toHash();
+        QVariantHash newResource;
         Q_FOREACH(QString key, resource.keys()) {
-            QJsonValue rdVal = resource.value(key);
+            QVariant rdVal = resource.value(key);
             if (key == "/5") {
-                newResource.insert("/Features", uncompressParagraphSheetFeatures(rdVal.toObject()));
+                newResource.insert("/Features", uncompressParagraphSheetFeatures(rdVal.toHash()));
             } else if (keyList.keys().contains(key)) {
                 newResource.insert(keyList.value(key), rdVal);
             } else {
@@ -290,15 +290,15 @@ QJsonObject uncompressKeysParagraphSheetSet(const QJsonObject object) {
             }
         }
 
-        newResources.append(QJsonObject({{"/Resource", newResource}}));
+        newResources.append(QVariantHash({{"/Resource", newResource}}));
     }
     newObject.insert("/Resources", newResources);
     return newObject;
 }
 
-QJsonObject uncompressTextFrameData(const QJsonObject object) {
+QVariantHash uncompressTextFrameData(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
     const QMap<QString, QString> keyList {
         {"/0", "/Type"},
         {"/1", "/LineOrientation"},
@@ -327,10 +327,10 @@ QJsonObject uncompressTextFrameData(const QJsonObject object) {
     };
 
     Q_FOREACH(QString key, object.keys()) {
-        QJsonValue val = object.value(key);
+        QVariant val = object.value(key);
         if (key == "/11") {
-            QJsonObject data = val.toObject();
-            QJsonObject newData;
+            QVariantHash data = val.toHash();
+            QVariantHash newData;
             Q_FOREACH(QString key2, data.keys()) {
                 if (pathDataList.keys().contains(key2)) {
                     newData.insert(pathDataList.value(key2), data.value(key2));
@@ -348,12 +348,12 @@ QJsonObject uncompressTextFrameData(const QJsonObject object) {
     return newObject;
 }
 
-QJsonObject uncompressKeysTextFrameSet(const QJsonObject object) {
+QVariantHash uncompressKeysTextFrameSet(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
 
-    QJsonArray resources = object.value("/0").toArray();
-    QJsonArray newResources;
+    QVariantList resources = object.value("/0").toList();
+    QVariantList newResources;
     const QMap<QString, QString> keyList {
         {"/0", "/Position"},
         {"/1", "/Bezier"},
@@ -361,19 +361,19 @@ QJsonObject uncompressKeysTextFrameSet(const QJsonObject object) {
         {"/97", "/UUID"}
     };
 
-    Q_FOREACH(QJsonValue val, resources) {
-        QJsonObject resource = val.toObject().value("/0").toObject();
-        QJsonObject newResource;
+    Q_FOREACH(QVariant val, resources) {
+        QVariantHash resource = val.toHash().value("/0").toHash();
+        QVariantHash newResource;
         Q_FOREACH(QString key2, resource.keys()) {
-            QJsonValue rdVal = resource.value(key2);
+            QVariant rdVal = resource.value(key2);
             if (key2 == "/5") {
-                newResource.insert("/Features", uncompressStyleSheetFeatures(rdVal.toObject()));
+                newResource.insert("/Features", uncompressStyleSheetFeatures(rdVal.toHash()));
             } else if (key2 == "/1") {
-                QJsonValue pList = rdVal.toObject().value("/0");
+                QVariant pList = rdVal.toHash().value("/0");
 
-                newResource.insert("/Bezier", QJsonObject({{"/Points", pList}}));
+                newResource.insert("/Bezier", QVariantHash({{"/Points", pList}}));
             } else if (key2 == "/2") {
-                newResource.insert("/Data", uncompressTextFrameData(rdVal.toObject()));
+                newResource.insert("/Data", uncompressTextFrameData(rdVal.toHash()));
             } else if (keyList.keys().contains(key2)) {
                 newResource.insert(keyList.value(key2), rdVal);
             } else {
@@ -381,32 +381,32 @@ QJsonObject uncompressKeysTextFrameSet(const QJsonObject object) {
             }
         }
 
-        newResources.append(QJsonObject({{"/Resource", newResource}}));
+        newResources.append(QVariantHash({{"/Resource", newResource}}));
     }
     newObject.insert("/Resources", newResources);
     return newObject;
 }
 
-QJsonObject uncompressKeysKinsokuSet(const QJsonObject object) {
+QVariantHash uncompressKeysKinsokuSet(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
 
-    QJsonArray resources = object.value("/0").toArray();
-    QJsonArray newResources;
+    QVariantList resources = object.value("/0").toList();
+    QVariantList newResources;
 
     const QMap<QString, QString> keyList {{"/0", "/Name"}, {"/5", "/Data"}};
     const QMap<QString, QString> idKeyList {{"/0", "/NoStart"}, {"/1", "/NoEnd"}, {"/2", "/Keep"}, {"/3", "/Hanging"}, {"/4", "/PredefinedTag"}};
 
 
-    Q_FOREACH(QJsonValue val, resources) {
-        QJsonObject resource = val.toObject().value("/0").toObject();
-        QJsonObject newResource;
+    Q_FOREACH(QVariant val, resources) {
+        QVariantHash resource = val.toHash().value("/0").toHash();
+        QVariantHash newResource;
         Q_FOREACH(QString key, resource.keys()) {
             if (key == "/5") {
-                QJsonObject id = resource.value(key).toObject();
-                QJsonObject newId;
+                QVariantHash id = resource.value(key).toHash();
+                QVariantHash newId;
                 Q_FOREACH(QString key2, id.keys()) {
-                    QJsonValue idVal = id.value(key2);
+                    QVariant idVal = id.value(key2);
                     if (idKeyList.keys().contains(key2)) {
                         newId.insert(idKeyList.value(key2), idVal);
                     } else {
@@ -421,54 +421,54 @@ QJsonObject uncompressKeysKinsokuSet(const QJsonObject object) {
             }
         }
 
-        newResources.append(QJsonObject({{"/Resource", newResource}}));
+        newResources.append(QVariantHash({{"/Resource", newResource}}));
     }
     newObject.insert("/Resources", newResources);
     return newObject;
 }
 
-QJsonObject uncompressKeysMojiKumiTableSet(const QJsonObject object) {
+QVariantHash uncompressKeysMojiKumiTableSet(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
 
     Q_FOREACH(QString key, object.keys()) {
-        QJsonValue val = object.value(key);
+        QVariant val = object.value(key);
         newObject.insert(key, val);
     }
     return newObject;
 }
 
-QJsonObject uncompressKeysMojiKumiCodeToClassSet(const QJsonObject object) {
+QVariantHash uncompressKeysMojiKumiCodeToClassSet(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
 
     Q_FOREACH(QString key, object.keys()) {
-        QJsonValue val = object.value(key);
+        QVariant val = object.value(key);
         newObject.insert(key, val);
     }
     return newObject;
 }
 
-QJsonObject uncompressKeysFontSet(const QJsonObject object) {
+QVariantHash uncompressKeysFontSet(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
 
-    QJsonArray resources = object.value("/0").toArray();
-    QJsonArray newResources;
+    QVariantList resources = object.value("/0").toList();
+    QVariantList newResources;
 
     const QMap<QString, QString> keyList {{"/99", "/StreamTag"}, {"/97", "/UUID"}};
     const QMap<QString, QString> idKeyList {{"/0", "/Name"}, {"/2", "/Type"}, {"/4", "/MMAxis"}, {"/5", "/VersionString"}};
 
 
-    Q_FOREACH(QJsonValue val, resources) {
-        QJsonObject resource = val.toObject().value("/0").toObject();
-        QJsonObject newResource;
+    Q_FOREACH(QVariant val, resources) {
+        QVariantHash resource = val.toHash().value("/0").toHash();
+        QVariantHash newResource;
         Q_FOREACH(QString key, resource.keys()) {
             if (key == "/0") {
-                QJsonObject id = resource.value(key).toObject();
-                QJsonObject newId;
+                QVariantHash id = resource.value(key).toHash();
+                QVariantHash newId;
                 Q_FOREACH(QString key2, id.keys()) {
-                    QJsonValue idVal = id.value(key2);
+                    QVariant idVal = id.value(key2);
                     if (idKeyList.keys().contains(key2)) {
                         newId.insert(idKeyList.value(key2), idVal);
                     } else {
@@ -483,33 +483,33 @@ QJsonObject uncompressKeysFontSet(const QJsonObject object) {
             }
         }
 
-        newResources.append(QJsonObject({{"/Resource", newResource}}));
+        newResources.append(QVariantHash({{"/Resource", newResource}}));
     }
     newObject.insert("/Resources", newResources);
     return newObject;
 }
 
-QJsonObject uncompressKeysDocumentResources(const QJsonObject object) {
+QVariantHash uncompressKeysDocumentResources(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
 
     Q_FOREACH(QString key, object.keys()) {
-        QJsonValue val = object.value(key);
+        QVariant val = object.value(key);
 
          if (key == "/1") {
-             newObject.insert("/FontSet", uncompressKeysFontSet(val.toObject()));
+             newObject.insert("/FontSet", uncompressKeysFontSet(val.toHash()));
          } else if (key == "/2") {
-             newObject.insert("/MojiKumiCodeToClassSet", uncompressKeysMojiKumiCodeToClassSet(val.toObject()));
+             newObject.insert("/MojiKumiCodeToClassSet", uncompressKeysMojiKumiCodeToClassSet(val.toHash()));
          } else if (key == "/3") {
-             newObject.insert("/MojiKumiTableSet", uncompressKeysMojiKumiTableSet(val.toObject()));
+             newObject.insert("/MojiKumiTableSet", uncompressKeysMojiKumiTableSet(val.toHash()));
          } else if (key == "/4") {
-             newObject.insert("/KinsokuSet", uncompressKeysKinsokuSet(val.toObject()));
+             newObject.insert("/KinsokuSet", uncompressKeysKinsokuSet(val.toHash()));
          } else if (key == "/5") {
-             newObject.insert("/StyleSheetSet", uncompressKeysStyleSheetSet(val.toObject()));
+             newObject.insert("/StyleSheetSet", uncompressKeysStyleSheetSet(val.toHash()));
          } else if (key == "/6") {
-             newObject.insert("/ParagraphSheetSet", uncompressKeysParagraphSheetSet(val.toObject()));
+             newObject.insert("/ParagraphSheetSet", uncompressKeysParagraphSheetSet(val.toHash()));
          } else if (key == "/8") {
-             newObject.insert("/TextFrameSet", uncompressKeysTextFrameSet(val.toObject()));
+             newObject.insert("/TextFrameSet", uncompressKeysTextFrameSet(val.toHash()));
          } else if (key == "/9") {
              newObject.insert("/ListStyleSet", val);
          } else {
@@ -521,29 +521,29 @@ QJsonObject uncompressKeysDocumentResources(const QJsonObject object) {
 
 /*------- Document Objects ----------*/
 
-QJsonObject uncompressKeysTextModel(const QJsonObject object) {
+QVariantHash uncompressKeysTextModel(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
 
     const QMap<QString, QString> runStyleKeyList {{"/0", "/Name"}, {"/5", "/Parent"}, {"/97", "/UUID"}};
 
     Q_FOREACH(QString key, object.keys()) {
-        QJsonValue val = object.value(key);
+        QVariant val = object.value(key);
 
          if (key == "/0") {
              newObject.insert("/Text", val);
          } else if (key == "/5") {
-             QJsonArray array = val.toObject().value("/0").toArray();
-             QJsonArray newArray;
+             QVariantList array = val.toHash().value("/0").toList();
+             QVariantList newArray;
 
-             Q_FOREACH(QJsonValue run, array) {
-                 QJsonObject runDataSheet = run.toObject().value("/0").toObject().value("/0").toObject();
-                 QJsonObject newDataSheet;
+             Q_FOREACH(QVariant run, array) {
+                 QVariantHash runDataSheet = run.toHash().value("/0").toHash().value("/0").toHash();
+                 QVariantHash newDataSheet;
 
                  Q_FOREACH(QString key2, runDataSheet.keys()) {
-                     QJsonValue rdVal = runDataSheet.value(key2);
+                     QVariant rdVal = runDataSheet.value(key2);
                      if (key2 == "/5") {
-                         newDataSheet.insert("/Features", uncompressParagraphSheetFeatures(rdVal.toObject()));
+                         newDataSheet.insert("/Features", uncompressParagraphSheetFeatures(rdVal.toHash()));
                      } else if (key2 == "/6") {
                          newDataSheet.insert("/Parent", rdVal);
                      } else if (runStyleKeyList.keys().contains(key)) {
@@ -553,25 +553,25 @@ QJsonObject uncompressKeysTextModel(const QJsonObject object) {
                      }
                  }
 
-                 QJsonObject newSheet =  {{"/ParagraphSheet", newDataSheet}};
-                 QJsonObject newRunData = {{"/RunData", newSheet}};
-                 newRunData.insert("/Length", run.toObject().value("/1"));
+                 QVariantHash newSheet =  {{"/ParagraphSheet", newDataSheet}};
+                 QVariantHash newRunData = {{"/RunData", newSheet}};
+                 newRunData.insert("/Length", run.toHash().value("/1"));
                  newArray.append(newRunData);
              }
-             QJsonObject arrayParent = {{"/RunArray", newArray}};
+             QVariantHash arrayParent = {{"/RunArray", newArray}};
              newObject.insert("/ParagraphRun", arrayParent);
          } else if (key == "/6") {
-             QJsonArray array = val.toObject().value("/0").toArray();
-             QJsonArray newArray;
+             QVariantList array = val.toHash().value("/0").toList();
+             QVariantList newArray;
 
-             Q_FOREACH(QJsonValue run, array) {
-                 QJsonObject runDataSheet = run.toObject().value("/0").toObject().value("/0").toObject();
-                 QJsonObject newDataSheet;
+             Q_FOREACH(QVariant run, array) {
+                 QVariantHash runDataSheet = run.toHash().value("/0").toHash().value("/0").toHash();
+                 QVariantHash newDataSheet;
 
                  Q_FOREACH(QString key2, runDataSheet.keys()) {
-                     QJsonValue rdVal = runDataSheet.value(key2);
+                     QVariant rdVal = runDataSheet.value(key2);
                      if (key2 == "/6") {
-                         newDataSheet.insert("/Features", uncompressStyleSheetFeatures(rdVal.toObject()));
+                         newDataSheet.insert("/Features", uncompressStyleSheetFeatures(rdVal.toHash()));
                      } else if (key2 == "/5") {
                          newDataSheet.insert("/Parent", rdVal);
                      } else if (runStyleKeyList.keys().contains(key)) {
@@ -581,12 +581,12 @@ QJsonObject uncompressKeysTextModel(const QJsonObject object) {
                      }
                  }
 
-                 QJsonObject newSheet =  {{"/StyleSheet", newDataSheet}};
-                 QJsonObject newRunData = {{"/RunData", newSheet}};
-                 newRunData.insert("/Length", run.toObject().value("/1"));
+                 QVariantHash newSheet =  {{"/StyleSheet", newDataSheet}};
+                 QVariantHash newRunData = {{"/RunData", newSheet}};
+                 newRunData.insert("/Length", run.toHash().value("/1"));
                  newArray.append(newRunData);
              }
-             QJsonObject arrayParent = {{"/RunArray", newArray}};
+             QVariantHash arrayParent = {{"/RunArray", newArray}};
              newObject.insert("/StyleRun", arrayParent);
          } else if (key == "/10") {
              newObject.insert("/StorySheet", val);
@@ -597,11 +597,11 @@ QJsonObject uncompressKeysTextModel(const QJsonObject object) {
     return newObject;
 }
 
-QJsonObject uncompressStrikeDef(const QJsonObject object) {
+QVariantHash uncompressStrikeDef(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
     Q_FOREACH(QString key, object.keys()) {
-        QJsonValue val = object.value(key);
+        QVariant val = object.value(key);
 
          if (key == "/99") {
              newObject.insert("/StreamTag", val);
@@ -612,10 +612,10 @@ QJsonObject uncompressStrikeDef(const QJsonObject object) {
          } else if (key == "/5") {
              newObject.insert("/ChildProcession", val);
          } else if (key == "/6") {
-             QJsonArray array = val.toArray();
-             QJsonArray newArray;
-             Q_FOREACH(QJsonValue entry, array) {
-                 newArray.append(uncompressStrikeDef(entry.toObject()));
+             QVariantList array = val.toList();
+             QVariantList newArray;
+             Q_FOREACH(QVariant entry, array) {
+                 newArray.append(uncompressStrikeDef(entry.toHash()));
              }
              newObject.insert("/Children", newArray);
          } else {
@@ -625,27 +625,27 @@ QJsonObject uncompressStrikeDef(const QJsonObject object) {
     return newObject;
 }
 
-QJsonObject uncompressKeysTextView(const QJsonObject object) {
+QVariantHash uncompressKeysTextView(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
     Q_FOREACH(QString key, object.keys()) {
-        QJsonValue val = object.value(key);
+        QVariant val = object.value(key);
 
          if (key == "/0") {
-             QJsonArray array = val.toArray();
-             QJsonArray newArray;
-             Q_FOREACH(QJsonValue entry, array) {
-                 QJsonValue resource = entry.toObject().value("/0");
+             QVariantList array = val.toList();
+             QVariantList newArray;
+             Q_FOREACH(QVariant entry, array) {
+                 QVariant resource = entry.toHash().value("/0");
 
-                newArray.append(QJsonObject({{"/Resource", resource}}));
+                newArray.append(QVariantHash({{"/Resource", resource}}));
              }
 
              newObject.insert("/Frames", newArray);
          } else if (key == "/2") {
-             QJsonArray array = val.toArray();
-             QJsonArray newArray;
-             Q_FOREACH(QJsonValue entry, array) {
-                 newArray.append(uncompressStrikeDef(entry.toObject()));
+             QVariantList array = val.toList();
+             QVariantList newArray;
+             Q_FOREACH(QVariant entry, array) {
+                 newArray.append(uncompressStrikeDef(entry.toHash()));
              }
              newObject.insert("/Strikes", newArray);
          } else {
@@ -655,17 +655,17 @@ QJsonObject uncompressKeysTextView(const QJsonObject object) {
     return newObject;
 }
 
-QJsonObject uncompressKeysTextObject(const QJsonObject object) {
+QVariantHash uncompressKeysTextObject(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
 
     Q_FOREACH(QString key, object.keys()) {
-        QJsonValue val = object.value(key);
+        QVariant val = object.value(key);
 
          if (key == "/0") {
-             newObject.insert("/Model", uncompressKeysTextModel(val.toObject()));
+             newObject.insert("/Model", uncompressKeysTextModel(val.toHash()));
          } else if (key == "/1") {
-             newObject.insert("/View", uncompressKeysTextView(val.toObject()));
+             newObject.insert("/View", uncompressKeysTextView(val.toHash()));
          } else {
              newObject.insert(key, val);
          }
@@ -673,8 +673,8 @@ QJsonObject uncompressKeysTextObject(const QJsonObject object) {
     return newObject;
 }
 
-QJsonObject uncompressSmartQuoteSettings(const QJsonObject object) {
-    QJsonObject newObject;
+QVariantHash uncompressSmartQuoteSettings(const QVariantHash object) {
+    QVariantHash newObject;
     const QMap<QString, QString> keyList {
         {"/0", "/Language"},
         {"/1", "/OpenDoubleQuote"},
@@ -685,7 +685,7 @@ QJsonObject uncompressSmartQuoteSettings(const QJsonObject object) {
     };
 
     Q_FOREACH(QString key, object.keys()) {
-        QJsonValue val = object.value(key);
+        QVariant val = object.value(key);
         if (keyList.keys().contains(key)) {
             newObject.insert(keyList.value(key), val);
         } else {
@@ -695,17 +695,17 @@ QJsonObject uncompressSmartQuoteSettings(const QJsonObject object) {
     return newObject;
 }
 
-QJsonObject uncompressHiddenGlyphSettings(const QJsonObject object) {
-    QJsonObject newObject;
+QVariantHash uncompressHiddenGlyphSettings(const QVariantHash object) {
+    QVariantHash newObject;
 
     if (object.keys().contains("/0")) {
         newObject.insert("/AlternateGlyphFont", object.value("/0"));
     }
     if (object.keys().contains("/1")) {
-        QJsonArray array = object.value("/1").toArray();
-        QJsonArray newArray;
-        Q_FOREACH(QJsonValue entry, array) {
-            QJsonObject newEntry;
+        QVariantList array = object.value("/1").toList();
+        QVariantList newArray;
+        Q_FOREACH(QVariant entry, array) {
+            QVariantHash newEntry;
             newObject.insert("/WhitespaceCharacter", newEntry.value("/0"));
             newObject.insert("/AlternateCharacter", newEntry.value("/1"));
             newArray.append(newObject);
@@ -716,8 +716,8 @@ QJsonObject uncompressHiddenGlyphSettings(const QJsonObject object) {
     return newObject;
 }
 
-QJsonObject uncompressKeysDocumentSettings(const QJsonObject object) {
-    QJsonObject newObject;
+QVariantHash uncompressKeysDocumentSettings(const QVariantHash object) {
+    QVariantHash newObject;
     const QMap<QString, QString> keyList {
         //{"/0", "/HiddenGlyphFont"},
         {"/1", "/NormalStyleSheet"},
@@ -743,14 +743,14 @@ QJsonObject uncompressKeysDocumentSettings(const QJsonObject object) {
     };
 
     Q_FOREACH(QString key, object.keys()) {
-        QJsonValue val = object.value(key);
+        QVariant val = object.value(key);
         if (key == "/0") {
-            newObject.insert("/HiddenGlyphFont", uncompressHiddenGlyphSettings(val.toObject()));
+            newObject.insert("/HiddenGlyphFont", uncompressHiddenGlyphSettings(val.toHash()));
         } else if (key == "/9") {
-            QJsonArray array = val.toArray();
-            QJsonArray newArray;
-            Q_FOREACH(QJsonValue entry, array) {
-                newArray.append(uncompressSmartQuoteSettings(entry.toObject()));
+            QVariantList array = val.toList();
+            QVariantList newArray;
+            Q_FOREACH(QVariant entry, array) {
+                newArray.append(uncompressSmartQuoteSettings(entry.toHash()));
             }
             newObject.insert("/SmartQuoteSets", newArray);
         } else if (keyList.keys().contains(key)) {
@@ -763,25 +763,25 @@ QJsonObject uncompressKeysDocumentSettings(const QJsonObject object) {
     return newObject;
 }
 
-QJsonObject uncompressKeysDocumentObjects(const QJsonObject object) {
+QVariantHash uncompressKeysDocumentObjects(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
-    QJsonObject newObject;
+    QVariantHash newObject;
     Q_FOREACH(QString key, object.keys()) {
-        QJsonValue val = object.value(key);
+        QVariant val = object.value(key);
 
          if (key == "/0") {
-             newObject.insert("/DocumentSettings", uncompressKeysDocumentSettings(val.toObject()));
+             newObject.insert("/DocumentSettings", uncompressKeysDocumentSettings(val.toHash()));
          } else if (key == "/1") {
-             QJsonArray array = val.toArray();
-             QJsonArray newArray;
-             Q_FOREACH(QJsonValue entry, array) {
-                 newArray.append(uncompressKeysTextObject(entry.toObject()));
+             QVariantList array = val.toList();
+             QVariantList newArray;
+             Q_FOREACH(QVariant entry, array) {
+                 newArray.append(uncompressKeysTextObject(entry.toHash()));
              }
              newObject.insert("/TextObjects", newArray);
          } else if (key == "/2") {
-             newObject.insert("/OriginalNormalStyleFeatures", uncompressStyleSheetFeatures(val.toObject()));
+             newObject.insert("/OriginalNormalStyleFeatures", uncompressStyleSheetFeatures(val.toHash()));
          } else if (key == "/3") {
-             newObject.insert("/OriginalNormalParagraphFeatures", uncompressParagraphSheetFeatures(val.toObject()));
+             newObject.insert("/OriginalNormalParagraphFeatures", uncompressParagraphSheetFeatures(val.toHash()));
          } else {
              newObject.insert(key, val);
          }
@@ -790,21 +790,18 @@ QJsonObject uncompressKeysDocumentObjects(const QJsonObject object) {
     return newObject;
 }
 
-QJsonDocument KisTxt2Utils::uncompressKeys(QJsonDocument doc)
+QVariantHash KisTxt2Utils::uncompressKeys(QVariantHash doc)
 {
-    QJsonDocument newDoc;
 
-    QJsonObject root = doc.object();
-    QJsonObject newRoot;
-    Q_FOREACH(QString key, root.keys()) {
+    QVariantHash newDoc;
+    Q_FOREACH(QString key, doc.keys()) {
         if (key == "/0") {
-            newRoot.insert("/DocumentResources", uncompressKeysDocumentResources(root.value(key).toObject()));
+            newDoc.insert("/DocumentResources", uncompressKeysDocumentResources(doc.value(key).toHash()));
         } else if (key == "/1") {
-            newRoot.insert("/DocumentObjects", uncompressKeysDocumentObjects(root.value(key).toObject()));
+            newDoc.insert("/DocumentObjects", uncompressKeysDocumentObjects(doc.value(key).toHash()));
         } else {
-            newRoot.insert(key, root.value(key));
+            newDoc.insert(key, doc.value(key));
         }
     }
-    newDoc.setObject(newRoot);
     return newDoc;
 }

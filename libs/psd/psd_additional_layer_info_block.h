@@ -35,7 +35,7 @@
 #include <asl/kis_asl_callback_object_catcher.h>
 #include <cos/kis_cos_parser.h>
 #include <cos/kis_cos_writer.h>
-#include <QJsonDocument>
+#include <QVariantHash>
 
 #include "psd_header.h"
 
@@ -822,7 +822,7 @@ struct KRITAPSD_EXPORT psd_layer_type_tool {
 struct KRITAPSD_EXPORT psd_layer_type_shape {
     QTransform transform;
 
-    QJsonDocument engineData;
+    QVariantHash engineData;
     QRectF bounds; // bounding box of the text in pixels, relative to first baseline, absent in point text.
     QRectF boundingBox; //no clue, maybe relative to topleft of first glyph(?), same size as bounds, absent in point text.
     int textIndex;
@@ -895,7 +895,7 @@ struct KRITAPSD_EXPORT psd_layer_type_shape {
             w.leaveDescriptor();
         }
         w.writeInteger("TextIndex", textIndex);
-        QByteArray ba = KisCosWriter::writeCosFromJSON(engineData);
+        QByteArray ba = KisCosWriter::writeCosFromVariantHash(engineData);
         w.writeRawData("EngineData", &ba);
 
         w.leaveDescriptor();
@@ -1194,7 +1194,7 @@ public:
     QDomDocument layerStyleXml;
 
     QVector<QDomDocument> embeddedPatterns;
-    QJsonDocument txt2Data;
+    QVariantHash txt2Data;
 
     quint16 labelColor{0}; // layer color.
 

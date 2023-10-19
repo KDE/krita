@@ -6,10 +6,11 @@
 #include "kis_cos_parser.h"
 
 #include <QTextCodec>
-#include <QJsonObject>
-#include <QJsonValue>
-#include <QJsonArray>
+#include <QVariantHash>
+#include <QVariantList>
 #include <QBuffer>
+#include <QVariant>
+#include <QDebug>
 
 enum {
     Null = 0x00,
@@ -52,7 +53,7 @@ void eatSpace(QIODevice &dev) {
     }
 }
 
-bool parseName(QIODevice &dev, QJsonValue &val) {
+bool parseName(QIODevice &dev, QVariant &val) {
     //qDebug() << Q_FUNC_INFO;
     char c;
     dev.getChar(&c);
@@ -66,7 +67,7 @@ bool parseName(QIODevice &dev, QJsonValue &val) {
     if (c == BeginName) {
         dev.ungetChar(c);
     }
-    val = QJsonValue(name);
+    val = QVariant(name);
     return true;
 }
 
@@ -81,7 +82,7 @@ const QMap<char, char> escaped = {
     {'\\', 0x5c} // reverse solidus/backslash
 };
 
-bool parseString(QIODevice &dev, QJsonValue &val) {
+bool parseString(QIODevice &dev, QVariant &val) {
     //qDebug() << Q_FUNC_INFO;
     char c;
     dev.getChar(&c);
@@ -134,7 +135,7 @@ bool parseString(QIODevice &dev, QJsonValue &val) {
     return true;
 }
 
-bool parseHexString(QIODevice &dev, QJsonValue &val) {
+bool parseHexString(QIODevice &dev, QVariant &val) {
     //qDebug() << Q_FUNC_INFO;
     char c;
     dev.getChar(&c);
@@ -149,9 +150,10 @@ bool parseHexString(QIODevice &dev, QJsonValue &val) {
     return true;
 }
 
-bool parseNumber(QIODevice &dev, QJsonValue &val) {
+bool parseNumber(QIODevice &dev, QVariant &val) {
     //qDebug() << Q_FUNC_INFO;
     char c;
+    bool isDouble = false;
     dev.getChar(&c);
     QString number;
     if (c == '-' || c == '+') {
@@ -163,6 +165,7 @@ bool parseNumber(QIODevice &dev, QJsonValue &val) {
         dev.getChar(&c);
     }
     if (c == '.') {
+        isDouble = true;
         number.append(c);
         dev.getChar(&c);
         while (c >= '0' && c <= '9') {
@@ -173,19 +176,23 @@ bool parseNumber(QIODevice &dev, QJsonValue &val) {
     //qDebug() << number << c;
 
     bool ok;
-    val = number.toDouble(&ok);
+    if (isDouble) {
+        val = number.toDouble(&ok);
+    } else {
+        val = number.toInt(&ok);
+    }
     return ok;
 }
 
-bool KisCosParser::parseObject(QIODevice &dev, QJsonObject &object) {
+bool KisCosParser::parseObject(QIODevice &dev, QVariantHash &object) {
     //qDebug() << Q_FUNC_INFO;
     eatSpace(dev);
 
-    QJsonValue key;
-    QJsonValue val;
+    QVariant key;
+    QVariant val;
     while (parseValue(dev, key)) {
-        object.insert(key.toString(), QJsonValue());
-        if (key.isString() && parseValue(dev, val)) {
+        object.insert(key.toString(), QVariant());
+        if (key.type() == QVariant::String && parseValue(dev, val)) {
             object.insert(key.toString(), val);
         } else {
             return false;
@@ -203,12 +210,12 @@ bool KisCosParser::parseObject(QIODevice &dev, QJsonObject &object) {
     return true;
 }
 
-bool KisCosParser::parseArray(QIODevice &dev, QJsonArray &array)
+bool KisCosParser::parseArray(QIODevice &dev, QVariantList &array)
 {
     //qDebug() << Q_FUNC_INFO;
     eatSpace(dev);
 
-    QJsonValue val;
+    QVariant val;
     while (parseValue(dev, val)) {
         array.append(val);
     }
@@ -223,7 +230,7 @@ bool KisCosParser::parseArray(QIODevice &dev, QJsonArray &array)
     return true;
 }
 
-bool KisCosParser::parseValue(QIODevice &dev, QJsonValue &val) {
+bool KisCosParser::parseValue(QIODevice &dev, QVariant &val) {
     //qDebug() << Q_FUNC_INFO;
 
     eatSpace(dev);
@@ -234,7 +241,7 @@ bool KisCosParser::parseValue(QIODevice &dev, QJsonValue &val) {
         char c2;
         dev.peek(&c2, 1);
         if (c2 == BeginObject) {
-            QJsonObject object = QJsonObject();
+            QVariantHash object = QVariantHash();
             dev.skip(1);
             if (!parseObject(dev, object)) {
                 return false;
@@ -246,7 +253,7 @@ bool KisCosParser::parseValue(QIODevice &dev, QJsonValue &val) {
             }
         }
     } else if (c == BeginArray) {
-        QJsonArray array = QJsonArray();
+        QVariantList array = QVariantList();
         if (!parseArray(dev, array)) {
             return false;
         }
@@ -283,7 +290,7 @@ bool KisCosParser::parseValue(QIODevice &dev, QJsonValue &val) {
         QByteArray t;
         dev.read(t.data(), 3);
         if (t[0] == 'u' && t[1] == 'l' && t[2] == 'l') {
-            val = QJsonValue();
+            val = QVariant();
         } else {
             return false;
         }
@@ -297,11 +304,10 @@ bool KisCosParser::parseValue(QIODevice &dev, QJsonValue &val) {
     return true;
 }
 
-QJsonDocument KisCosParser::parseCosToJson(QByteArray *ba)
+QVariantHash KisCosParser::parseCosToJson(QByteArray *ba)
 {
-    QJsonValue root;
+    QVariant root;
     QBuffer dev(ba);
-    //qDebug() << *ba;
     if (dev.open(QIODevice::ReadOnly)) {
 
         eatSpace(dev);
@@ -313,7 +319,7 @@ QJsonDocument KisCosParser::parseCosToJson(QByteArray *ba)
                 qDebug() << "dev not at end";
             }
         } else {
-            QJsonObject b;
+            QVariantHash b;
             if (!parseObject(dev, b)) {
                 qDebug() << "dev not at end";
             }
@@ -321,5 +327,5 @@ QJsonDocument KisCosParser::parseCosToJson(QByteArray *ba)
         }
         dev.close();
     }
-    return QJsonDocument(root.toObject());
+    return root.toHash();
 }

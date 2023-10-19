@@ -13,7 +13,7 @@
 class KRITAPSDUTILS_EXPORT KisCosWriter
 {
 public:
-    static QByteArray writeCosFromJSON(QJsonDocument doc);
+    static QByteArray writeCosFromVariantHash(QVariantHash doc);
 };
 
 #endif // KISCOSWRITER_H

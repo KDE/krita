@@ -20,10 +20,10 @@
 #include <QStringList>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
-#include <QJsonDocument>
 #include <QVariantList>
 #include <QVariantHash>
 #include <QVariant>
+#include <QJsonObject>
 #include <QTextCodec>
 #include <QtMath>
 
@@ -1707,11 +1707,14 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
     
 
     QVariantHash root = tySh;
-    //qDebug() << "Parsed JSON Object" << root;
+    //qDebug() << "Parsed JSON Object" << QJsonObject::fromVariantHash(root);
     bool loadFallback = txt2.isEmpty();
     QVariantHash docObjects = txt2.value("/DocumentObjects").toHash();
 
-    QVariantHash textObject = docObjects.value("/TextObjects").toList().at(textIndex).toHash();
+    QVariantHash textObject;
+    if (!loadFallback) {
+        textObject = docObjects.value("/TextObjects").toList().at(textIndex).toHash();
+    }
     if (textObject.isEmpty() || loadFallback) {
         textObject = root["/EngineDict"].toHash();
         loadFallback = true;
@@ -2443,16 +2446,16 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
 
     QVariantHash kinsokuHard; // line-break: 'strict'
     kinsokuHard["/Name"] = "PhotoshopKinsokuHard";
-    kinsokuHard["/Hanging"] = "、。.,";
-    kinsokuHard["/Keep"] = "―‥";
-    kinsokuHard["/NoEnd"] = "‘“（〔［｛〈〰రะက尨[{￥＄£＠§〒＃";
-    kinsokuHard["/NoStart"] = "、。，．・：；？！ー―’”）〕］｝〉》」』】ヽヾゝゞ々ぁぃぅぇぉっゃゅょゎァィゥェォッャュョヮヵヶ゛゜?!\\⤀崀紀Ⰰ⸀㨀㬡̡ऀꋿԠ";
+    kinsokuHard["/Hanging"] = "、。，．";
+    kinsokuHard["/Keep"] = "—‥…";
+    kinsokuHard["/NoEnd"] = "([{£§‘“〈《「『【〒〔＃＄（＠［｛￥";
+    kinsokuHard["/NoStart"] = "!),.:;?]}¢—’”‰℃℉、。々〉》」』】〕ぁぃぅぇぉっゃゅょゎ゛゜ゝゞァィゥェォッャュョヮヵヶ・ーヽヾ！％），．：；？］｝";
     QVariantHash kinsokuSoft;  // line-break: 'normal'
     kinsokuSoft["/Name"] = "PhotoshopKinsokuSoft";
-    kinsokuSoft["/Hanging"] = "、。.,";
-    kinsokuSoft["/Keep"] = "―‥";
-    kinsokuSoft["/NoEnd"] = "‘“（〔［｛〈〰రะ";
-    kinsokuSoft["/NoStart"] = "、。，．・：；？！’”）〕］｝〉》」』】ヽヾゝゞ々";
+    kinsokuSoft["/Hanging"] = "、。，．";
+    kinsokuSoft["/Keep"] = "—‥…";
+    kinsokuSoft["/NoEnd"] = "‘“〈《「『【〔（［｛";
+    kinsokuSoft["/NoStart"] = "’”、。々〉》」』】〕ゝゞ・ヽヾ！），．：；？］｝";
     resourceDict["/KinsokuSet"] = QVariantList({kinsokuHard, kinsokuSoft});
     //Mojikumi is the same kind of thing as CSS-Text-4 text-spacing
     // 1 = text-spacing-trim: trim-auto

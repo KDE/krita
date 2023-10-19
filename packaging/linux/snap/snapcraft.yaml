@@ -5,7 +5,6 @@ grade: stable
 adopt-info: krita
 base: core22
 confinement: strict
-version: 5.2
 apps:
     krita:
         common-id: org.kde.krita
@@ -154,63 +153,91 @@ parts:
         - -DBUILD_KRITA_QT_DESIGNER_PLUGINS=OFF
         build-packages:
         - cmake
-        - libboost-dev
+        - gettext
+        - kseexpr-dev
         - libboost-system-dev
+        - libcurl4-gnutls-dev
         - libeigen3-dev
+        - libexiv2-dev
         - libfftw3-dev
         - libgif-dev
-        - libglew-dev
-        - libgsf-1-dev
         - libgsl-dev
+        - libharfbuzz-dev
+        - libheif-dev
+        - libimmer-dev
         - libjpeg-dev
+        - libkf5kdcraw-dev
+        - liblager-dev
+        - liblcms2-dev
+        - libmypaint-dev
         - libopencolorio-dev
         - libopenexr-dev
-        - libopenimageio-dev
         - libopenjp2-7-dev
+        - libpng-dev
+        - libpoppler-qt5-dev
+        - libpostproc-dev
         - libquazip5-dev
         - libraw-dev
-        - libtiff-dev
-        - libvc-dev
-        - libx11-dev
-        - libxi-dev
-        - vc-dev
-        - libmypaint-dev
-        - libwebp-dev
-        - python3-dev
+        - libraqm-dev
+        - libswresample-dev
         - libswscale-dev
-        - libjpeg-turbo8-dev
-        - pyqt5-dev
+        - libtiff-dev
+        - libturbojpeg0-dev
+        - libunibreak-dev
+        - libwebp-dev
+        - libxcb-util0-dev
+        - libxcb1-dev
+        - libxi-dev
         - libxsimd-dev
-        - libpoppler-qt5-dev
-        - libheif-dev
+        - libzug-dev
+        - pkg-config
+        - pyqt5-dev
+        - pyqt5-dev-tools
+        - python3-sip-dev
+        - vc-dev
+        - xtl-dev
+        - zlib1g-dev
         build-snaps:
         - ffmpeg-2204
         parse-info:
         - usr/share/metainfo/org.kde.krita.appdata.xml
         stage-packages:
-        - freeglut3
-        - libboost-system1.74.0
+        - qml-module-qtquick2
+        - libc6
+        - libexiv2-27
         - libfftw3-double3
+        - libfontconfig1
+        - libfreetype6
+        - libgcc-s1
         - libgif7
         - libgsl27
-        - libgslcblas0
+        - libharfbuzz0b
+        - libheif1
         - libilmbase25
+        - libjpeg-turbo8
+        - libkf5kdcraw5
+        - libkseexpr4
+        - libkseexprui4
+        - liblcms2-2
+        - libmypaint-1.5-1
         - libopencolorio1v5
         - libopenexr25
+        - libopenjp2-7
+        - libpng16-16
+        - libpoppler-qt5-1
+        - libpython3.10
         - libquazip5-1
-        - libraw20
-        - libtinyxml2.6.2v5
-        - libxi6
-        - libyaml-cpp0.7
+        - libraqm0
+        - libstdc++6
+        - libtiff5
+        - libturbojpeg
+        - libunibreak5
+        - libwebp7
+        - libwebpdemux2
+        - libwebpmux3
+        - libx11-6
         - zlib1g
-        - libmypaint-1.5-1
-        - ffmpeg
-        - libglu1-mesa
-        - libslang2
-        - webp
-        - libjpeg-turbo8
-        - libde265-0
-        - libheif1
+        - colord
         stage-snaps:
         - ffmpeg-2204
         prime:

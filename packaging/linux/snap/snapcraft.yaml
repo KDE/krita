@@ -252,7 +252,7 @@ parts:
         - -usr/lib/aspell/*
         override-pull: |
             craftctl default
-            patch -p1 < ../../patches/src/patches/krita_dont_use_native_file_chooser.patch
+            patch -p1 < ../../patches/src/packaging/linux/snap/patches/krita_dont_use_native_file_chooser.patch
         build-environment: &id005
         - *id001
         - *id002

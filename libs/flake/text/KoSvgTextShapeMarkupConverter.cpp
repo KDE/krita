@@ -1711,10 +1711,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
     bool loadFallback = txt2.isEmpty();
     QVariantHash docObjects = txt2.value("/DocumentObjects").toHash();
 
-    QVariantHash textObject;
-    if (!loadFallback) {
-        textObject = docObjects.value("/TextObjects").toList().at(textIndex).toHash();
-    }
+    QVariantHash textObject = docObjects.value("/TextObjects").toList().value(textIndex).toHash();
     if (textObject.isEmpty() || loadFallback) {
         textObject = root["/EngineDict"].toHash();
         loadFallback = true;
@@ -1725,15 +1722,17 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
     }
 
     QMap<int, font_info_psd> fontNames;
-    QVariantHash resourceDict = loadFallback? root["/DocumentResources"].toHash(): txt2["/DocumentResources"].toHash();
+    QVariantHash resourceDict = loadFallback? root.value("/DocumentResources").toHash(): txt2.value("/DocumentResources").toHash();
     if (resourceDict.isEmpty()) {
         d->errors << "No engine dict found in PSD engine data";
         return false;
     } else {
         // PSD only stores the postscript name, and we'll need a bit more information than that.
-        QVariantList fonts = loadFallback? resourceDict["/FontSet"].toList(): resourceDict["/FontSet"].toHash()["/Resources"].toList();
+        QVariantList fonts = loadFallback? resourceDict.value("/FontSet").toList()
+                                         : resourceDict.value("/FontSet").toHash().value("/Resources").toList();
         for (int i = 0; i < fonts.size(); i++) {
-            QVariantHash font = loadFallback? fonts.at(i).toHash(): fonts.at(i).toHash()["/Resource"].toHash()["/Identifier"].toHash();
+            QVariantHash font = loadFallback? fonts.value(i).toHash()
+                                            : fonts.value(i).toHash().value("/Resource").toHash().value("/Identifier").toHash();
             //qDebug() << font;
             font_info_psd fontInfo;
             QString postScriptName = font.value("/Name").toString();
@@ -1763,104 +1762,109 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
     int textType = 0; ///< 0 = point text, 1 = paragraph text (including text in shape), 2 = text on path.
     bool reversed = false;
     if (loadFallback) {
-        QVariantHash rendered = textObject["/Rendered"].toHash();
+        QVariantHash rendered = textObject.value("/Rendered").toHash();
         // rendering info...
         if (!rendered.isEmpty()) {
-            QVariantHash shapeChild = rendered["/Shapes"].toHash()["/Children"].toList()[0].toHash();
-            textType = shapeChild["/ShapeType"].toInt();
+            QVariantHash shapeChild = rendered.value("/Shapes").toHash().value("/Children").toList()[0].toHash();
+            textType = shapeChild.value("/ShapeType").toInt();
             if (textType == 1) {
-                QVariantList BoxBounds = shapeChild["/Cookie"].toHash()["/Photoshop"].toHash()["/BoxBounds"].toList();
-                bounds = QRectF(BoxBounds[0].toDouble(), BoxBounds[1].toDouble(), BoxBounds[2].toDouble(), BoxBounds[3].toDouble());
-                bounds = scaleToPt.mapRect(bounds);
-                if (isHorizontal) {
-                    inlineSizeString = " inline-size:"+QString::number(bounds.width())+";";
-                } else {
-                    inlineSizeString = " inline-size:"+QString::number(bounds.height())+";";
+                QVariantList BoxBounds = shapeChild.value("/Cookie").toHash().value("/Photoshop").toHash().value("/BoxBounds").toList();
+                if (BoxBounds.size() == 4) {
+                    bounds = QRectF(BoxBounds[0].toDouble(), BoxBounds[1].toDouble(), BoxBounds[2].toDouble(), BoxBounds[3].toDouble());
+                    bounds = scaleToPt.mapRect(bounds);
+                    if (isHorizontal) {
+                        inlineSizeString = " inline-size:"+QString::number(bounds.width())+";";
+                    } else {
+                        inlineSizeString = " inline-size:"+QString::number(bounds.height())+";";
+                    }
                 }
             }
             qDebug() << bounds;
         }
     } else {
-        QVariantHash view = textObject["/View"].toHash();
+        QVariantHash view = textObject.value("/View").toHash();
         // todo: if multiple frames in frames array, there's multiple shapes in shape-inside.
-        int textFrameIndex = view["/Frames"].toList()[0].toHash()["/Resource"].toInt();
-        QVariantList textFrameSet = resourceDict["/TextFrameSet"].toHash()["/Resources"].toList();
-        QVariantHash textFrame = textFrameSet.at(textFrameIndex).toHash()["/Resource"].toHash();
+        QVariantList frames = view.value("/Frames").toList();
+        if (!frames.isEmpty()) {
+            int textFrameIndex = view.value("/Frames").toList().value(0).toHash().value("/Resource").toInt();
+            QVariantList textFrameSet = resourceDict.value("/TextFrameSet").toHash().value("/Resources").toList();
+            QVariantHash textFrame = textFrameSet.at(textFrameIndex).toHash().value("/Resource").toHash();
 
 
-        if (!textFrame.isEmpty()) {
-            textType = textFrame["/Data"].toHash()["/Type"].toInt();
-            //qDebug() << textFrame;
+            if (!textFrame.isEmpty()) {
+                textType = textFrame["/Data"].toHash()["/Type"].toInt();
+                //qDebug() << textFrame;
 
-            if (textType > 0) {
-                KoPathShape *textCurve = new KoPathShape();
-                QVariantHash data = textFrame["/Data"].toHash();
-                QVariantList points = textFrame["/Bezier"].toHash()["/Points"].toList();
-                QVariantList range = data["/TextOnPathTRange"].toList();
-                QVariantList fm = data["/FrameMatrix"].toList();
-                shapePadding = data["/Spacing"].toDouble();
-                QVariantHash pathData = data["/PathData"].toHash();
-                reversed = pathData["/Flip"].toBool();
+                if (textType > 0) {
+                    KoPathShape *textCurve = new KoPathShape();
+                    QVariantHash data = textFrame.value("/Data").toHash();
+                    QVariantList points = textFrame.value("/Bezier").toHash().value("/Points").toList();
+                    QVariantList range = data.value("/TextOnPathTRange").toList();
+                    QVariantList fm = data.value("/FrameMatrix").toList();
+                    shapePadding = data.value("/Spacing").toDouble();
+                    QVariantHash pathData = data.value("/PathData").toHash();
+                    reversed = pathData.value("/Flip").toBool();
 
-                QVariant lineOrientation = data["/LineOrientation"];
-                if (!lineOrientation.isNull()) {
-                    if (lineOrientation.toInt() == 2) {
-                        isHorizontal = false;
+                    QVariant lineOrientation = data.value("/LineOrientation");
+                    if (!lineOrientation.isNull()) {
+                        if (lineOrientation.toInt() == 2) {
+                            isHorizontal = false;
+                        }
                     }
-                }
-                QTransform frameMatrix = scaleToPt;
-                if (fm.size() == 6) {
-                    frameMatrix = QTransform(fm[0].toDouble(), fm[1].toDouble(), fm[2].toDouble(), fm[3].toDouble(), fm[4].toDouble(), fm[5].toDouble());
-                    frameMatrix = frameMatrix * scaleToPt;
-                }
+                    QTransform frameMatrix = scaleToPt;
+                    if (fm.size() == 6) {
+                        frameMatrix = QTransform(fm[0].toDouble(), fm[1].toDouble(), fm[2].toDouble(), fm[3].toDouble(), fm[4].toDouble(), fm[5].toDouble());
+                        frameMatrix = frameMatrix * scaleToPt;
+                    }
 
-                int length = points.size()/8;
+                    int length = points.size()/8;
 
-                QPointF startPoint;
-                QPointF endPoint;
-                for (int i = 0; i < length; i++) {
-                    int iAdjust = i*8;
-                    QPointF p1(points[iAdjust  ].toDouble(), points[iAdjust+1].toDouble());
-                    QPointF p2(points[iAdjust+2].toDouble(), points[iAdjust+3].toDouble());
-                    QPointF p3(points[iAdjust+4].toDouble(), points[iAdjust+5].toDouble());
-                    QPointF p4(points[iAdjust+6].toDouble(), points[iAdjust+7].toDouble());
+                    QPointF startPoint;
+                    QPointF endPoint;
+                    for (int i = 0; i < length; i++) {
+                        int iAdjust = i*8;
+                        QPointF p1(points[iAdjust  ].toDouble(), points[iAdjust+1].toDouble());
+                        QPointF p2(points[iAdjust+2].toDouble(), points[iAdjust+3].toDouble());
+                        QPointF p3(points[iAdjust+4].toDouble(), points[iAdjust+5].toDouble());
+                        QPointF p4(points[iAdjust+6].toDouble(), points[iAdjust+7].toDouble());
 
-                    if (i == 0 || endPoint != frameMatrix.map(p1)) {
-                        if (endPoint == startPoint && i > 0) {
+                        if (i == 0 || endPoint != frameMatrix.map(p1)) {
+                            if (endPoint == startPoint && i > 0) {
+                                textCurve->closeMerge();
+                            }
+                            textCurve->moveTo(frameMatrix.map(p1));
+                            startPoint = frameMatrix.map(p1);
+                        }
+                        if (p1==p2 && p3==p4) {
+                            textCurve->lineTo(frameMatrix.map(p4));
+                        } else {
+                            textCurve->curveTo(frameMatrix.map(p2), frameMatrix.map(p3), frameMatrix.map(p4));
+                        }
+                        endPoint = frameMatrix.map(p4);
+                    }
+                    if (points.size() > 8) {
+                        if (endPoint == startPoint) {
                             textCurve->closeMerge();
                         }
-                        textCurve->moveTo(frameMatrix.map(p1));
-                        startPoint = frameMatrix.map(p1);
+                        textShape = textCurve;
                     }
-                    if (p1==p2 && p3==p4) {
-                        textCurve->lineTo(frameMatrix.map(p4));
-                    } else {
-                        textCurve->curveTo(frameMatrix.map(p2), frameMatrix.map(p3), frameMatrix.map(p4));
-                    }
-                    endPoint = frameMatrix.map(p4);
-                }
-                if (points.size() > 8) {
-                    if (endPoint == startPoint) {
-                        textCurve->closeMerge();
-                    }
-                    textShape = textCurve;
-                }
-                if (!range.isEmpty()) {
-                    textPathStartOffset = range[0].toDouble();
-                    int segment = qFloor(textPathStartOffset);
-                    double t = textPathStartOffset - segment;
-                    double length = 0;
-                    double totalLength = 0;
-                    for (int i=0; i<textShape->subpathPointCount(0); i++) {
-                        double l = textShape->segmentByIndex(KoPathPointIndex(0, i)).length();
-                        totalLength += l;
-                        if (i < segment) {
-                            length += l;
-                        } else if (i == segment) {
-                            length += (l*t);
+                    if (!range.isEmpty()) {
+                        textPathStartOffset = range[0].toDouble();
+                        int segment = qFloor(textPathStartOffset);
+                        double t = textPathStartOffset - segment;
+                        double length = 0;
+                        double totalLength = 0;
+                        for (int i=0; i<textShape->subpathPointCount(0); i++) {
+                            double l = textShape->segmentByIndex(KoPathPointIndex(0, i)).length();
+                            totalLength += l;
+                            if (i < segment) {
+                                length += l;
+                            } else if (i == segment) {
+                                length += (l*t);
+                            }
                         }
+                        textPathStartOffset = (length/totalLength) * 100.0;
                     }
-                    textPathStartOffset = (length/totalLength) * 100.0;
                 }
             }
         }
@@ -1899,18 +1903,19 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
 
     svgWriter.writeStartElement("text");
 
-    QVariantHash editor = loadFallback? textObject["/Editor"].toHash() : textObject["/Model"].toHash();
+    QVariantHash editor = loadFallback? textObject.value("/Editor").toHash() : textObject.value("/Model").toHash();
     QString text = "";
     if (editor.isEmpty()) {
         d->errors << "No editor dict found in PSD engine data";
         return false;
     } else {
-        text = editor["/Text"].toString();
+        text = editor.value("/Text").toString();
         text.replace("\r", "\n");
     }
 
     int antiAliasing = 0;
-        antiAliasing = loadFallback? textObject["/AntiAlias"].toInt() : textObject["/StorySheet"].toHash()["/AntiAlias"].toInt();
+        antiAliasing = loadFallback? textObject.value("/AntiAlias").toInt()
+                                   : textObject.value("/StorySheet").toHash().value("/AntiAlias").toInt();
     //0 = None, 1 = Sharp, 2 = Crisp, 3 = Strong, 4 = Smooth
     if (antiAliasing == 4) {
         svgWriter.writeAttribute("text-rendering", "auto");
@@ -1918,13 +1923,13 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
         svgWriter.writeAttribute("text-rendering", "OptimizeSpeed");
     }
 
-    QVariantHash paragraphRun = loadFallback? textObject["/ParagraphRun"].toHash() : editor["/ParagraphRun"].toHash();
+    QVariantHash paragraphRun = loadFallback? textObject.value("/ParagraphRun").toHash() : editor.value("/ParagraphRun").toHash();
     if (!paragraphRun.isEmpty()) {
         //QVariantList runLengthArray = paragraphRun.value("RunLengthArray").toList();
-        QVariantList runArray = paragraphRun["/RunArray"].toList();
+        QVariantList runArray = paragraphRun.value("/RunArray").toList();
         QString features = loadFallback? "/Properties": "/Features";
-        QVariantHash style = loadFallback? runArray.at(0).toHash() : runArray.at(0).toHash()["/RunData"].toHash();
-        QVariantHash parasheet = loadFallback? runArray[0].toHash()["/ParagraphSheet"].toHash():
+        QVariantHash style = loadFallback? runArray.value(0).toHash() : runArray.value(0).toHash().value("/RunData").toHash();
+        QVariantHash parasheet = loadFallback? runArray.value(0).toHash()["/ParagraphSheet"].toHash():
                 runArray.at(0).toHash()["/RunData"].toHash()["/ParagraphSheet"].toHash();
         QVariantHash styleSheet = parasheet[features].toHash();
 

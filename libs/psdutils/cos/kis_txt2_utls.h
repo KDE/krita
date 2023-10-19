@@ -37,6 +37,24 @@ public:
      * @return documented with keys translated to names.
      */
     static QVariantHash uncompressKeys(QVariantHash doc);
+
+    /**
+     * @brief defaultTxt2
+     * Generate a default txt2 varianthash. This includes stuff like Kinsoku sets
+     * default fonts and other things that might be expected but Krita doesn't write itself.
+     * @return a default txt2 hash.
+     */
+    static QVariantHash defaultTxt2();
+
+    /**
+     * @brief tyShFromTxt2
+     * Txt2 is more or less a superset of tySh, so this function allows
+     * generating the tySh data from a Txt2 hash.
+     * @param Txt2 the global txt2 hash.
+     * @param textIndex the text object index for which to generate the tySh data.
+     * @return the tySh variantHash
+     */
+    static QVariantHash tyShFromTxt2(const QVariantHash Txt2, int textIndex);
 };
 
 #endif // KIS_TXT2_UTLS_H

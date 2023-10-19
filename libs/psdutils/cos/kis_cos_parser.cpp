@@ -125,6 +125,8 @@ bool parseString(QIODevice &dev, QVariant &val) {
         dev.getChar(&c);
     }
 
+    //qDebug() << text;
+
     if (text.startsWith(ByteOrderMark)) {
         QTextCodec *Utf16Codec = QTextCodec::codecForName("UTF-16BE");
         val = Utf16Codec->toUnicode(text);
@@ -184,13 +186,14 @@ bool parseNumber(QIODevice &dev, QVariant &val) {
     return ok;
 }
 
-bool KisCosParser::parseObject(QIODevice &dev, QVariantHash &object) {
+bool KisCosParser::parseObject(QIODevice &dev, QVariantHash &object, bool checkEnd) {
     //qDebug() << Q_FUNC_INFO;
     eatSpace(dev);
 
     QVariant key;
     QVariant val;
     while (parseValue(dev, key)) {
+        //qDebug() << key;
         object.insert(key.toString(), QVariant());
         if (key.type() == QVariant::String && parseValue(dev, val)) {
             object.insert(key.toString(), val);
@@ -203,7 +206,7 @@ bool KisCosParser::parseObject(QIODevice &dev, QVariantHash &object) {
     if (c == EndObject) {
         dev.skip(1);
         return true;
-    } else {
+    } else if (checkEnd) {
         return false;
     }
 
@@ -320,8 +323,8 @@ QVariantHash KisCosParser::parseCosToJson(QByteArray *ba)
             }
         } else {
             QVariantHash b;
-            if (!parseObject(dev, b)) {
-                qDebug() << "dev not at end";
+            if (!parseObject(dev, b, false)) {
+                qDebug() << "txt2 dev not at end";
             }
             root = b;
         }

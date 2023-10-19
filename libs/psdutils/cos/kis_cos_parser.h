@@ -35,7 +35,7 @@ public:
 private:
 
     bool parseValue(QIODevice &dev, QVariant &val);
-    bool parseObject(QIODevice &dev, QVariantHash &object);
+    bool parseObject(QIODevice &dev, QVariantHash &object, bool checkEnd = true);
     bool parseArray(QIODevice &dev, QVariantList &array);
 };
 

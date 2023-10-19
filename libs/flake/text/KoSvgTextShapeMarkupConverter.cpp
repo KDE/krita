@@ -1707,14 +1707,15 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
     
 
     QVariantHash root = tySh;
-    //qDebug() << "Parsed JSON Object" << QJsonObject::fromVariantHash(root);
+    //qDebug() << textIndex << "Parsed JSON Object" << QJsonObject::fromVariantHash(txt2);
     bool loadFallback = txt2.isEmpty();
-    QVariantHash docObjects = txt2.value("/DocumentObjects").toHash();
+    const QVariantHash docObjects = txt2.value("/DocumentObjects").toHash();
 
     QVariantHash textObject = docObjects.value("/TextObjects").toList().value(textIndex).toHash();
     if (textObject.isEmpty() || loadFallback) {
         textObject = root["/EngineDict"].toHash();
         loadFallback = true;
+        qDebug() << "loading from tySh data";
     }
     if (textObject.isEmpty()) {
         d->errors << "No engine dict found in PSD engine data";
@@ -1779,7 +1780,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
                     }
                 }
             }
-            qDebug() << bounds;
+            //qDebug() << bounds;
         }
     } else {
         QVariantHash view = textObject.value("/View").toHash();
@@ -1793,7 +1794,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
 
             if (!textFrame.isEmpty()) {
                 textType = textFrame["/Data"].toHash()["/Type"].toInt();
-                //qDebug() << textFrame;
+                //qDebug() << QJsonObject::fromVariantHash(textFrame);
 
                 if (textType > 0) {
                     KoPathShape *textCurve = new KoPathShape();
@@ -2041,12 +2042,13 @@ void gatherFonts(const QMap<QString, QString> cssStyles, const QString text, QVa
         QStringList families = cssStyles.value("font-family").split(",");
         int fontSize = cssStyles.value("font-size", "10").toInt();
         int fontWeight = cssStyles.value("font-weight", "400").toInt();
-        int fontWidth = cssStyles.value("font-stretch", "400").toInt();
+        int fontWidth = cssStyles.value("font-stretch", "100").toInt();
 
         const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues(families, lengths,
                                                       QMap<QString, qreal>(),
                                                       text, 72, 72, fontSize, 1.0,
                                                       fontWeight, fontWidth, false, 0, "");
+
         for (uint i = 0; i < faces.size(); i++) {
             const FT_FaceUP &face = faces.at(static_cast<size_t>(i));
             QString postScriptName = face->family_name;
@@ -2064,9 +2066,7 @@ void gatherFonts(const QMap<QString, QString> cssStyles, const QString text, QVa
             if (fontIndex < 0) {
                 QVariantHash font;
                 font["/Name"] = postScriptName;
-                font["/Script"] = 0;
-                font["/Synthetic"] = 0;
-                font["/FontType"] = 1;
+                font["/Type"] = 1;
                 fontSet.append(font);
                 fontIndex = fontSet.size()-1;
             }
@@ -2113,12 +2113,14 @@ void gatherFills(QDomElement el, QVariantHash &styleDict) {
     if (el.hasAttribute("fill")) {
         if (el.attribute("fill") != "none") {
             QColor c = QColor(el.attribute("fill"));
-            double opacity = el.attribute("fill-opacity", "1").toDouble();
+            //double opacity = el.attribute("fill-opacity", "1.0").toDouble();
             styleDict["/FillFlag"] = true;
-            styleDict["/FillColor"] = QVariantHash {
-            {"/Type", 1},
-            {"/Values", QVariantList({opacity, c.redF(), c.greenF(), c.blueF()})}
-        };
+            styleDict["/FillColor"] = QVariantHash({ {"/StreamTag", "/SimplePaint"},
+                                                     { "/Color", QVariantHash({
+                                                           {"/Type", 1},
+                                                           {"/Values", QVariantList({1.0, c.redF(), c.greenF(), c.blueF()})
+                                                           }})}
+                                                   });
         } else {
             styleDict["/FillFlag"] = false;
         }
@@ -2126,25 +2128,47 @@ void gatherFills(QDomElement el, QVariantHash &styleDict) {
     if (el.hasAttribute("stroke")) {
         if (el.attribute("stroke") != "none" && el.attribute("stroke-width").toDouble() != 0) {
             QColor c = QColor(el.attribute("stroke"));
-            double opacity = el.attribute("stroke-opacity").toDouble();
+            //double opacity = el.attribute("stroke-opacity").toDouble();
             styleDict["/StrokeFlag"] = true;
-            styleDict["/StrokeColor"] = QVariantHash {
-            {"/Type", 1},
-            {"/Values", QVariantList({opacity, c.redF(), c.greenF(), c.blueF()})}
-        };
+            styleDict["/StrokeColor"] = QVariantHash({ {"/StreamTag", "/SimplePaint"},
+                                                       { "/Color", QVariantHash({
+                                                             {"/Type", 1},
+                                                             {"/Values", QVariantList({1.0, c.redF(), c.greenF(), c.blueF()})
+                                                             }})}
+                                                     });
         } else {
             styleDict["/StrokeFlag"] = false;
         }
     }
+    if (el.hasAttribute("stroke-linejoin")) {
+        QString val = el.attribute("stroke-linejoin");
+        if (val == "miter") {
+            styleDict["/LineJoin"] = 0;
+        } else if (val == "round") {
+            styleDict["/LineJoin"] = 1;
+        } else if (val == "bevel") {
+            styleDict["/LineJoin"] = 2;
+        }
+    }
+    if (el.hasAttribute("stroke-linecap")) {
+        QString val = el.attribute("stroke-linecap");
+        if (val == "butt") {
+            styleDict["/LineCap"] = 0;
+        } else if (val == "round") {
+            styleDict["/LineCap"] = 1;
+        } else if (val == "square") {
+            styleDict["/LineCap"] = 2;
+        }
+    }
     if (el.hasAttribute("stroke-width") && el.attribute("stroke-width").toDouble() != 0) {
-        styleDict["/OutlineWidth"] = el.attribute("stroke-width").toDouble();
+        styleDict["/LineWidth"] = el.attribute("stroke-width").toDouble();
     }
 }
 
 void gatherStyles(QDomElement el, QString &text,
                   QVariantHash parentStyle,
                   QMap<QString, QString> parentCssStyles,
-                  QVariantList &styles, QVariantList &runs,
+                  QVariantList &styles,
                   QVariantList &fontSet, QTransform scaleToPx) {
     QMap<QString, QString> cssStyles = parentCssStyles;
     if (el.hasAttribute("style")) {
@@ -2177,8 +2201,13 @@ void gatherStyles(QDomElement el, QString &text,
         for (int i = 0; i< fontIndices.size(); i++) {
             QVariantHash curDict = styleDict;
             curDict["/Font"] = fontIndices.at(i);
-            styles.append(curDict);
-            runs.append(QVariant{lengths.at(i)});
+            QVariantHash fDict = {
+                {"/StyleSheet", QVariantHash({{"/Name", ""}, {"/Parent", 0}, {"/Features", curDict}})}
+            };
+            styles.append(QVariantHash({
+                                           {"/Length", lengths.at(i)},
+                                           {"/RunData", fDict},
+                                       }));
         }
 
     } else if (el.childNodes().size()>0) {
@@ -2186,7 +2215,7 @@ void gatherStyles(QDomElement el, QString &text,
         gatherFills(el, styleDict);
         QDomElement childEl = el.firstChildElement();
         while(!childEl.isNull()) {
-            gatherStyles(childEl, text, styleDict, cssStyles, styles, runs, fontSet, scaleToPx);
+            gatherStyles(childEl, text, styleDict, cssStyles, styles, fontSet, scaleToPx);
             childEl = childEl.nextSiblingElement();
         }
     }
@@ -2245,105 +2274,48 @@ QVariantHash gatherParagraphStyle(QDomElement el,
     } else {
         paragraphStyleSheet["/Justification"] = anchorVal;
     }
-    return QVariantHash{{"/DefaultStyleSheet", 0},{"/Properties", paragraphStyleSheet}};
+    return QVariantHash{{"/Name", ""}, {"/Parent", 0}, {"/Features", paragraphStyleSheet}};
 }
 
 bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &svgText,
                                                                QRectF &boundingBox,
-                                                               QVariantHash &tySh,
+                                                               QVariantHash &txt2,
+                                                               int &textIndex,
                                                                QString &textTotal,
                                                                bool &isHorizontal,
                                                                QTransform scaleToPx)
 {
     QVariantHash root;
 
-    QVariantHash engineDict;
-    QVariantHash resourceDict;
+    QVariantHash model;
+    QVariantHash view;
 
     QString text;
     QVariantList styles;
-    QVariantList styleRunArray;
     QVariantList fontSet;
 
-    // default fonts.
-    fontSet.append(QVariantHash{{"/Name", "AdobeInvisFont"}, {"/FontType", 0}, {"/Script", 0}, {"/Synthetic", 0}});
-    fontSet.append(QVariantHash{{"/Name", "MyriadPro-Regular"}, {"/FontType", 0}, {"/Script", 0}, {"/Synthetic", 0}});
+    QVariantList textObjects = txt2.value("/DocumentObjects").toHash().value("/TextObjects").toList();
+    QVariantHash defaultParagraphProps = txt2.value("/DocumentObjects").toHash().value("/OriginalNormalParagraphFeatures").toHash();
 
-    // We're creating the default character and paragraph style sheets here.
-    QVariantHash defaultStyle;
-    defaultStyle["/Font"] = 1;
-    defaultStyle["/FontSize"] = 12;
-    defaultStyle["/FauxBold"] = false;
-    defaultStyle["/FauxItalic"] = false;
-    defaultStyle["/AutoLeading"] = true;
-    defaultStyle["/Leading"] = 0;
-    defaultStyle["/HorizontalScale"] = 1.0;
-    defaultStyle["/VerticalScale"] = 1.0;
-    defaultStyle["/Tracking"] = 0;
-    defaultStyle["/AutoKerning"] = true;
-    defaultStyle["/Kerning"] = 0;
-    defaultStyle["/BaselineShift"] = 0;
-    defaultStyle["/FontCaps"] = 0;
-    defaultStyle["/FontBaseline"] = 0;
-    defaultStyle["/Underline"] = false;
-    defaultStyle["/Strikethrough"] = false;
-    defaultStyle["/Ligatures"] = true;
-    defaultStyle["/DLigatures"] = false;
-    defaultStyle["/BaselineDirection"] = 2;
-    defaultStyle["/Tsume"] = 0.0;
-    defaultStyle["/StyleRunAlignment"] = 2;
-    defaultStyle["/Language"] = 0;
-    defaultStyle["/NoBreak"] = false;
-    defaultStyle["/FillColor"] =   QVariantHash{{"/Type", 1}, {"/Values", QVariantList({1, 0, 0, 0})}};
-    defaultStyle["/StrokeColor"] = QVariantHash{{"/Type", 1}, {"/Values", QVariantList({1, 0, 0, 0})}};
-    defaultStyle["/FillFlag"] = true;
-    defaultStyle["/StrokeFlag"] = false;
-    defaultStyle["/FillFirst"] = true;
-    defaultStyle["/YUnderline"] = 1;
-    defaultStyle["/OutlineWidth"] = 1.0;
-    defaultStyle["/CharacterDirection"] = 0;
-    defaultStyle["/HindiNumbers"] = false;
-    defaultStyle["/Kashida"] = 1;
-    defaultStyle["/DiacriticPos"] = 2;
-    defaultStyle = styleToPSDStylesheet(KoSvgTextProperties::defaultProperties().convertToSvgTextAttributes(),
-                                        defaultStyle, scaleToPx);
+    const int tIndex = textObjects.size();
+    QVariantHash docResources = txt2.value("/DocumentResources").toHash();
+    QVariantList textFrames = docResources.value("/TextFrameSet").toHash().value("/Resources").toList();
+    const QVariantList resFontSet = docResources.value("/FontSet").toHash().value("/Resources").toList();
+
+    Q_FOREACH(const QVariant entry, resFontSet) {
+        const QVariantHash docFont = entry.toHash().value("/Resource").toHash();
+        QVariantHash font = docFont.value("/Identifier").toHash();
+        fontSet.append(font);
+    }
+
     QVector<int> lengths;
     QVector<int> fontIndices;
     gatherFonts(KoSvgTextProperties::defaultProperties().convertToSvgTextAttributes(), "", fontSet, lengths, fontIndices);
-    if (!fontIndices.isEmpty()) {
-        defaultStyle["/Font"] = fontIndices.first();
-    }
-
-    QVariantHash defaultParagraph;
-    defaultParagraph["/Name"] = "Default";
-    defaultParagraph["/DefaultStyleSheet"] = 0;
-    QVariantHash defaultParagraphProps = QVariantHash{
-    {"/Justification", 0},
-    {"/FirstLineIndent", 0},
-    {"/StartIndent", 0},
-    {"/EndIndent", 0},
-    {"/SpaceBefore", 0},
-    {"/AutoHyphenate", false},
-    {"/HyphenatedWordSize", 6},
-    {"/PreHyphen", 2},
-    {"/PostHyphen", 2},
-    {"/Zone", 36.0},
-    {"/WordSpacing", QVariantList({0.8, 1.0, 1.3})},
-    {"/LetterSpacing", QVariantList({0, 0, 0})},
-    {"/GlyphSpacing", QVariantList({1.0, 1.0, 1.0})},
-    {"/SpaceAfter", 0},
-    {"/AutoLeading", 1.0},
-    {"/LeadingType", 0},
-    {"/Hanging", false},
-    {"/Burasagari", false},
-    {"/KinsokuOrder", 0},
-    {"/EveryLineComposer", false}};
-    defaultParagraph["/Properties"] = defaultParagraphProps;
 
     // go down the document children to get the style.
     QDomDocument doc;
     doc.setContent(svgText);
-    gatherStyles(doc.documentElement(), text, QVariantHash(), QMap<QString, QString>(), styles, styleRunArray, fontSet, scaleToPx);
+    gatherStyles(doc.documentElement(), text, QVariantHash(), QMap<QString, QString>(), styles, fontSet, scaleToPx);
 
     QString inlineSize;
     QVariantHash paragraphStyle = gatherParagraphStyle(doc.documentElement(),
@@ -2351,58 +2323,27 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
                                                       isHorizontal, &inlineSize,
                                                       scaleToPx);
 
-    QVariantHash editor;
-    editor["/Text"] = text;
-    engineDict["/Editor"] = editor;
+    model.insert("/Text", text);
 
-    QVariantHash grid;
-    grid["/GridIsOn"] = false;
-    grid["/ShowGrid"] = false;
-    grid["/GridSize"] = 18.0;
-    grid["/GridLeading"] = 22.0;
-    grid["/GridColor"] = QVariantHash{{"/Type", 1}, {"/Values", QVariantList({0, 0, 0, 1})}};
-    grid["/GridLeadingFillColor"] = QVariantHash{{"/Type", 1}, {"/Values", QVariantList({0, 0, 0, 1})}};
-    grid["/AlignLineHeightToGridFlags"] = false;
-    engineDict["/GridInfo"] = grid;
+    QVariantHash paragraphSet;
+    paragraphSet.insert("/Length", QVariant(text.length()));
+    paragraphSet.insert("/RunData", QVariantHash{{"/ParagraphSheet", paragraphStyle}});
 
-    QVariantHash paragraphRun;
-    paragraphRun["/RunLengthArray"] = QVariantList({QVariant(text.length())});
-    QVariantHash paragraphAdjustments  = QVariantHash {
-    {"/Axis", QVariantList({1, 0, 1})},
-    {"/XY", QVariantList({0, 0})}
-    };
-    paragraphRun["/RunArray"] = QVariantList({ QVariantHash{
-                                                {"/ParagraphSheet", paragraphStyle},
-                                                {"/Adjustments", paragraphAdjustments}
-                                            }
-                                            });
-    paragraphRun["/IsJoinable"] = 1; //no idea what this means.
-    paragraphRun["/DefaultRunData"] = QVariantHash{
-    {"/ParagraphSheet",
-            QVariantHash{{"/DefaultStyleSheet", 0},
-                        {"/Properties", QVariantHash()}} },
-    {"/Adjustments", paragraphAdjustments}};
-
-    engineDict["/ParagraphRun"] = paragraphRun;
+    model.insert("/ParagraphRun", QVariantHash{{"/RunArray", QVariantList({paragraphSet})}});
 
     QVariantHash styleRun;
-    styleRun["/RunLengthArray"] = styleRunArray;
     QVariantList properStyleRun;
     Q_FOREACH(QVariant entry, styles) {
-        QVariantHash properStyle;
-        properStyle["/StyleSheetData"] = entry;
-        QVariantHash s;
-        s["/StyleSheet"] = properStyle;
-        properStyleRun.append(s);
+        properStyleRun.append(entry);
     }
-    styleRun["/RunArray"] = properStyleRun;
-    styleRun["/IsJoinable"] = 2;
+    styleRun.insert("/RunArray", properStyleRun);
 
-    styleRun["/DefaultRunData"] = QVariantHash{{"/StyleSheet", QVariantHash{{"/StyleSheetData", QVariantHash()}} }};
+    model.insert("/StyleRun", styleRun);
 
-    engineDict["/StyleRun"] = styleRun;
-
-    resourceDict["/FontSet"] = fontSet;
+    QVariantHash storySheet;
+    storySheet.insert("/UseFractionalGlyphWidths", true);
+    storySheet.insert("/AntiAlias", 1);
+    model.insert("/StorySheet", storySheet);
 
     QRectF bounds;
     if (!(inlineSize.isEmpty() || inlineSize == "auto")) {
@@ -2420,77 +2361,53 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
         bounds = QRectF();
     }
 
-    QVariantHash rendered;
+    QVariantHash Strike;
     int shapeType = bounds.isEmpty()? 0: 1; // 0 point, 1 paragraph, but what does that make text-on-path?
     int writingDirection = isHorizontal? 0: 2;
-    QVariantHash photoshop = QVariantHash {{"/ShapeType", shapeType},
-    {"/TransformPoint0", QVariantList({1.0, 0.0})},
-    {"/TransformPoint1", QVariantList({0.0, 1.0})},
-    {"/TransformPoint2", QVariantList({0.0, 0.0})}};
-    if (shapeType == 0) {
-        photoshop["/PointBase"] = QVariantList({0.0, 0.0});
-    } else if (shapeType == 1) {
-        // this is the bounding box of the paragraph shape.
-        QRectF boundsPix = scaleToPx.mapRect(bounds);
-        photoshop["/BoxBounds"] = QVariantList({0, 0, boundsPix.width(), boundsPix.height()});
-    }
-    QVariantHash renderChild = QVariantHash{
-    {"/ShapeType", shapeType},
-    {"/Procession", 0},
-    {"/Lines", QVariantHash{{"/WritingDirection", writingDirection}, {"/Children", QVariantList()}}},
-    {"/Cookie", QVariantHash{{"/Photoshop", photoshop}}}};
-    rendered["/Version"] = 1;
-    rendered["/Shapes"] = QVariantHash{{"/WritingDirection", writingDirection}, {"/Children", QVariantList({renderChild})}};
 
-    engineDict["/Rendered"] = rendered;
-    engineDict["/UseFractionalGlyphWidths"] = true;
-    engineDict["/AntiAlias"] = 1;
-    root["/EngineDict"] = engineDict;
+    Strike["/Transform"] = QVariantHash {{"/Origin", QVariantList({0.0, 0.0})}};
+    QRectF boundsPix = scaleToPx.mapRect(bounds);
+    Strike.insert("/Bounds", QVariantList({0, 0, boundsPix.width(), boundsPix.height()}));
+    Strike.insert("/StreamTag", "/PathSelectGroupCharacter");
+    Strike.insert("/ChildProcession", 0);
+    view.insert("/Strikes", QVariantList({Strike}));
+    view.insert("/RenderedData", QVariantList());
+
+    const int textFrameIndex = textFrames.size();
+    QVariantHash newTextFrame;
+    QVariantHash newTextFrameData;
+    newTextFrameData.insert("/LineOrientation", writingDirection);
+    newTextFrameData.insert("/Type", shapeType);
+
+    QVariantList points;
+    //TODO: write points
+    if (!points.isEmpty()) {
+        newTextFrame.insert("/Bezier", QVariantHash({{"/Points", points}}));
+    }
+    newTextFrame.insert("/Data", newTextFrameData);
+
+    view.insert("/Frames", QVariantList({QVariantHash({{"/Resource", textFrameIndex}})}));
+
+    textFrames.append(QVariantHash({{"/Resource", newTextFrame}}));
+    textObjects.append(QVariantHash({{"/Model", model}, {"/View", view}}));
 
     // default resoure dict
 
-    QVariantHash kinsokuHard; // line-break: 'strict'
-    kinsokuHard["/Name"] = "PhotoshopKinsokuHard";
-    kinsokuHard["/Hanging"] = "、。，．";
-    kinsokuHard["/Keep"] = "—‥…";
-    kinsokuHard["/NoEnd"] = "([{£§‘“〈《「『【〒〔＃＄（＠［｛￥";
-    kinsokuHard["/NoStart"] = "!),.:;?]}¢—’”‰℃℉、。々〉》」』】〕ぁぃぅぇぉっゃゅょゎ゛゜ゝゞァィゥェォッャュョヮヵヶ・ーヽヾ！％），．：；？］｝";
-    QVariantHash kinsokuSoft;  // line-break: 'normal'
-    kinsokuSoft["/Name"] = "PhotoshopKinsokuSoft";
-    kinsokuSoft["/Hanging"] = "、。，．";
-    kinsokuSoft["/Keep"] = "—‥…";
-    kinsokuSoft["/NoEnd"] = "‘“〈《「『【〔（［｛";
-    kinsokuSoft["/NoStart"] = "’”、。々〉》」』】〕ゝゞ・ヽヾ！），．：；？］｝";
-    resourceDict["/KinsokuSet"] = QVariantList({kinsokuHard, kinsokuSoft});
-    //Mojikumi is the same kind of thing as CSS-Text-4 text-spacing
-    // 1 = text-spacing-trim: trim-auto
-    // 2 = full width for most except characters end of line. allow end?
-    // 3 = full width for most including characters end of line (seems to skip space)
-    // 4 = text-spacing-trim: space-all
-    resourceDict["/MojiKumiSet"] = QVariantList( {QVariantHash{{"/InternalName", "Photoshop6MojiKumiSet1"}},
-                                               QVariantHash{{"/InternalName", "Photoshop6MojiKumiSet2"}},
-                                               QVariantHash{{"/InternalName", "Photoshop6MojiKumiSet3"}},
-                                               QVariantHash{{"/InternalName", "Photoshop6MojiKumiSet4"}}
-                                              });
-    resourceDict["/SubscriptPosition"] = 0.333;
-    resourceDict["/SubscriptSize"] = 0.583;
-    resourceDict["/SuperscriptPosition"] = 0.333;
-    resourceDict["/SuperscriptSize"] = 0.583;
-    resourceDict["/SmallCapSize"] = 0.7;
-    resourceDict["/TheNormalParagraphSheet"] = 0;
-    resourceDict["/TheNormalStyleSheet"] = 0;
-
-    QVariantHash resourceStyleSheet = QVariantHash{{"/Name", "Default"}, {"/StyleSheetData", defaultStyle}};
-    resourceDict["/StyleSheetSet"] = QVariantList({resourceStyleSheet});
-    resourceDict["/ParagraphSheetSet"] = QVariantList({defaultParagraph});
-
-    // documentResources and ResourceDict always seem to be the same...?
-
-    root["/ResourceDict"] = resourceDict;
-    root["/DocumentResources"] = resourceDict;
-
     textTotal = text;
-    tySh = root;
+
+    QVariantList newFontSet;
+
+    Q_FOREACH(const QVariant entry, fontSet) {
+        newFontSet.append(QVariantHash({{"/Resource", QVariantHash({{"/Identifier", entry}, {"/StreamTag", "/CoolTypeFont"}})}}));
+    }
+
+    QVariantHash docObjects = txt2.value("/DocumentObjects").toHash();
+    docObjects.insert("/TextObjects", textObjects);
+    txt2.insert("/DocumentObjects", docObjects);
+    docResources.insert("/TextFrameSet", QVariantHash({{"/Resources", textFrames}}));
+    docResources.insert("/FontSet", QVariantHash({{"/Resources", newFontSet}}));
+    txt2.insert("/DocumentResources", docResources);
+    textIndex = tIndex;
 
     return true;
 }

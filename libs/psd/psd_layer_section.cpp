@@ -46,6 +46,7 @@
 #include <asl/kis_asl_writer_utils.h>
 #include <asl/kis_offset_on_exit_verifier.h>
 #include <kis_asl_layer_style_serializer.h>
+#include <cos/kis_txt2_utls.h>
 
 PSDLayerMaskSection::PSDLayerMaskSection(const PSDHeader &header)
     : globalInfoSection(header)
@@ -557,6 +558,9 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
 {
     dbgFile << "Writing layer section";
 
+    globalInfoSection.txt2Data = KisTxt2Utils::defaultTxt2();
+    int textCount = 0;
+
     // Build the whole layer structure
     QList<FlattenedNode> nodes;
     addBackgroundIfNeeded(rootLayer, nodes);
@@ -668,8 +672,10 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                             // unsure about the boundingBox, needs more research.
                             textData.boundingBox = text->boundingRect().normalized();
                             textData.bounds = text->outlineRect().normalized();
-                            convert.convertToPSDTextEngineData(svgtext, textData.bounds, textData.engineData, textData.text, textData.isHorizontal, FlaketoPixels);
-                            textData.textIndex = 0;
+
+                            convert.convertToPSDTextEngineData(svgtext, textData.bounds, globalInfoSection.txt2Data, textData.textIndex, textData.text, textData.isHorizontal, FlaketoPixels);
+                            textData.engineData = KisTxt2Utils::tyShFromTxt2(globalInfoSection.txt2Data, textData.textIndex);
+                            textCount += 1;
                             QTransform offset;
                             if (!text->shapesInside().isEmpty()) {
                                 textData.bounds = text->outlineRect().normalized();
@@ -890,6 +896,9 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
         }
 
         globalInfoSection.writePattBlockEx(io, mergedPatternsXmlDoc);
+        if (textCount > 0) {
+            globalInfoSection.writeTxt2BlockEx(io, globalInfoSection.txt2Data);
+        }
     }
 }
 

@@ -95,7 +95,8 @@ public:
                                        QTransform scaleToPt = QTransform());
     bool convertToPSDTextEngineData(const QString &svgText,
                                     QRectF &boundingBox,
-                                    QVariantHash &tySh,
+                                    QVariantHash &txt2,
+                                    int &textIndex,
                                     QString &textTotal,
                                     bool &isHorizontal,
                                     QTransform scaleToPx = QTransform());

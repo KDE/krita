@@ -1183,6 +1183,7 @@ public:
     void writeVmskBlockEx(QIODevice &io, psd_vector_mask mask);
     void writeTypeToolBlockEx(QIODevice &io, psd_layer_type_shape typeTool);
     void writeVectorStrokeDataEx(QIODevice &io, const QDomDocument &vectorStroke);
+    void writeTxt2BlockEx(QIODevice &io, const QVariantHash txt2Hash);
 
     bool valid();
 
@@ -1240,6 +1241,9 @@ private:
 
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     void writeVectorStrokeDataImpl(QIODevice &io, const QDomDocument &vectorStroke);
+
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    void writeTxt2BlockExImpl(QIODevice &io, const QVariantHash txt2Hash);
 
 private:
     ExtraLayerInfoBlockHandler m_layerInfoBlockHandler;

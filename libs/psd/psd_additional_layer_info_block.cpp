@@ -695,3 +695,27 @@ void PsdAdditionalLayerInfoBlock::writeVectorStrokeDataImpl(QIODevice &io, const
         throw e;
     }
 }
+
+void PsdAdditionalLayerInfoBlock::writeTxt2BlockEx(QIODevice &io, const QVariantHash txt2Hash)
+{
+    switch (m_header.byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        writeTxt2BlockExImpl<psd_byte_order::psdLittleEndian>(io, txt2Hash);
+        break;
+    default:
+        writeTxt2BlockExImpl(io, txt2Hash);
+        break;
+    }
+}
+
+template<psd_byte_order byteOrder>
+void PsdAdditionalLayerInfoBlock::writeTxt2BlockExImpl(QIODevice &io, const QVariantHash txt2Hash)
+{
+    KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+    KisAslWriterUtils::writeFixedString<byteOrder>("Txt2", io);
+
+    QByteArray ba = KisCosWriter::writeTxt2FromVariantHash(txt2Hash);
+    quint32 length = ba.size();
+    SAFE_WRITE_EX(byteOrder, io, length);
+    io.write(ba);
+}

@@ -14,6 +14,8 @@ class KRITAPSDUTILS_EXPORT KisCosWriter
 {
 public:
     static QByteArray writeCosFromVariantHash(const QVariantHash doc);
+
+    static QByteArray writeTxt2FromVariantHash(const QVariantHash doc);
 };
 
 #endif // KISCOSWRITER_H

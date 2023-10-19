@@ -53,18 +53,24 @@ void writeString(QIODevice &dev, const QVariant val, const QString name) {
             }
             c++;
         }
-        qDebug() << name << newString;
-        qDebug() << escaped;
+        //qDebug() << name << newString;
+        //qDebug() << escaped;
         dev.write(escaped);
         dev.write(")");
     }
 }
-
-void writeVariant(QIODevice &dev, const QVariantHash object, int indent, bool prettyPrint) {
+/**
+ * @brief writeVariant
+ * @param prettyPrint -- whether to allow newlines and indentation or just a single space between values.
+ * @param writeBrackets -- for some reason PSD stores the txt2 section without the outermost << and >>...
+ */
+void writeVariant(QIODevice &dev, const QVariantHash object, int indent, bool prettyPrint, bool writeBrackets = true) {
     QByteArray indentStringOld(indent, QChar::Tabulation);
     QString newLine = prettyPrint? "\n": " ";
     dev.write(indentStringOld);
-    dev.write(("<<"+newLine).toLatin1());
+    if (writeBrackets) {
+        dev.write(("<<"+newLine).toLatin1());
+    }
     indent = prettyPrint? indent + 1: 0;
     QByteArray indentString(indent, QChar::Tabulation);
     Q_FOREACH(QString key, object.keys()) {
@@ -125,7 +131,9 @@ void writeVariant(QIODevice &dev, const QVariantHash object, int indent, bool pr
         }
     }
     dev.write(indentStringOld);
-    dev.write((">>"+newLine).toLatin1());
+    if (writeBrackets) {
+        dev.write((">>"+newLine).toLatin1());
+    }
 }
 
 QByteArray KisCosWriter::writeCosFromVariantHash(const QVariantHash doc)
@@ -137,6 +145,21 @@ QByteArray KisCosWriter::writeCosFromVariantHash(const QVariantHash doc)
         dev.write("\n\n");
         bool prettyPrint = true;
         writeVariant(dev, doc, indent, prettyPrint);
+        dev.close();
+    } else {
+        qDebug() << dev.errorString();
+    }
+    return ba;
+}
+
+QByteArray KisCosWriter::writeTxt2FromVariantHash(const QVariantHash doc)
+{
+    QByteArray ba;
+    QBuffer dev(&ba);
+    if (dev.open(QIODevice::WriteOnly)) {
+        int indent = 0;
+        bool prettyPrint = false;
+        writeVariant(dev, doc, indent, prettyPrint, false);
         dev.close();
     } else {
         qDebug() << dev.errorString();

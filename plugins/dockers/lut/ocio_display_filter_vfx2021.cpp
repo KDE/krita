@@ -507,7 +507,13 @@ bool OcioDisplayFilter::updateShaderImpl(F *f)
         unsigned height = 0;
         OCIO::GpuShaderDesc::TextureType channel = OCIO::GpuShaderDesc::TEXTURE_RGB_CHANNEL;
         OCIO::Interpolation interpolation = OCIO::INTERP_LINEAR;
+
+#if OCIO_VERSION_HEX >= 0x2030000
+        OCIO::GpuShaderCreator::TextureDimensions dimensions;
+        shaderDesc->getTexture(idx, textureName, samplerName, width, height, channel, dimensions, interpolation);
+#else
         shaderDesc->getTexture(idx, textureName, samplerName, width, height, channel, interpolation);
+#endif
 
         if (!textureName || !*textureName || !samplerName || !*samplerName || width == 0) {
             errOpenGL << "The texture data is corrupted";

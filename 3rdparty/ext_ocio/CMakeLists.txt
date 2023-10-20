@@ -3,8 +3,8 @@ SET(EXTPREFIX_ocio "${EXTPREFIX}" )
 ExternalProject_Add(
     ext_ocio
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/AcademySoftwareFoundation/OpenColorIO/archive/refs/tags/v2.2.1.tar.gz
-    URL_HASH SHA256=36f27c5887fc4e5c241805c29b8b8e68725aa05520bcaa7c7ec84c0422b8580e
+    URL https://github.com/AcademySoftwareFoundation/OpenColorIO/archive/refs/tags/v2.3.0.tar.gz
+    URL_HASH SHA256=32b7be676c110d849a77886d8a409159f0367309b2b2f5dae5aa0c38f42b445a
 
     INSTALL_DIR ${EXTPREFIX_ocio}
 

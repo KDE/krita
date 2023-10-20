@@ -1577,14 +1577,37 @@ void KisNodeManager::quickUngroup()
     KisNodeSP parent = active->parent();
     KisNodeSP aboveThis = active;
 
+    auto checkCanMoveLayers = [this] (KisNodeList nodes, KisNodeSP newParent) -> bool {
+        auto incompatibleNode =
+            std::find_if(nodes.begin(), nodes.end(),
+                [newParent] (KisNodeSP node) {
+                    return !newParent->allowAsChild(node);
+                });
+
+        if (incompatibleNode != nodes.end()) {
+            const QString message =
+                    newParent->parent() ?
+                        i18n("Cannot move layer \"%1\" into new parent \"%2\"",
+                             (*incompatibleNode)->name(),
+                             newParent->name()) :
+                        i18n("Cannot move layer \"%1\" into the root layer",
+                             (*incompatibleNode)->name());
+            m_d->view->showFloatingMessage(message, QIcon());
+            return false;
+        }
+        return true;
+    };
+
     KUndo2MagicString actionName = kundo2_i18n("Quick Ungroup");
 
     if (parent && dynamic_cast<KisGroupLayer*>(active.data())) {
         KisNodeList nodes = active->childNodes(QStringList(), KoProperties());
 
-        KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
-        juggler->moveNode(nodes, parent, active);
-        juggler->removeNode(KisNodeList() << active);
+        if (checkCanMoveLayers(nodes, parent)) {
+            KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+            juggler->moveNode(nodes, parent, active);
+            juggler->removeNode(KisNodeList() << active);
+        }
     } else if (parent && parent->parent()) {
         KisNodeSP grandParent = parent->parent();
 
@@ -1593,10 +1616,12 @@ void KisNodeManager::quickUngroup()
 
         const bool removeParent = KritaUtils::compareListsUnordered(allChildNodes, allSelectedNodes);
 
-        KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
-        juggler->moveNode(allSelectedNodes, grandParent, parent);
-        if (removeParent) {
-            juggler->removeNode(KisNodeList() << parent);
+        if (checkCanMoveLayers(allSelectedNodes, parent)) {
+            KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+            juggler->moveNode(allSelectedNodes, grandParent, parent);
+            if (removeParent) {
+                juggler->removeNode(KisNodeList() << parent);
+            }
         }
     }
 }

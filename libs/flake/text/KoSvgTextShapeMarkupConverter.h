@@ -17,6 +17,7 @@
 
 class QRectF;
 class KoSvgTextShape;
+class KoShape;
 
 /**
  * KoSvgTextShapeMarkupConverter is a utility class for converting a
@@ -95,6 +96,7 @@ public:
                                        QTransform scaleToPt = QTransform());
     bool convertToPSDTextEngineData(const QString &svgText,
                                     QRectF &boundingBox,
+                                    const QList<KoShape *> &shapesInside,
                                     QVariantHash &txt2,
                                     int &textIndex,
                                     QString &textTotal,

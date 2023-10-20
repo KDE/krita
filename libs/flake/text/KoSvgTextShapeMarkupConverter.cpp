@@ -2234,8 +2234,9 @@ QVariantHash gatherParagraphStyle(QDomElement el,
         QString val = style.split(":").last().trimmed();
         cssStyles.insert(key, val);
     }
-    if (el.hasAttribute("text-anchor")) {
-        cssStyles.insert("text-anchor", el.attribute("text-anchor", "start"));
+    for (int i = 0; i < el.attributes().length(); i++) {
+        const QDomAttr attr = el.attributes().item(i).toAttr();
+        cssStyles.insert(attr.name(), attr.value());
     }
     int alignVal = 0;
     int anchorVal = 0;
@@ -2277,8 +2278,8 @@ QVariantHash gatherParagraphStyle(QDomElement el,
     return QVariantHash{{"/Name", ""}, {"/Parent", 0}, {"/Features", paragraphStyleSheet}};
 }
 
-bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &svgText,
-                                                               QRectF &boundingBox,
+bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &svgText, QRectF &boundingBox,
+                                                               const QList<KoShape *> &shapesInside,
                                                                QVariantHash &txt2,
                                                                int &textIndex,
                                                                QString &textTotal,
@@ -2361,29 +2362,65 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
         bounds = QRectF();
     }
 
-    QVariantHash Strike;
-    int shapeType = bounds.isEmpty()? 0: 1; // 0 point, 1 paragraph, but what does that make text-on-path?
+    int shapeType = bounds.isEmpty()? 0: 1; ///< 0 point, 1 paragraph, 2 text-on-path.
     int writingDirection = isHorizontal? 0: 2;
 
-    Strike["/Transform"] = QVariantHash {{"/Origin", QVariantList({0.0, 0.0})}};
-    QRectF boundsPix = scaleToPx.mapRect(bounds);
-    Strike.insert("/Bounds", QVariantList({0, 0, boundsPix.width(), boundsPix.height()}));
-    Strike.insert("/StreamTag", "/PathSelectGroupCharacter");
-    Strike.insert("/ChildProcession", 0);
-    view.insert("/Strikes", QVariantList({Strike}));
     view.insert("/RenderedData", QVariantList());
 
     const int textFrameIndex = textFrames.size();
     QVariantHash newTextFrame;
     QVariantHash newTextFrameData;
     newTextFrameData.insert("/LineOrientation", writingDirection);
-    newTextFrameData.insert("/Type", shapeType);
 
-    QVariantList points;
-    //TODO: write points
-    if (!points.isEmpty()) {
-        newTextFrame.insert("/Bezier", QVariantHash({{"/Points", points}}));
+
+    QList<QPointF> points;
+
+    KoPathShape *textShape = nullptr;
+    Q_FOREACH(KoShape *shape, shapesInside) {
+        KoPathShape *p = dynamic_cast<KoPathShape*>(shape);
+        if (p) {
+            textShape = p;
+            break;
+        }
     }
+    if (textShape) {
+        for (int i = 0; i<textShape->subpathPointCount(0); i++) {
+            KoPathSegment s = textShape->segmentByIndex(KoPathPointIndex(0, i));
+            points.append(s.first()->point());
+            points.append(s.first()->controlPoint2());
+            points.append(s.second()->controlPoint1());
+            points.append(s.second()->point());
+        }
+    } else if (!bounds.isEmpty()) {
+        points.append(bounds.topLeft());
+        points.append(bounds.topLeft());
+        points.append(bounds.topRight());
+        points.append(bounds.topRight());
+        points.append(bounds.topRight());
+        points.append(bounds.topRight());
+        points.append(bounds.bottomRight());
+        points.append(bounds.bottomRight());
+        points.append(bounds.bottomRight());
+        points.append(bounds.bottomRight());
+        points.append(bounds.bottomLeft());
+        points.append(bounds.bottomLeft());
+        points.append(bounds.bottomLeft());
+        points.append(bounds.bottomLeft());
+        points.append(bounds.topLeft());
+        points.append(bounds.topLeft());
+    }
+    if (!points.isEmpty()) {
+        QVariantList p;
+        for(int i = 0; i < points.size(); i++) {
+            QPointF p2 = scaleToPx.map(points.at(i));
+            p.append(p2.x());
+            p.append(p2.y());
+        }
+        qDebug() << p;
+        newTextFrame.insert("/Bezier", QVariantHash({{"/Points", p}}));
+        shapeType = 1;
+    }
+    newTextFrameData.insert("/Type", shapeType);
     newTextFrame.insert("/Data", newTextFrameData);
 
     view.insert("/Frames", QVariantList({QVariantHash({{"/Resource", textFrameIndex}})}));

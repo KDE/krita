@@ -9,6 +9,7 @@
 #include <QVariant>
 #include <QVariantList>
 #include <QDebug>
+#include <QRectF>
 
 QVariantHash uncompressColor(const QVariantHash object) {
     //qDebug() << Q_FUNC_INFO;
@@ -1266,7 +1267,7 @@ static QVariantHash simplifyParagraphSheet(const QVariantHash complex) {
     return simple;
 }
 
-QVariantHash KisTxt2Utils::tyShFromTxt2(const QVariantHash Txt2, int textIndex)
+QVariantHash KisTxt2Utils::tyShFromTxt2(const QVariantHash Txt2, const QRectF boundsInPx, int textIndex)
 {
     QVariantHash tySh;
 
@@ -1343,7 +1344,6 @@ QVariantHash KisTxt2Utils::tyShFromTxt2(const QVariantHash Txt2, int textIndex)
     engineDict.insert("/StyleRun", styleRun);
     // rendered data...
 
-    const QVariantHash strikes = view.value("/Strikes").toList().value(0).toHash();
     const int frameIndex = view.value("/Frames").toList().value(0).toHash().value("/Resource").toInt();
     const QVariantHash textFrame = textFrames.value(frameIndex).toHash().value("/Resource").toHash();
     const QVariantHash textFrameData = textFrame.value("/Data").toHash();
@@ -1358,7 +1358,7 @@ QVariantHash KisTxt2Utils::tyShFromTxt2(const QVariantHash Txt2, int textIndex)
         photoshop["/PointBase"] = QVariantList({0.0, 0.0});
     } else if (shapeType == 1) {
         // this is the bounding box of the paragraph shape.
-        photoshop["/BoxBounds"] = strikes.value("/Bounds");
+        photoshop["/BoxBounds"] = QVariantList({0.0, 0.0, boundsInPx.width(), boundsInPx.height()});
     }
     QVariantHash renderChild = QVariantHash{
     {"/ShapeType", shapeType},

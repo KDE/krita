@@ -673,28 +673,19 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                             textData.boundingBox = text->boundingRect().normalized();
                             textData.bounds = text->outlineRect().normalized();
 
-                            convert.convertToPSDTextEngineData(svgtext, textData.bounds, globalInfoSection.txt2Data, textData.textIndex, textData.text, textData.isHorizontal, FlaketoPixels);
-                            textData.engineData = KisTxt2Utils::tyShFromTxt2(globalInfoSection.txt2Data, textData.textIndex);
+                            convert.convertToPSDTextEngineData(svgtext, textData.bounds, text->shapesInside(), globalInfoSection.txt2Data, textData.textIndex, textData.text, textData.isHorizontal, FlaketoPixels);
+                            textData.engineData = KisTxt2Utils::tyShFromTxt2(globalInfoSection.txt2Data, FlaketoPixels.mapRect(textData.boundingBox), textData.textIndex);
                             textCount += 1;
-                            QTransform offset;
                             if (!text->shapesInside().isEmpty()) {
                                 textData.bounds = text->outlineRect().normalized();
                             }
                             if (!textData.bounds.isEmpty()) {
-                                if (text->shapesInside().isEmpty()) {
-                                    offset = QTransform::fromTranslate(textData.bounds.left(), textData.bounds.top());
-                                }
-                                if (textData.isHorizontal) {
-                                    textData.bounds.translate(QPointF(-textData.bounds.left(), 0));
-                                } else {
-                                    textData.bounds.translate(QPointF(0, -textData.bounds.top()));
-                                }
                                 textData.boundingBox = FlaketoPixels.mapRect(textData.boundingBox);
                                 textData.bounds = FlaketoPixels.mapRect(textData.bounds);
                             } else {
                                 textData.boundingBox = QRectF();
                             }
-                            textData.transform = FlaketoPixels.inverted() * offset * text->absoluteTransformation() * FlaketoPixels;
+                            textData.transform = FlaketoPixels.inverted() * text->absoluteTransformation() * FlaketoPixels;
                         } else {
                             KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shapeLayer->shapes().first());
                             if (pathShape){

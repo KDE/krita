@@ -54,7 +54,7 @@ public:
      * @param textIndex the text object index for which to generate the tySh data.
      * @return the tySh variantHash
      */
-    static QVariantHash tyShFromTxt2(const QVariantHash Txt2, int textIndex);
+    static QVariantHash tyShFromTxt2(const QVariantHash Txt2, const QRectF boundsInPx, int textIndex);
 };
 
 #endif // KIS_TXT2_UTLS_H

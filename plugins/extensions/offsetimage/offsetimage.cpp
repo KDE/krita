@@ -77,12 +77,12 @@ void OffsetImage::slotOffsetLayer()
         DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(viewManager()->mainWindowAsQWidget(), "OffsetLayer", offsetWrapRect().size());
         Q_CHECK_PTR(dlgOffsetImage);
 
-        dlgOffsetImage->setCaption(i18nc("@title:window", "Offset Layers"));
+        KisNodeList nodes = viewManager()->nodeManager()->selectedNodes();
+        dlgOffsetImage->setCaption(i18ncp("@title:window", "Offset Layer", "Offset %1 Layers", nodes.size()));
 
         if (dlgOffsetImage->exec() == QDialog::Accepted) {
             QPoint offsetPoint = QPoint(dlgOffsetImage->offsetX(), dlgOffsetImage->offsetY());
-            KisNodeList nodes = viewManager()->nodeManager()->selectedNodes();
-            KUndo2MagicString actionName = (nodes.size() == 1 ? kundo2_i18n("Offset Layer") : kundo2_i18n("Offset Layers"));
+            KUndo2MagicString actionName = kundo2_i18np("Offset Layer", "Offset %1 Layers", nodes.size());
             offsetImpl(actionName, nodes, offsetPoint);
         }
         delete dlgOffsetImage;

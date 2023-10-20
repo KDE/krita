@@ -145,7 +145,7 @@ void RotateImage::rotateLayersCustomImpl(KisNodeList nodes)
     DlgRotateImage * dlgRotateImage = new DlgRotateImage(viewManager()->mainWindowAsQWidget(), "RotateLayer");
     Q_CHECK_PTR(dlgRotateImage);
 
-    dlgRotateImage->setCaption(nodes.size() == 1 ? i18n("Rotate Layer") : i18n("Rotate Layers"));
+    dlgRotateImage->setCaption(i18np("Rotate Layer", "Rotate %1 Layers", nodes.size()));
 
     if (dlgRotateImage->exec() == QDialog::Accepted) {
         double angle = dlgRotateImage->angle() * M_PI / 180;

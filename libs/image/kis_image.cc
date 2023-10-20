@@ -1034,7 +1034,7 @@ void KisImage::scaleNode(KisNodeSP node, const QPointF &center, qreal scaleX, qr
 }
 void KisImage::scaleNodes(KisNodeList nodes, const QPointF &center, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy, KisSelectionSP selection)
 {
-    KUndo2MagicString actionName(nodes.size() == 1 ? kundo2_i18n("Scale Layer") : kundo2_i18n("Scale Layers"));
+    KUndo2MagicString actionName(kundo2_i18np("Scale Layer", "Scale %1 Layers", nodes.size()));
     KisImageSignalVector emitSignals;
 
     QPointF offset;
@@ -1184,15 +1184,11 @@ void KisImage::rotateNode(KisNodeSP node, double radians, KisSelectionSP selecti
 }
 void KisImage::rotateNodes(KisNodeList nodes, double radians, KisSelectionSP selection)
 {
-    if (nodes.size() == 1) {
-        if (nodes[0]->inherits("KisMask")) {
-            rotateImpl(kundo2_i18n("Rotate Mask"), nodes, radians, false, selection);
-        } else {
-            rotateImpl(kundo2_i18n("Rotate Layer"), nodes, radians, false, selection);
-        }
+    if (nodes.size() == 1 && nodes[0]->inherits("KisMask")) {
+        rotateImpl(kundo2_i18n("Rotate Mask"), nodes, radians, false, selection);
     }
     else {
-        rotateImpl(kundo2_i18n("Rotate Layers"), nodes, radians, false, selection);
+        rotateImpl(kundo2_i18np("Rotate Layer", "Rotate %1 Layers", nodes.size()), nodes, radians, false, selection);
     }
 }
 
@@ -1291,17 +1287,12 @@ void KisImage::shearNode(KisNodeSP node, double angleX, double angleY, KisSelect
 }
 void KisImage::shearNodes(KisNodeList nodes, double angleX, double angleY, KisSelectionSP selection)
 {
-    if (nodes.size() == 1) {
-        if (nodes[0]->inherits("KisMask")) {
-            shearImpl(kundo2_i18n("Shear Mask"), nodes, false,
-                      angleX, angleY, selection);
-        } else {
-            shearImpl(kundo2_i18n("Shear Layer"), nodes, false,
-                      angleX, angleY, selection);
-        }
+    if (nodes.size() == 1 && nodes[0]->inherits("KisMask")) {
+        shearImpl(kundo2_i18n("Shear Mask"), nodes, false,
+                  angleX, angleY, selection);
     }
     else {
-        shearImpl(kundo2_i18n("Shear Layers"), nodes, false,
+        shearImpl(kundo2_i18np("Shear Layer", "Shear %1 Layers", nodes.size()), nodes, false,
                   angleX, angleY, selection);
     }
 }

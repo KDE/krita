@@ -73,7 +73,7 @@ void ShearImage::shearLayersImpl(KisNodeList nodes)
     DlgShearImage * dlgShearImage = new DlgShearImage(viewManager()->mainWindowAsQWidget(), "ShearLayer");
     Q_CHECK_PTR(dlgShearImage);
 
-    dlgShearImage->setCaption(nodes.size() == 1 ? i18n("Shear Layer") : i18n("Shear Layers"));
+    dlgShearImage->setCaption(i18np("Shear Layer", "Shear %1 Layers", nodes.size()));
 
     if (dlgShearImage->exec() == QDialog::Accepted) {
         qint32 angleX = dlgShearImage->angleX();

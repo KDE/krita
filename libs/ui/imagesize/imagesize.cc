@@ -123,7 +123,7 @@ void ImageSize::scaleLayersImpl(KisNodeList nodes)
 
     DlgLayerSize * dlgLayerSize = new DlgLayerSize(viewManager()->mainWindowAsQWidget(), "LayerSize", bounds.width(), bounds.height(), image->yRes());
     Q_CHECK_PTR(dlgLayerSize);
-    dlgLayerSize->setCaption(nodes.size() == 1 ? i18n("Resize Layer") : i18n("Resize Layers"));
+    dlgLayerSize->setCaption(i18np("Resize Layer", "Resize %1 Layers", nodes.size()));
 
     if (dlgLayerSize->exec() == QDialog::Accepted) {
         const QSize desiredSize(dlgLayerSize->desiredWidth(), dlgLayerSize->desiredHeight());

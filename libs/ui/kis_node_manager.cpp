@@ -1034,15 +1034,11 @@ void KisNodeManager::mirrorNodeX()
     KisNodeList nodes = selectedNodes();
 
     KUndo2MagicString commandName;
-    if (nodes.size() == 1) {
-        if (nodes[0]->inherits("KisLayer")) {
-            commandName = kundo2_i18n("Mirror Layer X");
-        } else if (nodes[0]->inherits("KisMask")) {
-            commandName = kundo2_i18n("Mirror Mask X");
-        }
+    if (nodes.size() == 1 && nodes[0]->inherits("KisMask")) {
+        commandName = kundo2_i18n("Mirror Mask X");
     }
     else {
-        commandName = kundo2_i18n("Mirror Layers X");
+        commandName = kundo2_i18np("Mirror Layer X", "Mirror %1 Layers X", nodes.size());
     }
     mirrorNodes(nodes, commandName, Qt::Horizontal, m_d->view->selection());
 }
@@ -1052,15 +1048,11 @@ void KisNodeManager::mirrorNodeY()
     KisNodeList nodes = selectedNodes();
 
     KUndo2MagicString commandName;
-    if (nodes.size() == 1) {
-        if (nodes[0]->inherits("KisLayer")) {
-            commandName = kundo2_i18n("Mirror Layer Y");
-        } else if (nodes[0]->inherits("KisMask")) {
-            commandName = kundo2_i18n("Mirror Mask Y");
-        }
+    if (nodes.size() == 1 && nodes[0]->inherits("KisMask")) {
+        commandName = kundo2_i18n("Mirror Mask Y");
     }
     else {
-        commandName = kundo2_i18n("Mirror Layers Y");
+        commandName = kundo2_i18np("Mirror Layer Y", "Mirror %1 Layers Y", nodes.size());
     }
     mirrorNodes(nodes, commandName, Qt::Vertical, m_d->view->selection());
 }

@@ -2079,7 +2079,7 @@ QVariantHash styleToPSDStylesheet(const QMap<QString, QString> cssStyles,
                                  QVariantHash parentStyle, QTransform scaleToPx) {
     QVariantHash styleSheet = parentStyle;
 
-    styleSheet["/Leading"] = 0.0;
+
 
     Q_FOREACH(QString key, cssStyles.keys()) {
         QString val = cssStyles.value(key);
@@ -2087,20 +2087,79 @@ QVariantHash styleToPSDStylesheet(const QMap<QString, QString> cssStyles,
         if (key == "font-size") {
             double size = val.toDouble();
             size = scaleToPx.map(QPointF(size, size)).x();
-            styleSheet["/FontSize"] = int(size);
+            styleSheet["/FontSize"] = size;
+        } else if (key == "letter-spacing") {
+            double space = val.toDouble();
+            space = scaleToPx.map(QPointF(space, space)).x();
+            double size = styleSheet["/FontSize"].toDouble();
+            styleSheet["/Tracking"] = (space/size) * 1000.0;
+        } else if (key == "line-height") {
+            double space = val.toDouble();
+            double size = styleSheet["/FontSize"].toDouble();
+            styleSheet["/Leading"] = (space*size);
         } else if (key == "font-kerning") {
             if (val == "none") {
-                styleSheet["AutoKerning"] = false;
+                styleSheet["AutoKern"] = 0;
             }
         } else if (key == "text-decoration") {
             QStringList decor = val.split(" ");
             Q_FOREACH(QString param, decor) {
                 if (param == "underline") {
-                    styleSheet["/Underline"] = true;
+                    styleSheet["/UnderlinePosition"] = 1;
                 } else if (param == "line-through"){
-                    styleSheet["/Strikethrough"] = true;
+                    styleSheet["/StrikethroughPosition"] = 1;
                 }
             }
+        } else if (key == "font-variant") {
+            QStringList params = val.split(" ");
+            bool tab = params.contains("tabular-nums");
+            bool old = params.contains("oldstyle-nums");
+            Q_FOREACH(QString param, params) {
+                if (param == "small-caps" || param == "all-small-caps") {
+                    styleSheet["/FontCaps"] = 1;
+                } else if (param == "no-common-ligatures"){
+                    styleSheet["/Ligatures"] = false;
+                } else if (param == "discretionary-ligatures"){
+                    styleSheet["/DiscretionaryLigatures"] = true;
+                } else if (param == "contextual"){
+                    styleSheet["/ContextualLigatures"] = true;
+                } else if (param == "diagonal-fractions"){
+                    styleSheet["/Fractions"] = true;
+                } else if (param == "ordinal"){
+                    styleSheet["/Ordinals"] = true;
+                } else if (param == "slashed-zero"){
+                    styleSheet["/SlashedZero"] = true;
+                }
+            }
+            if (tab && old) {
+                styleSheet["/FigureStyle"] = 4;
+            } else if (tab) {
+                styleSheet["/FigureStyle"] = 1;
+            } else if (old) {
+                styleSheet["/FigureStyle"] = 2;
+            }
+        } else if (key == "font-feature-settings") {
+            QStringList params = val.split(",");
+            Q_FOREACH(QString param, params) {
+                if (param.trimmed() == "'swsh' 1") {
+                    styleSheet["/Swash"] = true;
+                } else if (param.trimmed() == "'titl' 1") {
+                    styleSheet["/Titling"] = true;
+                } else if (param.trimmed() == "'salt' 1") {
+                    styleSheet["/StylisticAlternates"] = true;
+                } else if (param.trimmed() == "'ornm' 1") {
+                    styleSheet["/Ornaments"] = true;
+                } else if (param.trimmed() == "'ital' 1") {
+                    styleSheet["/Italics"] = true;
+                }
+            }
+        } else if (key == "text-orientation") {
+            if (val == "upright") {
+                styleSheet["/BaselineDirection"] = 1;
+            } else if (val == "mixed") {
+                styleSheet["/BaselineDirection"] = 2;
+            }
+        } else if (key == "word-break") {
         } else {
             qDebug() << "Unsupported css-style:" << key << val;
         }

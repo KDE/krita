@@ -349,7 +349,6 @@ RecorderExport::RecorderExport(RecorderExportSettings *s, QWidget *parent)
     connect(d->ui->buttonEditProfile, SIGNAL(clicked()), SLOT(onButtonEditProfileClicked()));
     connect(d->ui->editVideoFilePath, SIGNAL(textChanged(QString)), SLOT(onEditVideoPathChanged(QString)));
     connect(d->ui->buttonBrowseExport, SIGNAL(clicked()), SLOT(onButtonBrowseExportClicked()));
-    d->ui->buttonBox->button(QDialogButtonBox::Save)->setText(i18n("Export"));
     connect(d->ui->buttonBox->button(QDialogButtonBox::Save), SIGNAL(clicked()), this, SLOT(onButtonExportClicked()));
     connect(d->ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     connect(d->ui->buttonCancelExport, SIGNAL(clicked()), SLOT(onButtonCancelClicked()));
@@ -360,7 +359,9 @@ RecorderExport::RecorderExport(RecorderExportSettings *s, QWidget *parent)
     connect(d->ui->resultPreviewCheckBox, SIGNAL(toggled(bool)), d->ui->spinFirstFrameSec, SLOT(setEnabled(bool)));
     connect(d->ui->extendResultCheckBox, SIGNAL(toggled(bool)), d->ui->spinLastFrameSec, SLOT(setEnabled(bool)));
 
-
+    if (settings->realTimeCaptureMode)
+        d->ui->buttonBox->button(QDialogButtonBox::Close)->setText("OK");
+    d->ui->buttonBox->button(QDialogButtonBox::Save)->setText(i18n("Export"));
     d->ui->editVideoFilePath->installEventFilter(this);
 }
 

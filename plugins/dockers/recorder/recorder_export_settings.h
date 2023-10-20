@@ -26,6 +26,7 @@ struct RecorderExportSettings {
     // The following settings are stored in the RecorderExportConfiguration
     bool resize = false;
     bool lockRatio = false;
+    bool lockFps = false;
     bool resultPreview = true;
     bool extendResult = true;
     int inputFps = 30;
@@ -51,6 +52,7 @@ struct RecorderExportSettings {
     int framesCount = 0;
 
     bool realTimeCaptureMode = false;
+    bool realTimeCaptureModeWasSet = false;
 };
 
 

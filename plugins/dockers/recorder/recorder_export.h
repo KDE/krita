@@ -41,6 +41,7 @@ private Q_SLOTS:
     void onSpinScaleWidthValueChanged(int value);
     void onSpinScaleHeightValueChanged(int value);
     void onButtonLockRatioToggled(bool checked);
+    void onButtonLockFpsToggled(bool checked);
     void onButtonBrowseFfmpegClicked();
     void onComboProfileIndexChanged(int index);
     void onButtonEditProfileClicked();

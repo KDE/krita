@@ -21,7 +21,7 @@ public:
     RecorderExportConfig(bool readOnly);
     ~RecorderExportConfig();
 
-    void loadConfiguration(RecorderExportSettings *settings) const;
+    void loadConfiguration(RecorderExportSettings *settings, bool loadLockFps = true) const;
 
     int inputFps() const;
     void setInputFps(int value);
@@ -49,6 +49,9 @@ public:
 
     bool lockRatio() const;
     void setLockRatio(bool value);
+
+    bool lockFps() const;
+    void setLockFps(bool value);
 
     int profileIndex() const;
     void setProfileIndex(int value);

@@ -93,6 +93,10 @@ public:
         compression = config.compression();
         resolution = config.resolution();
         realTimeCaptureMode = config.realTimeCaptureMode();
+        if (realTimeCaptureMode) {
+            q->exportSettings->lockFps = true;
+            q->exportSettings->realTimeCaptureModeWasSet = true;
+        }
         recordIsolateLayerMode = config.recordIsolateLayerMode();
         recordAutomatically = config.recordAutomatically();
 
@@ -482,6 +486,10 @@ void RecorderDockerDock::onRealTimeCaptureModeToggled(bool checked)
     RecorderConfig(false).setRealTimeCaptureMode(checked);
     d->loadSettings();
     d->updateUiForRealTimeMode();
+    if (d->realTimeCaptureMode) {
+        exportSettings->lockFps = true;
+        exportSettings->realTimeCaptureModeWasSet = true;
+    }
 }
 
 void RecorderDockerDock::onCaptureIntervalChanged(double interval)

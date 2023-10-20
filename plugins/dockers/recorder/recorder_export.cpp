@@ -55,6 +55,9 @@ public:
 
     QElapsedTimer elapsedTimer;
 
+    int spinInputFPSMinValue = 0;
+    int spinInputFPSMaxValue = 0;
+
     Private(RecorderExport *q_ptr)
         : q(q_ptr)
         , ui(new Ui::RecorderExport)
@@ -143,6 +146,23 @@ public:
         QSignalBlocker blockerHeight(ui->spinScaleWidth);
         ui->spinScaleHeight->setValue(settings->size.height());
         ui->spinScaleWidth->setValue(settings->size.width());
+    }
+
+    void updateFps(RecorderExportConfig &config, bool takeFromInputFps = false)
+    {
+        if (!settings->lockFps)
+            return;
+
+        if (takeFromInputFps) {
+            settings->fps = settings->inputFps;
+            config.setFps(settings->fps);
+            ui->spinFps->setValue(settings->fps);
+        } else {
+            settings->inputFps = settings->fps;
+            config.setInputFps(settings->inputFps);
+            ui->spinInputFps->setValue(settings->inputFps);
+        }
+        updateVideoDuration();
     }
 
     bool tryAbortExport()
@@ -297,11 +317,14 @@ RecorderExport::RecorderExport(RecorderExportSettings *s, QWidget *parent)
     , d(new Private(this))
 {
     d->ui->setupUi(this);
+    d->spinInputFPSMaxValue = d->ui->spinInputFps->minimum();
+    d->spinInputFPSMaxValue = d->ui->spinInputFps->maximum();
     d->ui->buttonBrowseDirectory->setIcon(KisIconUtils::loadIcon("view-preview"));
     d->ui->buttonBrowseFfmpeg->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonEditProfile->setIcon(KisIconUtils::loadIcon("document-edit"));
     d->ui->buttonBrowseExport->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonLockRatio->setIcon(settings->lockRatio ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
+    d->ui->buttonLockFps->setIcon(settings->lockFps ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
     d->ui->buttonWatchIt->setIcon(KisIconUtils::loadIcon("media-playback-start"));
     d->ui->buttonShowInFolder->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonRemoveSnapshots->setIcon(KisIconUtils::loadIcon("edit-delete"));
@@ -320,6 +343,7 @@ RecorderExport::RecorderExport(RecorderExportSettings *s, QWidget *parent)
     connect(d->ui->spinScaleWidth, SIGNAL(valueChanged(int)), SLOT(onSpinScaleWidthValueChanged(int)));
     connect(d->ui->spinScaleHeight, SIGNAL(valueChanged(int)), SLOT(onSpinScaleHeightValueChanged(int)));
     connect(d->ui->buttonLockRatio, SIGNAL(toggled(bool)), SLOT(onButtonLockRatioToggled(bool)));
+    connect(d->ui->buttonLockFps, SIGNAL(toggled(bool)), SLOT(onButtonLockFpsToggled(bool)));
     connect(d->ui->buttonBrowseFfmpeg, SIGNAL(clicked()), SLOT(onButtonBrowseFfmpegClicked()));
     connect(d->ui->comboProfile, SIGNAL(currentIndexChanged(int)), SLOT(onComboProfileIndexChanged(int)));
     connect(d->ui->buttonEditProfile, SIGNAL(clicked()), SLOT(onButtonEditProfileClicked()));
@@ -346,6 +370,8 @@ RecorderExport::~RecorderExport()
 
 void RecorderExport::setup()
 {
+    RecorderExportConfig config(true);
+    d->updateFps(config);
     d->updateFrameInfo();
 
     if (settings->framesCount == 0) {
@@ -362,9 +388,10 @@ void RecorderExport::setup()
                                        );
     }
 
-    RecorderExportConfig config(true);
 
-    config.loadConfiguration(settings);
+    // Don't load lockFps flag from config, if liveCaptureMode was just set by the user
+    config.loadConfiguration(settings, !settings->realTimeCaptureModeWasSet);
+    settings->realTimeCaptureModeWasSet = false;
 
     d->ui->spinInputFps->setValue(settings->inputFps);
     d->ui->spinFps->setValue(settings->fps);
@@ -377,6 +404,9 @@ void RecorderExport::setup()
     d->ui->spinScaleHeight->setValue(settings->size.height());
     d->ui->buttonLockRatio->setChecked(settings->lockRatio);
     d->ui->buttonLockRatio->setIcon(settings->lockRatio ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
+    d->ui->labelRealTimeCaptureNotion->setVisible(settings->realTimeCaptureMode);
+    d->ui->buttonLockFps->setChecked(settings->lockFps);
+    d->ui->buttonLockFps->setIcon(settings->lockFps ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
     d->fillComboProfiles();
     d->checkFfmpeg();
     d->updateVideoFilePath();
@@ -408,14 +438,17 @@ void RecorderExport::onButtonBrowseDirectoryClicked()
 void RecorderExport::onSpinInputFpsValueChanged(int value)
 {
     settings->inputFps = value;
-    RecorderExportConfig(false).setInputFps(value);
-    d->updateVideoDuration();
+    RecorderExportConfig config(false);
+    config.setInputFps(value);
+    d->updateFps(config, true);
 }
 
 void RecorderExport::onSpinFpsValueChanged(int value)
 {
     settings->fps = value;
-    RecorderExportConfig(false).setFps(value);
+    RecorderExportConfig config(false);
+    config.setFps(value);
+    d->updateFps(config, false);
 }
 
 void RecorderExport::onCheckResultPreviewToggled(bool checked)
@@ -478,6 +511,24 @@ void RecorderExport::onButtonLockRatioToggled(bool checked)
         config.setSize(settings->size);
     }
     d->ui->buttonLockRatio->setIcon(settings->lockRatio ? KisIconUtils::loadIcon("locked") : KisIconUtils::loadIcon("unlocked"));
+}
+
+void RecorderExport::onButtonLockFpsToggled(bool checked)
+{
+    settings->lockFps = checked;
+    RecorderExportConfig config(false);
+    config.setLockFps(checked);
+    d->updateFps(config);
+    if (settings->lockFps) {
+        d->ui->buttonLockFps->setIcon(KisIconUtils::loadIcon("locked"));
+        d->ui->spinInputFps->setMinimum(d->ui->spinFps->minimum());
+        d->ui->spinInputFps->setMaximum(d->ui->spinFps->maximum());
+    } else {
+        d->ui->buttonLockFps->setIcon(KisIconUtils::loadIcon("unlocked"));
+        d->ui->spinInputFps->setMinimum(d->spinInputFPSMinValue);
+        d->ui->spinInputFps->setMaximum(d->spinInputFPSMaxValue);
+    }
+
 }
 
 void RecorderExport::onButtonBrowseFfmpegClicked()

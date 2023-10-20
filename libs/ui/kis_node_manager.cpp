@@ -1031,28 +1031,38 @@ void KisNodeManager::removeNode()
 
 void KisNodeManager::mirrorNodeX()
 {
-    KisNodeSP node = activeNode();
+    KisNodeList nodes = selectedNodes();
 
     KUndo2MagicString commandName;
-    if (node->inherits("KisLayer")) {
-        commandName = kundo2_i18n("Mirror Layer X");
-    } else if (node->inherits("KisMask")) {
-        commandName = kundo2_i18n("Mirror Mask X");
+    if (nodes.size() == 1) {
+        if (nodes[0]->inherits("KisLayer")) {
+            commandName = kundo2_i18n("Mirror Layer X");
+        } else if (nodes[0]->inherits("KisMask")) {
+            commandName = kundo2_i18n("Mirror Mask X");
+        }
     }
-    mirrorNode(node, commandName, Qt::Horizontal, m_d->view->selection());
+    else {
+        commandName = kundo2_i18n("Mirror Layers X");
+    }
+    mirrorNodes(nodes, commandName, Qt::Horizontal, m_d->view->selection());
 }
 
 void KisNodeManager::mirrorNodeY()
 {
-    KisNodeSP node = activeNode();
+    KisNodeList nodes = selectedNodes();
 
     KUndo2MagicString commandName;
-    if (node->inherits("KisLayer")) {
-        commandName = kundo2_i18n("Mirror Layer Y");
-    } else if (node->inherits("KisMask")) {
-        commandName = kundo2_i18n("Mirror Mask Y");
+    if (nodes.size() == 1) {
+        if (nodes[0]->inherits("KisLayer")) {
+            commandName = kundo2_i18n("Mirror Layer Y");
+        } else if (nodes[0]->inherits("KisMask")) {
+            commandName = kundo2_i18n("Mirror Mask Y");
+        }
     }
-    mirrorNode(node, commandName, Qt::Vertical, m_d->view->selection());
+    else {
+        commandName = kundo2_i18n("Mirror Layers Y");
+    }
+    mirrorNodes(nodes, commandName, Qt::Vertical, m_d->view->selection());
 }
 
 void KisNodeManager::mirrorAllNodesX()
@@ -1151,11 +1161,22 @@ void KisNodeManager::mirrorNode(KisNodeSP node,
                                 Qt::Orientation orientation,
                                 KisSelectionSP selection)
 {
-    if (!canModifyLayer(node)) return;
+    KisNodeList nodes = {node};
+    mirrorNodes(nodes, actionName, orientation, selection);
+}
+
+void KisNodeManager::mirrorNodes(KisNodeList nodes,
+                                const KUndo2MagicString& actionName,
+                                Qt::Orientation orientation,
+                                KisSelectionSP selection)
+{
+    Q_FOREACH(KisNodeSP node, nodes) {
+        if (!canModifyLayer(node)) return;
+    }
 
     KisImageSignalVector emitSignals;
 
-    KisProcessingApplicator applicator(m_d->view->image(), node,
+    KisProcessingApplicator applicator(m_d->view->image(), nodes,
                                        KisProcessingApplicator::RECURSIVE,
                                        emitSignals, actionName);
 

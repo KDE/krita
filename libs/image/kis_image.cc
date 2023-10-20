@@ -1030,7 +1030,11 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
 
 void KisImage::scaleNode(KisNodeSP node, const QPointF &center, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy, KisSelectionSP selection)
 {
-    KUndo2MagicString actionName(kundo2_i18n("Scale Layer"));
+    scaleNodes(KisNodeList{node}, center, scaleX, scaleY, filterStrategy, selection);
+}
+void KisImage::scaleNodes(KisNodeList nodes, const QPointF &center, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy, KisSelectionSP selection)
+{
+    KUndo2MagicString actionName(nodes.size() == 1 ? kundo2_i18n("Scale Layer") : kundo2_i18n("Scale Layers"));
     KisImageSignalVector emitSignals;
 
     QPointF offset;
@@ -1045,7 +1049,7 @@ void KisImage::scaleNode(KisNodeSP node, const QPointF &center, qreal scaleX, qr
         offset = center - transform.map(center);
     }
 
-    KisProcessingApplicator applicator(this, node,
+    KisProcessingApplicator applicator(this, nodes,
                                        KisProcessingApplicator::RECURSIVE,
                                        emitSignals, actionName);
 
@@ -1074,16 +1078,32 @@ void KisImage::rotateImpl(const KUndo2MagicString &actionName,
                           bool resizeImage,
                           KisSelectionSP selection)
 {
+    rotateImpl(actionName, KisNodeList{rootNode}, radians, resizeImage, selection);
+}
+void KisImage::rotateImpl(const KUndo2MagicString &actionName,
+                          KisNodeList nodes,
+                          double radians,
+                          bool resizeImage,
+                          KisSelectionSP selection)
+{
     // we can either transform (and resize) the whole image or
     // transform a selection, we cannot do both at the same time
     KIS_SAFE_ASSERT_RECOVER(!(bool(selection) && resizeImage)) {
         selection = 0;
     }
 
-    const QRect baseBounds =
-        resizeImage ? bounds() :
-        selection ? selection->selectedExactRect() :
-        rootNode->exactBounds();
+    QRect baseBounds;
+    if (resizeImage) {
+        baseBounds = bounds();
+    }
+    else if (selection) {
+        baseBounds = selection->selectedExactRect();
+    }
+    else {
+        Q_FOREACH(KisNodeSP node, nodes) {
+            baseBounds = baseBounds.united(node->exactBounds());
+        }
+    }
 
     QPointF offset;
     QSize newSize;
@@ -1124,7 +1144,7 @@ void KisImage::rotateImpl(const KUndo2MagicString &actionName,
         KisProcessingApplicator::NONE;
 
 
-    KisProcessingApplicator applicator(this, rootNode,
+    KisProcessingApplicator applicator(this, nodes,
                                        KisProcessingApplicator::RECURSIVE | signalFlags,
                                        emitSignals, actionName);
 
@@ -1160,10 +1180,19 @@ void KisImage::rotateImage(double radians)
 
 void KisImage::rotateNode(KisNodeSP node, double radians, KisSelectionSP selection)
 {
-    if (node->inherits("KisMask")) {
-        rotateImpl(kundo2_i18n("Rotate Mask"), node, radians, false, selection);
-    } else {
-        rotateImpl(kundo2_i18n("Rotate Layer"), node, radians, false, selection);
+    rotateNodes(KisNodeList{node}, radians, selection);
+}
+void KisImage::rotateNodes(KisNodeList nodes, double radians, KisSelectionSP selection)
+{
+    if (nodes.size() == 1) {
+        if (nodes[0]->inherits("KisMask")) {
+            rotateImpl(kundo2_i18n("Rotate Mask"), nodes, radians, false, selection);
+        } else {
+            rotateImpl(kundo2_i18n("Rotate Layer"), nodes, radians, false, selection);
+        }
+    }
+    else {
+        rotateImpl(kundo2_i18n("Rotate Layers"), nodes, radians, false, selection);
     }
 }
 
@@ -1173,11 +1202,26 @@ void KisImage::shearImpl(const KUndo2MagicString &actionName,
                          double angleX, double angleY,
                          KisSelectionSP selection)
 {
-    const QRect baseBounds =
-        resizeImage ? bounds() :
-        selection ? selection->selectedExactRect() :
-        rootNode->exactBounds();
-
+    shearImpl(actionName, KisNodeList{rootNode}, resizeImage, angleX, angleY, selection);
+}
+void KisImage::shearImpl(const KUndo2MagicString &actionName,
+                         KisNodeList nodes,
+                         bool resizeImage,
+                         double angleX, double angleY,
+                         KisSelectionSP selection)
+{
+    QRect baseBounds;
+    if (resizeImage) {
+        baseBounds = bounds();
+    }
+    else if (selection) {
+        baseBounds = selection->selectedExactRect();
+    }
+    else {
+        Q_FOREACH(KisNodeSP node, nodes) {
+            baseBounds = baseBounds.united(node->exactBounds());
+        }
+    }
     const QPointF origin = QRectF(baseBounds).center();
 
     //angleX, angleY are in degrees
@@ -1211,7 +1255,7 @@ void KisImage::shearImpl(const KUndo2MagicString &actionName,
         KisProcessingApplicator::RECURSIVE;
     if (resizeImage) signalFlags |= KisProcessingApplicator::NO_UI_UPDATES;
 
-    KisProcessingApplicator applicator(this, rootNode,
+    KisProcessingApplicator applicator(this, nodes,
                                        signalFlags,
                                        emitSignals, actionName);
 
@@ -1243,11 +1287,21 @@ void KisImage::shearImpl(const KUndo2MagicString &actionName,
 
 void KisImage::shearNode(KisNodeSP node, double angleX, double angleY, KisSelectionSP selection)
 {
-    if (node->inherits("KisMask")) {
-        shearImpl(kundo2_i18n("Shear Mask"), node, false,
-                  angleX, angleY, selection);
-    } else {
-        shearImpl(kundo2_i18n("Shear Layer"), node, false,
+    shearNodes(KisNodeList{node}, angleX, angleY, selection);
+}
+void KisImage::shearNodes(KisNodeList nodes, double angleX, double angleY, KisSelectionSP selection)
+{
+    if (nodes.size() == 1) {
+        if (nodes[0]->inherits("KisMask")) {
+            shearImpl(kundo2_i18n("Shear Mask"), nodes, false,
+                      angleX, angleY, selection);
+        } else {
+            shearImpl(kundo2_i18n("Shear Layer"), nodes, false,
+                      angleX, angleY, selection);
+        }
+    }
+    else {
+        shearImpl(kundo2_i18n("Shear Layers"), nodes, false,
                   angleX, angleY, selection);
     }
 }

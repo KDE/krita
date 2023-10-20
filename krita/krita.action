@@ -3155,10 +3155,10 @@
     </Action>
     <Action name="mirrorNodeX">
       <icon>symmetry-horizontal</icon>
-      <text>Mirror Layer Hori&amp;zontally</text>
+      <text>Mirror Layers Hori&amp;zontally</text>
       <whatsThis/>
-      <toolTip>Mirror Layer Horizontally</toolTip>
-      <iconText>Mirror Layer Horizontally</iconText>
+      <toolTip>Mirror Layers Horizontally</toolTip>
+      <iconText>Mirror Layers Horizontally</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut/>
@@ -3167,10 +3167,10 @@
     </Action>
     <Action name="mirrorNodeY">
       <icon>symmetry-vertical</icon>
-      <text>Mirror Layer &amp;Vertically</text>
+      <text>Mirror Layers &amp;Vertically</text>
       <whatsThis/>
-      <toolTip>Mirror Layer Vertically</toolTip>
-      <iconText>Mirror Layer Vertically</iconText>
+      <toolTip>Mirror Layers Vertically</toolTip>
+      <iconText>Mirror Layers Vertically</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut/>
@@ -3179,10 +3179,10 @@
     </Action>
     <Action name="rotatelayer">
       <icon/>
-      <text>&amp;Rotate Layer...</text>
+      <text>&amp;Rotate Layers...</text>
       <whatsThis/>
-      <toolTip>Rotate Layer</toolTip>
-      <iconText>Rotate Layer</iconText>
+      <toolTip>Rotate Layers</toolTip>
+      <iconText>Rotate Layers</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut/>
@@ -3191,10 +3191,10 @@
     </Action>
     <Action name="rotateLayerCW90">
       <icon>object-rotate-right</icon>
-      <text>Rotate &amp;Layer 90° to the Right</text>
+      <text>Rotate &amp;Layers 90° to the Right</text>
       <whatsThis/>
-      <toolTip>Rotate Layer 90° to the Right</toolTip>
-      <iconText>Rotate Layer 90° to the Right</iconText>
+      <toolTip>Rotate Layers 90° to the Right</toolTip>
+      <iconText>Rotate Layers 90° to the Right</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut/>
@@ -3203,10 +3203,10 @@
     </Action>
     <Action name="rotateLayerCCW90">
       <icon>object-rotate-left</icon>
-      <text>Rotate Layer &amp;90° to the Left</text>
+      <text>Rotate Layers &amp;90° to the Left</text>
       <whatsThis/>
-      <toolTip>Rotate Layer 90° to the Left</toolTip>
-      <iconText>Rotate Layer 90° to the Left</iconText>
+      <toolTip>Rotate Layers 90° to the Left</toolTip>
+      <iconText>Rotate Layers 90° to the Left</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut/>
@@ -3215,10 +3215,10 @@
     </Action>
     <Action name="rotateLayer180">
       <icon/>
-      <text>Rotate Layer &amp;180°</text>
+      <text>Rotate Layers &amp;180°</text>
       <whatsThis/>
-      <toolTip>Rotate Layer 180°</toolTip>
-      <iconText>Rotate Layer 180°</iconText>
+      <toolTip>Rotate Layers 180°</toolTip>
+      <iconText>Rotate Layers 180°</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut/>
@@ -3227,10 +3227,10 @@
     </Action>
     <Action name="layersize">
       <icon/>
-      <text>Scale &amp;Layer to new Size...</text>
+      <text>Scale &amp;Layers to new Size...</text>
       <whatsThis/>
-      <toolTip>Scale Layer to new Size</toolTip>
-      <iconText>Scale Layer to new Size</iconText>
+      <toolTip>Scale Layers to new Size</toolTip>
+      <iconText>Scale Layers to new Size</iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut/>
@@ -3239,10 +3239,10 @@
     </Action>
     <Action name="shearlayer">
       <icon/>
-      <text>&amp;Shear Layer...</text>
+      <text>&amp;Shear Layers...</text>
       <whatsThis/>
-      <toolTip>Shear Layer</toolTip>
-      <iconText>Shear Layer</iconText>
+      <toolTip>Shear Layers</toolTip>
+      <iconText>Shear Layers</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut/>
@@ -3347,10 +3347,10 @@
     </Action>
     <Action name="offsetlayer">
       <icon/>
-      <text>&amp;Offset Layer...</text>
+      <text>&amp;Offset Layers...</text>
       <whatsThis/>
-      <toolTip>Offset Layer</toolTip>
-      <iconText>Offset Layer</iconText>
+      <toolTip>Offset Layers</toolTip>
+      <iconText>Offset Layers</iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut/>

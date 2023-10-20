@@ -24,6 +24,7 @@ public:
 
 private:
     void shearLayerImpl(KisNodeSP rootNode);
+    void shearLayersImpl(KisNodeList nodes);
 
 private Q_SLOTS:
 

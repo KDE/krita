@@ -274,6 +274,7 @@ public:
      * right after this call.
      */
     void cropNode(KisNodeSP node, const QRect& newRect, const bool activeFrameOnly = false);
+    void cropNodes(KisNodeList nodes, const QRect& newRect, const bool activeFrameOnly = false);
 
     /**
      * @brief start asynchronous operation on scaling the image
@@ -302,6 +303,7 @@ public:
      * right after this call.
      */
     void scaleNode(KisNodeSP node, const QPointF &center, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy, KisSelectionSP selection);
+    void scaleNodes(KisNodeList nodes, const QPointF &center, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy, KisSelectionSP selection);
 
     /**
      * @brief start asynchronous operation on rotating the image
@@ -330,6 +332,7 @@ public:
      * right after the call
      */
     void rotateNode(KisNodeSP node, double radians, KisSelectionSP selection);
+    void rotateNodes(KisNodeList nodes, double radians, KisSelectionSP selection);
 
     /**
      * @brief start asynchronous operation on shearing the image
@@ -359,6 +362,7 @@ public:
      * right after the call
      */
     void shearNode(KisNodeSP node, double angleX, double angleY, KisSelectionSP selection);
+    void shearNodes(KisNodeList nodes, double angleX, double angleY, KisSelectionSP selection);
 
     /**
      * Convert image projection to \p dstColorSpace, keeping all the layers intouched.
@@ -1246,7 +1250,11 @@ private:
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
     void rotateImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode, double radians,
                     bool resizeImage, KisSelectionSP selection);
+    void rotateImpl(const KUndo2MagicString &actionName, KisNodeList nodes, double radians,
+                    bool resizeImage, KisSelectionSP selection);
     void shearImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
+                   bool resizeImage, double angleX, double angleY, KisSelectionSP selection);
+    void shearImpl(const KUndo2MagicString &actionName, KisNodeList nodes,
                    bool resizeImage, double angleX, double angleY, KisSelectionSP selection);
 
     void safeRemoveTwoNodes(KisNodeSP node1, KisNodeSP node2);

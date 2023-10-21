@@ -98,6 +98,9 @@ KisImportExportErrorCode PSDSaver::buildFile(QIODevice &io)
     }
 
     const bool haveLayers = m_image->rootLayer()->childCount() > 1 ||
+        m_image->rootLayer()->firstChild()->childCount() > 0 ||
+        // check if "oblige child" mechanism is in action, then forbid collapsing
+        m_image->rootLayer()->projection() != m_image->rootLayer()->firstChild()->projection() ||
         KisPainter::checkDeviceHasTransparency(
                 m_image->rootLayer()->firstChild()->projection());
 

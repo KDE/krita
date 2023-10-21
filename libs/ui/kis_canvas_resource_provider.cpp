@@ -310,7 +310,7 @@ void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVarian
         emit sigNodeChanged(currentNode());
         break;
     case(KoCanvasResource::CurrentEffectiveCompositeOp) :
-        emit sigCompositeOpChanged();
+        emit sigEffectiveCompositeOpChanged();
         break;
     case (KoCanvasResource::Opacity):
     {

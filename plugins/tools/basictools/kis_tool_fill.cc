@@ -78,7 +78,7 @@ KisToolFill::KisToolFill(KoCanvasBase * canvas)
 
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
 
-    connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigCompositeOpChanged()), SLOT(resetCursorStyle()));
+    connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
 }
 
 KisToolFill::~KisToolFill()

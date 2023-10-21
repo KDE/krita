@@ -167,7 +167,7 @@ Q_SIGNALS:
     void sigDisplayProfileChanged(const KoColorProfile *);
     void sigFGColorUsed(const KoColor&);
     void sigOnScreenResolutionChanged(qreal scaleX, qreal scaleY);
-    void sigCompositeOpChanged();
+    void sigEffectiveCompositeOpChanged();
     void sigOpacityChanged(qreal);
     void sigSavingWorkspace(KisWorkspaceResourceSP workspace);
     void sigLoadingWorkspace(KisWorkspaceResourceSP workspace);

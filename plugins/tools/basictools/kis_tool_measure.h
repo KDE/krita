@@ -19,8 +19,11 @@
 #include "flake/kis_node_shape.h"
 #include <kis_icon.h>
 
+#include <QVector2D>
+
 class QPointF;
 class QWidget;
+class QVector2D;
 
 class KoCanvasBase;
 
@@ -78,18 +81,13 @@ private:
     double angle();
     double distance();
 
-    double deltaX() {
-        return m_endPos.x() - m_startPos.x();
-    }
-    double deltaY() {
-        return m_startPos.y() - m_endPos.y();
-    }
-
 private:
     KisToolMeasureOptionsWidget *m_optionsWidget {nullptr};
 
     QPointF m_startPos {QPointF(0, 0)};
-    QPointF m_endPos {QPointF(0, 0)};
+    QPointF m_endPos {QPointF(0, 0)}; 
+    QVector2D m_baseLineVec {QPointF(1, 0)};
+    bool m_chooseBaseLineVec {false};
 };
 
 
@@ -119,4 +117,3 @@ public:
 
 
 #endif //KIS_TOOL_MEASURE_H_
-

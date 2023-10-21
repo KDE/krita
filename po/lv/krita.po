@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-18 00:40+0000\n"
+"POT-Creation-Date: 2023-10-21 00:40+0000\n"
 "PO-Revision-Date: 2008-12-27 19:32+0200\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Lavtian <locale@laka.lv>\n"
@@ -12276,7 +12276,7 @@ msgstr "Papīrs Augstums"
 #: krita/krita.action:3158
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Mirror Layer Hori&zontally"
+msgid "Mirror Layers Hori&zontally"
 msgstr "Horizontāli"
 
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
@@ -12286,14 +12286,14 @@ msgstr "Horizontāli"
 #: krita/krita.action:3160 krita/krita.action:3161
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Mirror Layer Horizontally"
+msgid "Mirror Layers Horizontally"
 msgstr "Horizontāli"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3170
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Mirror Layer &Vertically"
+msgid "Mirror Layers &Vertically"
 msgstr "Vertikāli"
 
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
@@ -12303,14 +12303,14 @@ msgstr "Vertikāli"
 #: krita/krita.action:3172 krita/krita.action:3173
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Mirror Layer Vertically"
+msgid "Mirror Layers Vertically"
 msgstr "Vertikāli"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3182
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "&Rotate Layer..."
+msgid "&Rotate Layers..."
 msgstr "&Rotēt Slānis."
 
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
@@ -12320,14 +12320,14 @@ msgstr "&Rotēt Slānis."
 #: krita/krita.action:3184 krita/krita.action:3185
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Rotate Layer"
+msgid "Rotate Layers"
 msgstr "Rotēt Slānis"
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3194
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Rotate &Layer 90° to the Right"
+msgid "Rotate &Layers 90° to the Right"
 msgstr "Rotēt Slānis"
 
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
@@ -12337,14 +12337,14 @@ msgstr "Rotēt Slānis"
 #: krita/krita.action:3196 krita/krita.action:3197
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Rotate Layer 90° to the Right"
+msgid "Rotate Layers 90° to the Right"
 msgstr "Rotēt Slānis"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3206
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Rotate Layer &90° to the Left"
+msgid "Rotate Layers &90° to the Left"
 msgstr "Rotēt Slānis"
 
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
@@ -12354,14 +12354,14 @@ msgstr "Rotēt Slānis"
 #: krita/krita.action:3208 krita/krita.action:3209
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Rotate Layer 90° to the Left"
+msgid "Rotate Layers 90° to the Left"
 msgstr "Rotēt Slānis"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3218
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Rotate Layer &180°"
+msgid "Rotate Layers &180°"
 msgstr "Rotēt Slānis"
 
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
@@ -12371,14 +12371,14 @@ msgstr "Rotēt Slānis"
 #: krita/krita.action:3220 krita/krita.action:3221
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Rotate Layer 180°"
+msgid "Rotate Layers 180°"
 msgstr "Rotēt Slānis"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3230
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Scale &Layer to new Size..."
+msgid "Scale &Layers to new Size..."
 msgstr "Saglabāt Slānis Attēls."
 
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
@@ -12388,14 +12388,14 @@ msgstr "Saglabāt Slānis Attēls."
 #: krita/krita.action:3232 krita/krita.action:3233
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Scale Layer to new Size"
+msgid "Scale Layers to new Size"
 msgstr "Saglabāt Slānis Attēls."
 
 #. i18n: context: text @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3242
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "&Shear Layer..."
+msgid "&Shear Layers..."
 msgstr "&Slānis."
 
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
@@ -12405,7 +12405,7 @@ msgstr "&Slānis."
 #: krita/krita.action:3244 krita/krita.action:3245
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Shear Layer"
+msgid "Shear Layers"
 msgstr "Slānis"
 
 #. i18n: context: text @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
@@ -12548,7 +12548,7 @@ msgstr "Slānis"
 #: krita/krita.action:3350
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "&Offset Layer..."
+msgid "&Offset Layers..."
 msgstr "&Slānis."
 
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
@@ -12558,7 +12558,7 @@ msgstr "&Slānis."
 #: krita/krita.action:3352 krita/krita.action:3353
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Offset Layer"
+msgid "Offset Layers"
 msgstr "X nobīde:"
 
 #. i18n: context: text @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
@@ -16773,15 +16773,15 @@ msgstr "Izmērs"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:40
 #: libs/ui/animation/wdg_animationrenderer.ui:150
 #: libs/ui/animation/wdg_animationrenderer.ui:164
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:751
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:755
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:958
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:965
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1181
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1350
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1353
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1417
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1455
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:754
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:758
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:975
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:984
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1211
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1390
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1393
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1457
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1462
 #: libs/ui/forms/wdgdisplaysettings.ui:336
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -16848,8 +16848,8 @@ msgstr "Izmērs"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:275
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:475
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:486
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:105
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:115
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:133
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:134
@@ -17078,7 +17078,7 @@ msgid "<%1> (embedded)"
 msgstr ""
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:467
+#: libs/ui/dialogs/kis_dlg_preferences.cc:468
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, fuzzy, kde-format
 msgid "Default"
@@ -17189,13 +17189,13 @@ msgstr ""
 msgid "Imported Image"
 msgstr "Imports, importēt Attēls"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1872
+#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1895
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
 msgstr "Izlase Kasīklis"
 
-#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2577
+#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -17237,82 +17237,100 @@ msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Attēla izšķirtspēja"
 
-#: libs/image/kis_image.cc:1033
+#: libs/image/kis_image.cc:1037
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "Mērogs Slānis"
 
-#: libs/image/kis_image.cc:1158
+#: libs/image/kis_image.cc:1037
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Scale Layers"
+msgstr "Mērogs Slānis"
+
+#: libs/image/kis_image.cc:1178
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rotēt Attēls"
 
-#: libs/image/kis_image.cc:1164
+#: libs/image/kis_image.cc:1189
 #, fuzzy
 #| msgid "Create Mask"
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Izveidot masku"
 
-#: libs/image/kis_image.cc:1166
+#: libs/image/kis_image.cc:1191
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "Rotēt Slānis"
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1195
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rotate Layers"
+msgstr "Rotēt Slānis"
+
+#: libs/image/kis_image.cc:1296
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Izmainīt Panelis Reverss"
 
-#: libs/image/kis_image.cc:1250
+#: libs/image/kis_image.cc:1299
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "Slānis"
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1304
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Shear Layers"
+msgstr "Slānis"
+
+#: libs/image/kis_image.cc:1311
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Attēls"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1329
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Pārveidot attēla tipu"
 
-#: libs/image/kis_image.cc:1326
+#: libs/image/kis_image.cc:1380
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Pārveidot attēla tipu"
 
-#: libs/image/kis_image.cc:1327
+#: libs/image/kis_image.cc:1381
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Pārveidot attēla tipu"
 
-#: libs/image/kis_image.cc:1385
+#: libs/image/kis_image.cc:1439
 #, fuzzy
 #| msgid "Apply Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Pielietot profilu"
 
-#: libs/image/kis_image.cc:1426
+#: libs/image/kis_image.cc:1480
 #, fuzzy
 #| msgid "Apply Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Pielietot profilu"
 
-#: libs/image/kis_image.cc:2486
+#: libs/image/kis_image.cc:2540
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -17457,72 +17475,72 @@ msgstr "Paletes"
 msgid "Error"
 msgstr "Spogulis Slānis"
 
-#: libs/image/kis_layer_utils.cpp:600
+#: libs/image/kis_layer_utils.cpp:609
 #, fuzzy, kde-format
 msgid "Merged"
 msgstr "Attēls"
 
-#: libs/image/kis_layer_utils.cpp:1378
+#: libs/image/kis_layer_utils.cpp:1389
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Alfa Opcijas"
 
-#: libs/image/kis_layer_utils.cpp:1602
+#: libs/image/kis_layer_utils.cpp:1625
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "(dokumenta) kopija Zaļš"
 
-#: libs/image/kis_layer_utils.cpp:1675
+#: libs/image/kis_layer_utils.cpp:1698
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Mainīt atkāpi"
 
-#: libs/image/kis_layer_utils.cpp:1835
+#: libs/image/kis_layer_utils.cpp:1858
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Noņemt izvēlēto krāsu"
 
-#: libs/image/kis_layer_utils.cpp:1843
+#: libs/image/kis_layer_utils.cpp:1866
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Profils:"
 
-#: libs/image/kis_layer_utils.cpp:1843
+#: libs/image/kis_layer_utils.cpp:1866
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Redzams"
 
-#: libs/image/kis_layer_utils.cpp:1921
+#: libs/image/kis_layer_utils.cpp:1944
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Izlase Kasīklis"
 
-#: libs/image/kis_layer_utils.cpp:1944
+#: libs/image/kis_layer_utils.cpp:1967
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Attēls"
 
-#: libs/image/kis_layer_utils.cpp:1957
+#: libs/image/kis_layer_utils.cpp:1980
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Attēls"
 
-#: libs/image/kis_layer_utils.cpp:2175
+#: libs/image/kis_layer_utils.cpp:2198
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Alfa Opcijas"
 
-#: libs/image/kis_layer_utils.cpp:2201
+#: libs/image/kis_layer_utils.cpp:2224
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
@@ -17534,8 +17552,8 @@ msgid "Processing"
 msgstr "Spiediens"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1414
-#: libs/ui/KisMainWindow.cpp:1777 libs/ui/KisMainWindow.cpp:1790
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1365
+#: libs/ui/KisMainWindow.cpp:1737 libs/ui/KisMainWindow.cpp:1750
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -17956,14 +17974,14 @@ msgid "Clone Layer"
 msgstr "Kustība Slānis"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1514
+#: libs/ui/kis_node_manager.cpp:1535
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Grupa:"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:961
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:972
 #, fuzzy, kde-format
 msgid "File Layer"
 msgstr "&Filtri Galerija"
@@ -18001,7 +18019,7 @@ msgid "Transform Mask"
 msgstr "Transformēt"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1294
+#: libs/ui/kis_node_manager.cpp:1315
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -18283,8 +18301,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Atsevišķs Attēls"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2150
-#: libs/ui/KisMainWindow.cpp:2233
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2108
+#: libs/ui/KisMainWindow.cpp:2191
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Imports, importēt Attēls"
@@ -19532,12 +19550,12 @@ msgstr ""
 msgid "Out"
 msgstr "Pielāgots"
 
-#: libs/pigment/resources/KoColorSet.cpp:1046
-#: libs/pigment/resources/KoColorSet.cpp:1391
-#: libs/pigment/resources/KoColorSet.cpp:1474
-#: libs/pigment/resources/KoColorSet.cpp:1688
+#: libs/pigment/resources/KoColorSet.cpp:1044
+#: libs/pigment/resources/KoColorSet.cpp:1389
+#: libs/pigment/resources/KoColorSet.cpp:1472
+#: libs/pigment/resources/KoColorSet.cpp:1721
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1175
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -19585,30 +19603,30 @@ msgstr "Avots:"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:658
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:354
-#: libs/ui/dialogs/kis_dlg_preferences.cc:905
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
+#: libs/ui/dialogs/kis_dlg_preferences.cc:906
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:1011
+#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1239
+#: libs/ui/kis_node_manager.cpp:1302 libs/ui/KisApplication.cpp:1011
 #: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
 #: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
 #: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
-#: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
-#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
-#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:973
-#: libs/ui/KisMainWindow.cpp:1089 libs/ui/KisMainWindow.cpp:1215
-#: libs/ui/KisMainWindow.cpp:1312 libs/ui/KisMainWindow.cpp:2008
-#: libs/ui/KisMainWindow.cpp:2017 libs/ui/KisMainWindow.cpp:2158
-#: libs/ui/KisMainWindow.cpp:2219 libs/ui/KisMainWindow.cpp:2240
-#: libs/ui/KisMainWindow.cpp:2855 libs/ui/KisPart.cpp:578
+#: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
+#: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
+#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:970
+#: libs/ui/KisMainWindow.cpp:1040 libs/ui/KisMainWindow.cpp:1166
+#: libs/ui/KisMainWindow.cpp:1263 libs/ui/KisMainWindow.cpp:1968
+#: libs/ui/KisMainWindow.cpp:1977 libs/ui/KisMainWindow.cpp:2116
+#: libs/ui/KisMainWindow.cpp:2177 libs/ui/KisMainWindow.cpp:2198
+#: libs/ui/KisMainWindow.cpp:2807 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:693
-#: libs/ui/KisView.cpp:1178 libs/ui/KisWelcomePageWidget.cpp:748
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:748
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -19853,8 +19871,8 @@ msgstr "Rediģēt Palete"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1787
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1791
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1796
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1800
 #: libs/ui/forms/wdgdisplaysettings.ui:165 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:326
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -20114,7 +20132,7 @@ msgid "Delete resource"
 msgstr "Dzēst tekstu"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2655
+#: libs/ui/KisMainWindow.cpp:2606
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -20449,7 +20467,7 @@ msgid "Select All"
 msgstr "Atla&sīt Visi"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:788
+#: libs/ui/KisView.cpp:792
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
@@ -20519,7 +20537,7 @@ msgid "Paste shapes"
 msgstr "Izveidot sagatavi"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:272
-#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:602
+#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:606
 #, fuzzy, kde-format
 msgid "(pasted)"
 msgstr "Pasteļtoņi"
@@ -20570,7 +20588,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Izveidot jaunu slāni"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2260
+#: libs/ui/KisMainWindow.cpp:2218
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "Krāsu pāreja:"
@@ -20631,7 +20649,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:488
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1815
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1824
 #, fuzzy, kde-format
 msgid "Warning(s):"
 msgstr "zīmējums"
@@ -21569,8 +21587,8 @@ msgstr "Rādīt"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2083
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2085
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2092
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2094
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -21673,8 +21691,8 @@ msgstr "Izņemt slāni"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2053
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2062
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2064
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22538,7 +22556,7 @@ msgid "Numerical"
 msgstr "Virsotnes:"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1183
+#: libs/ui/KisMainWindow.cpp:1134
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "Imports, importēt Attēls"
@@ -22675,49 +22693,49 @@ msgctxt "(qtundo-format)"
 msgid "Change Layer Properties"
 msgstr "Slāņa īpašības"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:65
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:66
 #, fuzzy, kde-format
 msgid "Layer Styles"
 msgstr "Slānis Lielums"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:276
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Ievadiet grupas nosaukumu:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:277 libs/ui/KisMainWindow.cpp:2666
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2617
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "&Nosaukums:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:279
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:280
 #, fuzzy, kde-format
 msgctxt "Default name for a new style"
 msgid "New Style"
 msgstr "Stili"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:333
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:397
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:334
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:398
 #, fuzzy, kde-format
 msgid "Select ASL file"
 msgstr "Atla&sīt Visi"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:356
 #, fuzzy, kde-format
 msgid "Could not load layer style library %1."
 msgstr "Nē Izlase"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:369
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:370
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:249
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Warning"
 msgstr "zīmējums"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:370
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:371
 #, fuzzy, kde-format
 msgid ""
 "There is already a layer style library with this name installed. Do you want "
@@ -22726,70 +22744,64 @@ msgstr ""
 "Dokuments ar šādu nosaukumu jau eksistē.\n"
 "Vai vēlaties to pārrakstīt?"
 
-#. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleXBox)
-#. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleYBox)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:748
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:766
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:769
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:787
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:750
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:770
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:775
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:795
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:798
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:922
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:955
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:962
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:969
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1098
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1101
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1172
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1175
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1178
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1185
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1188
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1305
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1308
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1347
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1421
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1427
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1370
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1374
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:805
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:810
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:936
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:971
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:980
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:989
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1120
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1125
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1197
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1202
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1207
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1216
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1221
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1340
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1345
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1386
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1462
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1467
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1472
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1372
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1378
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1460
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:45
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:52
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:123
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:971
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:987
-#, fuzzy, no-c-format, kde-format
-msgid " %"
-msgstr "%"
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1384
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1468
+#, kde-format
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "{n}%"
+msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:905
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:918
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
 #, fuzzy, kde-format
 msgid "Not Implemented Yet"
 msgstr "Bez aizpildījuma"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:992
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1013
 #: libs/ui/layerstyles/wdglayerstyles.ui:52
 #, fuzzy, kde-format
 msgid "Inner Shadow"
 msgstr "Nomest ēnojuma-"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:993
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1014
 #, kde-format
 msgid "Choke:"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1168
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1192
 #: libs/ui/layerstyles/wdglayerstyles.ui:60
 #, fuzzy, kde-format
 msgid "Outer Glow"
 msgstr "ūdeņi:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1214
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1248
 #, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
@@ -22807,17 +22819,17 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "Divkāršot"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:208
+#: libs/ui/dialogs/kis_dlg_preferences.cc:209
 #, fuzzy, kde-format
 msgid "No Cursor"
 msgstr "Kursors"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:209
+#: libs/ui/dialogs/kis_dlg_preferences.cc:210
 #, kde-format
 msgid "Tool Icon"
 msgstr "Darba rīka ikona"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:210
+#: libs/ui/dialogs/kis_dlg_preferences.cc:211
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
@@ -22826,128 +22838,128 @@ msgstr "Darba rīka ikona"
 msgid "Arrow"
 msgstr "Bulta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:212
 #, fuzzy, kde-format
 msgid "Small Circle"
 msgstr "Small"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:212
+#: libs/ui/dialogs/kis_dlg_preferences.cc:213
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, kde-format
 msgid "Crosshair"
 msgstr "Krusts"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:213
+#: libs/ui/dialogs/kis_dlg_preferences.cc:214
 #, fuzzy, kde-format
 #| msgid "Brush Outline"
 msgid "Triangle Righthanded"
 msgstr "Otas kontūra"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:214
+#: libs/ui/dialogs/kis_dlg_preferences.cc:215
 #, fuzzy, kde-format
 #| msgid "Brush Outline"
 msgid "Triangle Lefthanded"
 msgstr "Otas kontūra"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:216
 #, fuzzy, kde-format
 msgid "Black Pixel"
 msgstr "Bilde"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:217
 #, fuzzy, kde-format
 msgid "White Pixel"
 msgstr "Alfa Opcijas"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:219
+#: libs/ui/dialogs/kis_dlg_preferences.cc:220
 #, fuzzy, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "Otas kontūra"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:220
+#: libs/ui/dialogs/kis_dlg_preferences.cc:221
 #, fuzzy, kde-format
 msgid "Circle Outline"
 msgstr "Otas kontūra"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:221
+#: libs/ui/dialogs/kis_dlg_preferences.cc:222
 #, fuzzy, kde-format
 msgid "Preview Outline"
 msgstr "Priekšskatījums: "
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:222
+#: libs/ui/dialogs/kis_dlg_preferences.cc:223
 #, fuzzy, kde-format
 msgid "Tilt Outline"
 msgstr "Otas kontūra"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:246
+#: libs/ui/dialogs/kis_dlg_preferences.cc:247
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, fuzzy, kde-format
 msgid "Eraser"
 msgstr "Pikselis Kasīklis"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:323
+#: libs/ui/dialogs/kis_dlg_preferences.cc:324
 #, fuzzy, kde-format
 msgid "On Touch Drag"
 msgstr "Ceļvedis Līnijas"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:324
+#: libs/ui/dialogs/kis_dlg_preferences.cc:325
 #, fuzzy, kde-format
 msgid "On Click Drag"
 msgstr "Ceļvedis Līnijas"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:325
+#: libs/ui/dialogs/kis_dlg_preferences.cc:326
 #, fuzzy, kde-format
 msgid "On Middle-Click Drag"
 msgstr "Ceļvedis Līnijas"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:362
+#: libs/ui/dialogs/kis_dlg_preferences.cc:363
 #, kde-format
 msgid "Open default window"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:363
+#: libs/ui/dialogs/kis_dlg_preferences.cc:364
 #, fuzzy, kde-format
 msgid "Load previous session"
 msgstr "Pārvietot slāni augšup"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:364
+#: libs/ui/dialogs/kis_dlg_preferences.cc:365
 #, fuzzy, kde-format
 #| msgid "Preview: "
 msgid "Show session manager"
 msgstr "Priekšskatījums: "
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:432
+#: libs/ui/dialogs/kis_dlg_preferences.cc:433
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:438
+#: libs/ui/dialogs/kis_dlg_preferences.cc:439
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:470
+#: libs/ui/dialogs/kis_dlg_preferences.cc:471
 #, fuzzy, kde-format
 msgid "Internal Storage"
 msgstr "Izšķi&rtspēja:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:472
+#: libs/ui/dialogs/kis_dlg_preferences.cc:473
 #, kde-format
 msgid "SD-Card"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:510
+#: libs/ui/dialogs/kis_dlg_preferences.cc:511
 #, fuzzy, kde-format
 msgid "Choose Manually"
 msgstr "Instrukcija Režīms"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:575
+#: libs/ui/dialogs/kis_dlg_preferences.cc:576
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -22962,26 +22974,26 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:893
+#: libs/ui/dialogs/kis_dlg_preferences.cc:894
 #, fuzzy, kde-format
 msgid "Select a Background Image"
 msgstr "fons"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:905
+#: libs/ui/dialogs/kis_dlg_preferences.cc:906
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, fuzzy, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "Slānis Lielums"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:925
+#: libs/ui/dialogs/kis_dlg_preferences.cc:926
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1027
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1136
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1028
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1137
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1218
 #, fuzzy, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -22989,21 +23001,21 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "Ekrāns"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1096
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1097
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, fuzzy, kde-format
 msgid "Install Color Profiles"
 msgstr "Pielietot profilu"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1306
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1307
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1308
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1309
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr ""
@@ -23011,7 +23023,7 @@ msgstr ""
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1318
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1319
 #, fuzzy, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
@@ -23022,7 +23034,7 @@ msgstr[2] "Ota"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1327
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1328
 #, fuzzy, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
@@ -23031,13 +23043,13 @@ msgstr[1] "Uzstādījumi"
 msgstr[2] "Uzstādījumi"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1424
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1431
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1445
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1452
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -23046,184 +23058,184 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1449
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1456
 #, kde-format
 msgid " fps"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1659
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1668
 #, fuzzy, kde-format
 #| msgid "OpenGL"
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1660
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1669
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1662
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1671
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1664
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1673
 #, fuzzy, kde-format
 #| msgid "OpenGL"
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1671
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1680
 #, fuzzy, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Izmantošana"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1691
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1700
 #, fuzzy, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Ota"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1773
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1782
 #, fuzzy, kde-format
 msgid "Display Id: %1"
 msgstr "Rādīt"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1774
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1783
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1775
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1784
 #, fuzzy, kde-format
 msgid "Min Luminance: %1"
 msgstr "Palielināt (vērtību)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1776
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1785
 #, fuzzy, kde-format
 msgid "Max Luminance: %1"
 msgstr "Palielināt (vērtību)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1777
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1786
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1778
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1787
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1779
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1788
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1780
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1789
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1781
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1790
 #, fuzzy, kde-format
 msgid "White Point: %1, %2"
 msgstr "Alfa Opcijas"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1961
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1970
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2046
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
 #, fuzzy, kde-format
 msgid "Configure Krita"
 msgstr "Konfeti"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2063
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2072
 #, fuzzy, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Eksportēt dokumentu kā"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2065
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2074
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, fuzzy, kde-format
 msgid "Shortcuts"
 msgstr "Apstiprināt saglabāšanu"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2075
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2084
 #, fuzzy, kde-format
 msgid "Canvas Input Settings"
 msgstr "Divkāršot Ota"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2076
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2085
 #, fuzzy, kde-format
 msgid "Canvas Input"
 msgstr "Audekla krāsa:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2093
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2102
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, fuzzy, kde-format
 msgid "Color Management"
 msgstr "Krāsa Vadība"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2095
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2104
 #, fuzzy, kde-format
 #| msgid "Color"
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Krāsa"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2103
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2105
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2112
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2114
 #, kde-format
 msgid "Performance"
 msgstr "Veiktspēja"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2113
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2122
 #, fuzzy, kde-format
 msgid "Tablet settings"
 msgstr "Krāsu uzstādījumi"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2115
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2124
 #, fuzzy, kde-format
 msgid "Tablet"
 msgstr "Palete"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2123
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2132
 #, fuzzy, kde-format
 msgid "Canvas-only settings"
 msgstr "Divkāršot Ota"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2125
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2134
 #, fuzzy, kde-format
 msgid "Canvas-only"
 msgstr "Audekla krāsa:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2133
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2135
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2142
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2144
 #, fuzzy, kde-format
 msgid "Pop-up Palette"
 msgstr "Palete"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2143
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2152
 #, fuzzy, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autors"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2145
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2154
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Autors"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2152
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2161
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -26461,7 +26473,7 @@ msgstr "Pašreizējais slānis"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1068
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1021
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -27617,12 +27629,17 @@ msgstr "Saglabāt Slānis Attēls."
 msgid "Layer Size"
 msgstr "Slānis Lielums"
 
-#: libs/ui/imagesize/imagesize.cc:119
+#: libs/ui/imagesize/imagesize.cc:126
 #, fuzzy, kde-format
 msgid "Resize Layer"
 msgstr "Rotēt Slānis"
 
-#: libs/ui/imagesize/imagesize.cc:167
+#: libs/ui/imagesize/imagesize.cc:126
+#, fuzzy, kde-format
+msgid "Resize Layers"
+msgstr "Rotēt Slānis"
+
+#: libs/ui/imagesize/imagesize.cc:174
 #, fuzzy, kde-format
 msgid "Scale Selection"
 msgstr "Mērogs Izlase"
@@ -28815,7 +28832,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Mainīt filtru"
 
-#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:694
+#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:698
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -28989,7 +29006,7 @@ msgstr "Slāņa īpašības"
 msgid "File Layer Properties"
 msgstr "Slāņa īpašības"
 
-#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:969
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:980
 #, kde-format
 msgid "No file name specified"
 msgstr ""
@@ -29055,18 +29072,28 @@ msgstr[0] "Slānis Lielums"
 msgstr[1] "Slānis Lielums"
 msgstr[2] "Slānis Lielums"
 
-#: libs/ui/kis_layer_manager.cc:863
+#: libs/ui/kis_layer_manager.cc:864
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Slānis Lielums"
 
-#: libs/ui/kis_layer_manager.cc:919
+#: libs/ui/kis_layer_manager.cc:881
+#, kde-format
+msgctxt ""
+"floating message in layer manager when trying to merge a non-animated layer "
+"into an animated one"
+msgid ""
+"Non-animated layer is merged into the current frame. To merge it into the "
+"whole clip, create at least one frame"
+msgstr ""
+
+#: libs/ui/kis_layer_manager.cc:930
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:922
+#: libs/ui/kis_layer_manager.cc:933
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr ""
@@ -29194,119 +29221,141 @@ msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Darbarīki"
 
-#: libs/ui/kis_node_manager.cpp:1038
+#: libs/ui/kis_node_manager.cpp:1039
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
 msgstr "Spogulis Slānis"
 
-#: libs/ui/kis_node_manager.cpp:1040
+#: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask X"
 msgstr "Spogulis Slānis"
 
-#: libs/ui/kis_node_manager.cpp:1051
+#: libs/ui/kis_node_manager.cpp:1045
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Mirror Layers X"
+msgstr "Spogulis Slānis"
+
+#: libs/ui/kis_node_manager.cpp:1057
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
 msgstr "Spogulis Slānis"
 
-#: libs/ui/kis_node_manager.cpp:1053
+#: libs/ui/kis_node_manager.cpp:1059
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Y"
 msgstr "Spogulis Slānis"
 
-#: libs/ui/kis_node_manager.cpp:1061
+#: libs/ui/kis_node_manager.cpp:1063
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Mirror Layers Y"
+msgstr "Spogulis Slānis"
+
+#: libs/ui/kis_node_manager.cpp:1071
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers X"
 msgstr "Spogulis Slānis"
 
-#: libs/ui/kis_node_manager.cpp:1068
+#: libs/ui/kis_node_manager.cpp:1078
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Y"
 msgstr "Spogulis Slānis"
 
-#: libs/ui/kis_node_manager.cpp:1189
+#: libs/ui/kis_node_manager.cpp:1210
 #, fuzzy, kde-format
 msgid "Export \"%1\""
 msgstr "Tuvinājums:"
 
-#: libs/ui/kis_node_manager.cpp:1219
+#: libs/ui/kis_node_manager.cpp:1240
 #, fuzzy, kde-format
 msgid "Could not save the layer. %1"
 msgstr "&Monitora profils:"
 
-#: libs/ui/kis_node_manager.cpp:1237
+#: libs/ui/kis_node_manager.cpp:1258
 #, fuzzy, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Slānis Lielums"
 
-#: libs/ui/kis_node_manager.cpp:1261
+#: libs/ui/kis_node_manager.cpp:1282
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Tuvinājums:"
 
-#: libs/ui/kis_node_manager.cpp:1281
+#: libs/ui/kis_node_manager.cpp:1302
 #, fuzzy, kde-format
 msgid "Could not save to svg: %1"
 msgstr "&Monitora profils:"
 
-#: libs/ui/kis_node_manager.cpp:1307
+#: libs/ui/kis_node_manager.cpp:1328
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Slānis Lielums"
 
-#: libs/ui/kis_node_manager.cpp:1308
+#: libs/ui/kis_node_manager.cpp:1329
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1339
+#: libs/ui/kis_node_manager.cpp:1360
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Izveidot jaunu slāni"
 
-#: libs/ui/kis_node_manager.cpp:1462
+#: libs/ui/kis_node_manager.cpp:1483
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Divkāršot"
 
-#: libs/ui/kis_node_manager.cpp:1544
+#: libs/ui/kis_node_manager.cpp:1565
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Divkāršot Ota"
 
-#: libs/ui/kis_node_manager.cpp:1555
+#: libs/ui/kis_node_manager.cpp:1576
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Divkāršot Ota"
 
-#: libs/ui/kis_node_manager.cpp:1562
+#: libs/ui/kis_node_manager.cpp:1583
 #, fuzzy, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Izņemt slāni"
 
-#: libs/ui/kis_node_manager.cpp:1563
+#: libs/ui/kis_node_manager.cpp:1584
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "&Slānis"
 
-#: libs/ui/kis_node_manager.cpp:1580
+#: libs/ui/kis_node_manager.cpp:1611
+#, kde-format
+msgid "Cannot move layer \"%1\" into new parent \"%2\""
+msgstr ""
+
+#: libs/ui/kis_node_manager.cpp:1614
+#, kde-format
+msgid "Cannot move layer \"%1\" into the root layer"
+msgstr ""
+
+#: libs/ui/kis_node_manager.cpp:1622
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
@@ -29378,8 +29427,8 @@ msgstr "Krāsu telpa:"
 msgid "Brush composite"
 msgstr "Ota"
 
-#: libs/ui/kis_paintop_box.cc:1311 libs/ui/kis_paintop_box.cc:1333
-#: libs/ui/kis_paintop_box.cc:1347
+#: libs/ui/kis_paintop_box.cc:1303 libs/ui/kis_paintop_box.cc:1325
+#: libs/ui/kis_paintop_box.cc:1339
 #, fuzzy, kde-format
 msgid ""
 "%1\n"
@@ -29581,41 +29630,41 @@ msgid ""
 "\t\tPlease configure more RAM for Krita in Settings dialog"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:376
 #: plugins/python/channels2layers/channels2layers.py:79
 #, kde-format
 msgid "Hidden"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:380
+#: libs/ui/kis_statusbar.cc:378
 #, kde-format
 msgid "Ants"
 msgstr ""
 
-#: libs/ui/kis_statusbar.cc:380
+#: libs/ui/kis_statusbar.cc:378
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, fuzzy, kde-format
 msgid "Mask"
 msgstr "Maska"
 
-#: libs/ui/kis_statusbar.cc:383
+#: libs/ui/kis_statusbar.cc:381
 #, fuzzy, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
 "Display Mode: %5"
 msgstr "Izlase Aktīvs"
 
-#: libs/ui/kis_statusbar.cc:388
+#: libs/ui/kis_statusbar.cc:386
 #, fuzzy, kde-format
 msgid "No Selection"
 msgstr "Nē Izlase"
 
-#: libs/ui/kis_statusbar.cc:406
+#: libs/ui/kis_statusbar.cc:404
 #, fuzzy, kde-format
 msgid "No profile"
 msgstr "Nē"
 
-#: libs/ui/kis_statusbar.cc:408
+#: libs/ui/kis_statusbar.cc:406
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -30059,7 +30108,7 @@ msgstr "Kļūda autosaglabāšanas laikā! Pilns disks?"
 msgid "Finished autosaving %1"
 msgstr "&Puslīnija"
 
-#: libs/ui/KisDocument.cpp:1838
+#: libs/ui/KisDocument.cpp:1843
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -30071,40 +30120,40 @@ msgstr ""
 "Slikti formēts URL\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1904
+#: libs/ui/KisDocument.cpp:1909
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "File %1 does not exist."
 msgstr "Fails %1 neeksistē."
 
-#: libs/ui/KisDocument.cpp:1933
+#: libs/ui/KisDocument.cpp:1938
 #, fuzzy, kde-format
 msgid "Opening document"
 msgstr "Atvērt Avīze Dokumenti"
 
-#: libs/ui/KisDocument.cpp:1949 libs/ui/KisDocument.cpp:1955
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1960
 #, fuzzy, kde-format
 msgid "Could not open %1."
 msgstr "&Monitora profils:"
 
-#: libs/ui/KisDocument.cpp:1968 libs/ui/KisDocument.cpp:1972
+#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1977
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2103
+#: libs/ui/KisDocument.cpp:2112
 #, fuzzy, kde-format
 #| msgid "Not Filled"
 msgid "Not Saved"
 msgstr "Bez aizpildījuma"
 
-#: libs/ui/KisDocument.cpp:2584
+#: libs/ui/KisDocument.cpp:2594
 #, fuzzy, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "fons"
 
-#: libs/ui/KisDocument.cpp:2636
+#: libs/ui/KisDocument.cpp:2646
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30483,74 +30532,64 @@ msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr "Imports, importēt Attēls"
 
-#: libs/ui/KisMainWindow.cpp:187
+#: libs/ui/KisMainWindow.cpp:185
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
 msgstr "Stili"
 
-#: libs/ui/KisMainWindow.cpp:188
+#: libs/ui/KisMainWindow.cpp:186
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
 msgstr "Klintis"
 
-#: libs/ui/KisMainWindow.cpp:189
+#: libs/ui/KisMainWindow.cpp:187
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Window"
 msgstr "&Slānis"
 
-#: libs/ui/KisMainWindow.cpp:190
+#: libs/ui/KisMainWindow.cpp:188
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
 msgstr "Attēls Lielums"
 
-#: libs/ui/KisMainWindow.cpp:191
+#: libs/ui/KisMainWindow.cpp:189
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Krāsu telpa:"
 
-#: libs/ui/KisMainWindow.cpp:584
+#: libs/ui/KisMainWindow.cpp:586
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Rādīt orģinālo slāni"
 
-#: libs/ui/KisMainWindow.cpp:586
+#: libs/ui/KisMainWindow.cpp:588
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Uz slāņiem"
 
-#: libs/ui/KisMainWindow.cpp:1031
-#, fuzzy, kde-format
-msgid "Write Protected"
-msgstr "ieraksta aizsardzība"
-
-#: libs/ui/KisMainWindow.cpp:1035
-#, fuzzy, kde-format
-msgid "Recovered"
-msgstr "Renderēšana"
-
-#: libs/ui/KisMainWindow.cpp:1065
+#: libs/ui/KisMainWindow.cpp:1018
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "Plazma"
 
-#: libs/ui/KisMainWindow.cpp:1089
+#: libs/ui/KisMainWindow.cpp:1040
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Fails %1 neeksistē."
 
-#: libs/ui/KisMainWindow.cpp:1183
+#: libs/ui/KisMainWindow.cpp:1134
 #, fuzzy, kde-format
 msgid "Open Images"
 msgstr "Attēls"
 
-#: libs/ui/KisMainWindow.cpp:1313
+#: libs/ui/KisMainWindow.cpp:1264
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30559,45 +30598,45 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1369
+#: libs/ui/KisMainWindow.cpp:1320
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "Tuvinājums:"
 
-#: libs/ui/KisMainWindow.cpp:1369
+#: libs/ui/KisMainWindow.cpp:1320
 #, fuzzy, kde-format
 msgid "Saving As"
 msgstr "Datuma formāts"
 
-#: libs/ui/KisMainWindow.cpp:1756
+#: libs/ui/KisMainWindow.cpp:1716
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "Nesenie dokumenti"
 
-#: libs/ui/KisMainWindow.cpp:1780
+#: libs/ui/KisMainWindow.cpp:1740
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "Izvēles gradients"
 
-#: libs/ui/KisMainWindow.cpp:1792
+#: libs/ui/KisMainWindow.cpp:1752
 #, fuzzy, kde-format
 msgid "Create from Clipboard"
 msgstr "Izveidot"
 
-#: libs/ui/KisMainWindow.cpp:1977
+#: libs/ui/KisMainWindow.cpp:1937
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Saglabāt Slānis Attēls."
 
-#: libs/ui/KisMainWindow.cpp:2003
+#: libs/ui/KisMainWindow.cpp:1963
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:194
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:350
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Neizdevās izveidot failu saglabāšanai"
 
-#: libs/ui/KisMainWindow.cpp:2007
+#: libs/ui/KisMainWindow.cpp:1967
 #, kde-format
 msgid ""
 "\n"
@@ -30605,7 +30644,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2017
+#: libs/ui/KisMainWindow.cpp:1977
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:204
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:362
 #, kde-format
@@ -30614,7 +30653,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2158 libs/ui/KisMainWindow.cpp:2240
+#: libs/ui/KisMainWindow.cpp:2116 libs/ui/KisMainWindow.cpp:2198
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30623,59 +30662,59 @@ msgstr ""
 "Nevar atvērt\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2219
+#: libs/ui/KisMainWindow.cpp:2177
 #, fuzzy, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Izveidot jaunu slāni"
 
-#: libs/ui/KisMainWindow.cpp:2646
+#: libs/ui/KisMainWindow.cpp:2597
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "Krāsu telpa:"
 
-#: libs/ui/KisMainWindow.cpp:2661
+#: libs/ui/KisMainWindow.cpp:2612
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Krāsu telpa:"
 
-#: libs/ui/KisMainWindow.cpp:2665
+#: libs/ui/KisMainWindow.cpp:2616
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Krāsu telpa:"
 
-#: libs/ui/KisMainWindow.cpp:2709
+#: libs/ui/KisMainWindow.cpp:2660
 #, fuzzy, kde-format
 msgid "&%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2712
+#: libs/ui/KisMainWindow.cpp:2663
 #, fuzzy, kde-format
 msgid "%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2878
+#: libs/ui/KisMainWindow.cpp:2830
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2894
+#: libs/ui/KisMainWindow.cpp:2846
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Slānis Kļūda"
 
-#: libs/ui/KisMainWindow.cpp:3003
+#: libs/ui/KisMainWindow.cpp:2955
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3061
+#: libs/ui/KisMainWindow.cpp:3013
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -30998,27 +31037,27 @@ msgstr "Attēls nav pieejams."
 msgid "Use This Template"
 msgstr "izmantot šo šablonu"
 
-#: libs/ui/KisView.cpp:763
+#: libs/ui/KisView.cpp:767
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:678
+#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:678
 #, fuzzy, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Slānis Lielums"
 
-#: libs/ui/KisView.cpp:773 libs/ui/tool/kis_tool.cc:680
+#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:680
 #, fuzzy, kde-format
 msgid "Layer is locked."
 msgstr "Slānis Lielums"
 
-#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:682
+#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:682
 #, fuzzy, kde-format
 msgid "Layer is invisible."
 msgstr "Slānis Lielums"
 
-#: libs/ui/KisView.cpp:1179
+#: libs/ui/KisView.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -31027,82 +31066,92 @@ msgstr ""
 "<p>Dokuments <b>'%1'</b> ticis modificēts.</p><p>Vai vēlaties to saglabāt ?</"
 "p>"
 
-#: libs/ui/KisView.cpp:1382
+#: libs/ui/KisView.cpp:1252
+#, fuzzy, kde-format
+msgid "Write Protected"
+msgstr "ieraksta aizsardzība"
+
+#: libs/ui/KisView.cpp:1256
+#, fuzzy, kde-format
+msgid "Recovered"
+msgstr "Renderēšana"
+
+#: libs/ui/KisView.cpp:1410
 #, fuzzy, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Alfa Opcijas"
 
-#: libs/ui/KisView.cpp:1387
+#: libs/ui/KisView.cpp:1415
 #, fuzzy, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Alfa Opcijas"
 
-#: libs/ui/KisView.cpp:1389
+#: libs/ui/KisView.cpp:1417
 #, fuzzy, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Alfa Opcijas"
 
-#: libs/ui/KisView.cpp:1401
+#: libs/ui/KisView.cpp:1429
 #, fuzzy, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "zīmējums"
 
-#: libs/ui/KisView.cpp:1407
+#: libs/ui/KisView.cpp:1435
 #, fuzzy, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "zīmējums"
 
-#: libs/ui/KisView.cpp:1409
+#: libs/ui/KisView.cpp:1437
 #, fuzzy, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Alfa Opcijas"
 
-#: libs/ui/KisView.cpp:1412
+#: libs/ui/KisView.cpp:1440
 #, fuzzy, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "zīmējums"
 
-#: libs/ui/KisViewManager.cpp:814
+#: libs/ui/KisViewManager.cpp:772
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Pielietot profilu"
 
-#: libs/ui/KisViewManager.cpp:944
+#: libs/ui/KisViewManager.cpp:902
 #, fuzzy, kde-format
 msgid "%1 (Copy)"
 msgstr "(dokumenta) kopija Zaļš"
 
-#: libs/ui/KisViewManager.cpp:1087 libs/ui/KisViewManager.cpp:1168
+#: libs/ui/KisViewManager.cpp:1045 libs/ui/KisViewManager.cpp:1121
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1087
+#: libs/ui/KisViewManager.cpp:1045
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Spieķkauls"
 
-#: libs/ui/KisViewManager.cpp:1168
+#: libs/ui/KisViewManager.cpp:1121
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Spieķkauls"
 
-#: libs/ui/KisViewManager.cpp:1360
+#: libs/ui/KisViewManager.cpp:1309
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
 "Press %1 to go back."
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1402
+#: libs/ui/KisViewManager.cpp:1351
 #, fuzzy, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Avots:"
 
-#: libs/ui/KisViewManager.cpp:1406
+#: libs/ui/KisViewManager.cpp:1355
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31117,19 +31166,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1421
+#: libs/ui/KisViewManager.cpp:1370
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1422
+#: libs/ui/KisViewManager.cpp:1371
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1535 libs/ui/KisViewManager.cpp:1553
+#: libs/ui/KisViewManager.cpp:1484 libs/ui/KisViewManager.cpp:1502
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -32578,7 +32627,6 @@ msgstr "Caurspīdīgs"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:41
 #: plugins/tools/basictools/kis_tool_fill.cc:537
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:44
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
 #, fuzzy, kde-format
 msgid "Opacity: "
@@ -37223,7 +37271,6 @@ msgstr "Alfa Opcijas"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1078
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:51
 #, fuzzy, kde-format
 msgid "Saturation: "
 msgstr "Piesātināšana"
@@ -41969,15 +42016,21 @@ msgid "Offset Image"
 msgstr "X nobīde:"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Offset Layers"
+msgstr "X nobīde:"
+
+#: plugins/extensions/offsetimage/offsetimage.cpp:85
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgstr "X nobīde:"
 
-#: plugins/extensions/offsetimage/offsetimage.cpp:81
-#, fuzzy, kde-format
-msgctxt "@title:window"
-msgid "Offset Layer"
+#: plugins/extensions/offsetimage/offsetimage.cpp:85
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Offset Layers"
 msgstr "X nobīde:"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
@@ -42924,9 +42977,14 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Image Horizontally"
 msgstr "Horizontāli"
 
-#: plugins/extensions/rotateimage/rotateimage.cc:144
+#: plugins/extensions/rotateimage/rotateimage.cc:148
 #, fuzzy, kde-format
 msgid "Rotate Layer"
+msgstr "Rotēt Slānis"
+
+#: plugins/extensions/rotateimage/rotateimage.cc:148
+#, fuzzy, kde-format
+msgid "Rotate Layers"
 msgstr "Rotēt Slānis"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
@@ -43067,9 +43125,14 @@ msgstr "Pievienot"
 msgid "Shear Image"
 msgstr "Attēls"
 
-#: plugins/extensions/shearimage/shearimage.cc:72
+#: plugins/extensions/shearimage/shearimage.cc:76
 #, fuzzy, kde-format
 msgid "Shear Layer"
+msgstr "Slānis"
+
+#: plugins/extensions/shearimage/shearimage.cc:76
+#, fuzzy, kde-format
+msgid "Shear Layers"
 msgstr "Slānis"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
@@ -56795,7 +56858,6 @@ msgid "Select Shapes Tool"
 msgstr "Izvēles režīms:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:44
 #, fuzzy, kde-format
 msgid "Opacity [*varies*]: "
 msgstr "Necaurspīdība:"
@@ -56930,42 +56992,49 @@ msgstr "Atsauksme:"
 msgid "Reference Images Tool"
 msgstr "Atsauksme:"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:51
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
 #, fuzzy, kde-format
-msgid "Saturation [*varies*]: "
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Opacity: {n}%"
+msgstr "Necaurspīdība:"
+
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
+#, fuzzy, kde-format
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Saturation: {n}%"
 msgstr "Piesātināšana"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:61
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, fuzzy, kde-format
 msgid "Add Reference Image"
 msgstr "Atsauksme:"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:66
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:69
 #, fuzzy, kde-format
 msgid "Delete all Reference Images"
 msgstr "Atsauksme:"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:70
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:73
 #, fuzzy, kde-format
 msgid "Load Reference Images Set"
 msgstr "Atsauksme:"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:74
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:77
 #, fuzzy, kde-format
 msgid "Export Reference Images Set"
 msgstr "Atsauksme:"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:78
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:81
 #, fuzzy, kde-format
 msgid "Paste Reference Image From System Clipboard"
 msgstr "Izveidot"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:102
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:105
 #, kde-format
 msgid "Embed to .KRA"
 msgstr ""
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:103
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:106
 #, fuzzy, kde-format
 msgid "Link to Image"
 msgstr "Rotēt Attēls"
@@ -58705,12 +58774,12 @@ msgstr "&Krāsa:"
 msgid "Colorize Mask Editing Tool"
 msgstr "Gradienti"
 
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:107
 #, fuzzy, kde-format
 msgid "Edge detection: "
 msgstr "Stūris Detektācija"
 
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:109
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:110
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -58718,12 +58787,12 @@ msgid ""
 "thinnest lines on the image"
 msgstr ""
 
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:117
 #, kde-format
 msgid "Gap close hint: "
 msgstr ""
 
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:119
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:120
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -58731,12 +58800,13 @@ msgid ""
 "\"Gap close hint\" value"
 msgstr ""
 
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:124
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
 #, fuzzy, kde-format
-msgid "Clean up: "
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Clean up: {n}%"
 msgstr "Pielāgot lappusei"
 
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:127
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:129
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -59305,6 +59375,14 @@ msgstr "Pikselis"
 msgid "Horizontal Scale"
 msgstr "Horizontāli Vilnītis"
 
+#. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleXBox)
+#. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleYBox)
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:971
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:987
+#, fuzzy, no-c-format, kde-format
+msgid " %"
+msgstr "%"
+
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, scaleYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_height)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:984
@@ -59744,6 +59822,10 @@ msgstr "Aplaušanas pults T&roksnis."
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Atsauksme:"
+
+#, fuzzy
+#~ msgid "Saturation [*varies*]: "
+#~ msgstr "Piesātināšana"
 
 #, fuzzy
 #~ msgid "Embed tags..."

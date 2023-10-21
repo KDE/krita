@@ -82,8 +82,9 @@ void KisVisualColorModel::slotSetColorSpace(const KoColorSpace *cs)
         const KoColorSpace *csNew = cs;
 
         // PQ color space is not very suitable for color picking, substitute with linear one
-        if (cs->colorModelId() == RGBAColorModelID &&
-            cs->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile()->uniqueId()) {
+        if (cs->colorModelId() == RGBAColorModelID
+                && KoColorSpaceRegistry::instance()->p2020PQProfile()
+                && cs->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile()->uniqueId()) {
 
             csNew = KoColorSpaceRegistry::instance()->
                     colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(),

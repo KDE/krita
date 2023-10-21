@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-18 02:29+0000\n"
+"POT-Creation-Date: 2023-10-21 02:34+0000\n"
 "PO-Revision-Date: 2022-07-27 20:32+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -17393,13 +17393,13 @@ msgstr "Prechod cez"
 msgid "Imported Image"
 msgstr "Importovaný obrázok"
 
-#: libs/image/kis_image.cc:689 libs/image/kis_layer_utils.cpp:1872
+#: libs/image/kis_image.cc:689 libs/image/kis_layer_utils.cpp:1895
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
 msgstr "Maska výberu"
 
-#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2577
+#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -17641,63 +17641,63 @@ msgstr "Otvoriť súbor"
 msgid "Error"
 msgstr "Chyba"
 
-#: libs/image/kis_layer_utils.cpp:600
+#: libs/image/kis_layer_utils.cpp:609
 #, kde-format
 msgid "Merged"
 msgstr "Zlúčené"
 
-#: libs/image/kis_layer_utils.cpp:1378
+#: libs/image/kis_layer_utils.cpp:1389
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Zlúčiť nižšie"
 
-#: libs/image/kis_layer_utils.cpp:1602
+#: libs/image/kis_layer_utils.cpp:1625
 #, kde-format
 msgid "Copy of"
 msgstr "Kópia z"
 
-#: libs/image/kis_layer_utils.cpp:1675
+#: libs/image/kis_layer_utils.cpp:1698
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Zmeniť farbu projekcie"
 
-#: libs/image/kis_layer_utils.cpp:1835
+#: libs/image/kis_layer_utils.cpp:1858
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Zlúčiť vybrané uzly"
 
-#: libs/image/kis_layer_utils.cpp:1843
+#: libs/image/kis_layer_utils.cpp:1866
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nová z viditeľnej"
 
-#: libs/image/kis_layer_utils.cpp:1843
+#: libs/image/kis_layer_utils.cpp:1866
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Viditeľná"
 
-#: libs/image/kis_layer_utils.cpp:1921
+#: libs/image/kis_layer_utils.cpp:1944
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Zlúčiť masky výberu"
 
-#: libs/image/kis_layer_utils.cpp:1944
+#: libs/image/kis_layer_utils.cpp:1967
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Zarovnať vrstvu"
 
-#: libs/image/kis_layer_utils.cpp:1957
+#: libs/image/kis_layer_utils.cpp:1980
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Zarovnať obrázok"
 
-#: libs/image/kis_layer_utils.cpp:2175
+#: libs/image/kis_layer_utils.cpp:2198
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Rozdeliť alfu do masky"
 
-#: libs/image/kis_layer_utils.cpp:2201
+#: libs/image/kis_layer_utils.cpp:2224
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Previesť na vrstvu maľovania"
@@ -17708,8 +17708,8 @@ msgid "Processing"
 msgstr "Spracúvam"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1414
-#: libs/ui/KisMainWindow.cpp:1777 libs/ui/KisMainWindow.cpp:1790
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1365
+#: libs/ui/KisMainWindow.cpp:1737 libs/ui/KisMainWindow.cpp:1750
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18140,7 +18140,7 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "Skupina"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:961
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:972
 #, kde-format
 msgid "File Layer"
 msgstr "Vrstva súborov"
@@ -18472,8 +18472,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Dokument"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2148
-#: libs/ui/KisMainWindow.cpp:2231
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2106
+#: libs/ui/KisMainWindow.cpp:2189
 #, kde-format
 msgid "Import frames"
 msgstr "Importovať snímky"
@@ -19734,7 +19734,7 @@ msgstr "Von"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1175
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19787,25 +19787,25 @@ msgstr "Lokálne zdroje"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
+#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1218
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:1011
 #: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
 #: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
 #: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
-#: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
-#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
-#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:973
-#: libs/ui/KisMainWindow.cpp:1089 libs/ui/KisMainWindow.cpp:1215
-#: libs/ui/KisMainWindow.cpp:1312 libs/ui/KisMainWindow.cpp:2008
-#: libs/ui/KisMainWindow.cpp:2017 libs/ui/KisMainWindow.cpp:2156
-#: libs/ui/KisMainWindow.cpp:2217 libs/ui/KisMainWindow.cpp:2238
-#: libs/ui/KisMainWindow.cpp:2853 libs/ui/KisPart.cpp:578
+#: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
+#: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
+#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:970
+#: libs/ui/KisMainWindow.cpp:1040 libs/ui/KisMainWindow.cpp:1166
+#: libs/ui/KisMainWindow.cpp:1263 libs/ui/KisMainWindow.cpp:1968
+#: libs/ui/KisMainWindow.cpp:1977 libs/ui/KisMainWindow.cpp:2114
+#: libs/ui/KisMainWindow.cpp:2175 libs/ui/KisMainWindow.cpp:2196
+#: libs/ui/KisMainWindow.cpp:2805 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:693
-#: libs/ui/KisView.cpp:1178 libs/ui/KisWelcomePageWidget.cpp:748
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:748
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20320,7 +20320,7 @@ msgid "Delete resource"
 msgstr "Vymazať zdroj"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2653
+#: libs/ui/KisMainWindow.cpp:2604
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20680,7 +20680,7 @@ msgid "Select All"
 msgstr "Vybrať všetko"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:788
+#: libs/ui/KisView.cpp:792
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Vyplnenie vrstvy"
@@ -20742,7 +20742,7 @@ msgid "Paste shapes"
 msgstr "Vložiť tvary"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:272
-#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:602
+#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:606
 #, kde-format
 msgid "(pasted)"
 msgstr "(vložené)"
@@ -20798,7 +20798,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Zlyhalo vykresľovanie snímok animácie!"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2258
+#: libs/ui/KisMainWindow.cpp:2216
 #, kde-format
 msgid "Render Animation"
 msgstr "Vykresliť animáciu"
@@ -22907,7 +22907,7 @@ msgid "Numerical"
 msgstr "Číselný"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1183
+#: libs/ui/KisMainWindow.cpp:1134
 #, kde-format
 msgid "Import Images"
 msgstr "Importovať obrázky"
@@ -23053,7 +23053,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Zadať nový názov štýlu"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2664
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2615
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -27028,7 +27028,7 @@ msgstr "Aktuálna predvoľba štetca"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1068
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1021
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -29478,7 +29478,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Zmeniť vrstvu súborov"
 
-#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:694
+#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:698
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -29655,7 +29655,7 @@ msgstr "Vlastnosti vyplnenia vrstvy"
 msgid "File Layer Properties"
 msgstr "Vlastnosti vrstvy súborov"
 
-#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:969
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:980
 #, kde-format
 msgid "No file name specified"
 msgstr "Nezadané žiadne meno súboru"
@@ -29723,19 +29723,29 @@ msgstr[0] "Vrstva je zamknutá."
 msgstr[1] "Vrstva je zamknutá."
 msgstr[2] "Vrstva je zamknutá."
 
-#: libs/ui/kis_layer_manager.cc:863
+#: libs/ui/kis_layer_manager.cc:864
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Vrstva je zamknutá."
 
-#: libs/ui/kis_layer_manager.cc:919
+#: libs/ui/kis_layer_manager.cc:881
+#, kde-format
+msgctxt ""
+"floating message in layer manager when trying to merge a non-animated layer "
+"into an animated one"
+msgid ""
+"Non-animated layer is merged into the current frame. To merge it into the "
+"whole clip, create at least one frame"
+msgstr ""
+
+#: libs/ui/kis_layer_manager.cc:930
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Previesť neviditeľné skupiny"
 
-#: libs/ui/kis_layer_manager.cc:922
+#: libs/ui/kis_layer_manager.cc:933
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Exportovať iba skupiny najvyššej úrovne"
@@ -29959,7 +29969,18 @@ msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Vrstva masiek"
 
-#: libs/ui/kis_node_manager.cpp:1580
+#: libs/ui/kis_node_manager.cpp:1590
+#, kde-format
+msgid "Cannot move layer \"%1\" into new parent \"%2\""
+msgstr ""
+
+#: libs/ui/kis_node_manager.cpp:1593
+#, fuzzy, kde-format
+#| msgid "Put every layer in its own, separate group layer"
+msgid "Cannot move layer \"%1\" into the root layer"
+msgstr "Vložiť všetky vrstvy do vlastnej, samostatnej skupiny vrstiev"
+
+#: libs/ui/kis_node_manager.cpp:1601
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Rýchle zrušenie zoskupenia"
@@ -30283,24 +30304,24 @@ msgstr ""
 "priestoru.\n"
 "\t\tProsím, nakonfigurujte viac RAM pre Krita v dialógu Nastavenia"
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:376
 #: plugins/python/channels2layers/channels2layers.py:79
 #, kde-format
 msgid "Hidden"
 msgstr "Skryté"
 
-#: libs/ui/kis_statusbar.cc:380
+#: libs/ui/kis_statusbar.cc:378
 #, kde-format
 msgid "Ants"
 msgstr "Mravce"
 
-#: libs/ui/kis_statusbar.cc:380
+#: libs/ui/kis_statusbar.cc:378
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Maska"
 
-#: libs/ui/kis_statusbar.cc:383
+#: libs/ui/kis_statusbar.cc:381
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -30309,17 +30330,17 @@ msgstr ""
 "Výber: x = %1 y = %2 šírka = %3 výška = %4\n"
 "Režim zobrazenia: %5"
 
-#: libs/ui/kis_statusbar.cc:388
+#: libs/ui/kis_statusbar.cc:386
 #, kde-format
 msgid "No Selection"
 msgstr "Žiadny výber"
 
-#: libs/ui/kis_statusbar.cc:406
+#: libs/ui/kis_statusbar.cc:404
 #, kde-format
 msgid "No profile"
 msgstr "Nedostupný profil"
 
-#: libs/ui/kis_statusbar.cc:408
+#: libs/ui/kis_statusbar.cc:406
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -30810,7 +30831,7 @@ msgstr "Chyba počas automatického ukladania %1: %2"
 msgid "Finished autosaving %1"
 msgstr "Dokončené automatické ukladanie %1"
 
-#: libs/ui/KisDocument.cpp:1838
+#: libs/ui/KisDocument.cpp:1843
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -30822,41 +30843,41 @@ msgstr ""
 "Neplatné URL\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1904
+#: libs/ui/KisDocument.cpp:1909
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Súbor %1 neexistuje."
 
-#: libs/ui/KisDocument.cpp:1933
+#: libs/ui/KisDocument.cpp:1938
 #, kde-format
 msgid "Opening document"
 msgstr "Otvorenie dokumentu"
 
-#: libs/ui/KisDocument.cpp:1949 libs/ui/KisDocument.cpp:1955
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1960
 #, fuzzy, kde-format
 #| msgid "Could not open '%1'."
 msgid "Could not open %1."
 msgstr "Nepodarilo sa otvoriť '%1'."
 
-#: libs/ui/KisDocument.cpp:1968 libs/ui/KisDocument.cpp:1972
+#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1977
 #, fuzzy, kde-format
 #| msgid "There were problems opening %1."
 msgid "There were problems opening %1."
 msgstr "Nastali problémy pri otváraní %1."
 
-#: libs/ui/KisDocument.cpp:2103
+#: libs/ui/KisDocument.cpp:2112
 #, kde-format
 msgid "Not Saved"
 msgstr "Neuložené"
 
-#: libs/ui/KisDocument.cpp:2584
+#: libs/ui/KisDocument.cpp:2594
 #, fuzzy, kde-format
 #| msgid "Background"
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Pozadie"
 
-#: libs/ui/KisDocument.cpp:2636
+#: libs/ui/KisDocument.cpp:2646
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -31251,74 +31272,64 @@ msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr "Skryť vyskakovacie okno náhľadu vrstvy"
 
-#: libs/ui/KisMainWindow.cpp:185
+#: libs/ui/KisMainWindow.cpp:183
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
 msgstr "Štýly"
 
-#: libs/ui/KisMainWindow.cpp:186
+#: libs/ui/KisMainWindow.cpp:184
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
 msgstr "&Panely"
 
-#: libs/ui/KisMainWindow.cpp:187
+#: libs/ui/KisMainWindow.cpp:185
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Window"
 msgstr "&Okno"
 
-#: libs/ui/KisMainWindow.cpp:188
+#: libs/ui/KisMainWindow.cpp:186
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
 msgstr "Nové zobrazenie"
 
-#: libs/ui/KisMainWindow.cpp:189
+#: libs/ui/KisMainWindow.cpp:187
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Pracovná plocha"
 
-#: libs/ui/KisMainWindow.cpp:584
+#: libs/ui/KisMainWindow.cpp:586
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Zobraziť panel nástrojov %1"
 
-#: libs/ui/KisMainWindow.cpp:586
+#: libs/ui/KisMainWindow.cpp:588
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Skryť panel nástrojov %1"
 
-#: libs/ui/KisMainWindow.cpp:1031
-#, kde-format
-msgid "Write Protected"
-msgstr "Chránené proti zápisu"
-
-#: libs/ui/KisMainWindow.cpp:1035
-#, kde-format
-msgid "Recovered"
-msgstr "Obnovené"
-
-#: libs/ui/KisMainWindow.cpp:1065
+#: libs/ui/KisMainWindow.cpp:1018
 #, kde-format
 msgid "Save as %1"
 msgstr "Uložiť ako %1"
 
-#: libs/ui/KisMainWindow.cpp:1089
+#: libs/ui/KisMainWindow.cpp:1040
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Súbor %1 neexistuje."
 
-#: libs/ui/KisMainWindow.cpp:1183
+#: libs/ui/KisMainWindow.cpp:1134
 #, kde-format
 msgid "Open Images"
 msgstr "Otvoriť obrázky"
 
-#: libs/ui/KisMainWindow.cpp:1313
+#: libs/ui/KisMainWindow.cpp:1264
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -31331,40 +31342,40 @@ msgstr ""
 "\n"
 "Prosím, vyberte umiestnenie, kde nebude prepísaný pôvodný súbor!"
 
-#: libs/ui/KisMainWindow.cpp:1369
+#: libs/ui/KisMainWindow.cpp:1320
 #, kde-format
 msgid "Exporting"
 msgstr "Exportovanie"
 
-#: libs/ui/KisMainWindow.cpp:1369
+#: libs/ui/KisMainWindow.cpp:1320
 #, kde-format
 msgid "Saving As"
 msgstr "Uloženie ako"
 
-#: libs/ui/KisMainWindow.cpp:1756
+#: libs/ui/KisMainWindow.cpp:1716
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Vytvoriť nový dokument"
 
-#: libs/ui/KisMainWindow.cpp:1780
+#: libs/ui/KisMainWindow.cpp:1740
 #, kde-format
 msgid "Custom Document"
 msgstr "Vlastný dokument"
 
-#: libs/ui/KisMainWindow.cpp:1792
+#: libs/ui/KisMainWindow.cpp:1752
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Vytvoriť zo schránky"
 
-#: libs/ui/KisMainWindow.cpp:1977
+#: libs/ui/KisMainWindow.cpp:1937
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Save Layer/Mask"
 msgid "Layers/Masks"
 msgstr "Uložiť vrstvu/masku"
 
-#: libs/ui/KisMainWindow.cpp:2003
+#: libs/ui/KisMainWindow.cpp:1963
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, fuzzy, kde-format
@@ -31372,7 +31383,7 @@ msgstr "Uložiť vrstvu/masku"
 msgid "You don't have any resource bundles enabled."
 msgstr "Nemôžem vytvoriť výstupný dokument"
 
-#: libs/ui/KisMainWindow.cpp:2007
+#: libs/ui/KisMainWindow.cpp:1967
 #, kde-format
 msgid ""
 "\n"
@@ -31380,7 +31391,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2017
+#: libs/ui/KisMainWindow.cpp:1977
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -31389,7 +31400,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2156 libs/ui/KisMainWindow.cpp:2238
+#: libs/ui/KisMainWindow.cpp:2114 libs/ui/KisMainWindow.cpp:2196
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31398,43 +31409,43 @@ msgstr ""
 "Nepodarilo sa dokončiť import animácie:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2217
+#: libs/ui/KisMainWindow.cpp:2175
 #, fuzzy, kde-format
 #| msgid "Failed to render animation frames!"
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Zlyhalo vykresľovanie snímok animácie!"
 
-#: libs/ui/KisMainWindow.cpp:2644
+#: libs/ui/KisMainWindow.cpp:2595
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Import pracovnej plochy..."
 
-#: libs/ui/KisMainWindow.cpp:2659
+#: libs/ui/KisMainWindow.cpp:2610
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nová pracovná plocha..."
 
-#: libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/KisMainWindow.cpp:2614
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nová pracovná plocha"
 
-#: libs/ui/KisMainWindow.cpp:2707
+#: libs/ui/KisMainWindow.cpp:2658
 #, fuzzy, kde-format
 #| msgid "&%1 %2"
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2710
+#: libs/ui/KisMainWindow.cpp:2661
 #, fuzzy, kde-format
 #| msgid "%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2876
+#: libs/ui/KisMainWindow.cpp:2828
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -31443,19 +31454,19 @@ msgstr ""
 "Zásuvný modul správy farieb Krita LittleCMS nie je nainštalovaný. Krita sa "
 "ukončí."
 
-#: libs/ui/KisMainWindow.cpp:2892
+#: libs/ui/KisMainWindow.cpp:2844
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Chyba inštalácie"
 
-#: libs/ui/KisMainWindow.cpp:3001
+#: libs/ui/KisMainWindow.cpp:2953
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Témy"
 
-#: libs/ui/KisMainWindow.cpp:3059
+#: libs/ui/KisMainWindow.cpp:3011
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Rozširujúca medzera"
@@ -31777,65 +31788,75 @@ msgstr "Nie je dostupný žiadny obrázok."
 msgid "Use This Template"
 msgstr "Použiť túto šablónu"
 
-#: libs/ui/KisView.cpp:763
+#: libs/ui/KisView.cpp:767
 #, fuzzy, kde-format
 #| msgid "You cannot use this tool with the selected layer type"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Tento nástroj nemôžete použiť s vybraným typom vrstvy"
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:678
+#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:678
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Vrstva je zamknutá a neviditeľná."
 
-#: libs/ui/KisView.cpp:773 libs/ui/tool/kis_tool.cc:680
+#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:680
 #, kde-format
 msgid "Layer is locked."
 msgstr "Vrstva je zamknutá."
 
-#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:682
+#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:682
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Vrstva je neviditeľná."
 
-#: libs/ui/KisView.cpp:1179
+#: libs/ui/KisView.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Dokument <b>'%1'</b> bol zmenený.</p><p>Chcete ho uložiť?</p>"
 
-#: libs/ui/KisView.cpp:1382
+#: libs/ui/KisView.cpp:1252
+#, kde-format
+msgid "Write Protected"
+msgstr "Chránené proti zápisu"
+
+#: libs/ui/KisView.cpp:1256
+#, kde-format
+msgid "Recovered"
+msgstr "Obnovené"
+
+#: libs/ui/KisView.cpp:1410
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Mäkké overenie nefunguje s reálnymi číslami."
 
-#: libs/ui/KisView.cpp:1387
+#: libs/ui/KisView.cpp:1415
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Mäkké overenie je zapnuté"
 
-#: libs/ui/KisView.cpp:1389
+#: libs/ui/KisView.cpp:1417
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Mäkké overenie je vypnuté"
 
-#: libs/ui/KisView.cpp:1401
+#: libs/ui/KisView.cpp:1429
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Upozornenia škály nefungujú s reálnymi číslami."
 
-#: libs/ui/KisView.cpp:1407
+#: libs/ui/KisView.cpp:1435
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Upozornenia škály zapnuté."
 
-#: libs/ui/KisView.cpp:1409
+#: libs/ui/KisView.cpp:1437
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Mäkké overenie je stále vypnuté."
 
-#: libs/ui/KisView.cpp:1412
+#: libs/ui/KisView.cpp:1440
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Upozornenia škály vypnuté."
@@ -31850,7 +31871,7 @@ msgstr "Aktívny profil autora"
 msgid "%1 (Copy)"
 msgstr "%1 (kopírovať)"
 
-#: libs/ui/KisViewManager.cpp:1062 libs/ui/KisViewManager.cpp:1143
+#: libs/ui/KisViewManager.cpp:1062 libs/ui/KisViewManager.cpp:1138
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr "Alternatívne názvy vyčerpané, skúste ručne uložiť s vyšším číslom"
@@ -31861,13 +31882,13 @@ msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Nebolo možné uložiť inkrementálnu verziu"
 
-#: libs/ui/KisViewManager.cpp:1143
+#: libs/ui/KisViewManager.cpp:1138
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Nebolo možné uložiť inkrementálnu zálohu"
 
-#: libs/ui/KisViewManager.cpp:1326
+#: libs/ui/KisViewManager.cpp:1317
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31876,13 +31897,13 @@ msgstr ""
 "Prechádzam do režimu iba plátna.\n"
 "Stlačte %1 pre návrat."
 
-#: libs/ui/KisViewManager.cpp:1366
+#: libs/ui/KisViewManager.cpp:1357
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Otvoriť priečinok zdrojov"
 
-#: libs/ui/KisViewManager.cpp:1370
+#: libs/ui/KisViewManager.cpp:1361
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31897,19 +31918,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1385
+#: libs/ui/KisViewManager.cpp:1376
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1386
+#: libs/ui/KisViewManager.cpp:1377
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1499 libs/ui/KisViewManager.cpp:1517
+#: libs/ui/KisViewManager.cpp:1490 libs/ui/KisViewManager.cpp:1508
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"

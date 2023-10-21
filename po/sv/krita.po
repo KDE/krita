@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-18 02:29+0000\n"
+"POT-Creation-Date: 2023-10-21 02:34+0000\n"
 "PO-Revision-Date: 2023-09-30 21:00+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -17038,13 +17038,13 @@ msgstr "Skicka igenom"
 msgid "Imported Image"
 msgstr "Importerad bild"
 
-#: libs/image/kis_image.cc:689 libs/image/kis_layer_utils.cpp:1872
+#: libs/image/kis_image.cc:689 libs/image/kis_layer_utils.cpp:1895
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
 msgstr "Markeringsmask"
 
-#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2577
+#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -17285,63 +17285,63 @@ msgstr "Öppna fil"
 msgid "Error"
 msgstr "Fel"
 
-#: libs/image/kis_layer_utils.cpp:600
+#: libs/image/kis_layer_utils.cpp:609
 #, kde-format
 msgid "Merged"
 msgstr "Sammanfogade"
 
-#: libs/image/kis_layer_utils.cpp:1378
+#: libs/image/kis_layer_utils.cpp:1389
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Sammanfoga neråt"
 
-#: libs/image/kis_layer_utils.cpp:1602
+#: libs/image/kis_layer_utils.cpp:1625
 #, kde-format
 msgid "Copy of"
 msgstr "Kopia av"
 
-#: libs/image/kis_layer_utils.cpp:1675
+#: libs/image/kis_layer_utils.cpp:1698
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Ändra projektionsfärg"
 
-#: libs/image/kis_layer_utils.cpp:1835
+#: libs/image/kis_layer_utils.cpp:1858
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Sammanfoga markerade noder"
 
-#: libs/image/kis_layer_utils.cpp:1843
+#: libs/image/kis_layer_utils.cpp:1866
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nytt från synligt"
 
-#: libs/image/kis_layer_utils.cpp:1843
+#: libs/image/kis_layer_utils.cpp:1866
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Synligt"
 
-#: libs/image/kis_layer_utils.cpp:1921
+#: libs/image/kis_layer_utils.cpp:1944
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Sammanfoga markeringsmasker"
 
-#: libs/image/kis_layer_utils.cpp:1944
+#: libs/image/kis_layer_utils.cpp:1967
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Platta ut lager"
 
-#: libs/image/kis_layer_utils.cpp:1957
+#: libs/image/kis_layer_utils.cpp:1980
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Platta ut bild"
 
-#: libs/image/kis_layer_utils.cpp:2175
+#: libs/image/kis_layer_utils.cpp:2198
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Dela alfa till en mask"
 
-#: libs/image/kis_layer_utils.cpp:2201
+#: libs/image/kis_layer_utils.cpp:2224
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Konvertera till målningslager"
@@ -17352,8 +17352,8 @@ msgid "Processing"
 msgstr "Behandlar"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1414
-#: libs/ui/KisMainWindow.cpp:1777 libs/ui/KisMainWindow.cpp:1790
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1365
+#: libs/ui/KisMainWindow.cpp:1737 libs/ui/KisMainWindow.cpp:1750
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -17775,7 +17775,7 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "Grupp"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:961
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:972
 #, kde-format
 msgid "File Layer"
 msgstr "Arkivlager"
@@ -18098,8 +18098,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "CSV-dokument"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2148
-#: libs/ui/KisMainWindow.cpp:2231
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2106
+#: libs/ui/KisMainWindow.cpp:2189
 #, kde-format
 msgid "Import frames"
 msgstr "Importera bildrutor"
@@ -19349,7 +19349,7 @@ msgstr "Ut"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1175
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19402,25 +19402,25 @@ msgstr "Lokala resurser"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
+#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1218
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:1011
 #: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
 #: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
 #: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
-#: libs/ui/KisDocument.cpp:1904 libs/ui/KisDocument.cpp:1948
-#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1967
-#: libs/ui/KisDocument.cpp:1971 libs/ui/KisMainWindow.cpp:973
-#: libs/ui/KisMainWindow.cpp:1089 libs/ui/KisMainWindow.cpp:1215
-#: libs/ui/KisMainWindow.cpp:1312 libs/ui/KisMainWindow.cpp:2008
-#: libs/ui/KisMainWindow.cpp:2017 libs/ui/KisMainWindow.cpp:2156
-#: libs/ui/KisMainWindow.cpp:2217 libs/ui/KisMainWindow.cpp:2238
-#: libs/ui/KisMainWindow.cpp:2853 libs/ui/KisPart.cpp:578
+#: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
+#: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
+#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:970
+#: libs/ui/KisMainWindow.cpp:1040 libs/ui/KisMainWindow.cpp:1166
+#: libs/ui/KisMainWindow.cpp:1263 libs/ui/KisMainWindow.cpp:1968
+#: libs/ui/KisMainWindow.cpp:1977 libs/ui/KisMainWindow.cpp:2114
+#: libs/ui/KisMainWindow.cpp:2175 libs/ui/KisMainWindow.cpp:2196
+#: libs/ui/KisMainWindow.cpp:2805 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:693
-#: libs/ui/KisView.cpp:1178 libs/ui/KisWelcomePageWidget.cpp:748
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:748
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -19917,7 +19917,7 @@ msgid "Delete resource"
 msgstr "Ta bort resurs"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2653
+#: libs/ui/KisMainWindow.cpp:2604
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20260,7 +20260,7 @@ msgid "Select All"
 msgstr "Markera alla"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:788
+#: libs/ui/KisView.cpp:792
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Fyll ut lager"
@@ -20322,7 +20322,7 @@ msgid "Paste shapes"
 msgstr "Klistra in former"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:272
-#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:602
+#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:606
 #, kde-format
 msgid "(pasted)"
 msgstr "(inklistrad)"
@@ -20374,7 +20374,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Misslyckades återge animeringsbildrutor. Utdatafiler är ofullständiga."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2258
+#: libs/ui/KisMainWindow.cpp:2216
 #, kde-format
 msgid "Render Animation"
 msgstr "Återge animering"
@@ -22414,7 +22414,7 @@ msgid "Numerical"
 msgstr "Numerisk"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1183
+#: libs/ui/KisMainWindow.cpp:1134
 #, kde-format
 msgid "Import Images"
 msgstr "Importera bilder"
@@ -22560,7 +22560,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Ange nytt stilnamn"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2664
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2615
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -26495,7 +26495,7 @@ msgstr "Nuvarande penselförinställningar"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1068
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1021
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -28869,7 +28869,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Ändra arkivlager"
 
-#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:694
+#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:698
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -29036,7 +29036,7 @@ msgstr "Egenskaper för fyllager"
 msgid "File Layer Properties"
 msgstr "Egenskaper för arkivlager"
 
-#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:969
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:980
 #, kde-format
 msgid "No file name specified"
 msgstr "Inget filnamn angivet"
@@ -29103,18 +29103,28 @@ msgid_plural "Layers are locked"
 msgstr[0] "Lagret är låst"
 msgstr[1] "Lagren är låsta"
 
-#: libs/ui/kis_layer_manager.cc:863
+#: libs/ui/kis_layer_manager.cc:864
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Lagret är låst"
 
-#: libs/ui/kis_layer_manager.cc:919
+#: libs/ui/kis_layer_manager.cc:881
+#, kde-format
+msgctxt ""
+"floating message in layer manager when trying to merge a non-animated layer "
+"into an animated one"
+msgid ""
+"Non-animated layer is merged into the current frame. To merge it into the "
+"whole clip, create at least one frame"
+msgstr ""
+
+#: libs/ui/kis_layer_manager.cc:930
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Konvertera osynliga grupper"
 
-#: libs/ui/kis_layer_manager.cc:922
+#: libs/ui/kis_layer_manager.cc:933
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Exportera bara toppnivågrupper"
@@ -29333,7 +29343,18 @@ msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Maskeringslager"
 
-#: libs/ui/kis_node_manager.cpp:1580
+#: libs/ui/kis_node_manager.cpp:1590
+#, kde-format
+msgid "Cannot move layer \"%1\" into new parent \"%2\""
+msgstr ""
+
+#: libs/ui/kis_node_manager.cpp:1593
+#, fuzzy, kde-format
+#| msgid "Put every layer in its own, separate group layer"
+msgid "Cannot move layer \"%1\" into the root layer"
+msgstr "Lägg alla lager i sina egna, separata, grupplager"
+
+#: libs/ui/kis_node_manager.cpp:1601
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Snabbuppdelning av grupp"
@@ -29642,24 +29663,24 @@ msgstr ""
 "Varning:\tMinnet är slut! Växling har startats.\n"
 "\t\tStäll in mer RAM för Krita i inställningsdialogrutan."
 
-#: libs/ui/kis_statusbar.cc:378
+#: libs/ui/kis_statusbar.cc:376
 #: plugins/python/channels2layers/channels2layers.py:79
 #, kde-format
 msgid "Hidden"
 msgstr "Dold"
 
-#: libs/ui/kis_statusbar.cc:380
+#: libs/ui/kis_statusbar.cc:378
 #, kde-format
 msgid "Ants"
 msgstr "Myror"
 
-#: libs/ui/kis_statusbar.cc:380
+#: libs/ui/kis_statusbar.cc:378
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "Mask"
 
-#: libs/ui/kis_statusbar.cc:383
+#: libs/ui/kis_statusbar.cc:381
 #, kde-format
 msgid ""
 "Selection: x = %1 y = %2 width = %3 height = %4\n"
@@ -29668,17 +29689,17 @@ msgstr ""
 "Markering: x = %1 y = %2 bredd = %3 höjd = %4\n"
 "Visningsläge: %5"
 
-#: libs/ui/kis_statusbar.cc:388
+#: libs/ui/kis_statusbar.cc:386
 #, kde-format
 msgid "No Selection"
 msgstr "Ingen markering"
 
-#: libs/ui/kis_statusbar.cc:406
+#: libs/ui/kis_statusbar.cc:404
 #, kde-format
 msgid "No profile"
 msgstr "Ingen profil"
 
-#: libs/ui/kis_statusbar.cc:408
+#: libs/ui/kis_statusbar.cc:406
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
@@ -30160,7 +30181,7 @@ msgstr "Fel vid spara automatiskt av %1: %2"
 msgid "Finished autosaving %1"
 msgstr "Spara %1 automatiskt färdigt"
 
-#: libs/ui/KisDocument.cpp:1838
+#: libs/ui/KisDocument.cpp:1843
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30169,38 +30190,38 @@ msgstr ""
 "Felaktig sökväg\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1904
+#: libs/ui/KisDocument.cpp:1909
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Filen %1 finns inte."
 
-#: libs/ui/KisDocument.cpp:1933
+#: libs/ui/KisDocument.cpp:1938
 #, kde-format
 msgid "Opening document"
 msgstr "Öppnar dokument"
 
-#: libs/ui/KisDocument.cpp:1949 libs/ui/KisDocument.cpp:1955
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1960
 #, kde-format
 msgid "Could not open %1."
 msgstr "Kunde inte öppna %1."
 
-#: libs/ui/KisDocument.cpp:1968 libs/ui/KisDocument.cpp:1972
+#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1977
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Problem uppstod när %1 skulle öppnas."
 
-#: libs/ui/KisDocument.cpp:2103
+#: libs/ui/KisDocument.cpp:2112
 #, kde-format
 msgid "Not Saved"
 msgstr "Inte sparad"
 
-#: libs/ui/KisDocument.cpp:2584
+#: libs/ui/KisDocument.cpp:2594
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Bakgrundsfyllnad"
 
-#: libs/ui/KisDocument.cpp:2636
+#: libs/ui/KisDocument.cpp:2646
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30590,74 +30611,64 @@ msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr "Uppdatera lagrets miniatyrbilder"
 
-#: libs/ui/KisMainWindow.cpp:185
+#: libs/ui/KisMainWindow.cpp:183
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
 msgstr "Stilar"
 
-#: libs/ui/KisMainWindow.cpp:186
+#: libs/ui/KisMainWindow.cpp:184
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
 msgstr "&Paneler"
 
-#: libs/ui/KisMainWindow.cpp:187
+#: libs/ui/KisMainWindow.cpp:185
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Window"
 msgstr "&Fönster"
 
-#: libs/ui/KisMainWindow.cpp:188
+#: libs/ui/KisMainWindow.cpp:186
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
 msgstr "Ny &vy"
 
-#: libs/ui/KisMainWindow.cpp:189
+#: libs/ui/KisMainWindow.cpp:187
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Ar&betsyta"
 
-#: libs/ui/KisMainWindow.cpp:584
+#: libs/ui/KisMainWindow.cpp:586
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Visa verktygsrad %1"
 
-#: libs/ui/KisMainWindow.cpp:586
+#: libs/ui/KisMainWindow.cpp:588
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Dölj verktygsrad %1"
 
-#: libs/ui/KisMainWindow.cpp:1031
-#, kde-format
-msgid "Write Protected"
-msgstr "Skrivskyddad"
-
-#: libs/ui/KisMainWindow.cpp:1035
-#, kde-format
-msgid "Recovered"
-msgstr "Återställd"
-
-#: libs/ui/KisMainWindow.cpp:1065
+#: libs/ui/KisMainWindow.cpp:1018
 #, kde-format
 msgid "Save as %1"
 msgstr "Spara som %1"
 
-#: libs/ui/KisMainWindow.cpp:1089
+#: libs/ui/KisMainWindow.cpp:1040
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Filen %1 finns inte."
 
-#: libs/ui/KisMainWindow.cpp:1183
+#: libs/ui/KisMainWindow.cpp:1134
 #, kde-format
 msgid "Open Images"
 msgstr "Öppna bilder"
 
-#: libs/ui/KisMainWindow.cpp:1313
+#: libs/ui/KisMainWindow.cpp:1264
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30670,45 +30681,45 @@ msgstr ""
 "\n"
 "Välj en plats där originalfilen inte överskrids."
 
-#: libs/ui/KisMainWindow.cpp:1369
+#: libs/ui/KisMainWindow.cpp:1320
 #, kde-format
 msgid "Exporting"
 msgstr "Exporterar"
 
-#: libs/ui/KisMainWindow.cpp:1369
+#: libs/ui/KisMainWindow.cpp:1320
 #, kde-format
 msgid "Saving As"
 msgstr "Sparar som"
 
-#: libs/ui/KisMainWindow.cpp:1756
+#: libs/ui/KisMainWindow.cpp:1716
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Skapa nytt dokument"
 
-#: libs/ui/KisMainWindow.cpp:1780
+#: libs/ui/KisMainWindow.cpp:1740
 #, kde-format
 msgid "Custom Document"
 msgstr "Eget dokument"
 
-#: libs/ui/KisMainWindow.cpp:1792
+#: libs/ui/KisMainWindow.cpp:1752
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Skapa från klippbord"
 
-#: libs/ui/KisMainWindow.cpp:1977
+#: libs/ui/KisMainWindow.cpp:1937
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Lager och masker"
 
-#: libs/ui/KisMainWindow.cpp:2003
+#: libs/ui/KisMainWindow.cpp:1963
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Du har inga resurspackar aktiverade."
 
-#: libs/ui/KisMainWindow.cpp:2007
+#: libs/ui/KisMainWindow.cpp:1967
 #, kde-format
 msgid ""
 "\n"
@@ -30719,7 +30730,7 @@ msgstr ""
 "Det finns inga tillgängliga penselförinställningar. Aktivera en packe som "
 "har penselförinställningar innan du fortsätter.\n"
 
-#: libs/ui/KisMainWindow.cpp:2017
+#: libs/ui/KisMainWindow.cpp:1977
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -30730,7 +30741,7 @@ msgstr ""
 "\n"
 "Bara dina lokala resurser är tillgängliga."
 
-#: libs/ui/KisMainWindow.cpp:2156 libs/ui/KisMainWindow.cpp:2238
+#: libs/ui/KisMainWindow.cpp:2114 libs/ui/KisMainWindow.cpp:2196
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30739,40 +30750,40 @@ msgstr ""
 "Kunde inte slutföra import av animering:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2217
+#: libs/ui/KisMainWindow.cpp:2175
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Misslyckades skapa nytt dokument. Import av animering avbruten."
 
-#: libs/ui/KisMainWindow.cpp:2644
+#: libs/ui/KisMainWindow.cpp:2595
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importera arbetsyta..."
 
-#: libs/ui/KisMainWindow.cpp:2659
+#: libs/ui/KisMainWindow.cpp:2610
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Ny arbetsyta..."
 
-#: libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/KisMainWindow.cpp:2614
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Ny arbetsyta..."
 
-#: libs/ui/KisMainWindow.cpp:2707
+#: libs/ui/KisMainWindow.cpp:2658
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2710
+#: libs/ui/KisMainWindow.cpp:2661
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2876
+#: libs/ui/KisMainWindow.cpp:2828
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -30781,19 +30792,19 @@ msgstr ""
 "Kritas insticksprogram för LittleCMS-färghantering är inte installerat. "
 "Krita avslutas nu."
 
-#: libs/ui/KisMainWindow.cpp:2892
+#: libs/ui/KisMainWindow.cpp:2844
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Installationsfel"
 
-#: libs/ui/KisMainWindow.cpp:3001
+#: libs/ui/KisMainWindow.cpp:2953
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Teman"
 
-#: libs/ui/KisMainWindow.cpp:3059
+#: libs/ui/KisMainWindow.cpp:3011
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Expanderande mellanrum"
@@ -31107,27 +31118,27 @@ msgstr "Ingen bild tillgänglig."
 msgid "Use This Template"
 msgstr "Använd den här mallen"
 
-#: libs/ui/KisView.cpp:763
+#: libs/ui/KisView.cpp:767
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Det går inte att dra och släppa färger på den valda lagertypen."
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:678
+#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:678
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Lagret är låst och osynligt."
 
-#: libs/ui/KisView.cpp:773 libs/ui/tool/kis_tool.cc:680
+#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:680
 #, kde-format
 msgid "Layer is locked."
 msgstr "Lagret är låst."
 
-#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:682
+#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:682
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Lagret är osynligt."
 
-#: libs/ui/KisView.cpp:1179
+#: libs/ui/KisView.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -31135,37 +31146,47 @@ msgid ""
 msgstr ""
 "<p>Dokumentet <b>\"%1\"</b> har blivit ändrat.</p><p>Vill du spara det?</p>"
 
-#: libs/ui/KisView.cpp:1382
+#: libs/ui/KisView.cpp:1252
+#, kde-format
+msgid "Write Protected"
+msgstr "Skrivskyddad"
+
+#: libs/ui/KisView.cpp:1256
+#, kde-format
+msgid "Recovered"
+msgstr "Återställd"
+
+#: libs/ui/KisView.cpp:1410
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Bildskärmskorrektur fungerar inte med flyttal."
 
-#: libs/ui/KisView.cpp:1387
+#: libs/ui/KisView.cpp:1415
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Bildskärmskorrektur på."
 
-#: libs/ui/KisView.cpp:1389
+#: libs/ui/KisView.cpp:1417
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Bildskärmskorrektur av."
 
-#: libs/ui/KisView.cpp:1401
+#: libs/ui/KisView.cpp:1429
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Färgomfångsvarningar fungerar inte med flyttal."
 
-#: libs/ui/KisView.cpp:1407
+#: libs/ui/KisView.cpp:1435
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Färgomfångsvarningar på."
 
-#: libs/ui/KisView.cpp:1409
+#: libs/ui/KisView.cpp:1437
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Men bildskärmskorrektur är fortfarande av."
 
-#: libs/ui/KisView.cpp:1412
+#: libs/ui/KisView.cpp:1440
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Färgomfångsvarningar av."
@@ -31180,7 +31201,7 @@ msgstr "Aktiv upphovsmannaprofil"
 msgid "%1 (Copy)"
 msgstr "%1 (kopia)"
 
-#: libs/ui/KisViewManager.cpp:1062 libs/ui/KisViewManager.cpp:1143
+#: libs/ui/KisViewManager.cpp:1062 libs/ui/KisViewManager.cpp:1138
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
@@ -31192,13 +31213,13 @@ msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Kunde inte spara inkrementell version"
 
-#: libs/ui/KisViewManager.cpp:1143
+#: libs/ui/KisViewManager.cpp:1138
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Kunde inte spara inkrementell säkerhetskopia"
 
-#: libs/ui/KisViewManager.cpp:1326
+#: libs/ui/KisViewManager.cpp:1317
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31207,13 +31228,13 @@ msgstr ""
 "Visar enbart duk.\n"
 "Tryck på %1 för att gå tillbaka."
 
-#: libs/ui/KisViewManager.cpp:1366
+#: libs/ui/KisViewManager.cpp:1357
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Öppna resurskatalog"
 
-#: libs/ui/KisViewManager.cpp:1370
+#: libs/ui/KisViewManager.cpp:1361
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31237,19 +31258,19 @@ msgstr ""
 "<p><b>Privata programmets plats</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1385
+#: libs/ui/KisViewManager.cpp:1376
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Öppna i an&vändarens programdata"
 
-#: libs/ui/KisViewManager.cpp:1386
+#: libs/ui/KisViewManager.cpp:1377
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Öppna i &privat programplats"
 
-#: libs/ui/KisViewManager.cpp:1499 libs/ui/KisViewManager.cpp:1517
+#: libs/ui/KisViewManager.cpp:1490 libs/ui/KisViewManager.cpp:1508
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"

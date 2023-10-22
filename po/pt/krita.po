@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-21 00:40+0000\n"
+"POT-Creation-Date: 2023-10-22 00:41+0000\n"
 "PO-Revision-Date: 2023-07-13 00:28+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -17071,8 +17071,8 @@ msgstr "Tamanho"
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
 #: plugins/tools/basictools/kis_tool_brush.cc:388
-#: plugins/tools/basictools/kis_tool_fill.cc:568
-#: plugins/tools/basictools/kis_tool_fill.cc:579
+#: plugins/tools/basictools/kis_tool_fill.cc:577
+#: plugins/tools/basictools/kis_tool_fill.cc:588
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
@@ -20234,7 +20234,7 @@ msgstr "Miniatura"
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:615
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:609
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
@@ -20724,7 +20724,7 @@ msgstr "Conversão de formas para vectores da selecção"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:594
 #: libs/ui/actions/kis_selection_action_factories.cpp:653
-#: plugins/tools/tool_polyline/kis_tool_polyline.cc:49
+#: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
 msgstr "Desenhar uma Linha Poligonal"
@@ -22946,9 +22946,9 @@ msgstr "Propriedades da Camada"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:27
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:30
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:281
-#: plugins/tools/basictools/kis_tool_fill.cc:530
-#: plugins/tools/basictools/kis_tool_fill.cc:538
-#: plugins/tools/basictools/kis_tool_fill.cc:553
+#: plugins/tools/basictools/kis_tool_fill.cc:539
+#: plugins/tools/basictools/kis_tool_fill.cc:547
+#: plugins/tools/basictools/kis_tool_fill.cc:562
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
@@ -26220,7 +26220,7 @@ msgstr "Cor de Fundo"
 #: plugins/generators/pattern/wdgpatternoptions.ui:21
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:20
 #: plugins/paintops/libpaintop/KisTextureOptionWidget.cpp:27
-#: plugins/tools/basictools/kis_tool_fill.cc:612
+#: plugins/tools/basictools/kis_tool_fill.cc:621
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:515
 #, kde-format
 msgid "Pattern"
@@ -27964,7 +27964,7 @@ msgstr "Linha:"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:96
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:224
-#: plugins/tools/basictools/kis_tool_fill.cc:610
+#: plugins/tools/basictools/kis_tool_fill.cc:619
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
 #, kde-format
 msgid "Foreground color"
@@ -27974,7 +27974,7 @@ msgstr "Cor principal"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:101
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:214
-#: plugins/tools/basictools/kis_tool_fill.cc:611
+#: plugins/tools/basictools/kis_tool_fill.cc:620
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
 #, kde-format
 msgid "Background color"
@@ -32978,7 +32978,7 @@ msgstr "O grupo não está editável."
 msgid "Local selection is locked."
 msgstr "A selecção local está bloqueada."
 
-#: libs/ui/tool/kis_tool_freehand.cc:212
+#: libs/ui/tool/kis_tool_freehand.cc:211
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
@@ -32987,25 +32987,25 @@ msgstr ""
 "A ferramenta do pincel não consegue pintar nesta camada. Seleccione por "
 "favor uma camada ou máscara de pintura."
 
-#: libs/ui/tool/kis_tool_freehand.cc:217
-#: libs/ui/tool/kis_tool_polyline_base.cpp:119
+#: libs/ui/tool/kis_tool_freehand.cc:216
+#: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:167
-#: plugins/tools/basictools/kis_tool_line.cc:202
-#: plugins/tools/basictools/kis_tool_path.cc:78
-#: plugins/tools/basictools/kis_tool_pencil.cc:53
-#: plugins/tools/tool_enclose_and_fill/subtools/KisPathEnclosingProducer.cpp:113
+#: plugins/tools/basictools/kis_tool_line.cc:211
+#: plugins/tools/basictools/kis_tool_path.cc:90
+#: plugins/tools/basictools/kis_tool_pencil.cc:63
+#: plugins/tools/tool_enclose_and_fill/subtools/KisPathEnclosingProducer.cpp:130
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:71
 #, kde-format
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr "O Motor de Pincel do MyPaint não está disponível neste espaço de cores"
 
-#: libs/ui/tool/kis_tool_paint.cc:582
+#: libs/ui/tool/kis_tool_paint.cc:581
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr "Tamanho do Pincel: %1 px"
 
-#: libs/ui/tool/kis_tool_polyline_base.cpp:113
+#: libs/ui/tool/kis_tool_polyline_base.cpp:117
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
 #: libs/ui/tool/KisToolOutlineBase.cpp:161
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:65
@@ -33027,7 +33027,7 @@ msgstr ""
 "Altura: %2 px"
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
-#: plugins/tools/basictools/kis_tool_line.cc:284
+#: plugins/tools/basictools/kis_tool_line.cc:293
 #: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #, kde-format
 msgid ""
@@ -33082,7 +33082,7 @@ msgstr "Caixa de ferramentas"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:141
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:186
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:174
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
 #, kde-format
@@ -33324,7 +33324,7 @@ msgstr "Transparente"
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:38
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:41
-#: plugins/tools/basictools/kis_tool_fill.cc:537
+#: plugins/tools/basictools/kis_tool_fill.cc:546
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
 #, kde-format
@@ -34515,7 +34515,7 @@ msgid "Mid-gray level:"
 msgstr "Nível de meio-cinzento:"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:44
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:153
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:169
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:28
 #, kde-format
@@ -34524,7 +34524,7 @@ msgid "Display"
 msgstr "Visualização"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:169
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:157
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:177
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:40
 #, kde-format
@@ -34533,7 +34533,7 @@ msgstr "Miniaturas"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:177
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:183
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:46
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
@@ -34541,7 +34541,7 @@ msgstr "Miniaturas"
 msgid "Details"
 msgstr "Detalhes"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:115
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
 #, kde-format
 msgid "The settings for this preset have changed from their default."
@@ -34549,32 +34549,32 @@ msgstr ""
 "As configurações desta predefinição foram alteradas face aos seus valores "
 "iniciais."
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:117
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:105
 #, kde-format
 msgid "Toggle showing presets"
 msgstr "Comutar a apresentação das predefinições"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:119
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:107
 #, kde-format
 msgid "Toggle showing scratchpad"
 msgstr "Comutar a apresentação da área de desenhos"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:121
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:109
 #, kde-format
 msgid "Reload the brush preset"
 msgstr "Carregar de novo a predefinição do pincel"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:122
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:110
 #, kde-format
 msgid "Rename the brush preset"
 msgstr "Mudar o nome da predefinição do pincel"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:222
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:210
 #, kde-format
 msgid "Detach Brush Editor"
 msgstr "Dissociar o Editor do Pincel"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:550
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:544
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
@@ -34586,7 +34586,7 @@ msgid "No Preview for this engine"
 msgstr "Sem antevisão para este motor"
 
 #: libs/ui/widgets/kis_selection_options.cc:179
-#: plugins/tools/basictools/kis_tool_fill.cc:562
+#: plugins/tools/basictools/kis_tool_fill.cc:571
 #, kde-format
 msgctxt "The anti-alias checkbox in fill tool options"
 msgid "Anti-aliasing"
@@ -34662,7 +34662,7 @@ msgid "Grow or shrink the selection by the set amount"
 msgstr "Aumenta ou diminui a selecção pelo valor definido"
 
 #: libs/ui/widgets/kis_selection_options.cc:237
-#: plugins/tools/basictools/kis_tool_fill.cc:628
+#: plugins/tools/basictools/kis_tool_fill.cc:637
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
@@ -35149,7 +35149,7 @@ msgstr "Gradiente em Malha"
 #. i18n: ectx: property (text), widget (QLabel, labelRepeat)
 #: libs/ui/widgets/KoFillConfigWidget.ui:255
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:91
-#: plugins/tools/basictools/kis_tool_gradient.cc:256
+#: plugins/tools/basictools/kis_tool_gradient.cc:264
 #, kde-format
 msgid "Repeat:"
 msgstr "Repetição:"
@@ -44616,7 +44616,7 @@ msgstr "Íris"
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:85
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:245
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:50
-#: plugins/tools/basictools/kis_tool_gradient.cc:241
+#: plugins/tools/basictools/kis_tool_gradient.cc:249
 #, kde-format
 msgid "Shape:"
 msgstr "Forma:"
@@ -46519,84 +46519,84 @@ msgid "&Gradient..."
 msgstr "&Gradiente..."
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:28
-#: plugins/tools/basictools/kis_tool_gradient.cc:244
+#: plugins/tools/basictools/kis_tool_gradient.cc:252
 #, kde-format
 msgctxt "the gradient will be drawn linearly"
 msgid "Linear"
 msgstr "Linear"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:29
-#: plugins/tools/basictools/kis_tool_gradient.cc:245
+#: plugins/tools/basictools/kis_tool_gradient.cc:253
 #, kde-format
 msgctxt "the gradient will be drawn bilinearly"
 msgid "Bi-Linear"
 msgstr "Bi-Linear"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:30
-#: plugins/tools/basictools/kis_tool_gradient.cc:246
+#: plugins/tools/basictools/kis_tool_gradient.cc:254
 #, kde-format
 msgctxt "the gradient will be drawn radially"
 msgid "Radial"
 msgstr "Radial"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:31
-#: plugins/tools/basictools/kis_tool_gradient.cc:247
+#: plugins/tools/basictools/kis_tool_gradient.cc:255
 #, kde-format
 msgctxt "the gradient will be drawn in a square around a centre"
 msgid "Square"
 msgstr "Quadrado"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:32
-#: plugins/tools/basictools/kis_tool_gradient.cc:248
+#: plugins/tools/basictools/kis_tool_gradient.cc:256
 #, kde-format
 msgctxt "the gradient will be drawn as an asymmetric cone"
 msgid "Conical"
 msgstr "Cónico"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:33
-#: plugins/tools/basictools/kis_tool_gradient.cc:249
+#: plugins/tools/basictools/kis_tool_gradient.cc:257
 #, kde-format
 msgctxt "the gradient will be drawn as a symmetric cone"
 msgid "Conical Symmetric"
 msgstr "Cónico Simétrico"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:34
-#: plugins/tools/basictools/kis_tool_gradient.cc:250
+#: plugins/tools/basictools/kis_tool_gradient.cc:258
 #, kde-format
 msgctxt "the gradient will be drawn as a spiral"
 msgid "Spiral"
 msgstr "Espiral"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:35
-#: plugins/tools/basictools/kis_tool_gradient.cc:251
+#: plugins/tools/basictools/kis_tool_gradient.cc:259
 #, kde-format
 msgctxt "the gradient will be drawn as a reverse spiral"
 msgid "Reverse Spiral"
 msgstr "Espiral Inversa"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:36
-#: plugins/tools/basictools/kis_tool_gradient.cc:252
+#: plugins/tools/basictools/kis_tool_gradient.cc:260
 #, kde-format
 msgctxt "the gradient will be drawn in a selection outline"
 msgid "Shaped"
 msgstr "Forma"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:39
-#: plugins/tools/basictools/kis_tool_gradient.cc:259
+#: plugins/tools/basictools/kis_tool_gradient.cc:267
 #, kde-format
 msgctxt "The gradient will not repeat"
 msgid "None"
 msgstr "Nenhum"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_gradient.cc:260
+#: plugins/tools/basictools/kis_tool_gradient.cc:268
 #, kde-format
 msgctxt "The gradient will repeat forwards"
 msgid "Forwards"
 msgstr "Em frente"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:41
-#: plugins/tools/basictools/kis_tool_gradient.cc:261
+#: plugins/tools/basictools/kis_tool_gradient.cc:269
 #, kde-format
 msgctxt "The gradient will repeat alternatingly"
 msgid "Alternating"
@@ -46646,7 +46646,7 @@ msgstr "Relativa"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAntiAliasThreshold)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:101
-#: plugins/tools/basictools/kis_tool_gradient.cc:266
+#: plugins/tools/basictools/kis_tool_gradient.cc:274
 #, kde-format
 msgid "Anti-alias threshold:"
 msgstr "Limiar de 'anti-alias':"
@@ -57347,7 +57347,7 @@ msgid "Scalable Distance"
 msgstr "Distância Escalável"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:449
-#: plugins/tools/basictools/kis_tool_line.cc:101
+#: plugins/tools/basictools/kis_tool_line.cc:110
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Ajustar aos Assistentes"
@@ -57383,7 +57383,7 @@ msgstr ""
 "ao usar os infinitos assistentes."
 
 #: plugins/tools/basictools/kis_tool_brush.cc:473
-#: plugins/tools/basictools/kis_tool_line.cc:104
+#: plugins/tools/basictools/kis_tool_line.cc:113
 #, kde-format
 msgid "Snap Eraser"
 msgstr "Ajustar à Borracha"
@@ -57411,7 +57411,7 @@ msgstr ""
 msgid "Color Sampler Tool"
 msgstr "Ferramenta de Extracção de Cores"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:52
+#: plugins/tools/basictools/kis_tool_ellipse.cc:63
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Desenhar uma Elipse"
@@ -57421,42 +57421,42 @@ msgstr "Desenhar uma Elipse"
 msgid "Ellipse Tool"
 msgstr "Ferramenta da Elipse"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:129
+#: plugins/tools/basictools/kis_tool_fill.cc:138
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:177
 #, kde-format
 msgid "You cannot use this tool with the selected layer type"
 msgstr "Não pode usar esta ferramenta com o tipo de camada seleccionada"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:240
+#: plugins/tools/basictools/kis_tool_fill.cc:249
 msgctxt "(qtundo-format)"
 msgid "Flood Fill"
 msgstr "Preenchimento"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:529
+#: plugins/tools/basictools/kis_tool_fill.cc:538
 #, kde-format
 msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
 msgid "Scale: "
 msgstr "Escala: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:534
+#: plugins/tools/basictools/kis_tool_fill.cc:543
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:449
 #, kde-format
 msgid "Use custom blending options"
 msgstr "Usar as opções de mistura personalizadas"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:549
+#: plugins/tools/basictools/kis_tool_fill.cc:558
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in fill tool options"
 msgid "Threshold: "
 msgstr "Limiar: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:552
+#: plugins/tools/basictools/kis_tool_fill.cc:561
 #, kde-format
 msgctxt "The 'spread' spinbox prefix in fill tool options"
 msgid "Spread: "
 msgstr "Difusão: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:558
+#: plugins/tools/basictools/kis_tool_fill.cc:567
 #, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in fill tool to use selection "
@@ -57464,87 +57464,87 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Usar a selecção como limite"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:566
+#: plugins/tools/basictools/kis_tool_fill.cc:575
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in fill tool options"
 msgid "Grow: "
 msgstr "Aumento: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:577
+#: plugins/tools/basictools/kis_tool_fill.cc:586
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in fill tool options"
 msgid "Feather: "
 msgstr "Passagem: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:603
+#: plugins/tools/basictools/kis_tool_fill.cc:612
 #, kde-format
 msgctxt "The 'reset' button in fill tool options"
 msgid "Reset"
 msgstr "Reiniciar"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:606
+#: plugins/tools/basictools/kis_tool_fill.cc:615
 #, kde-format
 msgid "Fill the active selection, or the entire canvas"
 msgstr "Preencher a selecção activa ou a área de desenho toda"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:607
+#: plugins/tools/basictools/kis_tool_fill.cc:616
 #, kde-format
 msgid "Fill a contiguous region"
 msgstr "Preencher uma região contígua"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:608
+#: plugins/tools/basictools/kis_tool_fill.cc:617
 #, kde-format
 msgid "Fill all regions of a similar color"
 msgstr "Preencher todas as regiões com uma cor semelhante"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:613
+#: plugins/tools/basictools/kis_tool_fill.cc:622
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
 #, kde-format
 msgid "Set the scale of the pattern"
 msgstr "Definir a escala do padrão"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:614
+#: plugins/tools/basictools/kis_tool_fill.cc:623
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:517
 #, kde-format
 msgid "Set the rotation of the pattern"
 msgstr "Definir a rotação do padrão"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:615
+#: plugins/tools/basictools/kis_tool_fill.cc:624
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
 "Definir as opções de mistura personalizadas em vez de usar as do pincel"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:616
+#: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
 #, kde-format
 msgid "Set a custom opacity for the fill"
 msgstr "Definir uma opacidade personalizada no preenchimento"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:617
+#: plugins/tools/basictools/kis_tool_fill.cc:626
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
 #, kde-format
 msgid "Set a custom blend mode for the fill"
 msgstr "Definir um modo de mistura personalizado no preenchimento"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:619
+#: plugins/tools/basictools/kis_tool_fill.cc:628
 #, kde-format
 msgid "Fill regions similar in color to the clicked region"
 msgstr "Preencher as regiões com cores semelhantes à região onde se carregou"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:620
+#: plugins/tools/basictools/kis_tool_fill.cc:629
 #, kde-format
 msgid "Fill all regions until a specific boundary color"
 msgstr "Preencher todas as regiões até atingir uma cor-limite específica"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:621
+#: plugins/tools/basictools/kis_tool_fill.cc:630
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
 #, kde-format
 msgid "Boundary color"
 msgstr "Cor-limite"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:622
+#: plugins/tools/basictools/kis_tool_fill.cc:631
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
 #, kde-format
 msgid ""
@@ -57554,7 +57554,7 @@ msgstr ""
 "Define a tolerância à semelhança de cores do preenchimento. Se aumentar este "
 "limite, aumenta a gama de cores semelhantes a preencher."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:623
+#: plugins/tools/basictools/kis_tool_fill.cc:632
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
 #, kde-format
 msgid ""
@@ -57564,7 +57564,7 @@ msgstr ""
 "Define a extensão da porção opaca do preenchimento. Se diminuir a difusão, "
 "diminui a opacidade das áreas preenchidas, dependendo da semelhança de cores."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:624
+#: plugins/tools/basictools/kis_tool_fill.cc:633
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
 #, kde-format
 msgid ""
@@ -57574,37 +57574,37 @@ msgstr ""
 "Define se o contorno da selecção actual deverá ser tratado como um limite ao "
 "preencher a região"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:626
+#: plugins/tools/basictools/kis_tool_fill.cc:635
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
 #, kde-format
 msgid "Smooths the edges of the fill"
 msgstr "Suavizar as arestas do preenchimento"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:627
+#: plugins/tools/basictools/kis_tool_fill.cc:636
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
 msgstr "Aumentar ou diminuir o preenchimento pelo valor indicado"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:629
+#: plugins/tools/basictools/kis_tool_fill.cc:638
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
 #, kde-format
 msgid "Blur the fill by the set amount"
 msgstr "Borrar o preenchimento na quantidade indicada"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:631
+#: plugins/tools/basictools/kis_tool_fill.cc:640
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
 #, kde-format
 msgid "Fill regions found from the active layer"
 msgstr "Preencher as regiões usando a camada activa"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:632
+#: plugins/tools/basictools/kis_tool_fill.cc:641
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
 msgstr "Obter a região usando a reunião de todas as camadas"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:633
+#: plugins/tools/basictools/kis_tool_fill.cc:642
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
 #, kde-format
 msgid ""
@@ -57613,12 +57613,12 @@ msgstr ""
 "Preencher as regiões usando a reunião das camadas que têm uma legenda de cor "
 "específica"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:635
+#: plugins/tools/basictools/kis_tool_fill.cc:644
 #, kde-format
 msgid "Dragging will fill regions of any color"
 msgstr "O arrastamento irá preencher as regiões com qualquer cor"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:636
+#: plugins/tools/basictools/kis_tool_fill.cc:645
 #, kde-format
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
@@ -57627,43 +57627,43 @@ msgstr ""
 "O arrastamento irá preencher apenas as regiões com cores semelhantes à "
 "região inicial (útil para preencher desenhos a linhas)"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:638
+#: plugins/tools/basictools/kis_tool_fill.cc:647
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
 #, kde-format
 msgid "Reset the options to their default values"
 msgstr "Repor as opções nos seus valores por omissão"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:647
+#: plugins/tools/basictools/kis_tool_fill.cc:656
 #, kde-format
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
 msgstr "Modo do preenchimento"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:654
+#: plugins/tools/basictools/kis_tool_fill.cc:663
 #, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
 msgstr "Origem do preenchimento"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:668
+#: plugins/tools/basictools/kis_tool_fill.cc:677
 #, kde-format
 msgctxt "The 'reference' section label in fill tool options"
 msgid "Reference"
 msgstr "Referência"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:677
+#: plugins/tools/basictools/kis_tool_fill.cc:686
 #, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
 msgstr "Extensão do preenchimento"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:689
+#: plugins/tools/basictools/kis_tool_fill.cc:698
 #, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
 msgstr "Ajustes"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:698
+#: plugins/tools/basictools/kis_tool_fill.cc:707
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
@@ -57674,18 +57674,18 @@ msgstr "Modo de preenchimento por arrastamento"
 msgid "Fill Tool"
 msgstr "Ferramenta de Preenchimento"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:158
+#: plugins/tools/basictools/kis_tool_gradient.cc:166
 msgctxt "(qtundo-format)"
 msgid "Gradient"
 msgstr "Gradiente"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:274
+#: plugins/tools/basictools/kis_tool_gradient.cc:282
 #, kde-format
 msgctxt "the gradient will be drawn with the color order reversed"
 msgid "Reverse"
 msgstr "Inverter"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:279
+#: plugins/tools/basictools/kis_tool_gradient.cc:287
 #, kde-format
 msgctxt "the gradient will be dithered"
 msgid "Dither"
@@ -57696,32 +57696,32 @@ msgstr "Desenho em Meios-Tons"
 msgid "Gradient Tool"
 msgstr "Ferramenta de Gradiente"
 
-#: plugins/tools/basictools/kis_tool_line.cc:53
+#: plugins/tools/basictools/kis_tool_line.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Line"
 msgstr "Desenhar uma Linha"
 
-#: plugins/tools/basictools/kis_tool_line.cc:92
+#: plugins/tools/basictools/kis_tool_line.cc:101
 #, kde-format
 msgid "Use sensors"
 msgstr "Usar os sensores"
 
-#: plugins/tools/basictools/kis_tool_line.cc:95
+#: plugins/tools/basictools/kis_tool_line.cc:104
 #, kde-format
 msgid "Show Preview"
 msgstr "Mostrar a Antevisão"
 
-#: plugins/tools/basictools/kis_tool_line.cc:98
+#: plugins/tools/basictools/kis_tool_line.cc:107
 #, kde-format
 msgid "Show Guideline"
 msgstr "Mostrar a Guia"
 
-#: plugins/tools/basictools/kis_tool_line.cc:433
+#: plugins/tools/basictools/kis_tool_line.cc:442
 #, kde-format
 msgid "Length: %1 px"
 msgstr "Comprimento: %1 px"
 
-#: plugins/tools/basictools/kis_tool_line.cc:451
+#: plugins/tools/basictools/kis_tool_line.cc:460
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -57741,7 +57741,7 @@ msgctxt "angle value in degrees"
 msgid "%1°"
 msgstr "%1°"
 
-#: plugins/tools/basictools/kis_tool_measure.cc:169
+#: plugins/tools/basictools/kis_tool_measure.cc:177
 #, kde-format
 msgctxt "%1=distance %2=unit of distance %3=angle in degrees"
 msgid ""
@@ -57751,7 +57751,7 @@ msgstr ""
 "%1 %2\n"
 "%3°"
 
-#: plugins/tools/basictools/kis_tool_measure.h:104
+#: plugins/tools/basictools/kis_tool_measure.h:102
 #, kde-format
 msgid "Measure Tool"
 msgstr "Ferramenta de Medida"
@@ -57814,7 +57814,7 @@ msgstr "Ferramenta Multi-Pincel"
 msgid "Pan Tool"
 msgstr "Ferramenta de Posicionamento"
 
-#: plugins/tools/basictools/kis_tool_path.cc:130
+#: plugins/tools/basictools/kis_tool_path.cc:142
 msgctxt "(qtundo-format)"
 msgid "Draw Bezier Curve"
 msgstr "Desenhar uma Curva Bézier"
@@ -57826,7 +57826,7 @@ msgstr ""
 "Ferramenta de curvas Bézier. Carregue no botão do rato, em conjunto com o "
 "Shift, para terminar a curva."
 
-#: plugins/tools/basictools/kis_tool_pencil.cc:120
+#: plugins/tools/basictools/kis_tool_pencil.cc:130
 msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
 msgstr "Desenhar um Caminho Livre à Mão"
@@ -57836,7 +57836,7 @@ msgstr "Desenhar um Caminho Livre à Mão"
 msgid "Freehand Path Tool"
 msgstr "Ferramenta de Caminho Livre à Mão"
 
-#: plugins/tools/basictools/kis_tool_rectangle.cc:53
+#: plugins/tools/basictools/kis_tool_rectangle.cc:65
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "Desenhar um Rectângulo"
@@ -60319,7 +60319,7 @@ msgctxt "The label of the button that assigns a selected color as transparent"
 msgid "Transparent"
 msgstr "Transparente"
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.cc:45
+#: plugins/tools/tool_polygon/kis_tool_polygon.cc:50
 msgctxt "(qtundo-format)"
 msgid "Draw Polygon"
 msgstr "Desenhar um Polígono"

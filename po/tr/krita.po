@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-21 00:40+0000\n"
-"PO-Revision-Date: 2023-10-15 02:06+0300\n"
+"POT-Creation-Date: 2023-10-22 00:41+0000\n"
+"PO-Revision-Date: 2023-10-22 01:14+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -12172,171 +12172,139 @@ msgstr "Dalgacık Çözündür"
 
 #. i18n: context: text @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3158
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Hori&zontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Hori&zontally"
-msgstr "Katmanı Yatay Ola&rak Yansıt"
+msgstr "Katmanları Yatay Ola&rak Yansıt"
 
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3160 krita/krita.action:3161
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Horizontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Horizontally"
-msgstr "Katmanı Yatay Olarak Yansıt"
+msgstr "Katmanları yatay olarak yansıt"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3170
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer &Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers &Vertically"
-msgstr "Katmanı &Dikey Olarak Yansıt"
+msgstr "Katmanları &Dikey Olarak Yansıt"
 
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3172 krita/krita.action:3173
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Vertically"
-msgstr "Katmanı Dikey Olarak Yansıt"
+msgstr "Katmanları dikey olarak yansıt"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3182
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Rotate Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Rotate Layers..."
-msgstr "&Katmanı Döndür..."
+msgstr "&Katmanları Döndür..."
 
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3184 krita/krita.action:3185
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers"
-msgstr "Katmanı Döndür"
+msgstr "Katmanları döndür"
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3194
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate &Layer 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate &Layers 90° to the Right"
-msgstr "Katmanı &Sağa 90° Döndür"
+msgstr "Katmanları &Sağa 90° Döndür"
 
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3196 krita/krita.action:3197
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Right"
-msgstr "Katmanı Sağa 90° Döndür"
+msgstr "Katmanları sağa 90° döndür"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3206
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer &90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers &90° to the Left"
-msgstr "Katmanı Sola &90° Döndür"
+msgstr "Katmanları Sola &90° Döndür"
 
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3208 krita/krita.action:3209
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Left"
-msgstr "Katmanı Sola 90° Döndür"
+msgstr "Katmanları sola 90° döndür"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3218
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer &180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers &180°"
-msgstr "Katmanı &180° Döndür"
+msgstr "Katmanları &180° Döndür"
 
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3220 krita/krita.action:3221
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 180°"
-msgstr "Katmanı 180° Döndür"
+msgstr "Katmanları 180° döndür"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3230
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale &Layer to new Size..."
+#, kde-format
 msgctxt "action"
 msgid "Scale &Layers to new Size..."
-msgstr "Katmanı &Yeni Boyuta Ölçekle..."
+msgstr "Katmanları &Yeni Boyuta Ölçekle..."
 
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3232 krita/krita.action:3233
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale Layer to new Size"
+#, kde-format
 msgctxt "action"
 msgid "Scale Layers to new Size"
-msgstr "Katmanı yeni boyuta ölçekle"
+msgstr "Katmanları yeni boyuta ölçekle"
 
 #. i18n: context: text @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3242
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Shear Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Shear Layers..."
-msgstr "&Katmanı Kırk..."
+msgstr "&Katmanları Kırk..."
 
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3244 krita/krita.action:3245
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shear Layer"
+#, kde-format
 msgctxt "action"
 msgid "Shear Layers"
-msgstr "Katmanı Kırk"
+msgstr "Katmanları kırk"
 
 #. i18n: context: text @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3254
@@ -12476,24 +12444,20 @@ msgstr "Tüm Katmanları Kırk"
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3350
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Offset Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Offset Layers..."
-msgstr "&Katmanı Ofsetle..."
+msgstr "&Katmanları Ofsetle..."
 
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3352 krita/krita.action:3353
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "action"
 msgid "Offset Layers"
-msgstr "Katmanı Ofsetle"
+msgstr "Katmanları ofsetle"
 
 #. i18n: context: text @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3362
@@ -16742,8 +16706,8 @@ msgstr "Boyut"
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
 #: plugins/tools/basictools/kis_tool_brush.cc:388
-#: plugins/tools/basictools/kis_tool_fill.cc:568
-#: plugins/tools/basictools/kis_tool_fill.cc:579
+#: plugins/tools/basictools/kis_tool_fill.cc:577
+#: plugins/tools/basictools/kis_tool_fill.cc:588
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
@@ -17135,12 +17099,9 @@ msgid "Scale Layer"
 msgstr "Katmanı Ölçekle"
 
 #: libs/image/kis_image.cc:1037
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
 msgid "Scale Layers"
-msgstr "Katmanı Ölçekle"
+msgstr "Katmanları Ölçekle"
 
 #: libs/image/kis_image.cc:1178
 msgctxt "(qtundo-format)"
@@ -17158,12 +17119,9 @@ msgid "Rotate Layer"
 msgstr "Katmanı Döndür"
 
 #: libs/image/kis_image.cc:1195
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
 msgid "Rotate Layers"
-msgstr "Katmanı Döndür"
+msgstr "Katmanları Döndür"
 
 #: libs/image/kis_image.cc:1296
 msgctxt "(qtundo-format)"
@@ -17176,12 +17134,9 @@ msgid "Shear Layer"
 msgstr "Katmanı Kırk"
 
 #: libs/image/kis_image.cc:1304
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
 msgid "Shear Layers"
-msgstr "Katmanı Kırk"
+msgstr "Katmanları Kırk"
 
 #: libs/image/kis_image.cc:1311
 msgctxt "(qtundo-format)"
@@ -18112,7 +18067,7 @@ msgstr "Krita Kısayol Şeması"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Camera Raw Files"
-msgstr "Ham Kamera Dosyaları"
+msgstr "RAW Kamera Dosyaları"
 
 #: libs/koplugin/KisMimeDatabase.cpp:304
 #, kde-format
@@ -18879,7 +18834,7 @@ msgstr "Süper Işık"
 #, kde-format
 msgctxt "Blending mode - Tint (IFS Illusions)"
 msgid "Tint (IFS Illusions)"
-msgstr "Tonla (IFS Yanılsama)"
+msgstr "Açık Tonla (IFS Yanılsama)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:91
 #, kde-format
@@ -19899,7 +19854,7 @@ msgstr "Küçük Görsel"
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:615
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:609
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
@@ -20395,7 +20350,7 @@ msgstr "Şekilleri Vektör Seçime Dönüştür"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:594
 #: libs/ui/actions/kis_selection_action_factories.cpp:653
-#: plugins/tools/tool_polyline/kis_tool_polyline.cc:49
+#: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
 msgstr "Süren Çizgi Çiz"
@@ -21227,7 +21182,7 @@ msgstr "sıfır gecikme"
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "none"
-msgstr "hiçbiri"
+msgstr "yok"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:76
 #, kde-format
@@ -21240,7 +21195,7 @@ msgstr "sıfır gecikme"
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "none"
-msgstr "hiçbiri"
+msgstr "yok"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:79
 #, kde-format
@@ -21282,7 +21237,7 @@ msgstr "öntanımlı"
 #, kde-format
 msgctxt "webp preset option name"
 msgid "none"
-msgstr "hiçbiri"
+msgstr "yok"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:87
 #, kde-format
@@ -22607,9 +22562,9 @@ msgstr "Katman Özellikleri"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:27
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:30
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:281
-#: plugins/tools/basictools/kis_tool_fill.cc:530
-#: plugins/tools/basictools/kis_tool_fill.cc:538
-#: plugins/tools/basictools/kis_tool_fill.cc:553
+#: plugins/tools/basictools/kis_tool_fill.cc:539
+#: plugins/tools/basictools/kis_tool_fill.cc:547
+#: plugins/tools/basictools/kis_tool_fill.cc:562
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
@@ -22718,7 +22673,7 @@ msgstr ""
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
-msgstr ""
+msgstr "%{n}"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:918
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
@@ -25864,7 +25819,7 @@ msgstr "Arka Plan Rengi"
 #: plugins/generators/pattern/wdgpatternoptions.ui:21
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:20
 #: plugins/paintops/libpaintop/KisTextureOptionWidget.cpp:27
-#: plugins/tools/basictools/kis_tool_fill.cc:612
+#: plugins/tools/basictools/kis_tool_fill.cc:621
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:515
 #, kde-format
 msgid "Pattern"
@@ -26263,7 +26218,7 @@ msgstr "Maske Kaynağı"
 #: libs/ui/forms/wdgmasksource.ui:27
 #, kde-format
 msgid "&None"
-msgstr "&Hiçbiri"
+msgstr "&Yok"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioMask)
 #: libs/ui/forms/wdgmasksource.ui:34
@@ -27598,7 +27553,7 @@ msgstr "Çizgi:"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:96
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:224
-#: plugins/tools/basictools/kis_tool_fill.cc:610
+#: plugins/tools/basictools/kis_tool_fill.cc:619
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
 #, kde-format
 msgid "Foreground color"
@@ -27608,7 +27563,7 @@ msgstr "Ön plan rengi"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:101
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:214
-#: plugins/tools/basictools/kis_tool_fill.cc:611
+#: plugins/tools/basictools/kis_tool_fill.cc:620
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
 #, kde-format
 msgid "Background color"
@@ -27811,10 +27766,9 @@ msgid "Resize Layer"
 msgstr "Katmanı Yeniden Boyutlandır"
 
 #: libs/ui/imagesize/imagesize.cc:126
-#, fuzzy, kde-format
-#| msgid "Resize Layer"
+#, kde-format
 msgid "Resize Layers"
-msgstr "Katmanı Yeniden Boyutlandır"
+msgstr "Katmanları Yeniden Boyutlandır"
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, kde-format
@@ -28052,7 +28006,7 @@ msgstr "Yeniden Adlandır"
 #, kde-format
 msgctxt "No input for this button"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #: libs/ui/input/config/kis_input_button.cpp:128
 #: libs/ui/input/config/kis_input_button.cpp:190
@@ -28501,7 +28455,7 @@ msgstr "Fare %1"
 #, kde-format
 msgctxt "No mouse buttons for shortcut"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:358
 #, kde-format
@@ -28547,7 +28501,7 @@ msgstr "Üst Karakter"
 #, kde-format
 msgctxt "No keys for shortcut"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:409
 #, kde-format
@@ -28578,7 +28532,7 @@ msgstr "İzsürücü Çevir"
 #, kde-format
 msgctxt "No mouse wheel buttons for shortcut"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:441
 #, kde-format
@@ -29261,6 +29215,8 @@ msgid ""
 "Non-animated layer is merged into the current frame. To merge it into the "
 "whole clip, create at least one frame"
 msgstr ""
+"Canlandırmasız katman geçerli kareyle birleştirilir. Bunu klibin tamamıyla "
+"birleştirmek için en az bir kare oluşturun"
 
 #: libs/ui/kis_layer_manager.cc:930
 #, kde-format
@@ -29393,12 +29349,9 @@ msgid "Mirror Mask X"
 msgstr "X Maskesini Yansıt"
 
 #: libs/ui/kis_node_manager.cpp:1045
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layers X"
-msgstr "X Katmanını Yansıt"
+msgstr "X Katmanlarını Yansıt"
 
 #: libs/ui/kis_node_manager.cpp:1057
 msgctxt "(qtundo-format)"
@@ -29411,12 +29364,9 @@ msgid "Mirror Mask Y"
 msgstr "Y Maskesini Yansıt"
 
 #: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layers Y"
-msgstr "Y Katmanını Yansıt"
+msgstr "Y Katmanlarını Yansıt"
 
 #: libs/ui/kis_node_manager.cpp:1071
 msgctxt "(qtundo-format)"
@@ -29505,13 +29455,12 @@ msgstr "Maske Katmanı"
 #: libs/ui/kis_node_manager.cpp:1611
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
-msgstr ""
+msgstr "\"%1\" katmanı, yeni \"%2\" üst ögesine taşınamıyor"
 
 #: libs/ui/kis_node_manager.cpp:1614
-#, fuzzy, kde-format
-#| msgid "Put every layer in its own, separate group layer"
+#, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
-msgstr "Her katmanı kendi ayrı grup katmanına koy"
+msgstr "\"%1\" katmanı, kök katmana taşınamıyor"
 
 #: libs/ui/kis_node_manager.cpp:1622
 msgctxt "(qtundo-format)"
@@ -31860,7 +31809,7 @@ msgstr "İç saydamlığı ayarlayın. Sığ = Grup, Derin = Arka Plan"
 #, kde-format
 msgctxt "@item:inlistbox Knockout option"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbKnockout)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:225
@@ -32551,7 +32500,7 @@ msgstr "Grup düzenlenebilir değil."
 msgid "Local selection is locked."
 msgstr "Yerel seçim kilitli."
 
-#: libs/ui/tool/kis_tool_freehand.cc:212
+#: libs/ui/tool/kis_tool_freehand.cc:211
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
@@ -32559,25 +32508,25 @@ msgid ""
 msgstr ""
 "Fırça aracı bu katmanda boya yapamaz.  Lütfen boya katmanı veya maske seçin."
 
-#: libs/ui/tool/kis_tool_freehand.cc:217
-#: libs/ui/tool/kis_tool_polyline_base.cpp:119
+#: libs/ui/tool/kis_tool_freehand.cc:216
+#: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:167
-#: plugins/tools/basictools/kis_tool_line.cc:202
-#: plugins/tools/basictools/kis_tool_path.cc:78
-#: plugins/tools/basictools/kis_tool_pencil.cc:53
-#: plugins/tools/tool_enclose_and_fill/subtools/KisPathEnclosingProducer.cpp:113
+#: plugins/tools/basictools/kis_tool_line.cc:211
+#: plugins/tools/basictools/kis_tool_path.cc:90
+#: plugins/tools/basictools/kis_tool_pencil.cc:63
+#: plugins/tools/tool_enclose_and_fill/subtools/KisPathEnclosingProducer.cpp:130
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:71
 #, kde-format
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr "Bu renk uzayı için MyPaint Fırça İşletkesi kullanılabilir değil"
 
-#: libs/ui/tool/kis_tool_paint.cc:582
+#: libs/ui/tool/kis_tool_paint.cc:581
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr "Fırça boyutu: %1 pks"
 
-#: libs/ui/tool/kis_tool_polyline_base.cpp:113
+#: libs/ui/tool/kis_tool_polyline_base.cpp:117
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
 #: libs/ui/tool/KisToolOutlineBase.cpp:161
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:65
@@ -32599,7 +32548,7 @@ msgstr ""
 "Yükseklik: %2 pks"
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
-#: plugins/tools/basictools/kis_tool_line.cc:284
+#: plugins/tools/basictools/kis_tool_line.cc:293
 #: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #, kde-format
 msgid ""
@@ -32654,7 +32603,7 @@ msgstr "Araç Kutusu"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:141
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:186
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:174
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
 #, kde-format
@@ -32895,7 +32844,7 @@ msgstr "Saydam"
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:38
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:41
-#: plugins/tools/basictools/kis_tool_fill.cc:537
+#: plugins/tools/basictools/kis_tool_fill.cc:546
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
 #, kde-format
@@ -34062,7 +34011,7 @@ msgid "Mid-gray level:"
 msgstr "Orta gri düzeyi:"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:44
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:153
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:169
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:28
 #, kde-format
@@ -34071,7 +34020,7 @@ msgid "Display"
 msgstr "Ekran"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:169
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:157
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:177
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:40
 #, kde-format
@@ -34080,7 +34029,7 @@ msgstr "Küçük Görseller"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:177
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:183
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:46
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
@@ -34088,38 +34037,38 @@ msgstr "Küçük Görseller"
 msgid "Details"
 msgstr "Ayrıntılar"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:115
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
 #, kde-format
 msgid "The settings for this preset have changed from their default."
 msgstr "Bu önayarın ayarları öntanımlılardan değiştirildi."
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:117
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:105
 #, kde-format
 msgid "Toggle showing presets"
 msgstr "Önayar gösterimini aç/kapat"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:119
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:107
 #, kde-format
 msgid "Toggle showing scratchpad"
 msgstr "Karalama defteri gösterimini aç/kapat"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:121
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:109
 #, kde-format
 msgid "Reload the brush preset"
 msgstr "Fırça önayarını yeniden yükle"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:122
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:110
 #, kde-format
 msgid "Rename the brush preset"
 msgstr "Fırça önayarını yeniden adlandır"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:222
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:210
 #, kde-format
 msgid "Detach Brush Editor"
 msgstr "Fırça Düzenleyicisini Ayır"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:550
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:544
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
@@ -34131,7 +34080,7 @@ msgid "No Preview for this engine"
 msgstr "Bu işletke için önizleme yok"
 
 #: libs/ui/widgets/kis_selection_options.cc:179
-#: plugins/tools/basictools/kis_tool_fill.cc:562
+#: plugins/tools/basictools/kis_tool_fill.cc:571
 #, kde-format
 msgctxt "The anti-alias checkbox in fill tool options"
 msgid "Anti-aliasing"
@@ -34207,7 +34156,7 @@ msgid "Grow or shrink the selection by the set amount"
 msgstr "Seçimi, ayarlı miktar kadar büyüt veya küçült"
 
 #: libs/ui/widgets/kis_selection_options.cc:237
-#: plugins/tools/basictools/kis_tool_fill.cc:628
+#: plugins/tools/basictools/kis_tool_fill.cc:637
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
@@ -34693,7 +34642,7 @@ msgstr "Kafes Gradyanı"
 #. i18n: ectx: property (text), widget (QLabel, labelRepeat)
 #: libs/ui/widgets/KoFillConfigWidget.ui:255
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:91
-#: plugins/tools/basictools/kis_tool_gradient.cc:256
+#: plugins/tools/basictools/kis_tool_gradient.cc:264
 #, kde-format
 msgid "Repeat:"
 msgstr "Yinele:"
@@ -36409,7 +36358,7 @@ msgstr "Öntanımlı:"
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #. i18n: ectx: property (whatsThis), widget (KTreeWidgetSearchLineWidget, searchFilter)
 #: libs/widgetutils/xmlgui/KisShortcutsDialog.ui:21
@@ -38256,17 +38205,17 @@ msgstr "Klonları Benzersiz Yap"
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:46
 #, kde-format
 msgid "Tint: "
-msgstr "Renklendir: "
+msgstr "Açık ton: "
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:49
 #, kde-format
 msgid "Tint color for past frames"
-msgstr "Geçmiş kareler için renk tonu"
+msgstr "Geçmiş kareler için açık renk tonu"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:50
 #, kde-format
 msgid "Tint color for future frames"
-msgstr "Gelecek kareler için renk tonu"
+msgstr "Gelecek kareler için açık renk tonu"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, OnionSkinsDocker)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:23
@@ -38893,7 +38842,7 @@ msgid ""
 "Balanced: Show both opacity and blending mode if either are changed.\n"
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
-"Hiçbiri: Bir şey gösterme.\n"
+"Yok: Bir şey gösterme.\n"
 "Basit Değiştirilmiş matlıkları veya harmanlama kiplerini göster.\n"
 "Dengeli: Değiştirilmişlerse hem matlık hem harmanlama kipini göster.\n"
 "Ayrıntılı: Değiştirilmemişse bile hem matlık hem harmanlama kipini göster."
@@ -39221,7 +39170,7 @@ msgstr "Tüm Kanallar"
 #, kde-format
 msgctxt "Item to indicate no look transform being selected"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -42586,12 +42535,10 @@ msgid "Offset Image"
 msgstr "Görseli Ofsetle"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Offset Layers"
-msgstr "Göreli K&onum Katmanı"
+msgstr "Katmanları Ofsetle"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
 msgctxt "(qtundo-format)"
@@ -42599,12 +42546,9 @@ msgid "Offset Layer"
 msgstr "Katmanı Ofsetle"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
 msgid "Offset Layers"
-msgstr "Katmanı Ofsetle"
+msgstr "Katmanları Ofsetle"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -42647,8 +42591,8 @@ msgid ""
 "or a custom QPixmap or QIcon, or None."
 msgstr ""
 "Simge bu eylem ile ilişkili. Gerektiğinde menü çubuğunda ve araç çubuğunda "
-"metin ile birlikte gösterilir. KDE'nin görüntü yükleme sistemini veya özel "
-"QPixmap veya QIcon veya Hiçbiri'ni kullanmak için bir söz dizisi."
+"metin ile birlikte gösterilir. KDE'nin görsel yükleme sistemini veya özel "
+"QPixmap veya QIcon veya hiçbirini kullanmak için bir söz dizisi."
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, shortcut)
 #: plugins/extensions/pykrita/plugin/info.ui:41
@@ -42658,7 +42602,7 @@ msgid ""
 "instance, or None."
 msgstr ""
 "Bu eylemi başlatmak için bir kısayol, 'Kontrol+1' veya bir QKeySequence "
-"örneği veya Hiçbiri gibi."
+"örneği veya Yok gibi."
 
 #. i18n: ectx: property (text), widget (QLabel, labelText)
 #: plugins/extensions/pykrita/plugin/info.ui:68
@@ -42675,8 +42619,7 @@ msgid ""
 "The text associated with the action (used as the menu item label, etc), or "
 "None."
 msgstr ""
-"Eylem ile ilişkili metin (menü ögesi etiketi vb. olarak kullanılan) veya "
-"Hiçbiri."
+"Eylem ile ilişkili metin (menü ögesi etiketi vb. olarak kullanılan) veya Yok."
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, menu)
 #: plugins/extensions/pykrita/plugin/info.ui:88
@@ -42686,7 +42629,7 @@ msgid ""
 "None."
 msgstr ""
 "Altına bu ögenin yerleştirileceği menü, 'araçlar' veya 'ayarlar' gibi veya "
-"Hiçbiri."
+"Yok."
 
 #. i18n: ectx: property (text), widget (QLabel, labelShortcut)
 #: plugins/extensions/pykrita/plugin/info.ui:95
@@ -42730,7 +42673,7 @@ msgid ""
 "instance, or None."
 msgstr ""
 "'Kontrol+1' veya bir QKeySequence örneği gibi bu eylemi başlatacak kısayol, "
-"veya Hiçbiri."
+"veya Yok."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/extensions/pykrita/plugin/info.ui:240
@@ -43585,10 +43528,9 @@ msgid "Rotate Layer"
 msgstr "Katmanı Döndür"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, fuzzy, kde-format
-#| msgid "Rotate Layer"
+#, kde-format
 msgid "Rotate Layers"
-msgstr "Katmanı Döndür"
+msgstr "Katmanları Döndür"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -43734,10 +43676,9 @@ msgid "Shear Layer"
 msgstr "Katmanı Kırk"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
-#, fuzzy, kde-format
-#| msgid "Shear Layer"
+#, kde-format
 msgid "Shear Layers"
-msgstr "Katmanı Kırk"
+msgstr "Katmanları Kırk"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -44105,7 +44046,7 @@ msgstr "İris"
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:85
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:245
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:50
-#: plugins/tools/basictools/kis_tool_gradient.cc:241
+#: plugins/tools/basictools/kis_tool_gradient.cc:249
 #, kde-format
 msgid "Shape:"
 msgstr "Şekil:"
@@ -46006,84 +45947,84 @@ msgid "&Gradient..."
 msgstr "&Gradyan..."
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:28
-#: plugins/tools/basictools/kis_tool_gradient.cc:244
+#: plugins/tools/basictools/kis_tool_gradient.cc:252
 #, kde-format
 msgctxt "the gradient will be drawn linearly"
 msgid "Linear"
 msgstr "Doğrusal"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:29
-#: plugins/tools/basictools/kis_tool_gradient.cc:245
+#: plugins/tools/basictools/kis_tool_gradient.cc:253
 #, kde-format
 msgctxt "the gradient will be drawn bilinearly"
 msgid "Bi-Linear"
 msgstr "İki Yönlü Doğrusal"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:30
-#: plugins/tools/basictools/kis_tool_gradient.cc:246
+#: plugins/tools/basictools/kis_tool_gradient.cc:254
 #, kde-format
 msgctxt "the gradient will be drawn radially"
 msgid "Radial"
 msgstr "Işınsal"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:31
-#: plugins/tools/basictools/kis_tool_gradient.cc:247
+#: plugins/tools/basictools/kis_tool_gradient.cc:255
 #, kde-format
 msgctxt "the gradient will be drawn in a square around a centre"
 msgid "Square"
 msgstr "Kare"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:32
-#: plugins/tools/basictools/kis_tool_gradient.cc:248
+#: plugins/tools/basictools/kis_tool_gradient.cc:256
 #, kde-format
 msgctxt "the gradient will be drawn as an asymmetric cone"
 msgid "Conical"
 msgstr "Konik"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:33
-#: plugins/tools/basictools/kis_tool_gradient.cc:249
+#: plugins/tools/basictools/kis_tool_gradient.cc:257
 #, kde-format
 msgctxt "the gradient will be drawn as a symmetric cone"
 msgid "Conical Symmetric"
 msgstr "Konik Simetrik"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:34
-#: plugins/tools/basictools/kis_tool_gradient.cc:250
+#: plugins/tools/basictools/kis_tool_gradient.cc:258
 #, kde-format
 msgctxt "the gradient will be drawn as a spiral"
 msgid "Spiral"
 msgstr "Spiral"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:35
-#: plugins/tools/basictools/kis_tool_gradient.cc:251
+#: plugins/tools/basictools/kis_tool_gradient.cc:259
 #, kde-format
 msgctxt "the gradient will be drawn as a reverse spiral"
 msgid "Reverse Spiral"
 msgstr "Ters Spiral"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:36
-#: plugins/tools/basictools/kis_tool_gradient.cc:252
+#: plugins/tools/basictools/kis_tool_gradient.cc:260
 #, kde-format
 msgctxt "the gradient will be drawn in a selection outline"
 msgid "Shaped"
 msgstr "Şekilli"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:39
-#: plugins/tools/basictools/kis_tool_gradient.cc:259
+#: plugins/tools/basictools/kis_tool_gradient.cc:267
 #, kde-format
 msgctxt "The gradient will not repeat"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_gradient.cc:260
+#: plugins/tools/basictools/kis_tool_gradient.cc:268
 #, kde-format
 msgctxt "The gradient will repeat forwards"
 msgid "Forwards"
 msgstr "Yönlendirmeler"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:41
-#: plugins/tools/basictools/kis_tool_gradient.cc:261
+#: plugins/tools/basictools/kis_tool_gradient.cc:269
 #, kde-format
 msgctxt "The gradient will repeat alternatingly"
 msgid "Alternating"
@@ -46133,7 +46074,7 @@ msgstr "Göreceli"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAntiAliasThreshold)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:101
-#: plugins/tools/basictools/kis_tool_gradient.cc:266
+#: plugins/tools/basictools/kis_tool_gradient.cc:274
 #, kde-format
 msgid "Anti-alias threshold:"
 msgstr "Yumuşatma eşiği:"
@@ -46434,7 +46375,7 @@ msgstr "Eşitleştirme:"
 #, kde-format
 msgctxt "Screentone equalization mode"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonEqualizationFunctionBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:157
@@ -49253,11 +49194,11 @@ msgid ""
 "files will be decoded in 8-bit color depth with a BT.709 gamma curve and a "
 "99th-percentile white point. This mode is faster than 16-bit decoding.</p>"
 msgstr ""
-"<p>Etkinleştirilirse Tüm HAM dosyalar, doğrusal gama eğrisi kullanılarak 16 "
+"<p>Etkinleştirilirse Tüm RAW dosyalar, doğrusal gama eğrisi kullanılarak 16 "
 "bit renk derinliğine çözülür. Düzenleyici içinde koyu piksellerin oluşmasını "
 "engellemek için, bu kipte Renk Yönetimini kullanmanız önerilir.</p><p>Devre "
-"dışı bırakılırsa tüm HAM dosyalar bir BT.709 gama eğrisi ve bir 99.-yüzde "
-"beyaz nokta ile 8 bit renk derinliğinde çözülür. Bu kip 16 bit kod çözme "
+"dışı bırakılırsa tüm RAW dosyalar bir BT.709 gama eğrisi ve bir 99.-yüzde "
+"beyaz nokta ile 8 bit renk derinliğinde çözülür. Bu kip, 16 bit kod çözme "
 "işleminden daha hızlıdır.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:284
@@ -49772,7 +49713,7 @@ msgid ""
 "pictures. If you set this option to off, the Black Point value will be "
 "automatically computed.</p>"
 msgstr ""
-"<title>Siyah nokta</title><p>HAM görselleri çözmek için belirli bir siyah "
+"<title>Siyah nokta</title><p>RAW görselleri çözmek için belirli bir siyah "
 "nokta değeri kullan. Eğer bu seçeneği kapatırsanız Siyah Nokta değeri "
 "otomatik hesaplanacaktır.</p>"
 
@@ -49800,7 +49741,7 @@ msgid ""
 "pictures. If you set this option to off, the White Point value will be "
 "automatically computed.</p>"
 msgstr ""
-"<title>Beyaz nokta</title><p>HAM görselleri çözmek için belirli bir beyaz "
+"<title>Beyaz nokta</title><p>RAW görselleri çözmek için belirli bir beyaz "
 "nokta değeri kullan. Eğer bu seçenek kapalıysa Beyaz Nokta değeri otomatik "
 "olarak hesaplanacak.</p>"
 
@@ -49830,7 +49771,7 @@ msgstr "Gürültü azaltma:"
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:633
 #, kde-format
@@ -49871,9 +49812,9 @@ msgid ""
 "li><li><emphasis strong='true'>Impulse Denoise</emphasis>: Impulse noise "
 "suppression. It's applied after interpolation.</li></ul></p>"
 msgstr ""
-"<title>Gürültü Azaltma</title><p>HAM çözme sırasında uygulanacak gürültü "
-"azaltma yöntemini buradan seçin.</p><p><ul><li><emphasis "
-"strong='true'>Hiçbiri</emphasis>: hiç gürültü azaltma yok.</li><li><emphasis "
+"<title>Gürültü Azaltma</title><p>RAW çözme sırasında uygulanacak gürültü "
+"azaltma yöntemini buradan seçin.</p><p><ul><li><emphasis strong='true'>Yok</"
+"emphasis>: hiç gürültü azaltma yok.</li><li><emphasis "
 "strong='true'>Dalgacıklar</emphasis>: Gerçek ayrıntılar korunurken "
 "gürültünün silinmesi için dalgacık düzeltme. Aradeğerlemeden sonra uygulanır."
 "</li><li><emphasis strong='true'>FBDD</emphasis>: FBDD gürültü azaltma. "
@@ -49970,7 +49911,7 @@ msgstr "Kamera profili:"
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:721
 #, kde-format
@@ -49995,11 +49936,11 @@ msgid ""
 "if it exists.</li><li><emphasis strong='true'>Custom</emphasis>: use a "
 "custom input color space profile.</li></ul></p>"
 msgstr ""
-"<title>Kamera Profili</title><p>Buradan HAM veriyi çözmek için kullanılan "
-"girdi renk uzayını seçin.</p><p><ul><li><emphasis strong='true'>Hiçbiri</"
-"emphasis>: HAM kod çözme sırasında hiçbir girdi renk profili kullanılmadı.</"
-"li><li><emphasis strong='true'>Gömülü</emphasis>: eğer varsa HAM dosyadan "
-"gömülü renk profilini kullan.</li><li><emphasis strong='true'>Özel</"
+"<title>Kamera Profili</title><p>Buradan RAW veriyi çözmek için kullanılan "
+"girdi renk uzayını seçin.</p><p><ul><li><emphasis strong='true'>Yok</"
+"emphasis>: RAW kod çözme sırasında hiçbir girdi renk profili kullanılmadı.</"
+"li><li><emphasis strong='true'>Gömülü</emphasis>: eğer varsa RAW dosyadan "
+"gömülü renk profilini kullanın.</li><li><emphasis strong='true'>Özel</"
 "emphasis>: özel girdi renk uzayı profili kullan.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:735
@@ -50176,7 +50117,7 @@ msgstr "\"%1\" için tercih edilen çözünürlüğü gir (PPI)"
 #, kde-format
 msgctxt "TIFF options"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:39
 #, kde-format
@@ -56766,7 +56707,7 @@ msgid "Scalable Distance"
 msgstr "Ölçeklenebilir Uzaklık"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:449
-#: plugins/tools/basictools/kis_tool_line.cc:101
+#: plugins/tools/basictools/kis_tool_line.cc:110
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Yardımcılara Tuttur"
@@ -56802,7 +56743,7 @@ msgstr ""
 "yardımcılar kullanılırken sığdırma karmaşasını önler."
 
 #: plugins/tools/basictools/kis_tool_brush.cc:473
-#: plugins/tools/basictools/kis_tool_line.cc:104
+#: plugins/tools/basictools/kis_tool_line.cc:113
 #, kde-format
 msgid "Snap Eraser"
 msgstr "Silgi Tuttur"
@@ -56828,7 +56769,7 @@ msgstr "%1 palet dosyasına yazılamıyor. Saltokunur olabilir."
 msgid "Color Sampler Tool"
 msgstr "Renk Örnekleme Aracı"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:52
+#: plugins/tools/basictools/kis_tool_ellipse.cc:63
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Elips Çiz"
@@ -56838,42 +56779,42 @@ msgstr "Elips Çiz"
 msgid "Ellipse Tool"
 msgstr "Elips Aracı"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:129
+#: plugins/tools/basictools/kis_tool_fill.cc:138
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:177
 #, kde-format
 msgid "You cannot use this tool with the selected layer type"
 msgstr "Bu aracı seçili katman türüyle kullanamazsınız"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:240
+#: plugins/tools/basictools/kis_tool_fill.cc:249
 msgctxt "(qtundo-format)"
 msgid "Flood Fill"
 msgstr "Taşkın Dolgu"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:529
+#: plugins/tools/basictools/kis_tool_fill.cc:538
 #, kde-format
 msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
 msgid "Scale: "
 msgstr "Ölçek: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:534
+#: plugins/tools/basictools/kis_tool_fill.cc:543
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:449
 #, kde-format
 msgid "Use custom blending options"
 msgstr "Özel harmanlama seçenekleri kullan"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:549
+#: plugins/tools/basictools/kis_tool_fill.cc:558
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in fill tool options"
 msgid "Threshold: "
 msgstr "Eşik: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:552
+#: plugins/tools/basictools/kis_tool_fill.cc:561
 #, kde-format
 msgctxt "The 'spread' spinbox prefix in fill tool options"
 msgid "Spread: "
 msgstr "Yay: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:558
+#: plugins/tools/basictools/kis_tool_fill.cc:567
 #, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in fill tool to use selection "
@@ -56881,86 +56822,86 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Seçimi sınır olarak kullan"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:566
+#: plugins/tools/basictools/kis_tool_fill.cc:575
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in fill tool options"
 msgid "Grow: "
 msgstr "Büyüt:"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:577
+#: plugins/tools/basictools/kis_tool_fill.cc:586
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in fill tool options"
 msgid "Feather: "
 msgstr "Yumuşat:"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:603
+#: plugins/tools/basictools/kis_tool_fill.cc:612
 #, kde-format
 msgctxt "The 'reset' button in fill tool options"
 msgid "Reset"
 msgstr "Sıfırla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:606
+#: plugins/tools/basictools/kis_tool_fill.cc:615
 #, kde-format
 msgid "Fill the active selection, or the entire canvas"
 msgstr "Etkin seçimi veya bütün tuvali doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:607
+#: plugins/tools/basictools/kis_tool_fill.cc:616
 #, kde-format
 msgid "Fill a contiguous region"
 msgstr "Komşu bir bölgeyi doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:608
+#: plugins/tools/basictools/kis_tool_fill.cc:617
 #, kde-format
 msgid "Fill all regions of a similar color"
 msgstr "Tüm bölgeleri benzer bir renkle doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:613
+#: plugins/tools/basictools/kis_tool_fill.cc:622
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
 #, kde-format
 msgid "Set the scale of the pattern"
 msgstr "Desenin ölçeğini ayarla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:614
+#: plugins/tools/basictools/kis_tool_fill.cc:623
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:517
 #, kde-format
 msgid "Set the rotation of the pattern"
 msgstr "Desenin döndürmesini ayarla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:615
+#: plugins/tools/basictools/kis_tool_fill.cc:624
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr "Fırçalarınkiler yerine özel harmanlama seçenekleri ayarla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:616
+#: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
 #, kde-format
 msgid "Set a custom opacity for the fill"
 msgstr "Dolgu için özel bir matlık ayarla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:617
+#: plugins/tools/basictools/kis_tool_fill.cc:626
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
 #, kde-format
 msgid "Set a custom blend mode for the fill"
 msgstr "Dolgu için özel bir harmanlama kipi ayarla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:619
+#: plugins/tools/basictools/kis_tool_fill.cc:628
 #, kde-format
 msgid "Fill regions similar in color to the clicked region"
 msgstr "Bölgeleri, tıklanan bölgenin rengine benzer bir renkle doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:620
+#: plugins/tools/basictools/kis_tool_fill.cc:629
 #, kde-format
 msgid "Fill all regions until a specific boundary color"
 msgstr "Tüm bölgeleri belirli bir sınır rengine dek doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:621
+#: plugins/tools/basictools/kis_tool_fill.cc:630
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
 #, kde-format
 msgid "Boundary color"
 msgstr "Sınır rengi"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:622
+#: plugins/tools/basictools/kis_tool_fill.cc:631
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
 #, kde-format
 msgid ""
@@ -56970,7 +56911,7 @@ msgstr ""
 "Dolgunun renk benzerliği toleransını ayarlayın. Eşiği artırmak, doldurulacak "
 "benzer renklerin aralığını da artırır."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:623
+#: plugins/tools/basictools/kis_tool_fill.cc:632
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
 #, kde-format
 msgid ""
@@ -56980,7 +56921,7 @@ msgstr ""
 "Dolgunun mat kısmının kapsamını ayarlayın. Yaymayı azaltmak, renk "
 "benzerliğine bağlı olarak dolgu alanlarının matlığını azaltır."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:624
+#: plugins/tools/basictools/kis_tool_fill.cc:633
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
 #, kde-format
 msgid ""
@@ -56990,37 +56931,37 @@ msgstr ""
 "Etkin seçimin konturuna, bölgeyi doldururken bir sınır olarak davranılıp "
 "davranılmayacağını ayarla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:626
+#: plugins/tools/basictools/kis_tool_fill.cc:635
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
 #, kde-format
 msgid "Smooths the edges of the fill"
 msgstr "Dolgunun kenarlarını pürüzsüzleştirir"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:627
+#: plugins/tools/basictools/kis_tool_fill.cc:636
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
 msgstr "Dolguyu, ayarlanan miktar kadar büyüt veya küçült"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:629
+#: plugins/tools/basictools/kis_tool_fill.cc:638
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
 #, kde-format
 msgid "Blur the fill by the set amount"
 msgstr "Dolguyu, ayarlanan miktar kadar bulanıklaştır"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:631
+#: plugins/tools/basictools/kis_tool_fill.cc:640
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
 #, kde-format
 msgid "Fill regions found from the active layer"
 msgstr "Etkin katmandan bulunan tüm bölgeleri doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:632
+#: plugins/tools/basictools/kis_tool_fill.cc:641
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
 msgstr "Tüm katmanların birleştirilmesiyle oluşan bölgeleri doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:633
+#: plugins/tools/basictools/kis_tool_fill.cc:642
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
 #, kde-format
 msgid ""
@@ -57029,12 +56970,12 @@ msgstr ""
 "Katmanların belirli renk etiketleriyle birleştirilmesinden bulunan bölgeleri "
 "doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:635
+#: plugins/tools/basictools/kis_tool_fill.cc:644
 #, kde-format
 msgid "Dragging will fill regions of any color"
 msgstr "Sürüklemek, herhangi bir renkli bölgeleri dolduracaktır"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:636
+#: plugins/tools/basictools/kis_tool_fill.cc:645
 #, kde-format
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
@@ -57043,43 +56984,43 @@ msgstr ""
 "Sürükleme, yalnızca ilk bölgeye benzer renkli bölgeleri doldurur (çizgi "
 "resmi doldurmak için kullanışlıdır)"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:638
+#: plugins/tools/basictools/kis_tool_fill.cc:647
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
 #, kde-format
 msgid "Reset the options to their default values"
 msgstr "Seçenekleri öntanımlı değerlerine sıfırla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:647
+#: plugins/tools/basictools/kis_tool_fill.cc:656
 #, kde-format
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
 msgstr "Dolgu kipi"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:654
+#: plugins/tools/basictools/kis_tool_fill.cc:663
 #, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
 msgstr "Dolgu kaynağı"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:668
+#: plugins/tools/basictools/kis_tool_fill.cc:677
 #, kde-format
 msgctxt "The 'reference' section label in fill tool options"
 msgid "Reference"
 msgstr "Başvuru"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:677
+#: plugins/tools/basictools/kis_tool_fill.cc:686
 #, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
 msgstr "Dolgu kapsamı"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:689
+#: plugins/tools/basictools/kis_tool_fill.cc:698
 #, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
 msgstr "Ayarlamalar"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:698
+#: plugins/tools/basictools/kis_tool_fill.cc:707
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
@@ -57090,18 +57031,18 @@ msgstr "Sürükle ve doldur kipi"
 msgid "Fill Tool"
 msgstr "Doldurma Aracı"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:158
+#: plugins/tools/basictools/kis_tool_gradient.cc:166
 msgctxt "(qtundo-format)"
 msgid "Gradient"
 msgstr "Geçişli"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:274
+#: plugins/tools/basictools/kis_tool_gradient.cc:282
 #, kde-format
 msgctxt "the gradient will be drawn with the color order reversed"
 msgid "Reverse"
 msgstr "Tersine Çevir"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:279
+#: plugins/tools/basictools/kis_tool_gradient.cc:287
 #, kde-format
 msgctxt "the gradient will be dithered"
 msgid "Dither"
@@ -57112,32 +57053,32 @@ msgstr "Titret"
 msgid "Gradient Tool"
 msgstr "Geçiş Aracı"
 
-#: plugins/tools/basictools/kis_tool_line.cc:53
+#: plugins/tools/basictools/kis_tool_line.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Line"
 msgstr "Çizgi Çiz"
 
-#: plugins/tools/basictools/kis_tool_line.cc:92
+#: plugins/tools/basictools/kis_tool_line.cc:101
 #, kde-format
 msgid "Use sensors"
 msgstr "Algılayıcı kullan"
 
-#: plugins/tools/basictools/kis_tool_line.cc:95
+#: plugins/tools/basictools/kis_tool_line.cc:104
 #, kde-format
 msgid "Show Preview"
 msgstr "Önizleme göster"
 
-#: plugins/tools/basictools/kis_tool_line.cc:98
+#: plugins/tools/basictools/kis_tool_line.cc:107
 #, kde-format
 msgid "Show Guideline"
 msgstr "Kılavuz çizgisi göster"
 
-#: plugins/tools/basictools/kis_tool_line.cc:433
+#: plugins/tools/basictools/kis_tool_line.cc:442
 #, kde-format
 msgid "Length: %1 px"
 msgstr "Uzunluk: %1 pks"
 
-#: plugins/tools/basictools/kis_tool_line.cc:451
+#: plugins/tools/basictools/kis_tool_line.cc:460
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -57157,7 +57098,7 @@ msgctxt "angle value in degrees"
 msgid "%1°"
 msgstr "%1°"
 
-#: plugins/tools/basictools/kis_tool_measure.cc:169
+#: plugins/tools/basictools/kis_tool_measure.cc:177
 #, kde-format
 msgctxt "%1=distance %2=unit of distance %3=angle in degrees"
 msgid ""
@@ -57167,7 +57108,7 @@ msgstr ""
 "%1 %2\n"
 "%3"
 
-#: plugins/tools/basictools/kis_tool_measure.h:104
+#: plugins/tools/basictools/kis_tool_measure.h:102
 #, kde-format
 msgid "Measure Tool"
 msgstr "Ölçme Aracı"
@@ -57230,7 +57171,7 @@ msgstr "Çoklu fırça Aracı"
 msgid "Pan Tool"
 msgstr "Çevir Aracı"
 
-#: plugins/tools/basictools/kis_tool_path.cc:130
+#: plugins/tools/basictools/kis_tool_path.cc:142
 msgctxt "(qtundo-format)"
 msgid "Draw Bezier Curve"
 msgstr "Bézier Eğrisi Çiz"
@@ -57240,7 +57181,7 @@ msgstr "Bézier Eğrisi Çiz"
 msgid "Bezier Curve Tool: Shift-mouseclick ends the curve."
 msgstr "Bézier eğrisi aracı: Üst Karakter-fare tıklaması eğriyi sonlandırır."
 
-#: plugins/tools/basictools/kis_tool_pencil.cc:120
+#: plugins/tools/basictools/kis_tool_pencil.cc:130
 msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
 msgstr "Serbest Yol Çiz"
@@ -57250,7 +57191,7 @@ msgstr "Serbest Yol Çiz"
 msgid "Freehand Path Tool"
 msgstr "Serbest Yol Aracı"
 
-#: plugins/tools/basictools/kis_tool_rectangle.cc:53
+#: plugins/tools/basictools/kis_tool_rectangle.cc:65
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "Dikdörtgen Çiz"
@@ -57855,18 +57796,16 @@ msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
-#, fuzzy, kde-format
-#| msgid "Opacity: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
-msgstr "Matlık: "
+msgstr "Matlık: %{n}"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
-#, fuzzy, kde-format
-#| msgid "Saturation: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation: {n}%"
-msgstr "Doygunluk: "
+msgstr "Doygunluk: %{n}"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
@@ -59665,11 +59604,10 @@ msgstr ""
 "konturları kapatmaya çalışır"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
-#, fuzzy, kde-format
-#| msgid "Clean up: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Clean up: {n}%"
-msgstr "Temizle: "
+msgstr "Temizle: %{n}"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:129
 #, kde-format
@@ -59724,7 +59662,7 @@ msgctxt "The label of the button that assigns a selected color as transparent"
 msgid "Transparent"
 msgstr "Saydam"
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.cc:45
+#: plugins/tools/tool_polygon/kis_tool_polygon.cc:50
 msgctxt "(qtundo-format)"
 msgid "Draw Polygon"
 msgstr "Çokgen Çiz"

@@ -248,6 +248,31 @@ QVariant KisSizeResourceConverter::toSource(const QVariant &value, const QVarian
     return QVariant::fromValue(preset);
 }
 
+/*********************************************************************/
+/*          KisBrushRotationResourceConverter                        */
+/*********************************************************************/
+
+KisBrushRotationResourceConverter::KisBrushRotationResourceConverter()
+    : KoDerivedResourceConverter(KoCanvasResource::BrushRotation,
+                                 KoCanvasResource::CurrentPaintOpPreset)
+{
+}
+
+QVariant KisBrushRotationResourceConverter::fromSource(const QVariant &value)
+{
+    KisPaintOpPresetSP preset = value.value<KisPaintOpPresetSP>();
+    return (preset && preset->settings()) ? preset->settings()->paintOpAngle() : QVariant();
+}
+
+QVariant KisBrushRotationResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)
+{
+    KisPaintOpPresetSP preset = sourceValue.value<KisPaintOpPresetSP>();
+    if (!preset) return sourceValue;
+
+    preset->settings()->setPaintOpAngle(value.toReal());
+    return QVariant::fromValue(preset);
+}
+
 ///*********************************************************************/
 ///*          KisPatternSizeResourceConverter                          */
 ///*********************************************************************/

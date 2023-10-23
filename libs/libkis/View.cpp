@@ -247,6 +247,18 @@ void View::setBrushSize(qreal brushSize)
     d->view->resourceProvider()->setSize(brushSize);
 }
 
+qreal View::brushRotation() const
+{
+    if (!d->view) return 0.0;
+    return d->view->resourceProvider()->brushRotation();
+}
+
+void View::setBrushRotation(qreal brushRotation)
+{
+    if (!d->view) return;
+    d->view->resourceProvider()->setBrushRotation(brushRotation);
+}
+
 qreal View::paintingFlow() const
 {
     if (!d->view) return 0.0;

@@ -92,7 +92,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-22 00:41+0000\n"
-"PO-Revision-Date: 2023-10-15 11:37+0200\n"
+"PO-Revision-Date: 2023-10-22 10:05+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -12259,171 +12259,139 @@ msgstr "Rozkład falkowy"
 
 #. i18n: context: text @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3158
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Hori&zontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Hori&zontally"
-msgstr "Odbij lustrzanie warstwę w p&oziomie"
+msgstr "Odbij lustrzanie warstwy w p&oziomie"
 
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3160 krita/krita.action:3161
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Horizontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Horizontally"
-msgstr "Odbij lustrzanie warstwę w poziomie"
+msgstr "Odbij lustrzanie warstwy w poziomie"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3170
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer &Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers &Vertically"
-msgstr "Odbij lustrzanie warstwę w p&ionie"
+msgstr "Odbij lustrzanie warstwy w p&ionie"
 
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3172 krita/krita.action:3173
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Vertically"
-msgstr "Odbij lustrzanie warstwę w p&ionie"
+msgstr "Odbij lustrzanie warstwy w p&ionie"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3182
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Rotate Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Rotate Layers..."
-msgstr "Ob&róć warstwę..."
+msgstr "Ob&róć warstwy..."
 
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3184 krita/krita.action:3185
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers"
-msgstr "Obróć warstwę"
+msgstr "Obróć warstwy"
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3194
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate &Layer 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate &Layers 90° to the Right"
-msgstr "Obróć &warstwę o 90° w prawo"
+msgstr "Obróć &warstwy o 90° w prawo"
 
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3196 krita/krita.action:3197
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Right"
-msgstr "Obróć warstwę o 90° w prawo"
+msgstr "Obróć warstwy o 90° w prawo"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3206
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer &90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers &90° to the Left"
-msgstr "Obróć warstwę o &90° w lewo"
+msgstr "Obróć warstwy o &90° w lewo"
 
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3208 krita/krita.action:3209
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Left"
-msgstr "Obróć warstwę o 90° w lewo"
+msgstr "Obróć warstwy o 90° w lewo"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3218
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer &180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers &180°"
-msgstr "Obróć warstwę o &180°"
+msgstr "Obróć warstwy o &180°"
 
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3220 krita/krita.action:3221
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 180°"
-msgstr "Obróć warstwę o 180°"
+msgstr "Obróć warstwy o 180°"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3230
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale &Layer to new Size..."
+#, kde-format
 msgctxt "action"
 msgid "Scale &Layers to new Size..."
-msgstr "Przeska&luj warstwę do nowego rozmiaru..."
+msgstr "Przeska&luj warstwy do nowego rozmiaru..."
 
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3232 krita/krita.action:3233
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale Layer to new Size"
+#, kde-format
 msgctxt "action"
 msgid "Scale Layers to new Size"
-msgstr "Przeskaluj warstwę do nowego rozmiaru"
+msgstr "Przeskaluj warstwy do nowego rozmiaru"
 
 #. i18n: context: text @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3242
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Shear Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Shear Layers..."
-msgstr "Pochyl wars&twę..."
+msgstr "Pochyl wars&twy..."
 
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3244 krita/krita.action:3245
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shear Layer"
+#, kde-format
 msgctxt "action"
 msgid "Shear Layers"
-msgstr "Pochyl warstwę"
+msgstr "Pochyl warstwy"
 
 #. i18n: context: text @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3254
@@ -12563,24 +12531,20 @@ msgstr "Pochyl wszystkie warstwy"
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3350
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Offset Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Offset Layers..."
-msgstr "&Odsuń warstwę..."
+msgstr "&Odsuń warstwy..."
 
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3352 krita/krita.action:3353
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "action"
 msgid "Offset Layers"
-msgstr "Odsunięcie warstwy"
+msgstr "Odsuń warstwy"
 
 #. i18n: context: text @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3362
@@ -17219,12 +17183,9 @@ msgid "Scale Layer"
 msgstr "Przeskaluj warstwę"
 
 #: libs/image/kis_image.cc:1037
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
 msgid "Scale Layers"
-msgstr "Przeskaluj warstwę"
+msgstr "Przeskaluj warstwy"
 
 #: libs/image/kis_image.cc:1178
 msgctxt "(qtundo-format)"
@@ -17242,12 +17203,9 @@ msgid "Rotate Layer"
 msgstr "Obróć warstwę"
 
 #: libs/image/kis_image.cc:1195
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
 msgid "Rotate Layers"
-msgstr "Obróć warstwę"
+msgstr "Obróć warstwy"
 
 #: libs/image/kis_image.cc:1296
 msgctxt "(qtundo-format)"
@@ -17260,12 +17218,9 @@ msgid "Shear Layer"
 msgstr "Pochyl warstwę"
 
 #: libs/image/kis_image.cc:1304
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
 msgid "Shear Layers"
-msgstr "Pochyl warstwę"
+msgstr "Pochyl warstwy"
 
 #: libs/image/kis_image.cc:1311
 msgctxt "(qtundo-format)"
@@ -22810,7 +22765,7 @@ msgstr ""
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
-msgstr ""
+msgstr "{n}%"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:918
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
@@ -27919,10 +27874,9 @@ msgid "Resize Layer"
 msgstr "Zmień rozmiar warstwy"
 
 #: libs/ui/imagesize/imagesize.cc:126
-#, fuzzy, kde-format
-#| msgid "Resize Layer"
+#, kde-format
 msgid "Resize Layers"
-msgstr "Zmień rozmiar warstwy"
+msgstr "Zmień rozmiar warstw"
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, kde-format
@@ -29374,6 +29328,8 @@ msgid ""
 "Non-animated layer is merged into the current frame. To merge it into the "
 "whole clip, create at least one frame"
 msgstr ""
+"Nieanimowana warstwa została scalona z bieżącą klatką. Aby scalić ją do "
+"całego wycinka, utwórz co najmniej jedną klatkę"
 
 #: libs/ui/kis_layer_manager.cc:930
 #, kde-format
@@ -29506,12 +29462,9 @@ msgid "Mirror Mask X"
 msgstr "Odbij maskę względem X"
 
 #: libs/ui/kis_node_manager.cpp:1045
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layers X"
-msgstr "Odbij warstwę względem X"
+msgstr "Odbij warstwy względem X"
 
 #: libs/ui/kis_node_manager.cpp:1057
 msgctxt "(qtundo-format)"
@@ -29524,12 +29477,9 @@ msgid "Mirror Mask Y"
 msgstr "Odbij maskę względem Y"
 
 #: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layers Y"
-msgstr "Odbij warstwę względem Y"
+msgstr "Odbij warstwy względem Y"
 
 #: libs/ui/kis_node_manager.cpp:1071
 msgctxt "(qtundo-format)"
@@ -29618,13 +29568,12 @@ msgstr "Warstwa maski"
 #: libs/ui/kis_node_manager.cpp:1611
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
-msgstr ""
+msgstr "Nie można przenieść  warstwy \"%1\" do nowej rzeczy nadrzędnej \"%2\""
 
 #: libs/ui/kis_node_manager.cpp:1614
-#, fuzzy, kde-format
-#| msgid "Put every layer in its own, separate group layer"
+#, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
-msgstr "Umieść każdą warstwę w jej własnej osobnej warstwie grupującej"
+msgstr "Nie można przenieść  warstwy \"%1\" do warstwy głównej"
 
 #: libs/ui/kis_node_manager.cpp:1622
 msgctxt "(qtundo-format)"
@@ -42756,12 +42705,10 @@ msgid "Offset Image"
 msgstr "Odsunięcie obrazu"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Offset Layers"
-msgstr "Odsunięcie warstwy"
+msgstr "Odsuń warstwy"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
 msgctxt "(qtundo-format)"
@@ -42769,12 +42716,9 @@ msgid "Offset Layer"
 msgstr "Odsunięcie warstwy"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
 msgid "Offset Layers"
-msgstr "Odsunięcie warstwy"
+msgstr "Odsuń warstwy"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -43752,10 +43696,9 @@ msgid "Rotate Layer"
 msgstr "Obróć warstwę"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, fuzzy, kde-format
-#| msgid "Rotate Layer"
+#, kde-format
 msgid "Rotate Layers"
-msgstr "Obróć warstwę"
+msgstr "Obróć warstwy"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -43900,10 +43843,9 @@ msgid "Shear Layer"
 msgstr "Pochyl warstwę"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
-#, fuzzy, kde-format
-#| msgid "Shear Layer"
+#, kde-format
 msgid "Shear Layers"
-msgstr "Pochyl warstwę"
+msgstr "Pochyl warstwy"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -58060,18 +58002,16 @@ msgid "Reference Images Tool"
 msgstr "Narzędzie obrazów wzorcowych"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
-#, fuzzy, kde-format
-#| msgid "Opacity: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
-msgstr "Nieprzezroczystość:"
+msgstr "Nieprzezroczystość: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
-#, fuzzy, kde-format
-#| msgid "Saturation: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation: {n}%"
-msgstr "Nasycenie: "
+msgstr "Nasycenie: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
@@ -59873,11 +59813,10 @@ msgstr ""
 "wartość \"Wskazówki do zamknięcia szczeliny\""
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
-#, fuzzy, kde-format
-#| msgid "Clean up: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Clean up: {n}%"
-msgstr "Uprzątnij: "
+msgstr "Uprzątnij: {n}%"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:129
 #, kde-format

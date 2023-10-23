@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-22 00:41+0000\n"
-"PO-Revision-Date: 2023-10-14 17:40+0200\n"
+"PO-Revision-Date: 2023-10-21 20:59+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -12335,129 +12335,105 @@ msgstr "Retourner le calque verticalement"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3182
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Rotate Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Rotate Layers..."
-msgstr "Faire tou&rner le calque..."
+msgstr "Fai&re pivoter les calques..."
 
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3184 krita/krita.action:3185
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers"
-msgstr "Tourner le calque"
+msgstr "Faire pivoter les calques"
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3194
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate &Layer 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate &Layers 90° to the Right"
-msgstr "Tourner le ca&lque de 90° vers la droite"
+msgstr "Faire pivoter les calques de 90° vers la droite"
 
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3196 krita/krita.action:3197
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Right"
-msgstr "Tourner le calque de 90° vers la droite"
+msgstr "Faire pivoter les calques de 90° vers la droite"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3206
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer &90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers &90° to the Left"
-msgstr "Tourner le calque de &90° vers la gauche"
+msgstr "Faire pivoter les calques de &90° vers la gauche"
 
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3208 krita/krita.action:3209
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Left"
-msgstr "Tourner le calque de 90° vers la gauche"
+msgstr "Faire pivoter les calques de 90° vers la gauche"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3218
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer &180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers &180°"
-msgstr "Tourner le calque de &180°"
+msgstr "Faire pivoter les calques de &180°"
 
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3220 krita/krita.action:3221
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 180°"
-msgstr "Tourner le calque de 180°"
+msgstr "Faire pivoter les calques de 180°"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3230
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale &Layer to new Size..."
+#, kde-format
 msgctxt "action"
 msgid "Scale &Layers to new Size..."
-msgstr "Redimensionner &le calque à la nouvelle taille..."
+msgstr "Redimensionner &les calques à la nouvelle taille..."
 
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3232 krita/krita.action:3233
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale Layer to new Size"
+#, kde-format
 msgctxt "action"
 msgid "Scale Layers to new Size"
-msgstr "Redimensionner le calque à la nouvelle taille..."
+msgstr "Re-dimensionner les calques à la nouvelle taille..."
 
 #. i18n: context: text @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3242
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Shear Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Shear Layers..."
-msgstr "Ci&sailler le calque..."
+msgstr "Ci&sailler les calques..."
 
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3244 krita/krita.action:3245
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shear Layer"
+#, kde-format
 msgctxt "action"
 msgid "Shear Layers"
-msgstr "Cisailler le calque"
+msgstr "Cisailler les calques"
 
 #. i18n: context: text @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3254
@@ -12597,24 +12573,20 @@ msgstr "Cisailler tous les calques"
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3350
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Offset Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Offset Layers..."
-msgstr "&Décaler le calque..."
+msgstr "&Décaler les calques..."
 
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3352 krita/krita.action:3353
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "action"
 msgid "Offset Layers"
-msgstr "Décaler le calque"
+msgstr "Décaler les calques"
 
 #. i18n: context: text @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3362
@@ -17257,12 +17229,9 @@ msgid "Scale Layer"
 msgstr "Redimensionner le calque"
 
 #: libs/image/kis_image.cc:1037
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
 msgid "Scale Layers"
-msgstr "Redimensionner le calque"
+msgstr "Mettre les calques à l'échelle"
 
 #: libs/image/kis_image.cc:1178
 msgctxt "(qtundo-format)"
@@ -17280,12 +17249,9 @@ msgid "Rotate Layer"
 msgstr "Rotation calque"
 
 #: libs/image/kis_image.cc:1195
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
 msgid "Rotate Layers"
-msgstr "Rotation calque"
+msgstr "Faire pivoter les calques"
 
 #: libs/image/kis_image.cc:1296
 msgctxt "(qtundo-format)"
@@ -17298,12 +17264,9 @@ msgid "Shear Layer"
 msgstr "Cisailler le calque"
 
 #: libs/image/kis_image.cc:1304
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
 msgid "Shear Layers"
-msgstr "Cisailler le calque"
+msgstr "Cisailler les calques"
 
 #: libs/image/kis_image.cc:1311
 msgctxt "(qtundo-format)"
@@ -22873,7 +22836,7 @@ msgstr ""
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
-msgstr ""
+msgstr "{n}%"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:918
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
@@ -28043,10 +28006,9 @@ msgid "Resize Layer"
 msgstr "Redimensionner le calque"
 
 #: libs/ui/imagesize/imagesize.cc:126
-#, fuzzy, kde-format
-#| msgid "Resize Layer"
+#, kde-format
 msgid "Resize Layers"
-msgstr "Redimensionner le calque"
+msgstr "Re-dimensionner les calques"
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, kde-format
@@ -29509,6 +29471,8 @@ msgid ""
 "Non-animated layer is merged into the current frame. To merge it into the "
 "whole clip, create at least one frame"
 msgstr ""
+"Le calque non animé est fusionné dans la trame actuelle. Pour le fusionner "
+"dans l’élément entier, veuillez créer au moins une trame."
 
 #: libs/ui/kis_layer_manager.cc:930
 #, kde-format
@@ -29755,13 +29719,12 @@ msgstr "Masque"
 #: libs/ui/kis_node_manager.cpp:1611
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
-msgstr ""
+msgstr "Impossible de déplacer le calque « %1 » dans le nouveau parent « %2 »"
 
 #: libs/ui/kis_node_manager.cpp:1614
-#, fuzzy, kde-format
-#| msgid "Put every layer in its own, separate group layer"
+#, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
-msgstr "Mettre chaque calque dans un calque de groupe distinct"
+msgstr "Impossible de déplacer le calque « %1 » dans le calque racine"
 
 #: libs/ui/kis_node_manager.cpp:1622
 msgctxt "(qtundo-format)"
@@ -43031,12 +42994,10 @@ msgid "Offset Image"
 msgstr "Décaler l'image"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Offset Layers"
-msgstr "Décaler le calque"
+msgstr "Décaler les calques"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
 msgctxt "(qtundo-format)"
@@ -43044,12 +43005,9 @@ msgid "Offset Layer"
 msgstr "Décaler le calque"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
 msgid "Offset Layers"
-msgstr "Décaler le calque"
+msgstr "Décaler les calques"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -44036,10 +43994,9 @@ msgid "Rotate Layer"
 msgstr "Tourner le calque"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, fuzzy, kde-format
-#| msgid "Rotate Layer"
+#, kde-format
 msgid "Rotate Layers"
-msgstr "Tourner le calque"
+msgstr "Faire pivoter les calques"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -44185,10 +44142,9 @@ msgid "Shear Layer"
 msgstr "Cisailler le calque"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
-#, fuzzy, kde-format
-#| msgid "Shear Layer"
+#, kde-format
 msgid "Shear Layers"
-msgstr "Cisailler le calque"
+msgstr "Cisailler les calques"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -58484,18 +58440,16 @@ msgid "Reference Images Tool"
 msgstr "Images de référence"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
-#, fuzzy, kde-format
-#| msgid "Opacity: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
-msgstr "Opacité :"
+msgstr "Opacité : {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
-#, fuzzy, kde-format
-#| msgid "Saturation: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation: {n}%"
-msgstr "Saturation :"
+msgstr "Saturation : {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
@@ -60306,11 +60260,10 @@ msgstr ""
 "que la valeur « Conseil pour la fermeture de l'écart »."
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
-#, fuzzy, kde-format
-#| msgid "Clean up: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Clean up: {n}%"
-msgstr "Nettoyer :"
+msgstr "Nettoyer : {n}%"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:129
 #, kde-format

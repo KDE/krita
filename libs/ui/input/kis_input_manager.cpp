@@ -240,9 +240,7 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
      * for this problem. It checks consistency of standard modifiers and resets
      * shortcut's matcher state in case of a trouble.
      */
-    if (event->type() == QEvent::MouseButtonPress ||
-        event->type() == QEvent::MouseButtonRelease ||
-        event->type() == QEvent::MouseMove ||
+    if (event->type() == QEvent::MouseMove ||
         event->type() == QEvent::TabletMove ||
         event->type() == QEvent::TabletPress ||
         event->type() == QEvent::TabletRelease) {

@@ -213,11 +213,11 @@ public:
      * Resets the internal state of the matcher, tries to resync it to the state
      * passed via argument and activates the prepared action if possible.
      *
-     * This synchronization should happen when the user hovers Krita windows,
+     * This synchronization happens when the user hovers Krita windows,
      * **without** having keyboard focus set to it (therefore matcher cannot
-     * get key press and release events).
+     * get key press and release events), and is also used for various other fixes.
      */
-    void recoveryModifiersWithoutFocus(const QVector<Qt::Key> &keys);
+    void handlePolledKeys(const QVector<Qt::Key> &keys);
 
     /**
      * Sanity check correctness of the internal state of the matcher

@@ -779,7 +779,7 @@ void KisInputManager::Private::fixShortcutMatcherModifiersState(QVector<Qt::Key>
 {
     QVector<Qt::Key> danglingKeys = matcher.debugPressedKeys();
 
-    matcher.recoveryModifiersWithoutFocus(newKeys);
+    matcher.handlePolledKeys(newKeys);
 
     for (auto it = danglingKeys.begin(); it != danglingKeys.end();) {
         if (newKeys.contains(*it)) {

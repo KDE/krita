@@ -45,6 +45,7 @@ private:
     void initTransformations();
     void finishAxesSetup();
     void updateCanvas();
+    QVector<QPoint> intervalLocations();
 
 private Q_SLOTS:
     void activateAxesPointModeSetup();
@@ -58,11 +59,13 @@ private Q_SLOTS:
     void slotSetTranslateRadius(int radius);
     void slotAddSubbrushesMode(bool checked);
     void slotRemoveAllSubbrushes();
+    void slotSetIntervals();
+    void slotSetKeepAspect();
 
 private:
     KisToolMultihandHelper *m_helper;
 
-    enum enumTransformModes:int { SYMMETRY=0, MIRROR, TRANSLATE, SNOWFLAKE, COPYTRANSLATE };
+    enum enumTransformModes:int { SYMMETRY=0, MIRROR, TRANSLATE, SNOWFLAKE, COPYTRANSLATE, COPYTRANSLATEINTERVALS };
     enumTransformModes m_transformMode;
     QPointF m_axesPoint;
     qreal m_angle;
@@ -76,6 +79,9 @@ private:
     bool m_addSubbrushesMode;
     QPointF m_lastToolPos;
     QVector<QPointF> m_subbrOriginalLocations;
+
+    int m_intervalX;
+    int m_intervalY;
 
     KisToolMultiHandConfigWidget* customUI;
 };

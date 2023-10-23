@@ -244,6 +244,35 @@
        </item>
       </layout>
      </item>
+     <item row="9" column="0">
+      <widget class="QLabel" name="intervalXLabel">
+       <property name="text">
+        <string>Interval X:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="KisSliderSpinBox" name="intervalXSpinBox" native="true"/>
+     </item>
+     <item row="10" column="0">
+      <widget class="QLabel" name="intervalYLabel">
+       <property name="text">
+        <string>Interval Y:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="KisSliderSpinBox" name="intervalYSpinBox" native="true"/>
+     </item>
+     <item row="9" column="2" rowspan="2">
+      <widget class="KoAspectButton" name="intervalAspectButton" native="true"/>
+     </item>
      <item row="0" column="1">
       <widget class="QComboBox" name="multihandTypeCombobox"/>
      </item>
@@ -295,6 +324,12 @@
    <class>KisAngleSelector</class>
    <extends>QWidget</extends>
    <header location="global">KisAngleSelector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KoAspectButton</class>
+   <extends>QToolButton</extends>
+   <header>KoAspectButton.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

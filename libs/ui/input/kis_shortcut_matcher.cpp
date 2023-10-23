@@ -229,6 +229,10 @@ bool KisShortcutMatcher::autoRepeatedKeyPressed(Qt::Key key)
 
     if (!m_d->keys.contains(key)) { DEBUG_ACTION("Peculiar, autorepeated key but can't remember it was pressed"); }
 
+    if (m_d->polledKeys.contains(key)) {
+        m_d->polledKeys.remove(key);
+    }
+
     if (notifier.isInRecursion()) {
         forceDeactivateAllActions();
     } else if (!m_d->runningShortcut) {

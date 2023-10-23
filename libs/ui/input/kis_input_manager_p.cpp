@@ -729,20 +729,6 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
 {
     bool retval = false;
 
-    /**
-     * When Krita (as an application) has no input focus, we cannot
-     * handle key events. But at the same time, when the user hovers
-     * Krita canvas, we should still show him the correct cursor.
-     *
-     * So here we just add a simple workaround to resync shortcut
-     * matcher's state at least against the basic modifiers, like
-     * Shift, Control and Alt.
-     */
-    QWidget *receivingWidget = dynamic_cast<QWidget*>(eventsReceiver);
-    if (receivingWidget && !receivingWidget->hasFocus()) {
-        fixShortcutMatcherModifiersState();
-    }
-
     if (event->type() == QTouchEvent::TouchUpdate && touchHasBlockedPressEvents) {
         matcher.touchUpdateEvent((QTouchEvent *)event);
     } else if (!matcher.pointerMoved(event) && toolProxy && event->type() != QTouchEvent::TouchUpdate) {

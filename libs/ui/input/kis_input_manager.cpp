@@ -314,14 +314,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->accumulatedScrollDelta = 0;
     }
 
-#ifdef Q_OS_WIN32
-    /**
-     * On Windows, when the user presses some global window manager shortcuts,
-     * e.g. Alt+Space (to show window title menu), events for these key presses
-     * and releases are not delivered (see bug 424319). This code is a workaround
-     * for this problem. It checks consistency of standard modifiers and resets
-     * shortcut's matcher state in case of a trouble.
-     */
     if (event->type() == QEvent::MouseMove ||
         event->type() == QEvent::MouseButtonPress ||
         event->type() == QEvent::MouseButtonRelease ||
@@ -330,28 +322,50 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         event->type() == QEvent::TabletRelease ||
         event->type() == QEvent::Wheel) {
 
-        QInputEvent *inputEvent = static_cast<QInputEvent*>(event);
-        if (event->type() != QEvent::ShortcutOverride &&
-            !d->matcher.sanityCheckModifiersCorrectness(inputEvent->modifiers())) {
-
-            qWarning() << "WARNING: modifiers state became inconsistent! Trying to fix that...";
-            qWarning() << "    " << ppVar(inputEvent->modifiers());
-            qWarning() << "    " << ppVar(d->matcher.debugPressedKeys());
+        /**
+         * When Krita (as an application) has no input focus, we cannot
+         * handle key events. But at the same time, when the user hovers
+         * Krita canvas, we should still show him the correct cursor.
+         *
+         * So here we just add a simple workaround to resync shortcut
+         * matcher's state at least against the basic modifiers, like
+         * Shift, Control and Alt.
+         */
+        QWidget *receivingWidget = dynamic_cast<QWidget*>(d->eventsReceiver);
+        if (receivingWidget && !receivingWidget->hasFocus()) {
+            qWarning() << "WARNING: Fix unfocused keys state";
 
             d->fixShortcutMatcherModifiersState();
-        } else if (d->matcher.hasPolledKeys()) {
+        } else {
             /**
-             * Re-check the native platform key API against keys we are unsure about,
-             * and fix them in case they now show as released.
-             *
-             * The other part of the fix is placed in the handler of ShortcutOverride,
-             * because it needs a custom set of the presset keys.
+             * On Windows, when the user presses some global window manager shortcuts,
+             * e.g. Alt+Space (to show window title menu), events for these key presses
+             * and releases are not delivered (see bug 424319). This code is a workaround
+             * for this problem. It checks consistency of standard modifiers and resets
+             * shortcut's matcher state in case of a trouble.
              */
-            qWarning() << "WARNING: Fixing polled keys state";
-            d->fixShortcutMatcherModifiersState();
+            QInputEvent *inputEvent = static_cast<QInputEvent*>(event);
+            if (event->type() != QEvent::ShortcutOverride &&
+                !d->matcher.sanityCheckModifiersCorrectness(inputEvent->modifiers())) {
+
+                qWarning() << "WARNING: modifiers state became inconsistent! Trying to fix that...";
+                qWarning() << "    " << ppVar(inputEvent->modifiers());
+                qWarning() << "    " << ppVar(d->matcher.debugPressedKeys());
+
+                d->fixShortcutMatcherModifiersState();
+            } else if (d->matcher.hasPolledKeys()) {
+                /**
+                 * Re-check the native platform key API against keys we are unsure about,
+                 * and fix them in case they now show as released.
+                 *
+                 * The other part of the fix is placed in the handler of ShortcutOverride,
+                 * because it needs a custom set of the presset keys.
+                 */
+                qWarning() << "WARNING: Fixing polled keys state";
+                d->fixShortcutMatcherModifiersState();
+            }
         }
     }
-#endif
 
     switch (event->type()) {
     case QEvent::MouseButtonPress:

@@ -487,6 +487,16 @@ qreal KisCanvasResourceProvider::size() const
     return m_resourceManager->resource(KoCanvasResource::Size).toReal();
 }
 
+void KisCanvasResourceProvider::setBrushRotation(qreal rotation)
+{
+    m_resourceManager->setResource(KoCanvasResource::BrushRotation, rotation);
+}
+
+qreal KisCanvasResourceProvider::brushRotation() const
+{
+    return m_resourceManager->resource(KoCanvasResource::BrushRotation).toReal();
+}
+
 void KisCanvasResourceProvider::setPatternSize(qreal size)
 {
     m_resourceManager->setResource(KoCanvasResource::PatternSize, size);

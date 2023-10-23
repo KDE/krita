@@ -92,7 +92,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-22 03:09+0000\n"
-"PO-Revision-Date: 2023-09-30 11:10+0200\n"
+"PO-Revision-Date: 2023-10-22 10:05+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -12909,9 +12909,7 @@ msgid "File"
 msgstr "Plik"
 
 #: krita/krita5.xmlgui:416
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "Edytuj"
 
@@ -29216,6 +29214,8 @@ msgid ""
 "Non-animated layer is merged into the current frame. To merge it into the "
 "whole clip, create at least one frame"
 msgstr ""
+"Nieanimowana warstwa została scalona z bieżącą klatką. Aby scalić ją do "
+"całego wycinka, utwórz co najmniej jedną klatkę"
 
 #: libs/ui/kis_layer_manager.cc:930
 #, kde-format
@@ -29444,13 +29444,12 @@ msgstr "Warstwa maski"
 #: libs/ui/kis_node_manager.cpp:1590
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
-msgstr ""
+msgstr "Nie można przenieść  warstwy \"%1\" do nowej rzeczy nadrzędnej \"%2\""
 
 #: libs/ui/kis_node_manager.cpp:1593
-#, fuzzy, kde-format
-#| msgid "Put every layer in its own, separate group layer"
+#, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
-msgstr "Umieść każdą warstwę w jej własnej osobnej warstwie grupującej"
+msgstr "Nie można przenieść  warstwy \"%1\" do warstwy głównej"
 
 #: libs/ui/kis_node_manager.cpp:1601
 msgctxt "(qtundo-format)"

@@ -407,15 +407,27 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
                 KUndo2Command *addAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(assistants), EditAssistantsCommand::ADD, assistants.indexOf(m_newAssistant));
                 m_canvas->viewManager()->undoAdapter()->addCommand(addAssistantCmd);
                 m_origAssistantList = KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants());
-
                 m_handles = m_canvas->paintingAssistantsDecoration()->handles();
                 m_canvas->paintingAssistantsDecoration()->setSelectedAssistant(m_newAssistant);
-                m_assistantDrag = m_newAssistant;
-                m_newAssistant.clear();
-                m_cursorStart = event->point;
-                m_internalMode = MODE_DUPLICATING_ASSISTANT;
+                assistantDuplicatingFlag = true;
+                
+                // if assistant is locked simply move the editor widget, not the entire assistant
+                if(assistant->isLocked())
+                {
+                    newAssistantAllowed = false;
+                    m_internalMode = MODE_DRAGGING_EDITOR_WIDGET;
+                    m_dragStart = event->point;
+                    m_dragEnd = event->point;
+                    m_newAssistant.clear();
+                } else{
+                    m_assistantDrag = m_newAssistant;
+                    m_newAssistant.clear();
+                    m_cursorStart = event->point;
+                    m_internalMode = MODE_EDITING;
+                }
                 
                 updateToolOptionsUI(); 
+                m_canvas->updateCanvas();
                 return;
             }
 
@@ -696,10 +708,11 @@ void KisAssistantTool::endActionImpl(KoPointerEvent *event)
 {
     setMode(KisTool::HOVER_MODE);
     //release duplication button flag
-    if(m_internalMode == MODE_DUPLICATING_ASSISTANT)
+    if(assistantDuplicatingFlag)
     {
         KisPaintingAssistantSP selectedAssistant = m_canvas->paintingAssistantsDecoration()->selectedAssistant();
         selectedAssistant->setDuplicating(false);
+        assistantDuplicatingFlag = false;
     }
 
     if (m_handleDrag || m_assistantDrag) {
@@ -1782,7 +1795,7 @@ QWidget *KisAssistantTool::createOptionWidget()
             m_options.showSnap->setChecked(true);
         }
         if (globalEditorWidgetData.lockButtonActivated) {
-            m_options.showLock->setChecked(true);
+        m_options.showLock->setChecked(true);
         }
         if (globalEditorWidgetData.duplicateButtonActivated) {
             m_options.showDuplicate->setChecked(true);

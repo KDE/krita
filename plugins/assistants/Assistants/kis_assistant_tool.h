@@ -39,8 +39,7 @@ class KisAssistantTool : public KisTool
         MODE_EDITING, // This is the mode when the grid has been created, and we are waiting for the user to click on a control box
         MODE_DRAGGING_NODE, // In this mode one node is translated
         MODE_DRAGGING_TRANSLATING_TWONODES, // This mode is used when creating a new sub perspective grid
-        MODE_DRAGGING_EDITOR_WIDGET, // This mode is used when dragging/moving the little editor widget
-        MODE_DUPLICATING_ASSISTANT // This mode is used when duplicating an assistant.
+        MODE_DRAGGING_EDITOR_WIDGET // This mode is used when dragging/moving the little editor widget
     };
 public:
     KisAssistantTool(KoCanvasBase * canvas);
@@ -166,7 +165,7 @@ protected:
     QPointF m_dragEnd;
     int m_handleSize {17}; // how large the editor handles will appear
     int m_handleMaxDist {81}; // how far away the user can click and still select a handle
-
+    bool assistantDuplicatingFlag {false}; // this flag is set during an assistant duplication
 
 private:
     void drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& _gc);

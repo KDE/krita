@@ -209,8 +209,8 @@ QVariantHash uncompressParagraphSheetFeatures(const QVariantHash object) {
         {"/24", "/BurasagariType"},
 
         {"/25", "/KinsokuOrder"},
-        {"/26", "/Kinsoku"},
-        {"/27", "/KurikaeshiMojiShori"},
+        {"/26", "/KurikaeshiMojiShori"},
+        {"/27", "/Kinsoku"},
         {"/28", "/MojiKumiTable"},
         {"/29", "/EveryLineComposer"},
 
@@ -317,15 +317,15 @@ QVariantHash uncompressTextFrameData(const QVariantHash object) {
         {"/10", "/FirstBaseAlignment"},
        // {"/11", "/PathData"},
         //{"/12", ""},
-        {"/13", "/VerticalAlignment"},
+        {"/13", "/_VerticalAlignment"},
     };
 
     const QMap<QString, QString> pathDataList {
         {"/0", "/Flip"},
         {"/1", "/Effect"},
         {"/2", "/Alignment"},
-        {"/4", "/Spacing"},
-        {"/18", "/Spacing2"},
+        {"/4", "/_Spacing"},
+        {"/18", "/_Spacing2"},
     };
 
     Q_FOREACH(QString key, object.keys()) {
@@ -357,7 +357,7 @@ QVariantHash uncompressKeysTextFrameSet(const QVariantHash object) {
     QVariantList resources = object.value("/0").toList();
     QVariantList newResources;
     const QMap<QString, QString> keyList {
-        {"/0", "/Position"},
+        {"/0", "/_Position"},
         {"/1", "/Bezier"},
         //{"/2", "/Data"},
         {"/97", "/UUID"}
@@ -834,7 +834,7 @@ static QVariantHash defaultStyle {
     {"/Leading", 0.0},
     {"/HorizontalScale", 1.0},
     {"/VerticalScale", 1.0},
-    {"/Tracking", 0.0},
+    {"/Tracking", 0},
     {"/BaselineShift", 0.0},
 
     {"/CharacterRotation", 0.0},
@@ -881,8 +881,8 @@ static QVariantHash defaultStyle {
 
     {"/WariChuOrphanAmount", 2},
     {"/WariChuJustification", 7},
-    {"/TCYUpDownAdjustment", 0.0},
-    {"/TCYLeftRightAdjustment", 0.0},
+    {"/TCYUpDownAdjustment", 0},
+    {"/TCYLeftRightAdjustment", 0},
     {"/LeftAki", -1.0},
 
     {"/RightAki", -1.0},
@@ -896,6 +896,7 @@ static QVariantHash defaultStyle {
     {"/StrokeFlag", false},
     {"/FillFirst", false},
 
+    {"/FillOverPrint", false},
     {"/StrokeOverPrint", false},
     {"/LineCap", 0},
     {"/LineJoin", 0},
@@ -909,7 +910,7 @@ static QVariantHash defaultStyle {
     {"/DirOverride", 0},
 
     {"/DigitSet", 0},
-    {"/DiacVPos", 0.0},
+    {"/DiacVPos", 0},
     {"/DiacXOffset", 0.0},
     {"/DiacYOffset", 0.0},
     {"/OverlapSwash", false},
@@ -963,8 +964,8 @@ static QVariantHash defaultParagraph {
     {"/BurasagariType", 0},
 
     {"/KinsokuOrder", 0},
-    {"/Kinsoku", false},
-    {"/KurikaeshiMojiShori", "/nil"},
+    {"/KurikaeshiMojiShori", false},
+    {"/Kinsoku", "/nil"},
     {"/MojiKumiTable", "/nil"},
     {"/EveryLineComposer", false},
 
@@ -1171,8 +1172,8 @@ QVariantHash defaultGrid {
     {"/ShowGrid", false},
     {"/GridSize", 18.0},
     {"/GridLeading", 22.0},
-    {"/GridColor", QVariantHash{{"/Type", 1}, {"/Values", QVariantList({0, 0, 0, 1})}}},
-    {"/GridLeadingFillColor", QVariantHash{{"/Type", 1}, {"/Values", QVariantList({0, 0, 0, 1})}}},
+    {"/GridColor", QVariantHash{{"/Type", 1}, {"/Values", QVariantList({0.0, 0.0, 0.0, 1.0})}}},
+    {"/GridLeadingFillColor", QVariantHash{{"/Type", 1}, {"/Values", QVariantList({0.0, 0.0, 0.0, 1.0})}}},
     {"/AlignLineHeightToGridFlags", false},
 };
 
@@ -1214,7 +1215,11 @@ static QVariantHash simplifyStyleSheet(const QVariantHash complex) {
         } else if (key == "/UnderlinePosition") {
             bool val = complex.value(key).toBool();
             simple.insert("/Underline", val);
-            simple.insert("/YUnderline", complex.value(key));
+            if (complex.value(key).toInt() == 2) {
+                simple.insert("/YUnderline", 0);
+            } else {
+                simple.insert("/YUnderline", 1);
+            }
         } else if (key == "/StrikethroughPosition") {
             bool val = complex.value(key).toBool();
             simple.insert("/Strikethrough", val);
@@ -1304,8 +1309,8 @@ QVariantHash KisTxt2Utils::tyShFromTxt2(const QVariantHash Txt2, const QRectF bo
     QVariantHash paragraphRun;
     paragraphRun["/RunLengthArray"] = QVariantList({QVariant(length)});
     QVariantHash paragraphAdjustments  = QVariantHash {
-    {"/Axis", QVariantList({1, 0, 1})},
-    {"/XY", QVariantList({0, 0})}
+    {"/Axis", QVariantList({1.0, 0.0, 1.0})},
+    {"/XY", QVariantList({0.0, 0.0})}
     };
     paragraphRun["/RunArray"] = QVariantList({ QVariantHash{
                                                 {"/ParagraphSheet", paragraphStyle},

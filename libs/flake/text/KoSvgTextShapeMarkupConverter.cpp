@@ -46,6 +46,7 @@
 #include <KoXmlWriter.h>
 #include <KoDocumentResourceManager.h>
 #include <KoFontRegistry.h>
+#include <KoColor.h>
 
 #include <SvgParser.h>
 #include <SvgWriter.h>
@@ -1128,13 +1129,592 @@ QColor colorFromPSDStyleSheet(QVariantHash color) {
     if (color.keys().contains("/Color")) {
         color = color["/Color"].toHash();
     }
-    if (color.value("/Type").toInt() == 1) {
-        QVariantList values = color.value("/Values").toList();
-        c = QColor::fromRgbF(values.at(1).toDouble(), values.at(2).toDouble(), values.at(3).toDouble(), 1);
+    QDomDocument doc;
+    QDomElement root;
+    QVariantList values = color.value("/Values").toList();
+    if (color.value("/Type").toInt() == 0) { //graya
+        root = doc.createElement("Gray");
+        root.setAttribute("g", values.at(1).toDouble());
+    } else if (color.value("/Type").toInt() == 2) { // CMYK
+        root = doc.createElement("CMYK");
+        root.setAttribute("c", values.value(1).toDouble());
+        root.setAttribute("m", values.value(2).toDouble());
+        root.setAttribute("y", values.value(3).toDouble());
+        root.setAttribute("k", values.value(4).toDouble());
+    } else if (color.value("/Type").toInt() == 3) { // LAB
+        root = doc.createElement("Lab");
+        root.setAttribute("L", values.value(1).toDouble());
+        root.setAttribute("a", values.value(2).toDouble());
+        root.setAttribute("b", values.value(3).toDouble());
+    } else if (color.value("/Type").toInt() == 1) {
+        root = doc.createElement("RGB");
+        root.setAttribute("r", values.value(1).toDouble());
+        root.setAttribute("g", values.value(2).toDouble());
+        root.setAttribute("b", values.value(3).toDouble());
     }
+    KoColor final = KoColor::fromXML(root, "U8");
+    final.toQColor(&c);
     return c;
 }
-QString stylesForPSDParagraphSheet(QVariantHash PSDParagraphSheet, QTransform scaleToPt) {
+
+
+struct font_info_psd {
+    font_info_psd() {
+        weight = 400;
+        width = 100;
+    }
+    QString familyName;
+    int weight;
+    int width {100};
+    bool italic {false};
+};
+
+// language is one of pt, pt-BR, fr, fr-CA, de, de-1901, gsw, nl, en-UK, en-US, fi, it, nb, nn, es, sv
+static QHash <int, QString> psdLanguageMap {
+    {0, "en-US"},   // US English
+    {1, "fi"},      // Finnish
+    {2, "fr"},      // French
+    {3, "fr-CA"},   // Canadian French
+    {4, "de"},      // German
+    {5, "de-1901"}, // German before spelling reform
+    {6, "gsw"},     // Swiss German
+    {7, "it"},      // Italian
+    {8, "nb"},      //Norwegian
+    {9, "nn"},      // Norsk (nynorsk)
+    {10, "pt"},     // Portuguese
+    {11, "pt-BR"},  // Brazilian Portuguese
+    {12, "es"},     // Spansh
+    {13, "sv"},     // Swedish
+    {14, "en-UK"},  // British English
+    {15, "nl"},     // Dutch
+    {16, "da"},     // Danish
+    //{17, ""},
+    {18, "ru"},     // Russian
+    //{19, ""},
+    //{20, ""},
+    //{21, ""},
+    {22, "cs"},     // Czech
+    {23, "pl"},     // Polish
+    //{24, ""},
+    {25, "el"},     // Greek
+    {26, "tr"},     // Turkish
+    //{27, ""},
+    {28, "hu"},     // Hungarian
+};
+
+QString stylesForPSDStyleSheet(QString &lang, QVariantHash PSDStyleSheet, QMap<int, font_info_psd> fontNames, QTransform scale) {
+    QStringList styles;
+
+    QStringList unsupportedStyles;
+
+    int weight = 400;
+    bool italic = false;
+    QStringList textDecor;
+    QStringList baselineShift;
+    QStringList fontVariantLigatures;
+    QStringList fontVariantNumeric;
+    QStringList fontVariantCaps;
+    QStringList fontVariantEastAsian;
+    QStringList fontFeatureSettings;
+    QString underlinePos;
+    for (int i=0; i < PSDStyleSheet.keys().size(); i++) {
+        const QString key = PSDStyleSheet.keys().at(i);
+        if (key == "/Font") {
+            font_info_psd fontInfo = fontNames.value(PSDStyleSheet.value(key).toInt());
+            weight = fontInfo.weight;
+            italic = italic? true: fontInfo.italic;
+            styles.append("font-family:"+fontInfo.familyName);
+            if (fontInfo.width != 100) {
+                styles.append("font-width:"+QString::number(fontInfo.width));
+            }
+            continue;
+        } else if (key == "/FontSize") {
+            double val = PSDStyleSheet.value(key).toDouble();
+            val = scale.map(QPointF(val, val)).y();
+            styles.append("font-size:"+QString::number(val));
+            continue;
+        } else if (key == "/AutoKerning" || key == "/AutoKern") {
+            if (!PSDStyleSheet.value(key).toBool()) {
+                styles.append("font-kerning: none");
+            }
+            continue;
+        } else if (key == "/Kerning") {
+            // adjusts kerning value, we don't support this.
+            unsupportedStyles << key;
+            continue;
+        } else if (key == "/FauxBold") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                weight = 700;
+            }
+            continue;
+        } else if (key == "/FauxItalic") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                italic = true;
+            }
+            // synthetic Italic, bool
+            continue;
+        } else if (key == "/Leading") {
+            bool autoleading = true;
+            if (PSDStyleSheet.keys().contains("AutoLeading")) {
+                autoleading = PSDStyleSheet.value("AutoLeading").toBool();
+            }
+            if (!autoleading) {
+                double fontSize = PSDStyleSheet.value("FontSize").toDouble();
+                double val = PSDStyleSheet.value(key).toDouble();
+                styles.append("line-height:"+QString::number(val/fontSize));
+            }
+            // value for line-height
+            continue;
+        } else if (key == "/HorizontalScale" || key == "/VerticalScale") {
+            // adjusts scale glyphs, we don't support this.
+            unsupportedStyles << key;
+            continue;
+        } else if (key == "/Tracking") {
+            // tracking is in 1/1000 of an EM (as is kerning for that matter...)
+            double letterSpacing = (0.001 * PSDStyleSheet.value(key).toDouble());
+            styles.append("letter-spacing:"+QString::number(letterSpacing)+"em");
+            continue;
+        } else if (key == "/BaselineShift") {
+            if (PSDStyleSheet.value(key).toDouble() > 0) {
+                double val = PSDStyleSheet.value(key).toDouble();
+                val = scale.map(QPointF(val, val)).y();
+                baselineShift.append(QString::number(val));
+            }
+            continue;
+        } else if (key == "/FontCaps") {
+            switch (PSDStyleSheet.value(key).toInt()) {
+            case 0:
+                break;
+            case 1:
+                fontVariantCaps.append("all-small-caps");
+                break;
+            case 2:
+                styles.append("text-transform:uppercase");
+                break;
+            default:
+                qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
+            }
+            continue;
+        } else if (key == "/FontBaseline") {
+            // NOTE: This might also be better done with font-variant-position, though
+            // we don't support synthetic font stuff, including super and sub script.
+            // Actually, seems like this is specifically font-synthesis
+            switch (PSDStyleSheet.value(key).toInt()) {
+            case 0:
+                break;
+            case 1:
+                baselineShift.append("super");
+                break;
+            case 2:
+                baselineShift.append("sub");
+                break;
+            default:
+                qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
+            }
+            continue;
+        } else if (key == "/FontOTPosition") {
+            // NOTE: This might also be better done with font-variant-position, though
+            // we don't support synthetic font stuff, including super and sub script.
+            switch (PSDStyleSheet.value(key).toInt()) {
+            case 0:
+                break;
+            case 1:
+                styles.append("font-variant-position:super");
+                break;
+            case 2:
+                styles.append("font-variant-position:sub");
+                break;
+            case 3:
+                fontFeatureSettings.append("'numr' 1");
+                break;
+            case 4:
+                fontFeatureSettings.append("'dnum' 1");
+                break;
+            default:
+                qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
+            }
+            continue;
+        } else if (key == "/Underline") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                textDecor.append("underline");
+            }
+            continue;
+        }  else if (key == "/UnderlinePosition") {
+            switch (PSDStyleSheet.value(key).toInt()) {
+            case 0:
+                break;
+            case 1:
+                textDecor.append("underline");
+                underlinePos = "auto left";
+                break;
+            case 2:
+                textDecor.append("underline");
+                underlinePos = "auto right";
+                break;
+            default:
+                qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
+            }
+            continue;
+        } else if (key == "/YUnderline") {
+            // Option relating to vertical underline left or right
+            if (PSDStyleSheet.value(key).toInt() == 1) {
+                underlinePos = "auto left";
+            } else if (PSDStyleSheet.value(key).toInt() == 0) {
+                underlinePos = "auto right";
+            }
+            continue;
+        } else if (key == "/Strikethrough" || key == "/StrikethroughPosition") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                textDecor.append("line-through");
+            }
+            continue;
+        } else if (key == "/Ligatures") {
+            if (!PSDStyleSheet.value(key).toBool()) {
+                fontVariantLigatures.append("no-common-ligatures");
+            }
+            continue;
+        } else if (key == "/DLigatures" || key == "/DiscretionaryLigatures" || key == "/AlternateLigatures") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontVariantLigatures.append("discretionary-ligatures");
+            }
+            continue;
+        } else if (key == "/ContextualLigatures") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontVariantLigatures.append("contextual");
+            }
+            continue;
+        } else if (key == "/Fractions") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontVariantNumeric.append("diagonal-fractions");
+            }
+            continue;
+        } else if (key == "/Ordinals") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontVariantNumeric.append("ordinal");
+            }
+            continue;
+        } else if (key == "/Swash") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontFeatureSettings.append("'swsh' 1");
+            }
+            continue;
+        } else if (key == "/Titling") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontVariantCaps.append("titling-caps");
+            }
+            continue;
+        } else if (key == "/StylisticAlternates") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontFeatureSettings.append("'salt' 1");
+            }
+            continue;
+        } else if (key == "/Ornaments") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontFeatureSettings.append("'ornm' 1");
+            }
+            continue;
+        }  else if (key == "/OldStyle") {
+            if (PSDStyleSheet.value(key).toBool() && !fontVariantNumeric.contains("oldstyle-nums")) {
+                fontVariantNumeric.append("oldstyle-nums");
+            }
+            continue;
+        } else if (key == "/FigureStyle") {
+            switch (PSDStyleSheet.value(key).toInt()) {
+            case 0:
+                break;
+            case 1:
+                fontVariantNumeric.append("tabular-nums");
+                fontVariantNumeric.append("lining-nums");
+                break;
+            case 2:
+                fontVariantNumeric.append("proportional-nums");
+                fontVariantNumeric.append("oldstyle-nums");
+                break;
+            case 3:
+                fontVariantNumeric.append("proportional-nums");
+                fontVariantNumeric.append("lining-nums");
+                break;
+            case 4:
+                fontVariantNumeric.append("tabular-nums");
+                fontVariantNumeric.append("oldstyle-nums");
+                break;
+            default:
+                qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
+            }
+            continue;
+        } else if (key == "/Italics") {
+            // This is an educated guess: other italic happens via postscript name.
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontFeatureSettings.append("'ital' 1");
+            }
+            continue;
+        } else if (key == "/BaselineDirection") {
+            int val = PSDStyleSheet.value(key).toInt();
+            if (val == 1) {
+                styles.append("text-orientation: upright");
+            } else if (val == 2) {
+                styles.append("text-orientation: mixed");
+            } else if (val == 3) { //TCY or tate-chu-yoko
+                styles.append("text-combine-upright: all");
+            } else {
+                qDebug() << key << PSDStyleSheet.value(key);
+            }
+            continue;
+        } else if (key == "/Tsume" || key == "/LeftAki" || key == "/RightAki" || key == "/JiDori") {
+            // Reduce spacing around a single character. Partially related to text-spacing,
+            // Tsume is reduction, Aki expansion, and both can be used as part of Mojikumi
+            // However, in this particular case, the property seems to just reduce the space 
+            // of a single character, and may not be possible to support (as in CSS that'd
+            // just be padding/margin-reduction, but SVG cannot do that).
+            unsupportedStyles << key;
+            continue;
+        } else if (key == "/StyleRunAlignment") {
+            // 3 = roman
+            // 5 = em-box top/right, 2 = em-box center, 0 = em-box bottom/left
+            // 4 = icf-top/right, 1 icf-bottom/left?
+            QString dominantBaseline;
+            switch(PSDStyleSheet.value(key).toInt()) {
+            case 3:
+                dominantBaseline = "alphabetic";
+                break;
+            case 2:
+                dominantBaseline = "center";
+                break;
+            case 0:
+                dominantBaseline = "ideographic";
+                break;
+            case 4:
+                dominantBaseline = "text-top";
+                break;
+            case 1:
+                dominantBaseline = "text-bottom";
+                break;
+            default:
+                qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
+                dominantBaseline = QString();
+            }
+            if (!dominantBaseline.isEmpty()) {
+                styles.append("alignment-baseline: "+dominantBaseline);
+            }
+            continue;
+        } else if (key == "/Language") {
+            int val = PSDStyleSheet.value(key).toInt();
+            if (psdLanguageMap.keys().contains(val)) {
+                lang = psdLanguageMap.value(val);
+            } else {
+                qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
+            }
+            continue;
+        }  else if (key == "/ProportionalMetrics") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontFeatureSettings.append("'palt' 1");
+            }
+            continue;
+        } else if (key == "/Kana") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontFeatureSettings.append("'hkna' 1");
+            }
+            continue;
+        } else if (key == "/Ruby") {
+            fontVariantEastAsian.append("ruby");
+        } else if (key == "/JapaneseAlternateFeature") {
+            // hojo kanji - 'hojo'
+            // nlc kanji - 'nlck'
+            // alternate notation - nalt
+            // proportional kana - 'pkna'
+            // vertical kana - 'vkna'
+            // vert alt+rot - vrt2, or vert + vrtr
+            int val = PSDStyleSheet.value(key).toInt();
+            if (val == 1) { // japanese traditional - 'tnam'/'trad'
+                fontVariantEastAsian.append("traditional");
+            } else if (val == 2) {  // japanese expert - 'expt'
+                fontFeatureSettings.append("'expt' 1");
+            } else if (val == 3) { // Japanese 78 - jis78
+                fontVariantEastAsian.append("jis78");
+            } else {
+                qDebug() << key << PSDStyleSheet.value(key);
+            }
+            continue;
+        } else if (key == "/NoBreak") {
+            // Prevents word from breaking... I guess word-break???
+            if (PSDStyleSheet.value(key).toBool()) {
+                styles.append("word-break: keep-all");
+            }
+            continue;
+        } else if (key == "/DirOverride") {
+            QString dir = PSDStyleSheet.value(key).toBool()? "rtl": "ltr";
+            if (PSDStyleSheet.value(key).toBool()) {
+                styles.append("direction: "+dir);
+                styles.append("unicode-bidi: isolate");
+            }
+            continue;
+        }  else if (key == "/FillColor") {
+            bool fill = true;
+            if (PSDStyleSheet.keys().contains("/FillFlag")) {
+                fill = PSDStyleSheet.value("/FillFlag").toBool();
+            }
+            if (fill) {
+                QVariantHash color = PSDStyleSheet.value(key).toHash();
+                styles.append("fill:"+colorFromPSDStyleSheet(color).name());
+            } else {
+                styles.append("fill:none");
+            }
+        } else if (key == "/StrokeColor") {
+            bool fill = true;
+            if (PSDStyleSheet.keys().contains("/StrokeFlag")) {
+                fill = PSDStyleSheet.value("/StrokeFlag").toBool();
+            }
+            if (fill) {
+                QVariantHash color = PSDStyleSheet.value(key).toHash();
+                styles.append("stroke:"+colorFromPSDStyleSheet(color).name());
+            } else {
+                styles.append("stroke:none");
+            }
+            continue;
+        } else if (key == "/OutlineWidth" || key == "/LineWidth") {
+            double val = PSDStyleSheet.value(key).toDouble();
+            val = scale.map(QPointF(val, val)).y();
+            styles.append("stroke-width:"+QString::number(val));
+        } else if (key == "/FillFirst") {
+            // draw fill on top of stroke? paint-order: stroke markers fill, I guess.
+            if (PSDStyleSheet.value(key).toBool()) {
+                styles.append("paint-order: fill");
+            }
+            continue;
+        } else if (key == "/HindiNumbers") {
+            // bool. Looks like this automatically selects hindi numbers for arabic. There also
+            // seems to be a more complex option to automatically have arabic numbers for hebrew, and an option for farsi numbers, but this might be a different bool alltogether.
+            unsupportedStyles << key;
+            continue;
+        } else if (key == "/Kashida") {
+            // number, s related to drawing/inserting Kashida/Tatweel into Arabic justified text... We don't support this.
+            // options are none, short, medium, long, stylistic, indesign apparantly has a 'naskh' option, which is what toggles jalt usage.
+            unsupportedStyles << key;
+            continue;
+        } else if (key == "/DiacriticPos") {
+            // number, which is odd, because it looks like it should be a point.
+            // this controls how high or low the diacritic is on arabic text.
+            unsupportedStyles << key;
+            continue;
+        }  else if (key == "/SlashedZero") {
+            // font-variant: common-ligatures
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontVariantNumeric.append("slashed-zero");
+            }
+            continue;
+        } else if (key == "/StylisticSets") {
+            int flags = PSDStyleSheet.value(key).toInt();
+            if (flags & 1) {
+                fontFeatureSettings.append("'ss01' 1");
+            }
+            if (flags & 2) {
+                fontFeatureSettings.append("'ss02' 1");
+            }
+            if (flags & 4) {
+                fontFeatureSettings.append("'ss03' 1");
+            }
+            if (flags & 8) {
+                fontFeatureSettings.append("'ss04' 1");
+            }
+            // TODO: extend till ss20.
+
+            continue;
+        } else if (key == "/LineCap") {
+            switch (PSDStyleSheet.value(key).toInt()) {
+            case 0:
+                styles.append("stroke-linecap: butt");
+                break;
+            case 1:
+                styles.append("stroke-linecap: round");
+                break;
+            case 2:
+                styles.append("stroke-linecap: square");
+                break;
+            default:
+                styles.append("stroke-linecap: butt");
+            }
+        } else if (key == "/LineJoin") {
+            switch (PSDStyleSheet.value(key).toInt()) {
+            case 0:
+                styles.append("stroke-linejoin: miter");
+                break;
+            case 1:
+                styles.append("stroke-linejoin: round");
+                break;
+            case 2:
+                styles.append("stroke-linejoin: bevel");
+                break;
+            default:
+                styles.append("stroke-linejoin: miter");
+            }
+        } else if (key == "/MiterLimit") {
+            styles.append("stroke-miterlimit: "+PSDStyleSheet.value(key).toString());
+        //} else if (key == "/LineDashArray") {
+            //"stroke-dasharray"
+        } else if (key == "/LineDashOffset") {
+            styles.append("stroke-dashoffset: "+PSDStyleSheet.value(key).toString());
+        } else if (key == "/EnableWariChu" || key == "/WariChuWidowAmount" || key == "/WariChuLineGap" || key == "/WariChuJustification"
+                   || key == "/WariChuOrphanAmount" || key == "/WariChuLineCount" || key == "/WariChuSubLineAmount") {
+            // Inline cutting note features.
+            unsupportedStyles << key;
+            continue;
+        } else if (key == "/TCYUpDownAdjustment" || key == "/TCYLeftRightAdjustment") {
+            // Extra text-combine-upright stuff we don't support.
+            unsupportedStyles << key;
+            continue;
+        }  else if (key == "/Type1EncodingNames" || key == "/ConnectionForms") {
+            // no clue what these are
+            unsupportedStyles << key;
+            continue;
+        } else if (key == "/FillOverPrint" || key == "/StrokeOverPrint" || key == "/Blend") {
+            // Fill stuff we don't support.
+            unsupportedStyles << key;
+            continue;
+        } else if (key == "/UnderlineOffset") {
+            // Needs css text-decor-4 features
+            unsupportedStyles << key;
+            continue;
+        } else {
+            if (key != "/FillFlag" && key != "/StrokeFlag" && key != "/AutoLeading") {
+                qWarning() << "Unknown PSD character stylesheet style key" << key << PSDStyleSheet.value(key);
+            }
+        }
+    }
+    if (weight != 400) {
+        styles.append("font-weight:"+QString::number(weight));
+    }
+    if (italic) {
+        styles.append("font-style:italic");
+    }
+    if (!textDecor.isEmpty()) {
+        styles.append("text-decoration:"+textDecor.join(" "));
+    }
+    if (!baselineShift.isEmpty()) {
+        styles.append("baseline-shift:"+baselineShift.join(" "));
+    }
+    if (!fontVariantLigatures.isEmpty()) {
+        styles.append("font-variant-ligatures:"+fontVariantLigatures.join(" "));
+    }
+    if (!fontVariantNumeric.isEmpty()) {
+        styles.append("font-variant-numeric:"+fontVariantNumeric.join(" "));
+    }
+    if (!fontVariantCaps.isEmpty()) {
+        styles.append("font-variant-caps:"+fontVariantCaps.join(" "));
+    }
+    if (!fontVariantEastAsian.isEmpty()) {
+        styles.append("font-variant-east-asian:"+fontVariantEastAsian.join(" "));
+    }
+    if (!fontFeatureSettings.isEmpty()) {
+        styles.append("font-feature-settings:"+fontFeatureSettings.join(", "));
+    }
+    if (!underlinePos.isEmpty()) {
+        styles.append("text-decoration-position:"+underlinePos);
+    }
+    qWarning() << "Unsupported styles" << unsupportedStyles;
+    return styles.join("; ");
+}
+
+QString stylesForPSDParagraphSheet(QVariantHash PSDParagraphSheet, QString &lang, QMap<int, font_info_psd> fontNames, QTransform scaleToPt) {
     QStringList styles;
     QStringList unsupportedStyles;
 
@@ -1222,24 +1802,29 @@ QString stylesForPSDParagraphSheet(QVariantHash PSDParagraphSheet, QTransform sc
             // CSS-Text-4 hyphenate-limit-lines.
             unsupportedStyles << key;
             continue;
+        } else if (key == "/HyphenateCapitalized") {
+            unsupportedStyles << key;
+            continue;
+        } else if (key == "/HyphenationPreference") {
+            unsupportedStyles << key;
+            continue;
+        } else if (key == "/SingleWordJustification") {
+            unsupportedStyles << key;
+            continue;
         } else if (key == "/Zone") {
             // Hyphenation zone to control where hyphenation is allowed to start, pixels. 0..8640 for 72ppi
             // CSS-Text-4 hyphenation-limit-zone.
-            // Note: there's also a hyphenate capitalized words, but no idea which key.
             unsupportedStyles << key;
             continue;
         } else if (key == "/WordSpacing") {
             // val 0 is minimum allowed spacing, and val 2 is maximum allowed spacing, both for justified text.
             // 0 to 1000%, 100% default.
-            val = PSDParagraphSheet.value(key).toList()[1].toDouble();
-            val -= 1.0;
-            styles.append("word-spacing:"+QString::number(val)+"em");
+            unsupportedStyles << key;
             continue;
         } else if (key == "/LetterSpacing") {
             // val 0 is minimum allowed spacing, and val 2 is maximum allowed spacing, both for justified text.
             // -100% to 500%, 0% default.
-            val = PSDParagraphSheet.value(key).toList()[1].toDouble();
-            styles.append("letter-spacing:"+QString::number(val)+"em");
+            unsupportedStyles << key;
             continue;
         } else if (key == "/GlyphSpacing") {
             // scaling of the glyphs, list of vals, 50% to 200%, default 100%.
@@ -1256,15 +1841,18 @@ QString stylesForPSDParagraphSheet(QVariantHash PSDParagraphSheet, QTransform sc
         } else if (key == "/Hanging") {
             // Roman hanging punctuation (?), bool
             continue;
-        } else if (key == "/Burasagari") {
+        } else if (key == "/Burasagari" || key == "/BurasagariType") {
             // CJK hanging punctuation, bool
             // options are none, regular (allow-end) and force (force-end).
             if (PSDParagraphSheet.value(key).toBool()) {
                 styles.append("hanging-punctuation:allow-end");
             }
             continue;
-        } else if (key == "/KinsokuOrder") {
-            // strict vs loose linebreaking... sorta.
+        } else if (key == "/Kinsoku") {
+            // line breaking strictness.
+            unsupportedStyles << key;
+            continue;
+        }  else if (key == "/KinsokuOrder") {
             // might be 0 = pushInFirst, 1 = pushOutFirst, 2 = pushOutOnly, if so, Krita only supports 2.
             unsupportedStyles << key;
             continue;
@@ -1283,6 +1871,12 @@ QString stylesForPSDParagraphSheet(QVariantHash PSDParagraphSheet, QTransform sc
         } else if (key == "/MojiKumiTable") {
             unsupportedStyles << key;
             continue;
+        }  else if (key == "/DropCaps") {
+            unsupportedStyles << key;
+            continue;
+        } else if (key == "/TabStops" || key == "/AutoTCY" || key == "/KeepTogether" ) {
+            unsupportedStyles << key;
+            continue;
         } else if (key == "/ParagraphDirection") {
             switch (PSDParagraphSheet.value(key).toInt()) {
             case 1:
@@ -1294,442 +1888,17 @@ QString stylesForPSDParagraphSheet(QVariantHash PSDParagraphSheet, QTransform sc
             default:
                 break;
             }
+        } else if (key == "/DefaultTabWidth") {
+            unsupportedStyles << key;
+            continue;
+        } else if (key == "/DefaultStyle") {
+            styles.append(stylesForPSDStyleSheet(lang, PSDParagraphSheet.value(key).toHash(), fontNames, scaleToPt));
         } else {
             qWarning() << "Unknown PSD paragraph style key" << key << PSDParagraphSheet.value(key);
         }
     }
     qWarning() << "Unsupported paragraph styles" << unsupportedStyles;
 
-    return styles.join("; ");
-}
-
-struct font_info_psd {
-    font_info_psd() {
-        weight = 400;
-        width = 100;
-    }
-    QString familyName;
-    int weight;
-    int width {100};
-    bool italic {false};
-};
-
-QString stylesForPSDStyleSheet(QVariantHash PSDStyleSheet, QMap<int, font_info_psd> fontNames, QTransform scale) {
-    QStringList styles;
-
-    QStringList unsupportedStyles;
-
-    int weight = 400;
-    bool italic = false;
-    QStringList textDecor;
-    QStringList baselineShift;
-    QStringList fontVariantLigatures;
-    QStringList fontVariantNumeric;
-    QStringList fontVariantCaps;
-    QStringList fontFeatureSettings;
-    for (int i=0; i < PSDStyleSheet.keys().size(); i++) {
-        const QString key = PSDStyleSheet.keys().at(i);
-        if (key == "/Font") {
-            font_info_psd fontInfo = fontNames.value(PSDStyleSheet.value(key).toInt());
-            weight = fontInfo.weight;
-            italic = italic? true: fontInfo.italic;
-            styles.append("font-family:"+fontInfo.familyName);
-            if (fontInfo.width != 100) {
-                styles.append("font-width:"+QString::number(fontInfo.width));
-            }
-            continue;
-        } else if (key == "/FontSize") {
-            double val = PSDStyleSheet.value(key).toDouble();
-            val = scale.map(QPointF(val, val)).y();
-            styles.append("font-size:"+QString::number(val));
-            continue;
-        } else if (key == "/AutoKerning" || key == "/AutoKern") {
-            if (!PSDStyleSheet.value(key).toBool()) {
-                styles.append("font-kerning: none");
-            }
-            continue;
-        } else if (key == "/Kerning") {
-            // adjusts kerning value, we don't support this.
-            unsupportedStyles << key;
-            continue;
-        } else if (key == "/FauxBold") {
-            if (PSDStyleSheet.value(key).toBool()) {
-                weight = 700;
-            }
-            continue;
-        } else if (key == "/FauxItalic") {
-            if (PSDStyleSheet.value(key).toBool()) {
-                italic = true;
-            }
-            // synthetic Italic, bool
-            continue;
-        } else if (key == "/Leading") {
-            bool autoleading = true;
-            if (PSDStyleSheet.keys().contains("AutoLeading")) {
-                autoleading = PSDStyleSheet.value("AutoLeading").toBool();
-            }
-            if (!autoleading) {
-                double fontSize = PSDStyleSheet.value("FontSize").toDouble();
-                double val = PSDStyleSheet.value(key).toDouble();
-                styles.append("line-height:"+QString::number(val/fontSize));
-            }
-            // value for line-height
-            continue;
-        } else if (key == "/HorizontalScale") {
-            // adjust horizontal scale of glyphs, we don't support this.
-            unsupportedStyles << key;
-            continue;
-        } else if (key == "/VerticalScale") {
-            // adjusts vertical scale glyphs, we don't support this.
-            unsupportedStyles << key;
-            continue;
-        } else if (key == "/Tracking") {
-            // tracking is in 1/1000 of an EM (as is kerning for that matter...)
-            double letterSpacing = (0.001 * PSDStyleSheet.value(key).toDouble());
-            styles.append("letter-spacing:"+QString::number(letterSpacing)+"em");
-            continue;
-        } else if (key == "/BaselineShift") {
-            if (PSDStyleSheet.value(key).toDouble() > 0) {
-                double val = PSDStyleSheet.value(key).toDouble();
-                val = scale.map(QPointF(val, val)).y();
-                baselineShift.append(QString::number(val));
-            }
-            continue;
-        } else if (key == "/FontCaps") {
-            switch (PSDStyleSheet.value(key).toInt()) {
-            case 0:
-                break;
-            case 1:
-                fontVariantCaps.append("all-small-caps");
-                break;
-            case 2:
-                styles.append("text-transform:uppercase");
-                break;
-            default:
-                qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
-            }
-            continue;
-        } else if (key == "/FontBaseline") {
-            // NOTE: This might also be better done with font-variant-position, though
-            // we don't support synthetic font stuff, including super and sub script.
-            // Actually, seems like this is specifically font-synthesis
-            switch (PSDStyleSheet.value(key).toInt()) {
-            case 0:
-                break;
-            case 1:
-                baselineShift.append("super");
-                break;
-            case 2:
-                baselineShift.append("sub");
-                break;
-            default:
-                qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
-            }
-            continue;
-        } else if (key == "/FontOTPosition") {
-            // NOTE: This might also be better done with font-variant-position, though
-            // we don't support synthetic font stuff, including super and sub script.
-            switch (PSDStyleSheet.value(key).toInt()) {
-            case 0:
-                break;
-            case 1:
-                styles.append("font-variant-position:super");
-                break;
-            case 2:
-                styles.append("font-variant-position:sub");
-                break;
-            case 3:
-                fontFeatureSettings.append("'numr' 1");
-                break;
-            case 4:
-                fontFeatureSettings.append("'dnum' 1");
-                break;
-            default:
-                qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
-            }
-            continue;
-        } else if (key == "/Underline" || key == "/UnderlinePosition") {
-            if (PSDStyleSheet.value(key).toBool()) {
-                textDecor.append("underline");
-            }
-            continue;
-        } else if (key == "/Strikethrough" || key == "/StrikethroughPosition") {
-            if (PSDStyleSheet.value(key).toBool()) {
-                textDecor.append("line-through");
-            }
-            continue;
-        } else if (key == "/Ligatures") {
-            if (!PSDStyleSheet.value(key).toBool()) {
-                fontVariantLigatures.append("no-common-ligatures");
-            }
-            continue;
-        } else if (key == "/DLigatures" || key == "/DiscretionaryLigatures" || key == "/AlternateLigatures") {
-            if (PSDStyleSheet.value(key).toBool()) {
-                fontVariantLigatures.append("discretionary-ligatures");
-            }
-            continue;
-        } else if (key == "/ContextualLigatures") {
-            if (PSDStyleSheet.value(key).toBool()) {
-                fontVariantLigatures.append("contextual");
-            }
-            continue;
-        } else if (key == "/Fractions") {
-            if (PSDStyleSheet.value(key).toBool()) {
-                fontVariantNumeric.append("diagonal-fractions");
-            }
-            continue;
-        } else if (key == "/Ordinals") {
-            if (PSDStyleSheet.value(key).toBool()) {
-                fontVariantNumeric.append("ordinal");
-            }
-            continue;
-        } else if (key == "/Swash") {
-            if (PSDStyleSheet.value(key).toBool()) {
-                fontFeatureSettings.append("'swsh' 1");
-            }
-            continue;
-        } else if (key == "/Titling") {
-            if (PSDStyleSheet.value(key).toBool()) {
-                fontVariantCaps.append("titling-caps");
-            }
-            continue;
-        } else if (key == "/StylisticAlternates") {
-            if (PSDStyleSheet.value(key).toBool()) {
-                fontFeatureSettings.append("'salt' 1");
-            }
-            continue;
-        } else if (key == "/Ornaments") {
-            if (PSDStyleSheet.value(key).toBool()) {
-                fontFeatureSettings.append("'ornm' 1");
-            }
-            continue;
-        } else if (key == "/FigureStyle") {
-            switch (PSDStyleSheet.value(key).toInt()) {
-            case 0:
-                break;
-            case 1:
-                fontVariantNumeric.append("tabular-nums");
-                fontVariantNumeric.append("lining-nums");
-                break;
-            case 2:
-                fontVariantNumeric.append("proportional-nums");
-                fontVariantNumeric.append("oldstyle-nums");
-                break;
-            case 3:
-                fontVariantNumeric.append("proportional-nums");
-                fontVariantNumeric.append("lining-nums");
-                break;
-            case 4:
-                fontVariantNumeric.append("tabular-nums");
-                fontVariantNumeric.append("oldstyle-nums");
-                break;
-            default:
-                qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
-            }
-            continue;
-        } else if (key == "/Italics") {
-            // This is an educated guess: other italic happens via postscript name.
-            if (PSDStyleSheet.value(key).toBool()) {
-                fontFeatureSettings.append("'ital' 1");
-            }
-            continue;
-        } else if (key == "/BaselineDirection") {
-            if (PSDStyleSheet.value(key).toInt() == 1) {
-                styles.append("text-orientation: upright");
-            } else if (PSDStyleSheet.value(key).toInt() == 2) {
-                styles.append("text-orientation: mixed");
-            } else {
-                qDebug() << key << PSDStyleSheet.value(key);
-            }
-            continue;
-        } else if (key == "/Tsume") {
-            // Reduce spacing around a single character. Partially related to text-spacing,
-            // Tsume is reduction, Aki expansion, and both can be used as part of Mojikumi
-            // However, in this particular case, the property seems to just reduce the space 
-            // of a single character, and may not be possible to support (as in CSS that'd
-            // just be padding/margin-reduction, but SVG cannot do that).
-            unsupportedStyles << key;
-            continue;
-        }/* else if (key == "/StyleRunAlignment") {
-            // No idea?
-            // maybe mojisoroe? which would make it dominant-baseline.
-            // 0 = roman
-            // 1 = em-box top/right, 2 = em-box center, 3 = em-box bottom/left
-            // 4 = icf-top/right, 5 icf-bottom/left?
-            QString dominantBaseline;
-            switch(PSDStyleSheet.value(key).toInt()) {
-            case 0:
-                dominantBaseline = "alphabetic";
-            case 2:
-                dominantBaseline = "center";
-            case 3:
-                dominantBaseline = "ideographic";
-            case 4:
-                dominantBaseline = "text-top";
-            case 5:
-                dominantBaseline = "text-bottom";
-            default:
-                dominantBaseline = QString();
-            }
-            if (!dominantBaseline.isEmpty()) {
-                styles.append("dominant-baseline: "+dominantBaseline);
-            }
-            continue;
-        } else if (key == "/Language") {
-            // This is an enum... which terrifies me.
-            // language is one of pt, pt-BR, fr, fr-CA, de, de-1901, gsw, nl, en-UK, en-US, fi, it, nb, nn, es, sv
-            continue;
-        }*/ else if (key == "/NoBreak") {
-            // Prevents word from breaking... I guess word-break???
-            if (PSDStyleSheet.value(key).toBool()) {
-                styles.append("word-break: keep-all");
-            }
-            continue;
-        }else if (key == "/DirOverride") {
-            QString dir = PSDStyleSheet.value(key).toBool()? "rtl": "ltr";
-            // Prevents word from breaking... I guess word-break???
-            if (PSDStyleSheet.value(key).toBool()) {
-                styles.append("direction: "+dir);
-                styles.append("unicode-bidi: isolate");
-            }
-            continue;
-        }  else if (key == "/FillColor") {
-            bool fill = true;
-            if (PSDStyleSheet.keys().contains("/FillFlag")) {
-                fill = PSDStyleSheet.value("/FillFlag").toBool();
-            }
-            if (fill) {
-                QVariantHash color = PSDStyleSheet.value(key).toHash();
-                styles.append("fill:"+colorFromPSDStyleSheet(color).name());
-            } else {
-                styles.append("fill:none");
-            }
-        } else if (key == "/StrokeColor") {
-            bool fill = true;
-            if (PSDStyleSheet.keys().contains("/StrokeFlag")) {
-                fill = PSDStyleSheet.value("/StrokeFlag").toBool();
-            }
-            if (fill) {
-                QVariantHash color = PSDStyleSheet.value(key).toHash();
-                styles.append("stroke:"+colorFromPSDStyleSheet(color).name());
-            } else {
-                styles.append("stroke:none");
-            }
-            continue;
-        } else if (key == "/OutlineWidth" || key == "/LineWidth") {
-            double val = PSDStyleSheet.value(key).toDouble();
-            val = scale.map(QPointF(val, val)).y();
-            styles.append("stroke-width:"+QString::number(val));
-        } /*else if (key == "FillFirst") {
-            // draw fill on top of stroke? paint-order: stroke markers fill, I guess.
-            continue;
-        } else if (key == "YUnderline") {
-            // Option relating to vertical underline left or right
-            if (PSDStyleSheet.value(key).toInt()) {
-                styles.append("text-underline-position:auto right");
-            } else {
-                styles.append("text-underline-position:auto left");
-            }
-            continue;
-        } else if (key == "CharacterDirection") {
-            // text-orientation?
-            // text-orientation itself is called  "Standard Vertical Roman Alignment", but no idea if it is this option.
-            continue;
-        } else if (key == "HindiNumbers") {
-            // bool. Looks like this automatically selects hindi numbers for arabic. There also
-            // seems to be a more complex option to automatically have arabic numbers for hebrew, and an option for farsi numbers, but this might be a different bool alltogether.
-            continue;
-        }*/ else if (key == "Kashida") {
-            // number, s related to drawing/inserting Kashida/Tatweel into Arabic justified text... We don't support this.
-            // options are none, short, medium, long, stylistic, indesign apparantly has a 'naskh' option, which is what toggles jalt usage.
-            unsupportedStyles << key;
-            continue;
-        } /*else if (key == "DiacriticPos") {
-            // number, which is odd, because it looks like it should be a point.
-            // this controls how high or low the diacritic is on arabic text.
-            continue;
-        }*/  else if (key == "/SlashedZero") {
-            // font-variant: common-ligatures
-            if (PSDStyleSheet.value(key).toBool()) {
-                fontVariantNumeric.append("slashed-zero");
-            }
-            continue;
-        } else if (key == "/StylisticSets") {
-            int flags = PSDStyleSheet.value(key).toInt();
-            if (flags & 1) {
-                fontFeatureSettings.append("'ss01' 1");
-            }
-            if (flags & 2) {
-                fontFeatureSettings.append("'ss02' 1");
-            }
-            if (flags & 4) {
-                fontFeatureSettings.append("'ss03' 1");
-            }
-            if (flags & 8) {
-                fontFeatureSettings.append("'ss04' 1");
-            }
-            // TODO: extend till ss20.
-
-            continue;
-        } else if (key == "/LineCap") {
-            switch (PSDStyleSheet.value(key).toInt()) {
-            case 0:
-                styles.append("stroke-linecap: butt");
-                break;
-            case 1:
-                styles.append("stroke-linecap: round");
-                break;
-            case 2:
-                styles.append("stroke-linecap: square");
-                break;
-            default:
-                styles.append("stroke-linecap: butt");
-            }
-        } else if (key == "/LineJoin") {
-            switch (PSDStyleSheet.value(key).toInt()) {
-            case 0:
-                styles.append("stroke-linejoin: miter");
-                break;
-            case 1:
-                styles.append("stroke-linejoin: round");
-                break;
-            case 2:
-                styles.append("stroke-linejoin: bevel");
-                break;
-            default:
-                styles.append("stroke-linejoin: miter");
-            }
-        } else {
-            if (key != "/FillFlag" && key != "/StrokeFlag" && key != "/AutoLeading") {
-                qWarning() << "Unknown PSD character stylesheet style key" << key << PSDStyleSheet.value(key);
-            }
-        }
-    }
-    if (weight != 400) {
-        styles.append("font-weight:"+QString::number(weight));
-    }
-    if (italic) {
-        styles.append("font-style:italic");
-    }
-    if (!textDecor.isEmpty()) {
-        styles.append("text-decoration:"+textDecor.join(" "));
-    }
-    if (!baselineShift.isEmpty()) {
-        styles.append("baseline-shift:"+baselineShift.join(" "));
-    }
-    if (!fontVariantLigatures.isEmpty()) {
-        styles.append("font-variant-ligatures:"+fontVariantLigatures.join(" "));
-    }
-    if (!fontVariantNumeric.isEmpty()) {
-        styles.append("font-variant-numeric:"+fontVariantNumeric.join(" "));
-    }
-    if (!fontVariantCaps.isEmpty()) {
-        styles.append("font-variant-caps:"+fontVariantCaps.join(" "));
-    }
-    if (!fontFeatureSettings.isEmpty()) {
-        styles.append("font-feature-settings:"+fontFeatureSettings.join(", "));
-    }
-    qWarning() << "Unsupported styles" << unsupportedStyles;
     return styles.join("; ");
 }
 
@@ -1957,10 +2126,10 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
     int antiAliasing = 0;
         antiAliasing = loadFallback? textObject.value("/AntiAlias").toInt()
                                    : textObject.value("/StorySheet").toHash().value("/AntiAlias").toInt();
-    //0 = None, 1 = Sharp, 2 = Crisp, 3 = Strong, 4 = Smooth
-    if (antiAliasing == 4) {
+    //0 = None, 4 = Sharp, 1 = Crisp, 2 = Strong, 3 = Smooth
+    if (antiAliasing == 3) {
         svgWriter.writeAttribute("text-rendering", "auto");
-    } else {
+    } else if (antiAliasing == 0) {
         svgWriter.writeAttribute("text-rendering", "OptimizeSpeed");
     }
 
@@ -1974,7 +2143,11 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
                 runArray.at(0).toHash()["/RunData"].toHash()["/ParagraphSheet"].toHash();
         QVariantHash styleSheet = parasheet[features].toHash();
 
-        QString styleString = stylesForPSDParagraphSheet(styleSheet, scaleToPt);
+        QString lang;
+        QString styleString = stylesForPSDParagraphSheet(styleSheet, lang, fontNames, scaleToPt);
+        if (!lang.isEmpty()) {
+            svgWriter.writeAttribute("xml:lang", lang);
+        }
         if (textType < 2) {
             if (textShape) {
                 offsetByAscent = false;
@@ -2041,7 +2214,11 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
                     length += l;
                 } else {
                     svgWriter.writeStartElement("tspan");
-                    svgWriter.writeAttribute("style", stylesForPSDStyleSheet(styleSheet, fontNames, scaleToPt));
+                    QString lang;
+                    svgWriter.writeAttribute("style", stylesForPSDStyleSheet(lang, styleSheet, fontNames, scaleToPt));
+                    if (!lang.isEmpty()) {
+                        svgWriter.writeAttribute("xml:lang", lang);
+                    }
                     svgWriter.writeCharacters(text.mid(pos, length));
                     svgWriter.writeEndElement();
                     styleSheet = newStyleSheet;
@@ -2050,7 +2227,11 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
                 }
             }
             svgWriter.writeStartElement("tspan");
-            svgWriter.writeAttribute("style", stylesForPSDStyleSheet(styleSheet, fontNames, scaleToPt));
+            QString lang;
+            svgWriter.writeAttribute("style", stylesForPSDStyleSheet(lang, styleSheet, fontNames, scaleToPt));
+            if (!lang.isEmpty()) {
+                svgWriter.writeAttribute("xml:lang", lang);
+            }
             svgWriter.writeCharacters(text.mid(pos));
             svgWriter.writeEndElement();
         }
@@ -2155,6 +2336,9 @@ QVariantHash styleToPSDStylesheet(const QMap<QString, QString> cssStyles,
             Q_FOREACH(QString param, decor) {
                 if (param == "underline") {
                     styleSheet["/UnderlinePosition"] = 1;
+                    if (cssStyles.value("text-decoration-position").contains("right")) {
+                        styleSheet["/UnderlinePosition"] = 2;
+                    }
                 } else if (param == "line-through"){
                     styleSheet["/StrikethroughPosition"] = 1;
                 }
@@ -2184,8 +2368,15 @@ QVariantHash styleToPSDStylesheet(const QMap<QString, QString> cssStyles,
                     styleSheet["/FontOTPosition"] = 1;
                 } else if (param == "sub") {
                     styleSheet["/FontOTPosition"] = 2;
+                } else if (param == "ruby") {
+                    styleSheet["/Ruby"] = true;
+                } else if (param == "traditional") {
+                    styleSheet["/JapaneseAlternateFeature"] = 1;
+                } else if (param == "jis78") {
+                    styleSheet["/JapaneseAlternateFeature"] = 3;
                 }
             }
+            styleSheet["/OldStyle"] = old;
             if (tab && old) {
                 styleSheet["/FigureStyle"] = 4;
             } else if (tab) {
@@ -2210,6 +2401,12 @@ QVariantHash styleToPSDStylesheet(const QMap<QString, QString> cssStyles,
                     styleSheet["/FontOTPosition"] = 3;
                 } else if (param.trimmed() == "'dnum' 1") {
                     styleSheet["/FontOTPosition"] = 4;
+                } else if (param.trimmed() == "'expt' 1") {
+                    styleSheet["/JapaneseAlternateFeature"] = 2;
+                } else if (param.trimmed() == "'hkna' 1") {
+                    styleSheet["/Kana"] = true;
+                } else if (param.trimmed() == "'palt' 1") {
+                    styleSheet["/ProportionalMetrics"] = true;
                 }
             }
         } else if (key == "text-orientation") {
@@ -2218,10 +2415,21 @@ QVariantHash styleToPSDStylesheet(const QMap<QString, QString> cssStyles,
             } else if (val == "mixed") {
                 styleSheet["/BaselineDirection"] = 2;
             }
+        } else if (key == "text-combine-upright") {
+            if (val == "all") {
+                 styleSheet["/BaselineDirection"] = 3;
+            }
         } else if (key == "word-break") {
             styleSheet["/NoBreak"] = val == "keep-all";
         } else if (key == "direction") {
             styleSheet["/DirOverride"] = val == "ltr"? 0 :1;
+        } else if (key == "xml:lang") {
+            if (psdLanguageMap.values().contains(val)) {
+                styleSheet["/Language"] = psdLanguageMap.key(val);
+            }
+        } else if (key == "paint-order") {
+            QStringList decor = val.split(" ");
+            styleSheet["/FillFirst"] = decor.first() == "fill";
         } else {
             qDebug() << "Unsupported css-style:" << key << val;
         }
@@ -2446,6 +2654,7 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
                                                       isHorizontal, &inlineSize,
                                                       scaleToPx);
 
+    text += '\n';
     model.insert("/Text", text);
 
     QVariantHash paragraphSet;
@@ -2487,7 +2696,6 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     int shapeType = bounds.isEmpty()? 0: 1; ///< 0 point, 1 paragraph, 2 text-on-path.
     int writingDirection = isHorizontal? 0: 2;
 
-    view.insert("/RenderedData", QVariantList());
 
     const int textFrameIndex = textFrames.size();
     QVariantHash newTextFrame;
@@ -2538,7 +2746,6 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
             p.append(p2.x());
             p.append(p2.y());
         }
-        qDebug() << p;
         newTextFrame.insert("/Bezier", QVariantHash({{"/Points", p}}));
         shapeType = 1;
     }
@@ -2546,6 +2753,46 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     newTextFrame.insert("/Data", newTextFrameData);
 
     view.insert("/Frames", QVariantList({QVariantHash({{"/Resource", textFrameIndex}})}));
+
+    QVariantList bbox = {0.0, 0.0, bounds.width(), bounds.height()};
+    QVariantList bbox2 = {bounds.left(), bounds.top(), bounds.right(), bounds.bottom()};
+
+    /*
+    QVariantHash glyphStrike {
+        {"/Bounds", bbox},
+        {"/GlyphAdjustments", QVariantHash({{"/Data", QVariantList()}, {"/RunLengths", QVariantList()}})},
+        {"/Glyphs", QVariantList()},
+        {"/Invalidation", bbox},
+        {"/RenderedBounds", bbox},
+        {"/VisualBounds", bbox},
+        {"/SelectionAscent", 10.0},
+        {"/SelectionDescent", -10.0},
+        {"/ShadowStylesRun", QVariantHash({{"/Data", QVariantList()}, {"/RunLengths", QVariantList()}})},
+        {"/StreamTag", "/GlyphStrike"},
+        {"/Transform", QVariantHash({{"/Origin", QVariantList({0.0, 0.0})}})}
+    };
+    QVariantHash frameStrike {
+        {"/Bounds", QVariantList({0.0, 0.0, 0.0, 0.0})},
+        {"/ChildProcession", 2},
+        {"/Children", QVariantList({glyphStrike})},
+        {"/StreamTag", "/FrameStrike"},
+        {"/Frame", textFrameIndex},
+        {"/Transform", QVariantHash({{"/Origin", QVariantList({0.0, 0.0})}})}
+    };
+    QVariantHash pathStrike {
+        {"/Bounds", QVariantList({0.0, 0.0, 0.0, 0.0})},
+        {"/ChildProcession", 0},
+        {"/Children", QVariantList({frameStrike})},
+        {"/StreamTag", "/PathSelectGroupCharacter"},
+        {"/Transform", QVariantHash({{"/Origin", QVariantList({0.0, 0.0})}})}
+    };
+    view.insert("/Strikes", QVariantList({pathStrike}));*/
+    QVariantHash rendered {
+        {"/RunData", QVariantHash({{"/LineCount", 1}})},
+        {"/Length", textTotal.length()}
+    };
+    view.insert("/RenderedData", QVariantHash({{"/RunArray", QVariantList({rendered})}}));
+
 
     textFrames.append(QVariantHash({{"/Resource", newTextFrame}}));
     textObjects.append(QVariantHash({{"/Model", model}, {"/View", view}}));
@@ -2557,7 +2804,7 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     QVariantList newFontSet;
 
     Q_FOREACH(const QVariant entry, fontSet) {
-        newFontSet.append(QVariantHash({{"/Resource", QVariantHash({{"/Identifier", entry}, {"/StreamTag", "/CoolTypeFont"}})}}));
+        newFontSet.append(QVariantHash({{"/Resource", QVariantHash({{"/StreamTag", "/CoolTypeFont"}, {"/Identifier", entry}})}}));
     }
 
     QVariantHash docObjects = txt2.value("/DocumentObjects").toHash();

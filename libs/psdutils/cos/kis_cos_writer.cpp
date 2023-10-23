@@ -29,7 +29,7 @@ static QStringList nameKeys {
     "/StreamTag",
     "/ListStyle",
     "/MojiKumiTable",
-    "/KurikaeshiMojiShori"
+    "/Kinsoku"
 };
 
 void writeString(QIODevice &dev, const QVariant val, const QString name) {
@@ -37,7 +37,7 @@ void writeString(QIODevice &dev, const QVariant val, const QString name) {
     if (nameKeys.contains(name)) {
         dev.write((name+" "+newString).toLatin1());
     } else {
-        newString.replace("\n", "\r");
+        newString.replace(0x0a, 0x0d);
         QTextCodec *Utf16Codec = QTextCodec::codecForName("UTF-16BE");
         dev.write((name+" (").toLatin1());
         QByteArray unicode = Utf16Codec->fromUnicode(newString);
@@ -157,9 +157,8 @@ QByteArray KisCosWriter::writeTxt2FromVariantHash(const QVariantHash doc)
     QByteArray ba;
     QBuffer dev(&ba);
     if (dev.open(QIODevice::WriteOnly)) {
-        int indent = 0;
-        bool prettyPrint = false;
-        writeVariant(dev, doc, indent, prettyPrint, false);
+        dev.write(" ");
+        writeVariant(dev, doc, 0, false, false);
         dev.close();
     } else {
         qDebug() << dev.errorString();

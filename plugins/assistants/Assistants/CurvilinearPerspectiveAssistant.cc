@@ -9,7 +9,6 @@
 
 #include "CurvilinearPerspectiveAssistant.h"
 
-#include "../../../libs/ui/tool/kis_tool.h"
 #include "kis_debug.h"
 #include <klocalizedstring.h>
 
@@ -40,25 +39,6 @@ KisPaintingAssistantSP CurvilinearPerspectiveAssistant::clone(QMap<KisPaintingAs
     return KisPaintingAssistantSP(new CurvilinearPerspectiveAssistant(*this, handleMap));
 }
 
-QPointF CurvilinearPerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBegin, qreal moveThresholdPt)
-{
-    const static QPointF nullPoint(std::numeric_limits<qreal>::quiet_NaN(), std::numeric_limits<qreal>::quiet_NaN());
-    Q_ASSERT(isAssistantComplete());
-
-    if (KisAlgebra2D::norm(pt - strokeBegin) < moveThresholdPt) {
-        // allow some movement before snapping
-        return strokeBegin;
-    }
-
-    return nullPoint;
-
-}
-
-QPointF CurvilinearPerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal moveThresholdPt)
-{
-    return project(pt, strokeBegin, moveThresholdPt);
-}
-
 void CurvilinearPerspectiveAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
 {
     point = QPointF();
@@ -82,12 +62,17 @@ void CurvilinearPerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& 
         dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
 
-    if (isAssistantComplete()){
+    if (isAssistantComplete() && assistantVisible) {
 
         QTransform initialTransform = converter->documentToWidgetTransform();
-        QPainterPath path;
+        QPainterPath baseGuidePath;
+        QPainterPath mouseGuidePath;
 
         gc.setTransform(initialTransform);
+
+        if (m_followBrushPosition && m_adjustedPositionValid) {
+            mousePos = initialTransform.map(m_adjustedBrushPosition);
+        }
 
         /*
          * Curvilinear perspective is created by circular arcs that intersect 2 vanishing points.
@@ -129,8 +114,8 @@ void CurvilinearPerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& 
         for(int i = -resolution; i < resolution; i++) {
             // If i = 0, the circle would be infinitely far away with an infinite radius (aka a line)
             if(i == 0) {
-                path.moveTo(QPointF(p1.x() - deltaX*2, p1.y() - deltaY*2));
-                path.lineTo(QPointF(p2.x() + deltaX*2, p2.y() + deltaY*2));
+                baseGuidePath.moveTo(QPointF(p1.x() - deltaX*2, p1.y() - deltaY*2));
+                baseGuidePath.lineTo(QPointF(p2.x() + deltaX*2, p2.y() + deltaY*2));
                 continue;
             }
             // Map loop iterator to multiplier
@@ -144,47 +129,30 @@ void CurvilinearPerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& 
             // Use formula to calculate Radius
             double radius = halfHandleDist * (1 + mult*mult) / (2*mult);
 
-            path.addEllipse(QPointF(circleCenterX, circleCenterY), radius, radius);
+            baseGuidePath.addEllipse(QPointF(circleCenterX, circleCenterY), radius, radius);
 
         }
+        drawPreview(gc, baseGuidePath);
         
-        // Draw guideline for the mouse, based on mouse position.
-        // Get location on the screen of handles.
-        QPointF screenP1 = initialTransform.map(*handles()[0]);
-        QPointF screenP2 = initialTransform.map(*handles()[1]);
-        // Don't draw if mouse is too close to vanishing points (will flicker if not)
-        // Use distance squared to avoid expensive sqrt.
-        if(
-            (pow(mousePos.x() - screenP2.x(), 2) + pow(mousePos.y() - screenP2.y(), 2)) > 9 &&
-            (pow(mousePos.x() - screenP1.x(), 2) + pow(mousePos.y() - screenP1.y(), 2)) > 9
-        ) {
-            /*
-             * Calculate center location and radius for an arbitrary point (the mouse location).
-             * Given Formulas:
-             * Radius^2 = HalfHandleDist^2 + CenterDist^2
-             * avgX + CenterDist * dirX = CenterX
-             * avgY + CenterDist * dirY = CenterY
-             * 
-             * For ease of use, let BetaX = MouseX - AvgX, BetaY = MouseY - AvgY
-             * Calculated Formula for CenterDist:
-             * CenterDist = (BetaX^2 + BetaY^2 - HalfHandleDist^2) / (2 * DirY * BetaX + 2 * DirY * BetaY)
-             */
-            QPointF docMousePos = initialTransform.inverted().map(mousePos);
-            double betaX = docMousePos.x() - avgX;
-            double betaY = docMousePos.y() - avgY;
+        if(isSnappingActive() && previewVisible) {
+            // Draw guideline for the mouse, based on mouse position.
+            // Get location on the screen of handles.
+            QPointF screenP1 = initialTransform.map(*handles()[0]);
+            QPointF screenP2 = initialTransform.map(*handles()[1]);
+            // Don't draw if mouse is too close to vanishing points (will flicker if not)
+            // Use distance squared to avoid expensive sqrt.
+            if(
+                (pow(mousePos.x() - screenP2.x(), 2) + pow(mousePos.y() - screenP2.y(), 2)) > 9 &&
+                (pow(mousePos.x() - screenP1.x(), 2) + pow(mousePos.y() - screenP1.y(), 2)) > 9
+            ) {
 
-            double centerDist = 
-                (betaX * betaX + betaY * betaY - halfHandleDist*halfHandleDist) 
-                / 
-                (2 * dirX * betaX + 2 * dirY * betaY);
-            
-            double circleCenterX = centerDist*dirX + avgX;
-            double circleCenterY = centerDist*dirY + avgY;
-            double radius = sqrt(pow(centerDist, 2) + pow(halfHandleDist, 2));
-            path.addEllipse(QPointF(circleCenterX, circleCenterY), radius, radius);
+                QLineF circle = identifyCircle(initialTransform.inverted().map(mousePos));
+                double radius = circle.length();
+                mouseGuidePath.addEllipse(circle.p1(), radius, radius);
+            }
+
+            drawPreview(gc, mouseGuidePath);
         }
-
-        drawPath(gc, path, isSnappingActive());
 
     }
     gc.restore();
@@ -198,6 +166,71 @@ void CurvilinearPerspectiveAssistant::drawCache(QPainter& gc, const KisCoordinat
     Q_UNUSED(gc);
     Q_UNUSED(converter);
     Q_UNUSED(assistantVisible);
+}
+
+QLineF CurvilinearPerspectiveAssistant::identifyCircle(const QPointF thirdPoint) {
+    /*
+    * Calculate center location and radius for an arbitrary point (usually the mouse location).
+    * Given Formulas:
+    * Radius^2 = HalfHandleDist^2 + CenterDist^2
+    * avgX + CenterDist * dirX = CenterX
+    * avgY + CenterDist * dirY = CenterY
+    * 
+    * For ease of use, let BetaX = MouseX - AvgX, BetaY = MouseY - AvgY
+    * Calculated Formula for CenterDist:
+    * CenterDist = (BetaX^2 + BetaY^2 - HalfHandleDist^2) / (2 * DirY * BetaX + 2 * DirY * BetaY)
+    * 
+    * Returns line from center to the arbitrary point.
+    * 
+    */
+    QPointF p1 = *handles()[0];
+    QPointF p2 = *handles()[1];
+
+    double deltaX = p2.x() - p1.x();
+    double deltaY = p2.y() - p1.y();
+
+    double handleDistance = sqrt(pow(deltaX, 2) + pow(deltaY, 2));
+    double halfHandleDist = handleDistance / 2.0;
+
+    double avgX = deltaX / 2.0 + p1.x();
+    double avgY = deltaY / 2.0 + p1.y();
+
+    double dirX = -deltaY / handleDistance;
+    double dirY = deltaX / handleDistance;
+
+    double betaX = thirdPoint.x() - avgX;
+    double betaY = thirdPoint.y() - avgY;
+
+    double centerDist = 
+        (betaX * betaX + betaY * betaY - halfHandleDist*halfHandleDist) 
+        / 
+        (2 * dirX * betaX + 2 * dirY * betaY);
+    
+    double circleCenterX = centerDist*dirX + avgX;
+    double circleCenterY = centerDist*dirY + avgY;
+    return QLineF(QPointF(circleCenterX, circleCenterY), thirdPoint);
+}
+
+QPointF CurvilinearPerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal moveThresholdPt)
+{
+
+    qreal dx = pt.x() - strokeBegin.x();
+    qreal dy = pt.y() - strokeBegin.y();
+
+    if (KisAlgebra2D::norm(QPointF(dx, dy)) < moveThresholdPt) {
+        // allow some movement before snapping
+        return strokeBegin;
+    }
+
+    // Get the center and radius for the given point
+    QLineF initialCircle = identifyCircle(strokeBegin);
+
+    // Set the new point onto the circle.
+    QLineF magnetizedCircle(initialCircle.p1(), pt);
+    magnetizedCircle.setLength(initialCircle.length());
+
+    return magnetizedCircle.p2();
+
 }
 
 QPointF CurvilinearPerspectiveAssistant::getDefaultEditorPosition() const

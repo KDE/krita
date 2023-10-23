@@ -585,7 +585,7 @@ void KisShortcutMatcher::reinitializeButtons()
     }
 }
 
-void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &keys)
+void KisShortcutMatcher::handlePolledKeys(const QVector<Qt::Key> &keys)
 {
     Q_FOREACH (Qt::Key key, m_d->keys) {
         if (!keys.contains(key)) {

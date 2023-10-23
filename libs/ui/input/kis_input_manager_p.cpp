@@ -754,13 +754,6 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
     return retval;
 }
 
-void KisInputManager::Private::tryFixPolledKeys()
-{
-    if (matcher.hasPolledKeys()) {
-        fixShortcutMatcherModifiersState();
-    }
-}
-
 void KisInputManager::Private::fixShortcutMatcherModifiersState()
 {
     KisExtendedModifiersMapper mapper;

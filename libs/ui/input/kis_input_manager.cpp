@@ -232,29 +232,6 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
                   std::is_same<Event, QTouchEvent>::value,
                   "event should be a mouse or a tablet event");
 
-#ifdef Q_OS_WIN32
-    /**
-     * On Windows, when the user presses some global window manager shortcuts,
-     * e.g. Alt+Space (to show window title menu), events for these key presses
-     * and releases are not delivered (see bug 424319). This code is a workaround
-     * for this problem. It checks consistency of standard modifiers and resets
-     * shortcut's matcher state in case of a trouble.
-     */
-    if (event->type() == QEvent::MouseMove ||
-        event->type() == QEvent::TabletMove ||
-        event->type() == QEvent::TabletPress ||
-        event->type() == QEvent::TabletRelease) {
-
-        QInputEvent *inputEvent = static_cast<QInputEvent*>(event);
-        if (!d->matcher.sanityCheckModifiersCorrectness(inputEvent->modifiers())) {
-            qWarning() << "WARNING: modifiers state became inconsistent! Trying to fix that...";
-            qWarning() << "    " << ppVar(inputEvent->modifiers());
-            qWarning() << "    " << ppVar(d->matcher.debugPressedKeys());
-
-            d->fixShortcutMatcherModifiersState();
-        }
-    }
-#endif
 
     bool retval = false;
 
@@ -337,13 +314,50 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->accumulatedScrollDelta = 0;
     }
 
+#ifdef Q_OS_WIN32
+    /**
+     * On Windows, when the user presses some global window manager shortcuts,
+     * e.g. Alt+Space (to show window title menu), events for these key presses
+     * and releases are not delivered (see bug 424319). This code is a workaround
+     * for this problem. It checks consistency of standard modifiers and resets
+     * shortcut's matcher state in case of a trouble.
+     */
+    if (event->type() == QEvent::MouseMove ||
+        event->type() == QEvent::MouseButtonPress ||
+        event->type() == QEvent::MouseButtonRelease ||
+        event->type() == QEvent::TabletMove ||
+        event->type() == QEvent::TabletPress ||
+        event->type() == QEvent::TabletRelease ||
+        event->type() == QEvent::Wheel) {
+
+        QInputEvent *inputEvent = static_cast<QInputEvent*>(event);
+        if (event->type() != QEvent::ShortcutOverride &&
+            !d->matcher.sanityCheckModifiersCorrectness(inputEvent->modifiers())) {
+
+            qWarning() << "WARNING: modifiers state became inconsistent! Trying to fix that...";
+            qWarning() << "    " << ppVar(inputEvent->modifiers());
+            qWarning() << "    " << ppVar(d->matcher.debugPressedKeys());
+
+            d->fixShortcutMatcherModifiersState();
+        } else if (d->matcher.hasPolledKeys()) {
+            /**
+             * Re-check the native platform key API against keys we are unsure about,
+             * and fix them in case they now show as released.
+             *
+             * The other part of the fix is placed in the handler of ShortcutOverride,
+             * because it needs a custom set of the presset keys.
+             */
+            qWarning() << "WARNING: Fixing polled keys state";
+            d->fixShortcutMatcherModifiersState();
+        }
+    }
+#endif
+
     switch (event->type()) {
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
         d->debugEvent<QMouseEvent, true>(event);
         if (d->touchHasBlockedPressEvents) break;
-
-        d->tryFixPolledKeys();
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
@@ -374,8 +388,14 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(keyEvent);
 
-        // see a comment in the handler of KeyRelease event
-        if (d->shouldSynchronizeOnNextKeyPress) {
+        /** See a comment in the handler of KeyRelease event for
+         * shouldSynchronizeOnNextKeyPress explanation
+         *
+         * There is also a case when Krita gets focus via Win+1 key, then
+         * the polled key '1' gets into the matcher, but OS does not deliver any
+         * signals for it (see bug 451424)
+         */
+        if (d->shouldSynchronizeOnNextKeyPress || d->matcher.hasPolledKeys()) {
             QVector<Qt::Key> guessedKeys;
             KisExtendedModifiersMapper mapper;
             Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
@@ -387,12 +407,9 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             if (!d->matcher.debugPressedKeys().contains(key)) {
                 guessedKeys.removeOne(key);
             }
-
+            qWarning() << "WARNING: fixing polled keys in ShortcutOverride";
             d->fixShortcutMatcherModifiersState(guessedKeys, modifiers);
             d->shouldSynchronizeOnNextKeyPress = false;
-        }
-        else {
-            d->tryFixPolledKeys();
         }
 
         if (!keyEvent->isAutoRepeat()) {
@@ -465,8 +482,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::Wheel: {
         d->debugEvent<QWheelEvent, false>(event);
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
-
-        d->tryFixPolledKeys();
 
 #ifdef Q_OS_MACOS
         // Some QT wheel events are actually touch pad pan events. From the QT docs:
@@ -584,8 +599,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->debugEvent<QTabletEvent, false>(event);
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
 
-        d->tryFixPolledKeys();
-
         {
             //Make sure the input actions know we are active.
             KisAbstractInputAction::setInputManager(this);
@@ -669,8 +682,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
     case QEvent::TouchBegin:
     {
-        d->tryFixPolledKeys();
-
         d->debugEvent<QTouchEvent, false>(event);
         // The popup was dismissed in previous TouchBegin->TouchEnd sequence. We now have a new TouchBegin.
         d->popupWasActive = false;

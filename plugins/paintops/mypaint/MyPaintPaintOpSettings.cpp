@@ -13,8 +13,9 @@
 struct KisMyPaintOpSettings::Private
 {
     bool cachedProperties{false};
-    qreal paintOpSize;
-    qreal offsetValue;
+    qreal paintOpSize{0.0};
+    qreal paintOpAngle{0.0};  // the original angle value as seen by KisPaintOpSettings interface
+    qreal offsetValue{0.0};
 };
 
 
@@ -48,9 +49,15 @@ void KisMyPaintOpSettings::setPaintOpAngle(qreal value)
     MyPaintEllipticalDabAngleData data;
     data.read(this);
 
-    // Paintop angle is expressed in degrees already, but we need to reverse the rotation (MyPaint is clockwise).
-    // To do this, we subtract the angle difference instead of adding it to the old value.
-    const qreal angleDifference = value - data.strengthValue;
+    // Paintop angle is expressed in degrees.
+    value = normalizeAngleDegrees(value);
+
+    // To keep the angle consistent across the KisPaintOpSettings interface, we keep track of the original value.
+    const qreal angleDifference = value - m_d->paintOpAngle;
+    m_d->paintOpAngle = value;
+
+    // We need to reverse the rotation (MyPaint is clockwise). To do this, we subtract the angle difference
+    // instead of adding it to the old value.
     value = data.strengthValue - angleDifference;
 
     // Shift the angle to zero, so that we can use fmod to wrap around
@@ -76,9 +83,7 @@ void KisMyPaintOpSettings::setPaintOpAngle(qreal value)
 
 qreal KisMyPaintOpSettings::paintOpAngle() const
 {
-    MyPaintEllipticalDabAngleData data;
-    data.read(this);
-    return data.strengthValue;
+    return m_d->paintOpAngle;
 }
 
 void KisMyPaintOpSettings::setPaintOpOpacity(qreal value)

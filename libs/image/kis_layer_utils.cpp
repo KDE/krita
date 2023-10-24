@@ -147,7 +147,7 @@ namespace KisLayerUtils {
              *
              * See https://bugs.kde.org/show_bug.cgi?id=475550
              */
-            if (!currLayer->isAnimated()) {
+            if (!frames.isEmpty() && !currLayer->isAnimated()) {
                 frames.insert(image->animationInterface()->currentTime());
             }
 

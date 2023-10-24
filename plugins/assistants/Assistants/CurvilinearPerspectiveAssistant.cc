@@ -98,7 +98,7 @@ void CurvilinearPerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& 
         double deltaX = p2.x() - p1.x();
         double deltaY = p2.y() - p1.y();
 
-        double handleDistance = sqrt(pow(deltaX, 2) + pow(deltaY, 2));
+        double handleDistance = KisAlgebra2D::norm(QPointF(deltaX, deltaY));
         double halfHandleDist = handleDistance / 2.0;
 
         double avgX = deltaX / 2.0 + p1.x();
@@ -121,13 +121,13 @@ void CurvilinearPerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& 
             // Map loop iterator to multiplier
             double mult = ((double) i) / resolution;
             // Use formula to calculate CenterDist
-            double centerDist = halfHandleDist * (1 - mult*mult) / (2*mult);
+            double centerDist = halfHandleDist * (1 - pow2(mult)) / (2*mult);
 
             // Use the distance to the center (from the average point) to calculate the center location.
             double circleCenterX = centerDist * dirX + avgX;
             double circleCenterY = centerDist * dirY + avgY;
             // Use formula to calculate Radius
-            double radius = halfHandleDist * (1 + mult*mult) / (2*mult);
+            double radius = halfHandleDist * (1 + pow2(mult)) / (2*mult);
 
             baseGuidePath.addEllipse(QPointF(circleCenterX, circleCenterY), radius, radius);
 
@@ -142,10 +142,9 @@ void CurvilinearPerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& 
             // Don't draw if mouse is too close to vanishing points (will flicker if not)
             // Use distance squared to avoid expensive sqrt.
             if(
-                (pow(mousePos.x() - screenP2.x(), 2) + pow(mousePos.y() - screenP2.y(), 2)) > 9 &&
-                (pow(mousePos.x() - screenP1.x(), 2) + pow(mousePos.y() - screenP1.y(), 2)) > 9
+                kisSquareDistance(mousePos, screenP2) > 9 &&
+                kisSquareDistance(mousePos, screenP1) > 9
             ) {
-
                 QLineF circle = identifyCircle(initialTransform.inverted().map(mousePos));
                 double radius = circle.length();
                 mouseGuidePath.addEllipse(circle.p1(), radius, radius);
@@ -189,7 +188,7 @@ QLineF CurvilinearPerspectiveAssistant::identifyCircle(const QPointF thirdPoint)
     double deltaX = p2.x() - p1.x();
     double deltaY = p2.y() - p1.y();
 
-    double handleDistance = sqrt(pow(deltaX, 2) + pow(deltaY, 2));
+    double handleDistance = KisAlgebra2D::norm(QPointF(deltaX, deltaY));
     double halfHandleDist = handleDistance / 2.0;
 
     double avgX = deltaX / 2.0 + p1.x();
@@ -202,7 +201,7 @@ QLineF CurvilinearPerspectiveAssistant::identifyCircle(const QPointF thirdPoint)
     double betaY = thirdPoint.y() - avgY;
 
     double centerDist = 
-        (betaX * betaX + betaY * betaY - halfHandleDist*halfHandleDist) 
+        (pow2(betaX) + pow2(betaY) - pow2(halfHandleDist)) 
         / 
         (2 * dirX * betaX + 2 * dirY * betaY);
     

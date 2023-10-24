@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-22 03:09+0000\n"
-"PO-Revision-Date: 2023-10-21 20:59+0200\n"
+"POT-Creation-Date: 2023-10-24 02:28+0000\n"
+"PO-Revision-Date: 2023-10-22 15:34+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -2493,7 +2493,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pixelart_dither.kpp"
 msgid "Pixelart dither"
-msgstr "Tramage du Pixelart"
+msgstr "Tramage du PixelArt"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2501,7 +2501,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pixelart_round.kpp"
 msgid "Pixelart round"
-msgstr "Arrondi du Pixelart"
+msgstr "Arrondi du PixelArt"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8809,7 +8809,7 @@ msgstr "Afficher / Masquer les préréglages de gomme"
 #, kde-format
 msgctxt "action"
 msgid "Reload Original Preset"
-msgstr "Recharger le préreglage d'origine"
+msgstr "Recharger le pré-réglage d'origine"
 
 #. i18n: context: text @ Action (preserve_alpha), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (preserve_alpha), Actions (Painting), ActionCollection (Krita)
@@ -12939,9 +12939,7 @@ msgid "File"
 msgstr "Fichier"
 
 #: krita/krita5.xmlgui:416
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "Modifier"
 
@@ -16010,7 +16008,7 @@ msgstr "Espacement > 0.5, il faudrait désactiver l'aperçu instantané"
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:35
 #, kde-format
 msgid "Could not access brush tip metadata"
-msgstr "Impossible d''accéder aux métadonnées d'astuces pour les brosses."
+msgstr "Impossible d'accéder aux métadonnées d'astuces pour les brosses."
 
 #: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
 #, kde-format
@@ -21054,7 +21052,7 @@ msgid ""
 "destination streams of the FFmpeg instance"
 msgstr ""
 "Ajouter ici les options de filtrage « FFmpeg ». Elles seront insérées entre "
-"les flux de source et de destination de l'instance« FFmpeg »."
+"les flux de source et de destination de l'instance « FFmpeg »."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -23424,7 +23422,7 @@ msgid ""
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
 "L'annulation cumulative permet à Krita de fusionner les actions d'annulation "
-"et de rendre l'historique d'annulation plus propre. Krita gardera encore "
+"et de rendre l'historique d'annulation plus propre. Krita conservera encore "
 "quelques dernières actions non fusionnées selon les options « Attendre avant "
 "de fusionner les appuis de touches » et « Exclure les derniers appuis de "
 "touches de la fusion ». Chaque fois qu'une action devient obsolète en "
@@ -29008,7 +29006,7 @@ msgstr "%1x%2 décalage : %3,%4"
 #, kde-format
 msgctxt "@option:radio"
 msgid "%1 (Wintab)"
-msgstr "%1 (Wintab)"
+msgstr "%1 (WinTab)"
 
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.cpp:49
 #, kde-format
@@ -29344,7 +29342,7 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 "Le calque non animé est fusionné dans la trame actuelle. Pour le fusionner "
-"dans l’élément entier, veuillez créer au moins une trame."
+"dans l'élément entier, veuillez créer au moins une trame."
 
 #: libs/ui/kis_layer_manager.cc:930
 #, kde-format
@@ -30858,7 +30856,7 @@ msgid ""
 "The image has a profile attached that Krita cannot edit images in (\"%1\"), "
 "please select a space to convert to for editing: \n"
 msgstr ""
-"L’image comporte un profil associé que Krita ne peut pas modifier pour les "
+"L'image comporte un profil associé que Krita ne peut pas modifier pour les "
 "images (« %1 »). Veuillez sélectionner un espace colorimétrique pour la "
 "conversion avant modification : \n"
 
@@ -33360,10 +33358,10 @@ msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/RGB_color_space\">RGB (Red, "
 "Green, Blue)</a></b> est le modèle de couleurs utilisés par les écrans et "
 "les autres média utilisant de l'affichage lumineux.<br/> « RGB » est un "
-"modèle additif de couleurs : l'ajout de couleurs ensemble les rendent plus "
-"lumineuses. Ce modèle de couleurs est le plus étendu de tous les modèles de "
-"couleurs. Il est recommandé comme modèle pour le dessin, que vous pouvez "
-"convertir ultérieurement vers d'autres espaces. Il est aussi l'espace "
+"modèle en addition de couleurs : l'ajout de couleurs ensemble les rendent "
+"plus lumineuses. Ce modèle de couleurs est le plus étendu de tous les "
+"modèles de couleurs. Il est recommandé comme modèle pour le dessin, que vous "
+"pouvez convertir ultérieurement vers d'autres espaces. Il est aussi l'espace "
 "colorimétrique recommandé pour l'édition « HDR »."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:408
@@ -33404,7 +33402,7 @@ msgstr ""
 "<b><a href=\"https://fr.wikipedia.org/wiki/CIE_XYZ\">CIE XYZ</a></b> est "
 "l'espace déterminé par le « CIE » comme espace englobant toutes les autres "
 "couleurs et utilisé pour la conversion de couleurs entre les profils. "
-"« XYZ » est un modèle additif de couleurs, signifiant que l'ajout de "
+"« XYZ » est un modèle en addition de couleurs, signifiant que l'ajout de "
 "couleurs entre elles les rend plus lumineuses. Il <b>n'est pas</b> "
 "recommandé pour le dessin mais peut être utilise pour l'encodage. La courbe "
 "de réponse en couleurs est supposée être linéaire."
@@ -39123,7 +39121,7 @@ msgid ""
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
 "Aucun : rien n'est affiché.Simple : affiche les opacités ou les modes de "
-"mélange modifiés.Équilibré : affiche à la fois l'opacité et le mode de "
+"mélange modifiés. Équilibré : affiche à la fois l'opacité et le mode de "
 "mélange si l'un ou l'autre a été modifié.\n"
 "Détaillé : affiche à la fois l'opacité et le mode de mélange, même s'ils "
 "sont inchangés."
@@ -40388,7 +40386,7 @@ msgid ""
 "time. Try increasing the capture interval."
 msgstr ""
 "Alerte de faible performance. L'enregistreur est incapable d'écrire toutes "
-"les trames dans le temps imparti.Veuillez essayer d'augmenter l'intervalle "
+"les trames dans le temps imparti. Veuillez essayer d'augmenter l'intervalle "
 "de capture."
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
@@ -40514,7 +40512,7 @@ msgstr ""
 #: plugins/dockers/storyboarddocker/KisAddRemoveStoryboardCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Add Storyboard Scene"
-msgstr "Ajouter une scéne au scénario"
+msgstr "Ajouter une scène au scénario"
 
 #: plugins/dockers/storyboarddocker/KisAddRemoveStoryboardCommand.cpp:72
 msgctxt "(qtundo-format)"
@@ -46546,7 +46544,7 @@ msgctxt ""
 "generator"
 msgid "Every {n} cell vertically"
 msgid_plural "Every {n} cells vertically"
-msgstr[0] "Chaque {n} cellules verticalement"
+msgstr[0] "Chaque {n} cellule verticalement"
 msgstr[1] "Chaque {n} cellule verticalement"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:446
@@ -47743,7 +47741,7 @@ msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
 "Image « JPEG-XL » détectée avec des canaux de tâches de couleurs. "
-"Importation d’une image à plat."
+"Importation d'une image à plat."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:640
 #: plugins/impex/jxl/JPEGXLImport.cpp:650
@@ -47762,7 +47760,7 @@ msgid ""
 "flattened image."
 msgstr ""
 "Image « JPEG-XL » multi-couches détectée avec un mode de fusion non pris en "
-"charge. Importation d’une image à plat."
+"charge. Importation d'une image à plat."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:833
 #, kde-format
@@ -48112,7 +48110,7 @@ msgid ""
 msgstr ""
 "Utiliser l'encodage modulaire plutôt que l'encodage par défaut « VarDCT » "
 "pour des compressions avec perte\n"
-"(C'est à dire pour des images non photographiques).\n"
+"(C'est-à-dire pour des images non photographiques).\n"
 "Par défaut : désactivé."
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceModular)
@@ -48199,11 +48197,11 @@ msgid ""
 "setting.</p><p>It is advised to leave this option checked for web delivery "
 "and general compatibility with other applications.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Si cette option n’est pas activée, les calques seront "
+"<html><head/><body><p>Si cette option n'est pas activée, les calques seront "
 "rastérisés et enregistrés. Cependant, les exportations animées sont toujours "
 "mises à plat, quel que soit la valeur de cette option. </p><p>Il est "
 "conseillé de laisser cette option validée pour une utilisation Internet et "
-"la compatibilité générale avec d’autres applications. </p></body></html>"
+"la compatibilité générale avec d'autres applications. </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:239
@@ -48812,9 +48810,9 @@ msgid ""
 msgstr ""
 "Le calque « %1 » possède un mode de mélange « %2 » qui a modifié son "
 "comportement pour la couleur « CMJN » dans Krita 5.2. Veuillez vérifier le "
-"résultat et envisager d'activer l'ancien algorithme « Additif » dans le menu "
-"Configuration / Configurer Krita / Général / Outils / Mode de mélange "
-"« CMJN »"
+"résultat et envisager d'activer l'ancien algorithme « En addition » dans le "
+"menu Configuration / Configurer Krita / Général / Outils / Mode de mélange "
+"« CMJN »."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1105
 #, kde-format
@@ -49940,7 +49938,8 @@ msgid ""
 msgstr ""
 "<title>Surbrillance</title><p>Quantité de préservation de la surbrillance "
 "pour la correction d'exposition avant l'interpolation dans E.V. Ceci ne "
-"prend effet que si la correction de décalage est > 1.0 E.V.</p>"
+"prend effet que si la correction de décalage est strictement supérieur à 1.0 "
+"E.V.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:542
 #, kde-format
@@ -50486,7 +50485,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "TIFF image with PSD data"
-msgstr "Image « TIFF « avec des données « PSD »"
+msgstr "Image « TIFF » avec des données « PSD »"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1579
 #, kde-format
@@ -50495,8 +50494,8 @@ msgid ""
 "The TIFF image contains valid PSD data embedded. Would you like to use PSD "
 "data instead of normal TIFF data?"
 msgstr ""
-"L’image « TIFF » contient des données intégrées « PSD » valides. Voulez-vous "
-"utiliser ces données « PSD » au lieu des données « TIFF » normales ?"
+"L'image « TIFF » contient des données intégrées « PSD » valables. Voulez-"
+"vous utiliser ces données « PSD » au lieu des données « TIFF » normales ?"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
 #. i18n: ectx: property (title), widget (QGroupBox, tiffOptions)
@@ -54043,7 +54042,7 @@ msgstr ""
 "Définir une distribution personnalisée des particules.\n"
 "L'axe horizontal représente l'angle de 0 à 360 degrés.\n"
 "L'axe vertical représente la probabilité qu'une particule arrive sur cet "
-"angle.Plus la courbe est élevée pour un angle donné, plus le nombre de "
+"angle. Plus la courbe est élevée pour un angle donné, plus le nombre de "
 "particules se arrivant sur cet angle est important."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:71
@@ -54733,7 +54732,7 @@ msgid "Percentage:"
 msgstr "Pourcentage :"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:209
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:265
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:266
 msgid "Export Settings"
 msgstr "Paramètres pour l'exportation"
 
@@ -55477,52 +55476,52 @@ msgstr "Pas de description"
 msgid "Comics Manager"
 msgstr "Gestionnaire de bande dessinée"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:247
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:248
 msgid "New Project"
 msgstr "Nouveau projet"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:249
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:250
 msgid "Open Project"
 msgstr "Ouvrir un projet"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:261
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:262
 msgid "Project Settings"
 msgstr "Configuration du projet"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:264
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Meta Data"
 msgstr "Métadonnées"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:281
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:282
 msgid "Add Page"
 msgstr "Ajouter une page"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:283
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:284
 msgid "Add Page from Template"
 msgstr "Ajouter une page à partir d'un modèle"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:285
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:286
 msgid "Add Existing Pages"
 msgstr "Ajouter des pages existantes"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:287
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
 msgid "Remove Page"
 msgstr "Supprimer la page"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:289
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
 msgid "Batch Resize"
 msgstr "Redimensionner par lots"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:292
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
 msgid "View Page In Window"
 msgstr "Voir la page dans la fenêtre"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:294
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 msgid "Scrape Author Info"
 msgstr "Collecter les informations sur l'auteur"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
 msgid ""
 "Search for author information in documents and add it to the author list. "
 "This does not check for duplicates."
@@ -55530,19 +55529,19 @@ msgstr ""
 "Rechercher des informations sur l'auteur dans les documents et les ajouter à "
 "la liste des auteurs. Ceci ne vérifie pas la présence de duplicatas."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:297
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
 msgid "Scrape Text for Translation"
 msgstr "Collecter le texte pour traduction"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:318
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:319
 msgid "Export Comic"
 msgstr "Exporter la bande dessinée"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:323
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
 msgid "Copy Location"
 msgstr "Copier l'emplacement"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
 msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
@@ -55551,19 +55550,19 @@ msgstr ""
 "rapidement vers un gestionnaire de fichiers ou similaire."
 
 # unreviewed-context
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "Please select the JSON comic config file."
 msgstr "Sélectionnez le fichier de configuration JSON."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "JSON files"
 msgstr "Fichier JSON"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid "Config cannot be used"
 msgstr "Il est impossible d'utiliser la configuration."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
@@ -55573,55 +55572,55 @@ msgstr ""
 "nouveaux fichiers ne peuvent y être écrits. Veuillez configurer les accès au "
 "dossier ou déplacer le projet vers un dossier dans lequel on peut les créer."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:378
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:379
 msgid "Loading Pages..."
 msgstr "Chargement des pages..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:118
 msgid "Krita files"
 msgstr "Fichiers pour Krita"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
 msgid "Which existing pages to add?"
 msgstr "Quelles pages existantes sont à ajouter ?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:591
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:610
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:592
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:611
 msgid "Where are the templates located?"
 msgstr "Où sont rangés les modèles ?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:634
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:635
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:113
 msgid "Where should the pages go?"
 msgstr "Où les pages doivent aller ?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 msgid "Which image should be the basis the new page?"
 msgstr "Quelle image devrait elle servir de base à cette nouvelle page ?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "Export success"
 msgstr "Succès de l'exportation"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "The files have been written to the export folder."
 msgstr "Les fichiers ont été écrits dans le dossier des exportations."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:883
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:884
 msgid "Resize all Pages"
 msgstr "Redimensionner toutes les pages"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:894
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
 msgid "Resizing pages..."
 msgstr "Redimensionnement des pages..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:896
 msgid "Resizing Pages"
 msgstr "Redimensionnement des pages"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:909
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -55632,11 +55631,11 @@ msgstr ""
 "Temps écoulé : {passedString}\n"
 "Estimé : {estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 msgid "Scraping success"
 msgstr "Succès du grattage"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr "Le fichier « POT » a été enregistré dans : {file}"

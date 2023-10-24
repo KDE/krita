@@ -415,8 +415,8 @@ void KisToolMultihand::initTransformations()
             kisCanvas->viewManager()->selection()->selectedExactRect() :
             kisCanvas->currentImage()->bounds();
         QPoint dPos = bounds.topLeft() +
-                      QPoint(m_intervalX * floor((m_axesPoint.x() - bounds.left()) / m_intervalX),
-                             m_intervalY * floor((m_axesPoint.y() - bounds.top()) / m_intervalY));
+                      QPoint(m_intervalX ? m_intervalX * floor((m_axesPoint.x() - bounds.left()) / m_intervalX) : 0,
+                             m_intervalY ? m_intervalY * floor((m_axesPoint.y() - bounds.top()) / m_intervalY) : 0);
 
         for (QPoint pos : intervalLocations()) {
                 QPointF resPos = pos - dPos;
@@ -563,7 +563,8 @@ QVector<QPoint> KisToolMultihand::intervalLocations()
         kisCanvas->viewManager()->selection()->selectedExactRect() :
         kisCanvas->currentImage()->bounds();
 
-    int intervals = bounds.width() / m_intervalX + bounds.height() / m_intervalY;
+    int intervals = m_intervalX ? (bounds.width() / m_intervalX) : 0 +
+                    m_intervalY ? (bounds.height() / m_intervalY) : 0;
     if (intervals > MAXIMUM_BRUSHES) {
         kisCanvas->viewManager()->showFloatingMessage(
             i18n("Multibrush Tool does not support more than %1 brushes; use a larger interval.",

@@ -49,6 +49,16 @@ qreal KisSprayPaintOpSettings::paintOpSize() const
     return option.diameter;
 }
 
+void KisSprayPaintOpSettings::setPaintOpAngle(qreal value)
+{
+    Q_UNUSED(value);
+}
+
+qreal KisSprayPaintOpSettings::paintOpAngle() const
+{
+    return 0.0;
+}
+
 bool KisSprayPaintOpSettings::paintIncremental()
 {
     KisPaintingModeOptionData data;

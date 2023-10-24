@@ -23,6 +23,9 @@ public:
     qreal paintOpSize() const override;
     void setPaintOpSize(qreal value) override;
 
+    void setPaintOpAngle(qreal value) override;
+    qreal paintOpAngle() const override;
+
     bool isAirbrushing() const override
     {
         return false;

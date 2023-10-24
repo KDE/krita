@@ -44,6 +44,16 @@ qreal KisDeformPaintOpSettings::paintOpSize() const
     return option.brushDiameter;
 }
 
+void KisDeformPaintOpSettings::setPaintOpAngle(qreal value)
+{
+    Q_UNUSED(value);
+}
+
+qreal KisDeformPaintOpSettings::paintOpAngle() const
+{
+    return 0.0;
+}
+
 bool KisDeformPaintOpSettings::paintIncremental()
 {
     return true;

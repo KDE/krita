@@ -266,6 +266,17 @@ public:
     virtual qreal paintOpSize() const = 0;
 
     /**
+     * Set paintop angle (in degrees) directly in the properties.
+     * Increasing the angle corresponds to a counter-clockwise rotation.
+     */
+    virtual void setPaintOpAngle(qreal value) = 0;
+
+    /**
+     * @return paintop angle (in degrees) saved in the properties
+     */
+    virtual qreal paintOpAngle() const = 0;
+
+    /**
      * @return pattern size saved in the properties
      */
     virtual qreal paintOpPatternSize();

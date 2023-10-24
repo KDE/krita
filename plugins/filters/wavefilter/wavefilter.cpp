@@ -98,7 +98,7 @@ KisFilterWave::KisFilterWave() : KisFilter(id(), FiltersCategoryOtherId, i18n("&
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(false);
-    setSupportsAdjustmentLayers(false);
+    setSupportsAdjustmentLayers(true);
 }
 
 KisFilterConfigurationSP KisFilterWave::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
@@ -172,6 +172,11 @@ QRect KisFilterWave::changedRect(const QRect &rect, const KisFilterConfiguration
     int horizontalamplitude = (config && config->getProperty("horizontalamplitude", value)) ? value.toInt() : 4;
     int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
     return rect.adjusted(-horizontalamplitude, -verticalamplitude, horizontalamplitude, verticalamplitude);
+}
+
+QRect KisFilterWave::neededRect(const QRect& rect, const KisFilterConfigurationSP config, int lod) const
+{
+    return changedRect(rect, config, lod);
 }
 
 #include "wavefilter.moc"

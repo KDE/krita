@@ -150,6 +150,11 @@ public:
     /// Handle the cursor-related key events.
     void keyPressEvent(QKeyEvent *event);
 
+    /// Whether the last command may have been set by the cursor.
+    bool cursorInsertedCommand();
+    /// Unset the boolean of the above.
+    void unsetCursorInsertedCommand();
+
 Q_SIGNALS:
 
     void updateCursorDecoration(QRectF updateRect);

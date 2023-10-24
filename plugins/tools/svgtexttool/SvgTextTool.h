@@ -82,6 +82,9 @@ public:
     bool hasSelection() override;
     /// reimplemented from superclass
     KoToolSelection * selection() override;
+    
+    void requestStrokeEnd() override;
+    void requestStrokeCancellation() override;
 
 protected:
     /// reimplemented from KoToolBase

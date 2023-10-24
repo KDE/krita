@@ -370,6 +370,40 @@ KoToolSelection *SvgTextTool::selection()
     return &m_textCursor;
 }
 
+void SvgTextTool::requestStrokeEnd()
+{
+    qDebug() << Q_FUNC_INFO << m_textCursor.cursorInsertedCommand();
+    if (m_textCursor.cursorInsertedCommand()) {
+        m_textCursor.unsetCursorInsertedCommand();
+    } else {
+        if (m_interactionStrategy) {
+            m_dragging = DragMode::None;
+            m_interactionStrategy->finishInteraction(Qt::KeyboardModifier::NoModifier);
+            m_interactionStrategy = nullptr;
+            useCursor(Qt::ArrowCursor);
+        } else if (isInTextMode()) {
+            canvas()->shapeManager()->selection()->deselectAll();
+        }
+    }
+}
+
+void SvgTextTool::requestStrokeCancellation()
+{
+    qDebug() << Q_FUNC_INFO << m_textCursor.cursorInsertedCommand();
+    if (m_textCursor.cursorInsertedCommand()) {
+        m_textCursor.unsetCursorInsertedCommand();
+    } else {
+        if (m_interactionStrategy) {
+            m_dragging = DragMode::None;
+            m_interactionStrategy->cancelInteraction();
+            m_interactionStrategy = nullptr;
+            useCursor(Qt::ArrowCursor);
+        } else if (isInTextMode()) {
+            canvas()->shapeManager()->selection()->deselectAll();
+        }
+    }
+}
+
 void SvgTextTool::slotUpdateCursorDecoration(QRectF updateRect)
 {
     if (canvas()) {
@@ -655,28 +689,13 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
         m_interactionStrategy->handleMouseMove(m_lastMousePos, event->modifiers());
         event->accept();
         return;
+    } else if (event->key() == Qt::Key_Escape) {
+        event->ignore();
     } else {
-        if (event->key() == Qt::Key_Escape) {
-            canvas()->shapeManager()->selection()->deselectAll();
-            event->accept();
-        } else {
-            m_textCursor.keyPressEvent(event);
-        }
+        m_textCursor.keyPressEvent(event);
     }
 
-    if (m_interactionStrategy) {
-        if (event->key() == Qt::Key_Escape) {
-            m_dragging = DragMode::None;
-            m_interactionStrategy->cancelInteraction();
-            m_interactionStrategy = nullptr;
-            useCursor(Qt::ArrowCursor);
-            event->accept();
-        } else {
-            event->ignore();
-        }
-    } else {
-        event->ignore();
-    }
+    event->ignore();
 }
 
 void SvgTextTool::keyReleaseEvent(QKeyEvent *event)

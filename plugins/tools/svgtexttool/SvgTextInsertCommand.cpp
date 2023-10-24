@@ -15,6 +15,8 @@ SvgTextInsertCommand::SvgTextInsertCommand(KoSvgTextShape *shape, int pos, int a
     , m_anchor(anchor)
     , m_text(text)
 {
+    setText(kundo2_i18n("Insert Text"));
+
     QRegExp exp;
     // This replaces...
     // - carriage return

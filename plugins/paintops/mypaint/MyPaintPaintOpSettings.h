@@ -25,6 +25,9 @@ public:
     void setPaintOpSize(qreal value) override;
     qreal paintOpSize() const override;
 
+    void setPaintOpAngle(qreal value) override;
+    qreal paintOpAngle() const override;
+
     void setPaintOpOpacity(qreal value) override;
     qreal paintOpOpacity() override;
 

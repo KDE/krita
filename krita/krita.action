@@ -840,6 +840,54 @@
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
+    <Action name="rotate_brush_tip_clockwise">
+      <icon/>
+      <text>Rotate brush tip clockwise</text>
+      <whatsThis/>
+      <toolTip>Rotate brush tip clockwise</toolTip>
+      <iconText>Rotate brush tip clockwise</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="rotate_brush_tip_clockwise_precise">
+      <icon/>
+      <text>Rotate brush tip clockwise (precise)</text>
+      <whatsThis/>
+      <toolTip>Rotate brush tip clockwise (precise)</toolTip>
+      <iconText>Rotate brush tip clockwise (precise)</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="rotate_brush_tip_counter_clockwise">
+      <icon/>
+      <text>Rotate brush tip counter-clockwise</text>
+      <whatsThis/>
+      <toolTip>Rotate brush tip counter-clockwise</toolTip>
+      <iconText>Rotate brush tip counter-clockwise</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="rotate_brush_tip_counter_clockwise_precise">
+    <icon/>
+    <text>Rotate brush tip counter-clockwise (precise)</text>
+    <whatsThis/>
+    <toolTip>Rotate brush tip counter-clockwise (precise)</toolTip>
+    <iconText>Rotate brush tip counter-clockwise (precise)</iconText>
+    <activationFlags>0</activationFlags>
+    <activationConditions>0</activationConditions>
+    <shortcut/>
+    <isCheckable>false</isCheckable>
+    <statusTip/>
+  </Action>
     <Action name="toggle_assistant">
       <icon/>
       <text>Toggle Snap To Assistants</text>

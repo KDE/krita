@@ -199,6 +199,11 @@ void KisToolPaint::activate(const QSet<KoShape*> &shapes)
 
     }
 
+    connect(action("rotate_brush_tip_clockwise"), SIGNAL(triggered()), SLOT(rotateBrushTipClockwise()), Qt::UniqueConnection);
+    connect(action("rotate_brush_tip_clockwise_precise"), SIGNAL(triggered()), SLOT(rotateBrushTipClockwisePrecise()), Qt::UniqueConnection);
+    connect(action("rotate_brush_tip_counter_clockwise"), SIGNAL(triggered()), SLOT(rotateBrushTipCounterClockwise()), Qt::UniqueConnection);
+    connect(action("rotate_brush_tip_counter_clockwise_precise"), SIGNAL(triggered()), SLOT(rotateBrushTipCounterClockwisePrecise()), Qt::UniqueConnection);
+
     tryRestoreOpacitySnapshot();
 }
 
@@ -208,6 +213,11 @@ void KisToolPaint::deactivate()
         disconnect(action("increase_brush_size"), 0, this, 0);
         disconnect(action("decrease_brush_size"), 0, this, 0);
     }
+
+    disconnect(action("rotate_brush_tip_clockwise"), 0, this, 0);
+    disconnect(action("rotate_brush_tip_clockwise_precise"), 0, this, 0);
+    disconnect(action("rotate_brush_tip_counter_clockwise"), 0, this, 0);
+    disconnect(action("rotate_brush_tip_counter_clockwise_precise"), 0, this, 0);
 
     tryRestoreOpacitySnapshot();
     emit statusTextChanged(QString());
@@ -580,6 +590,34 @@ void KisToolPaint::showBrushSize()
      KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
      kisCanvas->viewManager()->showFloatingMessage(i18n("Brush Size: %1 px", currentPaintOpPreset()->settings()->paintOpSize())
                                                    , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+}
+
+void KisToolPaint::rotateBrushTipClockwise()
+{
+    const qreal angle = currentPaintOpPreset()->settings()->paintOpAngle();
+    currentPaintOpPreset()->settings()->setPaintOpAngle(angle - 15);
+    requestUpdateOutline(m_outlineDocPoint, 0);
+}
+
+void KisToolPaint::rotateBrushTipClockwisePrecise()
+{
+    const qreal angle = currentPaintOpPreset()->settings()->paintOpAngle();
+    currentPaintOpPreset()->settings()->setPaintOpAngle(angle - 1);
+    requestUpdateOutline(m_outlineDocPoint, 0);
+}
+
+void KisToolPaint::rotateBrushTipCounterClockwise()
+{
+    const qreal angle = currentPaintOpPreset()->settings()->paintOpAngle();
+    currentPaintOpPreset()->settings()->setPaintOpAngle(angle + 15);
+    requestUpdateOutline(m_outlineDocPoint, 0);
+}
+
+void KisToolPaint::rotateBrushTipCounterClockwisePrecise()
+{
+    const qreal angle = currentPaintOpPreset()->settings()->paintOpAngle();
+    currentPaintOpPreset()->settings()->setPaintOpAngle(angle + 1);
+    requestUpdateOutline(m_outlineDocPoint, 0);
 }
 
 void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)

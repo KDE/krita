@@ -142,19 +142,6 @@ KisOptimizedBrushOutline KisBrushBasedPaintOpSettings::brushOutline(const KisPai
     return brushOutlineImpl(info, mode, alignForZoom, 1.0);
 }
 
-void KisBrushBasedPaintOpSettings::setAngle(qreal value)
-{
-    BrushWriter w(this);
-    if (!w.brush()) return;
-    w.brush()->setAngle(value);
-}
-
-qreal KisBrushBasedPaintOpSettings::angle()
-{
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), 0.0);
-    return this->brush()->angle();
-}
-
 void KisBrushBasedPaintOpSettings::setSpacing(qreal value)
 {
     BrushWriter w(this);
@@ -202,6 +189,22 @@ qreal KisBrushBasedPaintOpSettings::paintOpSize() const
     return this->brush()->userEffectiveSize();
 }
 
+void KisBrushBasedPaintOpSettings::setPaintOpAngle(qreal value)
+{
+    BrushWriter w(this);
+    if (!w.brush()) return;
+
+    value = normalizeAngleDegrees(value);
+    value = kisDegreesToRadians(value);
+    w.brush()->setAngle(value);
+}
+
+qreal KisBrushBasedPaintOpSettings::paintOpAngle() const
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), 0.0);
+    const qreal value = kisRadiansToDegrees(this->brush()->angle());
+    return value;
+}
 
 
 #include <brushengine/kis_slider_based_paintop_property.h>
@@ -229,15 +232,14 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                     KisBrushBasedPaintOpSettings *s =
                         dynamic_cast<KisBrushBasedPaintOpSettings*>(prop->settings().data());
 
-                    const qreal angleResult = kisRadiansToDegrees(s->angle());
-                    prop->setValue(angleResult);
+                    prop->setValue(s->paintOpAngle());
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
                     KisBrushBasedPaintOpSettings *s =
                         dynamic_cast<KisBrushBasedPaintOpSettings*>(prop->settings().data());
 
-                    s->setAngle(kisDegreesToRadians(prop->value().toReal()));
+                    s->setPaintOpAngle(prop->value().toReal());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));

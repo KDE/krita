@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-22 00:41+0000\n"
+"POT-Creation-Date: 2023-10-24 00:40+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -17618,7 +17618,7 @@ msgid "Set Image Resolution"
 msgstr "Бет мосламалари"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move"
@@ -17740,7 +17740,7 @@ msgstr "Филтерни танлаш"
 msgid "Gaussian"
 msgstr "Жорий бўлим"
 
-#: libs/image/kis_clone_layer.cpp:320
+#: libs/image/kis_clone_layer.cpp:321
 #, fuzzy, kde-format
 #| msgid "Green"
 msgid "Copy From"
@@ -17886,16 +17886,11 @@ msgid "Change Image Resolution"
 msgstr "Табуляцияни ўзгартириш"
 
 #: libs/image/kis_image.cc:1037
-#, fuzzy
+#, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
-msgstr "Намунани яратиш"
-
-#: libs/image/kis_image.cc:1037
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Scale Layers"
-msgstr "Намунани яратиш"
+msgid_plural "Scale %1 Layers"
+msgstr[0] "Намунани яратиш"
 
 #: libs/image/kis_image.cc:1178
 #, fuzzy
@@ -17904,82 +17899,72 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Матнни қўйиш"
 
-#: libs/image/kis_image.cc:1189
+#: libs/image/kis_image.cc:1188
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Матнни ўчириш"
 
 #: libs/image/kis_image.cc:1191
-#, fuzzy
+#, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
-msgstr "Намунани яратиш"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] "Намунани яратиш"
 
-#: libs/image/kis_image.cc:1195
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Rotate Layers"
-msgstr "Намунани яратиш"
-
-#: libs/image/kis_image.cc:1296
+#: libs/image/kis_image.cc:1291
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Матнни ўчириш"
 
-#: libs/image/kis_image.cc:1299
-#, fuzzy
+#: libs/image/kis_image.cc:1295
+#, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
-msgstr "Матнни ўчириш"
+msgid_plural "Shear %1 Layers"
+msgstr[0] "Матнни ўчириш"
 
-#: libs/image/kis_image.cc:1304
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Shear Layers"
-msgstr "Матнни ўчириш"
-
-#: libs/image/kis_image.cc:1311
+#: libs/image/kis_image.cc:1302
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Матнни ўчириш"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1320
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Намунани яратиш"
 
-#: libs/image/kis_image.cc:1380
+#: libs/image/kis_image.cc:1371
 #, fuzzy
 #| msgid "Color:"
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Ранги:"
 
-#: libs/image/kis_image.cc:1381
+#: libs/image/kis_image.cc:1372
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Намунани яратиш"
 
-#: libs/image/kis_image.cc:1439
+#: libs/image/kis_image.cc:1430
 #, fuzzy
 #| msgid "Right indent"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Ўнгдан бўш жой"
 
-#: libs/image/kis_image.cc:1480
+#: libs/image/kis_image.cc:1471
 #, fuzzy
 #| msgid "Missing Export Filter"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Экспорт филтери етишмаяпти"
 
-#: libs/image/kis_image.cc:2540
+#: libs/image/kis_image.cc:2531
 #, fuzzy
 #| msgid "Current Section"
 msgctxt "(qtundo-format)"
@@ -18662,7 +18647,7 @@ msgid "Clone Layer"
 msgstr "Намунани яратиш"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1535
+#: libs/ui/kis_node_manager.cpp:1527
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -18711,7 +18696,7 @@ msgid "Transform Mask"
 msgstr "Ранги:"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1315
+#: libs/ui/kis_node_manager.cpp:1307
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -20363,8 +20348,8 @@ msgstr "Ҳужжатни импорт қилиш"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1239
-#: libs/ui/kis_node_manager.cpp:1302 libs/ui/KisApplication.cpp:1011
+#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1011
 #: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
 #: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
 #: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
@@ -28729,12 +28714,8 @@ msgstr "Бетнинг ўлчами"
 #: libs/ui/imagesize/imagesize.cc:126
 #, fuzzy, kde-format
 msgid "Resize Layer"
-msgstr "Намунани яратиш"
-
-#: libs/ui/imagesize/imagesize.cc:126
-#, fuzzy, kde-format
-msgid "Resize Layers"
-msgstr "Намунани яратиш"
+msgid_plural "Resize %1 Layers"
+msgstr[0] "Намунани яратиш"
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, fuzzy, kde-format
@@ -30430,62 +30411,52 @@ msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Боғни олиб ташлаш"
 
-#: libs/ui/kis_node_manager.cpp:1039
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgstr "Қизил"
-
-#: libs/ui/kis_node_manager.cpp:1041
+#: libs/ui/kis_node_manager.cpp:1038
 #, fuzzy
 #| msgid "Error!"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask X"
 msgstr "Хато!"
 
-#: libs/ui/kis_node_manager.cpp:1045
-#, fuzzy
+#: libs/ui/kis_node_manager.cpp:1041
+#, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers X"
-msgstr "Қизил"
+msgid "Mirror Layer X"
+msgid_plural "Mirror %1 Layers X"
+msgstr[0] "Қизил"
 
-#: libs/ui/kis_node_manager.cpp:1057
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgstr "Қизил"
-
-#: libs/ui/kis_node_manager.cpp:1059
+#: libs/ui/kis_node_manager.cpp:1052
 #, fuzzy
 #| msgid "Error!"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Y"
 msgstr "Хато!"
 
-#: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
+#: libs/ui/kis_node_manager.cpp:1055
+#, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers Y"
-msgstr "Қизил"
+msgid "Mirror Layer Y"
+msgid_plural "Mirror %1 Layers Y"
+msgstr[0] "Қизил"
 
-#: libs/ui/kis_node_manager.cpp:1071
+#: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers X"
 msgstr "Қизил"
 
-#: libs/ui/kis_node_manager.cpp:1078
+#: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Y"
 msgstr "Қизил"
 
-#: libs/ui/kis_node_manager.cpp:1210
+#: libs/ui/kis_node_manager.cpp:1202
 #, fuzzy, kde-format
 msgid "Export \"%1\""
 msgstr "&Экспорт қилиш"
 
-#: libs/ui/kis_node_manager.cpp:1240
+#: libs/ui/kis_node_manager.cpp:1232
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -30495,20 +30466,20 @@ msgstr ""
 "%1\n"
 "файлини сақлаб бўлмади."
 
-#: libs/ui/kis_node_manager.cpp:1258
+#: libs/ui/kis_node_manager.cpp:1250
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "%1 файли мавжуд эмас."
 
-#: libs/ui/kis_node_manager.cpp:1282
+#: libs/ui/kis_node_manager.cpp:1274
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "&Экспорт қилиш"
 
-#: libs/ui/kis_node_manager.cpp:1302
+#: libs/ui/kis_node_manager.cpp:1294
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -30518,71 +30489,71 @@ msgstr ""
 "%1\n"
 "файлини сақлаб бўлмади."
 
-#: libs/ui/kis_node_manager.cpp:1328
+#: libs/ui/kis_node_manager.cpp:1320
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "%1 файли мавжуд эмас."
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1321
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1360
+#: libs/ui/kis_node_manager.cpp:1352
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Матнни ўчириш"
 
-#: libs/ui/kis_node_manager.cpp:1483
+#: libs/ui/kis_node_manager.cpp:1475
 #, fuzzy
 #| msgid "None"
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Йўқ"
 
-#: libs/ui/kis_node_manager.cpp:1565
+#: libs/ui/kis_node_manager.cpp:1557
 #, fuzzy
 #| msgid "Group:"
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Гуруҳ:"
 
-#: libs/ui/kis_node_manager.cpp:1576
+#: libs/ui/kis_node_manager.cpp:1568
 #, fuzzy
 #| msgid "Group:"
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Гуруҳ:"
 
-#: libs/ui/kis_node_manager.cpp:1583
+#: libs/ui/kis_node_manager.cpp:1575
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Гуруҳ:"
 
-#: libs/ui/kis_node_manager.cpp:1584
+#: libs/ui/kis_node_manager.cpp:1576
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Қизил"
 
-#: libs/ui/kis_node_manager.cpp:1611
+#: libs/ui/kis_node_manager.cpp:1603
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1614
+#: libs/ui/kis_node_manager.cpp:1606
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1622
+#: libs/ui/kis_node_manager.cpp:1614
 #, fuzzy
 #| msgid "Group:"
 msgctxt "(qtundo-format)"
@@ -39106,6 +39077,17 @@ msgstr ""
 msgid "Zoom view to fit curve."
 msgstr "Жорий бўлим"
 
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
+#, fuzzy
+#| msgid ""
+#| "Could not save %1\n"
+#| "Reason: %2"
+msgctxt "(qtundo-format)"
+msgid "Add Scalar Keyframes"
+msgstr ""
+"%1 файлини сақлаб бўлмади.\n"
+"Сабаб: %2"
+
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -43977,23 +43959,19 @@ msgctxt "@title:window"
 msgid "Offset Image"
 msgstr "Матнни қўйиш"
 
-#: plugins/extensions/offsetimage/offsetimage.cpp:80
+#: plugins/extensions/offsetimage/offsetimage.cpp:81
 #, fuzzy, kde-format
 msgctxt "@title:window"
-msgid "Offset Layers"
-msgstr "Намунани яратиш"
+msgid "Offset Layer"
+msgid_plural "Offset %1 Layers"
+msgstr[0] "Намунани яратиш"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
-#, fuzzy
+#, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
-msgstr "Намунани яратиш"
-
-#: plugins/extensions/offsetimage/offsetimage.cpp:85
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Offset Layers"
-msgstr "Намунани яратиш"
+msgid_plural "Offset %1 Layers"
+msgstr[0] "Намунани яратиш"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -44991,12 +44969,8 @@ msgstr "&Энига"
 #: plugins/extensions/rotateimage/rotateimage.cc:148
 #, fuzzy, kde-format
 msgid "Rotate Layer"
-msgstr "Намунани яратиш"
-
-#: plugins/extensions/rotateimage/rotateimage.cc:148
-#, fuzzy, kde-format
-msgid "Rotate Layers"
-msgstr "Намунани яратиш"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] "Намунани яратиш"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -45142,12 +45116,8 @@ msgstr "Матнни ўчириш"
 #: plugins/extensions/shearimage/shearimage.cc:76
 #, fuzzy, kde-format
 msgid "Shear Layer"
-msgstr "Матнни ўчириш"
-
-#: plugins/extensions/shearimage/shearimage.cc:76
-#, fuzzy, kde-format
-msgid "Shear Layers"
-msgstr "Матнни ўчириш"
+msgid_plural "Shear %1 Layers"
+msgstr[0] "Матнни ўчириш"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -47114,6 +47084,13 @@ msgstr "Скрипт"
 #, kde-format
 msgid "Size of the window:"
 msgstr ""
+
+#: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
+#: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
+#, fuzzy, kde-format
+#| msgid "Color:"
+msgid "Reset Transparent"
+msgstr "Ранги:"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, fuzzy, kde-format
@@ -49989,86 +49966,86 @@ msgid ""
 "layer will be converted into a paint layer."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Сақлаш учун файлни яратиб бўлмади"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create transform mask params"
 msgstr "Сақлаш учун файлни яратиб бўлмади"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
 #, fuzzy, kde-format
 #| msgid "Could not read the package \"%1\"."
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "'%1' пакетини ўқиб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
 #, fuzzy, kde-format
 #| msgid "Could not read the package \"%1\"."
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "'%1' пакетини ўқиб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
 #, fuzzy, kde-format
 #| msgid "Could not read the package \"%1\"."
 msgid "Could not read pixel data: %1."
 msgstr "'%1' пакетини ўқиб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
 #, fuzzy, kde-format
 #| msgid "Could not load picture."
 msgid "Could not load pixel data: %1."
 msgstr "Расмни юклаб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
 #, fuzzy, kde-format
 #| msgid "Could not load picture."
 msgid "Could not load profile: %1."
 msgstr "Расмни юклаб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
 #, fuzzy, kde-format
 #| msgid "Could not find %1"
 msgid "Could not filter configuration %1."
 msgstr "%1 топилмади"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
 #, fuzzy, kde-format
 #| msgid "Could not read the package \"%1\"."
 msgid "Could not load metadata for layer %1."
 msgstr "'%1' пакетини ўқиб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
 #, fuzzy, kde-format
 #| msgid "Could not load picture."
 msgid "Could not load vector selection %1."
 msgstr "Расмни юклаб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
 #, fuzzy, kde-format
 #| msgid "Could not read the package \"%1\"."
 msgid "Could not load raster selection %1."
 msgstr "'%1' пакетини ўқиб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
 #, fuzzy, kde-format
 #| msgid "Could not read the package \"%1\"."
 msgid "Could not load keyframes from %1."
 msgstr "'%1' пакетини ўқиб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
 "Error message: %4"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
 #, fuzzy, kde-format
 #| msgid "Could not read the package \"%1\"."
 msgid "unknown keyframe channel type: %1 in %2"
@@ -56018,7 +55995,7 @@ msgid "Percentage:"
 msgstr "Чегараларни ўзгартириш"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:209
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:265
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:266
 #, fuzzy
 #| msgid "Document Subject"
 msgid "Export Settings"
@@ -56832,36 +56809,36 @@ msgstr "Таърифи:"
 msgid "Comics Manager"
 msgstr "Хатчўпнинг номи:"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:247
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:248
 #, fuzzy
 #| msgid "Current Section"
 msgid "New Project"
 msgstr "Жорий бўлим"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:249
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:250
 #, fuzzy
 #| msgid "Open Document"
 msgid "Open Project"
 msgstr "Ҳужжатни очиш"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:261
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:262
 #, fuzzy
 #| msgid "Document Subject"
 msgid "Project Settings"
 msgstr "Ҳужжатнинг мавзуси"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:264
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 #, fuzzy
 msgid "Meta Data"
 msgstr "Боғни қўйиш"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:281
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:282
 #, fuzzy
 msgid "Add Page"
 msgstr "Тўлқин"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:283
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:284
 #, fuzzy
 #| msgid ""
 #| "Could not save %1\n"
@@ -56871,140 +56848,140 @@ msgstr ""
 "%1 файлини сақлаб бўлмади.\n"
 "Сабаб: %2"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:285
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:286
 #, fuzzy
 msgid "Add Existing Pages"
 msgstr "Қизил"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:287
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
 #, fuzzy
 msgid "Remove Page"
 msgstr "Матнни ўчириш"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:289
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
 #, fuzzy
 msgid "Batch Resize"
 msgstr "Тиклаш"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:292
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
 #, fuzzy
 #| msgid "&Split View"
 msgid "View Page In Window"
 msgstr "Кўр&инишни бўлиш"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:294
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 #, fuzzy
 #| msgid "Author"
 msgid "Scrape Author Info"
 msgstr "Муаллиф"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
 msgid ""
 "Search for author information in documents and add it to the author list. "
 "This does not check for duplicates."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:297
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
 msgid "Scrape Text for Translation"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:318
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:319
 #, fuzzy
 #| msgid "Position"
 msgid "Export Comic"
 msgstr "Жойлашиши"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:323
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
 #, fuzzy
 #| msgid "Position"
 msgid "Copy Location"
 msgstr "Жойлашиши"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
 msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "Please select the JSON comic config file."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "JSON files"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid "Config cannot be used"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
 "be written to."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:378
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:379
 #, fuzzy
 #| msgid "Import Document"
 msgid "Loading Pages..."
 msgstr "Ҳужжатни импорт қилиш"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:118
 #, fuzzy
 msgid "Krita files"
 msgstr "Сана:"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
 msgid "Which existing pages to add?"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:591
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:610
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:592
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:611
 #, fuzzy
 #| msgid "Create Template"
 msgid "Where are the templates located?"
 msgstr "Намунани яратиш"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:634
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:635
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:113
 #, fuzzy
 #| msgid "Create Template"
 msgid "Where should the pages go?"
 msgstr "Намунани яратиш"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 msgid "Which image should be the basis the new page?"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 #, fuzzy
 msgid "Export success"
 msgstr "&Экспорт қилиш"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "The files have been written to the export folder."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:883
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:884
 #, fuzzy
 msgid "Resize all Pages"
 msgstr "Матнни ўчириш"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:894
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
 #, fuzzy
 msgid "Resizing pages..."
 msgstr "Матнни ўчириш"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:896
 #, fuzzy
 msgid "Resizing Pages"
 msgstr "Бетга мослаш"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:909
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -57012,12 +56989,12 @@ msgid ""
 " Estimated:{estimated}"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 #, fuzzy
 msgid "Scraping success"
 msgstr "&Экспорт қилиш"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr ""
@@ -61947,21 +61924,21 @@ msgstr ""
 msgid "Transform Tool Actions"
 msgstr "Ранги:"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
 #, fuzzy, kde-format
 #| msgid "More Line Colors..."
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Кўпроқ чизиқ ранглари"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:868
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
 #, fuzzy, kde-format
 #| msgid "More Line Colors..."
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "Кўпроқ чизиқ ранглари"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:888
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -61969,20 +61946,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:902
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -62135,8 +62112,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr ""
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
 #, fuzzy
 #| msgid "Color:"
 msgctxt "(qtundo-format)"
@@ -62776,6 +62753,53 @@ msgstr "Ранги:"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "&Алмаштириш:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale Layers"
+#~ msgstr "Намунани яратиш"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate Layers"
+#~ msgstr "Намунани яратиш"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Layers"
+#~ msgstr "Матнни ўчириш"
+
+#, fuzzy
+#~ msgid "Resize Layers"
+#~ msgstr "Намунани яратиш"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers X"
+#~ msgstr "Қизил"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers Y"
+#~ msgstr "Қизил"
+
+#, fuzzy
+#~ msgctxt "@title:window"
+#~ msgid "Offset Layers"
+#~ msgstr "Намунани яратиш"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset Layers"
+#~ msgstr "Намунани яратиш"
+
+#, fuzzy
+#~ msgid "Rotate Layers"
+#~ msgstr "Намунани яратиш"
+
+#, fuzzy
+#~ msgid "Shear Layers"
+#~ msgstr "Матнни ўчириш"
 
 #, fuzzy
 #~ msgid "Saturation [*varies*]: "

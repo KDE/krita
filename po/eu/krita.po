@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-22 00:41+0000\n"
+"POT-Creation-Date: 2023-10-24 00:40+0000\n"
 "PO-Revision-Date: 2023-08-26 10:02+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -16986,7 +16986,7 @@ msgid "Set Image Resolution"
 msgstr "Ezarri irudi-bereizmena"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr "Lekuz aldatu"
@@ -17096,7 +17096,7 @@ msgstr "Biguna"
 msgid "Gaussian"
 msgstr "Gaussen lausotzea"
 
-#: libs/image/kis_clone_layer.cpp:320
+#: libs/image/kis_clone_layer.cpp:321
 #, kde-format
 msgid "Copy From"
 msgstr "Kopiatu hemendik"
@@ -17244,90 +17244,81 @@ msgid "Change Image Resolution"
 msgstr "Aldatu irudi-bereizmena"
 
 #: libs/image/kis_image.cc:1037
-msgctxt "(qtundo-format)"
-msgid "Scale Layer"
-msgstr "Eskalatu geruza"
-
-#: libs/image/kis_image.cc:1037
-#, fuzzy
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
-msgid "Scale Layers"
-msgstr "Eskalatu geruza"
+msgid "Scale Layer"
+msgid_plural "Scale %1 Layers"
+msgstr[0] "Eskalatu geruza"
+msgstr[1] "Eskalatu geruza"
 
 #: libs/image/kis_image.cc:1178
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Biratu irudia"
 
-#: libs/image/kis_image.cc:1189
+#: libs/image/kis_image.cc:1188
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Biratu maskara"
 
 #: libs/image/kis_image.cc:1191
-msgctxt "(qtundo-format)"
-msgid "Rotate Layer"
-msgstr "Biratu geruza"
-
-#: libs/image/kis_image.cc:1195
-#, fuzzy
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
-msgid "Rotate Layers"
-msgstr "Biratu geruza"
+msgid "Rotate Layer"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] "Biratu geruza"
+msgstr[1] "Biratu geruza"
 
-#: libs/image/kis_image.cc:1296
+#: libs/image/kis_image.cc:1291
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Zizailatu maskara"
 
-#: libs/image/kis_image.cc:1299
-msgctxt "(qtundo-format)"
-msgid "Shear Layer"
-msgstr "Zizailatu geruza"
-
-#: libs/image/kis_image.cc:1304
-#, fuzzy
+#: libs/image/kis_image.cc:1295
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
-msgid "Shear Layers"
-msgstr "Zizailatu geruza"
+msgid "Shear Layer"
+msgid_plural "Shear %1 Layers"
+msgstr[0] "Zizailatu geruza"
+msgstr[1] "Zizailatu geruza"
 
-#: libs/image/kis_image.cc:1311
+#: libs/image/kis_image.cc:1302
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Zizailatu irudia"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1320
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Bihurtu geruzako kolore-eremua"
 
-#: libs/image/kis_image.cc:1380
+#: libs/image/kis_image.cc:1371
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Bihurtu irudiko kolore-eremua"
 
-#: libs/image/kis_image.cc:1381
+#: libs/image/kis_image.cc:1372
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Bihurtu proiekzioko kolore-eremua"
 
-#: libs/image/kis_image.cc:1439
+#: libs/image/kis_image.cc:1430
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Esleitu profila geruzari"
 
-#: libs/image/kis_image.cc:1480
+#: libs/image/kis_image.cc:1471
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Esleitu profila"
 
-#: libs/image/kis_image.cc:2540
+#: libs/image/kis_image.cc:2531
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Moztu hautapenak"
@@ -17952,7 +17943,7 @@ msgid "Clone Layer"
 msgstr "Klon-geruza"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1535
+#: libs/ui/kis_node_manager.cpp:1527
 #, fuzzy, kde-format
 #| msgid "Group"
 msgctxt "A group of layers"
@@ -17997,7 +17988,7 @@ msgid "Transform Mask"
 msgstr "Eraldatze maskara"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1315
+#: libs/ui/kis_node_manager.cpp:1307
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19598,8 +19589,8 @@ msgstr "Baliabide lokalak"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1239
-#: libs/ui/kis_node_manager.cpp:1302 libs/ui/KisApplication.cpp:1011
+#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1011
 #: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
 #: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
 #: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
@@ -27912,15 +27903,12 @@ msgid "Layer Size"
 msgstr "Geruzaren tamaina"
 
 #: libs/ui/imagesize/imagesize.cc:126
-#, kde-format
-msgid "Resize Layer"
-msgstr "Tamaina aldatu geruzari"
-
-#: libs/ui/imagesize/imagesize.cc:126
 #, fuzzy, kde-format
 #| msgid "Resize Layer"
-msgid "Resize Layers"
-msgstr "Tamaina aldatu geruzari"
+msgid "Resize Layer"
+msgid_plural "Resize %1 Layers"
+msgstr[0] "Tamaina aldatu geruzari"
+msgstr[1] "Tamaina aldatu geruzari"
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, kde-format
@@ -29529,86 +29517,80 @@ msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Kendu nodoak"
 
-#: libs/ui/kis_node_manager.cpp:1039
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgstr "Islatu geruza X"
-
-#: libs/ui/kis_node_manager.cpp:1041
+#: libs/ui/kis_node_manager.cpp:1038
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask X"
 msgstr "Islatu maskara X"
 
-#: libs/ui/kis_node_manager.cpp:1045
-#, fuzzy
+#: libs/ui/kis_node_manager.cpp:1041
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers X"
-msgstr "Islatu geruza X"
+msgid "Mirror Layer X"
+msgid_plural "Mirror %1 Layers X"
+msgstr[0] "Islatu geruza X"
+msgstr[1] "Islatu geruza X"
 
-#: libs/ui/kis_node_manager.cpp:1057
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgstr "Islatu geruza Y"
-
-#: libs/ui/kis_node_manager.cpp:1059
+#: libs/ui/kis_node_manager.cpp:1052
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Y"
 msgstr "Islatu maskara Y"
 
-#: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
+#: libs/ui/kis_node_manager.cpp:1055
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers Y"
-msgstr "Islatu geruza Y"
+msgid "Mirror Layer Y"
+msgid_plural "Mirror %1 Layers Y"
+msgstr[0] "Islatu geruza Y"
+msgstr[1] "Islatu geruza Y"
 
-#: libs/ui/kis_node_manager.cpp:1071
+#: libs/ui/kis_node_manager.cpp:1063
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers X"
 msgstr "Islatu geruza denak X"
 
-#: libs/ui/kis_node_manager.cpp:1078
+#: libs/ui/kis_node_manager.cpp:1070
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Y"
 msgstr "Islatu geruza denak Y"
 
-#: libs/ui/kis_node_manager.cpp:1210
+#: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Esportatu «%1»"
 
-#: libs/ui/kis_node_manager.cpp:1240
+#: libs/ui/kis_node_manager.cpp:1232
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Ezin izan du geruza gorde. %1"
 
-#: libs/ui/kis_node_manager.cpp:1258
+#: libs/ui/kis_node_manager.cpp:1250
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Geruzak ez du pixelen daturik"
 
-#: libs/ui/kis_node_manager.cpp:1282
+#: libs/ui/kis_node_manager.cpp:1274
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Esportatu SVG gisa"
 
-#: libs/ui/kis_node_manager.cpp:1302
+#: libs/ui/kis_node_manager.cpp:1294
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Ezin izan du SVG gisa gorde: %1"
 
-#: libs/ui/kis_node_manager.cpp:1328
+#: libs/ui/kis_node_manager.cpp:1320
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "%1 geruza ezin da editatu"
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1321
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -29617,50 +29599,50 @@ msgstr ""
 "Ezin du idatzi «%1» guraso geruzako alfa kanala.\n"
 "Eragiketa utzi egingo du."
 
-#: libs/ui/kis_node_manager.cpp:1360
+#: libs/ui/kis_node_manager.cpp:1352
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Idatzi alfa geruza batean"
 
-#: libs/ui/kis_node_manager.cpp:1483
+#: libs/ui/kis_node_manager.cpp:1475
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Ebaki nodoak"
 
-#: libs/ui/kis_node_manager.cpp:1565
+#: libs/ui/kis_node_manager.cpp:1557
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Taldekatze azkarra"
 
-#: libs/ui/kis_node_manager.cpp:1576
+#: libs/ui/kis_node_manager.cpp:1568
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Mozketa azkarreko taldea"
 
-#: libs/ui/kis_node_manager.cpp:1583
+#: libs/ui/kis_node_manager.cpp:1575
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Mozketa taldea"
 
-#: libs/ui/kis_node_manager.cpp:1584
+#: libs/ui/kis_node_manager.cpp:1576
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Maskara geruza"
 
-#: libs/ui/kis_node_manager.cpp:1611
+#: libs/ui/kis_node_manager.cpp:1603
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1614
+#: libs/ui/kis_node_manager.cpp:1606
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Ipini geruza bakoitza bere geruza-talde bereizi propioan"
 
-#: libs/ui/kis_node_manager.cpp:1622
+#: libs/ui/kis_node_manager.cpp:1614
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Talde-banatze azkarra"
@@ -38041,6 +38023,14 @@ msgstr "Ikuspegiari zoom kanal barrutira egokitzeko."
 msgid "Zoom view to fit curve."
 msgstr "Ikuspegiaren zooma kurbara egokitzeko."
 
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Add scalar keyframes"
+msgctxt "(qtundo-format)"
+msgid "Add Scalar Keyframes"
+msgstr "Gehitu gako-fotograma eskalarra"
+
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
 msgid "Adjust keyframe"
@@ -42670,26 +42660,25 @@ msgctxt "@title:window"
 msgid "Offset Image"
 msgstr "Jatorri-aldatu irudiari"
 
-#: plugins/extensions/offsetimage/offsetimage.cpp:80
+#: plugins/extensions/offsetimage/offsetimage.cpp:81
 #, fuzzy, kde-format
-#| msgctxt "@title:window"
+#| msgctxt "(qtundo-format)"
 #| msgid "Offset Layer"
 msgctxt "@title:window"
-msgid "Offset Layers"
-msgstr "Jatorri-aldaketa geruza"
-
-#: plugins/extensions/offsetimage/offsetimage.cpp:85
-msgctxt "(qtundo-format)"
 msgid "Offset Layer"
-msgstr "Jatorri-aldaketa geruza"
+msgid_plural "Offset %1 Layers"
+msgstr[0] "Jatorri-aldaketa geruza"
+msgstr[1] "Jatorri-aldaketa geruza"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
-#, fuzzy
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
-msgid "Offset Layers"
-msgstr "Jatorri-aldaketa geruza"
+msgid "Offset Layer"
+msgid_plural "Offset %1 Layers"
+msgstr[0] "Jatorri-aldaketa geruza"
+msgstr[1] "Jatorri-aldaketa geruza"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -43671,15 +43660,12 @@ msgid "Mirror Image Horizontally"
 msgstr "Ispilatu irudia horizontalki"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, kde-format
-msgid "Rotate Layer"
-msgstr "Biratu geruza"
-
-#: plugins/extensions/rotateimage/rotateimage.cc:148
 #, fuzzy, kde-format
 #| msgid "Rotate Layer"
-msgid "Rotate Layers"
-msgstr "Biratu geruza"
+msgid "Rotate Layer"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] "Biratu geruza"
+msgstr[1] "Biratu geruza"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -43820,15 +43806,12 @@ msgid "Shear Image"
 msgstr "Zizailatu irudia"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
-#, kde-format
-msgid "Shear Layer"
-msgstr "Zizailatu geruza"
-
-#: plugins/extensions/shearimage/shearimage.cc:76
 #, fuzzy, kde-format
 #| msgid "Shear Layer"
-msgid "Shear Layers"
-msgstr "Zizailatu geruza"
+msgid "Shear Layer"
+msgid_plural "Shear %1 Layers"
+msgstr[0] "Zizailatu geruza"
+msgstr[1] "Zizailatu geruza"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -45694,6 +45677,13 @@ msgstr "Ausazko hautaketa"
 #, kde-format
 msgid "Size of the window:"
 msgstr "Leihoaren tamaina:"
+
+#: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
+#: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
+#, fuzzy, kde-format
+#| msgid "Transparent"
+msgid "Reset Transparent"
+msgstr "Gardena"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -48485,71 +48475,71 @@ msgstr ""
 "Fitxategiak jatorri-nodo-ID akastun bat duen klon-geruza bat du. Geruza hori "
 "margo-geruza bihurtuko da."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Ezin izan da eraldatze geruzaren «id» zamatu"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "Ezin izan dira sortu eraldatze geruzako parametroak"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr ""
 "Ezin izan dira aurkitu gako-fotogramako pixelen datuak %2(e)ko %1 "
 "fotogramarako."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr ""
 "Ezin izan dira zamatu gako-fotogramako pixelen datuak %2(e)ko %1 "
 "fotogramarako."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Ezin izan dira irakurri pilexen datuak: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Ezin izan dira zamatu pixelen datuak: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "Ezin izan da profila zamatu: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Ezin izan da %1 konfigurazioa iragazi."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Ezin izan %1 geruzaren metadaturik zamatu."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Ezin izan da %1 bektore-hautapena zamatu."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Ezin izan da %1 raster hautapena zamatu."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Ezin izan dira zamatu %1(e)ko gako-fotogramak."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -48558,7 +48548,7 @@ msgstr ""
 "aztertze-errorea %1 gako-fotograma fitxategiko %2 lerroan, %3 zutabean\n"
 "Errore-mezua: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "gako-fotograma kanal mota ezezaguna: %2(e)ko %1"
@@ -54313,7 +54303,7 @@ msgid "Percentage:"
 msgstr "Ehunekoa:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:209
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:265
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:266
 msgid "Export Settings"
 msgstr "Esportatzeko ezarpenak"
 
@@ -55039,52 +55029,52 @@ msgstr "Deskribapenik gabe"
 msgid "Comics Manager"
 msgstr "Komiki kudeatzailea"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:247
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:248
 msgid "New Project"
 msgstr "Proiektu berria"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:249
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:250
 msgid "Open Project"
 msgstr "Ireki proiektua"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:261
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:262
 msgid "Project Settings"
 msgstr "Proiektuaren ezarpenak"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:264
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Meta Data"
 msgstr "Metadatuak"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:281
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:282
 msgid "Add Page"
 msgstr "Gehitu orria"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:283
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:284
 msgid "Add Page from Template"
 msgstr "Gehitu orria txantiloitik"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:285
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:286
 msgid "Add Existing Pages"
 msgstr "Gehitu lehendik dauden orriak"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:287
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
 msgid "Remove Page"
 msgstr "Kendu orria"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:289
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
 msgid "Batch Resize"
 msgstr "Tamaina sortaka aldatu"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:292
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
 msgid "View Page In Window"
 msgstr "Ikusi orria leihoan"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:294
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 msgid "Scrape Author Info"
 msgstr "Erauzi egileari buruzko informazioa"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
 msgid ""
 "Search for author information in documents and add it to the author list. "
 "This does not check for duplicates."
@@ -55092,19 +55082,19 @@ msgstr ""
 "Bilatu egilearen gaineko informazioa dokumentuetan eta gehitu egileen "
 "zerrendara. Horrek ez du egiaztatzen bikoizturik dagoen."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:297
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
 msgid "Scrape Text for Translation"
 msgstr "Erauzi itzulpenerako testua"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:318
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:319
 msgid "Export Comic"
 msgstr "Esportatu komikia"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:323
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
 msgid "Copy Location"
 msgstr "Kopiatu kokalekua"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
 msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
@@ -55112,19 +55102,19 @@ msgstr ""
 "Proiektuaren bide-izena arbelera kopiatzen du. Erabilgarria da fitxategi-"
 "kudeatzaile batera edo antzeko batera azkar kopiatzeko."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "Please select the JSON comic config file."
 msgstr "Hautatu JSON komiki konfiguratzeko fitxategia."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "JSON files"
 msgstr "JSON fitxategiak"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid "Config cannot be used"
 msgstr "Konfigurazioa ezin da erabili"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
@@ -55134,55 +55124,55 @@ msgstr ""
 "berriak egin. Mesedez, konfiguratu karpetarako sarbidea edo eraman proiektua "
 "idatz daitekeen karpeta batera."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:378
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:379
 msgid "Loading Pages..."
 msgstr "Orriak zamatzen..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:118
 msgid "Krita files"
 msgstr "Krita fitxategiak"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
 msgid "Which existing pages to add?"
 msgstr "Existitzen diren zein orrialde gehitu nahi dituzu?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:591
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:610
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:592
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:611
 msgid "Where are the templates located?"
 msgstr "Non daude kokatuta txantiloiak?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:634
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:635
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:113
 msgid "Where should the pages go?"
 msgstr "Orriek non egon behar dute?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 msgid "Which image should be the basis the new page?"
 msgstr "Zein irudi izan behar du orrialde berriaren oinarria?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "Export success"
 msgstr "Esportatze arrakastatsua"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "The files have been written to the export folder."
 msgstr "Fitxategiak esportatzeko karpetan idatzi dira."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:883
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:884
 msgid "Resize all Pages"
 msgstr "Aldatu orri guztien tamaina"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:894
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
 msgid "Resizing pages..."
 msgstr "Orrien tamaina aldatzen..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:896
 msgid "Resizing Pages"
 msgstr "Orrien tamaina aldatzea"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:909
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -55193,11 +55183,11 @@ msgstr ""
 "Igarotako denbora: {passedString}:\n"
 " Balioztatua:{estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 msgid "Scraping success"
 msgstr "Karrakatze arrakastatsua"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr "POT fitxategia hemen idatzi da: {file}"
@@ -59757,13 +59747,13 @@ msgstr "Ezarri"
 msgid "Transform Tool Actions"
 msgstr "Eraldatze-tresnaren ekintzak"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Geruza motak ezin du eraldatze-tresna erabili"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:868
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -59771,7 +59761,7 @@ msgstr ""
 "Geruza motak ezin du erabili eraldatze-tresna. Horren ordez erabili "
 "eraldatze-maskara."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:888
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59781,20 +59771,20 @@ msgstr ""
 "Geruzak eraldatzeko maskarak dituzten haurrak ditu. Mesedez, ezgaitu itzazu "
 "eraldatu aurretik."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:902
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Hautapenak ez dira erabiltzen eraldatze maskarak editatzean"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Ezin eraldatu hutsik dauden geruzak "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59954,8 +59944,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Eraldatu geruza bat edo hautapen bat"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Eraldatu"
@@ -60561,6 +60551,70 @@ msgstr "Zoom tresna"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Erreferentziazko irudien tresna"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Scale Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale Layers"
+#~ msgstr "Eskalatu geruza"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Rotate Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate Layers"
+#~ msgstr "Biratu geruza"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Shear Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Layers"
+#~ msgstr "Zizailatu geruza"
+
+#, fuzzy
+#~| msgid "Resize Layer"
+#~ msgid "Resize Layers"
+#~ msgstr "Tamaina aldatu geruzari"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers X"
+#~ msgstr "Islatu geruza X"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers Y"
+#~ msgstr "Islatu geruza Y"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Offset Layer"
+#~ msgctxt "@title:window"
+#~ msgid "Offset Layers"
+#~ msgstr "Jatorri-aldaketa geruza"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Offset Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset Layers"
+#~ msgstr "Jatorri-aldaketa geruza"
+
+#, fuzzy
+#~| msgid "Rotate Layer"
+#~ msgid "Rotate Layers"
+#~ msgstr "Biratu geruza"
+
+#, fuzzy
+#~| msgid "Shear Layer"
+#~ msgid "Shear Layers"
+#~ msgstr "Zizailatu geruza"
 
 #~ msgid "Saturation [*varies*]: "
 #~ msgstr "Asetasuna [*aldakorra*]: "

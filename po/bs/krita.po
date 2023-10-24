@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-22 00:41+0000\n"
+"POT-Creation-Date: 2023-10-24 00:40+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -17329,7 +17329,7 @@ msgid "Set Image Resolution"
 msgstr "Postavi rezoluciju slike"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr "Promjeni položaj"
@@ -17452,7 +17452,7 @@ msgstr "Umekšan"
 msgid "Gaussian"
 msgstr "Gausovo zamagljenje"
 
-#: libs/image/kis_clone_layer.cpp:320
+#: libs/image/kis_clone_layer.cpp:321
 #, kde-format
 msgid "Copy From"
 msgstr "Kopiraj iz"
@@ -17602,24 +17602,22 @@ msgid "Change Image Resolution"
 msgstr "Promijeni rezoluciju slike"
 
 #: libs/image/kis_image.cc:1037
-msgctxt "(qtundo-format)"
-msgid "Scale Layer"
-msgstr "Skaliraj sloj"
-
-#: libs/image/kis_image.cc:1037
-#, fuzzy
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
-msgid "Scale Layers"
-msgstr "Skaliraj sloj"
+msgid "Scale Layer"
+msgid_plural "Scale %1 Layers"
+msgstr[0] "Skaliraj sloj"
+msgstr[1] "Skaliraj sloj"
+msgstr[2] "Skaliraj sloj"
 
 #: libs/image/kis_image.cc:1178
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rotiraj sliku"
 
-#: libs/image/kis_image.cc:1189
+#: libs/image/kis_image.cc:1188
 #, fuzzy
 #| msgid "Rotate Canvas"
 msgctxt "(qtundo-format)"
@@ -17627,19 +17625,17 @@ msgid "Rotate Mask"
 msgstr "Okreni platno"
 
 #: libs/image/kis_image.cc:1191
-msgctxt "(qtundo-format)"
-msgid "Rotate Layer"
-msgstr "Okreni sloj"
-
-#: libs/image/kis_image.cc:1195
-#, fuzzy
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
-msgid "Rotate Layers"
-msgstr "Okreni sloj"
+msgid "Rotate Layer"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] "Okreni sloj"
+msgstr[1] "Okreni sloj"
+msgstr[2] "Okreni sloj"
 
-#: libs/image/kis_image.cc:1296
+#: libs/image/kis_image.cc:1291
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear shapes"
@@ -17647,56 +17643,52 @@ msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Kresanje oblika"
 
-#: libs/image/kis_image.cc:1299
-#, fuzzy
+#: libs/image/kis_image.cc:1295
+#, fuzzy, kde-format
 #| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
-msgstr "Smakni sloj"
+msgid_plural "Shear %1 Layers"
+msgstr[0] "Smakni sloj"
+msgstr[1] "Smakni sloj"
+msgstr[2] "Smakni sloj"
 
-#: libs/image/kis_image.cc:1304
-#, fuzzy
-#| msgid "Shear Layer"
-msgctxt "(qtundo-format)"
-msgid "Shear Layers"
-msgstr "Smakni sloj"
-
-#: libs/image/kis_image.cc:1311
+#: libs/image/kis_image.cc:1302
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Smakni sliku"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1320
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "&Pretvori prostor sloja slike..."
 
-#: libs/image/kis_image.cc:1380
+#: libs/image/kis_image.cc:1371
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Konvertuj prostor boja slike"
 
-#: libs/image/kis_image.cc:1381
+#: libs/image/kis_image.cc:1372
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Konvertuj prostor boja projekcije"
 
-#: libs/image/kis_image.cc:1439
+#: libs/image/kis_image.cc:1430
 #, fuzzy
 #| msgid "Assign to tag"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Dodjela za oznaku"
 
-#: libs/image/kis_image.cc:1480
+#: libs/image/kis_image.cc:1471
 #, fuzzy
 #| msgid "Open Color Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Otvor profil boje"
 
-#: libs/image/kis_image.cc:2540
+#: libs/image/kis_image.cc:2531
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Kropaj izbore"
@@ -18376,7 +18368,7 @@ msgid "Clone Layer"
 msgstr "&Kloniraj sloj"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1535
+#: libs/ui/kis_node_manager.cpp:1527
 #, fuzzy, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -18422,7 +18414,7 @@ msgid "Transform Mask"
 msgstr "Maska transformacije"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1315
+#: libs/ui/kis_node_manager.cpp:1307
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -20154,8 +20146,8 @@ msgstr "Upravljane Resurs Bundlima"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1239
-#: libs/ui/kis_node_manager.cpp:1302 libs/ui/KisApplication.cpp:1011
+#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1011
 #: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
 #: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
 #: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
@@ -28680,15 +28672,13 @@ msgid "Layer Size"
 msgstr "Veličina sloja"
 
 #: libs/ui/imagesize/imagesize.cc:126
-#, kde-format
-msgid "Resize Layer"
-msgstr "Promijeni veličinu sloja"
-
-#: libs/ui/imagesize/imagesize.cc:126
 #, fuzzy, kde-format
 #| msgid "Resize Layer"
-msgid "Resize Layers"
-msgstr "Promijeni veličinu sloja"
+msgid "Resize Layer"
+msgid_plural "Resize %1 Layers"
+msgstr[0] "Promijeni veličinu sloja"
+msgstr[1] "Promijeni veličinu sloja"
+msgstr[2] "Promijeni veličinu sloja"
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, kde-format
@@ -30353,43 +30343,39 @@ msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Alat za linije"
 
-#: libs/ui/kis_node_manager.cpp:1039
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgstr "Sloj X u ogledalu"
-
-#: libs/ui/kis_node_manager.cpp:1041
+#: libs/ui/kis_node_manager.cpp:1038
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask X"
 msgstr "Ogledalo maske X"
 
-#: libs/ui/kis_node_manager.cpp:1045
-#, fuzzy
+#: libs/ui/kis_node_manager.cpp:1041
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers X"
-msgstr "Sloj X u ogledalu"
+msgid "Mirror Layer X"
+msgid_plural "Mirror %1 Layers X"
+msgstr[0] "Sloj X u ogledalu"
+msgstr[1] "Sloj X u ogledalu"
+msgstr[2] "Sloj X u ogledalu"
 
-#: libs/ui/kis_node_manager.cpp:1057
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgstr "Sloj Y u ogledalu"
-
-#: libs/ui/kis_node_manager.cpp:1059
+#: libs/ui/kis_node_manager.cpp:1052
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Y"
 msgstr "Ogledaj masku Y"
 
-#: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
+#: libs/ui/kis_node_manager.cpp:1055
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers Y"
-msgstr "Sloj Y u ogledalu"
+msgid "Mirror Layer Y"
+msgid_plural "Mirror %1 Layers Y"
+msgstr[0] "Sloj Y u ogledalu"
+msgstr[1] "Sloj Y u ogledalu"
+msgstr[2] "Sloj Y u ogledalu"
 
-#: libs/ui/kis_node_manager.cpp:1071
+#: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer X"
@@ -30397,7 +30383,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers X"
 msgstr "Sloj X u ogledalu"
 
-#: libs/ui/kis_node_manager.cpp:1078
+#: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer Y"
@@ -30405,12 +30391,12 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Y"
 msgstr "Sloj Y u ogledalu"
 
-#: libs/ui/kis_node_manager.cpp:1210
+#: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Izvezi \"%1\""
 
-#: libs/ui/kis_node_manager.cpp:1240
+#: libs/ui/kis_node_manager.cpp:1232
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -30420,7 +30406,7 @@ msgstr ""
 "Ne mogu snimiti\n"
 "%1"
 
-#: libs/ui/kis_node_manager.cpp:1258
+#: libs/ui/kis_node_manager.cpp:1250
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Layer %1 is not editable"
@@ -30428,13 +30414,13 @@ msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Sloj %1 se ne može mijenjati"
 
-#: libs/ui/kis_node_manager.cpp:1282
+#: libs/ui/kis_node_manager.cpp:1274
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Iz&vezi..."
 
-#: libs/ui/kis_node_manager.cpp:1302
+#: libs/ui/kis_node_manager.cpp:1294
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -30444,13 +30430,13 @@ msgstr ""
 "Ne mogu snimiti\n"
 "%1"
 
-#: libs/ui/kis_node_manager.cpp:1328
+#: libs/ui/kis_node_manager.cpp:1320
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Sloj %1 se ne može mijenjati"
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1321
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -30459,52 +30445,52 @@ msgstr ""
 "Ne mogu pisati alfa kanal roditeljskog sloja \"%1\".\n"
 "Operavija će biti otkazana."
 
-#: libs/ui/kis_node_manager.cpp:1360
+#: libs/ui/kis_node_manager.cpp:1352
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Piši alpha u sloj"
 
-#: libs/ui/kis_node_manager.cpp:1483
+#: libs/ui/kis_node_manager.cpp:1475
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Udvostruči"
 
-#: libs/ui/kis_node_manager.cpp:1565
+#: libs/ui/kis_node_manager.cpp:1557
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Grupa:"
 
-#: libs/ui/kis_node_manager.cpp:1576
+#: libs/ui/kis_node_manager.cpp:1568
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Grupa:"
 
-#: libs/ui/kis_node_manager.cpp:1583
+#: libs/ui/kis_node_manager.cpp:1575
 #, fuzzy, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Grupa:"
 
-#: libs/ui/kis_node_manager.cpp:1584
+#: libs/ui/kis_node_manager.cpp:1576
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "&Slikarski sloj"
 
-#: libs/ui/kis_node_manager.cpp:1611
+#: libs/ui/kis_node_manager.cpp:1603
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1614
+#: libs/ui/kis_node_manager.cpp:1606
 #, fuzzy, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Stavi svaki sloj u svoj vlastiti, odvojeni grupni sloj"
 
-#: libs/ui/kis_node_manager.cpp:1622
+#: libs/ui/kis_node_manager.cpp:1614
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
@@ -38986,6 +38972,12 @@ msgstr ""
 msgid "Zoom view to fit curve."
 msgstr "Uvećaj sve"
 
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add Scalar Keyframes"
+msgstr "Udvostruči segment"
+
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -43930,26 +43922,27 @@ msgctxt "@title:window"
 msgid "Offset Image"
 msgstr "Promjena početka slike"
 
-#: plugins/extensions/offsetimage/offsetimage.cpp:80
+#: plugins/extensions/offsetimage/offsetimage.cpp:81
 #, fuzzy, kde-format
-#| msgctxt "@title:window"
+#| msgctxt "(qtundo-format)"
 #| msgid "Offset Layer"
 msgctxt "@title:window"
-msgid "Offset Layers"
-msgstr "Promjena početka sloja"
-
-#: plugins/extensions/offsetimage/offsetimage.cpp:85
-msgctxt "(qtundo-format)"
 msgid "Offset Layer"
-msgstr "Promjena početka sloja"
+msgid_plural "Offset %1 Layers"
+msgstr[0] "Promjena početka sloja"
+msgstr[1] "Promjena početka sloja"
+msgstr[2] "Promjena početka sloja"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
-#, fuzzy
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
-msgid "Offset Layers"
-msgstr "Promjena početka sloja"
+msgid "Offset Layer"
+msgid_plural "Offset %1 Layers"
+msgstr[0] "Promjena početka sloja"
+msgstr[1] "Promjena početka sloja"
+msgstr[2] "Promjena početka sloja"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -44969,15 +44962,13 @@ msgid "Mirror Image Horizontally"
 msgstr "Slika u ogledalu horizontalno"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, kde-format
-msgid "Rotate Layer"
-msgstr "Okreni sloj"
-
-#: plugins/extensions/rotateimage/rotateimage.cc:148
 #, fuzzy, kde-format
 #| msgid "Rotate Layer"
-msgid "Rotate Layers"
-msgstr "Okreni sloj"
+msgid "Rotate Layer"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] "Okreni sloj"
+msgstr[1] "Okreni sloj"
+msgstr[2] "Okreni sloj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -45118,15 +45109,13 @@ msgid "Shear Image"
 msgstr "Smakni sliku"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
-#, kde-format
-msgid "Shear Layer"
-msgstr "Smakni sloj"
-
-#: plugins/extensions/shearimage/shearimage.cc:76
 #, fuzzy, kde-format
 #| msgid "Shear Layer"
-msgid "Shear Layers"
-msgstr "Smakni sloj"
+msgid "Shear Layer"
+msgid_plural "Shear %1 Layers"
+msgstr[0] "Smakni sloj"
+msgstr[1] "Smakni sloj"
+msgstr[2] "Smakni sloj"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -47051,6 +47040,13 @@ msgstr "Nasumičan izbor"
 #, kde-format
 msgid "Size of the window:"
 msgstr "Veličina prozora:"
+
+#: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
+#: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
+#, fuzzy, kde-format
+#| msgid "Transparent"
+msgid "Reset Transparent"
+msgstr "Providno"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -49975,68 +49971,68 @@ msgid ""
 "layer will be converted into a paint layer."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Ne mogu učitati \"id\" transformacijske maske"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "Ne mogu krerati parametre transform maske"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
 #, fuzzy, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "Ne mogu učitati metapodatake za sloj %1 ."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
 #, fuzzy, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "Ne mogu učitati metapodatake za sloj %1 ."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Nije moguće očitati podatak piksela: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Nije moguće učitati podatak piksela: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
 #, fuzzy, kde-format
 #| msgid "Could not load profile %1."
 msgid "Could not load profile: %1."
 msgstr "Nije moguće učitati profil %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Nije moguće filtrirati konfiguraciju %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Ne mogu učitati metapodatake za sloj %1 ."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Nije moguče učitati izbor vektora %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Ne mogu učitati raster izbor  %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
 #, fuzzy, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Ne mogu učitati metapodatake za sloj %1 ."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, fuzzy, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -50045,7 +50041,7 @@ msgstr ""
 "Greška pri raščlanjivanju u %1 u liniji %2, koloni %3\n"
 "Poruka o grešci: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
 #, fuzzy, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "Ne mogu učitati metapodatake za sloj %1 ."
@@ -56020,7 +56016,7 @@ msgid "Percentage:"
 msgstr "Procenat"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:209
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:265
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:266
 #, fuzzy
 #| msgid "Footnote Settings"
 msgid "Export Settings"
@@ -56859,182 +56855,182 @@ msgstr "Opis"
 msgid "Comics Manager"
 msgstr "Upravljanje bojama"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:247
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:248
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "New Section"
 msgid "New Project"
 msgstr "Nova sekcija"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:249
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:250
 #, fuzzy
 msgid "Open Project"
 msgstr "Otvori dokument"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:261
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:262
 #, fuzzy
 #| msgid "Footnote Settings"
 msgid "Project Settings"
 msgstr "Postavke fusnote"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:264
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 #, fuzzy
 #| msgid "Metadata"
 msgid "Meta Data"
 msgstr "Meta podaci"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:281
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:282
 #, fuzzy
 #| msgid "Adrian Page"
 msgid "Add Page"
 msgstr "Adrian Page"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:283
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:284
 #, fuzzy
 msgid "Add Page from Template"
 msgstr "Udvostruči segment"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:285
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:286
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Add Layer"
 msgid "Add Existing Pages"
 msgstr "Dodaj sloj"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:287
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
 #, fuzzy
 msgid "Remove Page"
 msgstr "Izbriši sloj"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:289
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Resize"
 msgid "Batch Resize"
 msgstr "Promijeni veličinu"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:292
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
 #, fuzzy
 msgid "View Page In Window"
 msgstr "&Novi prozor"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:294
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 #, fuzzy
 msgid "Scrape Author Info"
 msgstr "Autor"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
 msgid ""
 "Search for author information in documents and add it to the author list. "
 "This does not check for duplicates."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:297
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
 msgid "Scrape Text for Translation"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:318
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:319
 #, fuzzy
 #| msgid "Export Composition"
 msgid "Export Comic"
 msgstr "Izvoz kompozicije"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:323
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
 #, fuzzy
 msgid "Copy Location"
 msgstr "Namjera sjenčenja"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
 msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "Please select the JSON comic config file."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 #, fuzzy
 #| msgid "&Profiles:"
 msgid "JSON files"
 msgstr "&Profili:"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid "Config cannot be used"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
 "be written to."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:378
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:379
 #, fuzzy
 msgid "Loading Pages..."
 msgstr "Dodaj novu paletu..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:118
 #, fuzzy
 #| msgid "Edit Profiles"
 msgid "Krita files"
 msgstr "Uređivanje profila"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
 msgid "Which existing pages to add?"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:591
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:610
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:592
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:611
 #, fuzzy
 #| msgid "Create Template"
 msgid "Where are the templates located?"
 msgstr "Napravi šablon"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:634
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:635
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:113
 #, fuzzy
 #| msgid "Create Template"
 msgid "Where should the pages go?"
 msgstr "Napravi šablon"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 msgid "Which image should be the basis the new page?"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 #, fuzzy
 msgid "Export success"
 msgstr "Ekspozicija"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "The files have been written to the export folder."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:883
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:884
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Resize shapes"
 msgid "Resize all Pages"
 msgstr "Promijeni veličinu oblika"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:894
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
 #, fuzzy
 msgid "Resizing pages..."
 msgstr "Promijeni veličinu platna..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:896
 #, fuzzy
 #| msgid "Facing pages"
 msgid "Resizing Pages"
 msgstr "Suprotne stranice"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:909
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -57042,12 +57038,12 @@ msgid ""
 " Estimated:{estimated}"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 #, fuzzy
 msgid "Scraping success"
 msgstr "Ekspozicija"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr ""
@@ -62019,21 +62015,21 @@ msgstr ""
 msgid "Transform Tool Actions"
 msgstr "Trasformiši"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Aktiviraj alatku za linije"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:868
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "Aktiviraj alatku za linije"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:888
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -62041,20 +62037,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:902
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Izbori nisu korišteni pri uređivanju transformacijskih maski"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Ne mogu transformisati prazan sloj"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -62221,8 +62217,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Transformiši sloj ili izbor"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Trasformiši"
@@ -62857,6 +62853,69 @@ msgstr "Uvećaj sve"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referentne slike"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Scale Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale Layers"
+#~ msgstr "Skaliraj sloj"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Rotate Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate Layers"
+#~ msgstr "Okreni sloj"
+
+#, fuzzy
+#~| msgid "Shear Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Layers"
+#~ msgstr "Smakni sloj"
+
+#, fuzzy
+#~| msgid "Resize Layer"
+#~ msgid "Resize Layers"
+#~ msgstr "Promijeni veličinu sloja"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers X"
+#~ msgstr "Sloj X u ogledalu"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers Y"
+#~ msgstr "Sloj Y u ogledalu"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Offset Layer"
+#~ msgctxt "@title:window"
+#~ msgid "Offset Layers"
+#~ msgstr "Promjena početka sloja"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Offset Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset Layers"
+#~ msgstr "Promjena početka sloja"
+
+#, fuzzy
+#~| msgid "Rotate Layer"
+#~ msgid "Rotate Layers"
+#~ msgstr "Okreni sloj"
+
+#, fuzzy
+#~| msgid "Shear Layer"
+#~ msgid "Shear Layers"
+#~ msgstr "Smakni sloj"
 
 #, fuzzy
 #~| msgid "Saturation Rings:"

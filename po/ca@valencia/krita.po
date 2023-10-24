@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-22 00:41+0000\n"
+"POT-Creation-Date: 2023-10-24 00:40+0000\n"
 "PO-Revision-Date: 2023-10-13 16:14+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -16909,7 +16909,7 @@ msgid "Set Image Resolution"
 msgstr "Establix la resolució de la imatge"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr "Mou"
@@ -17019,7 +17019,7 @@ msgstr "Suau"
 msgid "Gaussian"
 msgstr "Gaussià"
 
-#: libs/image/kis_clone_layer.cpp:320
+#: libs/image/kis_clone_layer.cpp:321
 #, kde-format
 msgid "Copy From"
 msgstr "Copia des de"
@@ -17166,90 +17166,81 @@ msgid "Change Image Resolution"
 msgstr "Canvi de resolució de la imatge"
 
 #: libs/image/kis_image.cc:1037
-msgctxt "(qtundo-format)"
-msgid "Scale Layer"
-msgstr "Escala la capa"
-
-#: libs/image/kis_image.cc:1037
-#, fuzzy
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
-msgid "Scale Layers"
-msgstr "Escala la capa"
+msgid "Scale Layer"
+msgid_plural "Scale %1 Layers"
+msgstr[0] "Escala la capa"
+msgstr[1] "Escala la capa"
 
 #: libs/image/kis_image.cc:1178
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Gira la imatge"
 
-#: libs/image/kis_image.cc:1189
+#: libs/image/kis_image.cc:1188
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Gira la màscara"
 
 #: libs/image/kis_image.cc:1191
-msgctxt "(qtundo-format)"
-msgid "Rotate Layer"
-msgstr "Gira la capa"
-
-#: libs/image/kis_image.cc:1195
-#, fuzzy
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
-msgid "Rotate Layers"
-msgstr "Gira la capa"
+msgid "Rotate Layer"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] "Gira la capa"
+msgstr[1] "Gira la capa"
 
-#: libs/image/kis_image.cc:1296
+#: libs/image/kis_image.cc:1291
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Inclina la màscara"
 
-#: libs/image/kis_image.cc:1299
-msgctxt "(qtundo-format)"
-msgid "Shear Layer"
-msgstr "Inclina la capa"
-
-#: libs/image/kis_image.cc:1304
-#, fuzzy
+#: libs/image/kis_image.cc:1295
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
-msgid "Shear Layers"
-msgstr "Inclina la capa"
+msgid "Shear Layer"
+msgid_plural "Shear %1 Layers"
+msgstr[0] "Inclina la capa"
+msgstr[1] "Inclina la capa"
 
-#: libs/image/kis_image.cc:1311
+#: libs/image/kis_image.cc:1302
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Inclina la imatge"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1320
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Convertix l'espai de color de la capa"
 
-#: libs/image/kis_image.cc:1380
+#: libs/image/kis_image.cc:1371
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Convertix l'espai de color de la imatge"
 
-#: libs/image/kis_image.cc:1381
+#: libs/image/kis_image.cc:1372
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Convertix l'espai de color de la projecció"
 
-#: libs/image/kis_image.cc:1439
+#: libs/image/kis_image.cc:1430
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Assigna un perfil a la capa"
 
-#: libs/image/kis_image.cc:1480
+#: libs/image/kis_image.cc:1471
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Assigna un perfil"
 
-#: libs/image/kis_image.cc:2540
+#: libs/image/kis_image.cc:2531
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Seleccions escapçades"
@@ -17876,7 +17867,7 @@ msgid "Clone Layer"
 msgstr "Capa clonada"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1535
+#: libs/ui/kis_node_manager.cpp:1527
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -17920,7 +17911,7 @@ msgid "Transform Mask"
 msgstr "Màscara de transformació"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1315
+#: libs/ui/kis_node_manager.cpp:1307
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19518,8 +19509,8 @@ msgstr "Recursos locals"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1239
-#: libs/ui/kis_node_manager.cpp:1302 libs/ui/KisApplication.cpp:1011
+#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1011
 #: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
 #: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
 #: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
@@ -27891,15 +27882,12 @@ msgid "Layer Size"
 msgstr "Mida de la capa"
 
 #: libs/ui/imagesize/imagesize.cc:126
-#, kde-format
-msgid "Resize Layer"
-msgstr "Redimensió de capa"
-
-#: libs/ui/imagesize/imagesize.cc:126
 #, fuzzy, kde-format
 #| msgid "Resize Layer"
-msgid "Resize Layers"
-msgstr "Redimensió de capa"
+msgid "Resize Layer"
+msgid_plural "Resize %1 Layers"
+msgstr[0] "Redimensió de capa"
+msgstr[1] "Redimensió de capa"
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, kde-format
@@ -29472,86 +29460,80 @@ msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Elimina els nodes"
 
-#: libs/ui/kis_node_manager.cpp:1039
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgstr "Emmiralla la capa per l'eix X"
-
-#: libs/ui/kis_node_manager.cpp:1041
+#: libs/ui/kis_node_manager.cpp:1038
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask X"
 msgstr "Emmiralla la màscara per l'eix X"
 
-#: libs/ui/kis_node_manager.cpp:1045
-#, fuzzy
+#: libs/ui/kis_node_manager.cpp:1041
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers X"
-msgstr "Emmiralla la capa per l'eix X"
+msgid "Mirror Layer X"
+msgid_plural "Mirror %1 Layers X"
+msgstr[0] "Emmiralla la capa per l'eix X"
+msgstr[1] "Emmiralla la capa per l'eix X"
 
-#: libs/ui/kis_node_manager.cpp:1057
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgstr "Emmiralla la capa per l'eix Y"
-
-#: libs/ui/kis_node_manager.cpp:1059
+#: libs/ui/kis_node_manager.cpp:1052
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Y"
 msgstr "Emmiralla la màscara per l'eix Y"
 
-#: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
+#: libs/ui/kis_node_manager.cpp:1055
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers Y"
-msgstr "Emmiralla la capa per l'eix Y"
+msgid "Mirror Layer Y"
+msgid_plural "Mirror %1 Layers Y"
+msgstr[0] "Emmiralla la capa per l'eix Y"
+msgstr[1] "Emmiralla la capa per l'eix Y"
 
-#: libs/ui/kis_node_manager.cpp:1071
+#: libs/ui/kis_node_manager.cpp:1063
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers X"
 msgstr "Emmiralla totes les capes per l'eix X"
 
-#: libs/ui/kis_node_manager.cpp:1078
+#: libs/ui/kis_node_manager.cpp:1070
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Y"
 msgstr "Emmiralla totes les capes per l'eix Y"
 
-#: libs/ui/kis_node_manager.cpp:1210
+#: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Exporta «%1»"
 
-#: libs/ui/kis_node_manager.cpp:1240
+#: libs/ui/kis_node_manager.cpp:1232
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "No s'ha pogut guardar la capa. %1"
 
-#: libs/ui/kis_node_manager.cpp:1258
+#: libs/ui/kis_node_manager.cpp:1250
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "La capa no té dades dels píxels"
 
-#: libs/ui/kis_node_manager.cpp:1282
+#: libs/ui/kis_node_manager.cpp:1274
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Exporta cap a SVG"
 
-#: libs/ui/kis_node_manager.cpp:1302
+#: libs/ui/kis_node_manager.cpp:1294
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "No s'ha pogut guardar a SVG: %1"
 
-#: libs/ui/kis_node_manager.cpp:1328
+#: libs/ui/kis_node_manager.cpp:1320
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "La capa %1 no és editable"
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1321
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -29560,50 +29542,50 @@ msgstr ""
 "No s'ha pogut escriure el canal alfa de la capa superior «%1».\n"
 "L'operació es cancel·larà."
 
-#: libs/ui/kis_node_manager.cpp:1360
+#: libs/ui/kis_node_manager.cpp:1352
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Escriu l'alfa en una capa"
 
-#: libs/ui/kis_node_manager.cpp:1483
+#: libs/ui/kis_node_manager.cpp:1475
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Retalla nodes"
 
-#: libs/ui/kis_node_manager.cpp:1565
+#: libs/ui/kis_node_manager.cpp:1557
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Agrupa ràpid"
 
-#: libs/ui/kis_node_manager.cpp:1576
+#: libs/ui/kis_node_manager.cpp:1568
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Agrupa ràpid de retall"
 
-#: libs/ui/kis_node_manager.cpp:1583
+#: libs/ui/kis_node_manager.cpp:1575
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Grup de retall"
 
-#: libs/ui/kis_node_manager.cpp:1584
+#: libs/ui/kis_node_manager.cpp:1576
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Capa de màscara"
 
-#: libs/ui/kis_node_manager.cpp:1611
+#: libs/ui/kis_node_manager.cpp:1603
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1614
+#: libs/ui/kis_node_manager.cpp:1606
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Situa cada capa en la seua pròpia capa de grup separada"
 
-#: libs/ui/kis_node_manager.cpp:1622
+#: libs/ui/kis_node_manager.cpp:1614
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Desagrupa ràpid"
@@ -38141,6 +38123,14 @@ msgstr "Vista de zoom per a ajustar l'interval del canal."
 msgid "Zoom view to fit curve."
 msgstr "Vista de zoom per a ajustar la corba."
 
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Add scalar keyframes"
+msgctxt "(qtundo-format)"
+msgid "Add Scalar Keyframes"
+msgstr "Afig fotogrames clau escalars"
+
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
 msgid "Adjust keyframe"
@@ -42762,26 +42752,25 @@ msgctxt "@title:window"
 msgid "Offset Image"
 msgstr "Desplaçament de la imatge"
 
-#: plugins/extensions/offsetimage/offsetimage.cpp:80
+#: plugins/extensions/offsetimage/offsetimage.cpp:81
 #, fuzzy, kde-format
-#| msgctxt "@title:window"
+#| msgctxt "(qtundo-format)"
 #| msgid "Offset Layer"
 msgctxt "@title:window"
-msgid "Offset Layers"
-msgstr "Desplaçament de la capa"
-
-#: plugins/extensions/offsetimage/offsetimage.cpp:85
-msgctxt "(qtundo-format)"
 msgid "Offset Layer"
-msgstr "Desplaça la capa"
+msgid_plural "Offset %1 Layers"
+msgstr[0] "Desplaça la capa"
+msgstr[1] "Desplaça la capa"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
-#, fuzzy
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
-msgid "Offset Layers"
-msgstr "Desplaça la capa"
+msgid "Offset Layer"
+msgid_plural "Offset %1 Layers"
+msgstr[0] "Desplaça la capa"
+msgstr[1] "Desplaça la capa"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -43758,15 +43747,12 @@ msgid "Mirror Image Horizontally"
 msgstr "Emmiralla horitzontalment la imatge"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, kde-format
-msgid "Rotate Layer"
-msgstr "Gira la capa"
-
-#: plugins/extensions/rotateimage/rotateimage.cc:148
 #, fuzzy, kde-format
 #| msgid "Rotate Layer"
-msgid "Rotate Layers"
-msgstr "Gira la capa"
+msgid "Rotate Layer"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] "Gira la capa"
+msgstr[1] "Gira la capa"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -43907,15 +43893,12 @@ msgid "Shear Image"
 msgstr "Inclina la imatge"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
-#, kde-format
-msgid "Shear Layer"
-msgstr "Inclina la capa"
-
-#: plugins/extensions/shearimage/shearimage.cc:76
 #, fuzzy, kde-format
 #| msgid "Shear Layer"
-msgid "Shear Layers"
-msgstr "Inclina la capa"
+msgid "Shear Layer"
+msgid_plural "Shear %1 Layers"
+msgstr[0] "Inclina la capa"
+msgstr[1] "Inclina la capa"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -45777,6 +45760,13 @@ msgstr "Elecció aleatòria"
 #, kde-format
 msgid "Size of the window:"
 msgstr "Mida de la finestra:"
+
+#: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
+#: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
+#, fuzzy, kde-format
+#| msgid "Transparent"
+msgid "Reset Transparent"
+msgstr "Transparent"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -48657,71 +48647,71 @@ msgstr ""
 "El fitxer conté una capa clonada que té un ID de node origen incorrecte. "
 "Esta capa es convertirà en una capa de pintura."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr "No s'ha pogut carregar l'«id» de la màscara de transformació"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "No s'han pogut crear els paràmetres de la màscara de transformació"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr ""
 "No s'han pogut trobar les dades dels píxels del fotograma clau per al "
 "fotograma %1 a %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr ""
 "No s'han pogut carregar les dades dels píxels del fotograma clau per al "
 "fotograma %1 a %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "No s'ha pogut llegir les dades dels píxels: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "No s'han pogut carregar les dades dels píxels: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "No s'ha pogut carregar el perfil: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "No s'ha pogut filtrar la configuració %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "No s'han pogut carregar les metadades per a la capa %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "No s'ha pogut carregar la selecció amb vectors %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "No s'ha pogut carregar la selecció ràster %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "No s'han pogut carregar els fotogrames clau des de %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -48731,7 +48721,7 @@ msgstr ""
 "línia %2, columna %3\n"
 "Missatge d'error: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "Tipus de canal desconegut de fotograma clau: %1 a %2"
@@ -54716,7 +54706,7 @@ msgid "Percentage:"
 msgstr "Percentatge:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:209
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:265
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:266
 msgid "Export Settings"
 msgstr "Exporta les opcions de configuració"
 
@@ -55449,52 +55439,52 @@ msgstr "Sense descripció"
 msgid "Comics Manager"
 msgstr "Gestor de còmics"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:247
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:248
 msgid "New Project"
 msgstr "Projecte nou"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:249
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:250
 msgid "Open Project"
 msgstr "Obri un projecte"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:261
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:262
 msgid "Project Settings"
 msgstr "Configureu el projecte"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:264
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Meta Data"
 msgstr "Metadades"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:281
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:282
 msgid "Add Page"
 msgstr "Afig una pàgina"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:283
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:284
 msgid "Add Page from Template"
 msgstr "Afig una pàgina des d'una plantilla"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:285
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:286
 msgid "Add Existing Pages"
 msgstr "Afig pàgines existents"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:287
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
 msgid "Remove Page"
 msgstr "Elimina la pàgina"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:289
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
 msgid "Batch Resize"
 msgstr "Redimensió per lots"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:292
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
 msgid "View Page In Window"
 msgstr "Visualitza la pàgina en una finestra"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:294
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 msgid "Scrape Author Info"
 msgstr "Indaga la informació de l'autor"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
 msgid ""
 "Search for author information in documents and add it to the author list. "
 "This does not check for duplicates."
@@ -55502,19 +55492,19 @@ msgstr ""
 "Busca informació de l'autor a documents i l'afig a la llista de l'autor. Açò "
 "no verifica els duplicats."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:297
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
 msgid "Scrape Text for Translation"
 msgstr "Indaga el text quant a traduccions"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:318
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:319
 msgid "Export Comic"
 msgstr "Exporta el còmic"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:323
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
 msgid "Copy Location"
 msgstr "Copia la ubicació"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
 msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
@@ -55522,19 +55512,19 @@ msgstr ""
 "Copia el camí del projecte al porta-retalls. És útil per a copiar ràpidament "
 "a un gestor de fitxers o similar."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "Please select the JSON comic config file."
 msgstr "Seleccioneu el fitxer JSON de configuració del còmic."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "JSON files"
 msgstr "Fitxers JSON"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid "Config cannot be used"
 msgstr "No es pot utilitzar la configuració"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
@@ -55544,55 +55534,55 @@ msgstr ""
 "Configureu l'accés a la carpeta o moveu el projecte a una carpeta que s'hi "
 "puga escriure."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:378
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:379
 msgid "Loading Pages..."
 msgstr "Càrrega de pàgines..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:118
 msgid "Krita files"
 msgstr "Fitxers de Krita"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
 msgid "Which existing pages to add?"
 msgstr "Quines pàgines existents voleu afegir?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:591
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:610
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:592
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:611
 msgid "Where are the templates located?"
 msgstr "A on estan ubicades les plantilles?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:634
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:635
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:113
 msgid "Where should the pages go?"
 msgstr "A on han d'anar les pàgines?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 msgid "Which image should be the basis the new page?"
 msgstr "Quina imatge ha de ser la base de la pàgina nova?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "Export success"
 msgstr "Exportació correcta"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "The files have been written to the export folder."
 msgstr "Els fitxers s'han escrit a la carpeta d'exportació."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:883
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:884
 msgid "Resize all Pages"
 msgstr "Redimensiona totes les pàgines"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:894
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
 msgid "Resizing pages..."
 msgstr "S'estan redimensionant les pàgines..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:896
 msgid "Resizing Pages"
 msgstr "Redimensió de pàgines"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:909
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -55603,11 +55593,11 @@ msgstr ""
 "Temps passat: {passedString}:\n"
 " Estimat:{estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 msgid "Scraping success"
 msgstr "Indagació exitosa"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr "El fitxer POT s'ha escrit a: {file}"
@@ -60179,13 +60169,13 @@ msgstr "Aplica"
 msgid "Transform Tool Actions"
 msgstr "Accions de l'eina de transformació"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "El tipus de capa no pot utilitzar l'eina de transformació"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:868
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -60193,7 +60183,7 @@ msgstr ""
 "El tipus de capa no pot utilitzar l'eina de transformació. En el seu lloc "
 "utilitzeu la màscara de transformació."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:888
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60203,20 +60193,20 @@ msgstr ""
 "La capa té fills amb màscares de transformació. Per favor, inhabiliteu-los "
 "abans de fer la transformació."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:902
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Les seleccions no s'utilitzen en editar les màscares de transformació "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "No es pot transformar una capa buida "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60378,8 +60368,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Transforma una capa o una selecció"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Transforma"
@@ -60986,6 +60976,70 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Scale Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale Layers"
+#~ msgstr "Escala la capa"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Rotate Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate Layers"
+#~ msgstr "Gira la capa"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Shear Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Layers"
+#~ msgstr "Inclina la capa"
+
+#, fuzzy
+#~| msgid "Resize Layer"
+#~ msgid "Resize Layers"
+#~ msgstr "Redimensió de capa"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers X"
+#~ msgstr "Emmiralla la capa per l'eix X"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers Y"
+#~ msgstr "Emmiralla la capa per l'eix Y"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Offset Layer"
+#~ msgctxt "@title:window"
+#~ msgid "Offset Layers"
+#~ msgstr "Desplaçament de la capa"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Offset Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset Layers"
+#~ msgstr "Desplaça la capa"
+
+#, fuzzy
+#~| msgid "Rotate Layer"
+#~ msgid "Rotate Layers"
+#~ msgstr "Gira la capa"
+
+#, fuzzy
+#~| msgid "Shear Layer"
+#~ msgid "Shear Layers"
+#~ msgstr "Inclina la capa"
 
 #~ msgid "Saturation [*varies*]: "
 #~ msgstr "Saturació [*varia*]: "

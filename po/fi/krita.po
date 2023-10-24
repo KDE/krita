@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-22 00:41+0000\n"
+"POT-Creation-Date: 2023-10-24 00:40+0000\n"
 "PO-Revision-Date: 2023-07-27 20:09+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -17932,7 +17932,7 @@ msgstr ""
 "kuvan tarkkuuden asettaminen"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr ""
@@ -18058,7 +18058,7 @@ msgstr "Pehmeä"
 msgid "Gaussian"
 msgstr "Gauss"
 
-#: libs/image/kis_clone_layer.cpp:320
+#: libs/image/kis_clone_layer.cpp:321
 #, kde-format
 msgid "Copy From"
 msgstr "Kopioi lähteestä"
@@ -18220,19 +18220,16 @@ msgstr ""
 "kuvan tarkkuuden muuttaminen"
 
 #: libs/image/kis_image.cc:1037
-msgctxt "(qtundo-format)"
-msgid "Scale Layer"
-msgstr ""
-"Skaalaa taso\n"
-"tason skaalaus"
-
-#: libs/image/kis_image.cc:1037
-#, fuzzy
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
-msgid "Scale Layers"
-msgstr ""
+msgid "Scale Layer"
+msgid_plural "Scale %1 Layers"
+msgstr[0] ""
+"Skaalaa taso\n"
+"tason skaalaus"
+msgstr[1] ""
 "Skaalaa taso\n"
 "tason skaalaus"
 
@@ -18243,7 +18240,7 @@ msgstr ""
 "Kierrä kuvaa\n"
 "kuvan kierto"
 
-#: libs/image/kis_image.cc:1189
+#: libs/image/kis_image.cc:1188
 #, fuzzy
 #| msgid "Raise Mask"
 msgctxt "(qtundo-format)"
@@ -18251,23 +18248,20 @@ msgid "Rotate Mask"
 msgstr "Tuo maski eteen"
 
 #: libs/image/kis_image.cc:1191
-msgctxt "(qtundo-format)"
-msgid "Rotate Layer"
-msgstr ""
-"Kierrä tasoa\n"
-"tason kierto"
-
-#: libs/image/kis_image.cc:1195
-#, fuzzy
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
-msgid "Rotate Layers"
-msgstr ""
+msgid "Rotate Layer"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] ""
+"Kierrä tasoa\n"
+"tason kierto"
+msgstr[1] ""
 "Kierrä tasoa\n"
 "tason kierto"
 
-#: libs/image/kis_image.cc:1296
+#: libs/image/kis_image.cc:1291
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear shapes"
@@ -18275,57 +18269,54 @@ msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Katkaise muotoja"
 
-#: libs/image/kis_image.cc:1299
-msgctxt "(qtundo-format)"
-msgid "Shear Layer"
-msgstr "Viistoa taso"
-
-#: libs/image/kis_image.cc:1304
-#, fuzzy
+#: libs/image/kis_image.cc:1295
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
-msgid "Shear Layers"
-msgstr "Viistoa taso"
+msgid "Shear Layer"
+msgid_plural "Shear %1 Layers"
+msgstr[0] "Viistoa taso"
+msgstr[1] "Viistoa taso"
 
-#: libs/image/kis_image.cc:1311
+#: libs/image/kis_image.cc:1302
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr ""
 "Viistoa kuva\n"
 "kuvan viistoaminen"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1320
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Muunna tason väriavaruus"
 
-#: libs/image/kis_image.cc:1380
+#: libs/image/kis_image.cc:1371
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Muunna kuvan väriavaruutta"
 
-#: libs/image/kis_image.cc:1381
+#: libs/image/kis_image.cc:1372
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Muuta kuvan tyyppiä"
 
-#: libs/image/kis_image.cc:1439
+#: libs/image/kis_image.cc:1430
 #, fuzzy
 #| msgid "Apply Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Käytä profiilia"
 
-#: libs/image/kis_image.cc:1480
+#: libs/image/kis_image.cc:1471
 #, fuzzy
 #| msgid "Apply Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Käytä profiilia"
 
-#: libs/image/kis_image.cc:2540
+#: libs/image/kis_image.cc:2531
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Rajaa valinnat"
@@ -19018,7 +19009,7 @@ msgid "Clone Layer"
 msgstr "&Kopiotaso"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1535
+#: libs/ui/kis_node_manager.cpp:1527
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -19064,7 +19055,7 @@ msgid "Transform Mask"
 msgstr "Muunnosmaski"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1315
+#: libs/ui/kis_node_manager.cpp:1307
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -20764,8 +20755,8 @@ msgstr "Ladataan resursseja…"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1239
-#: libs/ui/kis_node_manager.cpp:1302 libs/ui/KisApplication.cpp:1011
+#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1011
 #: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
 #: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
 #: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
@@ -29361,15 +29352,12 @@ msgid "Layer Size"
 msgstr "Tason koko"
 
 #: libs/ui/imagesize/imagesize.cc:126
-#, kde-format
-msgid "Resize Layer"
-msgstr "Muuta tason kokoa"
-
-#: libs/ui/imagesize/imagesize.cc:126
 #, fuzzy, kde-format
 #| msgid "Resize Layer"
-msgid "Resize Layers"
-msgstr "Muuta tason kokoa"
+msgid "Resize Layer"
+msgid_plural "Resize %1 Layers"
+msgstr[0] "Muuta tason kokoa"
+msgstr[1] "Muuta tason kokoa"
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, kde-format
@@ -31040,43 +31028,37 @@ msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Poista solmut"
 
-#: libs/ui/kis_node_manager.cpp:1039
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgstr "Peilaa X-taso"
-
-#: libs/ui/kis_node_manager.cpp:1041
+#: libs/ui/kis_node_manager.cpp:1038
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask X"
 msgstr "Peilaa X-maski"
 
-#: libs/ui/kis_node_manager.cpp:1045
-#, fuzzy
+#: libs/ui/kis_node_manager.cpp:1041
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers X"
-msgstr "Peilaa X-taso"
+msgid "Mirror Layer X"
+msgid_plural "Mirror %1 Layers X"
+msgstr[0] "Peilaa X-taso"
+msgstr[1] "Peilaa X-taso"
 
-#: libs/ui/kis_node_manager.cpp:1057
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgstr "Peilaa Y-taso"
-
-#: libs/ui/kis_node_manager.cpp:1059
+#: libs/ui/kis_node_manager.cpp:1052
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Y"
 msgstr "Peilaa Y-maski"
 
-#: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
+#: libs/ui/kis_node_manager.cpp:1055
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers Y"
-msgstr "Peilaa Y-taso"
+msgid "Mirror Layer Y"
+msgid_plural "Mirror %1 Layers Y"
+msgstr[0] "Peilaa Y-taso"
+msgstr[1] "Peilaa Y-taso"
 
-#: libs/ui/kis_node_manager.cpp:1071
+#: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer X"
@@ -31084,7 +31066,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers X"
 msgstr "Peilaa X-taso"
 
-#: libs/ui/kis_node_manager.cpp:1078
+#: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer Y"
@@ -31092,12 +31074,12 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Y"
 msgstr "Peilaa Y-taso"
 
-#: libs/ui/kis_node_manager.cpp:1210
+#: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Vie ”%1”"
 
-#: libs/ui/kis_node_manager.cpp:1240
+#: libs/ui/kis_node_manager.cpp:1232
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -31107,7 +31089,7 @@ msgstr ""
 "Ei voitu tallentaa tiedostoa\n"
 "%1"
 
-#: libs/ui/kis_node_manager.cpp:1258
+#: libs/ui/kis_node_manager.cpp:1250
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Layer %1 is not editable"
@@ -31115,7 +31097,7 @@ msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Taso %1 ei ole muokattavissa"
 
-#: libs/ui/kis_node_manager.cpp:1282
+#: libs/ui/kis_node_manager.cpp:1274
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Export"
@@ -31123,7 +31105,7 @@ msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Vie"
 
-#: libs/ui/kis_node_manager.cpp:1302
+#: libs/ui/kis_node_manager.cpp:1294
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -31133,13 +31115,13 @@ msgstr ""
 "Ei voitu tallentaa tiedostoa\n"
 "%1"
 
-#: libs/ui/kis_node_manager.cpp:1328
+#: libs/ui/kis_node_manager.cpp:1320
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Taso %1 ei ole muokattavissa"
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1321
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -31148,50 +31130,50 @@ msgstr ""
 "Alfakanavaa ei voida kirjoittaa emotasoon ”%1”.\n"
 "Toimenpide perutaan."
 
-#: libs/ui/kis_node_manager.cpp:1360
+#: libs/ui/kis_node_manager.cpp:1352
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Kirjoita alfa tasoon"
 
-#: libs/ui/kis_node_manager.cpp:1483
+#: libs/ui/kis_node_manager.cpp:1475
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Leikkaa solmut"
 
-#: libs/ui/kis_node_manager.cpp:1565
+#: libs/ui/kis_node_manager.cpp:1557
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Pikaryhmä"
 
-#: libs/ui/kis_node_manager.cpp:1576
+#: libs/ui/kis_node_manager.cpp:1568
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Rajaava pikaryhmä"
 
-#: libs/ui/kis_node_manager.cpp:1583
+#: libs/ui/kis_node_manager.cpp:1575
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Rajaava ryhmä"
 
-#: libs/ui/kis_node_manager.cpp:1584
+#: libs/ui/kis_node_manager.cpp:1576
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Maskitaso"
 
-#: libs/ui/kis_node_manager.cpp:1611
+#: libs/ui/kis_node_manager.cpp:1603
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1614
+#: libs/ui/kis_node_manager.cpp:1606
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Sijoita jokainen taso omaan erilliseen ryhmätasoonsa"
 
-#: libs/ui/kis_node_manager.cpp:1622
+#: libs/ui/kis_node_manager.cpp:1614
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Pikapura ryhmä"
@@ -39851,6 +39833,13 @@ msgstr ""
 msgid "Zoom view to fit curve."
 msgstr "Sovita näkymä käyrään."
 
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
+#, fuzzy
+#| msgid "Add new keyframe"
+msgctxt "(qtundo-format)"
+msgid "Add Scalar Keyframes"
+msgstr "Lisää avainruutu"
+
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 #, fuzzy
 #| msgctxt "(qtundo-format)"
@@ -44668,28 +44657,31 @@ msgctxt "@title:window"
 msgid "Offset Image"
 msgstr "Kuvan siirtäminen"
 
-#: plugins/extensions/offsetimage/offsetimage.cpp:80
+#: plugins/extensions/offsetimage/offsetimage.cpp:81
 #, fuzzy, kde-format
-#| msgctxt "@title:window"
+#| msgctxt "(qtundo-format)"
 #| msgid "Offset Layer"
 msgctxt "@title:window"
-msgid "Offset Layers"
-msgstr "Tason siirtäminen"
-
-#: plugins/extensions/offsetimage/offsetimage.cpp:85
-msgctxt "(qtundo-format)"
 msgid "Offset Layer"
-msgstr ""
+msgid_plural "Offset %1 Layers"
+msgstr[0] ""
+"Siirrä tasoa\n"
+"tason siirto"
+msgstr[1] ""
 "Siirrä tasoa\n"
 "tason siirto"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
-#, fuzzy
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
-msgid "Offset Layers"
-msgstr ""
+msgid "Offset Layer"
+msgid_plural "Offset %1 Layers"
+msgstr[0] ""
+"Siirrä tasoa\n"
+"tason siirto"
+msgstr[1] ""
 "Siirrä tasoa\n"
 "tason siirto"
 
@@ -45690,15 +45682,12 @@ msgstr ""
 "kuvan peilaus vaakasuunnassa"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, kde-format
-msgid "Rotate Layer"
-msgstr "Kierrä tasoa"
-
-#: plugins/extensions/rotateimage/rotateimage.cc:148
 #, fuzzy, kde-format
 #| msgid "Rotate Layer"
-msgid "Rotate Layers"
-msgstr "Kierrä tasoa"
+msgid "Rotate Layer"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] "Kierrä tasoa"
+msgstr[1] "Kierrä tasoa"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -45839,15 +45828,12 @@ msgid "Shear Image"
 msgstr "Viistoa kuva"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
-#, kde-format
-msgid "Shear Layer"
-msgstr "Viistoa taso"
-
-#: plugins/extensions/shearimage/shearimage.cc:76
 #, fuzzy, kde-format
 #| msgid "Shear Layer"
-msgid "Shear Layers"
-msgstr "Viistoa taso"
+msgid "Shear Layer"
+msgid_plural "Shear %1 Layers"
+msgstr[0] "Viistoa taso"
+msgstr[1] "Viistoa taso"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -47751,6 +47737,13 @@ msgstr "Satunnaisvalinta"
 #, kde-format
 msgid "Size of the window:"
 msgstr "Ikkunan koko:"
+
+#: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
+#: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
+#, fuzzy, kde-format
+#| msgid "Transparent"
+msgid "Reset Transparent"
+msgstr "Läpinäkyvä"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -50580,68 +50573,68 @@ msgid ""
 "layer will be converted into a paint layer."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
 #, fuzzy, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Ei voitu lisätä tasoa kuvaan."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
 #, fuzzy, kde-format
 msgid "Could not create transform mask params"
 msgstr "Ei voitu lisätä tasoa kuvaan."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
 #, fuzzy, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "Tason %1 metatietoja ei voitu ladata."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
 #, fuzzy, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "Tason %1 metatietoja ei voitu ladata."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Kuvapistedataa %1 ei voitu lukea."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Kuvapistedataa %1 ei voitu ladata."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
 #, fuzzy, kde-format
 #| msgid "Could not load profile %1."
 msgid "Could not load profile: %1."
 msgstr "Profiilia %1 ei voitu ladata."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
 #, fuzzy, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Uusi määritys %1"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Tason %1 metatietoja ei voitu ladata."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Vektorivalintaa %1 ei voitu ladata."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Rasterivalintaa %1 ei voitu ladata."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
 #, fuzzy, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Tason %1 metatietoja ei voitu ladata."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -50650,7 +50643,7 @@ msgstr ""
 "jäsennysvirhe avainkuvatiedostossa %1 rivillä %2, sarakkeessa %3.\n"
 "Virheilmoitus: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "tuntematon avainruudun kanavatyyppi: %1 %2 :ssa"
@@ -56691,7 +56684,7 @@ msgid "Percentage:"
 msgstr "Osuus:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:209
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:265
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:266
 msgid "Export Settings"
 msgstr "Vientiasetukset"
 
@@ -57404,90 +57397,90 @@ msgstr "Ei kuvausta"
 msgid "Comics Manager"
 msgstr "Sarjakuvahallinta"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:247
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:248
 msgid "New Project"
 msgstr "Uusi projekti"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:249
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:250
 msgid "Open Project"
 msgstr "Avaa projekti"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:261
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:262
 msgid "Project Settings"
 msgstr "Projektin asetukset"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:264
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Meta Data"
 msgstr "Metatieto"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:281
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:282
 msgid "Add Page"
 msgstr "Lisää sivu"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:283
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:284
 msgid "Add Page from Template"
 msgstr "Lisää sivu mallipohjasta"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:285
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:286
 msgid "Add Existing Pages"
 msgstr "Lisää olemassa olevia sivuja"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:287
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
 msgid "Remove Page"
 msgstr "Poista sivu"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:289
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
 msgid "Batch Resize"
 msgstr "Koon muuttaminen eräajona"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:292
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
 msgid "View Page In Window"
 msgstr "Näytä sivu ikkunassa"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:294
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 #, fuzzy
 #| msgid "Author"
 msgid "Scrape Author Info"
 msgstr "Tekijä"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
 msgid ""
 "Search for author information in documents and add it to the author list. "
 "This does not check for duplicates."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:297
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
 msgid "Scrape Text for Translation"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:318
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:319
 msgid "Export Comic"
 msgstr "Vie sarjakuvaksi"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:323
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
 msgid "Copy Location"
 msgstr "Kopioinnin kohde"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
 msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "Please select the JSON comic config file."
 msgstr "Valitse sarjakuva-asetusten JSON-tiedosto."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "JSON files"
 msgstr "JSON-tiedostot"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid "Config cannot be used"
 msgstr "Asetuksia ei voi käyttää"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
@@ -57497,55 +57490,55 @@ msgstr ""
 "voi luoda. Anna kansioon käyttöoikeudet tai siirrä projekti kansioon, johon "
 "voi kirjoittaa."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:378
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:379
 msgid "Loading Pages..."
 msgstr "Ladataan sivuja…"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:118
 msgid "Krita files"
 msgstr "Krita-tiedostot"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
 msgid "Which existing pages to add?"
 msgstr "Mitkä olemassa olevat sivut lisätään?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:591
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:610
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:592
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:611
 msgid "Where are the templates located?"
 msgstr "Missä mallipohjat sijaitsevat?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:634
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:635
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:113
 msgid "Where should the pages go?"
 msgstr "Mihin sivujen pitäisi mennä?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 msgid "Which image should be the basis the new page?"
 msgstr "Mikä kuva toimii uuden sivun pohjana?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "Export success"
 msgstr "Vienti onnistui"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "The files have been written to the export folder."
 msgstr "Tiedostot kirjoitettiin vientikansioon."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:883
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:884
 msgid "Resize all Pages"
 msgstr "Muuta kaikkien sivujen kokoa"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:894
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
 msgid "Resizing pages..."
 msgstr "Muutetaan sivujen kokoja…"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:896
 msgid "Resizing Pages"
 msgstr "Muutetaan sivujen kokoja"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:909
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -57556,13 +57549,13 @@ msgstr ""
 "Aikaa kulunut: {passedString}:\n"
 "Arvio: {estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 #, fuzzy
 #| msgid "Success"
 msgid "Scraping success"
 msgstr "Onnistui"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr "POT-tiedosto on kirjoitettu kohteeseen: {file}"
@@ -62142,21 +62135,21 @@ msgstr "Käytä"
 msgid "Transform Tool Actions"
 msgstr "Muunnostyökalu"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Aktivoi viivatyökalu"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:868
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "Aktivoi viivatyökalu"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:888
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -62164,20 +62157,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:902
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Tyhjää tasoa ei voi muuntaa"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -62329,8 +62322,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Muunna taso tai valinta"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Muunna"
@@ -62942,6 +62935,76 @@ msgstr "Lähennystyökalu"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Viitekuvatyökalu"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Scale Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale Layers"
+#~ msgstr ""
+#~ "Skaalaa taso\n"
+#~ "tason skaalaus"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Rotate Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate Layers"
+#~ msgstr ""
+#~ "Kierrä tasoa\n"
+#~ "tason kierto"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Shear Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Layers"
+#~ msgstr "Viistoa taso"
+
+#, fuzzy
+#~| msgid "Resize Layer"
+#~ msgid "Resize Layers"
+#~ msgstr "Muuta tason kokoa"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers X"
+#~ msgstr "Peilaa X-taso"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers Y"
+#~ msgstr "Peilaa Y-taso"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Offset Layer"
+#~ msgctxt "@title:window"
+#~ msgid "Offset Layers"
+#~ msgstr "Tason siirtäminen"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Offset Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset Layers"
+#~ msgstr ""
+#~ "Siirrä tasoa\n"
+#~ "tason siirto"
+
+#, fuzzy
+#~| msgid "Rotate Layer"
+#~ msgid "Rotate Layers"
+#~ msgstr "Kierrä tasoa"
+
+#, fuzzy
+#~| msgid "Shear Layer"
+#~ msgid "Shear Layers"
+#~ msgstr "Viistoa taso"
 
 #~ msgid "Saturation [*varies*]: "
 #~ msgstr "Kylläisyys [*vaihtelee*]: "

@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-22 00:41+0000\n"
+"POT-Creation-Date: 2023-10-24 00:40+0000\n"
 "PO-Revision-Date: 2023-03-12 19:06+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -17108,7 +17108,7 @@ msgstr ""
 "изменение разрешения изображения"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr ""
@@ -17228,7 +17228,7 @@ msgstr "Мягкий"
 msgid "Gaussian"
 msgstr "Гауссово"
 
-#: libs/image/kis_clone_layer.cpp:320
+#: libs/image/kis_clone_layer.cpp:321
 #, kde-format
 msgid "Copy From"
 msgstr "Копировать из"
@@ -17385,19 +17385,22 @@ msgstr ""
 "изменение разрешения изображения"
 
 #: libs/image/kis_image.cc:1037
-msgctxt "(qtundo-format)"
-msgid "Scale Layer"
-msgstr ""
-"Масштабирование слоя\n"
-"масштабирование слоя"
-
-#: libs/image/kis_image.cc:1037
-#, fuzzy
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
-msgid "Scale Layers"
-msgstr ""
+msgid "Scale Layer"
+msgid_plural "Scale %1 Layers"
+msgstr[0] ""
+"Масштабирование слоя\n"
+"масштабирование слоя"
+msgstr[1] ""
+"Масштабирование слоя\n"
+"масштабирование слоя"
+msgstr[2] ""
+"Масштабирование слоя\n"
+"масштабирование слоя"
+msgstr[3] ""
 "Масштабирование слоя\n"
 "масштабирование слоя"
 
@@ -17408,7 +17411,7 @@ msgstr ""
 "Поворот изображения\n"
 "поворот изображения"
 
-#: libs/image/kis_image.cc:1189
+#: libs/image/kis_image.cc:1188
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr ""
@@ -17416,61 +17419,67 @@ msgstr ""
 "поворот маски"
 
 #: libs/image/kis_image.cc:1191
-msgctxt "(qtundo-format)"
-msgid "Rotate Layer"
-msgstr ""
-"Поворот слоя\n"
-"поворот слоя"
-
-#: libs/image/kis_image.cc:1195
-#, fuzzy
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
-msgid "Rotate Layers"
-msgstr ""
+msgid "Rotate Layer"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] ""
+"Поворот слоя\n"
+"поворот слоя"
+msgstr[1] ""
+"Поворот слоя\n"
+"поворот слоя"
+msgstr[2] ""
+"Поворот слоя\n"
+"поворот слоя"
+msgstr[3] ""
 "Поворот слоя\n"
 "поворот слоя"
 
-#: libs/image/kis_image.cc:1296
+#: libs/image/kis_image.cc:1291
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr ""
 "Сдвиг маски\n"
 "сдвиг маски"
 
-#: libs/image/kis_image.cc:1299
-msgctxt "(qtundo-format)"
-msgid "Shear Layer"
-msgstr ""
-"Сдвиг слоя\n"
-"сдвиг слоя"
-
-#: libs/image/kis_image.cc:1304
-#, fuzzy
+#: libs/image/kis_image.cc:1295
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
-msgid "Shear Layers"
-msgstr ""
+msgid "Shear Layer"
+msgid_plural "Shear %1 Layers"
+msgstr[0] ""
+"Сдвиг слоя\n"
+"сдвиг слоя"
+msgstr[1] ""
+"Сдвиг слоя\n"
+"сдвиг слоя"
+msgstr[2] ""
+"Сдвиг слоя\n"
+"сдвиг слоя"
+msgstr[3] ""
 "Сдвиг слоя\n"
 "сдвиг слоя"
 
-#: libs/image/kis_image.cc:1311
+#: libs/image/kis_image.cc:1302
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr ""
 "Сдвиг изображения\n"
 "сдвиг изображения"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1320
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr ""
 "Преобразование цветового пространства слоя\n"
 "преобразование цветового пространства слоя"
 
-#: libs/image/kis_image.cc:1380
+#: libs/image/kis_image.cc:1371
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr ""
@@ -17478,28 +17487,28 @@ msgstr ""
 "преобразование цветового пространства изображения"
 
 # BUGME: is it "color space of projection"? --aspotashev
-#: libs/image/kis_image.cc:1381
+#: libs/image/kis_image.cc:1372
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr ""
 "Преобразование цветового пространства проекции\n"
 "преобразование цветового пространства проекции"
 
-#: libs/image/kis_image.cc:1439
+#: libs/image/kis_image.cc:1430
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr ""
 "Назначение профиля слою\n"
 "назначение профиля слою"
 
-#: libs/image/kis_image.cc:1480
+#: libs/image/kis_image.cc:1471
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr ""
 "Назначение профиля\n"
 "назначение профиля"
 
-#: libs/image/kis_image.cc:2540
+#: libs/image/kis_image.cc:2531
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr ""
@@ -18181,7 +18190,7 @@ msgid "Clone Layer"
 msgstr "Клонирующий слой"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1535
+#: libs/ui/kis_node_manager.cpp:1527
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -18226,7 +18235,7 @@ msgid "Transform Mask"
 msgstr "Трансформирующая маска"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1315
+#: libs/ui/kis_node_manager.cpp:1307
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19826,8 +19835,8 @@ msgstr "Локальные источники"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1239
-#: libs/ui/kis_node_manager.cpp:1302 libs/ui/KisApplication.cpp:1011
+#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1011
 #: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
 #: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
 #: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
@@ -28319,15 +28328,14 @@ msgid "Layer Size"
 msgstr "Размер слоя"
 
 #: libs/ui/imagesize/imagesize.cc:126
-#, kde-format
-msgid "Resize Layer"
-msgstr "Изменение размера слоя"
-
-#: libs/ui/imagesize/imagesize.cc:126
 #, fuzzy, kde-format
 #| msgid "Resize Layer"
-msgid "Resize Layers"
-msgstr "Изменение размера слоя"
+msgid "Resize Layer"
+msgid_plural "Resize %1 Layers"
+msgstr[0] "Изменение размера слоя"
+msgstr[1] "Изменение размера слоя"
+msgstr[2] "Изменение размера слоя"
+msgstr[3] "Изменение размера слоя"
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, kde-format
@@ -29969,15 +29977,7 @@ msgstr ""
 "Удаление узлов\n"
 "удаление узлов"
 
-# tied to action "Mirror Layer Horizontally" --aspotashev
-#: libs/ui/kis_node_manager.cpp:1039
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgstr ""
-"Горизонтальное отражение слоя\n"
-"горизонтальное отражение слоя"
-
-#: libs/ui/kis_node_manager.cpp:1041
+#: libs/ui/kis_node_manager.cpp:1038
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask X"
 msgstr ""
@@ -29985,25 +29985,27 @@ msgstr ""
 "горизонтальное отражение маски"
 
 # tied to action "Mirror Layer Horizontally" --aspotashev
-#: libs/ui/kis_node_manager.cpp:1045
-#, fuzzy
+#: libs/ui/kis_node_manager.cpp:1041
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers X"
-msgstr ""
+msgid "Mirror Layer X"
+msgid_plural "Mirror %1 Layers X"
+msgstr[0] ""
+"Горизонтальное отражение слоя\n"
+"горизонтальное отражение слоя"
+msgstr[1] ""
+"Горизонтальное отражение слоя\n"
+"горизонтальное отражение слоя"
+msgstr[2] ""
+"Горизонтальное отражение слоя\n"
+"горизонтальное отражение слоя"
+msgstr[3] ""
 "Горизонтальное отражение слоя\n"
 "горизонтальное отражение слоя"
 
-# tied to action "Mirror Layer Vertically" --aspotashev
-#: libs/ui/kis_node_manager.cpp:1057
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgstr ""
-"Вертикальное отражение слоя\n"
-"вертикальное отражение слоя"
-
-#: libs/ui/kis_node_manager.cpp:1059
+#: libs/ui/kis_node_manager.cpp:1052
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Y"
 msgstr ""
@@ -30011,18 +30013,28 @@ msgstr ""
 "вертикальное отражение маски"
 
 # tied to action "Mirror Layer Vertically" --aspotashev
-#: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
+#: libs/ui/kis_node_manager.cpp:1055
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers Y"
-msgstr ""
+msgid "Mirror Layer Y"
+msgid_plural "Mirror %1 Layers Y"
+msgstr[0] ""
+"Вертикальное отражение слоя\n"
+"вертикальное отражение слоя"
+msgstr[1] ""
+"Вертикальное отражение слоя\n"
+"вертикальное отражение слоя"
+msgstr[2] ""
+"Вертикальное отражение слоя\n"
+"вертикальное отражение слоя"
+msgstr[3] ""
 "Вертикальное отражение слоя\n"
 "вертикальное отражение слоя"
 
 # tied to action "Mirror Layer Horizontally" --aspotashev
-#: libs/ui/kis_node_manager.cpp:1071
+#: libs/ui/kis_node_manager.cpp:1063
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers X"
 msgstr ""
@@ -30030,47 +30042,47 @@ msgstr ""
 "отражение всех слоёв относительно оси X"
 
 # tied to action "Mirror Layer Vertically" --aspotashev
-#: libs/ui/kis_node_manager.cpp:1078
+#: libs/ui/kis_node_manager.cpp:1070
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Y"
 msgstr ""
 "Отражение всех слоёв относительно оси Y\n"
 "отражение всех слоёв относительно оси Y"
 
-#: libs/ui/kis_node_manager.cpp:1210
+#: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Экспорт «%1»"
 
-#: libs/ui/kis_node_manager.cpp:1240
+#: libs/ui/kis_node_manager.cpp:1232
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Не удалось сохранить слой. %1"
 
-#: libs/ui/kis_node_manager.cpp:1258
+#: libs/ui/kis_node_manager.cpp:1250
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Слой не имеет пиксельные данные"
 
-#: libs/ui/kis_node_manager.cpp:1282
+#: libs/ui/kis_node_manager.cpp:1274
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Экспорт в SVG"
 
-#: libs/ui/kis_node_manager.cpp:1302
+#: libs/ui/kis_node_manager.cpp:1294
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Не удалось сохранить как svg: %1"
 
-#: libs/ui/kis_node_manager.cpp:1328
+#: libs/ui/kis_node_manager.cpp:1320
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Слой %1 нельзя редактировать"
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1321
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -30079,58 +30091,58 @@ msgstr ""
 "Не удалось изменить альфа-канал родительского слоя «%1».\n"
 "Операция будет отменена."
 
-#: libs/ui/kis_node_manager.cpp:1360
+#: libs/ui/kis_node_manager.cpp:1352
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr ""
 "Запись альфа-канал в слой\n"
 "запись альфа-канала в слой"
 
-#: libs/ui/kis_node_manager.cpp:1483
+#: libs/ui/kis_node_manager.cpp:1475
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr ""
 "Вырезание узлов\n"
 "вырезание узлов"
 
-#: libs/ui/kis_node_manager.cpp:1565
+#: libs/ui/kis_node_manager.cpp:1557
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr ""
 "Быстрая группировка\n"
 "быструю группировку"
 
-#: libs/ui/kis_node_manager.cpp:1576
+#: libs/ui/kis_node_manager.cpp:1568
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr ""
 "Быстрая группировка в макетную группу\n"
 "быструю группировку в макетную группу"
 
-#: libs/ui/kis_node_manager.cpp:1583
+#: libs/ui/kis_node_manager.cpp:1575
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Макетная группа"
 
-#: libs/ui/kis_node_manager.cpp:1584
+#: libs/ui/kis_node_manager.cpp:1576
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Маскирующий слой"
 
-#: libs/ui/kis_node_manager.cpp:1611
+#: libs/ui/kis_node_manager.cpp:1603
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1614
+#: libs/ui/kis_node_manager.cpp:1606
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Поместить каждый слой в отдельную группу"
 
-#: libs/ui/kis_node_manager.cpp:1622
+#: libs/ui/kis_node_manager.cpp:1614
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr ""
@@ -38754,6 +38766,14 @@ msgstr ""
 msgid "Zoom view to fit curve."
 msgstr "Увеличить масштаб изображения, чтобы оно соответствовало кривой."
 
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Add scalar keyframes"
+msgctxt "(qtundo-format)"
+msgid "Add Scalar Keyframes"
+msgstr "Добавить скалярные ключевые кадры"
+
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
 msgid "Adjust keyframe"
@@ -43569,28 +43589,43 @@ msgctxt "@title:window"
 msgid "Offset Image"
 msgstr "Смещение изображения"
 
-#: plugins/extensions/offsetimage/offsetimage.cpp:80
+#: plugins/extensions/offsetimage/offsetimage.cpp:81
 #, fuzzy, kde-format
-#| msgctxt "@title:window"
+#| msgctxt "(qtundo-format)"
 #| msgid "Offset Layer"
 msgctxt "@title:window"
-msgid "Offset Layers"
-msgstr "Смещение слоя"
-
-#: plugins/extensions/offsetimage/offsetimage.cpp:85
-msgctxt "(qtundo-format)"
 msgid "Offset Layer"
-msgstr ""
+msgid_plural "Offset %1 Layers"
+msgstr[0] ""
+"Смещение слоя\n"
+"смещение слоя"
+msgstr[1] ""
+"Смещение слоя\n"
+"смещение слоя"
+msgstr[2] ""
+"Смещение слоя\n"
+"смещение слоя"
+msgstr[3] ""
 "Смещение слоя\n"
 "смещение слоя"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
-#, fuzzy
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
-msgid "Offset Layers"
-msgstr ""
+msgid "Offset Layer"
+msgid_plural "Offset %1 Layers"
+msgstr[0] ""
+"Смещение слоя\n"
+"смещение слоя"
+msgstr[1] ""
+"Смещение слоя\n"
+"смещение слоя"
+msgstr[2] ""
+"Смещение слоя\n"
+"смещение слоя"
+msgstr[3] ""
 "Смещение слоя\n"
 "смещение слоя"
 
@@ -44593,15 +44628,14 @@ msgstr ""
 "отражение изображения по горизонтали"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, kde-format
-msgid "Rotate Layer"
-msgstr "Поворот слоя"
-
-#: plugins/extensions/rotateimage/rotateimage.cc:148
 #, fuzzy, kde-format
 #| msgid "Rotate Layer"
-msgid "Rotate Layers"
-msgstr "Поворот слоя"
+msgid "Rotate Layer"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] "Поворот слоя"
+msgstr[1] "Поворот слоя"
+msgstr[2] "Поворот слоя"
+msgstr[3] "Поворот слоя"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -44745,15 +44779,14 @@ msgid "Shear Image"
 msgstr "Сдвиг изображения"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
-#, kde-format
-msgid "Shear Layer"
-msgstr "Сдвиг слоя"
-
-#: plugins/extensions/shearimage/shearimage.cc:76
 #, fuzzy, kde-format
 #| msgid "Shear Layer"
-msgid "Shear Layers"
-msgstr "Сдвиг слоя"
+msgid "Shear Layer"
+msgid_plural "Shear %1 Layers"
+msgstr[0] "Сдвиг слоя"
+msgstr[1] "Сдвиг слоя"
+msgstr[2] "Сдвиг слоя"
+msgstr[3] "Сдвиг слоя"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -46618,6 +46651,13 @@ msgstr "Случайный выбор"
 #, kde-format
 msgid "Size of the window:"
 msgstr "Размер окна:"
+
+#: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
+#: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
+#, fuzzy, kde-format
+#| msgid "Transparent"
+msgid "Reset Transparent"
+msgstr "Прозрачный"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -49492,68 +49532,68 @@ msgstr ""
 "Файл состоит из клонирующего слоя с неверным идентификатором исходного узла. "
 "Этот слой будет преобразован в обычный слой."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Не удалось загрузить «id» трансформирующей маски"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "Не удалось создать параметры трансформирующей маски"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "Не удалось найти пиксельные данные ключевого кадра для кадра %1 в %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr ""
 "Не удалось загрузить пиксельные данные ключевого кадра для кадра %1 в %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Не удалось прочитать информацию о точках: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Не удалось загрузить информацию о точках: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "Не удалось загрузить профиль: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Не удалось отфильтровать конфигурацию %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Не удалось загрузить метаданные слоя %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Не удалось загрузить векторное выделение %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Не удалось загрузить растровое выделение %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Не удалось загрузить ключевые кадры из %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -49562,7 +49602,7 @@ msgstr ""
 "Ошибка анализа в файле ключевого кадра %1 в строке %2, столбце %3.\n"
 "Текст ошибки: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "Неизвестный тип канала ключевых кадров: %1 in %2"
@@ -55534,7 +55574,7 @@ msgid "Percentage:"
 msgstr "Проценты:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:209
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:265
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:266
 msgid "Export Settings"
 msgstr "Параметры экспорта"
 
@@ -56273,52 +56313,52 @@ msgstr "Нет описания"
 msgid "Comics Manager"
 msgstr "Редактор комиксов"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:247
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:248
 msgid "New Project"
 msgstr "Создать проект"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:249
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:250
 msgid "Open Project"
 msgstr "Открыть проект"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:261
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:262
 msgid "Project Settings"
 msgstr "Параметры проекта"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:264
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Meta Data"
 msgstr "Метаданные"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:281
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:282
 msgid "Add Page"
 msgstr "Добавить страницу"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:283
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:284
 msgid "Add Page from Template"
 msgstr "Добавить страницу из шаблона"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:285
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:286
 msgid "Add Existing Pages"
 msgstr "Добавить существующие страницы"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:287
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
 msgid "Remove Page"
 msgstr "Удалить страницу"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:289
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
 msgid "Batch Resize"
 msgstr "Пакетное изменение размера"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:292
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
 msgid "View Page In Window"
 msgstr "Просмотр страницы в окне"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:294
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 msgid "Scrape Author Info"
 msgstr "Собрать данные автора"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
 msgid ""
 "Search for author information in documents and add it to the author list. "
 "This does not check for duplicates."
@@ -56326,19 +56366,19 @@ msgstr ""
 "Искать в документах данные об авторах и добавлять из в список авторов. "
 "Программа не будет выполнять проверку наличия дубликатов записи."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:297
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
 msgid "Scrape Text for Translation"
 msgstr "Собрать текст для перевода"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:318
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:319
 msgid "Export Comic"
 msgstr "Экспорт комикса"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:323
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
 msgid "Copy Location"
 msgstr "Копировать расположение"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
 msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
@@ -56346,19 +56386,19 @@ msgstr ""
 "Копирует расположение проекта в буфер обмена. Полезно для быстрого "
 "копирования данных в файловый менеджер."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "Please select the JSON comic config file."
 msgstr "Выберите файл конфигурации комикса в формате JSON."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "JSON files"
 msgstr "Файлы JSON"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid "Config cannot be used"
 msgstr "Невозможно использовать конфигурацию"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
@@ -56368,55 +56408,55 @@ msgstr ""
 "параметры доступа к папке или переместите проект в папку с соответствующими "
 "параметрами доступа."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:378
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:379
 msgid "Loading Pages..."
 msgstr "Загрузка страниц..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:118
 msgid "Krita files"
 msgstr "Файлы Krita"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
 msgid "Which existing pages to add?"
 msgstr "Какие существующие страницы нужно добавить?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:591
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:610
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:592
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:611
 msgid "Where are the templates located?"
 msgstr "Где находятся шаблоны?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:634
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:635
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:113
 msgid "Where should the pages go?"
 msgstr "Куда следует сохранять страницы?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 msgid "Which image should be the basis the new page?"
 msgstr "Какое изображение должно быть основой новой страницы?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "Export success"
 msgstr "Экспорт завершён успешно"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "The files have been written to the export folder."
 msgstr "Файлы были записаны в папку экспорта."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:883
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:884
 msgid "Resize all Pages"
 msgstr "Изменить размер всех страниц"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:894
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
 msgid "Resizing pages..."
 msgstr "Изменение размера страниц..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:896
 msgid "Resizing Pages"
 msgstr "Изменение размера страниц"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:909
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -56427,11 +56467,11 @@ msgstr ""
 "Прошло времени: {passedString}:\n"
 " Оценка продолжительности:{estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 msgid "Scraping success"
 msgstr "Данные успешно собраны"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr "POT-файл был записан в: {file}"
@@ -61082,13 +61122,13 @@ msgstr "Применить"
 msgid "Transform Tool Actions"
 msgstr "Действия трансформации"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Невозможно использовать инструмент преобразования на этом слое"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:868
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -61096,7 +61136,7 @@ msgstr ""
 "Невозможно использовать инструмент преобразования на этом слое. Вместо этого "
 "воспользуйтесь маской преобразования."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:888
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -61106,21 +61146,21 @@ msgstr ""
 "Слой имеет дочерние слои с трансформирующей маской. Отключите их перед "
 "трансформацией."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:902
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Выделение игнорируется при редактировании трансформирующей маски "
 
 # BUGME: why space at the end? --aspotashev
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Нельзя трансформировать пустой слой "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -61280,8 +61320,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Трансформация слоя или выделения"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr ""
@@ -61891,6 +61931,84 @@ msgstr "Изменение масштаба"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Эталонные изображения"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Scale Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale Layers"
+#~ msgstr ""
+#~ "Масштабирование слоя\n"
+#~ "масштабирование слоя"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Rotate Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate Layers"
+#~ msgstr ""
+#~ "Поворот слоя\n"
+#~ "поворот слоя"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Shear Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Layers"
+#~ msgstr ""
+#~ "Сдвиг слоя\n"
+#~ "сдвиг слоя"
+
+#, fuzzy
+#~| msgid "Resize Layer"
+#~ msgid "Resize Layers"
+#~ msgstr "Изменение размера слоя"
+
+# tied to action "Mirror Layer Horizontally" --aspotashev
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers X"
+#~ msgstr ""
+#~ "Горизонтальное отражение слоя\n"
+#~ "горизонтальное отражение слоя"
+
+# tied to action "Mirror Layer Vertically" --aspotashev
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers Y"
+#~ msgstr ""
+#~ "Вертикальное отражение слоя\n"
+#~ "вертикальное отражение слоя"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Offset Layer"
+#~ msgctxt "@title:window"
+#~ msgid "Offset Layers"
+#~ msgstr "Смещение слоя"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Offset Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset Layers"
+#~ msgstr ""
+#~ "Смещение слоя\n"
+#~ "смещение слоя"
+
+#, fuzzy
+#~| msgid "Rotate Layer"
+#~ msgid "Rotate Layers"
+#~ msgstr "Поворот слоя"
+
+#, fuzzy
+#~| msgid "Shear Layer"
+#~ msgid "Shear Layers"
+#~ msgstr "Сдвиг слоя"
 
 #~ msgid "Saturation [*varies*]: "
 #~ msgstr "Насыщенность (*изменяется*): "

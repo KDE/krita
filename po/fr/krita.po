@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-22 00:41+0000\n"
-"PO-Revision-Date: 2023-10-21 20:59+0200\n"
+"POT-Creation-Date: 2023-10-24 00:40+0000\n"
+"PO-Revision-Date: 2023-10-22 15:34+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -2493,7 +2493,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pixelart_dither.kpp"
 msgid "Pixelart dither"
-msgstr "Tramage du Pixelart"
+msgstr "Tramage du PixelArt"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2501,7 +2501,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pixelart_round.kpp"
 msgid "Pixelart round"
-msgstr "Arrondi du Pixelart"
+msgstr "Arrondi du PixelArt"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8827,7 +8827,7 @@ msgstr "Sélectionner les préréglages de gomme"
 msgctxt "action"
 msgid "Select eraser preset, along with the freehand brush tool"
 msgstr ""
-"Sélectionner les préréglages de gomme au bord de l’outil de brosse à main "
+"Sélectionner les préréglages de gomme au bord de l'outil de brosse à main "
 "levée"
 
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -8846,7 +8846,7 @@ msgstr "Sélectionner les préréglage de brosse"
 msgctxt "action"
 msgid "Select brush preset, along with the freehand brush tool"
 msgstr ""
-"Sélectionner les préréglages de brosse au bord de l’outil de brosse à main "
+"Sélectionner les préréglages de brosse au bord de l'outil de brosse à main "
 "levée"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -8859,7 +8859,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Reload Original Preset"
-msgstr "Recharger le préreglage d'origine"
+msgstr "Recharger le pré-réglage d'origine"
 
 #. i18n: context: text @ Action (preserve_alpha), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (preserve_alpha), Actions (Painting), ActionCollection (Krita)
@@ -12293,12 +12293,10 @@ msgstr "Décomposition en ondelettes"
 
 #. i18n: context: text @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3158
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Hori&zontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Hori&zontally"
-msgstr "Retourner le calque hori&zontalement"
+msgstr "Réaliser un miroir des calques hori&zontalement"
 
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
@@ -12314,24 +12312,20 @@ msgstr "Retourner le calque horizontalement"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3170
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer &Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers &Vertically"
-msgstr "Retourner le calque &verticalement"
+msgstr "Réaliser un miroir des calques horizontalement"
 
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3172 krita/krita.action:3173
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Vertically"
-msgstr "Retourner le calque verticalement"
+msgstr "Réaliser un miroir des calques verticalement"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3182
@@ -16066,7 +16060,7 @@ msgstr "Espacement > 0.5, il faudrait désactiver l'aperçu instantané"
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:35
 #, kde-format
 msgid "Could not access brush tip metadata"
-msgstr "Impossible d''accéder aux métadonnées d'astuces pour les brosses."
+msgstr "Impossible d'accéder aux métadonnées d'astuces pour les brosses."
 
 #: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
 #, kde-format
@@ -16967,7 +16961,7 @@ msgid "Set Image Resolution"
 msgstr "Définir la résolution de l'image"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr "Déplacer"
@@ -17077,7 +17071,7 @@ msgstr "Doux"
 msgid "Gaussian"
 msgstr "Gaussien"
 
-#: libs/image/kis_clone_layer.cpp:320
+#: libs/image/kis_clone_layer.cpp:321
 #, kde-format
 msgid "Copy From"
 msgstr "Copier depuis"
@@ -17224,81 +17218,81 @@ msgid "Change Image Resolution"
 msgstr "Modifier la résolution de l'image"
 
 #: libs/image/kis_image.cc:1037
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
-msgstr "Redimensionner le calque"
-
-#: libs/image/kis_image.cc:1037
-msgctxt "(qtundo-format)"
-msgid "Scale Layers"
-msgstr "Mettre les calques à l'échelle"
+msgid_plural "Scale %1 Layers"
+msgstr[0] "Redimensionner le calque"
+msgstr[1] "Redimensionner le calque"
 
 #: libs/image/kis_image.cc:1178
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rotation image"
 
-#: libs/image/kis_image.cc:1189
+#: libs/image/kis_image.cc:1188
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Rotation masque"
 
 #: libs/image/kis_image.cc:1191
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
-msgstr "Rotation calque"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] "Rotation calque"
+msgstr[1] "Rotation calque"
 
-#: libs/image/kis_image.cc:1195
-msgctxt "(qtundo-format)"
-msgid "Rotate Layers"
-msgstr "Faire pivoter les calques"
-
-#: libs/image/kis_image.cc:1296
+#: libs/image/kis_image.cc:1291
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Cisailler le masque"
 
-#: libs/image/kis_image.cc:1299
+#: libs/image/kis_image.cc:1295
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
-msgstr "Cisailler le calque"
+msgid_plural "Shear %1 Layers"
+msgstr[0] "Cisailler le calque"
+msgstr[1] "Cisailler le calque"
 
-#: libs/image/kis_image.cc:1304
-msgctxt "(qtundo-format)"
-msgid "Shear Layers"
-msgstr "Cisailler les calques"
-
-#: libs/image/kis_image.cc:1311
+#: libs/image/kis_image.cc:1302
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Cisailler l'image"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1320
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Convertir l'espace colorimétrique du calque de couleurs"
 
-#: libs/image/kis_image.cc:1380
+#: libs/image/kis_image.cc:1371
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Convertir l'espace de couleur de l'image"
 
-#: libs/image/kis_image.cc:1381
+#: libs/image/kis_image.cc:1372
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Convertir l'espace de couleur de projection"
 
-#: libs/image/kis_image.cc:1439
+#: libs/image/kis_image.cc:1430
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Attribuer un profil à un calque"
 
-#: libs/image/kis_image.cc:1480
+#: libs/image/kis_image.cc:1471
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Associer un profil"
 
-#: libs/image/kis_image.cc:2540
+#: libs/image/kis_image.cc:2531
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Rogner les sélections"
@@ -17926,7 +17920,7 @@ msgid "Clone Layer"
 msgstr "Calque de clonage"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1535
+#: libs/ui/kis_node_manager.cpp:1527
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -17970,7 +17964,7 @@ msgid "Transform Mask"
 msgstr "Masque de transformation"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1315
+#: libs/ui/kis_node_manager.cpp:1307
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19569,8 +19563,8 @@ msgstr "Ressources locales"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1239
-#: libs/ui/kis_node_manager.cpp:1302 libs/ui/KisApplication.cpp:1011
+#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1011
 #: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
 #: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
 #: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
@@ -21129,7 +21123,7 @@ msgid ""
 "destination streams of the FFmpeg instance"
 msgstr ""
 "Ajouter ici les options de filtrage « FFmpeg ». Elles seront insérées entre "
-"les flux de source et de destination de l'instance« FFmpeg »."
+"les flux de source et de destination de l'instance « FFmpeg »."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -22836,7 +22830,7 @@ msgstr ""
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
-msgstr "{n}%"
+msgstr "{n} %"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:918
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
@@ -23494,7 +23488,7 @@ msgid ""
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
 "L'annulation cumulative permet à Krita de fusionner les actions d'annulation "
-"et de rendre l'historique d'annulation plus propre. Krita gardera encore "
+"et de rendre l'historique d'annulation plus propre. Krita conservera encore "
 "quelques dernières actions non fusionnées selon les options « Attendre avant "
 "de fusionner les appuis de touches » et « Exclure les derniers appuis de "
 "touches de la fusion ». Chaque fois qu'une action devient obsolète en "
@@ -28001,14 +27995,12 @@ msgid "Layer Size"
 msgstr "Taille du calque"
 
 #: libs/ui/imagesize/imagesize.cc:126
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resize Layer"
 msgid "Resize Layer"
-msgstr "Redimensionner le calque"
-
-#: libs/ui/imagesize/imagesize.cc:126
-#, kde-format
-msgid "Resize Layers"
-msgstr "Re-dimensionner les calques"
+msgid_plural "Resize %1 Layers"
+msgstr[0] "Redimensionner le calque"
+msgstr[1] "Redimensionner le calque"
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, kde-format
@@ -29134,7 +29126,7 @@ msgstr "%1x%2 décalage : %3,%4"
 #, kde-format
 msgctxt "@option:radio"
 msgid "%1 (Wintab)"
-msgstr "%1 (Wintab)"
+msgstr "%1 (WinTab)"
 
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.cpp:49
 #, kde-format
@@ -29472,7 +29464,7 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 "Le calque non animé est fusionné dans la trame actuelle. Pour le fusionner "
-"dans l’élément entier, veuillez créer au moins une trame."
+"dans l'élément entier, veuillez créer au moins une trame."
 
 #: libs/ui/kis_layer_manager.cc:930
 #, kde-format
@@ -29596,86 +29588,80 @@ msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Supprimer les nœuds"
 
-#: libs/ui/kis_node_manager.cpp:1039
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgstr "Miroir du calque selon X"
-
-#: libs/ui/kis_node_manager.cpp:1041
+#: libs/ui/kis_node_manager.cpp:1038
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask X"
 msgstr "Miroir du masque selon X"
 
-#: libs/ui/kis_node_manager.cpp:1045
-#, fuzzy
+#: libs/ui/kis_node_manager.cpp:1041
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers X"
-msgstr "Miroir du calque selon X"
+msgid "Mirror Layer X"
+msgid_plural "Mirror %1 Layers X"
+msgstr[0] "Miroir du calque selon X"
+msgstr[1] "Miroir du calque selon X"
 
-#: libs/ui/kis_node_manager.cpp:1057
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgstr "Miroir du calque selon Y"
-
-#: libs/ui/kis_node_manager.cpp:1059
+#: libs/ui/kis_node_manager.cpp:1052
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Y"
 msgstr "Miroir du masque selon Y"
 
-#: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
+#: libs/ui/kis_node_manager.cpp:1055
+#, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers Y"
-msgstr "Miroir du calque selon Y"
+msgid "Mirror Layer Y"
+msgid_plural "Mirror %1 Layers Y"
+msgstr[0] "Miroir du calque selon Y"
+msgstr[1] "Miroir du calque selon Y"
 
-#: libs/ui/kis_node_manager.cpp:1071
+#: libs/ui/kis_node_manager.cpp:1063
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers X"
 msgstr "Faire un reflet de tous les calques selon X"
 
-#: libs/ui/kis_node_manager.cpp:1078
+#: libs/ui/kis_node_manager.cpp:1070
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Y"
 msgstr "Faire un reflet de tous les calques selon Y"
 
-#: libs/ui/kis_node_manager.cpp:1210
+#: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Exporter « %1 »"
 
-#: libs/ui/kis_node_manager.cpp:1240
+#: libs/ui/kis_node_manager.cpp:1232
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Impossible d'enregistrer le calque. %1"
 
-#: libs/ui/kis_node_manager.cpp:1258
+#: libs/ui/kis_node_manager.cpp:1250
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Le calque ne possède aucune donnée de pixel."
 
-#: libs/ui/kis_node_manager.cpp:1282
+#: libs/ui/kis_node_manager.cpp:1274
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Exporter en SVG"
 
-#: libs/ui/kis_node_manager.cpp:1302
+#: libs/ui/kis_node_manager.cpp:1294
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Impossible d'enregistrer en format SVG : %1"
 
-#: libs/ui/kis_node_manager.cpp:1328
+#: libs/ui/kis_node_manager.cpp:1320
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Le calque %1 n'est pas modifiable."
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1321
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -29684,49 +29670,49 @@ msgstr ""
 "Impossible d'écrire le canal alpha dans le calque parent « %1 ».\n"
 "L'opération sera annulée."
 
-#: libs/ui/kis_node_manager.cpp:1360
+#: libs/ui/kis_node_manager.cpp:1352
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Écrire le canal alpha dans un calque"
 
-#: libs/ui/kis_node_manager.cpp:1483
+#: libs/ui/kis_node_manager.cpp:1475
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Couper les nœuds"
 
-#: libs/ui/kis_node_manager.cpp:1565
+#: libs/ui/kis_node_manager.cpp:1557
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Groupe rapide"
 
-#: libs/ui/kis_node_manager.cpp:1576
+#: libs/ui/kis_node_manager.cpp:1568
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Groupe de rognage rapide"
 
-#: libs/ui/kis_node_manager.cpp:1583
+#: libs/ui/kis_node_manager.cpp:1575
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Groupe de rognage"
 
-#: libs/ui/kis_node_manager.cpp:1584
+#: libs/ui/kis_node_manager.cpp:1576
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Masque"
 
-#: libs/ui/kis_node_manager.cpp:1611
+#: libs/ui/kis_node_manager.cpp:1603
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "Impossible de déplacer le calque « %1 » dans le nouveau parent « %2 »"
 
-#: libs/ui/kis_node_manager.cpp:1614
+#: libs/ui/kis_node_manager.cpp:1606
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Impossible de déplacer le calque « %1 » dans le calque racine"
 
-#: libs/ui/kis_node_manager.cpp:1622
+#: libs/ui/kis_node_manager.cpp:1614
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Dégroupage rapide"
@@ -31004,7 +30990,7 @@ msgid ""
 "The image has a profile attached that Krita cannot edit images in (\"%1\"), "
 "please select a space to convert to for editing: \n"
 msgstr ""
-"L’image comporte un profil associé que Krita ne peut pas modifier pour les "
+"L'image comporte un profil associé que Krita ne peut pas modifier pour les "
 "images (« %1 »). Veuillez sélectionner un espace colorimétrique pour la "
 "conversion avant modification : \n"
 
@@ -33505,10 +33491,10 @@ msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/RGB_color_space\">RGB (Red, "
 "Green, Blue)</a></b> est le modèle de couleurs utilisés par les écrans et "
 "les autres média utilisant de l'affichage lumineux.<br/> « RGB » est un "
-"modèle additif de couleurs : l'ajout de couleurs ensemble les rendent plus "
-"lumineuses. Ce modèle de couleurs est le plus étendu de tous les modèles de "
-"couleurs. Il est recommandé comme modèle pour le dessin, que vous pouvez "
-"convertir ultérieurement vers d'autres espaces. Il est aussi l'espace "
+"modèle en addition de couleurs : l'ajout de couleurs ensemble les rendent "
+"plus lumineuses. Ce modèle de couleurs est le plus étendu de tous les "
+"modèles de couleurs. Il est recommandé comme modèle pour le dessin, que vous "
+"pouvez convertir ultérieurement vers d'autres espaces. Il est aussi l'espace "
 "colorimétrique recommandé pour l'édition « HDR »."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:408
@@ -33549,7 +33535,7 @@ msgstr ""
 "<b><a href=\"https://fr.wikipedia.org/wiki/CIE_XYZ\">CIE XYZ</a></b> est "
 "l'espace déterminé par le « CIE » comme espace englobant toutes les autres "
 "couleurs et utilisé pour la conversion de couleurs entre les profils. "
-"« XYZ » est un modèle additif de couleurs, signifiant que l'ajout de "
+"« XYZ » est un modèle en addition de couleurs, signifiant que l'ajout de "
 "couleurs entre elles les rend plus lumineuses. Il <b>n'est pas</b> "
 "recommandé pour le dessin mais peut être utilise pour l'encodage. La courbe "
 "de réponse en couleurs est supposée être linéaire."
@@ -38361,6 +38347,14 @@ msgstr "Faire un zoom de l'affichage pour s'adapter à l'intervalle du canal."
 msgid "Zoom view to fit curve."
 msgstr "Faire un zoom de l'affichage pour s'adapter à la courbe."
 
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Add scalar keyframes"
+msgctxt "(qtundo-format)"
+msgid "Add Scalar Keyframes"
+msgstr "Ajouter des images clés scalaires"
+
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
 msgid "Adjust keyframe"
@@ -39269,7 +39263,7 @@ msgid ""
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
 "Aucun : rien n'est affiché.Simple : affiche les opacités ou les modes de "
-"mélange modifiés.Équilibré : affiche à la fois l'opacité et le mode de "
+"mélange modifiés. Équilibré : affiche à la fois l'opacité et le mode de "
 "mélange si l'un ou l'autre a été modifié.\n"
 "Détaillé : affiche à la fois l'opacité et le mode de mélange, même s'ils "
 "sont inchangés."
@@ -40534,7 +40528,7 @@ msgid ""
 "time. Try increasing the capture interval."
 msgstr ""
 "Alerte de faible performance. L'enregistreur est incapable d'écrire toutes "
-"les trames dans le temps imparti.Veuillez essayer d'augmenter l'intervalle "
+"les trames dans le temps imparti. Veuillez essayer d'augmenter l'intervalle "
 "de capture."
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
@@ -40660,7 +40654,7 @@ msgstr ""
 #: plugins/dockers/storyboarddocker/KisAddRemoveStoryboardCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Add Storyboard Scene"
-msgstr "Ajouter une scéne au scénario"
+msgstr "Ajouter une scène au scénario"
 
 #: plugins/dockers/storyboarddocker/KisAddRemoveStoryboardCommand.cpp:72
 msgctxt "(qtundo-format)"
@@ -42993,21 +42987,25 @@ msgctxt "@title:window"
 msgid "Offset Image"
 msgstr "Décaler l'image"
 
-#: plugins/extensions/offsetimage/offsetimage.cpp:80
-#, kde-format
+#: plugins/extensions/offsetimage/offsetimage.cpp:81
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Offset Layer"
 msgctxt "@title:window"
-msgid "Offset Layers"
-msgstr "Décaler les calques"
+msgid "Offset Layer"
+msgid_plural "Offset %1 Layers"
+msgstr[0] "Décaler le calque"
+msgstr[1] "Décaler le calque"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
-msgstr "Décaler le calque"
-
-#: plugins/extensions/offsetimage/offsetimage.cpp:85
-msgctxt "(qtundo-format)"
-msgid "Offset Layers"
-msgstr "Décaler les calques"
+msgid_plural "Offset %1 Layers"
+msgstr[0] "Décaler le calque"
+msgstr[1] "Décaler le calque"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -43989,14 +43987,12 @@ msgid "Mirror Image Horizontally"
 msgstr "Retourner l'image horizontalement"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Rotate Layer"
 msgid "Rotate Layer"
-msgstr "Tourner le calque"
-
-#: plugins/extensions/rotateimage/rotateimage.cc:148
-#, kde-format
-msgid "Rotate Layers"
-msgstr "Faire pivoter les calques"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] "Tourner le calque"
+msgstr[1] "Tourner le calque"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -44137,14 +44133,12 @@ msgid "Shear Image"
 msgstr "Cisailler l'image"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Shear Layer"
 msgid "Shear Layer"
-msgstr "Cisailler le calque"
-
-#: plugins/extensions/shearimage/shearimage.cc:76
-#, kde-format
-msgid "Shear Layers"
-msgstr "Cisailler les calques"
+msgid_plural "Shear %1 Layers"
+msgstr[0] "Cisailler le calque"
+msgstr[1] "Cisailler le calque"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -46011,6 +46005,13 @@ msgstr "Sélection aléatoire"
 msgid "Size of the window:"
 msgstr "Taille de la fenêtre :"
 
+#: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
+#: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
+#, fuzzy, kde-format
+#| msgid "Transparent"
+msgid "Reset Transparent"
+msgstr "Transparent"
+
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
 msgid "&Round Corners..."
@@ -46803,7 +46804,7 @@ msgctxt ""
 "generator"
 msgid "Every {n} cell vertically"
 msgid_plural "Every {n} cells vertically"
-msgstr[0] "Chaque {n} cellules verticalement"
+msgstr[0] "Chaque {n} cellule verticalement"
 msgstr[1] "Chaque {n} cellule verticalement"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:446
@@ -48003,7 +48004,7 @@ msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
 "Image « JPEG-XL » détectée avec des canaux de tâches de couleurs. "
-"Importation d’une image à plat."
+"Importation d'une image à plat."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:640
 #: plugins/impex/jxl/JPEGXLImport.cpp:650
@@ -48022,7 +48023,7 @@ msgid ""
 "flattened image."
 msgstr ""
 "Image « JPEG-XL » multi-couches détectée avec un mode de fusion non pris en "
-"charge. Importation d’une image à plat."
+"charge. Importation d'une image à plat."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:833
 #, kde-format
@@ -48372,7 +48373,7 @@ msgid ""
 msgstr ""
 "Utiliser l'encodage modulaire plutôt que l'encodage par défaut « VarDCT » "
 "pour des compressions avec perte\n"
-"(C'est à dire pour des images non photographiques).\n"
+"(C'est-à-dire pour des images non photographiques).\n"
 "Par défaut : désactivé."
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceModular)
@@ -48459,11 +48460,11 @@ msgid ""
 "setting.</p><p>It is advised to leave this option checked for web delivery "
 "and general compatibility with other applications.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Si cette option n’est pas activée, les calques seront "
+"<html><head/><body><p>Si cette option n'est pas activée, les calques seront "
 "rastérisés et enregistrés. Cependant, les exportations animées sont toujours "
 "mises à plat, quel que soit la valeur de cette option. </p><p>Il est "
 "conseillé de laisser cette option validée pour une utilisation Internet et "
-"la compatibilité générale avec d’autres applications. </p></body></html>"
+"la compatibilité générale avec d'autres applications. </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:239
@@ -48896,67 +48897,67 @@ msgstr ""
 "Le fichier contient un calque cloné dont l'identifiant de nœud source est "
 "incorrect. Ce calque sera converti en un calque de dessin."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Impossible de charger l'identifiant du masque de transformation"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "Impossible de créer les paramètres du masque de transformation"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "Impossible de trouver les données de pixels pour l'image %1 parmi %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "Impossible de charger les données de pixels pour l'image %1 parmi %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Impossible de lire les données du pixel : %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Impossible de charger les données du pixel : %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "Impossible de charger le profil : %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Impossible de filtrer la configuration %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Impossible de charger les métadonnées du calque %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Impossible de charger la sélection vectorielle %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Impossible de charger la sélection matricielle %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Impossible de charger les images clés depuis %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -48965,7 +48966,7 @@ msgstr ""
 "Erreur d'analyse dans le fichier d'images clés %1 à la ligne %2, colonne %3\n"
 "Message d'erreur : %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "Type inconnu de canal d'image clé : %1 dans %2"
@@ -49072,9 +49073,9 @@ msgid ""
 msgstr ""
 "Le calque « %1 » possède un mode de mélange « %2 » qui a modifié son "
 "comportement pour la couleur « CMJN » dans Krita 5.2. Veuillez vérifier le "
-"résultat et envisager d'activer l'ancien algorithme « Additif » dans le menu "
-"Configuration / Configurer Krita / Général / Outils / Mode de mélange "
-"« CMJN »"
+"résultat et envisager d'activer l'ancien algorithme « En addition » dans le "
+"menu Configuration / Configurer Krita / Général / Outils / Mode de mélange "
+"« CMJN »."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1105
 #, kde-format
@@ -50200,7 +50201,8 @@ msgid ""
 msgstr ""
 "<title>Surbrillance</title><p>Quantité de préservation de la surbrillance "
 "pour la correction d'exposition avant l'interpolation dans E.V. Ceci ne "
-"prend effet que si la correction de décalage est > 1.0 E.V.</p>"
+"prend effet que si la correction de décalage est strictement supérieur à 1.0 "
+"E.V.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:542
 #, kde-format
@@ -50746,7 +50748,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "TIFF image with PSD data"
-msgstr "Image « TIFF « avec des données « PSD »"
+msgstr "Image « TIFF » avec des données « PSD »"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1579
 #, kde-format
@@ -50755,8 +50757,8 @@ msgid ""
 "The TIFF image contains valid PSD data embedded. Would you like to use PSD "
 "data instead of normal TIFF data?"
 msgstr ""
-"L’image « TIFF » contient des données intégrées « PSD » valides. Voulez-vous "
-"utiliser ces données « PSD » au lieu des données « TIFF » normales ?"
+"L'image « TIFF » contient des données intégrées « PSD » valables. Voulez-"
+"vous utiliser ces données « PSD » au lieu des données « TIFF » normales ?"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
 #. i18n: ectx: property (title), widget (QGroupBox, tiffOptions)
@@ -54303,7 +54305,7 @@ msgstr ""
 "Définir une distribution personnalisée des particules.\n"
 "L'axe horizontal représente l'angle de 0 à 360 degrés.\n"
 "L'axe vertical représente la probabilité qu'une particule arrive sur cet "
-"angle.Plus la courbe est élevée pour un angle donné, plus le nombre de "
+"angle. Plus la courbe est élevée pour un angle donné, plus le nombre de "
 "particules se arrivant sur cet angle est important."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:71
@@ -54993,7 +54995,7 @@ msgid "Percentage:"
 msgstr "Pourcentage :"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:209
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:265
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:266
 msgid "Export Settings"
 msgstr "Paramètres pour l'exportation"
 
@@ -55733,52 +55735,52 @@ msgstr "Pas de description"
 msgid "Comics Manager"
 msgstr "Gestionnaire de bande dessinée"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:247
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:248
 msgid "New Project"
 msgstr "Nouveau projet"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:249
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:250
 msgid "Open Project"
 msgstr "Ouvrir un projet"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:261
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:262
 msgid "Project Settings"
 msgstr "Configuration du projet"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:264
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Meta Data"
 msgstr "Métadonnées"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:281
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:282
 msgid "Add Page"
 msgstr "Ajouter une page"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:283
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:284
 msgid "Add Page from Template"
 msgstr "Ajouter une page à partir d'un modèle"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:285
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:286
 msgid "Add Existing Pages"
 msgstr "Ajouter des pages existantes"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:287
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
 msgid "Remove Page"
 msgstr "Supprimer la page"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:289
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
 msgid "Batch Resize"
 msgstr "Redimensionner par lots"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:292
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
 msgid "View Page In Window"
 msgstr "Voir la page dans la fenêtre"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:294
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 msgid "Scrape Author Info"
 msgstr "Collecter les informations sur l'auteur"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
 msgid ""
 "Search for author information in documents and add it to the author list. "
 "This does not check for duplicates."
@@ -55786,19 +55788,19 @@ msgstr ""
 "Rechercher des informations sur l'auteur dans les documents et les ajouter à "
 "la liste des auteurs. Ceci ne vérifie pas la présence de duplicatas."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:297
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
 msgid "Scrape Text for Translation"
 msgstr "Collecter le texte pour traduction"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:318
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:319
 msgid "Export Comic"
 msgstr "Exporter la bande dessinée"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:323
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
 msgid "Copy Location"
 msgstr "Copier l'emplacement"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
 msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
@@ -55807,19 +55809,19 @@ msgstr ""
 "rapidement vers un gestionnaire de fichiers ou similaire."
 
 # unreviewed-context
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "Please select the JSON comic config file."
 msgstr "Sélectionnez le fichier de configuration JSON."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "JSON files"
 msgstr "Fichier JSON"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid "Config cannot be used"
 msgstr "Il est impossible d'utiliser la configuration."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
@@ -55829,55 +55831,55 @@ msgstr ""
 "nouveaux fichiers ne peuvent y être écrits. Veuillez configurer les accès au "
 "dossier ou déplacer le projet vers un dossier dans lequel on peut les créer."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:378
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:379
 msgid "Loading Pages..."
 msgstr "Chargement des pages..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:118
 msgid "Krita files"
 msgstr "Fichiers pour Krita"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
 msgid "Which existing pages to add?"
 msgstr "Quelles pages existantes sont à ajouter ?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:591
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:610
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:592
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:611
 msgid "Where are the templates located?"
 msgstr "Où sont rangés les modèles ?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:634
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:635
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:113
 msgid "Where should the pages go?"
 msgstr "Où les pages doivent aller ?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 msgid "Which image should be the basis the new page?"
 msgstr "Quelle image devrait elle servir de base à cette nouvelle page ?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "Export success"
 msgstr "Succès de l'exportation"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "The files have been written to the export folder."
 msgstr "Les fichiers ont été écrits dans le dossier des exportations."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:883
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:884
 msgid "Resize all Pages"
 msgstr "Redimensionner toutes les pages"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:894
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
 msgid "Resizing pages..."
 msgstr "Redimensionnement des pages..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:896
 msgid "Resizing Pages"
 msgstr "Redimensionnement des pages"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:909
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -55888,11 +55890,11 @@ msgstr ""
 "Temps écoulé : {passedString}\n"
 "Estimé : {estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 msgid "Scraping success"
 msgstr "Succès du grattage"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr "Le fichier « POT » a été enregistré dans : {file}"
@@ -58443,13 +58445,13 @@ msgstr "Images de référence"
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
-msgstr "Opacité : {n}%"
+msgstr "Opacité : {n} %"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation: {n}%"
-msgstr "Saturation : {n}%"
+msgstr "Saturation : {n} %"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
@@ -59601,7 +59603,7 @@ msgid ""
 "Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
 "are explicitly positioned, but the line height may be slightly inaccurate."
 msgstr ""
-"Utilisez l’ancien mode d'emballage fort (identique à Krita 5.1 et "
+"Utilisez l'ancien mode d'emballage fort (identique à Krita 5.1 et "
 "précédent). Chaque ligne est explicitement positionnée, mais la hauteur de "
 "la ligne peut être légèrement inexacte."
 
@@ -59622,7 +59624,7 @@ msgstr "Emballage fort « SVG »"
 msgctxt "action"
 msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
 msgstr ""
-"Utiliser le mode d'emballage fort « SVG » avec option« CSS `white-space : "
+"Utiliser le mode d'emballage fort « SVG » avec option « CSS `white-space : "
 "pre` »."
 
 #. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59644,7 +59646,7 @@ msgid ""
 "Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
 "defining the text width."
 msgstr ""
-"Utiliser le mode d'emballage « SVG » avec option« CSS `white-space: pre-"
+"Utiliser le mode d'emballage « SVG » avec option « CSS `white-space: pre-"
 "wrap` », avec le paramètre « inline-size » définissant la largeur du texte."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:240
@@ -60263,7 +60265,7 @@ msgstr ""
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Clean up: {n}%"
-msgstr "Nettoyer : {n}%"
+msgstr "Nettoyer : {n} %"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:129
 #, kde-format
@@ -60488,13 +60490,13 @@ msgstr "Appliquer"
 msgid "Transform Tool Actions"
 msgstr "Actions des outils de transformation"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Le type de calque ne peut être utilisé par l'outil de transformation."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:868
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -60502,7 +60504,7 @@ msgstr ""
 "Le type de calque ne peut être utiliser par l'outil de transformation. "
 "Utiliser le masque de transformation à la place."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:888
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60512,7 +60514,7 @@ msgstr ""
 "Le calque possède des enfants avec des masques de transformation. Veuillez "
 "les désactiver avant de procéder à la transformation."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:902
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
@@ -60520,14 +60522,14 @@ msgstr ""
 "Les sélections ne sont pas utilisées lors de l'édition de masques de "
 "transformation"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Impossible transformer un calque vide "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60692,8 +60694,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Transformer un calque ou une sélection"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Transformer"
@@ -61301,6 +61303,43 @@ msgstr "Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Images de référence"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale Layers"
+#~ msgstr "Mettre les calques à l'échelle"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate Layers"
+#~ msgstr "Faire pivoter les calques"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Layers"
+#~ msgstr "Cisailler les calques"
+
+#~ msgid "Resize Layers"
+#~ msgstr "Re-dimensionner les calques"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers X"
+#~ msgstr "Réaliser un miroir des calques selon l'axe X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers Y"
+#~ msgstr "Réaliser un miroir des calques selon l'axe Y"
+
+#~ msgctxt "@title:window"
+#~ msgid "Offset Layers"
+#~ msgstr "Décaler les calques"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset Layers"
+#~ msgstr "Décaler les calques"
+
+#~ msgid "Rotate Layers"
+#~ msgstr "Faire pivoter les calques"
+
+#~ msgid "Shear Layers"
+#~ msgstr "Cisailler les calques"
 
 #~ msgid "Saturation [*varies*]: "
 #~ msgstr "La saturation [*varie*] : "

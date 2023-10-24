@@ -42,8 +42,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-22 00:41+0000\n"
-"PO-Revision-Date: 2023-10-13 22:03+0100\n"
+"POT-Creation-Date: 2023-10-24 00:40+0000\n"
+"PO-Revision-Date: 2023-10-23 21:19+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -16860,7 +16860,7 @@ msgid "Set Image Resolution"
 msgstr "Meti Bildrezolucion"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr "Movi"
@@ -16970,7 +16970,7 @@ msgstr "Mola"
 msgid "Gaussian"
 msgstr "Gaŭsa"
 
-#: libs/image/kis_clone_layer.cpp:320
+#: libs/image/kis_clone_layer.cpp:321
 #, kde-format
 msgid "Copy From"
 msgstr "Kopii De"
@@ -17117,81 +17117,81 @@ msgid "Change Image Resolution"
 msgstr "Ŝanĝi Bildrezolucion"
 
 #: libs/image/kis_image.cc:1037
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
-msgstr "Skali Tavolon"
-
-#: libs/image/kis_image.cc:1037
-msgctxt "(qtundo-format)"
-msgid "Scale Layers"
-msgstr "Skali Tavolojn"
+msgid_plural "Scale %1 Layers"
+msgstr[0] "Skali Tavolon"
+msgstr[1] "Skali Tavolon"
 
 #: libs/image/kis_image.cc:1178
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rotacii Bildon"
 
-#: libs/image/kis_image.cc:1189
+#: libs/image/kis_image.cc:1188
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Rotacii Maskon"
 
 #: libs/image/kis_image.cc:1191
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
-msgstr "Rotacii Tavolon"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] "Rotacii Tavolon"
+msgstr[1] "Rotacii Tavolon"
 
-#: libs/image/kis_image.cc:1195
-msgctxt "(qtundo-format)"
-msgid "Rotate Layers"
-msgstr "Rotacii Tavolojn"
-
-#: libs/image/kis_image.cc:1296
+#: libs/image/kis_image.cc:1291
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Tondi Maskon"
 
-#: libs/image/kis_image.cc:1299
+#: libs/image/kis_image.cc:1295
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
-msgstr "Tondi Tavolon"
+msgid_plural "Shear %1 Layers"
+msgstr[0] "Tondi Tavolon"
+msgstr[1] "Tondi Tavolon"
 
-#: libs/image/kis_image.cc:1304
-msgctxt "(qtundo-format)"
-msgid "Shear Layers"
-msgstr "Tondi Tavolojn"
-
-#: libs/image/kis_image.cc:1311
+#: libs/image/kis_image.cc:1302
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Tondi Bildon"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1320
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Konverti Tavolan Kolorspacon"
 
-#: libs/image/kis_image.cc:1380
+#: libs/image/kis_image.cc:1371
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Konverti Bilda Koloraspacon"
 
-#: libs/image/kis_image.cc:1381
+#: libs/image/kis_image.cc:1372
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Konverti Projekcian Koloraspacon"
 
-#: libs/image/kis_image.cc:1439
+#: libs/image/kis_image.cc:1430
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Atribui Profilon al Tavolo"
 
-#: libs/image/kis_image.cc:1480
+#: libs/image/kis_image.cc:1471
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Atribui Profilon"
 
-#: libs/image/kis_image.cc:2540
+#: libs/image/kis_image.cc:2531
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Stuci Elektojn"
@@ -17820,7 +17820,7 @@ msgid "Clone Layer"
 msgstr "Klona Tavolo"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1535
+#: libs/ui/kis_node_manager.cpp:1527
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -17864,7 +17864,7 @@ msgid "Transform Mask"
 msgstr "Transforma Masko"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1315
+#: libs/ui/kis_node_manager.cpp:1307
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19458,8 +19458,8 @@ msgstr "Lokaj Rimedoj"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1239
-#: libs/ui/kis_node_manager.cpp:1302 libs/ui/KisApplication.cpp:1011
+#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1011
 #: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
 #: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
 #: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
@@ -22695,7 +22695,7 @@ msgstr ""
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
-msgstr ""
+msgstr "{n}%"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:918
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
@@ -27776,14 +27776,12 @@ msgid "Layer Size"
 msgstr "Tavolgrandeco"
 
 #: libs/ui/imagesize/imagesize.cc:126
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resize Layer"
 msgid "Resize Layer"
-msgstr "Aligrandigi Tavolon"
-
-#: libs/ui/imagesize/imagesize.cc:126
-#, kde-format
-msgid "Resize Layers"
-msgstr "Aligrandigi Tavolojn"
+msgid_plural "Resize %1 Layers"
+msgstr[0] "Aligrandigi Tavolon"
+msgstr[1] "Aligrandigi Tavolon"
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, kde-format
@@ -29229,6 +29227,8 @@ msgid ""
 "Non-animated layer is merged into the current frame. To merge it into the "
 "whole clip, create at least one frame"
 msgstr ""
+"Neanimaciita tavolo estas kunfandita en la nunan kadron. Por kunfandi ĝin en "
+"la tutan tondaĵon, kreu almenaŭ unu kadron"
 
 #: libs/ui/kis_layer_manager.cc:930
 #, kde-format
@@ -29350,80 +29350,80 @@ msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Forigi Nodojn"
 
-#: libs/ui/kis_node_manager.cpp:1039
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgstr "Speguli Tavolon X"
-
-#: libs/ui/kis_node_manager.cpp:1041
+#: libs/ui/kis_node_manager.cpp:1038
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask X"
 msgstr "Speguli Maskon X"
 
-#: libs/ui/kis_node_manager.cpp:1045
+#: libs/ui/kis_node_manager.cpp:1041
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers X"
-msgstr "Speguli Tavolojn X"
+msgid "Mirror Layer X"
+msgid_plural "Mirror %1 Layers X"
+msgstr[0] "Speguli Tavolon X"
+msgstr[1] "Speguli Tavolon X"
 
-#: libs/ui/kis_node_manager.cpp:1057
-msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgstr "Speguli Tavolon Y"
-
-#: libs/ui/kis_node_manager.cpp:1059
+#: libs/ui/kis_node_manager.cpp:1052
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Y"
 msgstr "Speguli Maskon Y"
 
-#: libs/ui/kis_node_manager.cpp:1063
+#: libs/ui/kis_node_manager.cpp:1055
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layers Y"
-msgstr "Speguli Tavolojn Y"
+msgid "Mirror Layer Y"
+msgid_plural "Mirror %1 Layers Y"
+msgstr[0] "Speguli Tavolon Y"
+msgstr[1] "Speguli Tavolon Y"
 
-#: libs/ui/kis_node_manager.cpp:1071
+#: libs/ui/kis_node_manager.cpp:1063
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers X"
 msgstr "Speguli Ĉiujn Tavolojn X"
 
-#: libs/ui/kis_node_manager.cpp:1078
+#: libs/ui/kis_node_manager.cpp:1070
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Y"
 msgstr "Speguli Ĉiujn Tavolojn Y"
 
-#: libs/ui/kis_node_manager.cpp:1210
+#: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Eksporti \"%1\""
 
-#: libs/ui/kis_node_manager.cpp:1240
+#: libs/ui/kis_node_manager.cpp:1232
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Ne eblis konservi la tavolon. %1"
 
-#: libs/ui/kis_node_manager.cpp:1258
+#: libs/ui/kis_node_manager.cpp:1250
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Tavolo havas neniujn rastrumerojn"
 
-#: libs/ui/kis_node_manager.cpp:1282
+#: libs/ui/kis_node_manager.cpp:1274
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Eksporti al SVG"
 
-#: libs/ui/kis_node_manager.cpp:1302
+#: libs/ui/kis_node_manager.cpp:1294
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Ne eblis konservi al svg: %1"
 
-#: libs/ui/kis_node_manager.cpp:1328
+#: libs/ui/kis_node_manager.cpp:1320
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Tavolo %1 ne estas redaktebla"
 
-#: libs/ui/kis_node_manager.cpp:1329
+#: libs/ui/kis_node_manager.cpp:1321
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -29432,49 +29432,49 @@ msgstr ""
 "Ne povas skribi alfa-kanalon de la gepatra tavolo \"%1\".\n"
 "La operacio estos nuligita."
 
-#: libs/ui/kis_node_manager.cpp:1360
+#: libs/ui/kis_node_manager.cpp:1352
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Skribi Alfa en Tavolon"
 
-#: libs/ui/kis_node_manager.cpp:1483
+#: libs/ui/kis_node_manager.cpp:1475
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Tranĉi Nodojn"
 
-#: libs/ui/kis_node_manager.cpp:1565
+#: libs/ui/kis_node_manager.cpp:1557
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Rapida Grupo"
 
-#: libs/ui/kis_node_manager.cpp:1576
+#: libs/ui/kis_node_manager.cpp:1568
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Rapida Tondado-Grupo"
 
-#: libs/ui/kis_node_manager.cpp:1583
+#: libs/ui/kis_node_manager.cpp:1575
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Tondado Grupo"
 
-#: libs/ui/kis_node_manager.cpp:1584
+#: libs/ui/kis_node_manager.cpp:1576
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Masko Tavolo"
 
-#: libs/ui/kis_node_manager.cpp:1611
+#: libs/ui/kis_node_manager.cpp:1603
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
-msgstr ""
+msgstr "Ne eblas movi tavolon \"%1\" al nova gepatro \"%2\""
 
-#: libs/ui/kis_node_manager.cpp:1614
+#: libs/ui/kis_node_manager.cpp:1606
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Ne eblas movi tavolon \"%1\" en la radikan tavolon"
 
-#: libs/ui/kis_node_manager.cpp:1622
+#: libs/ui/kis_node_manager.cpp:1614
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Rapida Malgrupigo"
@@ -37953,6 +37953,14 @@ msgstr "Zoma vido por konveni kanalan gamon."
 msgid "Zoom view to fit curve."
 msgstr "Zomi vido por konveni kurbon."
 
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Add scalar keyframes"
+msgctxt "(qtundo-format)"
+msgid "Add Scalar Keyframes"
+msgstr "Aldonu skalarajn ŝlosilkadrojn"
+
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
 msgid "Adjust keyframe"
@@ -42547,21 +42555,25 @@ msgctxt "@title:window"
 msgid "Offset Image"
 msgstr "Deŝovi Bildon"
 
-#: plugins/extensions/offsetimage/offsetimage.cpp:80
-#, kde-format
+#: plugins/extensions/offsetimage/offsetimage.cpp:81
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Offset Layer"
 msgctxt "@title:window"
-msgid "Offset Layers"
-msgstr "Deŝovi Tavolojn"
+msgid "Offset Layer"
+msgid_plural "Offset %1 Layers"
+msgstr[0] "Deŝovi Tavolon"
+msgstr[1] "Deŝovi Tavolon"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
-msgstr "Deŝovi Tavolon"
-
-#: plugins/extensions/offsetimage/offsetimage.cpp:85
-msgctxt "(qtundo-format)"
-msgid "Offset Layers"
-msgstr "Deŝova Tavolojn"
+msgid_plural "Offset %1 Layers"
+msgstr[0] "Deŝovi Tavolon"
+msgstr[1] "Deŝovi Tavolon"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -43531,14 +43543,12 @@ msgid "Mirror Image Horizontally"
 msgstr "Spegula Bildo Horizontale"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Rotate Layer"
 msgid "Rotate Layer"
-msgstr "Rotacii Tavolon"
-
-#: plugins/extensions/rotateimage/rotateimage.cc:148
-#, kde-format
-msgid "Rotate Layers"
-msgstr "Rotacii Tavolojn"
+msgid_plural "Rotate %1 Layers"
+msgstr[0] "Rotacii Tavolon"
+msgstr[1] "Rotacii Tavolon"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -43679,14 +43689,12 @@ msgid "Shear Image"
 msgstr "Tondi Bildon"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Shear Layer"
 msgid "Shear Layer"
-msgstr "Tondi Tavolon"
-
-#: plugins/extensions/shearimage/shearimage.cc:76
-#, kde-format
-msgid "Shear Layers"
-msgstr "Tondi Tavolojn"
+msgid_plural "Shear %1 Layers"
+msgstr[0] "Tondi Tavolon"
+msgstr[1] "Tondi Tavolon"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -45542,6 +45550,13 @@ msgstr "Hazarda Elekto"
 #, kde-format
 msgid "Size of the window:"
 msgstr "Grandeco de la fenestro:"
+
+#: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
+#: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
+#, fuzzy, kde-format
+#| msgid "Transparent"
+msgid "Reset Transparent"
+msgstr "Travidebla"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -48404,67 +48419,67 @@ msgstr ""
 "La dosiero enhavas klonan tavolon kiu havas malĝustan fontnodan id. Ĉi tiu "
 "tavolo estos konvertita en farbotavolon."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Ne eblis ŝargi \"id\" de la transformmasko"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "Ne eblis krei transformajn maskajn parametrojn"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "Ne eblis trovi ŝlosilkadrajn rastrumerojn por kadro %1 en %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "Ne eblis ŝargi ŝlosilkadrajn rastrumerojn por kadro %1 en %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Ne eblis legi rastrumerojn: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Ne eblis ŝargi pikserajn datumojn: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "Ne eblis ŝargi profilon: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Ne eblis filtri agordon %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Ne eblis ŝargi metadatumojn por tavolo %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Ne eblis ŝargi vektoran elekton %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Ne eblis ŝargi rastruman elekton %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Ne eblis ŝargi ŝlosilkadrojn de %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -48473,7 +48488,7 @@ msgstr ""
 "analiza eraro en la ĉefkadra dosiero %1 ĉe linio %2, kolumno %3\n"
 "Erara mesaĝo: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "nekonata ĉefkadra kanaltipo: %1 en %2"
@@ -54399,7 +54414,7 @@ msgid "Percentage:"
 msgstr "Procento:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:209
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:265
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:266
 msgid "Export Settings"
 msgstr "Eksporti Agordojn"
 
@@ -55126,52 +55141,52 @@ msgstr "Neniu priskribo"
 msgid "Comics Manager"
 msgstr "Comics Manager"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:247
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:248
 msgid "New Project"
 msgstr "Nova Projekto"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:249
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:250
 msgid "Open Project"
 msgstr "Malfermi Projekton"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:261
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:262
 msgid "Project Settings"
 msgstr "Projektaj Agordoj"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:264
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Meta Data"
 msgstr "Metadatumoj"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:281
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:282
 msgid "Add Page"
 msgstr "Aldoni Paĝon"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:283
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:284
 msgid "Add Page from Template"
 msgstr "Aldoni Paĝon de Ŝablono"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:285
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:286
 msgid "Add Existing Pages"
 msgstr "Aldoni Ekzistantajn Paĝojn"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:287
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
 msgid "Remove Page"
 msgstr "Forigi Paĝon"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:289
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
 msgid "Batch Resize"
 msgstr "Batch Regrandigi"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:292
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
 msgid "View Page In Window"
 msgstr "Vidi Paĝon En Fenestro"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:294
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 msgid "Scrape Author Info"
 msgstr "Skrapi Aŭtoran Info"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
 msgid ""
 "Search for author information in documents and add it to the author list. "
 "This does not check for duplicates."
@@ -55179,19 +55194,19 @@ msgstr ""
 "Serĉi informojn pri aŭtoro en dokumentoj kaj aldonu ĝin al la aŭtorlisto. Ĉi "
 "tio ne kontrolas por duplikatoj."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:297
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
 msgid "Scrape Text for Translation"
 msgstr "Skrapi Tekston por Tradukado"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:318
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:319
 msgid "Export Comic"
 msgstr "Eksporti Comic"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:323
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
 msgid "Copy Location"
 msgstr "Kopii Lokon"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
 msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
@@ -55199,19 +55214,19 @@ msgstr ""
 "Kopias la vojon de la projekto al la tondujo. Utila por rapide kopii al "
 "dosieradministranto aŭ simile."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "Please select the JSON comic config file."
 msgstr "Bonvolu elekti la JSON-komikan agordosieron."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "JSON files"
 msgstr "JSON-dosieroj"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid "Config cannot be used"
 msgstr "Agordo ne povas esti uzata"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:344
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
@@ -55221,55 +55236,55 @@ msgstr ""
 "povas esti faritaj. Bonvolu agordi la dosierujon aliron aŭ movi la projekton "
 "al dosierujo al kiu povas esti skribita."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:378
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:379
 msgid "Loading Pages..."
 msgstr "Ŝargante paĝojn..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:118
 msgid "Krita files"
 msgstr "Krita dosieroj"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
 msgid "Which existing pages to add?"
 msgstr "Kiujn ekzistantajn paĝojn aldoni?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:591
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:610
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:592
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:611
 msgid "Where are the templates located?"
 msgstr "Kie troviĝas la ŝablonoj?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:634
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:635
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:113
 msgid "Where should the pages go?"
 msgstr "Kien iru la paĝoj?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
 msgid "Which image should be the basis the new page?"
 msgstr "Kiu bildo estu la bazo de la nova paĝo?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "Export success"
 msgstr "Sukceso de eksporto"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
 msgid "The files have been written to the export folder."
 msgstr "La dosieroj estis skribitaj al la eksporta dosierujo."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:883
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:884
 msgid "Resize all Pages"
 msgstr "Regrandigi ĉiujn Paĝojn"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:894
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
 msgid "Resizing pages..."
 msgstr "Regrandigi paĝojn..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:896
 msgid "Resizing Pages"
 msgstr "Regrandigi Paĝojn"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:909
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -55280,11 +55295,11 @@ msgstr ""
 "Tempo pasinta: {passedString}:\n"
 " Taksita:{estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 msgid "Scraping success"
 msgstr "Sukceso de skrapado"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr "POT-dosiero estis skribita al: {file}"
@@ -59836,20 +59851,20 @@ msgstr "Apliki"
 msgid "Transform Tool Actions"
 msgstr "Transformi Ilajn Agojn"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Tavolspeco ne povas uzi la transformilon"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:868
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr ""
 "Tavolspeco ne povas uzi la transformilon. Uzu transform maskon anstataŭe."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:888
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59859,20 +59874,20 @@ msgstr ""
 "Tavolo havas infanojn kun transformaj maskoj. Bonvolu malŝalti ilin antaŭ ol "
 "fari transformon."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:902
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Elektoj ne estas uzataj dum redaktado de transformmaskoj"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Ne povas transformi malplenan tavolon"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60031,8 +60046,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Transformi tavolon aŭ elekton"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Transformi"
@@ -60639,5 +60654,39 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
 
-#~ msgid "Saturation [*varies*]: "
-#~ msgstr "Saturiĝo [*varias*]:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale Layers"
+#~ msgstr "Skali Tavolojn"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate Layers"
+#~ msgstr "Rotacii Tavolojn"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Layers"
+#~ msgstr "Tondi Tavolojn"
+
+#~ msgid "Resize Layers"
+#~ msgstr "Aligrandigi Tavolojn"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers X"
+#~ msgstr "Speguli Tavolojn X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layers Y"
+#~ msgstr "Speguli Tavolojn Y"
+
+#~ msgctxt "@title:window"
+#~ msgid "Offset Layers"
+#~ msgstr "Deŝovi Tavolojn"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset Layers"
+#~ msgstr "Deŝova Tavolojn"
+
+#~ msgid "Rotate Layers"
+#~ msgstr "Rotacii Tavolojn"
+
+#~ msgid "Shear Layers"
+#~ msgstr "Tondi Tavolojn"

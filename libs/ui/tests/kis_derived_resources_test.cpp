@@ -64,6 +64,7 @@ void KisDerivedResourcesTest::test()
     expectedSignals[KoCanvasResource::LodAvailability] = true;
     expectedSignals[KoCanvasResource::Opacity] = 1.0;
     expectedSignals[KoCanvasResource::Size] = 300.0;
+    expectedSignals[KoCanvasResource::BrushRotation] = 0.0;
     expectedSignals[KoCanvasResource::Flow] = 1.0;
     expectedSignals[KoCanvasResource::Fade] = 0.25;
     expectedSignals[KoCanvasResource::Scatter] = 0.0;

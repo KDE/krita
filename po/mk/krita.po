@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-24 02:28+0000\n"
+"POT-Creation-Date: 2023-10-25 02:40+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -45189,6 +45189,12 @@ msgstr "Скрипта за извршување."
 #, kde-format
 msgid "Size of the window:"
 msgstr ""
+
+#: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
+#: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
+#, fuzzy, kde-format
+msgid "Reset Transparent"
+msgstr "Колони:"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, fuzzy, kde-format

@@ -7,14 +7,14 @@
 # Pau Tallada Crespí <pau_tallada@telefonica.net>, 2006, 2007.
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
-# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Josep M. Ferrer <txemaq@gmail.com>
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-24 02:28+0000\n"
-"PO-Revision-Date: 2023-09-30 12:07+0200\n"
+"POT-Creation-Date: 2023-10-25 02:40+0000\n"
+"PO-Revision-Date: 2023-10-22 09:41+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.2\n"
 "X-Accelerator-Marker: &\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -12844,9 +12844,7 @@ msgid "File"
 msgstr "Fitxer"
 
 #: krita/krita5.xmlgui:416
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "Edita"
 
@@ -22818,7 +22816,7 @@ msgstr "Cal reiniciar Krita per tal que els canvis tinguen efecte."
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
-"Guardar a una ubicació seleccionada des del selector de fitxers pot alentir "
+"Guardar en una ubicació seleccionada des del selector de fitxers pot alentir "
 "l'inici!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:470
@@ -24888,8 +24886,8 @@ msgid ""
 "file layer may be broken.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Avís: Krita utilitza un camí relatiu per a "
-"emmagatzemar la ubicació del fitxer en el «.kra». Si moveu el «.kra» però no "
-"el fitxer, la capa del fitxer es podria trencar.</p></body></html>"
+"emmagatzemar la ubicació del fitxer en «.kra». Si moveu «.kra» però no el "
+"fitxer, la capa del fitxer es podria trencar.</p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpScalingOptions)
 #: libs/ui/forms/wdgdlgfilelayer.ui:112
@@ -26771,7 +26769,7 @@ msgid ""
 "When undo information reaches this limit, it will be stored in a temporary "
 "file and memory will be freed. Undo will be slower."
 msgstr ""
-"Quan la informació de desfer arriba a este límit, s'emmagatzemarà en un "
+"Quan la informació de desfer arriba fins a este límit, s'emmagatzemarà en un "
 "fitxer temporal i s'alliberarà la memòria. Desfer serà més lent."
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -29173,6 +29171,8 @@ msgid ""
 "Non-animated layer is merged into the current frame. To merge it into the "
 "whole clip, create at least one frame"
 msgstr ""
+"La capa no animada es fusiona amb el fotograma actual. Per a fusionar-la amb "
+"el clip sencer, creeu almenys un fotograma"
 
 #: libs/ui/kis_layer_manager.cc:930
 #, kde-format
@@ -29401,13 +29401,12 @@ msgstr "Capa de màscara"
 #: libs/ui/kis_node_manager.cpp:1590
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
-msgstr ""
+msgstr "No s'ha pogut moure la capa «%1» a dins del pare nou «%2»"
 
 #: libs/ui/kis_node_manager.cpp:1593
-#, fuzzy, kde-format
-#| msgid "Put every layer in its own, separate group layer"
+#, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
-msgstr "Situa cada capa en la seua pròpia capa de grup separada"
+msgstr "No s'ha pogut moure la capa «%1» a dins de la capa arrel."
 
 #: libs/ui/kis_node_manager.cpp:1601
 msgctxt "(qtundo-format)"
@@ -33099,7 +33098,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Estimated Gamma cannot be retrieved for CMYK."
-msgstr "La gamma estimada no es pot recuperar per al CMYK."
+msgstr "La gamma estimada no es pot recuperar per a CMYK."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:357
 #, kde-format
@@ -33179,9 +33178,8 @@ msgstr ""
 "afegint colors conjuntament. Com que els perfils CMYK són molt específics "
 "segons la impressora, es recomana treballar en l'espai RGB, i després "
 "convertir a un perfil CMYK, preferiblement un subministrat per la vostra "
-"impressora.<br/>El CMYK <b>no</b> es recomana per a pintar. "
-"Desafortunadament, Krita no pot recuperar els colorants o la TRC per a este "
-"espai."
+"impressora.<br/>CMYK <b>no</b> es recomana per a pintar. Desafortunadament, "
+"Krita no pot recuperar els colorants o la TRC per a este espai."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:417
 #, kde-format
@@ -33447,7 +33445,7 @@ msgstr ""
 "s'utilitza davall, «Compatible amb Adobe RGB 1998» és la terminologia "
 "suggerida en el preàmbul a les especificacions de l'espai de color AdobeRGB "
 "1998.</p><p>La gamma de colors de l'Adobe RGB 1998 cobrix un percentatge més "
-"gran de cians, verds i grocs-verds del món real que el sRGB, però encara no "
+"gran de cians, verds i grocs-verds del món real que sRGB, però encara no "
 "inclou tots els cians, verds i grocs-verds imprimibles, especialment quan "
 "s'imprimix emprant impressores d'injecció de tinta de gamma alta d'hui en "
 "dia. El BetaRGB (no inclòs en el paquet de perfils) i el Rec.2020 són més "
@@ -33581,7 +33579,7 @@ msgstr ""
 "tecnologia de visualització ja està preparada per al Rec.2020, les "
 "pel·lícules ja es fan per al Rec.2020, i diverses càmeres permeten el "
 "Rec.2020. I en la cambra fosca digital el Rec.2020 és molt més adequat com a "
-"espai de treball general del RGB que l'espai de color xicotet del sRGB.</p>"
+"espai de treball general de RGB que l'espai de color xicotet de sRGB.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:613
 #, kde-format
@@ -33603,23 +33601,23 @@ msgid ""
 "all the other the RGB profiles provided in my profile pack) is a matrix "
 "profile, and matrix profiles don't have perceptual intent tables.</p>"
 msgstr ""
-"<p>Hewlett-Packard i Microsoft dissenyaren el sRGB per a la correspondència "
-"de la gamma de colors dels monitors CRT de consum des de l'any 1990. El sRGB "
-"és l'espai de color estàndard per a la web i encara és la millor elecció per "
-"a exportar imatges a Internet.</p><p>La gamma de colors sRGB era una bona "
-"correspondència per als monitors calibrats amb una qualitat decent. Però el "
+"<p>Hewlett-Packard i Microsoft dissenyaren sRGB per a la correspondència de "
+"la gamma de colors dels monitors CRT de consum des de l'any 1990. sRGB és "
+"l'espai de color estàndard per a la web i encara és la millor elecció per a "
+"exportar imatges a Internet.</p><p>La gamma de colors sRGB era una bona "
+"correspondència per als monitors calibrats amb una qualitat decent. Però "
 "sRGB no és una bona correspondència per a molts monitors LCD de consum, els "
 "quals amb freqüència no poden mostrar els blaus i magentes sRGB més saturats "
 "(la bona notícia és que a mesura que la tecnologia progressa, les gammes més "
-"amples arriben als monitors de consum).</p><p>Les gammes de color de les "
-"impressores poden excedir amb facilitat la gamma de colors sRGB en cians, "
-"verd i groc-verds. Els colors dels fitxers RAW interpolats per les càmeres "
-"també excedixen amb freqüència la gamma de colors sRGB.</p><p>Com a part "
-"important, l'ús del propòsit perceptiu en convertir al sRGB no fa màgicament "
-"una altra cosa que ajustar els colors fora de la gamma dins la gamma de "
-"colors sRGB! L'espai de color sRGB estàndard (amb tots els altres perfils "
-"RGB subministrats en el meu paquet de perfils) és un perfil de matrius, i "
-"els perfils de matrius no tenen taules de propòsit perceptiu.</p>"
+"amples arriben fins als monitors de consum).</p><p>Les gammes de color de "
+"les impressores poden excedir amb facilitat la gamma de colors sRGB en "
+"cians, verd i groc-verds. Els colors dels fitxers RAW interpolats per les "
+"càmeres també excedixen amb freqüència la gamma de colors sRGB.</p><p>Com a "
+"part important, l'ús del propòsit perceptiu en convertir a sRGB no fa "
+"màgicament una altra cosa que ajustar els colors fora de la gamma dins la "
+"gamma de colors sRGB! L'espai de color sRGB estàndard (amb tots els altres "
+"perfils RGB subministrats en el meu paquet de perfils) és un perfil de "
+"matrius, i els perfils de matrius no tenen taules de propòsit perceptiu.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:629
 #, kde-format
@@ -35654,7 +35652,7 @@ msgstr "&Pàgina anterior"
 #: libs/widgetutils/config/kstandardaction_p.h:69
 #, kde-format
 msgid "Go to previous page"
-msgstr "Va a la pàgina anterior"
+msgstr "Va fins a la pàgina anterior"
 
 #: libs/widgetutils/config/kstandardaction_p.h:70
 #, kde-format
@@ -35664,7 +35662,7 @@ msgstr "Pàgina següe&nt"
 #: libs/widgetutils/config/kstandardaction_p.h:70
 #, kde-format
 msgid "Go to next page"
-msgstr "Va a la pàgina següent"
+msgstr "Va fins a la pàgina següent"
 
 #: libs/widgetutils/config/kstandardaction_p.h:71
 #, kde-format
@@ -35689,7 +35687,7 @@ msgstr "P&rimera pàgina"
 #: libs/widgetutils/config/kstandardaction_p.h:74
 #, kde-format
 msgid "Go to first page"
-msgstr "Va a la primera pàgina"
+msgstr "Va fins a la primera pàgina"
 
 #: libs/widgetutils/config/kstandardaction_p.h:75
 #, kde-format
@@ -35699,7 +35697,7 @@ msgstr "Ú&ltima pàgina"
 #: libs/widgetutils/config/kstandardaction_p.h:75
 #, kde-format
 msgid "Go to last page"
-msgstr "Va a l'última pàgina"
+msgstr "Va fins a l'última pàgina"
 
 #: libs/widgetutils/config/kstandardaction_p.h:76
 #, kde-format
@@ -38079,7 +38077,7 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 "Zoom de la línia de temps. Mantindre premut i arrossegar cap a l'esquerra o "
-"a la dreta."
+"cap a la dreta."
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
 #, kde-format
@@ -45463,6 +45461,13 @@ msgstr "Elecció aleatòria"
 msgid "Size of the window:"
 msgstr "Mida de la finestra:"
 
+#: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
+#: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
+#, fuzzy, kde-format
+#| msgid "Transparent"
+msgid "Reset Transparent"
+msgstr "Transparent"
+
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
 msgid "&Round Corners..."
@@ -49167,7 +49172,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Interpolate RGB as four colors"
-msgstr "Interpola el RGB com a quatre colors"
+msgstr "Interpola RGB com a quatre colors"
 
 # skip-rule: ff-resume
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:285
@@ -49182,13 +49187,13 @@ msgid ""
 "it eliminates false 2x2 mesh patterns with VNG quality method or mazes with "
 "AHD quality method.</p>"
 msgstr ""
-"<title>Interpola el RGB com a quatre colors</title><p>De manera "
-"predeterminada, s'assumix que tots els píxels verds són el mateix. Si els "
-"píxels verds de les files parelles són més sensibles a la llum ultraviolada "
-"que els de les files senars, esta diferència provoca un patró mallat en "
-"l'eixida; utilitzant esta opció açò es resol amb una pèrdua de detall mínima."
-"</p><p>Resumint, esta opció difumina una mica la imatge, però elimina el "
-"patró mallat 2x2 amb un mètode de qualitat VNG o amb un mètode imbricat de "
+"<title>Interpola RGB com a quatre colors</title><p>De manera predeterminada, "
+"s'assumix que tots els píxels verds són el mateix. Si els píxels verds de "
+"les files parelles són més sensibles a la llum ultraviolada que els de les "
+"files senars, esta diferència provoca un patró mallat en l'eixida; "
+"utilitzant esta opció açò es resol amb una pèrdua de detall mínima.</"
+"p><p>Resumint, esta opció difumina una mica la imatge, però elimina el patró "
+"mallat 2x2 amb un mètode de qualitat VNG o amb un mètode imbricat de "
 "qualitat AHD.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:299
@@ -49819,7 +49824,7 @@ msgid ""
 "green and blue-yellow axis by the given factors (automatic by default).</p>"
 msgstr ""
 "<title>Activa la correcció de l'aberració cromàtica</title><p>Augmenta els "
-"eixos roig-verd i blau-groc del RAW per un factor indicat (automàtic de "
+"eixos roig-verd i blau-groc de RAW per un factor indicat (automàtic de "
 "manera predeterminada).</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:670
@@ -56235,7 +56240,7 @@ msgid ""
 "(https://github.com/test/plugin)</li>"
 msgstr ""
 "<p><strong>Introduïu l'URL de baixada</strong></p><p>Per exemple:"
-"<ul><li>Enllaç de la baixada del ZIP (https://exemple.org/connector.zip)</"
+"<ul><li>Enllaç de la baixada de ZIP (https://exemple.org/connector.zip)</"
 "li><li>Repositori de GitHub (https://github.com/prova/connector)</li>"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:102
@@ -59880,8 +59885,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "When in non-buildup mode, shows how fast the deformation limit is reached."
 msgstr ""
-"Quan no està en el mode de construcció, mostra la velocitat en arribar al "
-"límit de deformació."
+"Quan no està en el mode de construcció, mostra la velocitat en arribar fins "
+"al límit de deformació."
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:233
 #, kde-format

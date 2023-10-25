@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-24 02:28+0000\n"
+"POT-Creation-Date: 2023-10-25 02:40+0000\n"
 "PO-Revision-Date: 2022-03-08 20:53+0700\n"
 "Last-Translator: Linerly <linerly@protonmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -44106,6 +44106,12 @@ msgstr ""
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:44
 #, kde-format
 msgid "Size of the window:"
+msgstr ""
+
+#: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
+#: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
+#, kde-format
+msgid "Reset Transparent"
 msgstr ""
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42

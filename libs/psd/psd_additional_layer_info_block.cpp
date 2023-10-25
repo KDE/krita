@@ -328,7 +328,20 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         } else if (key == "SoLd") {
         } else if (key == "vstk") { // vector stroke info
             vectorStroke = KisAslReader::readVectorStroke(io, byteOrder);
-        } else if (key == "vsCg") {
+        } else if (key == "vscg") {
+            if (blockSize > 4) {
+                QString vscgKey = readFixedString<byteOrder>(io);
+                fillConfig = KisAslReader::readFillLayer(io, byteOrder);
+                if (vscgKey == "SoCo") {
+                    fillType = psd_fill_solid_color;
+                } else if (vscgKey == "GdFl") {
+                    // Gradient Fill
+                    fillType = psd_fill_gradient;
+                } else if (vscgKey == "PtFl") {
+                    // Pattern Fill
+                    fillType = psd_fill_pattern;
+                }
+            }
         } else if (key == "sn2P") {
         } else if (key == "vogk") {
         } else if (key == "Mtrn" || key == "Mt16" || key == "Mt32") { // There is no data associated with these keys.

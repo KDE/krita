@@ -887,9 +887,30 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
         }
 
         globalInfoSection.writePattBlockEx(io, mergedPatternsXmlDoc);
+
+#if 0
+        /**
+         * We're currently not writing the Txt2 data itself as it doesn't
+         * result in correct PSDs. There's three possible culprits for this:
+         *
+         * 1. PSD perhaps requires the data to be stored in a specific order.
+         *    The 'uncompressKeys' function in kis_txt2_utls gives an indication of this order.
+         * 2. PSD requires the Strikes for each text object to be written.
+         *    This is the most likely cause. The strikes object however consists of data for
+         *    every line, segment, and character, with positioning, bounding boxes and even
+         *    precise font glyph indices for each character. This is more or less a cached
+         *    version of the layout data of the text shape, and we don't have that kind of access
+         *    of the text shape data right now.
+         * 3. Something else. The Txt2 data is huge and therefore it is hard to figure out
+         *    where things might be going wrong.
+         *
+         * In practice, this means Krita won't be able to store OpenType feature data as well
+         * as path shapes for either text-in-shape or text-on-path.
+         */
         if (textCount > 0) {
             globalInfoSection.writeTxt2BlockEx(io, globalInfoSection.txt2Data);
         }
+#endif
     }
 }
 

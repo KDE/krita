@@ -1124,7 +1124,7 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
     return true;
 }
 
-QColor colorFromPSDStyleSheet(QVariantHash color) {
+QColor colorFromPSDStyleSheet(QVariantHash color, const KoColorSpace *imageCs) {
     QColor c(Qt::black);
     if (color.keys().contains("/Color")) {
         color = color["/Color"].toHash();
@@ -1153,6 +1153,9 @@ QColor colorFromPSDStyleSheet(QVariantHash color) {
         root.setAttribute("b", values.value(3).toDouble());
     }
     KoColor final = KoColor::fromXML(root, "U8");
+    if (final.colorSpace()->colorModelId() == imageCs->colorModelId()) {
+        final.setProfile(imageCs->profile());
+    }
     final.toQColor(&c);
     return c;
 }
@@ -1202,7 +1205,7 @@ static QHash <int, QString> psdLanguageMap {
     {28, "hu"},     // Hungarian
 };
 
-QString stylesForPSDStyleSheet(QString &lang, QVariantHash PSDStyleSheet, QMap<int, font_info_psd> fontNames, QTransform scale) {
+QString stylesForPSDStyleSheet(QString &lang, QVariantHash PSDStyleSheet, QMap<int, font_info_psd> fontNames, QTransform scale, const KoColorSpace *imageCs) {
     QStringList styles;
 
     QStringList unsupportedStyles;
@@ -1525,14 +1528,16 @@ QString stylesForPSDStyleSheet(QString &lang, QVariantHash PSDStyleSheet, QMap<i
             // vertical kana - 'vkna'
             // vert alt+rot - vrt2, or vert + vrtr
             int val = PSDStyleSheet.value(key).toInt();
-            if (val == 1) { // japanese traditional - 'tnam'/'trad'
+            if (val == 0) {
+                continue;
+            } else if (val == 1) { // japanese traditional - 'tnam'/'trad'
                 fontVariantEastAsian.append("traditional");
             } else if (val == 2) {  // japanese expert - 'expt'
                 fontFeatureSettings.append("'expt' 1");
             } else if (val == 3) { // Japanese 78 - jis78
                 fontVariantEastAsian.append("jis78");
             } else {
-                qDebug() << key << PSDStyleSheet.value(key);
+                qDebug() << QString("Unknown value for %1:").arg(key) << PSDStyleSheet.value(key);
             }
             continue;
         } else if (key == "/NoBreak") {
@@ -1555,7 +1560,7 @@ QString stylesForPSDStyleSheet(QString &lang, QVariantHash PSDStyleSheet, QMap<i
             }
             if (fill) {
                 QVariantHash color = PSDStyleSheet.value(key).toHash();
-                styles.append("fill:"+colorFromPSDStyleSheet(color).name());
+                styles.append("fill:"+colorFromPSDStyleSheet(color, imageCs).name());
             } else {
                 styles.append("fill:none");
             }
@@ -1566,7 +1571,7 @@ QString stylesForPSDStyleSheet(QString &lang, QVariantHash PSDStyleSheet, QMap<i
             }
             if (fill) {
                 QVariantHash color = PSDStyleSheet.value(key).toHash();
-                styles.append("stroke:"+colorFromPSDStyleSheet(color).name());
+                styles.append("stroke:"+colorFromPSDStyleSheet(color, imageCs).name());
             } else {
                 styles.append("stroke:none");
             }
@@ -1676,7 +1681,7 @@ QString stylesForPSDStyleSheet(QString &lang, QVariantHash PSDStyleSheet, QMap<i
             continue;
         } else {
             if (key != "/FillFlag" && key != "/StrokeFlag" && key != "/AutoLeading") {
-                qWarning() << "Unknown PSD character stylesheet style key" << key << PSDStyleSheet.value(key);
+                debugFlake << "Unknown PSD character stylesheet style key" << key << PSDStyleSheet.value(key);
             }
         }
     }
@@ -1710,11 +1715,11 @@ QString stylesForPSDStyleSheet(QString &lang, QVariantHash PSDStyleSheet, QMap<i
     if (!underlinePos.isEmpty()) {
         styles.append("text-decoration-position:"+underlinePos);
     }
-    qWarning() << "Unsupported styles" << unsupportedStyles;
+    debugFlake << "Unsupported styles" << unsupportedStyles;
     return styles.join("; ");
 }
 
-QString stylesForPSDParagraphSheet(QVariantHash PSDParagraphSheet, QString &lang, QMap<int, font_info_psd> fontNames, QTransform scaleToPt) {
+QString stylesForPSDParagraphSheet(QVariantHash PSDParagraphSheet, QString &lang, QMap<int, font_info_psd> fontNames, QTransform scaleToPt, const KoColorSpace *imageCs) {
     QStringList styles;
     QStringList unsupportedStyles;
 
@@ -1892,18 +1897,19 @@ QString stylesForPSDParagraphSheet(QVariantHash PSDParagraphSheet, QString &lang
             unsupportedStyles << key;
             continue;
         } else if (key == "/DefaultStyle") {
-            styles.append(stylesForPSDStyleSheet(lang, PSDParagraphSheet.value(key).toHash(), fontNames, scaleToPt));
+            styles.append(stylesForPSDStyleSheet(lang, PSDParagraphSheet.value(key).toHash(), fontNames, scaleToPt, imageCs));
         } else {
-            qWarning() << "Unknown PSD paragraph style key" << key << PSDParagraphSheet.value(key);
+            debugFlake << "Unknown PSD paragraph style key" << key << PSDParagraphSheet.value(key);
         }
     }
-    qWarning() << "Unsupported paragraph styles" << unsupportedStyles;
+    debugFlake << "Unsupported paragraph styles" << unsupportedStyles;
 
     return styles.join("; ");
 }
 
 bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariantHash tySh,
                                                                   const QVariantHash txt2,
+                                                                  const KoColorSpace *imageCs,
                                                                   const int textIndex,
                                                                   QString *svgText,
                                                                   QString *svgStyles,
@@ -2120,7 +2126,8 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
         return false;
     } else {
         text = editor.value("/Text").toString();
-        text.replace("\r", "\n");
+        text.replace("\r", "\n"); // return, used for paragraph hard breaks.
+        text.replace(0x03, "\n"); // end of text character, used for non-paragraph hard breaks.
     }
 
     int antiAliasing = 0;
@@ -2144,7 +2151,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
         QVariantHash styleSheet = parasheet[features].toHash();
 
         QString lang;
-        QString styleString = stylesForPSDParagraphSheet(styleSheet, lang, fontNames, scaleToPt);
+        QString styleString = stylesForPSDParagraphSheet(styleSheet, lang, fontNames, scaleToPt, imageCs);
         if (!lang.isEmpty()) {
             svgWriter.writeAttribute("xml:lang", lang);
         }
@@ -2215,7 +2222,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
                 } else {
                     svgWriter.writeStartElement("tspan");
                     QString lang;
-                    svgWriter.writeAttribute("style", stylesForPSDStyleSheet(lang, styleSheet, fontNames, scaleToPt));
+                    svgWriter.writeAttribute("style", stylesForPSDStyleSheet(lang, styleSheet, fontNames, scaleToPt, imageCs));
                     if (!lang.isEmpty()) {
                         svgWriter.writeAttribute("xml:lang", lang);
                     }
@@ -2228,7 +2235,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(const QVariant
             }
             svgWriter.writeStartElement("tspan");
             QString lang;
-            svgWriter.writeAttribute("style", stylesForPSDStyleSheet(lang, styleSheet, fontNames, scaleToPt));
+            svgWriter.writeAttribute("style", stylesForPSDStyleSheet(lang, styleSheet, fontNames, scaleToPt, imageCs));
             if (!lang.isEmpty()) {
                 svgWriter.writeAttribute("xml:lang", lang);
             }

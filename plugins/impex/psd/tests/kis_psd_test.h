@@ -22,6 +22,9 @@ private Q_SLOTS:
 
     void testOpenFillLayers();
 
+    void testLoadVectorMasks();
+    void testLoadText();
+
     void testOpenLayerStylesWithPattern();
     void testOpenLayerStylesWithPatternMulti();
 

@@ -18,6 +18,7 @@
 class QRectF;
 class KoSvgTextShape;
 class KoShape;
+class KoColorSpace;
 
 /**
  * KoSvgTextShapeMarkupConverter is a utility class for converting a
@@ -87,6 +88,7 @@ public:
 
     bool convertPSDTextEngineDataToSVG(const QVariantHash tySh,
                                        const QVariantHash txt2,
+                                       const KoColorSpace *imageCs,
                                        const int textIndex,
                                        QString *svgText,
                                        QString *svgStyles,

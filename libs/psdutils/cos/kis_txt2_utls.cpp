@@ -599,17 +599,117 @@ QVariantHash uncompressKeysTextModel(const QVariantHash object) {
     return newObject;
 }
 
-QVariantHash uncompressStrikeDef(const QVariantHash object) {
-    //qDebug() << Q_FUNC_INFO;
+QVariantHash uncompressGlyphStrikeDef(const QVariantHash object) {
     QVariantHash newObject;
+
+    Q_FOREACH(QString key, object.keys()) {
+        QVariant val = object.value(key);
+           // bounds,
+         if (key == "/99") {
+             newObject.insert("/StreamTag", val);
+         } else if (key == "/1") {
+             newObject.insert("/Bounds", val);
+         } else if (key == "/5") {
+             newObject.insert("/Glyphs", val);
+         } else if (key == "/10") {
+             newObject.insert("/GlyphAdjustments", val);
+         } else if (key == "/8") {
+             newObject.insert("/VisualBounds", val);
+         } else if (key == "/9") {
+             newObject.insert("/RenderedBounds", val);
+         } else if (key == "/15") {
+             newObject.insert("/Invalidation", val);
+         } else if (key == "/14") {
+             newObject.insert("/EndsInCR", val);
+         } else if (key == "/12") {
+             newObject.insert("/SelectionAscent", val);
+         } else if (key == "/13") {
+             newObject.insert("/SelectionDescent", val);
+         } else {
+             newObject.insert(key, val);
+         }
+    }
+    return newObject;
+}
+
+QVariantHash uncompressSegmentDef(const QVariantHash object) {
+    QVariantHash newObject;
+
+    Q_FOREACH(QString key, object.keys()) {
+        QVariant val = object.value(key);
+
+         if (key == "/99") {
+             newObject.insert("/StreamTag", val);
+         } else if (key == "/1") {
+             newObject.insert("/Bounds", val);
+         } else if (key == "/5") {
+             newObject.insert("/ChildProcession", val);
+         } else if (key == "/6") {
+             QVariantList array = val.toList();
+             QVariantList newArray;
+             Q_FOREACH(QVariant entry, array) {
+                 newArray.append(uncompressGlyphStrikeDef(entry.toHash()));
+             }
+             newObject.insert("/Children", newArray);
+         } else if (key == "/15") {
+             newObject.insert("/Mapping", val);
+         }  else if (key == "/20") {
+             newObject.insert("/FirstCharacterIndexInSegment", val);
+         } else {
+             newObject.insert(key, val);
+         }
+    }
+    return newObject;
+}
+
+QVariantHash uncompressLineDef(const QVariantHash object) {
+    QVariantHash newObject;
+
     Q_FOREACH(QString key, object.keys()) {
         QVariant val = object.value(key);
 
          if (key == "/99") {
              newObject.insert("/StreamTag", val);
          } else if (key == "/0") {
-             newObject.insert("/Bounds", val);
+             newObject.insert("/Transform", val);
          } else if (key == "/1") {
+             newObject.insert("/Bounds", val);
+         } else if (key == "/5") {
+             newObject.insert("/ChildProcession", val);
+         } else if (key == "/6") {
+             QVariantList array = val.toList();
+             QVariantList newArray;
+             Q_FOREACH(QVariant entry, array) {
+                    newArray.append(uncompressSegmentDef(entry.toHash()));
+             }
+             newObject.insert("/Children", newArray);
+         } else if (key == "/10") {
+             newObject.insert("/Baseline", val);
+         } else if (key == "/14") {
+             newObject.insert("/SelectionAscent", val);
+         } else if (key == "/15") {
+             newObject.insert("/SelectionDescent", val);
+         } else {
+             newObject.insert(key, val);
+         }
+    }
+    return newObject;
+}
+
+QVariantHash uncompressStrikeDef(const QVariantHash object, bool flip = false) {
+    //qDebug() << Q_FUNC_INFO;
+    QVariantHash newObject;
+    QString tag = object.contains("/99")? object.value("/99").toString()
+                                        : object.value("/StreamTag").toString();
+
+    Q_FOREACH(QString key, object.keys()) {
+        QVariant val = object.value(key);
+
+         if (key == "/99") {
+             newObject.insert("/StreamTag", val);
+         } else if ((key == "/0" && !flip) || (key == "/1" && flip)) {
+             newObject.insert("/Bounds", val);
+         } else if ((key == "/1" && !flip) || (key == "/0" && flip)) {
              newObject.insert("/Transform", val);
          } else if (key == "/5") {
              newObject.insert("/ChildProcession", val);
@@ -617,9 +717,18 @@ QVariantHash uncompressStrikeDef(const QVariantHash object) {
              QVariantList array = val.toList();
              QVariantList newArray;
              Q_FOREACH(QVariant entry, array) {
-                 newArray.append(uncompressStrikeDef(entry.toHash()));
+                 QString streamTag = entry.toHash().keys().contains("/99")? entry.toHash().value("/99").toString()
+                                                                          : entry.toHash().value("/StreamTag").toString();
+                 if (streamTag == "/PC" || streamTag == "/PathSelectGroupCharacter"
+                         || streamTag == "/F" || streamTag == "/FrameStrike" || streamTag == "/RowColStrike" || streamTag == "/R") {
+                    newArray.append(uncompressStrikeDef(entry.toHash(), true));
+                 } else if (streamTag == "/L" || streamTag == "/LineStrike") {
+                     newArray.append(uncompressLineDef(entry.toHash()));
+                 }
              }
              newObject.insert("/Children", newArray);
+         } else if (key == "/10" && (tag == "/F" || tag == "/FrameStrike")) { // only for frame strike.
+             newObject.insert("/Frame", val);
          } else {
              newObject.insert(key, val);
          }
@@ -1355,7 +1464,7 @@ QVariantHash KisTxt2Utils::tyShFromTxt2(const QVariantHash Txt2, const QRectF bo
     QVariantHash rendered;
     int shapeType = textFrameData.value("/Type", QVariant(0)).toInt(); // 0 point, 1 paragraph, 2, text on path
     int writingDirection = textFrameData.value("/LineOrientation", QVariant(0)).toInt();
-    QVariantHash photoshop = QVariantHash {{"/ShapeType", shapeType},
+    QVariantHash photoshop = QVariantHash {{"/ShapeType", qMax(1, shapeType)},
     {"/TransformPoint0", QVariantList({1.0, 0.0})},
     {"/TransformPoint1", QVariantList({0.0, 1.0})},
     {"/TransformPoint2", QVariantList({0.0, 0.0})}};

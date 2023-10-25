@@ -13,11 +13,12 @@
 #include <QBuffer>
 
 const QMap<char, char> escape = {
-    {0x0a, 'n'},
-    {0x0d, 'r'},
-    {0x09, 't'},
-    {0x08, 'b'}, // backspace
-    {0x0c, 'f'},
+    // Turns out, Adobe text engine data only really escapes ( and ).
+    //{0x0a, 'n'},
+    //{0x0d, 'r'},
+    //{0x09, 't'},
+    //{0x08, 'b'}, // backspace
+    //{0x0c, 'f'},
     {0x28, '('},
     {0x29, ')'},
     {0x5c, '\\'} // reverse solidus/backslash
@@ -162,6 +163,9 @@ QByteArray KisCosWriter::writeTxt2FromVariantHash(const QVariantHash doc)
         dev.close();
     } else {
         qDebug() << dev.errorString();
+    }
+    if (ba.endsWith(' ')) {
+        ba.chop(1);
     }
     return ba;
 }

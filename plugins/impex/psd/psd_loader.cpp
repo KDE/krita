@@ -431,6 +431,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 QTransform scaleToPt = QTransform::fromScale(m_image->xRes(), m_image->yRes()).inverted();
                 bool res = converter.convertPSDTextEngineDataToSVG(text.engineData,
                                                                    layerSection.globalInfoSection.txt2Data,
+                                                                   m_image->colorSpace(),
                                                                    text.textIndex,
                                                                    &svg, &styles,
                                                                    offset1, offsetByAscent,

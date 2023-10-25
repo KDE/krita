@@ -633,13 +633,11 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
 
 
     //loop over all visible buttons and render them
-    if (globalEditorWidgetData.moveButtonActivated)
-    {
+    if (globalEditorWidgetData.moveButtonActivated) {
         QPointF iconMovePosition(actionsPosition + globalEditorWidgetData.moveIconPosition);
         gc.drawPixmap(iconMovePosition, globalEditorWidgetData.m_iconMove);
     }
-    if (globalEditorWidgetData.snapButtonActivated)
-    {
+    if (globalEditorWidgetData.snapButtonActivated) {
         QPointF iconSnapPosition(actionsPosition + globalEditorWidgetData.snapIconPosition);
         if (assistant->isSnappingActive() == true) {
             gc.drawPixmap(iconSnapPosition, globalEditorWidgetData.m_iconSnapOn);
@@ -647,8 +645,7 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
             gc.drawPixmap(iconSnapPosition, globalEditorWidgetData.m_iconSnapOff);
         }
     }
-    if (globalEditorWidgetData.lockButtonActivated)
-    {
+    if (globalEditorWidgetData.lockButtonActivated) {
         QPointF iconLockedPosition(actionsPosition + globalEditorWidgetData.lockedIconPosition);
         if (assistant->isLocked()) {
             gc.drawPixmap(iconLockedPosition, globalEditorWidgetData.m_iconLockOn);
@@ -659,8 +656,7 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
             gc.setOpacity(oldOpacity);
         }
     }
-    if (globalEditorWidgetData.duplicateButtonActivated)
-    {
+    if (globalEditorWidgetData.duplicateButtonActivated) {
         QPointF iconDuplicatePosition(actionsPosition + globalEditorWidgetData.duplicateIconPosition);
         if(assistant->isDuplicating()){
             gc.drawPixmap(iconDuplicatePosition,globalEditorWidgetData.m_iconDuplicateOff);
@@ -668,8 +664,7 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
             gc.drawPixmap(iconDuplicatePosition,globalEditorWidgetData.m_iconDuplicateOn);
         }
     }
-    if (globalEditorWidgetData.deleteButtonActivated)
-    {
+    if (globalEditorWidgetData.deleteButtonActivated) {
         QPointF iconDeletePosition(actionsPosition + globalEditorWidgetData.deleteIconPosition);
         gc.drawPixmap(iconDeletePosition, globalEditorWidgetData.m_iconDelete);
     }

@@ -350,8 +350,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
         QPointF uiMousePosition = initialTransform.map(canvasDecoration->snapToGuide(event, QPointF(), false));
         
         //loop through all activated buttons and see if any are being clicked
-        if(globalEditorWidgetData.moveButtonActivated)
-        {
+        if(globalEditorWidgetData.moveButtonActivated) {
             QPointF iconMovePosition(actionsPosition + globalEditorWidgetData.moveIconPosition);
             QRectF moveRect(iconMovePosition, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize));
 
@@ -365,8 +364,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
                 return;
             }
         }
-        if(globalEditorWidgetData.snapButtonActivated)
-        {
+        if(globalEditorWidgetData.snapButtonActivated) {
             QPointF iconSnapPosition(actionsPosition + globalEditorWidgetData.snapIconPosition);
             QRectF visibleRect(iconSnapPosition, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize));
             if (visibleRect.contains(uiMousePosition)) {
@@ -377,8 +375,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
                 assistantSelected(assistant); // whatever handle is the closest contains the selected assistant
             }
         }
-        if(globalEditorWidgetData.lockButtonActivated)
-        {
+        if(globalEditorWidgetData.lockButtonActivated) {
             QPointF iconLockPosition(actionsPosition + globalEditorWidgetData.lockedIconPosition);
             QRectF lockRect(iconLockPosition, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize));
             if (lockRect.contains(uiMousePosition)) {
@@ -390,8 +387,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
                 return;
             }
         }
-        if(globalEditorWidgetData.duplicateButtonActivated)
-        {
+        if(globalEditorWidgetData.duplicateButtonActivated) {
             QPointF iconDuplicatePosition(actionsPosition + globalEditorWidgetData.duplicateIconPosition);
             QRectF duplicateRect(iconDuplicatePosition,QSizeF(globalEditorWidgetData.buttonSize,globalEditorWidgetData.buttonSize));
             
@@ -412,14 +408,13 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
                 assistantDuplicatingFlag = true;
                 
                 // if assistant is locked simply move the editor widget, not the entire assistant
-                if(assistant->isLocked())
-                {
+                if(assistant->isLocked()) {
                     newAssistantAllowed = false;
                     m_internalMode = MODE_DRAGGING_EDITOR_WIDGET;
                     m_dragStart = event->point;
                     m_dragEnd = event->point;
                     m_newAssistant.clear();
-                } else{
+                } else {
                     m_assistantDrag = m_newAssistant;
                     m_newAssistant.clear();
                     m_cursorStart = event->point;
@@ -432,8 +427,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
             }
 
         }
-        if(globalEditorWidgetData.deleteButtonActivated)
-        {
+        if(globalEditorWidgetData.deleteButtonActivated) {
             QPointF iconDeletePosition(actionsPosition + globalEditorWidgetData.deleteIconPosition);
             QRectF deleteRect(iconDeletePosition, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize));
             if (deleteRect.contains(uiMousePosition) && !assistant->isLocked()) {
@@ -447,8 +441,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
 
         }
         //if user clicking editor widget background.
-        if((QRectF(actionsPosition + QPointF(10, 10), globalEditorWidgetData.boundingSize).adjusted(-2, -2, 2, 2).contains(uiMousePosition)))
-        {
+        if((QRectF(actionsPosition + QPointF(10, 10), globalEditorWidgetData.boundingSize).adjusted(-2, -2, 2, 2).contains(uiMousePosition))) {
             newAssistantAllowed = false;
             m_internalMode = MODE_DRAGGING_EDITOR_WIDGET;
             assistantSelected(assistant);
@@ -459,7 +452,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
         
     }
 
-    if (newAssistantAllowed==true){//don't make a new assistant when I'm just toggling visibility//
+    if (newAssistantAllowed==true) {//don't make a new assistant when I'm just toggling visibility//
         QString key = m_options.availableAssistantsComboBox->model()->index( m_options.availableAssistantsComboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
         KConfigGroup cfg = KSharedConfig::openConfig()->group(toolId());
         cfg.writeEntry("AssistantType", key);
@@ -708,8 +701,7 @@ void KisAssistantTool::endActionImpl(KoPointerEvent *event)
 {
     setMode(KisTool::HOVER_MODE);
     //release duplication button flag
-    if(assistantDuplicatingFlag)
-    {
+    if(assistantDuplicatingFlag) {
         KisPaintingAssistantSP selectedAssistant = m_canvas->paintingAssistantsDecoration()->selectedAssistant();
         selectedAssistant->setDuplicating(false);
         assistantDuplicatingFlag = false;
@@ -812,8 +804,7 @@ void KisAssistantTool::updateEditorWidgetData()
 
     AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
     if( !globalEditorWidgetData.moveButtonActivated && !globalEditorWidgetData.snapButtonActivated && !globalEditorWidgetData.lockButtonActivated && 
-        !globalEditorWidgetData.duplicateButtonActivated && !globalEditorWidgetData.deleteButtonActivated)
-    {
+        !globalEditorWidgetData.duplicateButtonActivated && !globalEditorWidgetData.deleteButtonActivated) {
         globalEditorWidgetData.widgetActivated = false;
     } else globalEditorWidgetData.widgetActivated = true;
 
@@ -824,8 +815,7 @@ void KisAssistantTool::updateEditorWidgetData()
     int positionY = 15;
 
     //loop through all buttons and calculate positions
-    if(globalEditorWidgetData.moveButtonActivated)
-    {
+    if(globalEditorWidgetData.moveButtonActivated) {
         
         buttonCount++;
         horizontalButtonCount++;
@@ -841,8 +831,7 @@ void KisAssistantTool::updateEditorWidgetData()
         globalEditorWidgetData.moveIconPosition.setY(positionY-5);
         positionX += globalEditorWidgetData.buttonSize + globalEditorWidgetData.buttonPadding;
     }
-    if(globalEditorWidgetData.snapButtonActivated)
-    {
+    if(globalEditorWidgetData.snapButtonActivated) {
         buttonCount++;
         horizontalButtonCount++;
         if(horizontalButtonCount > horizontalButtonLimit)
@@ -855,8 +844,7 @@ void KisAssistantTool::updateEditorWidgetData()
         globalEditorWidgetData.snapIconPosition.setY(positionY);
         positionX += globalEditorWidgetData.buttonSize + globalEditorWidgetData.buttonPadding;
     }
-    if(globalEditorWidgetData.lockButtonActivated)
-    {
+    if(globalEditorWidgetData.lockButtonActivated) {
         buttonCount++;
         horizontalButtonCount++;
         if(horizontalButtonCount > horizontalButtonLimit)
@@ -869,8 +857,7 @@ void KisAssistantTool::updateEditorWidgetData()
         globalEditorWidgetData.lockedIconPosition.setY(positionY);
         positionX += globalEditorWidgetData.buttonSize + globalEditorWidgetData.buttonPadding;
     }
-    if(globalEditorWidgetData.duplicateButtonActivated)
-    {
+    if(globalEditorWidgetData.duplicateButtonActivated) {
         buttonCount++;
         horizontalButtonCount++;
         if(horizontalButtonCount > horizontalButtonLimit)
@@ -883,8 +870,7 @@ void KisAssistantTool::updateEditorWidgetData()
         globalEditorWidgetData.duplicateIconPosition.setY(positionY);
         positionX += globalEditorWidgetData.buttonSize + globalEditorWidgetData.buttonPadding;
     }
-    if(globalEditorWidgetData.deleteButtonActivated)
-    {
+    if(globalEditorWidgetData.deleteButtonActivated) {
         buttonCount++;
         horizontalButtonCount++;
         if(horizontalButtonCount > horizontalButtonLimit)
@@ -904,8 +890,7 @@ void KisAssistantTool::updateEditorWidgetData()
     globalEditorWidgetData.boundingSize.setWidth(boundingWidgetWidth+globalEditorWidgetData.dragDecorationWidth);
 
     int buttonToWidthRatio = (buttonCount/horizontalButtonLimit);
-    if(buttonCount%horizontalButtonLimit != 0)
-    {
+    if(buttonCount%horizontalButtonLimit != 0) {
         buttonToWidthRatio++;
     }
 
@@ -944,24 +929,19 @@ void KisAssistantTool::updateToolOptionsUI()
      bool hasActiveAssistant = m_selectedAssistant ? true : false;
     AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
 
-    if(globalEditorWidgetData.moveButtonActivated)
-    {
+    if(globalEditorWidgetData.moveButtonActivated) {
         m_options.showMove->setChecked(true);
     }
-    if(globalEditorWidgetData.snapButtonActivated)
-    {
+    if(globalEditorWidgetData.snapButtonActivated) {
         m_options.showSnap->setChecked(true);
     }
-    if(globalEditorWidgetData.lockButtonActivated)
-    {
+    if(globalEditorWidgetData.lockButtonActivated) {
         m_options.showLock->setChecked(true);
     }
-    if(globalEditorWidgetData.duplicateButtonActivated)
-    {
+    if(globalEditorWidgetData.duplicateButtonActivated) {
         m_options.showDuplicate->setChecked(true);
     }
-    if(globalEditorWidgetData.deleteButtonActivated)
-    {
+    if(globalEditorWidgetData.deleteButtonActivated) {
         m_options.showDelete->setChecked(true);
     }
 

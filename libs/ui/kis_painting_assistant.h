@@ -151,10 +151,12 @@ public:
      * @brief isDuplicating
      * @return If the duplication button is pressed
      */
+    /*The duplication button must be depressed when the user clicks it. This getter function indicates to the 
+    render function when the button is clicked*/
     bool isDuplicating();
     /**
      * @brief setDuplicating
-     * @param value set the indication that the duplication button is pressed
+     * @param value setter function sets the indication that the duplication button is pressed
      */
     void setDuplicating(bool value);
 

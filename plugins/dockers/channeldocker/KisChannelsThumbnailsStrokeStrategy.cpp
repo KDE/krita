@@ -10,14 +10,12 @@
 #include "kis_sequential_iterator.h"
 #include "KoColorModelStandardIds.h"
 #include "KoColorSpace.h"
+#include <KisStaticRegistrar.h>
 
-struct KisQVectorOfQImageStaticRegistrar {
-    KisQVectorOfQImageStaticRegistrar() {
-        qRegisterMetaType<QVector<QImage>>("QVector<QImage>");
-        QMetaType::registerEqualsComparator<QVector<QImage>>();
-    }
-};
-static KisQVectorOfQImageStaticRegistrar __registrar1;
+KIS_DECLARE_STATIC_REGISTRAR {
+    qRegisterMetaType<QVector<QImage>>("QVector<QImage>");
+    QMetaType::registerEqualsComparator<QVector<QImage>>();
+}
 
 void KisChannelsThumbnailsStrokeStrategy::reportThumbnailGenerationCompleted(KisPaintDeviceSP device, const QRect &rect)
 {

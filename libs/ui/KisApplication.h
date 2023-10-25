@@ -91,6 +91,8 @@ public:
     /// @return true if Krita has been acquired through an app store
     bool isStoreApplication();
 
+    static void verifyMetatypeRegistration();
+
 public Q_SLOTS:
 
     void executeRemoteArguments(QByteArray message, KisMainWindow *mainWindow);

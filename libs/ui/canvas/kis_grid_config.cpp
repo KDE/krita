@@ -11,14 +11,11 @@
 #include "kis_config.h"
 #include "kis_dom_utils.h"
 #include "kis_algebra_2d.h"
+#include <KisStaticRegistrar.h>
 
-
-struct KisGridConfigStaticRegistrar {
-    KisGridConfigStaticRegistrar() {
-        qRegisterMetaType<KisGridConfig>("KisGridConfig");
-    }
-};
-static KisGridConfigStaticRegistrar __registrar;
+KIS_DECLARE_STATIC_REGISTRAR {
+    qRegisterMetaType<KisGridConfig>("KisGridConfig");
+}
 
 Q_GLOBAL_STATIC(KisGridConfig, staticDefaultObject)
 

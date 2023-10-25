@@ -14,14 +14,11 @@
 #include "kis_image_animation_interface.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_image_config.h"
+#include <KisStaticRegistrar.h>
 
-struct KisCancelReasonStaticRegistrar {
-    KisCancelReasonStaticRegistrar() {
-        qRegisterMetaType<KisAsyncAnimationRendererBase::CancelReason>("KisAsyncAnimationRendererBase::CancelReason");
-    }
-};
-
-static KisCancelReasonStaticRegistrar __registrar;
+KIS_DECLARE_STATIC_REGISTRAR {
+    qRegisterMetaType<KisAsyncAnimationRendererBase::CancelReason>("KisAsyncAnimationRendererBase::CancelReason");
+}
 
 struct KRITAUI_NO_EXPORT KisAsyncAnimationRendererBase::Private
 {

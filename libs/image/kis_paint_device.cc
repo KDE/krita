@@ -57,16 +57,11 @@
 #include "kis_transform_worker.h"
 #include "kis_filter_strategy.h"
 #include "krita_utils.h"
+#include <KisStaticRegistrar.h>
 
-
-struct KisPaintDeviceSPStaticRegistrar {
-    KisPaintDeviceSPStaticRegistrar() {
-        qRegisterMetaType<KisPaintDeviceSP>("KisPaintDeviceSP");
-    }
-};
-static KisPaintDeviceSPStaticRegistrar __registrar;
-
-
+KIS_DECLARE_STATIC_REGISTRAR {
+    qRegisterMetaType<KisPaintDeviceSP>("KisPaintDeviceSP");
+}
 
 struct KisPaintDevice::Private
 {

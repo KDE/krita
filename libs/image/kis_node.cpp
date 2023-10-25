@@ -38,25 +38,17 @@ typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 #include "kis_image.h"
 #include "kis_layer_utils.h"
 #include "KisRegion.h"
+#include <KisStaticRegistrar.h>
 
 /**
- *The link between KisProjection and KisImageUpdater
- *uses queued signals with an argument of KisNodeSP type,
- *so we should register it beforehand
+ * The link between KisProjection and KisImageUpdater
+ * uses queued signals with an argument of KisNodeSP type,
+ * so we should register it beforehand
  */
-struct KisNodeSPStaticRegistrar {
-    KisNodeSPStaticRegistrar() {
-        qRegisterMetaType<KisNodeSP>("KisNodeSP");
-    }
-};
-static KisNodeSPStaticRegistrar __registrar1;
-
-struct KisNodeListStaticRegistrar {
-    KisNodeListStaticRegistrar() {
-        qRegisterMetaType<KisNodeList>("KisNodeList");
-    }
-};
-static KisNodeListStaticRegistrar __registrar2;
+KIS_DECLARE_STATIC_REGISTRAR {
+    qRegisterMetaType<KisNodeSP>("KisNodeSP");
+    qRegisterMetaType<KisNodeList>("KisNodeList");
+}
 
 
 /**

@@ -79,6 +79,7 @@ set(kritaimage_LIB_SRCS
    brushengine/KisStrokeSpeedMeasurer.cpp
    brushengine/KisPaintopSettingsIds.cpp
    brushengine/KisOptimizedBrushOutline.cpp
+   brushengine/kis_paintop_lod_limitations.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/KisDeselectActiveSelectionCommand.cpp
    commands/kis_image_change_layers_command.cpp

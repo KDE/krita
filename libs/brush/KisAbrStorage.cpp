@@ -9,14 +9,11 @@
 #include "KisResourceStorage.h"
 
 #include <QFileInfo>
+#include <KisStaticRegistrar.h>
 
-struct KisAbrStorageStaticRegistrar {
-    KisAbrStorageStaticRegistrar() {
-        KisStoragePluginRegistry::instance()->addStoragePluginFactory(KisResourceStorage::StorageType::AdobeBrushLibrary, new KisStoragePluginFactory<KisAbrStorage>());
-    }
-};
-static KisAbrStorageStaticRegistrar s_registrar;
-
+KIS_DECLARE_STATIC_REGISTRAR {
+    KisStoragePluginRegistry::instance()->addStoragePluginFactory(KisResourceStorage::StorageType::AdobeBrushLibrary, new KisStoragePluginFactory<KisAbrStorage>());
+}
 
 class AbrTagIterator : public KisResourceStorage::TagIterator
 {

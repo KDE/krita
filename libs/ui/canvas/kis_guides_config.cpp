@@ -16,15 +16,11 @@
 #include "kis_dom_utils.h"
 #include "kis_algebra_2d.h"
 #include "kis_global.h"
+#include <KisStaticRegistrar.h>
 
-
-struct KisGuidesConfigStaticRegistrar {
-    KisGuidesConfigStaticRegistrar() {
-        qRegisterMetaType<KisGuidesConfig>("KisGuidesConfig");
-    }
-};
-static KisGuidesConfigStaticRegistrar __registrar;
-
+KIS_DECLARE_STATIC_REGISTRAR {
+    qRegisterMetaType<KisGuidesConfig>("KisGuidesConfig");
+}
 
 class Q_DECL_HIDDEN KisGuidesConfig::Private
 {

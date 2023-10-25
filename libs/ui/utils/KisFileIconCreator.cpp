@@ -19,18 +19,14 @@
 
 #include <kis_painting_tweaks.h>
 #include <kis_debug.h>
+#include <KisStaticRegistrar.h>
 
 namespace
 {
 
-struct KisFileIconRegistrar {
-    KisFileIconRegistrar() {
-        KisPreviewFileDialog::s_iconCreator = new KisFileIconCreator();
-    }
-};
-
-
-static KisFileIconRegistrar s_registrar;
+KIS_DECLARE_STATIC_REGISTRAR {
+    KisPreviewFileDialog::s_iconCreator = new KisFileIconCreator();
+}
 
 
 QIcon createIcon(const QImage &source, const QSize &iconSize)

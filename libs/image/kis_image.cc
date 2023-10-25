@@ -98,6 +98,7 @@
 #include "KisRunnableStrokeJobsInterface.h"
 
 #include "KisBusyWaitBroker.h"
+#include <KisStaticRegistrar.h>
 
 
 // #define SANITY_CHECKS
@@ -111,13 +112,9 @@
 #define SANITY_CHECK_LOCKED(name)
 #endif
 
-
-struct KisImageSPStaticRegistrar {
-    KisImageSPStaticRegistrar() {
-        qRegisterMetaType<KisImageSP>("KisImageSP");
-    }
-};
-static KisImageSPStaticRegistrar __registrar1;
+KIS_DECLARE_STATIC_REGISTRAR {
+    qRegisterMetaType<KisImageSP>("KisImageSP");
+}
 
 class KisImage::KisImagePrivate
 {

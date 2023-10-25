@@ -114,6 +114,7 @@
 #include <kis_psd_layer_style.h>
 
 #include <config-seexpr.h>
+#include <config-safe-asserts.h>
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -707,6 +708,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
         }
     }
 
+    verifyMetatypeRegistration();
+
     // not calling this before since the program will quit there.
     return true;
 }
@@ -837,6 +840,58 @@ bool KisApplication::isStoreApplication()
 #endif
 
     return false;
+}
+
+void KisApplication::verifyMetatypeRegistration()
+{
+    /**
+     * Veryfy that all our statically registered types are actually registered.
+     * This check is skipped in release builds, when HIDE_SAFE_ASSERTS is defined
+     */
+#if !defined(HIDE_SAFE_ASSERTS) || defined(CRASH_ON_SAFE_ASSERTS)
+
+    auto verifyTypeRegistered = [] (const char *type) {
+        const int typeId = QMetaType::type(type);
+
+        if (typeId <= 0) {
+            qFatal("ERROR: type-id for metatype %s is not found", type);
+        }
+
+        if (!QMetaType::isRegistered(typeId)) {
+            qFatal("ERROR: metatype %s is not registered", type);
+        }
+    };
+
+    verifyTypeRegistered("KisBrushSP");
+    verifyTypeRegistered("KoSvgText::AutoValue");
+    verifyTypeRegistered("KoSvgText::BackgroundProperty");
+    verifyTypeRegistered("KoSvgText::StrokeProperty");
+    verifyTypeRegistered("KoSvgText::TextTransformInfo");
+    verifyTypeRegistered("KoSvgText::TextIndentInfo");
+    verifyTypeRegistered("KoSvgText::TabSizeInfo");
+    verifyTypeRegistered("KoSvgText::LineHeightInfo");
+    verifyTypeRegistered("KoSvgText::AssociatedShapeWrapper");
+    verifyTypeRegistered("KisPaintopLodLimitations");
+    verifyTypeRegistered("KisImageSP");
+    verifyTypeRegistered("KisImageSignalType");
+    verifyTypeRegistered("KisNodeSP");
+    verifyTypeRegistered("KisNodeList");
+    verifyTypeRegistered("KisPaintDeviceSP");
+    verifyTypeRegistered("KisTimeSpan");
+    verifyTypeRegistered("KoColor");
+    verifyTypeRegistered("KoResourceSP");
+    verifyTypeRegistered("KoResourceCacheInterfaceSP");
+    verifyTypeRegistered("KisAsyncAnimationRendererBase::CancelReason");
+    verifyTypeRegistered("KisGridConfig");
+    verifyTypeRegistered("KisGuidesConfig");
+    verifyTypeRegistered("KisUpdateInfoSP");
+    verifyTypeRegistered("KisToolChangesTrackerDataSP");
+    verifyTypeRegistered("QVector<QImage>");
+    verifyTypeRegistered("SnapshotDirInfoList");
+    verifyTypeRegistered("TransformTransactionProperties");
+    verifyTypeRegistered("ToolTransformArgs");
+    verifyTypeRegistered("QPainterPath");
+#endif
 }
 
 void KisApplication::executeRemoteArguments(QByteArray message, KisMainWindow *mainWindow)

@@ -21,46 +21,38 @@
 
 #include <KoSvgTextChunkShape.h>
 #include <KoSvgTextChunkShapeLayoutInterface.h>
+#include <KisStaticRegistrar.h>
 
+KIS_DECLARE_STATIC_REGISTRAR {
+    qRegisterMetaType<KoSvgText::AutoValue>("KoSvgText::AutoValue");
+    QMetaType::registerEqualsComparator<KoSvgText::AutoValue>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::AutoValue>();
 
-namespace {
+    qRegisterMetaType<KoSvgText::BackgroundProperty>("KoSvgText::BackgroundProperty");
+    QMetaType::registerEqualsComparator<KoSvgText::BackgroundProperty>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::BackgroundProperty>();
 
-struct TextPropertiesStaticRegistrar {
-    TextPropertiesStaticRegistrar() {
-        qRegisterMetaType<KoSvgText::AutoValue>("KoSvgText::AutoValue");
-        QMetaType::registerEqualsComparator<KoSvgText::AutoValue>();
-        QMetaType::registerDebugStreamOperator<KoSvgText::AutoValue>();
+    qRegisterMetaType<KoSvgText::StrokeProperty>("KoSvgText::StrokeProperty");
+    QMetaType::registerEqualsComparator<KoSvgText::StrokeProperty>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::StrokeProperty>();
 
-        qRegisterMetaType<KoSvgText::BackgroundProperty>("KoSvgText::BackgroundProperty");
-        QMetaType::registerEqualsComparator<KoSvgText::BackgroundProperty>();
-        QMetaType::registerDebugStreamOperator<KoSvgText::BackgroundProperty>();
+    qRegisterMetaType<KoSvgText::TextTransformInfo>("KoSvgText::TextTransformInfo");
+    QMetaType::registerEqualsComparator<KoSvgText::TextTransformInfo>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::TextTransformInfo>();
 
-        qRegisterMetaType<KoSvgText::StrokeProperty>("KoSvgText::StrokeProperty");
-        QMetaType::registerEqualsComparator<KoSvgText::StrokeProperty>();
-        QMetaType::registerDebugStreamOperator<KoSvgText::StrokeProperty>();
+    qRegisterMetaType<KoSvgText::TextIndentInfo>("KoSvgText::TextIndentInfo");
+    QMetaType::registerEqualsComparator<KoSvgText::TextIndentInfo>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::TextIndentInfo>();
 
-        qRegisterMetaType<KoSvgText::TextTransformInfo>("KoSvgText::TextTransformInfo");
-        QMetaType::registerEqualsComparator<KoSvgText::TextTransformInfo>();
-        QMetaType::registerDebugStreamOperator<KoSvgText::TextTransformInfo>();
+    qRegisterMetaType<KoSvgText::TabSizeInfo>("KoSvgText::TabSizeInfo");
+    QMetaType::registerEqualsComparator<KoSvgText::TabSizeInfo>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::TabSizeInfo>();
 
-        qRegisterMetaType<KoSvgText::TextIndentInfo>("KoSvgText::TextIndentInfo");
-        QMetaType::registerEqualsComparator<KoSvgText::TextIndentInfo>();
-        QMetaType::registerDebugStreamOperator<KoSvgText::TextIndentInfo>();
+    qRegisterMetaType<KoSvgText::LineHeightInfo>("KoSvgText::LineHeightInfo");
+    QMetaType::registerEqualsComparator<KoSvgText::LineHeightInfo>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::LineHeightInfo>();
 
-        qRegisterMetaType<KoSvgText::TabSizeInfo>("KoSvgText::TabSizeInfo");
-        QMetaType::registerEqualsComparator<KoSvgText::TabSizeInfo>();
-        QMetaType::registerDebugStreamOperator<KoSvgText::TabSizeInfo>();
-
-        qRegisterMetaType<KoSvgText::LineHeightInfo>("KoSvgText::LineHeightInfo");
-        QMetaType::registerEqualsComparator<KoSvgText::LineHeightInfo>();
-        QMetaType::registerDebugStreamOperator<KoSvgText::LineHeightInfo>();
-
-        qRegisterMetaType<KoSvgText::AssociatedShapeWrapper>("KoSvgText::AssociatedShapeWrapper");
-    }
-};
-
-static TextPropertiesStaticRegistrar textPropertiesStaticRegistrar;
-
+    qRegisterMetaType<KoSvgText::AssociatedShapeWrapper>("KoSvgText::AssociatedShapeWrapper");
 }
 
 namespace KoSvgText {

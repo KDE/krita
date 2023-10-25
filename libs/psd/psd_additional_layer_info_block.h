@@ -22,6 +22,7 @@
 #include <kis_paint_device.h>
 #include <kis_generator_registry.h>
 #include <KisGlobalResourcesInterface.h>
+#include <KisEmbeddedResourceStorageProxy.h>
 #include <KoStopGradient.h>
 #include <KoSegmentGradient.h>
 #include <KoShapeBackground.h>
@@ -587,6 +588,7 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
                 g->setFinalStop(line.p2());
                 line.setAngle(180+angle);
                 g->setStart(line.p2());
+                pointer = g;
             }
         }
 
@@ -751,21 +753,41 @@ struct KRITAPSD_EXPORT psd_layer_pattern_fill {
         w.writePoint("phase", offset);
     }
 
-    QSharedPointer<KoShapeBackground> getBackground() {
+    void loadPattern(KisEmbeddedResourceStorageProxy &embeddedProxy) {
+        const QString patternMD5 = "";
+        const QString patternNameTemp = patternName;
+        const QString patternFileName = QString(patternID + ".pat");
+
+        KoResourceLoadResult res = embeddedProxy.resourcesInterface()->source(ResourceType::Patterns).bestMatchLoadResult(patternMD5, patternFileName, patternNameTemp);
+        pattern = res.resource<KoPattern>();
+    }
+
+    QSharedPointer<KoShapeBackground> getBackground(KisEmbeddedResourceStorageProxy &embeddedProxy) {
         QSharedPointer<KoPatternBackground> bg = QSharedPointer<KoPatternBackground>(new KoPatternBackground());
 
-        const QString patternMD5 = "";
-        const QString patternNameTemp = QString(patternID + ".pat");
-        const QString patternFileName = patternName;
-        KoResourceLoadResult res = KisGlobalResourcesInterface::instance()->source(ResourceType::Patterns).bestMatchLoadResult(patternMD5, patternFileName, patternNameTemp);
-        pattern = res.resource<KoPattern>();
+        loadPattern(embeddedProxy);
         if (pattern) {
             bg->setPattern(pattern->pattern());
         } else {
-            res = KisGlobalResourcesInterface::instance()->source(ResourceType::Patterns).fallbackResource();
+            KoResourceLoadResult res = KisGlobalResourcesInterface::instance()->source(ResourceType::Patterns).fallbackResource();
             bg->setPattern(res.resource<KoPattern>()->pattern());
         }
         return bg;
+    }
+
+    QBrush getBrush(KisEmbeddedResourceStorageProxy &embeddedProxy) {
+        QBrush brush;
+        loadPattern(embeddedProxy);
+        if (pattern) {
+            brush.setTextureImage(pattern->pattern());
+        } else {
+            KoResourceLoadResult res = KisGlobalResourcesInterface::instance()->source(ResourceType::Patterns).fallbackResource();
+            brush.setTextureImage(res.resource<KoPattern>()->pattern());
+        }
+        QTransform t = QTransform::fromScale(scale*0.01, scale*0.01);
+        t.rotate(angle);
+        brush.setTransform(t);
+        return brush;
     }
 };
 
@@ -962,7 +984,7 @@ struct KRITAPSD_EXPORT psd_vector_stroke_data {
     
     double opacity {1.0};
     
-    double resolution {72};
+    double resolution {72.0};
     bool pixelWidth {false};
 
     void setVersion(int version) {
@@ -1041,8 +1063,8 @@ struct KRITAPSD_EXPORT psd_vector_stroke_data {
         catcher.subscribeBoolean(path + "/strokeStyle/strokeEnabled", std::bind(&psd_vector_stroke_data::setStrokeEnabled, data, std::placeholders::_1));
         catcher.subscribeBoolean(path + "/strokeStyle/fillEnabled", std::bind(&psd_vector_stroke_data::setFillEnabled, data, std::placeholders::_1));
 
-        catcher.subscribeUnitFloat(path + "/strokeStyle/strokeStyleLineWidth", "#Pnt", std::bind(&psd_vector_stroke_data::setStrokeWidth, data, std::placeholders::_1));
-        //catcher.subscribeUnitFloat(path + "/strokeStyle/strokeStyleLineWidth", "#Pxl", std::bind(&psd_vector_stroke_data::setStrokePixel, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(path + "/strokeStyle/strokeStyleLineWidth", "#Pxl", std::bind(&psd_vector_stroke_data::setStrokeWidth, data, std::placeholders::_1));
+        //catcher.subscribeUnitFloat(path + "/strokeStyle/strokeStyleLineWidth", "#Pnt", std::bind(&psd_vector_stroke_data::setStrokePixel, data, std::placeholders::_1));
         catcher.subscribeUnitFloat(path + "/strokeStyle/strokeStyleLineDashOffset", "#Pnt", std::bind(&psd_vector_stroke_data::setStrokeDashOffset, data, std::placeholders::_1));
         catcher.subscribeDouble(path + "/strokeStyle/strokeStyleMiterLimit", std::bind(&psd_vector_stroke_data::setStrokeMiterLimit, data, std::placeholders::_1));
 
@@ -1066,7 +1088,7 @@ struct KRITAPSD_EXPORT psd_vector_stroke_data {
         w.writeBoolean("strokeEnabled", strokeEnabled);
         w.writeBoolean("fillEnabled", fillEnabled);
         
-        w.writeUnitFloat("strokeStyleLineWidth", "#Pnt", pen.widthF());
+        w.writeUnitFloat("strokeStyleLineWidth", "#Pxl", pen.widthF() * (resolution / 72.0));
         w.writeUnitFloat("strokeStyleLineDashOffset ", "#Pnt", pen.dashOffset());
         w.writeDouble("strokeStyleMiterLimit", pen.miterLimit());
         
@@ -1132,9 +1154,7 @@ struct KRITAPSD_EXPORT psd_vector_stroke_data {
 
     void setupShapeStroke(KoShapeStrokeSP stroke) {
         double width = pen.widthF();
-        if (pixelWidth) {
-            width = (width / resolution) * 72.0;
-        }
+        width = (width / resolution) * 72.0;
         stroke->setLineWidth(width);
         stroke->setCapStyle(pen.capStyle());
         stroke->setJoinStyle(pen.joinStyle());

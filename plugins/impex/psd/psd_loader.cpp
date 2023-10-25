@@ -348,7 +348,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                     parser.parseXML(layerRecord->infoBlocks.fillConfig, catcher);
                     fillConfig = fill.getFillLayerConfig();
                     if (vectorMask) {
-                        vectorMask->setBackground(fill.getBackground());
+                        vectorMask->setBackground(fill.getBackground(resourceProxy));
                     }
 
                 } else {
@@ -374,11 +374,13 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                         psd_vector_stroke_data data;
                         psd_layer_solid_color fill;
                         psd_layer_gradient_fill grad;
+                        psd_layer_pattern_fill patt;
                         fill.cs = m_image->colorSpace();
                         KisAslCallbackObjectCatcher strokeCatcher;
                         psd_vector_stroke_data::setupCatcher("", strokeCatcher, &data);
                         psd_layer_solid_color::setupCatcher("/strokeStyle/strokeStyleContent", strokeCatcher, &fill);
                         psd_layer_gradient_fill::setupCatcher("/strokeStyle/strokeStyleContent", strokeCatcher, &grad);
+                        psd_layer_pattern_fill::setupCatcher("/strokeStyle/strokeStyleContent", strokeCatcher, &patt);
                         KisAslXmlParser parser;
                         parser.parseXML(layerRecord->infoBlocks.vectorStroke, strokeCatcher);
 
@@ -389,7 +391,9 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                             QColor c = fill.getBrush().color();
                             c.setAlphaF(data.opacity);
                             stroke->setColor(c);
-                            if (grad.getBrush().gradient()) {
+                            if (!patt.patternID.isEmpty()) {
+                                stroke->setLineBrush(patt.getBrush(resourceProxy));
+                            } else if (!grad.gradient.isNull()) {
                                 stroke->setLineBrush(grad.getBrush());
                             }
                         } else {

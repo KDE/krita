@@ -731,6 +731,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                                     strokeDataStruct.loadFromShapeStroke(shapeStroke);
                                     strokeDataStruct.strokeEnabled = true;
                                     strokeDataStruct.fillEnabled = pathShape->background()? true: false;
+                                    strokeDataStruct.resolution = node->image()->xRes()*72.0;
                                     strokeData = strokeDataStruct.getASLXML();
                                 }
                             }

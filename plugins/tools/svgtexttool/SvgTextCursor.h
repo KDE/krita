@@ -121,7 +121,7 @@ public:
      * @param parent
      * @return the text-removal command, if possible, if there's no selection or shape, it'll return 0;
      */
-    SvgTextRemoveCommand *removeSelection(KUndo2Command *parent = 0);
+    void removeSelection();
 
     /**
      * @brief copy
@@ -150,10 +150,8 @@ public:
     /// Handle the cursor-related key events.
     void keyPressEvent(QKeyEvent *event);
 
-    /// Whether the last command may have been set by the cursor.
-    bool cursorInsertedCommand();
-    /// Unset the boolean of the above.
-    void unsetCursorInsertedCommand();
+    /// the cursor is currently adding a command
+    bool isAddingCommand() const;
 
 Q_SIGNALS:
 
@@ -163,6 +161,15 @@ private Q_SLOTS:
     void stopBlinkCursor();
 
 private:
+
+    /**
+     * @brief removeSelection
+     * if there's a selection, creates a text-removal command.
+     * @param parent
+     * @return the text-removal command, if possible, if there's no selection or shape, it'll return 0;
+     */
+    SvgTextRemoveCommand *removeSelectionImpl(KUndo2Command *parent = 0);
+
 
     void updateCursor();
     void updateSelection();

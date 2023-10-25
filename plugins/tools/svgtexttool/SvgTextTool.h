@@ -64,14 +64,6 @@ public:
 
     KisPopupWidgetInterface* popupWidget() override;
 
-    /**
-     * @brief addCommand
-     * Add this command to the canvas undo stack, if the command exists.
-     * This is used by the SvgTextCursor to add commands.
-     * @param cmd the command to add.
-     */
-    void addCommand(KUndo2Command *cmd);
-
     /// reimplemented from superclass
     void copy() const override;
     /// reimplemented from superclass

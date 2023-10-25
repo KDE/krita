@@ -285,9 +285,15 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
     KisSelectionSP selection = view->selection();
 
     if (!makeSharpClip && (haveShapesSelected || currentToolHasSelection)) {
-        // XXX: "Add saving of XML data for Cut/Copy of shapes"
+        /**
+         * Make sure that we use tryBarrierLock() here becasue it does **not**
+         * cause requestStrokeEnd() to be called in the tools, hence does not
+         * prevent disruptions in the text tool.
+         */
+        KisImageBarrierLock lock(image, std::try_to_lock);
+        if (!lock.owns_lock()) return;
 
-        KisImageBarrierLock lock(image);
+        // XXX: "Add saving of XML data for Cut/Copy of shapes"
         if (willCut) {
             view->canvasBase()->toolProxy()->cut();
         } else {

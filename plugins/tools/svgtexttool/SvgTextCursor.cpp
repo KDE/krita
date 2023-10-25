@@ -20,7 +20,7 @@
 
 struct Q_DECL_HIDDEN SvgTextCursor::Private {
     KoCanvasBase *canvas;
-    bool commandFromCursor = false; ///< Whether an undo command was just added by the cursor.
+    bool isAddingCommand = false;
     int pos = 0;
     int anchor = 0;
     KoSvgTextShape *shape {nullptr};
@@ -150,7 +150,7 @@ void SvgTextCursor::insertText(QString text)
     if (d->shape) {
         //KUndo2Command *parentCmd = new KUndo2Command;
         if (hasSelection()) {
-            SvgTextRemoveCommand *removeCmd = removeSelection();
+            SvgTextRemoveCommand *removeCmd = removeSelectionImpl();
             addCommandToUndoAdapter(removeCmd);
         }
 
@@ -165,7 +165,7 @@ void SvgTextCursor::removeText(SvgTextCursor::MoveMode first, SvgTextCursor::Mov
     if (d->shape) {
         SvgTextRemoveCommand *removeCmd;
         if (hasSelection()) {
-            removeCmd = removeSelection();
+            removeCmd = removeSelectionImpl();
             addCommandToUndoAdapter(removeCmd);
         } else {
             int posA = moveModeResult(first, d->pos, d->visualNavigation);
@@ -181,10 +181,15 @@ void SvgTextCursor::removeText(SvgTextCursor::MoveMode first, SvgTextCursor::Mov
     }
 }
 
-SvgTextRemoveCommand *SvgTextCursor::removeSelection(KUndo2Command *parent)
+void SvgTextCursor::removeSelection()
+{
+    KUndo2Command *removeCmd = removeSelectionImpl();
+    addCommandToUndoAdapter(removeCmd);
+}
+
+SvgTextRemoveCommand *SvgTextCursor::removeSelectionImpl(KUndo2Command *parent)
 {
     SvgTextRemoveCommand *removeCmd = nullptr;
-    d->commandFromCursor = true;
     if (d->shape) {
         if (d->anchor != d->pos) {
             int start = qMin(d->anchor, d->pos);
@@ -197,8 +202,6 @@ SvgTextRemoveCommand *SvgTextCursor::removeSelection(KUndo2Command *parent)
 
 void SvgTextCursor::copy() const
 {
-    d->commandFromCursor = true;
-    qDebug() << Q_FUNC_INFO;
     if (d->shape) {
         int start = d->shape->indexForPos(qMin(d->anchor, d->pos));
         int length = d->shape->indexForPos(qMax(d->anchor, d->pos)) - start;
@@ -212,7 +215,6 @@ void SvgTextCursor::copy() const
 bool SvgTextCursor::paste()
 {
     bool success = false;
-    d->commandFromCursor = true;
     if (d->shape) {
         QClipboard *cb = QApplication::clipboard();
         const QMimeData *mimeData = cb->mimeData();
@@ -297,6 +299,8 @@ void SvgTextCursor::notifyCursorPosChanged(int pos, int anchor)
 
 void SvgTextCursor::keyPressEvent(QKeyEvent *event)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->shape);
+
     bool select = event->modifiers().testFlag(Qt::ShiftModifier);
 
     if (!((Qt::ControlModifier | Qt::AltModifier | Qt::MetaModifier) & event->modifiers())) {
@@ -513,14 +517,9 @@ void SvgTextCursor::keyPressEvent(QKeyEvent *event)
     }
 }
 
-bool SvgTextCursor::cursorInsertedCommand()
+bool SvgTextCursor::isAddingCommand() const
 {
-    return d->commandFromCursor;
-}
-
-void SvgTextCursor::unsetCursorInsertedCommand()
-{
-    d->commandFromCursor = false;
+    return d->isAddingCommand;
 }
 
 void SvgTextCursor::updateCursor()
@@ -550,8 +549,9 @@ void SvgTextCursor::addCommandToUndoAdapter(KUndo2Command *cmd)
 {
     if (d->canvas) {
         if (cmd) {
-            d->commandFromCursor = true;
+            d->isAddingCommand = true;
             d->canvas->addCommand(cmd);
+            d->isAddingCommand = false;
         }
     }
 }

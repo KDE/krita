@@ -336,15 +336,6 @@ void SvgTextTool::slotShapeSelectionChanged()
     }
 }
 
-void SvgTextTool::addCommand(KUndo2Command *cmd)
-{
-    if (cmd) {
-        if (canvas()) {
-            canvas()->addCommand(cmd);
-        }
-    }
-}
-
 void SvgTextTool::copy() const
 {
     m_textCursor.copy();
@@ -352,7 +343,7 @@ void SvgTextTool::copy() const
 
 void SvgTextTool::deleteSelection()
 {
-    addCommand(m_textCursor.removeSelection());
+    m_textCursor.removeSelection();
 }
 
 bool SvgTextTool::paste()
@@ -372,13 +363,10 @@ KoToolSelection *SvgTextTool::selection()
 
 void SvgTextTool::requestStrokeEnd()
 {
-    qDebug() << Q_FUNC_INFO << m_textCursor.cursorInsertedCommand();
-    if (m_textCursor.cursorInsertedCommand()) {
-        m_textCursor.unsetCursorInsertedCommand();
-    } else {
+    if (!m_textCursor.isAddingCommand()) {
         if (m_interactionStrategy) {
             m_dragging = DragMode::None;
-            m_interactionStrategy->finishInteraction(Qt::KeyboardModifier::NoModifier);
+            m_interactionStrategy->cancelInteraction();
             m_interactionStrategy = nullptr;
             useCursor(Qt::ArrowCursor);
         } else if (isInTextMode()) {
@@ -389,19 +377,11 @@ void SvgTextTool::requestStrokeEnd()
 
 void SvgTextTool::requestStrokeCancellation()
 {
-    qDebug() << Q_FUNC_INFO << m_textCursor.cursorInsertedCommand();
-    if (m_textCursor.cursorInsertedCommand()) {
-        m_textCursor.unsetCursorInsertedCommand();
-    } else {
-        if (m_interactionStrategy) {
-            m_dragging = DragMode::None;
-            m_interactionStrategy->cancelInteraction();
-            m_interactionStrategy = nullptr;
-            useCursor(Qt::ArrowCursor);
-        } else if (isInTextMode()) {
-            canvas()->shapeManager()->selection()->deselectAll();
-        }
-    }
+    /**
+     * Doing nothing, since these signals come on undo/redo actions
+     * in the mainland undo stack, which we manipulate while editing
+     * text
+     */
 }
 
 void SvgTextTool::slotUpdateCursorDecoration(QRectF updateRect)
@@ -690,8 +670,8 @@ void SvgTextTool::keyPressEvent(QKeyEvent *event)
         event->accept();
         return;
     } else if (event->key() == Qt::Key_Escape) {
-        event->ignore();
-    } else {
+        requestStrokeEnd();
+    } else if (selectedShape()) {
         m_textCursor.keyPressEvent(event);
     }
 

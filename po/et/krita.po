@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-25 00:40+0000\n"
+"POT-Creation-Date: 2023-10-26 00:40+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -20842,8 +20842,8 @@ msgstr "Kohalikud ressurssid"
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1350
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1353
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
@@ -21257,7 +21257,7 @@ msgstr "Pisipilt"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:609
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:815
@@ -34610,8 +34610,8 @@ msgid "Transparent"
 msgstr "Läbipaistev"
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:92
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1526
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1532
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:50
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:38
@@ -38805,14 +38805,58 @@ msgstr "Globaalne värv:"
 msgid "Custom Color"
 msgstr "Kohandatud värv"
 
+#. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
+#, fuzzy, kde-format
+#| msgid "Editor text color"
+msgid "Editor Widget Control:"
+msgstr "Redaktori teksti värv"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showMove)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
+#, fuzzy, kde-format
+#| msgid "Sh&adow Mode:"
+msgid "Show Move"
+msgstr "Var&jurežiim:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showSnap)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Show Snap Options Popup"
+msgid "Show Snapping"
+msgstr "Tõmbevalikute hüpikmenüü näitamine"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showLock)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Show Dockers"
+msgid "Show Lock"
+msgstr "Dokkide näitamine"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#, fuzzy, kde-format
+#| msgid "Duplicate"
+msgid "Show Duplicate"
+msgstr "Klooni"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showDelete)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "Show Delete"
+msgstr "Kustuta"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:274
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
 #, kde-format
 msgid "Load Assistant Set"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:393
 #, kde-format
 msgid "Save Assistant Set"
 msgstr ""
@@ -38826,6 +38870,18 @@ msgstr "Kontsentrilise ellipsi  nõustaja"
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr "Kontsentriline ellips"
+
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:28
+#, fuzzy, kde-format
+#| msgid "Perspective assistant"
+msgid "Curvilinear Perspective assistant"
+msgstr "Perspektiivinõustaja"
+
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
+#, fuzzy, kde-format
+#| msgid "Clear Perspective Grid"
+msgid "Curvilinear Perspective"
+msgstr "Puhasta perspektiivvõrk"
 
 #: plugins/assistants/Assistants/EditAssistantsCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -38879,40 +38935,40 @@ msgstr "Lõputu joonlaua nõustaja"
 msgid "Infinite Ruler"
 msgstr "Lõputu joonlaud"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1205
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1388
 #, kde-format
 msgid "Select an Assistant"
 msgstr "Nõustaja valimine"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1353
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr "Esines tõrkeid. Kõiki nõustajaid ei õnnestunud edukalt laadida."
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1441
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1624
 #, kde-format
 msgid "Save Assistant"
 msgstr "Nõustaja salvestamine"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1539
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1543
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
 #, kde-format
 msgid "Density: "
 msgstr "Tihedus:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1548
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Subdivisions: "
 msgstr "Alajaotus:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1552
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1742
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Minor Subdivisions: "
 msgstr "Alajaotus:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:177
+#: plugins/assistants/Assistants/kis_assistant_tool.h:186
 #, kde-format
 msgid "Assistant Tool"
 msgstr "Nõustaja"
@@ -100181,9 +100237,6 @@ msgstr "Kõrvutuspiltide tööriist"
 
 #~ msgid "Hide Perspective Grid"
 #~ msgstr "Peida perspektiivvõrk"
-
-#~ msgid "Clear Perspective Grid"
-#~ msgstr "Puhasta perspektiivvõrk"
 
 #~ msgid "Layer style configuration (*.asl)"
 #~ msgstr "Kihistiili seadistus (*.asl)"

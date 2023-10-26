@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-25 00:40+0000\n"
+"POT-Creation-Date: 2023-10-26 00:40+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -20089,8 +20089,8 @@ msgstr "संसाधन फाईल्स साफ करा"
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1350
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1353
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
@@ -20509,7 +20509,7 @@ msgstr "लघुप्रतिमा"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:609
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:815
@@ -33498,8 +33498,8 @@ msgid "Transparent"
 msgstr "पारदर्शक"
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:92
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1526
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1532
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:50
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:38
@@ -37359,14 +37359,51 @@ msgstr "रंगाचा इतिहास"
 msgid "Custom Color"
 msgstr "रंग थांबवा."
 
+#. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
+#, fuzzy, kde-format
+msgid "Editor Widget Control:"
+msgstr "मजकूर रंग"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showMove)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
+#, fuzzy, kde-format
+msgid "Show Move"
+msgstr "शॅडोज"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showSnap)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
+#, fuzzy, kde-format
+msgid "Show Snapping"
+msgstr "डेकोरेशन्स दर्शवा"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showLock)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
+#, fuzzy, kde-format
+msgid "Show Lock"
+msgstr "मोजपट्ट्या दर्शवा"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#, fuzzy, kde-format
+msgid "Show Duplicate"
+msgstr "प्रतिकृती"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showDelete)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "Show Delete"
+msgstr "काढून टाका"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:274
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
 #, fuzzy, kde-format
 msgid "Load Assistant Set"
 msgstr "सहायक :"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:393
 #, fuzzy, kde-format
 msgid "Save Assistant Set"
 msgstr "सहायक :"
@@ -37380,6 +37417,18 @@ msgstr "लंबवर्तुळ सहायक"
 #, fuzzy, kde-format
 msgid "Concentric Ellipse"
 msgstr "सर्व निवडा"
+
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:28
+#, fuzzy, kde-format
+#| msgid "Perspective assistant"
+msgid "Curvilinear Perspective assistant"
+msgstr "आकलन सहायक"
+
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
+#, fuzzy, kde-format
+#| msgid "Clear Perspective Grid"
+msgid "Curvilinear Perspective"
+msgstr "आकलन जाळी काढून टाका"
 
 #: plugins/assistants/Assistants/EditAssistantsCommand.cpp:19
 #, fuzzy
@@ -37437,41 +37486,41 @@ msgstr "मोजपट्टी सहायक"
 msgid "Infinite Ruler"
 msgstr "मोजपट्टी सहायक"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1205
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1388
 #, fuzzy, kde-format
 msgid "Select an Assistant"
 msgstr "स्प्लाईन सहायक"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1353
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr "चुका आढळल्या. सर्व सहायक कार्यान्वित करता आले नाहीत."
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1441
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1624
 #, fuzzy, kde-format
 msgid "Save Assistant"
 msgstr "सहायक :"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1539
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1543
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
 #, fuzzy, kde-format
 #| msgid "Density:"
 msgid "Density: "
 msgstr "घनता :"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1548
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Subdivisions: "
 msgstr "उपविभागणी :"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1552
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1742
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Minor Subdivisions: "
 msgstr "उपविभागणी :"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:177
+#: plugins/assistants/Assistants/kis_assistant_tool.h:186
 #, fuzzy, kde-format
 msgid "Assistant Tool"
 msgstr "सहायक :"
@@ -89773,9 +89822,6 @@ msgstr "25%"
 
 #~ msgid "Hide Perspective Grid"
 #~ msgstr "आकलन जाळी लपवा"
-
-#~ msgid "Clear Perspective Grid"
-#~ msgstr "आकलन जाळी काढून टाका"
 
 #, fuzzy
 #~| msgid "OpenColorIO configuration path:"

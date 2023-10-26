@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-25 00:40+0000\n"
-"PO-Revision-Date: 2023-10-24 12:26+0300\n"
+"POT-Creation-Date: 2023-10-26 00:40+0000\n"
+"PO-Revision-Date: 2023-10-25 12:57+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -9125,12 +9125,10 @@ msgstr "Fırça Boyutunu Artır"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:879 krita/krita.action:881 krita/krita.action:882
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise"
-msgstr "Nesneyi 90° saat yönünde döndür"
+msgstr "Fırça ucunu saat yönünde döndür"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9139,11 +9137,10 @@ msgstr "Nesneyi 90° saat yönünde döndür"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:891 krita/krita.action:893 krita/krita.action:894
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "Seçimi saat yönünde 90 derece döndür"
+msgstr "Fırça ucunu saat yönünde döndür (kesin)"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
@@ -9152,12 +9149,10 @@ msgstr "Seçimi saat yönünde 90 derece döndür"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:903 krita/krita.action:905 krita/krita.action:906
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Nesneyi 90° saat yönünün tersine döndür"
+msgstr "Fırça ucunu saat yönünün tersine döndür"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9166,11 +9161,10 @@ msgstr "Nesneyi 90° saat yönünün tersine döndür"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:915 krita/krita.action:917 krita/krita.action:918
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Seçimi saat yönünün tersine 90 derece döndür"
+msgstr "Fırça ucunu saat yönünün tersine döndür (kesin)"
 
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
@@ -19502,8 +19496,8 @@ msgstr "Yerel Özkaynaklar"
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1350
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1353
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
@@ -19903,7 +19897,7 @@ msgstr "Küçük Görsel"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:609
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:815
@@ -32621,30 +32615,24 @@ msgid "Decrease Brush Size"
 msgstr "Fırça Boyutu Küçült"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgid "Rotate brush tip clockwise"
-msgstr "Nesneyi 90° saat yönünde döndür"
+msgstr "Fırça Ucunu Saat Yönünde Döndür"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "Seçimi saat yönünde 90 derece döndür"
+msgstr "Fırça Ucunu Saat Yönünde Döndür (Kesin)"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Nesneyi 90° saat yönünün tersine döndür"
+msgstr "Fırça Ucunu Saat Yönünün Tersine Döndür"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Seçimi saat yönünün tersine 90 derece döndür"
+msgstr "Fırça Ucunu Saat Yönünün Tersine Döndür (Kesin)"
 
 #: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, kde-format
@@ -32905,8 +32893,8 @@ msgid "Transparent"
 msgstr "Saydam"
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:92
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1526
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1532
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:50
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:38
@@ -36958,14 +36946,58 @@ msgstr "Global renk:"
 msgid "Custom Color"
 msgstr "Özel Renk"
 
+#. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
+#, fuzzy, kde-format
+#| msgid "Editor text color"
+msgid "Editor Widget Control:"
+msgstr "Düzenleyici metin rengi"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showMove)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
+#, fuzzy, kde-format
+#| msgid "Sh&adow Mode:"
+msgid "Show Move"
+msgstr "Gö&lge kipi:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showSnap)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Show Snap Options Popup"
+msgid "Show Snapping"
+msgstr "Tutturma Seçenekleri Açılır Penceresini Göster"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showLock)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Show Dockers"
+msgid "Show Lock"
+msgstr "Panelleri Göster"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#, fuzzy, kde-format
+#| msgid "Duplicate"
+msgid "Show Duplicate"
+msgstr "Çoğalt"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showDelete)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "Show Delete"
+msgstr "Sil"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:274
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
 #, kde-format
 msgid "Load Assistant Set"
 msgstr "Yardımcı Kümesini Yükle"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:393
 #, kde-format
 msgid "Save Assistant Set"
 msgstr "Yardımcı Kümesini Kaydet"
@@ -36979,6 +37011,18 @@ msgstr "Ortak Merkezli Elips yardımcısı"
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr "Ortak Merkezli Elips"
+
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:28
+#, fuzzy, kde-format
+#| msgid "Perspective assistant"
+msgid "Curvilinear Perspective assistant"
+msgstr "Perspektif yardımcısı"
+
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
+#, fuzzy, kde-format
+#| msgid "2 Point Perspective"
+msgid "Curvilinear Perspective"
+msgstr "2 Noktalı Perspektif"
 
 #: plugins/assistants/Assistants/EditAssistantsCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -37032,38 +37076,38 @@ msgstr "Sonsuz Cetvel yardımcısı"
 msgid "Infinite Ruler"
 msgstr "Sonsuz Cetvel"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1205
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1388
 #, kde-format
 msgid "Select an Assistant"
 msgstr "Bir Yardımcı seç"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1353
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr "Hatalarla karşılaşıldı. Tüm yardımcılar başarıyla yüklenemedi."
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1441
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1624
 #, kde-format
 msgid "Save Assistant"
 msgstr "Yardımcıyı Kaydet"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1539
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1543
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
 #, kde-format
 msgid "Density: "
 msgstr "Yoğunluk: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1548
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
 #, kde-format
 msgid "Subdivisions: "
 msgstr "Alt bölümler: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1552
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1742
 #, kde-format
 msgid "Minor Subdivisions: "
 msgstr "Küçük alt bölümler: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:177
+#: plugins/assistants/Assistants/kis_assistant_tool.h:186
 #, kde-format
 msgid "Assistant Tool"
 msgstr "Yardımcı Araç"

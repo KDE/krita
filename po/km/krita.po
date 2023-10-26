@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-25 00:40+0000\n"
+"POT-Creation-Date: 2023-10-26 00:40+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -19817,8 +19817,8 @@ msgstr "ឯកសារ​ប្រភព ៖"
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1350
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1353
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
@@ -20229,7 +20229,7 @@ msgstr "Thumbnails"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:609
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:815
@@ -32967,8 +32967,8 @@ msgid "Transparent"
 msgstr "ថ្លា"
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:92
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1526
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1532
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:50
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:38
@@ -36743,14 +36743,51 @@ msgstr "ប្រវត្តិ​ពណ៌"
 msgid "Custom Color"
 msgstr "ពណ៌"
 
+#. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
+#, fuzzy, kde-format
+msgid "Editor Widget Control:"
+msgstr "អត្ថបទ"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showMove)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
+#, fuzzy, kde-format
+msgid "Show Move"
+msgstr "ស្រមោល ២"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showSnap)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
+#, fuzzy, kde-format
+msgid "Show Snapping"
+msgstr "ជម្រើស​ឧបករណ៍"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showLock)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
+#, fuzzy, kde-format
+msgid "Show Lock"
+msgstr "ឧបករណ៍​ចូល​ផែ​"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#, fuzzy, kde-format
+msgid "Show Duplicate"
+msgstr "ច្បាប់​ចម្លង"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showDelete)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "Show Delete"
+msgstr "លុប"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:274
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
 #, fuzzy, kde-format
 msgid "Load Assistant Set"
 msgstr "អ្នក​ជំនួយ​ការ ៖"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:393
 #, fuzzy, kde-format
 msgid "Save Assistant Set"
 msgstr "អ្នក​ជំនួយ​ការ ៖"
@@ -36764,6 +36801,18 @@ msgstr "អ្នក​ជំនួញ​ការ Ellipse​"
 #, fuzzy, kde-format
 msgid "Concentric Ellipse"
 msgstr "ជ្រើស​ទាំងអស់"
+
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:28
+#, fuzzy, kde-format
+#| msgid "Perspective assistant"
+msgid "Curvilinear Perspective assistant"
+msgstr "អ្នក​ជំនួយការ​យថាទស្សន៍​"
+
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
+#, fuzzy, kde-format
+#| msgid "Clear Perspective Grid"
+msgid "Curvilinear Perspective"
+msgstr "ជម្រះ​ក្រឡាចត្រង្គ​យថាទស្សន៍"
 
 #: plugins/assistants/Assistants/EditAssistantsCommand.cpp:19
 #, fuzzy
@@ -36821,41 +36870,41 @@ msgstr "អ្នក​ជំនួយការ​បន្ទាត់"
 msgid "Infinite Ruler"
 msgstr "អ្នក​ជំនួយការ​បន្ទាត់"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1205
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1388
 #, fuzzy, kde-format
 msgid "Select an Assistant"
 msgstr "អ្នក​ជំនួយ Spline"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1353
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr "កំហុស​ត្រូវ​បាន​ជួប​ប្រទះ ។ គ្មាន​អ្នក​ជំនួយ​ការ​ទាំងអស់​ត្រូវ​បាន​ផ្ទុក​ដោយ​ជោគជ័យ​ឡើយ ។ "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1441
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1624
 #, fuzzy, kde-format
 msgid "Save Assistant"
 msgstr "អ្នក​ជំនួយ​ការ ៖"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1539
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1543
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
 #, fuzzy, kde-format
 #| msgid "Density:"
 msgid "Density: "
 msgstr "ដង់ស៊ីតេ​"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1548
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Subdivisions: "
 msgstr "ផ្នែក​រង ៖"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1552
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1742
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Minor Subdivisions: "
 msgstr "ផ្នែក​រង ៖"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:177
+#: plugins/assistants/Assistants/kis_assistant_tool.h:186
 #, fuzzy, kde-format
 msgid "Assistant Tool"
 msgstr "អ្នក​ជំនួយ​ការ ៖"
@@ -87455,9 +87504,6 @@ msgstr "រូបភាព​យោង ៖"
 
 #~ msgid "Hide Perspective Grid"
 #~ msgstr "ក្រឡាចត្រង្គ​យថាទស្សន៍"
-
-#~ msgid "Clear Perspective Grid"
-#~ msgstr "ជម្រះ​ក្រឡាចត្រង្គ​យថាទស្សន៍"
 
 #, fuzzy
 #~| msgid "No configuration option."

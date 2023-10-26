@@ -48,7 +48,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-25 00:40+0000\n"
+"POT-Creation-Date: 2023-10-26 00:40+0000\n"
 "PO-Revision-Date: 2023-06-28 14:15+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -9154,12 +9154,10 @@ msgstr "Zvětšit velikost štětce"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:879 krita/krita.action:881 krita/krita.action:882
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise"
-msgstr "Otočit objekt o 90° ve směru hodinových ručiček"
+msgstr ""
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9168,11 +9166,10 @@ msgstr "Otočit objekt o 90° ve směru hodinových ručiček"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:891 krita/krita.action:893 krita/krita.action:894
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "Otočit výběr po směru hodinových ručiček o 90 stupňů"
+msgstr ""
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
@@ -9181,12 +9178,10 @@ msgstr "Otočit výběr po směru hodinových ručiček o 90 stupňů"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:903 krita/krita.action:905 krita/krita.action:906
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Otočit objekt o 90° proti směru hodinových ručiček"
+msgstr ""
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9195,11 +9190,10 @@ msgstr "Otočit objekt o 90° proti směru hodinových ručiček"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:915 krita/krita.action:917 krita/krita.action:918
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Otočit výběr proti směru hodinových ručiček o 90 stupňů"
+msgstr ""
 
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
@@ -12245,171 +12239,139 @@ msgstr ""
 
 #. i18n: context: text @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3206
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Hori&zontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Hori&zontally"
-msgstr "Zrcadlit vrstvu vodorovně"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3208 krita/krita.action:3209
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Horizontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Horizontally"
-msgstr "Zrcadlit vrstvu vodorovně"
+msgstr ""
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3218
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer &Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers &Vertically"
-msgstr "Zrcadlit vrstvu s&visle"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3220 krita/krita.action:3221
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Vertically"
-msgstr "Zrcadlit vrstvu svisle"
+msgstr ""
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3230
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Rotate Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Rotate Layers..."
-msgstr "&Otočit vrstvu..."
+msgstr ""
 
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3232 krita/krita.action:3233
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers"
-msgstr "Otočit vrstvu"
+msgstr ""
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3242
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate &Layer 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate &Layers 90° to the Right"
-msgstr "Otočit vrs&tvu 90° doprava"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3244 krita/krita.action:3245
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Right"
-msgstr "Otočit vrstvu 90° doprava"
+msgstr ""
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3254
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer &90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers &90° to the Left"
-msgstr "Otočit vrstvu &90° doleva"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3256 krita/krita.action:3257
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Left"
-msgstr "Otočit vrstvu 90° doleva"
+msgstr ""
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3266
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer &180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers &180°"
-msgstr "Otočit vrstvu o &180°"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3268 krita/krita.action:3269
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 180°"
-msgstr "Otočit vrstvu o 180°"
+msgstr ""
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3278
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale &Layer to new Size..."
+#, kde-format
 msgctxt "action"
 msgid "Scale &Layers to new Size..."
-msgstr "Změnit měřítko vrstvy na novou ve&likost..."
+msgstr ""
 
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3280 krita/krita.action:3281
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale Layer to new Size"
+#, kde-format
 msgctxt "action"
 msgid "Scale Layers to new Size"
-msgstr "Změnit měřítko vrstvy na novou ve&likost"
+msgstr ""
 
 #. i18n: context: text @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3290
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Shear Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Shear Layers..."
-msgstr "Zko&sit vrstvu..."
+msgstr ""
 
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3292 krita/krita.action:3293
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shear Layer"
+#, kde-format
 msgctxt "action"
 msgid "Shear Layers"
-msgstr "Zkosit vrstvu"
+msgstr ""
 
 #. i18n: context: text @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3302
@@ -12549,24 +12511,20 @@ msgstr ""
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3398
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Offset Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Offset Layers..."
-msgstr "P&osunout vrstvu..."
+msgstr ""
 
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3400 krita/krita.action:3401
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "action"
 msgid "Offset Layers"
-msgstr "Posunout vrstvu"
+msgstr ""
 
 #. i18n: context: text @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3410
@@ -17165,15 +17123,13 @@ msgid "Change Image Resolution"
 msgstr "Změnit rozlišení obrázku"
 
 #: libs/image/kis_image.cc:1037
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Scale Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
-msgstr[0] "Měřítko vrstvy"
-msgstr[1] "Měřítko vrstvy"
-msgstr[2] "Měřítko vrstvy"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: libs/image/kis_image.cc:1178
 msgctxt "(qtundo-format)"
@@ -17186,15 +17142,13 @@ msgid "Rotate Mask"
 msgstr "Otočit masku"
 
 #: libs/image/kis_image.cc:1191
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
-msgstr[0] "Otočit vrstvu"
-msgstr[1] "Otočit vrstvu"
-msgstr[2] "Otočit vrstvu"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: libs/image/kis_image.cc:1291
 msgctxt "(qtundo-format)"
@@ -17202,15 +17156,13 @@ msgid "Shear Mask"
 msgstr "Zkosit masku"
 
 #: libs/image/kis_image.cc:1295
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Shear Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
-msgstr[0] "Zkosit vrstvu"
-msgstr[1] "Zkosit vrstvu"
-msgstr[2] "Zkosit vrstvu"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: libs/image/kis_image.cc:1302
 msgctxt "(qtundo-format)"
@@ -19495,8 +19447,8 @@ msgstr ""
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1350
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1353
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
@@ -19895,7 +19847,7 @@ msgstr "Náhled"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:609
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:815
@@ -27458,13 +27410,12 @@ msgid "Layer Size"
 msgstr "Velikost vrstvy"
 
 #: libs/ui/imagesize/imagesize.cc:126
-#, fuzzy, kde-format
-#| msgid "Resize Layer"
+#, kde-format
 msgid "Resize Layer"
 msgid_plural "Resize %1 Layers"
-msgstr[0] "Změnit velikost vrstvy"
-msgstr[1] "Změnit velikost vrstvy"
-msgstr[2] "Změnit velikost vrstvy"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, kde-format
@@ -29030,15 +28981,13 @@ msgid "Mirror Mask X"
 msgstr "Zrcadlení masky podle X"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
 msgid_plural "Mirror %1 Layers X"
-msgstr[0] "Zrcadlení vrstvy X"
-msgstr[1] "Zrcadlení vrstvy X"
-msgstr[2] "Zrcadlení vrstvy X"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: libs/ui/kis_node_manager.cpp:1052
 msgctxt "(qtundo-format)"
@@ -29046,15 +28995,13 @@ msgid "Mirror Mask Y"
 msgstr "Zrcadlení masky podle Y"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
 msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Zrcadlení vrstvy Y"
-msgstr[1] "Zrcadlení vrstvy Y"
-msgstr[2] "Zrcadlení vrstvy Y"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: libs/ui/kis_node_manager.cpp:1063
 msgctxt "(qtundo-format)"
@@ -32101,30 +32048,24 @@ msgid "Decrease Brush Size"
 msgstr "Zmenšit velikost štětce"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgid "Rotate brush tip clockwise"
-msgstr "Otočit objekt o 90° ve směru hodinových ručiček"
+msgstr ""
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "Otočit výběr po směru hodinových ručiček o 90 stupňů"
+msgstr ""
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Otočit objekt o 90° proti směru hodinových ručiček"
+msgstr ""
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Otočit výběr proti směru hodinových ručiček o 90 stupňů"
+msgstr ""
 
 #: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, kde-format
@@ -32381,8 +32322,8 @@ msgid "Transparent"
 msgstr "Průhledné"
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:92
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1526
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1532
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:50
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:38
@@ -36174,14 +36115,56 @@ msgstr ""
 msgid "Custom Color"
 msgstr "Vlastní barva"
 
+#. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
+#, fuzzy, kde-format
+#| msgid "Edit video profile"
+msgid "Editor Widget Control:"
+msgstr "Upravit profil videa:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showMove)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
+#, fuzzy, kde-format
+#| msgid "Sh&adow Mode:"
+msgid "Show Move"
+msgstr "Režim stínu"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showSnap)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
+#, kde-format
+msgid "Show Snapping"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, showLock)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Show Dockers"
+msgid "Show Lock"
+msgstr "Zobrazit doky"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#, fuzzy, kde-format
+#| msgid "Duplicate"
+msgid "Show Duplicate"
+msgstr "Duplikovat"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showDelete)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "Show Delete"
+msgstr "Smazat"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:274
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
 #, kde-format
 msgid "Load Assistant Set"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:393
 #, kde-format
 msgid "Save Assistant Set"
 msgstr ""
@@ -36195,6 +36178,17 @@ msgstr ""
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr ""
+
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:28
+#, kde-format
+msgid "Curvilinear Perspective assistant"
+msgstr ""
+
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
+#, fuzzy, kde-format
+#| msgid "Perspective"
+msgid "Curvilinear Perspective"
+msgstr "Perspektiva"
 
 #: plugins/assistants/Assistants/EditAssistantsCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -36248,38 +36242,38 @@ msgstr ""
 msgid "Infinite Ruler"
 msgstr ""
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1205
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1388
 #, kde-format
 msgid "Select an Assistant"
 msgstr "Vyberte asistenta"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1353
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr ""
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1441
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1624
 #, kde-format
 msgid "Save Assistant"
 msgstr "Uložit asistenta"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1539
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1543
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
 #, kde-format
 msgid "Density: "
 msgstr "Hustota: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1548
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
 #, kde-format
 msgid "Subdivisions: "
 msgstr ""
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1552
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1742
 #, kde-format
 msgid "Minor Subdivisions: "
 msgstr ""
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:177
+#: plugins/assistants/Assistants/kis_assistant_tool.h:186
 #, kde-format
 msgid "Assistant Tool"
 msgstr "Asistenční nástroj"
@@ -37218,12 +37212,9 @@ msgid "Zoom view to fit curve."
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Keyframe"
 msgctxt "(qtundo-format)"
 msgid "Add Scalar Keyframes"
-msgstr "Přidat klíčový snímek"
+msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
@@ -41762,26 +41753,22 @@ msgid "Offset Image"
 msgstr "Posunout obrázek"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Offset Layer"
 msgid_plural "Offset %1 Layers"
-msgstr[0] "Posunout vrstvu"
-msgstr[1] "Posunout vrstvu"
-msgstr[2] "Posunout vrstvu"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgid_plural "Offset %1 Layers"
-msgstr[0] "Posunout vrstvu"
-msgstr[1] "Posunout vrstvu"
-msgstr[2] "Posunout vrstvu"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -42715,13 +42702,12 @@ msgid "Mirror Image Horizontally"
 msgstr "Zrcadlit obrázek vodorovně"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, fuzzy, kde-format
-#| msgid "Rotate Layer"
+#, kde-format
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
-msgstr[0] "Otočit vrstvu"
-msgstr[1] "Otočit vrstvu"
-msgstr[2] "Otočit vrstvu"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -42860,13 +42846,12 @@ msgid "Shear Image"
 msgstr "Zkosit obrázek"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
-#, fuzzy, kde-format
-#| msgid "Shear Layer"
+#, kde-format
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
-msgstr[0] "Zkosit vrstvu"
-msgstr[1] "Zkosit vrstvu"
-msgstr[2] "Zkosit vrstvu"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -44713,10 +44698,9 @@ msgstr "Velikost okna:"
 
 #: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgid "Reset Transparent"
-msgstr "Průhledné"
+msgstr ""
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -56374,18 +56358,16 @@ msgid "Reference Images Tool"
 msgstr ""
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
-#, fuzzy, kde-format
-#| msgid "Opacity: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
-msgstr "Krytí:"
+msgstr ""
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
-#, fuzzy, kde-format
-#| msgid "Saturation: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation: {n}%"
-msgstr "Nasycení: "
+msgstr ""
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
@@ -58162,11 +58144,10 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
-#, fuzzy, kde-format
-#| msgid "Clean up: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Clean up: {n}%"
-msgstr "Vyčistit: "
+msgstr ""
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:129
 #, kde-format
@@ -59176,67 +59157,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Scale Layer"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale Layers"
-#~ msgstr "Měřítko vrstvy"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Rotate Layer"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rotate Layers"
-#~ msgstr "Otočit vrstvu"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Shear Layer"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Layers"
-#~ msgstr "Zkosit vrstvu"
-
-#, fuzzy
-#~| msgid "Resize Layer"
-#~ msgid "Resize Layers"
-#~ msgstr "Změnit velikost vrstvy"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Mirror Layer X"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layers X"
-#~ msgstr "Zrcadlení vrstvy X"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Mirror Layer Y"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layers Y"
-#~ msgstr "Zrcadlení vrstvy Y"
-
-#, fuzzy
-#~| msgctxt "@title:window"
-#~| msgid "Offset Layer"
-#~ msgctxt "@title:window"
-#~ msgid "Offset Layers"
-#~ msgstr "Posunout vrstvu"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Offset Layer"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Offset Layers"
-#~ msgstr "Posunout vrstvu"
-
-#, fuzzy
-#~| msgid "Rotate Layer"
-#~ msgid "Rotate Layers"
-#~ msgstr "Otočit vrstvu"
-
-#, fuzzy
-#~| msgid "Shear Layer"
-#~ msgid "Shear Layers"
-#~ msgstr "Zkosit vrstvu"

@@ -361,7 +361,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                                 double angle = 360.0/(data.originPolySides*2);
                                 double a = cos(kisDegreesToRadians(angle)) * 100.0;
                                 double totalHeight = a + 100.0;
-                                double l = size.height() / totalHeight * 100;
+                                double l = size.height() / totalHeight * 100.0;
 
                                 if (data.isStar) {
                                     // 100% is a normal polygon.
@@ -437,13 +437,11 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                         psd_vector_stroke_data data;
                         psd_layer_solid_color fill;
                         psd_layer_gradient_fill grad;
-                        psd_layer_pattern_fill patt;
                         fill.cs = m_image->colorSpace();
                         KisAslCallbackObjectCatcher strokeCatcher;
                         psd_vector_stroke_data::setupCatcher("", strokeCatcher, &data);
                         psd_layer_solid_color::setupCatcher("/strokeStyle/strokeStyleContent", strokeCatcher, &fill);
                         psd_layer_gradient_fill::setupCatcher("/strokeStyle/strokeStyleContent", strokeCatcher, &grad);
-                        psd_layer_pattern_fill::setupCatcher("/strokeStyle/strokeStyleContent", strokeCatcher, &patt);
                         KisAslXmlParser parser;
                         parser.parseXML(layerRecord->infoBlocks.vectorStroke, strokeCatcher);
 
@@ -454,9 +452,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                             QColor c = fill.getBrush().color();
                             c.setAlphaF(data.opacity);
                             stroke->setColor(c);
-                            if (!patt.patternID.isEmpty()) {
-                                stroke->setLineBrush(patt.getBrush(resourceProxy));
-                            } else if (!grad.gradient.isNull()) {
+                            if (!grad.gradient.isNull()) {
                                 stroke->setLineBrush(grad.getBrush());
                             }
                         } else {

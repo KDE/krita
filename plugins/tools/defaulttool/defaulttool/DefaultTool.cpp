@@ -985,14 +985,6 @@ void DefaultTool::keyPressEvent(QKeyEvent *event)
                 event->accept();
             }
             break;
-        case Qt::Key_1:
-        case Qt::Key_2:
-        case Qt::Key_3:
-        case Qt::Key_4:
-        case Qt::Key_5:
-            canvas()->resourceManager()->setResource(HotPosition, event->key() - Qt::Key_1);
-            event->accept();
-            break;
         default:
             return;
         }

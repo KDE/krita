@@ -25,6 +25,10 @@
 
 #include <kis_assert.h>
 
+#ifdef Q_OS_MACOS
+#include "KisMacosSecurityBookmarkManager.h"
+#endif
+
 class Q_DECL_HIDDEN KoFileDialog::Private
 {
 public:
@@ -129,6 +133,13 @@ void KoFileDialog::createFileDialog()
     }
     connect(d->fileDialog.get(), SIGNAL(filterSelected(const QString&)), this, SLOT(onFilterSelected(const QString&)));
 
+#ifdef Q_OS_MACOS
+    KisMacosSecurityBookmarkManager *bookmarkmngr = KisMacosSecurityBookmarkManager::instance();
+    if(bookmarkmngr->isSandboxed()) {
+        connect(d->fileDialog.get(), SIGNAL(urlSelected  (const QUrl&)), bookmarkmngr, SLOT(addBookmarkAndCheckParentDir(const QUrl&)));
+    }
+#endif
+
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
 
     bool dontUseNative = true;
@@ -220,6 +231,12 @@ void KoFileDialog::createFileDialog()
 // MacOS do not declare native file dialog as modal BUG:413241.
 #ifdef Q_OS_MACOS
         allowModal = optionDontUseNative;
+//        if ( d->proposedFileName.isEmpty() ) {
+//            d->fileDialog->selectFile("untitled.kra");
+//        } else {
+//            d->fileDialog->selectFile(d->proposedFileName);
+//        }
+//        qDebug() << d->proposedFileName.isEmpty() << d->proposedFileName << d->defaultDirectory;
 #endif
         if (allowModal) {
             d->fileDialog->setWindowModality(Qt::WindowModal);
@@ -326,6 +343,11 @@ QString KoFileDialog::filename()
                 i18n("The selected file name does not have a file extension that Krita understands.\n"
                      "Make sure the file name ends in '.%1' for example.", extension));
             retryNeeded = true;
+
+// We can only write to the Uri that was returned, we don't have permission to change the Uri.
+#if !(defined(Q_OS_MACOS) || defined(Q_OS_ANDROID))
+            url = url + extension;
+#endif
         }
 #endif
     } while (retryNeeded);

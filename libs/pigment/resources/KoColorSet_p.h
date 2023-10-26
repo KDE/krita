@@ -68,16 +68,16 @@ public:
 
 private:
 
-    friend class AddSwatchCommand;
-    friend class RemoveSwatchCommand;
-    friend class ChangeGroupNameCommand;
-    friend class AddGroupCommand;
-    friend class RemoveGroupCommand;
-    friend class ClearCommand;
-    friend class SetColumnCountCommand;
-    friend class SetCommentCommand;
-    friend class SetPaletteTypeCommand;
-    friend class MoveGroupCommand;
+    friend struct AddSwatchCommand;
+    friend struct RemoveSwatchCommand;
+    friend struct ChangeGroupNameCommand;
+    friend struct AddGroupCommand;
+    friend struct RemoveGroupCommand;
+    friend struct ClearCommand;
+    friend struct SetColumnCountCommand;
+    friend struct SetCommentCommand;
+    friend struct SetPaletteTypeCommand;
+    friend struct MoveGroupCommand;
 
     KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &ba);
     void scribusParseColor(KoColorSet *set, QXmlStreamReader *xml);
@@ -88,8 +88,16 @@ private:
     float readFloat(QIODevice *io);
     QString readUnicodeString(QIODevice *io, bool sizeIsInt = false);
 
+    const KoColorProfile *loadColorProfile(QScopedPointer<KoStore> &store,
+                                           const QString &path,
+                                           const QString &modelId,
+                                           const QString &colorDepthId);
+
     void saveKplGroup(QDomDocument &doc, QDomElement &groupEle,
                       const KisSwatchGroupSP group, QSet<const KoColorSpace *> &colorSetSet) const;
+    bool loadKplProfiles(QScopedPointer<KoStore> &store);
+    bool loadKplColorset(QScopedPointer<KoStore> &store);
+    bool loadSbzSwatchbook(QScopedPointer<KoStore> &store);
     void loadKplGroup(const QDomDocument &doc, const QDomElement &parentElement, KisSwatchGroupSP group, QString version);
 };
 

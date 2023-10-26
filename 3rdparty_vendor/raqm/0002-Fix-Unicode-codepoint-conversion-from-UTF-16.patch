@@ -1,0 +1,26 @@
+From dedaff154ee6d76d95c6579c70cd01a5b52e5c55 Mon Sep 17 00:00:00 2001
+From: alvinhochun <alvin@alvinhc.com>
+Date: Fri, 1 Sep 2023 17:17:41 +0800
+Subject: [PATCH] Fix Unicode codepoint conversion from UTF-16
+
+This fixes conversion of codepoints like U+28000, U+F1FFF, U+100000, etc.
+---
+ src/raqm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/raqm.c b/src/raqm.c
+index 633c1f0..fdbac3c 100644
+--- a/src/raqm.c
++++ b/src/raqm.c
+@@ -595,9 +595,9 @@ _raqm_get_utf16_codepoint (const void *str,
+ {
+   const uint16_t *s = (const uint16_t *)str;
+ 
+-  if (s[0] > 0xD800 && s[0] < 0xDBFF)
++  if (s[0] >= 0xD800 && s[0] <= 0xDBFF)
+   {
+-    if (s[1] > 0xDC00 && s[1] < 0xDFFF)
++    if (s[1] >= 0xDC00 && s[1] <= 0xDFFF)
+     {
+       uint32_t X = ((s[0] & ((1 << 6) -1)) << 10) | (s[1] & ((1 << 10) -1));
+       uint32_t W = (s[0] >> 6) & ((1 << 5) - 1);

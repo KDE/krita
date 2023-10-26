@@ -734,9 +734,9 @@ public:
         float &h = component[KisHSVCurve::Hue];
         float &s = component[KisHSVCurve::Saturation];
         float &v = component[KisHSVCurve::Value];
-        float &r = component[KisHSVCurve::Red];
-        float &g = component[KisHSVCurve::Green];
-        float &b = component[KisHSVCurve::Blue];
+        float &r = component[traits::red_pos];
+        float &g = component[traits::green_pos];
+        float &b = component[traits::blue_pos];
         float &a = component[KisHSVCurve::Alpha];
 
         while (nPixels > 0) {

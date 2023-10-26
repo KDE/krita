@@ -39,7 +39,7 @@ ParallelRulerAssistant::ParallelRulerAssistant(const ParallelRulerAssistant &rhs
 {
 }
 
-QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
+QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin, qreal moveThresholdPt)
 {
     Q_ASSERT(isAssistantComplete());
 
@@ -47,7 +47,7 @@ QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& stroke
     qreal dx = pt.x() - strokeBegin.x();
     qreal dy = pt.y() - strokeBegin.y();
 
-    if (dx * dx + dy * dy < 4.0) {
+    if (KisAlgebra2D::norm(QPointF(dx, dy)) < moveThresholdPt) {
         return strokeBegin; // allow some movement before snapping
     }
 
@@ -78,14 +78,14 @@ QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& stroke
     //return pt;
 }
 
-QPointF ParallelRulerAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
+QPointF ParallelRulerAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal moveThresholdPt)
 {
-    return project(pt, strokeBegin);
+    return project(pt, strokeBegin, moveThresholdPt);
 }
 
 void ParallelRulerAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
 {
-    point = project(point, strokeBegin);
+    point = project(point, strokeBegin, 0.0);
 }
 
 void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)

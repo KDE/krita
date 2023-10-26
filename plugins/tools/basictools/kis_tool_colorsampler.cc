@@ -216,7 +216,7 @@ void KisToolColorSampler::displaySampledColor(const KoColor &color)
 {
     if (color.data() && m_optionsWidget) {
 
-        QList<KoChannelInfo *> channels = color.colorSpace()->channels();
+        const QList<KoChannelInfo *> channels = color.colorSpace()->channels();
         m_optionsWidget->listViewChannels->clear();
 
         QVector<SampledChannel> sampledChannels;

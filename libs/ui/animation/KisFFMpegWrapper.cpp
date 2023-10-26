@@ -152,6 +152,8 @@ void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings
 
     dbgFile << "starting process: " << qUtf8Printable(settings.processPath) << args;
 
+    fixUpNonEmbeddedProcessEnvironment(settings.processPath, *m_process);
+
     m_process->start(settings.processPath, args);
 }
 
@@ -358,11 +360,55 @@ void KisFFMpegWrapper::slotFinished(int exitCode)
     }
 }
 
+void KisFFMpegWrapper::fixUpNonEmbeddedProcessEnvironment(const QString &processPath, QProcess &process)
+{
+#ifdef Q_OS_LINUX
+
+    /**
+     * We are embedding our own dynamically linked ffmpeg into Krita's appimage
+     * and add that to the environment using LD_LIBRARY_PATH variable. If the user
+     * has his/her own ffmpeg installed into the system, our libraries in
+     * LD_LIBRARY_PATH may cause conflicts, so we should remove our environment
+     * for such binaries.
+     */
+
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+
+    const QStringList libraryPaths = env.value("LD_LIBRARY_PATH").split(':');
+    const QString processAbsPath = QFileInfo(QFileInfo(processPath).absolutePath() + "/../").absoluteFilePath();
+
+    bool isCustomBuildOfFFmpeg = false;
+
+    Q_FOREACH (const QString &path, libraryPaths) {
+        const QString absPath1 = QFileInfo(path + "/").absoluteFilePath();
+        const QString absPath2 = QFileInfo(path + "/../").absoluteFilePath();
+
+        if (absPath1 == processAbsPath || absPath2 == processAbsPath) {
+            dbgFile << "Detected embedded ffmpeg:" << processPath;
+            dbgFile << "    " << ppVar(processAbsPath);
+            dbgFile << "    " << ppVar(absPath1);
+            dbgFile << "    " << ppVar(absPath2);
+
+            isCustomBuildOfFFmpeg = true;
+
+            break;
+        }
+    }
+
+    if (!isCustomBuildOfFFmpeg) {
+        dbgFile << "Removing LD_LIBRARY_PATH for running" << processPath;
+
+        env.remove("LD_LIBRARY_PATH");
+        process.setProcessEnvironment(env);
+    }
+#endif /* Q_OS_LINUX */
+}
+
 QByteArray KisFFMpegWrapper::runProcessAndReturn(const QString &processPath, const QStringList &args, int msecs)
 {
     QProcess runProcess;
     
-    dbgFile << "runProcessAndReturn:" << processPath << args;
+    fixUpNonEmbeddedProcessEnvironment(processPath, runProcess);
     
     runProcess.start(processPath, args);
     
@@ -401,6 +447,9 @@ QJsonObject KisFFMpegWrapper::findProcessPath(const QString &processName, const 
         proposedPaths << customLocation + '/' + processName;
     }
 
+#ifdef Q_OS_MACOS
+    proposedPaths << QCoreApplication::applicationDirPath() + '/' + processName;
+#endif
     proposedPaths << KoResourcePaths::getApplicationRoot()
                    + '/' + "bin" + '/' + processName;
 
@@ -440,16 +489,19 @@ QJsonObject KisFFMpegWrapper::findProcessPath(const QString &processName, const 
     return resultJsonObj;
 }
 
-QJsonObject KisFFMpegWrapper::findProcessInfo(const QString &processName, const QString &processPath, bool includeProcessInfo)
+QJsonObject KisFFMpegWrapper::findProcessInfo(const QString &processName, const QString &rawProcessPath, bool includeProcessInfo)
 {
 
-    QJsonObject ffmpegInfo {{"path", processPath},
+    QJsonObject ffmpegInfo {{"path", rawProcessPath},
                             {"enabled",false},
                             {"version", "0"},
                             {"encoder",QJsonValue::Object},
                             {"decoder",QJsonValue::Object}};
                             
-    if (!QFile::exists(processPath)) return ffmpegInfo;
+    if (!QFile::exists(rawProcessPath)) return ffmpegInfo;
+
+    const QString processPath = QFileInfo(rawProcessPath).absoluteFilePath();
+    ffmpegInfo["path"] = processPath;
     
     dbgFile << "Found process at:" << processPath;    
     QString processVersion = KisFFMpegWrapper::runProcessAndReturn(processPath, QStringList() << "-version", FFMPEG_TIMEOUT);

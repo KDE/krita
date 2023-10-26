@@ -214,6 +214,13 @@ Q_SIGNALS:
      */
     void documentClosed(const QString &ref);
 
+    /**
+     * Emitted when the animation PlaybackEngine is changed.
+     * GUI objects that want to control playback should watch this signal 
+     * and connect to the new playbackEgine as needed.
+    */
+   void playbackEngineChanged(KisPlaybackEngine *newPlaybackEngine);
+
     // These signals are for libkis or sketch
     void sigViewAdded(KisView *view);
     void sigViewRemoved(KisView *view);
@@ -294,6 +301,14 @@ public:
      * @see QGlobalStatic::exists()
      */
     static bool exists();
+
+    //------------------ Animation PlaybackEngine management ------------------
+public:
+    void upgradeToPlaybackEngineMLT(class KoCanvasBase *canvas);
+
+private:
+
+    void setPlaybackEngine(KisPlaybackEngine *p_playbackEngine);
 
 private Q_SLOTS:
 

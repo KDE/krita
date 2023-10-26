@@ -36,6 +36,7 @@
 #include <canvas/kis_canvas2.h>
 #include <widgets/kis_cmb_composite.h>
 #include <kis_slider_spin_box.h>
+#include <kis_canvas_resource_provider.h>
 #include <kis_cursor.h>
 #include <kis_color_filter_combo.h>
 #include <KisAngleSelector.h>
@@ -74,6 +75,10 @@ KisToolFill::KisToolFill(KoCanvasBase * canvas)
 {
     setObjectName("tool_fill");
     connect(&m_compressorFillUpdate, SIGNAL(timeout()), SLOT(slotUpdateFill()));
+
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+
+    connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
 }
 
 KisToolFill::~KisToolFill()
@@ -82,7 +87,11 @@ KisToolFill::~KisToolFill()
 
 void KisToolFill::resetCursorStyle()
 {
-    KisToolPaint::resetCursorStyle();
+    if (isEraser() && !m_useCustomBlendingOptions) {
+        useCursor(KisCursor::load("tool_fill_eraser_cursor.png", 6, 6));
+    } else {
+        KisToolPaint::resetCursorStyle();
+    }
 
     overrideCursorIfNotEditable();
 }

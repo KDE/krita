@@ -18,18 +18,23 @@ public:
     explicit Private()
         : QSharedData()
         , activeLayer(0)
-        , selectionChangedCompressor(1, KisSignalCompressor::FIRST_INACTIVE)
+        , selectionChangedCompressor(new KisThreadSafeSignalCompressor(1, KisSignalCompressor::FIRST_INACTIVE))
     {}
     explicit Private(const Private &)
         : QSharedData()
         , activeLayer(0)
-        , selectionChangedCompressor(1, KisSignalCompressor::FIRST_INACTIVE)
+        , selectionChangedCompressor(new KisThreadSafeSignalCompressor(1, KisSignalCompressor::FIRST_INACTIVE))
     {
     }
+
+    ~Private() {
+        selectionChangedCompressor->deleteLater();
+    }
+
     QList<KoShape*> selectedShapes;
     KoShapeLayer *activeLayer;
 
-    KisThreadSafeSignalCompressor selectionChangedCompressor;
+    KisThreadSafeSignalCompressor *selectionChangedCompressor;
 };
 
 #endif

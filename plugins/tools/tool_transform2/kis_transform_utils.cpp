@@ -27,29 +27,8 @@
 #include "kis_transform_mask_adapter.h"
 #include "krita_container_utils.h"
 #include "kis_selection.h"
-
-
-struct TransformTransactionPropertiesRegistrar {
-    TransformTransactionPropertiesRegistrar() {
-        qRegisterMetaType<TransformTransactionProperties>("TransformTransactionProperties");
-    }
-};
-static TransformTransactionPropertiesRegistrar __registrar1;
-
-struct ToolTransformArgsRegistrar {
-    ToolTransformArgsRegistrar() {
-        qRegisterMetaType<ToolTransformArgs>("ToolTransformArgs");
-    }
-};
-static ToolTransformArgsRegistrar __registrar2;
-
-struct QPainterPathRegistrar {
-    QPainterPathRegistrar() {
-        qRegisterMetaType<QPainterPath>("QPainterPath");
-    }
-};
-static QPainterPathRegistrar __registrar3;
-
+#include "kis_image.h"
+#include "kis_image_animation_interface.h"
 
 const int KisTransformUtils::rotationHandleVisualRadius = 12;
 const int KisTransformUtils::rotationHandleRadius = 8;
@@ -285,7 +264,8 @@ void transformDeviceImpl(const ToolTransformArgs &config,
                          KisPaintDeviceSP srcDevice,
                          KisPaintDeviceSP dstDevice,
                          KisProcessingVisitor::ProgressHelper *helper,
-                         bool cropDst)
+                         bool cropDst,
+                         bool forceSubPixelTranslation)
 {
     if (config.mode() == ToolTransformArgs::WARP) {
         KoUpdaterPtr updater = helper->updater();
@@ -333,6 +313,7 @@ void transformDeviceImpl(const ToolTransformArgs &config,
         KisTransformWorker transformWorker =
             KisTransformUtils::createTransformWorker(config, dstDevice, updater1, &transformedCenter);
 
+        transformWorker.setForceSubPixelTranslation(forceSubPixelTranslation);
         transformWorker.run();
 
         KisPerspectiveTransformWorker::SampleType sampleType =
@@ -348,6 +329,7 @@ void transformDeviceImpl(const ToolTransformArgs &config,
                                                             config.cameraPos().z(),
                                                             cropDst,
                                                             updater2);
+            perspectiveWorker.setForceSubPixelTranslation(forceSubPixelTranslation);
             perspectiveWorker.run(sampleType);
         } else if (config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
             QTransform T =
@@ -358,6 +340,7 @@ void transformDeviceImpl(const ToolTransformArgs &config,
                                                             T.inverted() * config.flattenedPerspectiveTransform() * T,
                                                             cropDst,
                                                             updater2);
+            perspectiveWorker.setForceSubPixelTranslation(forceSubPixelTranslation);
             perspectiveWorker.run(sampleType);
         }
     }
@@ -370,12 +353,12 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
                                         KisPaintDeviceSP dstDevice,
                                         KisProcessingVisitor::ProgressHelper *helper)
 {
-    transformDeviceImpl(config, srcDevice, dstDevice, helper, false);
+    transformDeviceImpl(config, srcDevice, dstDevice, helper, false, false);
 }
 
-void KisTransformUtils::transformDeviceWithCroppedDst(const ToolTransformArgs &config, KisPaintDeviceSP srcDevice, KisPaintDeviceSP dstDevice, KisProcessingVisitor::ProgressHelper *helper)
+void KisTransformUtils::transformDeviceWithCroppedDst(const ToolTransformArgs &config, KisPaintDeviceSP srcDevice, KisPaintDeviceSP dstDevice, KisProcessingVisitor::ProgressHelper *helper, bool forceSubPixelTranslation)
 {
-    transformDeviceImpl(config, srcDevice, dstDevice, helper, true);
+    transformDeviceImpl(config, srcDevice, dstDevice, helper, true, forceSubPixelTranslation);
 }
 
 QRect KisTransformUtils::needRect(const ToolTransformArgs &config,
@@ -655,8 +638,12 @@ KisNodeSP KisTransformUtils::tryOverrideRootToTransformMask(KisNodeSP root)
 int KisTransformUtils::fetchCurrentImageTime(KisNodeList rootNodes)
 {
     Q_FOREACH(KisNodeSP node, rootNodes) {
-        if (node && node->projection()) {
-            return node->projection()->defaultBounds()->currentTime();
+        /**
+         * We cannot just use projection's default bounds, because masks don't have
+         * any projection
+         */
+        if (node && node->image()) {
+            return node->image()->animationInterface()->currentTime();
         }
     }
     return -1;
@@ -717,7 +704,7 @@ bool KisTransformUtils::tryInitArgsFromNode(KisNodeList rootNodes, ToolTransform
             KisTransformMaskAdapter *adapter =
                 dynamic_cast<KisTransformMaskAdapter*>(savedParams.data());
 
-            if (adapter) {
+            if (adapter && adapter->isInitialized()) {
                 *args = *adapter->transformArgs();
                 result = true;
             }

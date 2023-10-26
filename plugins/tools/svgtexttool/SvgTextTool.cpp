@@ -6,8 +6,17 @@
 */
 
 #include "SvgTextTool.h"
+#include "KoSvgTextProperties.h"
 #include "KoSvgTextShape.h"
+#include "KoSvgTextShapeMarkupConverter.h"
+#include "SvgCreateTextStrategy.h"
+#include "SvgInlineSizeChangeCommand.h"
+#include "SvgInlineSizeChangeStrategy.h"
+#include "SvgInlineSizeHelper.h"
+#include "SvgMoveTextCommand.h"
+#include "SvgMoveTextStrategy.h"
 #include "SvgTextChangeCommand.h"
+#include "SvgTextRemoveCommand.h"
 
 #include <QLabel>
 #include <QPainterPath>
@@ -27,6 +36,7 @@
 #include <kis_canvas2.h>
 #include <KSharedConfig>
 #include "kis_assert.h"
+#include <kis_coordinates_converter.h>
 
 #include <KoFileDialog.h>
 #include <KoIcon.h>
@@ -43,14 +53,39 @@
 #include <KoShapeFillWrapper.h>
 #include "KoCanvasResourceProvider.h"
 #include <KoPathShape.h>
+#include <KoPathSegment.h>
 
 #include "KisHandlePainterHelper.h"
 #include <commands/KoKeepShapesSelectedCommand.h>
 
+using SvgInlineSizeHelper::InlineSizeInfo;
+
+
+static bool debugEnabled()
+{
+    static const bool debugEnabled = !qEnvironmentVariableIsEmpty("KRITA_DEBUG_TEXTTOOL");
+    return debugEnabled;
+}
 
 SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
+    , m_textCursor(canvas)
 {
+     // TODO: figure out whether we should use system config for this, Windows and GTK have values for it, but Qt and MacOS don't(?).
+    int cursorFlashLimit = 5000;
+    m_textCursor.setCaretSetting(QApplication::style()->pixelMetric(QStyle::PM_TextCursorWidth)
+                                 , qApp->cursorFlashTime()
+                                 , cursorFlashLimit);
+    connect(&m_textCursor, SIGNAL(updateCursorDecoration(QRectF)), this, SLOT(slotUpdateCursorDecoration(QRectF)));
+
+    m_base_cursor = QCursor(QPixmap(":/tool_text_basic.xpm"), 7, 7);
+    m_text_inline_horizontal = QCursor(QPixmap(":/tool_text_inline_horizontal.xpm"), 7, 7);
+    m_text_inline_vertical = QCursor(QPixmap(":/tool_text_inline_vertical.xpm"), 7, 7);
+    m_text_on_path = QCursor(QPixmap(":/tool_text_on_path.xpm"), 7, 7);
+    m_text_in_shape = QCursor(QPixmap(":/tool_text_in_shape.xpm"), 7, 7);
+    m_ibeam_horizontal = QCursor(QPixmap(":/tool_text_i_beam_horizontal.xpm"), 11, 11);
+    m_ibeam_vertical = QCursor(QPixmap(":/tool_text_i_beam_vertical.xpm"), 11, 11);
+    m_ibeam_horizontal_done = QCursor(QPixmap(":/tool_text_i_beam_horizontal_done.xpm"), 5, 11);
 }
 
 SvgTextTool::~SvgTextTool()
@@ -64,7 +99,9 @@ SvgTextTool::~SvgTextTool()
 void SvgTextTool::activate(const QSet<KoShape *> &shapes)
 {
     KoToolBase::activate(shapes);
-    useCursor(Qt::ArrowCursor);
+    m_canvasConnections.addConnection(canvas()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotShapeSelectionChanged()));
+
+    useCursor(m_base_cursor);
     auto uploadColorToResourceManager = [this](KoShape *shape) {
         m_originalColor = canvas()->resourceManager()->foregroundColor();
         KoShapeFillWrapper wrapper(shape, KoFlake::Fill);
@@ -79,10 +116,6 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
             koSelection()->deselectAll();
         } else {
             uploadColorToResourceManager(textShape);
-            // if we are a text shape...and the proxy tells us we want to edit the shape. open the text editor
-            if (canvas()->selectedShapesProxy()->isRequestingToBeEdited()) {
-                showEditor();
-            }
         }
     } else if (shapes.size() > 1) {
         KoSvgTextShape *foundTextShape = nullptr;
@@ -101,24 +134,22 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
             koSelection()->select(foundTextShape);
         }
     }
+    slotShapeSelectionChanged();
+
+    repaintDecorations();
 }
 
 void SvgTextTool::deactivate()
 {
     KoToolBase::deactivate();
+    m_canvasConnections.clear();
     if (m_originalColor) {
         canvas()->resourceManager()->setForegroundColor(*m_originalColor);
     }
 
-    QRectF updateRect = m_hoveredShapeHighlightRect.boundingRect();
-
-    KoSvgTextShape *shape = selectedShape();
-    if (shape) {
-        updateRect |= shape->boundingRect();
-    }
     m_hoveredShapeHighlightRect = QPainterPath();
 
-    canvas()->updateCanvas(updateRect);
+    repaintDecorations();
 }
 
 KisPopupWidgetInterface *SvgTextTool::popupWidget()
@@ -129,19 +160,18 @@ KisPopupWidgetInterface *SvgTextTool::popupWidget()
 QWidget *SvgTextTool::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();
-    QGridLayout *layout = new QGridLayout(optionWidget);
+    optionUi.setupUi(optionWidget);
+
+    if (!debugEnabled()) {
+        optionUi.groupBoxDebug->hide();
+    }
+
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
 
-    QGroupBox *defsOptions = new QGroupBox(i18n("Create new texts with..."));
-    QVBoxLayout *defOptionsLayout = new QVBoxLayout(defsOptions);
-
-    m_defFont = new QFontComboBox();
     QString storedFont = m_configGroup.readEntry<QString>("defaultFont", QApplication::font().family());
-    m_defFont->setCurrentFont(QFont(storedFont));
-    defOptionsLayout->addWidget(m_defFont);
-    m_defPointSize = new QComboBox();
+    optionUi.defFont->setCurrentFont(QFont(storedFont));
     Q_FOREACH (int size, QFontDatabase::standardSizes()) {
-        m_defPointSize->addItem(QString::number(size)+" pt");
+        optionUi.defPointSize->addItem(QString::number(size)+" pt");
     }
     int storedSize = m_configGroup.readEntry<int>("defaultSize", QApplication::font().pointSize());
 #ifdef Q_OS_ANDROID
@@ -157,69 +187,41 @@ QWidget *SvgTextTool::createOptionWidget()
     if (QFontDatabase::standardSizes().contains(storedSize)) {
         sizeIndex = QFontDatabase::standardSizes().indexOf(storedSize);
     }
-    m_defPointSize->setCurrentIndex(sizeIndex);
+    optionUi.defPointSize->setCurrentIndex(sizeIndex);
 
     int checkedAlignment = m_configGroup.readEntry<int>("defaultAlignment", 0);
 
     m_defAlignment = new QButtonGroup();
-    QHBoxLayout *alignButtons = new QHBoxLayout();
-    alignButtons->addWidget(m_defPointSize);
-    QToolButton *alignLeft = new QToolButton();
-    alignLeft->setIcon(KisIconUtils::loadIcon("format-justify-left"));
-    alignLeft->setCheckable(true);
-    alignLeft->setAutoRaise(true);
+    optionUi.alignLeft->setIcon(KisIconUtils::loadIcon("format-justify-left"));
+    m_defAlignment->addButton(optionUi.alignLeft, 0);
 
-    alignLeft->setToolTip(i18n("Anchor text to the left."));
-    m_defAlignment->addButton(alignLeft, 0);
-    alignButtons->addWidget(alignLeft);
+    optionUi.alignCenter->setIcon(KisIconUtils::loadIcon("format-justify-center"));
+    m_defAlignment->addButton(optionUi.alignCenter, 1);
 
-    QToolButton *alignCenter = new QToolButton();
-    alignCenter->setIcon(KisIconUtils::loadIcon("format-justify-center"));
-    alignCenter->setCheckable(true);
-    alignCenter->setAutoRaise(true);
-    m_defAlignment->addButton(alignCenter, 1);
-    alignCenter->setToolTip(i18n("Anchor text to the middle."));
-
-    alignButtons->addWidget(alignCenter);
-
-    QToolButton *alignRight = new QToolButton();
-    alignRight->setIcon(KisIconUtils::loadIcon("format-justify-right"));
-    alignRight->setCheckable(true);
-    alignRight->setAutoRaise(true);
-    m_defAlignment->addButton(alignRight, 2);
-    alignRight->setToolTip(i18n("Anchor text to the right."));
-    alignButtons->addWidget(alignRight);
+    optionUi.alignRight->setIcon(KisIconUtils::loadIcon("format-justify-right"));
+    m_defAlignment->addButton(optionUi.alignRight, 2);
 
     m_defAlignment->setExclusive(true);
     if (checkedAlignment<1) {
-        alignLeft->setChecked(true);
+        optionUi.alignLeft->setChecked(true);
     } else if (checkedAlignment==1) {
-        alignCenter->setChecked(true);
+        optionUi.alignCenter->setChecked(true);
     } else if (checkedAlignment==2) {
-        alignRight->setChecked(true);
+        optionUi.alignRight->setChecked(true);
     } else {
-        alignLeft->setChecked(true);
+        optionUi.alignLeft->setChecked(true);
     }
 
     double storedLetterSpacing = m_configGroup.readEntry<double>("defaultLetterSpacing", 0.0);
-    m_defLetterSpacing = new QDoubleSpinBox();
-    m_defLetterSpacing->setToolTip(i18n("Letter Spacing"));
-    m_defLetterSpacing->setRange(-20.0, 20.0);
-    m_defLetterSpacing->setSingleStep(0.5);
-    m_defLetterSpacing->setValue(storedLetterSpacing);
-    alignButtons->addWidget(m_defLetterSpacing);
+    optionUi.defLetterSpacing->setValue(storedLetterSpacing);
 
-    defOptionsLayout->addLayout(alignButtons);
-    layout->addWidget(defsOptions);
     connect(m_defAlignment, SIGNAL(buttonClicked(int)), this, SLOT(storeDefaults()));
-    connect(m_defFont, SIGNAL(currentFontChanged(QFont)), this, SLOT(storeDefaults()));
-    connect(m_defPointSize, SIGNAL(currentIndexChanged(int)), this, SLOT(storeDefaults()));
-    connect(m_defLetterSpacing, SIGNAL(valueChanged(double)), SLOT(storeDefaults()));
+    connect(optionUi.defFont, SIGNAL(currentFontChanged(QFont)), this, SLOT(storeDefaults()));
+    connect(optionUi.defPointSize, SIGNAL(currentIndexChanged(int)), this, SLOT(storeDefaults()));
+    connect(optionUi.defLetterSpacing, SIGNAL(valueChanged(double)), SLOT(storeDefaults()));
 
-    m_edit = new QPushButton(optionWidget);
-    m_edit->setText(i18n("Edit Text"));
-    connect(m_edit, SIGNAL(clicked(bool)), SLOT(showEditor()));
-    layout->addWidget(m_edit);
+    connect(optionUi.btnEdit, SIGNAL(clicked(bool)), SLOT(showEditor()));
+    connect(optionUi.btnEditSvg, SIGNAL(clicked(bool)), SLOT(showEditorSvgSource()));
 
     return optionWidget;
 }
@@ -273,6 +275,16 @@ void SvgTextTool::showEditor()
     }
 }
 
+void SvgTextTool::showEditorSvgSource()
+{
+    KoSvgTextShape *shape = selectedShape();
+    if (!shape) {
+        return;
+    }
+    shape->setRichTextPreferred(false);
+    showEditor();
+}
+
 void SvgTextTool::textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs, bool richTextUpdated)
 {
     SvgTextChangeCommand *cmd = new SvgTextChangeCommand(shape, svg, defs, richTextUpdated);
@@ -286,10 +298,10 @@ void SvgTextTool::slotTextEditorClosed()
     KoToolManager::instance()->switchToolRequested("InteractionTool");
 }
 
-QString SvgTextTool::generateDefs()
+QString SvgTextTool::generateDefs(const QString &extraProperties)
 {
-    QString font = m_defFont->currentFont().family();
-    QString size = QString::number(QFontDatabase::standardSizes().at(m_defPointSize->currentIndex() > -1 ? m_defPointSize->currentIndex() : 0));
+    QString font = optionUi.defFont->currentFont().family();
+    QString size = QString::number(QFontDatabase::standardSizes().at(optionUi.defPointSize->currentIndex() > -1 ? optionUi.defPointSize->currentIndex() : 0));
 
     QString textAnchor = "middle";
     if (m_defAlignment->button(0)->isChecked()) {
@@ -300,54 +312,211 @@ QString SvgTextTool::generateDefs()
     }
 
     QString fontColor = canvas()->resourceManager()->foregroundColor().toQColor().name();
-    QString letterSpacing = QString::number(m_defLetterSpacing->value());
+    QString letterSpacing = QString::number(optionUi.defLetterSpacing->value());
 
-    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ; fill:%3 ;  text-anchor:%4; letter-spacing:%5;\n  }\n </style>\n</defs>").arg(font, size, fontColor, textAnchor, letterSpacing);
+    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ; fill:%3 ;  text-anchor:%4; letter-spacing:%5;%6\n  white-space:pre-wrap;\n  }\n </style>\n</defs>").arg(font, size, fontColor, textAnchor, letterSpacing, extraProperties);
 }
 
 void SvgTextTool::storeDefaults()
 {
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
-    m_configGroup.writeEntry("defaultFont", m_defFont->currentFont().family());
-    m_configGroup.writeEntry("defaultSize", QFontDatabase::standardSizes().at(m_defPointSize->currentIndex() > -1 ? m_defPointSize->currentIndex() : 0));
+    m_configGroup.writeEntry("defaultFont", optionUi.defFont->currentFont().family());
+    m_configGroup.writeEntry("defaultSize", QFontDatabase::standardSizes().at(optionUi.defPointSize->currentIndex() > -1 ? optionUi.defPointSize->currentIndex() : 0));
     m_configGroup.writeEntry("defaultAlignment", m_defAlignment->checkedId());
-    m_configGroup.writeEntry("defaultLetterSpacing", m_defLetterSpacing->value());
+    m_configGroup.writeEntry("defaultLetterSpacing", optionUi.defLetterSpacing->value());
+}
+
+void SvgTextTool::slotShapeSelectionChanged()
+{
+    m_textCursor.setShape(selectedShape());
+    if (selectedShape()) {
+        setTextMode(true);
+    } else {
+        setTextMode(false);
+    }
+}
+
+void SvgTextTool::copy() const
+{
+    m_textCursor.copy();
+}
+
+void SvgTextTool::deleteSelection()
+{
+    m_textCursor.removeSelection();
+}
+
+bool SvgTextTool::paste()
+{
+    return m_textCursor.paste();
+}
+
+bool SvgTextTool::hasSelection()
+{
+    return m_textCursor.hasSelection();
+}
+
+KoToolSelection *SvgTextTool::selection()
+{
+    return &m_textCursor;
+}
+
+void SvgTextTool::requestStrokeEnd()
+{
+    if (!m_textCursor.isAddingCommand()) {
+        if (m_interactionStrategy) {
+            m_dragging = DragMode::None;
+            m_interactionStrategy->cancelInteraction();
+            m_interactionStrategy = nullptr;
+            useCursor(Qt::ArrowCursor);
+        } else if (isInTextMode()) {
+            canvas()->shapeManager()->selection()->deselectAll();
+        }
+    }
+}
+
+void SvgTextTool::requestStrokeCancellation()
+{
+    /**
+     * Doing nothing, since these signals come on undo/redo actions
+     * in the mainland undo stack, which we manipulate while editing
+     * text
+     */
+}
+
+void SvgTextTool::slotUpdateCursorDecoration(QRectF updateRect)
+{
+    if (canvas()) {
+        canvas()->updateCanvas(updateRect);
+    }
+}
+
+QFont SvgTextTool::defaultFont() const
+{
+    int size = QFontDatabase::standardSizes().at(optionUi.defPointSize->currentIndex() > -1 ? optionUi.defPointSize->currentIndex() : 0);
+    QFont font = optionUi.defFont->currentFont();
+    font.setPointSize(size);
+    return font;
+}
+
+Qt::Alignment SvgTextTool::horizontalAlign() const
+{
+    if (m_defAlignment->button(1)->isChecked()) {
+        return Qt::AlignHCenter;
+    }
+    if (m_defAlignment->button(2)->isChecked()) {
+        return Qt::AlignRight;
+    }
+    return Qt::AlignLeft;
+}
+
+QRectF SvgTextTool::decorationsRect() const
+{
+    QRectF rect;
+    KoSvgTextShape *const shape = selectedShape();
+    if (shape) {
+        rect |= shape->boundingRect();
+
+        const QPointF anchor = shape->absoluteTransformation().map(QPointF());
+        rect |= kisGrowRect(QRectF(anchor, anchor), handleRadius());
+
+        if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape)) {
+            rect |= kisGrowRect(info->boundingRect(), handleRadius() * 2);
+        }
+    }
+
+    rect |= m_hoveredShapeHighlightRect.boundingRect();
+
+    return rect;
 }
 
 void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
 {
     if (!isActivated()) return;
 
-    gc.setTransform(converter.documentToView(), true);
-
-    KisHandlePainterHelper handlePainter(&gc);
-
-    if (m_dragging) {
-        QPolygonF poly(QRectF(m_dragStart, m_dragEnd));
-        handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
-        handlePainter.drawRubberLine(poly);
+    if (m_dragging == DragMode::Create) {
+        m_interactionStrategy->paint(gc, converter);
     }
 
     KoSvgTextShape *shape = selectedShape();
     if (shape) {
-        handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
-        QPainterPath path;
-        path.addRect(shape->boundingRect());
-        handlePainter.drawPath(path);
-        handlePainter.drawHandleCircle(shape->absoluteTransformation().map(QPointF()), KoToolBase::handleRadius());
+        KisHandlePainterHelper handlePainter =
+            KoShape::createHandlePainterHelperView(&gc, shape, converter, handleRadius());
+
+        if (m_dragging != DragMode::InlineSizeHandle && m_dragging != DragMode::Move) {
+            handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
+            QPainterPath path;
+            path.addRect(shape->outlineRect());
+            handlePainter.drawPath(path);
+        }
+
+        if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape)) {
+            handlePainter.setHandleStyle(KisHandleStyle::secondarySelection());
+            handlePainter.drawConnectionLine(info->baselineLineLocal());
+            handlePainter.drawConnectionLine(info->nonEditLineLocal());
+            if (m_highlightItem == HighlightItem::InlineSizeHandle) {
+                handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
+            }
+            handlePainter.drawConnectionLine(info->editLineLocal());
+            handlePainter.drawGradientHandle(info->editLineLocal().p1(), KoToolBase::handleRadius() * 0.75);
+        }
+
+        if (m_highlightItem == HighlightItem::MoveBorder) {
+            handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
+        } else {
+            handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
+        }
+        handlePainter.drawHandleCircle(QPointF(), KoToolBase::handleRadius());
     }
 
-    if (!m_hoveredShapeHighlightRect.isEmpty()) {
-        handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandlesWithSolidOutline());
-        QPainterPath path;
-        path.addPath(m_hoveredShapeHighlightRect);
-        handlePainter.drawPath(path);
+    gc.setTransform(converter.documentToView(), true);
+    {
+        KisHandlePainterHelper handlePainter(&gc);
+        if (!m_hoveredShapeHighlightRect.isEmpty()) {
+            handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandlesWithSolidOutline());
+            QPainterPath path;
+            path.addPath(m_hoveredShapeHighlightRect);
+            handlePainter.drawPath(path);
+        }
+    }
+    if (shape) {
+            m_textCursor.paintDecorations(gc, qApp->palette().color(QPalette::Highlight));
+    }
+
+    // Paint debug outline
+    if (debugEnabled() && shape) {
+        using Element = KoSvgTextShape::DebugElement;
+        KoSvgTextShape::DebugElements el{};
+        if (optionUi.chkDbgCharBbox->isChecked()) {
+            el |= Element::CharBbox;
+        }
+        if (optionUi.chkDbgLineBox->isChecked()) {
+            el |= Element::LineBox;
+        }
+
+        gc.setTransform(shape->absoluteTransformation(), true);
+        shape->paintDebug(gc, el);
     }
 }
 
 void SvgTextTool::mousePressEvent(KoPointerEvent *event)
 {
     KoSvgTextShape *selectedShape = this->selectedShape();
+
+    if (selectedShape) {
+        if (m_highlightItem == HighlightItem::MoveBorder) {
+            m_interactionStrategy.reset(new SvgMoveTextStrategy(this, selectedShape, event->point));
+            m_dragging = DragMode::Move;
+            event->accept();
+            return;
+        } else if (m_highlightItem == HighlightItem::InlineSizeHandle) {
+            m_interactionStrategy.reset(new SvgInlineSizeChangeStrategy(this, selectedShape, event->point));
+            m_dragging = DragMode::InlineSizeHandle;
+            event->accept();
+            return;
+        }
+    }
+
     KoSvgTextShape *hoveredShape = dynamic_cast<KoSvgTextShape *>(canvas()->shapeManager()->shapeAt(event->point));
 
     if (!selectedShape || hoveredShape != selectedShape) {
@@ -355,112 +524,171 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
 
         if (hoveredShape) {
             canvas()->shapeManager()->selection()->select(hoveredShape);
-        } else {
-            m_dragStart = m_dragEnd = event->point;
-            m_dragging = true;
-            event->accept();
+            m_textCursor.setPosToPoint(event->point);
+        } else if (!this->isInTextMode()){
+            m_interactionStrategy.reset(new SvgCreateTextStrategy(this, event->point));
+            m_dragging = DragMode::Create;
         }
+        event->accept();
+    } else if (hoveredShape == selectedShape){
+        m_textCursor.setPosToPoint(event->point);
+        event->accept();
     }
+
+    repaintDecorations();
+}
+
+static inline Qt::CursorShape angleToCursor(const QVector2D unit)
+{
+    constexpr float SIN_PI_8 = 0.382683432;
+    if (unit.y() < SIN_PI_8 && unit.y() > -SIN_PI_8) {
+        return Qt::SizeHorCursor;
+    } else if (unit.x() < SIN_PI_8 && unit.x() > -SIN_PI_8) {
+        return Qt::SizeVerCursor;
+    } else if ((unit.x() > 0 && unit.y() > 0) || (unit.x() < 0 && unit.y() < 0)) {
+        return Qt::SizeFDiagCursor;
+    } else {
+        return Qt::SizeBDiagCursor;
+    }
+}
+
+static inline Qt::CursorShape lineToCursor(const QLineF line, const KoCanvasBase *const canvas)
+{
+    const KisCanvas2 *const canvas2 = qobject_cast<const KisCanvas2 *>(canvas);
+    KIS_ASSERT(canvas2);
+    const KisCoordinatesConverter *const converter = canvas2->coordinatesConverter();
+    QLineF wdgLine = converter->flakeToWidget(line);
+    return angleToCursor(QVector2D(wdgLine.p2() - wdgLine.p1()).normalized());
 }
 
 void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    QRectF updateRect = m_hoveredShapeHighlightRect.boundingRect();
+    m_lastMousePos = event->point;
+    m_hoveredShapeHighlightRect = QPainterPath();
 
-    if (m_dragging) {
-        m_dragEnd = event->point;
-        m_hoveredShapeHighlightRect = QPainterPath();
-        updateRect |= QRectF(m_dragStart, m_dragEnd).normalized().toAlignedRect();
+
+    if (m_interactionStrategy) {
+        m_interactionStrategy->handleMouseMove(event->point, event->modifiers());
+        if (m_dragging == DragMode::Create) {
+            useCursor(m_text_inline_horizontal);
+        }
         event->accept();
     } else {
+        m_highlightItem = HighlightItem::None;
+        KoSvgTextShape *const selectedShape = this->selectedShape();
+        QCursor cursor = m_base_cursor;
+        if (selectedShape) {
+            cursor = m_ibeam_horizontal_done;
+            const qreal sensitivity = grabSensitivityInPt();
+
+            if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(selectedShape)) {
+                const QPolygonF zone = info->editLineGrabRect(sensitivity);
+                if (zone.containsPoint(event->point, Qt::OddEvenFill)) {
+                    m_highlightItem = HighlightItem::InlineSizeHandle;
+                    cursor = lineToCursor(info->baselineLine(), canvas());
+                }
+            }
+
+            if (m_highlightItem == HighlightItem::None) {
+                const QPolygonF textOutline = selectedShape->absoluteTransformation().map(selectedShape->outlineRect());
+                const QRectF moveBorderRegion = kisGrowRect(selectedShape->boundingRect(), sensitivity);
+                if (moveBorderRegion.contains(event->point) && !textOutline.containsPoint(event->point, Qt::OddEvenFill)) {
+                    m_highlightItem = HighlightItem::MoveBorder;
+                    cursor = Qt::SizeAllCursor;
+                }
+            }
+        }
+
         KoSvgTextShape *hoveredShape = dynamic_cast<KoSvgTextShape *>(canvas()->shapeManager()->shapeAt(event->point));
-        if (hoveredShape) {
+        if (hoveredShape && m_highlightItem == HighlightItem::None) {
+            m_hoveredShapeHighlightRect = {};
             if (hoveredShape->shapesInside().isEmpty()) {
                 m_hoveredShapeHighlightRect.addRect(hoveredShape->boundingRect());
             } else {
                 Q_FOREACH(KoShape *shape, hoveredShape->shapesInside()) {
                     KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
                     if (path) {
-                        m_hoveredShapeHighlightRect.addPath(hoveredShape->transformation().map(path->transformation().map(path->outline())));
+                        m_hoveredShapeHighlightRect.addPath(hoveredShape->absoluteTransformation().map(path->absoluteTransformation().map(path->outline())));
                     }
                 }
             }
-            updateRect |= m_hoveredShapeHighlightRect.boundingRect();
-        } else {
-            m_hoveredShapeHighlightRect = QPainterPath();
+            // Todo: replace with something a little less hacky.
+            if (hoveredShape->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt() == 0) {
+                cursor = m_ibeam_horizontal;
+            } else {
+                cursor = m_ibeam_vertical;
+            }
         }
+#if 0
+        /// Commenting this out until we have a good idea of how we want to tackle the text and shape to put them on.
+           else if(m_highlightItem == HighlightItem::None) {
+            KoPathShape *shape = dynamic_cast<KoPathShape *>(canvas()->shapeManager()->shapeAt(event->point));
+            if (shape) {
+                if (shape->subpathCount() > 0) {
+                    if (shape->isClosedSubpath(0)) {
+                        cursor = m_text_in_shape;
+                    }
+                }
+                KoPathSegment segment = segmentAtPoint(event->point, shape, handleGrabRect(event->point));
+                if (segment.isValid()) {
+                    cursor = m_text_on_path;
+                }
+                m_hoveredShapeHighlightRect.addPath(shape->absoluteTransformation().map(shape->outline()));
+            } else {
+                m_hoveredShapeHighlightRect = QPainterPath();
+            }
+        }
+#endif
+        useCursor(cursor);
         event->ignore();
     }
 
-    if (!updateRect.isEmpty()) {
-        canvas()->updateCanvas(kisGrowRect(updateRect, 100));
-    }
+    repaintDecorations();
 }
 
 void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (m_dragging) {
-        QRectF rectangle = QRectF(m_dragStart, m_dragEnd).normalized();
-        if (rectangle.width() < 4 && rectangle.height() < 4) {
-            m_dragging = false;
-            event->accept();
-            return;
+    if (m_interactionStrategy) {
+        m_interactionStrategy->finishInteraction(event->modifiers());
+        KUndo2Command *const command = m_interactionStrategy->createCommand();
+        if (command) {
+            canvas()->addCommand(command);
         }
-        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoSvgTextShapeID");
-        KoProperties *params = new KoProperties();//Fill these with "svgText", "defs" and "shapeRect"
-        params->setProperty("defs", QVariant(generateDefs()));
-        if (m_dragging) {
-            m_dragEnd = event->point;
-            m_dragging = false;
-
-            //The following show only happen when we're creating preformatted text. If we're making
-            //Word-wrapped text, it should take the rectangle unmodified.
-            int size = QFontDatabase::standardSizes().at(m_defPointSize->currentIndex() > -1 ? m_defPointSize->currentIndex() : 0);
-            QFont font = m_defFont->currentFont();
-            font.setPointSize(size);
-            rectangle.setTop(rectangle.top()+QFontMetrics(font).lineSpacing());
-            if (m_defAlignment->button(1)->isChecked()) {
-                rectangle.setLeft(rectangle.center().x());
-            } else if (m_defAlignment->button(2)->isChecked()) {
-                qreal right = rectangle.right();
-                rectangle.setRight(right+10);
-                rectangle.setLeft(right);
-            }
-
-            params->setProperty("shapeRect", QVariant(rectangle));
-        }
-        KoShape *textShape = factory->createShape( params, canvas()->shapeController()->resourceManager());
-
-        KUndo2Command *parentCommand = new KUndo2Command();
-
-        new KoKeepShapesSelectedCommand(koSelection()->selectedShapes(), {}, canvas()->selectedShapesProxy(), false, parentCommand);
-
-        KUndo2Command *cmd = canvas()->shapeController()->addShape(textShape, 0, parentCommand);
-        parentCommand->setText(cmd->text());
-
-        new KoKeepShapesSelectedCommand({}, {textShape}, canvas()->selectedShapesProxy(), true, parentCommand);
-
-        canvas()->addCommand(parentCommand);
-
-        showEditor();
-        event->accept();
-
-    } else if (m_editor) {
-        showEditor();
-        event->accept();
+        m_interactionStrategy = nullptr;
+        m_dragging = DragMode::None;
+        useCursor(m_base_cursor);
     }
+    event->accept();
 }
 
 void SvgTextTool::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key()==Qt::Key_Enter || event->key()==Qt::Key_Return) {
-        showEditor();
+    if (m_interactionStrategy
+        && (event->key() == Qt::Key_Control || event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift
+            || event->key() == Qt::Key_Meta)) {
+        m_interactionStrategy->handleMouseMove(m_lastMousePos, event->modifiers());
+        event->accept();
+        return;
+    } else if (event->key() == Qt::Key_Escape) {
+        requestStrokeEnd();
+    } else if (selectedShape()) {
+        m_textCursor.keyPressEvent(event);
+    }
+
+    event->ignore();
+}
+
+void SvgTextTool::keyReleaseEvent(QKeyEvent *event)
+{
+    if (m_interactionStrategy
+        && (event->key() == Qt::Key_Control || event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift
+            || event->key() == Qt::Key_Meta)) {
+        m_interactionStrategy->handleMouseMove(m_lastMousePos, event->modifiers());
         event->accept();
     } else {
         event->ignore();
     }
 }
-
 
 void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
@@ -468,11 +696,14 @@ void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
         event->ignore(); // allow the event to be used by another
         return;
     }
-    showEditor();
-    if(m_editor) {
-        m_editor->raise();
-        m_editor->activateWindow();
-    }
+    const QRectF updateRect = std::exchange(m_hoveredShapeHighlightRect, QPainterPath()).boundingRect();
+    canvas()->updateCanvas(kisGrowRect(updateRect, 100));
     event->accept();
+}
+
+qreal SvgTextTool::grabSensitivityInPt() const
+{
+    const int sensitivity = grabSensitivity();
+    return canvas()->viewConverter()->viewToDocumentX(sensitivity);
 }
 

@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2021 Mathias Wein <lynx.mw+kde@gmail.com>
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -41,55 +42,10 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
     setButtons(Close);
     setDefaultButton(Close);
 
-    m_ui->resourceItemView->setFixedToolTipThumbnailSize(QSize(128, 128));
+    m_wdgResourcePreview = new WdgResourcePreview(WidgetType::ResourceManager, this);
+    m_ui->formLayout->addWidget(m_wdgResourcePreview);
 
-    m_resourceTypeModel = new KisResourceTypeModel(this);
-
-    m_ui->cmbResourceType->setModel(m_resourceTypeModel);
-    m_ui->cmbResourceType->setModelColumn(KisResourceTypeModel::Name);
-    for (int i = 0; i < m_resourceTypeModel->rowCount(); i++) {
-        QModelIndex idx = m_resourceTypeModel->index(i, 0);
-        QString resourceType = m_resourceTypeModel->data(idx, Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
-        if (resourceType == "paintoppresets") {
-            m_ui->cmbResourceType->setCurrentIndex(i);
-            break;
-        }
-    }
-    connect(m_ui->cmbResourceType, SIGNAL(activated(int)), SLOT(slotResourceTypeSelected(int)));
-
-    m_storageModel = new KisStorageModel(this);
-
-    m_ui->cmbStorage->setModel(m_storageModel);
-    m_ui->cmbStorage->setModelColumn(KisStorageModel::DisplayName);
-    connect(m_ui->cmbStorage, SIGNAL(activated(int)), SLOT(slotStorageSelected(int)));
-
-    QString selectedResourceType = getCurrentResourceType();
-
-    KisTagModel* tagModel = new KisTagModel(selectedResourceType);
-    tagModel->sort(KisAllTagsModel::Name);
-    m_tagModelsForResourceType.insert(selectedResourceType, tagModel);
-
-    m_ui->cmbTag->setModel(tagModel);
-    m_ui->cmbTag->setModelColumn(KisAllTagsModel::Name);
-    connect(m_ui->cmbTag, SIGNAL(activated(int)), SLOT(slotTagSelected(int)));
-
-    // the model will be owned by `proxyModel`
-    KisResourceModel* resourceModel = new KisResourceModel(selectedResourceType);
-    resourceModel->setStorageFilter(KisResourceModel::ShowAllStorages);
-    resourceModel->setResourceFilter(m_ui->chkShowDeleted->isChecked() ? KisResourceModel::ShowAllResources : KisResourceModel::ShowActiveResources);
-
-    KisTagFilterResourceProxyModel* proxyModel = new KisTagFilterResourceProxyModel(selectedResourceType);
-    proxyModel->setResourceModel(resourceModel);
-    proxyModel->setTagFilter(0);
-    proxyModel->setStorageFilter(true, getCurrentStorageId());
-    proxyModel->sort(KisAbstractResourceModel::Name);
-    m_resourceProxyModelsForResourceType.insert(selectedResourceType, proxyModel);
-
-    m_ui->resourceItemView->setModel(proxyModel);
-    m_ui->resourceItemView->setItemDelegate(new KisResourceItemDelegate(this));
-    m_ui->resourceItemView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
-    connect(m_ui->resourceItemView, SIGNAL(currentResourceChanged(QModelIndex)), SLOT(slotResourcesSelectionChanged(QModelIndex)));
+    connect(m_wdgResourcePreview, SIGNAL(signalResourcesSelectionChanged(QModelIndex)), this, SLOT(slotResourcesSelectionChanged(QModelIndex)));
 
     connect(m_ui->btnDeleteResource, SIGNAL(clicked(bool)), SLOT(slotDeleteResources()));
     connect(m_ui->btnCreateBundle, SIGNAL(clicked(bool)), SLOT(slotCreateBundle()));
@@ -97,8 +53,6 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
     connect(m_ui->btnImportResources, SIGNAL(clicked(bool)), SLOT(slotImportResources()));
     connect(m_ui->btnExtractTagsToResourceFolder, SIGNAL(clicked(bool)), SLOT(slotSaveTags()));
 
-    connect(m_ui->lneFilterText, SIGNAL(textChanged(const QString&)), SLOT(slotFilterTextChanged(const QString&)));
-    connect(m_ui->chkShowDeleted, SIGNAL(stateChanged(int)), SLOT(slotShowDeletedChanged(int)));
 
     m_tagsController.reset(new KisWdgTagSelectionControllerOneResource(m_ui->wdgResourcesTags, true));
 
@@ -114,74 +68,13 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
 
 DlgResourceManager::~DlgResourceManager()
 {
-    qDeleteAll(m_tagModelsForResourceType);
-    qDeleteAll(m_resourceProxyModelsForResourceType);
-    delete m_storageModel;
-    delete m_resourceTypeModel;
-}
-
-void DlgResourceManager::slotResourceTypeSelected(int)
-{
-    QString selectedResourceType = getCurrentResourceType();
-    if (!m_tagModelsForResourceType.contains(selectedResourceType)) {
-        m_tagModelsForResourceType.insert(selectedResourceType, new KisTagModel(selectedResourceType));
-        m_tagModelsForResourceType[selectedResourceType]->sort(KisAllTagsModel::Name);
-    }
-
-    m_ui->cmbTag->setModel(m_tagModelsForResourceType[selectedResourceType]);
-
-    if (!m_resourceProxyModelsForResourceType.contains(selectedResourceType)) {
-        // the model will be owned by `proxyModel`
-        KisResourceModel* resourceModel = new KisResourceModel(selectedResourceType);
-        KIS_SAFE_ASSERT_RECOVER_RETURN(resourceModel);
-        resourceModel->setStorageFilter(KisResourceModel::ShowAllStorages);
-        resourceModel->setResourceFilter(m_ui->chkShowDeleted->isChecked() ? KisResourceModel::ShowAllResources : KisResourceModel::ShowActiveResources);
-
-        KisTagFilterResourceProxyModel* proxyModel = new KisTagFilterResourceProxyModel(selectedResourceType);
-        KIS_SAFE_ASSERT_RECOVER_RETURN(proxyModel);
-        proxyModel->setResourceModel(resourceModel);
-        proxyModel->sort(KisAbstractResourceModel::Name);
-        m_resourceProxyModelsForResourceType.insert(selectedResourceType, proxyModel);
-    }
-    m_resourceProxyModelsForResourceType[selectedResourceType]->setStorageFilter(true, getCurrentStorageId());
-    m_resourceProxyModelsForResourceType[selectedResourceType]->setTagFilter(getCurrentTag());
-
-    m_ui->resourceItemView->setModel(m_resourceProxyModelsForResourceType[selectedResourceType]);
-
-    if (selectedResourceType == ResourceType::Gradients) {
-        m_ui->resourceItemView->setFixedToolTipThumbnailSize(QSize(256, 64));
-        m_ui->resourceItemView->setToolTipShouldRenderCheckers(true);
-    }
-    else if (selectedResourceType == ResourceType::PaintOpPresets) {
-        m_ui->resourceItemView->setFixedToolTipThumbnailSize(QSize(128, 128));
-    } else if (selectedResourceType == ResourceType::Patterns || selectedResourceType == ResourceType::Palettes) {
-        m_ui->resourceItemView->setFixedToolTipThumbnailSize(QSize(256, 256));
-        m_ui->resourceItemView->setToolTipShouldRenderCheckers(false);
-    }
-
-}
-
-void DlgResourceManager::slotStorageSelected(int)
-{
-    if (!m_resourceProxyModelsForResourceType.contains(getCurrentResourceType())) {
-        return;
-    }
-    m_resourceProxyModelsForResourceType[getCurrentResourceType()]->setStorageFilter(true, getCurrentStorageId());
-}
-
-void DlgResourceManager::slotTagSelected(int)
-{
-    if (!m_resourceProxyModelsForResourceType.contains(getCurrentResourceType())) {
-        return;
-    }
-    m_resourceProxyModelsForResourceType[getCurrentResourceType()]->setTagFilter(getCurrentTag());
 }
 
 void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
 {
     Q_UNUSED(index);
-    QModelIndexList list = m_ui->resourceItemView->selectionModel()->selection().indexes();
-    KisTagFilterResourceProxyModel* model = m_resourceProxyModelsForResourceType[getCurrentResourceType()];
+    QModelIndexList list = m_wdgResourcePreview->geResourceItemsSelected();
+    KisTagFilterResourceProxyModel* model = m_wdgResourcePreview->getResourceProxyModelsForResourceType()[m_wdgResourcePreview->getCurrentResourceType()];
     if (list.size() == 1) {
         const QModelIndex idx = list[0];
         m_ui->lblFilename->setText(model->data(idx, Qt::UserRole + KisAllResourcesModel::Filename).toString());
@@ -207,7 +100,7 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         m_ui->lblThumbnail->setDisabled(false);
         m_ui->lneName->setDisabled(false);
         m_ui->lblId->setDisabled(false);
-        m_ui->lblMetadata->setText(constructMetadata(metadata, getCurrentResourceType()));
+        m_ui->lblMetadata->setText(constructMetadata(metadata, m_wdgResourcePreview->getCurrentResourceType()));
     } else if (list.size() > 1) {
 
         QString commonLocation = model->data(list.first(), Qt::UserRole + KisAllResourcesModel::Location).toString();
@@ -263,36 +156,21 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         resourceIds << resourceId;
     }
     updateDeleteButtonState(list);
-    m_tagsController->setResourceIds(getCurrentResourceType(), resourceIds);
-}
-
-void DlgResourceManager::slotFilterTextChanged(const QString &filterText)
-{
-    if (m_resourceProxyModelsForResourceType.contains(getCurrentResourceType())) {
-        m_resourceProxyModelsForResourceType[getCurrentResourceType()]->setSearchText(filterText);
-    }
-}
-
-void DlgResourceManager::slotShowDeletedChanged(int newState)
-{
-    Q_UNUSED(newState);
-
-    if (m_resourceProxyModelsForResourceType.contains(getCurrentResourceType())) {
-        m_resourceProxyModelsForResourceType[getCurrentResourceType()]->setResourceFilter(
-                    m_ui->chkShowDeleted->isChecked() ? KisTagFilterResourceProxyModel::ShowAllResources : KisTagFilterResourceProxyModel::ShowActiveResources);
-    }
+    m_tagsController->setResourceIds(m_wdgResourcePreview->getCurrentResourceType(), resourceIds);
 }
 
 void DlgResourceManager::slotDeleteResources()
 {
-    QModelIndexList list = m_ui->resourceItemView->selectionModel()->selection().indexes();
-    if (!m_resourceProxyModelsForResourceType.contains(getCurrentResourceType()) || list.empty()) {
+    QModelIndexList list = m_wdgResourcePreview->geResourceItemsSelected();
+    QMap<QString, KisTagFilterResourceProxyModel*> resourceProxyModelsForResourceType = m_wdgResourcePreview->getResourceProxyModelsForResourceType();
+
+    if (!resourceProxyModelsForResourceType.contains(m_wdgResourcePreview->getCurrentResourceType()) || list.empty()) {
         return;
     }
-    KisTagFilterResourceProxyModel *model = m_resourceProxyModelsForResourceType[getCurrentResourceType()];
-    KisAllResourcesModel *allModel = KisResourceModelProvider::resourceModel(getCurrentResourceType());
+    KisTagFilterResourceProxyModel *model = resourceProxyModelsForResourceType[m_wdgResourcePreview->getCurrentResourceType()];
+    KisAllResourcesModel *allModel = KisResourceModelProvider::resourceModel(m_wdgResourcePreview->getCurrentResourceType());
 
-    if (static_cast<QAbstractItemModel*>(model) != m_ui->resourceItemView->model()) {
+    if (static_cast<QAbstractItemModel*>(model) != m_wdgResourcePreview->getModel()) {
         qCritical() << "wrong item model!";
         return;
     }
@@ -319,8 +197,6 @@ void DlgResourceManager::slotImportResources()
     ResourceImporter importer(this);
     importer.importResources();
 
-
-
 }
 
 void DlgResourceManager::slotOpenResourceFolder()
@@ -341,21 +217,6 @@ void DlgResourceManager::slotCreateBundle()
 void DlgResourceManager::slotSaveTags()
 {
     KisResourceLocator::instance()->saveTags();
-}
-
-QString DlgResourceManager::getCurrentResourceType()
-{
-    return m_ui->cmbResourceType->currentData(Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
-}
-
-int DlgResourceManager::getCurrentStorageId()
-{
-    return m_ui->cmbStorage->currentData(Qt::UserRole + KisStorageModel::Id).toInt();
-}
-
-QSharedPointer<KisTag> DlgResourceManager::getCurrentTag()
-{
-    return m_ui->cmbTag->currentData(Qt::UserRole + KisAllTagsModel::KisTagRole).value<KisTagSP>();
 }
 
 void DlgResourceManager::updateDeleteButtonState(const QModelIndexList &list)

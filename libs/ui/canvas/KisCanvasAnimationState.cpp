@@ -194,6 +194,9 @@ public:
         }
     }
 
+Q_SIGNALS:
+    void sigPlaybackStatisticsUpdated();
+
 private:
     int m_originFrame; //!< The frame user started playback from.
     KisSignalAutoConnectionsStore m_cancelStrokeConnections;
@@ -215,8 +218,8 @@ public:
         : canvas(p_canvas)
         , displayProxy( new KisFrameDisplayProxy(p_canvas) )
         , playbackEnvironment( nullptr )
-        , playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
     {
+        m_statsTimer.setInterval(1000);
     }
 
     KisCanvas2 *canvas;
@@ -225,7 +228,9 @@ public:
     QScopedPointer<QFileInfo> media; // TODO: Should we just get this from the document instead?
     QScopedPointer<CanvasPlaybackEnvironment> playbackEnvironment;
 
-    KisSignalCompressor playbackStatisticsCompressor;
+    QTimer m_statsTimer;
+
+    qreal playbackSpeed {1.0};
 };
 
 KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
@@ -234,6 +239,7 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
 {
     setPlaybackState(STOPPED);
 
+    // Handle image-internal frame change case...
     connect(m_d->displayProxy.data(), SIGNAL(sigFrameChange()), this, SIGNAL(sigFrameChanged()));
 
     // Grow to new playback range when new frames added (configurable)...
@@ -251,7 +257,7 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
 
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioTracksChanged, this, &KisCanvasAnimationState::setupAudioTracks);
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioLevelChanged, this, &KisCanvasAnimationState::sigAudioLevelChanged);
-    setupAudioTracks();
+    connect(&m_d->m_statsTimer, SIGNAL(timeout()), this, SIGNAL(sigPlaybackStatisticsUpdated()));
 }
 
 KisCanvasAnimationState::~KisCanvasAnimationState()
@@ -295,24 +301,17 @@ KisFrameDisplayProxy *KisCanvasAnimationState::displayProxy()
     return m_d->displayProxy.data();
 }
 
-void KisCanvasAnimationState::showFrame(int frame, bool finalize)
+void KisCanvasAnimationState::setPlaybackSpeed(qreal value)
 {
-    m_d->displayProxy->displayFrame(frame, finalize);
-}
-
-void KisCanvasAnimationState::updateDropFramesMode()
-{
-    KisConfig cfg(true);
-}
-
-KisTimeSpan KisCanvasAnimationState::activePlaybackRange()
-{
-    if (!m_d->canvas || !m_d->canvas->image()) {
-        return KisTimeSpan::infinite(0);
+    if (!qFuzzyCompare(value, m_d->playbackSpeed)) {
+        m_d->playbackSpeed = value;
+        Q_EMIT sigPlaybackSpeedChanged(value);
     }
+}
 
-    const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    return animation->activePlaybackRange();
+qreal KisCanvasAnimationState::playbackSpeed() const
+{
+    return m_d->playbackSpeed;
 }
 
 void KisCanvasAnimationState::setupAudioTracks()
@@ -332,10 +331,28 @@ void KisCanvasAnimationState::setupAudioTracks()
             QFileInfo toLoad = files.first();
             KIS_SAFE_ASSERT_RECOVER_RETURN(toLoad.exists());
             m_d->media.reset(new QFileInfo(toLoad));
+
+            // Once media is attached we upgrade to the MLT-based playbackEngine...
+            KisPart::instance()->upgradeToPlaybackEngineMLT(m_d->canvas);
         }
 
         emit sigPlaybackMediaChanged();
     }
+}
+
+void KisCanvasAnimationState::showFrame(int frame, bool finalize)
+{
+    m_d->displayProxy->displayFrame(frame, finalize);
+}
+
+KisTimeSpan KisCanvasAnimationState::activePlaybackRange()
+{
+    if (!m_d->canvas || !m_d->canvas->image()) {
+        return KisTimeSpan::infinite(0);
+    }
+
+    const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    return animation->activePlaybackRange();
 }
 
 void KisCanvasAnimationState::setPlaybackState(PlaybackState p_state)
@@ -345,9 +362,15 @@ void KisCanvasAnimationState::setPlaybackState(PlaybackState p_state)
         if (m_d->state == PLAYING) {
             if (!m_d->playbackEnvironment) {
                 m_d->playbackEnvironment.reset(new CanvasPlaybackEnvironment(m_d->displayProxy->activeFrame(), this));
+                connect(m_d->playbackEnvironment.data(), SIGNAL(sigPlaybackStatisticsUpdated()),
+                        this, SIGNAL(sigPlaybackStatisticsUpdated()));
             }
 
             m_d->playbackEnvironment->prepare(m_d->canvas);
+
+            m_d->m_statsTimer.start();
+            Q_EMIT sigPlaybackStatisticsUpdated();
+
         } else {
             if (m_d->playbackEnvironment) {
                 m_d->playbackEnvironment->restore();
@@ -356,6 +379,9 @@ void KisCanvasAnimationState::setPlaybackState(PlaybackState p_state)
             if (m_d->state == STOPPED) {
                 m_d->playbackEnvironment.reset();
             }
+
+            m_d->m_statsTimer.stop();
+            Q_EMIT sigPlaybackStatisticsUpdated();
         }
 
         emit sigPlaybackStateChanged(m_d->state);

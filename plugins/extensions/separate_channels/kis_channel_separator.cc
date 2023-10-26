@@ -81,10 +81,15 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
     quint32 numberOfChannels = src->channelCount();
     const KoColorSpace * srcCs  = src->colorSpace();
-    QList<KoChannelInfo *> channels = srcCs->channels();
+    const QList<KoChannelInfo *> channels = srcCs->channels();
     vKisPaintDeviceSP paintDevices;
 
-    QRect rect = src->exactBounds();
+    /**
+     * We should process the entire image, even when its pixels are
+     * transparent, because we might be pulling colors from under a
+     * zero-alpha channel.
+     */
+    const QRect rect = image->bounds();
 
     KisImageBarrierLock lock(image);
     int i = 0;

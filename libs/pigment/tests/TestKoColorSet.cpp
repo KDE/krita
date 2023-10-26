@@ -146,13 +146,85 @@ void TestKoColorSet::testLoadKPL()
     QCOMPARE(set2.paletteType(), KoColorSet::KPL);
 
 }
+
+void TestKoColorSet::testLoadSBZ_data()
+{
+    QTest::addColumn<QString>("fileName");
+    QTest::addColumn<int>("expectedColorCount");
+    QTest::addColumn<QString>("sampleGroup");
+    QTest::addColumn<QPoint>("samplePoint");
+    QTest::addColumn<QString>("expectedColorModel");
+    QTest::addColumn<QString>("expectedColorDepth");
+    QTest::addColumn<QString>("expectedName");
+    QTest::addColumn<QString>("expectedId");
+    QTest::addColumn<QVector<float>>("expectedResult");
+
+    QTest::newRow("swatchbook.sbz")
+        << "swatchbook.sbz"
+        << 5
+        << "Sample swatch book" << QPoint(1, 0)
+        << RGBAColorModelID.id()
+        << Float32BitsColorDepthID.id()
+        << "Cyan 100%"
+        << "C10"
+        << QVector<float>({0,1,1,1});
+
+    QTest::newRow("sample_swatchbook.sbz")
+        << "sample_swatchbook.sbz"
+        << 47
+        << "" << QPoint(5, 1)
+        << CMYKAColorModelID.id()
+        << Float32BitsColorDepthID.id()
+        << "Cyan 90%"
+        << "C09"
+        << QVector<float>({90,0,0,0,1.0});
+}
+
 void TestKoColorSet::testLoadSBZ()
 {
-    KoColorSet set(QString(FILES_DATA_DIR)+ "/swatchbook.sbz");
+    QFETCH(QString, fileName);
+    QFETCH(int, expectedColorCount);
+    QFETCH(QString, sampleGroup);
+    QFETCH(QPoint, samplePoint);
+    QFETCH(QString, expectedColorModel);
+    QFETCH(QString, expectedColorDepth);
+    QFETCH(QString, expectedName);
+    QFETCH(QString, expectedId);
+    QFETCH(QVector<float>, expectedResult);
+
+    KoColorSet set(QString(FILES_DATA_DIR) + QDir::separator() + fileName);
     QVERIFY(set.load(KisGlobalResourcesInterface::instance()));
     QCOMPARE(set.paletteType(), KoColorSet::SBZ);
 
-    QCOMPARE(set.colorCount(), 5);
+    QCOMPARE(set.colorCount(), expectedColorCount);
+
+#if 0
+    qDebug() << set.swatchGroupNames();
+
+    const int numColumns = set.getGroup(sampleGroup)->columnCount();
+    const int numRows = set.getGroup(sampleGroup)->rowCount();
+
+    for (int row = 0; row < numRows; row++) {
+        for (int col = 0; col < numColumns; col++) {
+            KisSwatch s = set.getSwatchFromGroup(col, row, sampleGroup);
+
+            qDebug() << row << col << ppVar(s.name()) << ppVar(s.id()) << ppVar(s.color());
+        }
+    }
+#endif
+
+    KisSwatch s = set.getSwatchFromGroup(samplePoint.x(), samplePoint.y(), sampleGroup);
+    QCOMPARE(s.name(), expectedName);
+    QCOMPARE(s.id(), expectedId);
+
+    KoColor c = s.color();
+    QCOMPARE(c.colorSpace()->colorModelId().id(), expectedColorModel);
+    QCOMPARE(c.colorSpace()->colorDepthId().id(), expectedColorDepth);
+
+    const float *ptr = reinterpret_cast<float*>(c.data());
+    for (int i = 0; i < expectedResult.size(); i++) {
+        QCOMPARE(ptr[i], expectedResult[i]);
+    }
 
     set.setFilename("test.sbz");
     QVERIFY(set.save());

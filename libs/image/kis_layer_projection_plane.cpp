@@ -54,35 +54,7 @@ void KisLayerProjectionPlane::applyImpl(KisPainter *painter, const QRect &rect, 
 
     if(needRect.isEmpty()) return;
 
-    QBitArray channelFlags = m_d->layer->projectionLeaf()->channelFlags();
-
-
-    // if the color spaces don't match we will have a problem with the channel flags
-    // because the channel flags from the source layer doesn't match with the colorspace of the projection device
-    // this leads to the situation that the wrong channels will be enabled/disabled
-    const KoColorSpace* srcCS = device->colorSpace();
-    const KoColorSpace* dstCS = painter->device()->colorSpace();
-
-    if (!channelFlags.isEmpty() && srcCS != dstCS) {
-        bool alphaFlagIsSet        = (srcCS->channelFlags(false,true) & channelFlags) == srcCS->channelFlags(false,true);
-        bool allColorFlagsAreSet   = (srcCS->channelFlags(true,false) & channelFlags) == srcCS->channelFlags(true,false);
-        bool allColorFlagsAreUnset = (srcCS->channelFlags(true,false) & channelFlags).count(true) == 0;
-
-        if(allColorFlagsAreSet) {
-            channelFlags = dstCS->channelFlags(true, alphaFlagIsSet);
-        } else if(allColorFlagsAreUnset) {
-            channelFlags = dstCS->channelFlags(false, alphaFlagIsSet);
-        } else {
-            //TODO: convert the cannel flags properly
-            //      for now just the alpha channel bit is copied and the other channels are left alone
-            for (quint32 i=0; i < dstCS->channelCount(); ++i) {
-                if (dstCS->channels()[i]->channelType() == KoChannelInfo::ALPHA) {
-                    channelFlags.setBit(i, alphaFlagIsSet);
-                    break;
-                }
-            }
-        }
-    }
+    const QBitArray channelFlags = m_d->layer->projectionLeaf()->channelFlags();
 
     QScopedPointer<KisCachedPaintDevice::Guard> d1;
 

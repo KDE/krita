@@ -11,7 +11,7 @@ cpp = ['@CMAKE_CXX_COMPILER@'] + cross_compile_args
 ar = '@CMAKE_AR@'
 strip = '@CMAKE_STRIP@'
 pkgconfig = '@PKG_CONFIG_EXECUTABLE@'
-nasm = '@EXTPREFIX@/bin/nasm'
+nasm = '@MESON_NASM_PATH@'
 @_c_ld@
 @_cpp_ld@
 

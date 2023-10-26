@@ -43,6 +43,44 @@ qreal KisMyPaintOpSettings::paintOpSize() const
     return 2 * exp(m_d->paintOpSize);
 }
 
+void KisMyPaintOpSettings::setPaintOpAngle(qreal value)
+{
+    MyPaintEllipticalDabAngleData data;
+    data.read(this);
+
+    // Paintop angle is expressed in degrees already, but we need to reverse the rotation (MyPaint is clockwise).
+    // To do this, we subtract the angle difference instead of adding it to the old value.
+    const qreal angleDifference = value - data.strengthValue;
+    value = data.strengthValue - angleDifference;
+
+    // Shift the angle to zero, so that we can use fmod to wrap around
+    value -= data.strengthMinValue;
+
+    // Wrap the angle in [0, range]
+    const qreal range = data.strengthMaxValue - data.strengthMinValue;
+    if (value < 0)
+    {
+        value = range + std::fmod(value, range);
+    }
+    else if (value > range)
+    {
+        value = std::fmod(value, range);
+    }
+
+    // Shift back to the correct min/max range
+    value += data.strengthMinValue;
+
+    data.strengthValue = value;
+    data.write(this);
+}
+
+qreal KisMyPaintOpSettings::paintOpAngle() const
+{
+    MyPaintEllipticalDabAngleData data;
+    data.read(this);
+    return data.strengthValue;
+}
+
 void KisMyPaintOpSettings::setPaintOpOpacity(qreal value)
 {
     MyPaintOpacityData data;

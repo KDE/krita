@@ -431,6 +431,12 @@ Q_SIGNALS:
      */
     void statusTextChanged(const QString &statusText);
 
+    /**
+     * Emitted when the tool's text mode has changed.
+     * @param inTextMode whether it is now in text mode.
+     */
+    void textModeChanged(bool inTextMode);
+
 protected:
     /**
      * Classes inheriting from this one can call this method to signify which cursor

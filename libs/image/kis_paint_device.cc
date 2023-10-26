@@ -375,6 +375,7 @@ public:
         DataSP data = m_frames[frameId];
         data->setX(offset.x());
         data->setY(offset.y());
+        data->cache()->invalidate();
     }
 
     const QList<int> frameIds() const
@@ -403,6 +404,7 @@ public:
         KoColor color(defPixel);
         color.convertTo(data->colorSpace());
         data->dataManager()->setDefaultPixel(color.data());
+        data->cache()->invalidate();
     }
 
     KoColor frameDefaultPixel(int frameId) const
@@ -1600,7 +1602,7 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfil
     QImage image = _image;
 
     if (image.format() != QImage::Format_ARGB32) {
-        image = image.convertToFormat(QImage::Format_ARGB32);
+        image.convertTo(QImage::Format_ARGB32);
     }
     // Don't convert if not no profile is given and both paint dev and qimage are rgba.
     if (!profile && colorSpace()->id() == "RGBA") {

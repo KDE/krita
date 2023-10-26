@@ -20,6 +20,7 @@ private Q_SLOTS:
     void testUnitIn();
     void testUnitPercentInitial();
     void testScalingViewport();
+    void testScalingViewportNoScale();
     void testScalingViewportKeepMeet1();
     void testScalingViewportKeepMeet2();
     void testScalingViewportKeepMeetAlign();

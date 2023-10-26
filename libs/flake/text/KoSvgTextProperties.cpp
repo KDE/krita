@@ -119,13 +119,14 @@ bool KoSvgTextProperties::inheritsProperty(KoSvgTextProperties::PropertyId id, c
     return !hasProperty(id) || parentProperties.property(id) == property(id);
 }
 
-KoSvgTextProperties KoSvgTextProperties::ownProperties(const KoSvgTextProperties &parentProperties) const
+KoSvgTextProperties KoSvgTextProperties::ownProperties(const KoSvgTextProperties &parentProperties, bool keepFontSize) const
 {
     KoSvgTextProperties result;
 
     auto it = m_d->properties.constBegin();
     for (; it != m_d->properties.constEnd(); ++it) {
-        if (!parentProperties.hasProperty(it.key()) || parentProperties.property(it.key()) != it.value()) {
+        if ((keepFontSize && it.key() == FontSizeId) || !parentProperties.hasProperty(it.key())
+            || parentProperties.property(it.key()) != it.value()) {
             result.setProperty(it.key(), it.value());
         }
     }
@@ -1047,6 +1048,7 @@ QStringList KoSvgTextProperties::supportedXmlAttributes()
                << "kerning"
                << "letter-spacing"
                << "word-spacing"
+               << "xml:space"
                << "xml:lang";
     return attributes;
 }
@@ -1073,13 +1075,11 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
         s_defaultProperties->setProperty(LetterSpacingId, fromAutoValue(AutoValue()));
         s_defaultProperties->setProperty(WordSpacingId, fromAutoValue(AutoValue()));
 
-        QFont font;
-
-        s_defaultProperties->setProperty(FontFamiliesId, font.family());
-        s_defaultProperties->setProperty(FontStyleId, font.style());
+        s_defaultProperties->setProperty(FontFamiliesId, QStringLiteral("sans-serif"));
+        s_defaultProperties->setProperty(FontStyleId, QFont::StyleNormal);
         s_defaultProperties->setProperty(FontStretchId, 100);
         s_defaultProperties->setProperty(FontWeightId, 400);
-        s_defaultProperties->setProperty(FontSizeId, font.pointSizeF());
+        s_defaultProperties->setProperty(FontSizeId, 12.0);
         s_defaultProperties->setProperty(FontSizeAdjustId, fromAutoValue(AutoValue()));
 
         s_defaultProperties->setProperty(FontOpticalSizingId, true);

@@ -28,6 +28,7 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 
+#include <kis_algebra_2d.h>
 #include <kis_icon.h>
 #include <KoShape.h>
 #include <KoCanvasResourceProvider.h>
@@ -64,13 +65,23 @@
 #include <kis_action.h>
 #include "strokes/kis_color_sampler_stroke_strategy.h"
 #include "kis_popup_palette.h"
+#include "kis_paintop_utils.h"
+
+
+struct KisToolPaint::Private
+{
+    // Keeps track of past cursor positions. This is used to determine the drawing angle when
+    // drawing the brush outline or starting a stroke.
+    KisPaintOpUtils::PositionHistory lastCursorPos;
+};
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
     : KisTool(canvas, cursor),
       m_isOutlineEnabled(true),
       m_isOutlineVisible(true),
-      m_colorSamplerHelper(dynamic_cast<KisCanvas2*>(canvas))
+      m_colorSamplerHelper(dynamic_cast<KisCanvas2*>(canvas)),
+      m_d(new Private())
 {
 
     {
@@ -188,6 +199,11 @@ void KisToolPaint::activate(const QSet<KoShape*> &shapes)
 
     }
 
+    connect(action("rotate_brush_tip_clockwise"), SIGNAL(triggered()), SLOT(rotateBrushTipClockwise()), Qt::UniqueConnection);
+    connect(action("rotate_brush_tip_clockwise_precise"), SIGNAL(triggered()), SLOT(rotateBrushTipClockwisePrecise()), Qt::UniqueConnection);
+    connect(action("rotate_brush_tip_counter_clockwise"), SIGNAL(triggered()), SLOT(rotateBrushTipCounterClockwise()), Qt::UniqueConnection);
+    connect(action("rotate_brush_tip_counter_clockwise_precise"), SIGNAL(triggered()), SLOT(rotateBrushTipCounterClockwisePrecise()), Qt::UniqueConnection);
+
     tryRestoreOpacitySnapshot();
 }
 
@@ -197,6 +213,11 @@ void KisToolPaint::deactivate()
         disconnect(action("increase_brush_size"), 0, this, 0);
         disconnect(action("decrease_brush_size"), 0, this, 0);
     }
+
+    disconnect(action("rotate_brush_tip_clockwise"), 0, this, 0);
+    disconnect(action("rotate_brush_tip_clockwise_precise"), 0, this, 0);
+    disconnect(action("rotate_brush_tip_counter_clockwise"), 0, this, 0);
+    disconnect(action("rotate_brush_tip_counter_clockwise_precise"), 0, this, 0);
 
     tryRestoreOpacitySnapshot();
     emit statusTextChanged(QString());
@@ -223,8 +244,7 @@ KisOptimizedBrushOutline KisToolPaint::tryFixBrushOutline(const KisOptimizedBrus
 {
     KisConfig cfg(true);
 
-    bool useSeparateEraserCursor = cfg.separateEraserCursor() &&
-            canvas()->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE;
+    bool useSeparateEraserCursor = cfg.separateEraserCursor() && isEraser();
 
     const OutlineStyle currentOutlineStyle = !useSeparateEraserCursor ? cfg.newOutlineStyle() : cfg.eraserOutlineStyle();
     if (currentOutlineStyle == OUTLINE_NONE) return originalOutline;
@@ -572,6 +592,34 @@ void KisToolPaint::showBrushSize()
                                                    , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
+void KisToolPaint::rotateBrushTipClockwise()
+{
+    const qreal angle = currentPaintOpPreset()->settings()->paintOpAngle();
+    currentPaintOpPreset()->settings()->setPaintOpAngle(angle - 15);
+    requestUpdateOutline(m_outlineDocPoint, 0);
+}
+
+void KisToolPaint::rotateBrushTipClockwisePrecise()
+{
+    const qreal angle = currentPaintOpPreset()->settings()->paintOpAngle();
+    currentPaintOpPreset()->settings()->setPaintOpAngle(angle - 1);
+    requestUpdateOutline(m_outlineDocPoint, 0);
+}
+
+void KisToolPaint::rotateBrushTipCounterClockwise()
+{
+    const qreal angle = currentPaintOpPreset()->settings()->paintOpAngle();
+    currentPaintOpPreset()->settings()->setPaintOpAngle(angle + 15);
+    requestUpdateOutline(m_outlineDocPoint, 0);
+}
+
+void KisToolPaint::rotateBrushTipCounterClockwisePrecise()
+{
+    const qreal angle = currentPaintOpPreset()->settings()->paintOpAngle();
+    currentPaintOpPreset()->settings()->setPaintOpAngle(angle + 1);
+    requestUpdateOutline(m_outlineDocPoint, 0);
+}
+
 void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)
 {
     QRectF outlinePixelRect;
@@ -583,8 +631,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
         KisConfig cfg(true);
         KisPaintOpSettings::OutlineMode outlineMode;
 
-        bool useSeparateEraserCursor = cfg.separateEraserCursor() &&
-                canvas()->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE;
+        bool useSeparateEraserCursor = cfg.separateEraserCursor() && isEraser();
 
         const OutlineStyle currentOutlineStyle = !useSeparateEraserCursor ? cfg.newOutlineStyle() : cfg.eraserOutlineStyle();
         const auto outlineStyleIsVisible = [&]() {
@@ -676,6 +723,10 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
     m_oldColorPreviewUpdateRect = colorPreviewDocUpdateRect;
 }
 
+bool KisToolPaint::isEraser() const {
+    return canvas()->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE;
+}
+
 KisOptimizedBrushOutline KisToolPaint::getOutlinePath(const QPointF &documentPos,
                                                       const KoPointerEvent *event,
                                                       KisPaintOpSettings::OutlineMode outlineMode)
@@ -686,12 +737,22 @@ KisOptimizedBrushOutline KisToolPaint::getOutlinePath(const QPointF &documentPos
     KIS_ASSERT(canvas2);
     const KisCoordinatesConverter *converter = canvas2->coordinatesConverter();
 
-    KisPaintInformation info(convertToPixelCoord(documentPos));
+    const QPointF pixelPos = convertToPixelCoord(documentPos);
+    KisPaintInformation info(pixelPos);
     info.setCanvasMirroredH(canvas2->coordinatesConverter()->xAxisMirrored());
     info.setCanvasMirroredV(canvas2->coordinatesConverter()->yAxisMirrored());
     info.setCanvasRotation(canvas2->coordinatesConverter()->rotationAngle());
     info.setRandomSource(new KisRandomSource());
     info.setPerStrokeRandomSource(new KisPerStrokeRandomSource());
+
+    const qreal currentZoom = canvas2->resourceManager() ? canvas2->resourceManager()->resource(KoCanvasResource::EffectiveZoom).toReal() : 1.0;
+
+    QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(pixelPos, currentZoom);
+    qreal startAngle = KisAlgebra2D::directionBetweenPoints(prevPoint, pixelPos, 0);
+    KisDistanceInformation distanceInfo(prevPoint, startAngle);
+
+    KisPaintInformation::DistanceInformationRegistrar registrar =
+        info.registerDistanceInformation(&distanceInfo);
 
     KisOptimizedBrushOutline path = currentPaintOpPreset()->settings()->
         brushOutline(info,

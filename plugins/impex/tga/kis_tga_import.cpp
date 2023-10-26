@@ -234,7 +234,7 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
      * image to 24 bits.
      */
     if (!hasAlpha && tga.pixel_size == 32) {
-        img = img.convertToFormat(QImage::Format_RGB32);
+        img.convertTo(QImage::Format_RGB32);
         qWarning() << "WARNING: TGA image with 32-bit has all pixels transparent, removing alpha information.";
     }
 

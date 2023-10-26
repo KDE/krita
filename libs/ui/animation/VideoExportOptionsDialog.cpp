@@ -464,7 +464,7 @@ QStringList KisVideoExportOptionsDialog::generateCustomLine() const
     QStringList options;
 
     if (currentCodecId() == "libopenh264") {
-        options << "-c" << "libopenh264";
+        options << "-c:v" << "libopenh264";
         options << "-b:v" << QString::number(ui->intOpenH264bitrate->value()) + "k";
     } else if (currentCodecId() == "libx264") {
         options << "-crf" << QString::number(ui->intCRFH264->value());
@@ -523,7 +523,7 @@ QStringList KisVideoExportOptionsDialog::generateCustomLine() const
     } else if (currentCodecId() == "libtheora") {
         options << "-b" << QString::number(ui->intBitrate->value()) + "k";
     } else if (currentCodecId() == "libvpx-vp9") {
-        options << "-vcodec" << currentCodecId();
+        options << "-c:v" << currentCodecId();
         if (ui->vp9Lossless->isChecked()) {
             options << "-lossless" <<  "1";
         } else {

@@ -485,7 +485,7 @@ inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDe
     }
 
     if (!paramInfo.channelFlags.isEmpty()) {
-        const QBitArray onlyColor = colorSpace->channelFlags(true, false);
+        const QBitArray onlyColor = srcDev->colorSpace()->channelFlags(true, false);
         KIS_SAFE_ASSERT_RECOVER_NOOP(onlyColor.size() == paramInfo.channelFlags.size());
 
         // check if we have alpha channel locked

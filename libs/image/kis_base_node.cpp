@@ -117,6 +117,7 @@ quint8 KisBaseNode::opacity() const
 void KisBaseNode::setOpacity(quint8 val)
 {
     m_d->opacityProperty.set(val);
+    baseNodeChangedCallback();
 }
 
 quint8 KisBaseNode::percentOpacity() const

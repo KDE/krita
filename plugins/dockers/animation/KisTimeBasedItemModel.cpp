@@ -20,7 +20,7 @@
 #include "kis_keyframe_channel.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_processing_applicator.h"
-#include "KisImageBarrierLock.h""
+#include "KisImageBarrierLock.h"
 #include "commands_new/kis_switch_current_time_command.h"
 #include "kis_command_utils.h"
 #include "KisPart.h"
@@ -123,6 +123,7 @@ void KisTimeBasedItemModel::setImage(KisImageWSP p_image)
     }
 
     m_d->image = p_image;
+    m_d->numFramesOverride = m_d->effectiveNumFrames();
 
     if (m_d->image) {
         KisImageAnimationInterface *ai = m_d->image->animationInterface();
@@ -212,7 +213,7 @@ void KisTimeBasedItemModel::setLastVisibleFrame(int time)
 int KisTimeBasedItemModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return m_d->effectiveNumFrames();
+    return m_d->numFramesOverride;
 }
 
 QVariant KisTimeBasedItemModel::data(const QModelIndex &index, int role) const
@@ -328,7 +329,7 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
             SeekOptionFlags seekFlags = SeekOptionFlags(value.toInt());
             prioritizeCache(m_d->activeFrameIndex);
             if (!m_d->image->hasUpdatesRunning()) {
-                KisPart::instance()->playbackEngine()->seek(m_d->activeFrameIndex, seekFlags); // PROBLEM!
+                KisPart::instance()->playbackEngine()->seek(m_d->activeFrameIndex, seekFlags);
             }
             break;
         }
@@ -516,7 +517,7 @@ bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
     }
 
     KisProcessingApplicator::runSingleCommandStroke(m_d->image,
-                                                    new KisCommandUtils::SkipFirstRedoWrapper(parentCommand.take()),
+                                                    parentCommand.take(),
                                                     KisStrokeJobData::BARRIER,
                                                     KisStrokeJobData::EXCLUSIVE);
     return true;

@@ -43,6 +43,8 @@ v *  GNU General Public License for more details.
 
 #include <FlakeDebug.h>
 
+#include <QRegularExpression>
+
 namespace {
 
 const QString BIDI_CONTROL_LRE = "\u202a";
@@ -210,9 +212,10 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
                 KoSvgText::TextTransformInfo textTransformInfo =
                     q->s->properties.propertyOrDefault(KoSvgTextProperties::TextTransformId).value<KoSvgText::TextTransformInfo>();
                 QString lang = q->s->properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
+                QVector<QPair<int, int>> positions;
 
                 result = getBidiOpening(direction == KoSvgText::DirectionLeftToRight, bidi).size();
-                result += transformText(q->s->text, textTransformInfo, lang).size();
+                result += transformText(q->s->text, textTransformInfo, lang, positions).size();
                 result += getBidiClosing(bidi).size();
             } else {
                 result = q->s->text.size();
@@ -234,17 +237,21 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         int result = -1;
         int numCharsPassed = 0;
 
-        Q_FOREACH (KoShape *shape, q->shapes()) {
-            KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(chunkShape, 0);
+        if (isTextNode() && q == child) {
+            result = pos - numCharsPassed;
+        } else {
+            Q_FOREACH (KoShape *shape, q->shapes()) {
+                KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(chunkShape, 0);
 
-            if (chunkShape == child) {
-                result = pos + numCharsPassed;
-                break;
-            } else {
-                numCharsPassed += chunkShape->layoutInterface()->numChars();
+                if (chunkShape == child) {
+                    result = pos - numCharsPassed;
+                    break;
+                } else {
+                    numCharsPassed += chunkShape->layoutInterface()->numChars(true);
+                }
+
             }
-
         }
 
         return result;
@@ -326,14 +333,19 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         return result;
     }
 
-    static QString transformText(QString text, KoSvgText::TextTransformInfo textTransformInfo, const QString lang)
+    static QString transformText(QString text, KoSvgText::TextTransformInfo textTransformInfo, const QString &lang, QVector<QPair<int, int>> &positions)
     {
         if (textTransformInfo.capitals == KoSvgText::TextTransformCapitalize) {
-            text = KoCssTextUtils::transformTextCapitalize(text, lang);
+            text = KoCssTextUtils::transformTextCapitalize(text, lang, positions);
         } else if (textTransformInfo.capitals == KoSvgText::TextTransformUppercase) {
-            text = KoCssTextUtils::transformTextToUpperCase(text, lang);
+            text = KoCssTextUtils::transformTextToUpperCase(text, lang, positions);
         } else if (textTransformInfo.capitals == KoSvgText::TextTransformLowercase) {
-            text = KoCssTextUtils::transformTextToLowerCase(text, lang);
+            text = KoCssTextUtils::transformTextToLowerCase(text, lang, positions);
+        } else {
+            positions.clear();
+            for (int i = 0; i < text.size(); i++) {
+                positions.append(QPair<int, int>(i, i));
+            }
         }
 
         if (textTransformInfo.fullWidth) {
@@ -358,7 +370,8 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
             KoSvgText::TextTransformInfo textTransformInfo =
                 q->s->properties.propertyOrDefault(KoSvgTextProperties::TextTransformId).value<KoSvgText::TextTransformInfo>();
             QString lang = q->s->properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
-            const QString text = transformText(q->s->text, textTransformInfo, lang);
+            QVector<QPair<int, int>> positions;
+            const QString text = transformText(q->s->text, textTransformInfo, lang, positions);
             const KoSvgText::KoSvgCharChunkFormat format = q->fetchCharFormat();
             QVector<KoSvgText::CharTransformation> transforms = q->s->localTransformations;
 
@@ -376,18 +389,18 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
             const QString bidiClosing = getBidiClosing(bidi);
 
             if (!bidiOpening.isEmpty()) {
-                result << SubChunk(bidiOpening, format, textInPath, firstTextInPath);
+                result << SubChunk(bidiOpening, QString(), format, positions, textInPath, firstTextInPath);
                 firstTextInPath = false;
             }
 
             if (transforms.isEmpty()) {
-                result << SubChunk(text, format, textInPath, firstTextInPath);
+                result << SubChunk(text, q->s->text, format, positions, textInPath, firstTextInPath);
             } else {
-                result << SubChunk(text, format, transforms, textInPath, firstTextInPath);
+                result << SubChunk(text, q->s->text, format, transforms, positions, textInPath, firstTextInPath);
             }
 
             if (!bidiClosing.isEmpty()) {
-                result << SubChunk(bidiClosing, format, textInPath, firstTextInPath);
+                result << SubChunk(bidiClosing, QString(), format, positions, textInPath, firstTextInPath);
             }
             firstTextInPath = false;
 
@@ -462,6 +475,23 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         return q->s->textDecorations;
     }
 
+    void insertText(int start, QString text) override
+    {
+        if (!q->shapeCount()) {
+            if (start >= q->s->text.size()) {
+                q->s->text.append(text);
+            } else {
+                q->s->text.insert(start, text);
+            }
+        }
+    }
+    void removeText(int start, int length) override
+    {
+        if (isTextNode()) {
+            q->s->text.remove(start, length);
+        }
+    }
+
 private:
     KoSvgTextChunkShape *q;
 };
@@ -524,11 +554,11 @@ QPainterPath KoSvgTextChunkShape::outline() const
             KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
             KIS_SAFE_ASSERT_RECOVER_BREAK(chunkShape);
 
-            result |= chunkShape->outline();
+            result.addPath(chunkShape->outline());
         }
     }
 
-    return result.simplified();
+    return result;
 }
 
 void KoSvgTextChunkShape::paintComponent(QPainter &painter) const
@@ -562,7 +592,7 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
         parent ? parent->textProperties() : KoSvgTextProperties::defaultProperties();
 
     // XXX: we don't save fill, stroke, text length, length adjust or spacing and glyphs.
-    KoSvgTextProperties ownProperties = textProperties().ownProperties(parentProperties);
+    KoSvgTextProperties ownProperties = textProperties().ownProperties(parentProperties, isRootTextNode());
 
     if (isRootTextNode()) {
         context.shapeWriter().startElement("body", false);
@@ -744,7 +774,7 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
     KoSvgTextProperties parentProperties =
         parent ? parent->textProperties() : KoSvgTextProperties::defaultProperties();
 
-    KoSvgTextProperties ownProperties = textProperties().ownProperties(parentProperties);
+    KoSvgTextProperties ownProperties = textProperties().ownProperties(parentProperties, isRootTextNode());
 
     ownProperties = adjustPropertiesForFontSizeWorkaround(ownProperties);
 
@@ -886,91 +916,6 @@ bool KoSvgTextChunkShape::loadSvg(const QDomElement &e, SvgLoadingContext &conte
     return true;
 }
 
-namespace {
-
-QString cleanUpString(QString text) {
-    text.replace(QRegExp("[\\r\\n\u2028]"), "");
-    text.replace(QRegExp(" {2,}"), " ");
-    return text;
-}
-
-enum Result {
-    FoundNothing,
-    FoundText,
-    FoundSpace
-};
-
-Result hasPreviousSibling(QDomNode node)
-{
-    while (!node.isNull()) {
-        if (node.isElement()) {
-            QDomElement element = node.toElement();
-            if (element.tagName() == "text") break;
-        }
-
-
-        while (!node.previousSibling().isNull()) {
-            node = node.previousSibling();
-
-            while (!node.lastChild().isNull()) {
-                node = node.lastChild();
-            }
-
-            if (node.isText()) {
-                QDomText textNode = node.toText();
-                const QString text = cleanUpString(textNode.data());
-
-                if (!text.isEmpty()) {
-
-                    // if we are the leading whitespace, we should report that
-                    // we are the last
-
-                    if (text == " ") {
-                        return hasPreviousSibling(node) == FoundNothing ? FoundNothing : FoundSpace;
-                    }
-
-                    return text[text.size() - 1] != ' ' ? FoundText : FoundSpace;
-                }
-            }
-        }
-        node = node.parentNode();
-    }
-
-    return FoundNothing;
-}
-
-Result hasNextSibling(QDomNode node)
-{
-    while (!node.isNull()) {
-        while (!node.nextSibling().isNull()) {
-            node = node.nextSibling();
-
-            while (!node.firstChild().isNull()) {
-                node = node.firstChild();
-            }
-
-            if (node.isText()) {
-                QDomText textNode = node.toText();
-                const QString text = cleanUpString(textNode.data());
-
-                // if we are the trailing whitespace, we should report that
-                // we are the last
-                if (text == " ") {
-                    return hasNextSibling(node) == FoundNothing ? FoundNothing : FoundSpace;
-                }
-
-                if (!text.isEmpty()) {
-                    return text[0] != ' ' ? FoundText : FoundSpace;
-                }
-            }
-        }
-        node = node.parentNode();
-    }
-
-    return FoundNothing;
-}
-}
-
 bool KoSvgTextChunkShape::loadSvgTextNode(const QDomText &text, SvgLoadingContext &context)
 {
     SvgGraphicsContext *gc = context.currentGC();
@@ -978,28 +923,18 @@ bool KoSvgTextChunkShape::loadSvgTextNode(const QDomText &text, SvgLoadingContex
 
     s->loadContextBasedProperties(gc);
 
-    QString data = cleanUpString(text.data());
+    // In theory, the XML spec requires XML parsers to normalize line endings to
+    // LF. However, QXmlInputSource + QXmlSimpleReader do not do this, so we can
+    // end up with CR in the text. The SVG spec explicitly calls out that all
+    // newlines in SVG are to be represented by a single LF (U+000A) character,
+    // so we can replace all CRLF and CR into LF here for simplicity.
+    static const QRegularExpression s_regexCrlf(R"==((?:\r\n|\r(?!\n)))==");
+    QString content = text.data();
+    content.replace(s_regexCrlf, QStringLiteral("\n"));
 
-    const Result leftBorder = hasPreviousSibling(text);
-    const Result rightBorder = hasNextSibling(text);
+    s->text = std::move(content);
 
-    if (data.startsWith(' ') && leftBorder == FoundNothing) {
-        data.remove(0, 1);
-    }
-
-    if (data.endsWith(' ') && rightBorder != FoundText) {
-        data.remove(data.size() - 1, 1);
-    }
-
-    if (data == " " && (leftBorder == FoundNothing || rightBorder == FoundNothing)) {
-        data = "";
-    }
-
-    //ENTER_FUNCTION() << text.data() << "-->" << data;
-
-    s->text = text.data();
-
-    return !data.isEmpty();
+    return true;
 }
 
 void KoSvgTextChunkShape::simplifyFillStrokeInheritance()

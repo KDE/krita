@@ -145,6 +145,10 @@ public:
      */
     virtual QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations() = 0;
 
+    virtual void insertText(int index, QString text) = 0;
+
+    virtual void removeText(int index, int length) = 0;
+
     /**
      * A QTextLayout-compatible representation of a single leaf of
      * KoSvgTextChunkShape subtree
@@ -155,32 +159,42 @@ public:
         {
         }
 
-        SubChunk(QString _text, KoSvgText::KoSvgCharChunkFormat _format, bool textInPath = false, bool firstTextInPath = false)
+        SubChunk(QString _text, QString originalText, KoSvgText::KoSvgCharChunkFormat _format, const QVector<QPair<int, int>> &positions, bool textInPath = false, bool firstTextInPath = false)
             : text(std::move(_text))
+            , originalText(std::move(originalText))
             , format(std::move(_format))
+            , newToOldPositions(positions)
             , textInPath(textInPath)
             , firstTextInPath(firstTextInPath)
         {
         }
 
         SubChunk(QString _text,
+                 QString originalText,
                  KoSvgText::KoSvgCharChunkFormat _format,
                  const QVector<KoSvgText::CharTransformation> &t,
+                 const QVector<QPair<int, int>> &positions,
                  bool textInPath = false,
                  bool firstTextInPath = false)
             : text(std::move(_text))
+            , originalText(std::move(originalText))
             , format(std::move(_format))
             , transformation(t)
+            , newToOldPositions(positions)
             , textInPath(textInPath)
             , firstTextInPath(firstTextInPath)
         {
         }
 
         QString text;
+        QString originalText;
         KoSvgText::KoSvgCharChunkFormat format;
         QVector<KoSvgText::CharTransformation> transformation;
+        QVector<QPair<int, int>> newToOldPositions; ///< For transformed strings, we need to know which
+                                                    ///< original index matches which new index;
         bool textInPath = false;
-        bool firstTextInPath = false; // We need to mark the first text in path as an anchored chunk.
+        bool firstTextInPath = false; ///< We need to mark the first text in path as an anchored chunk.
+
     };
 
     /**

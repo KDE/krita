@@ -24,7 +24,7 @@ class ParallelRulerAssistant : public KisPaintingAssistant
 public:
     ParallelRulerAssistant();
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
-    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
+    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny, qreal moveThresholdPt) override;
     void adjustLine(QPointF &point, QPointF& strokeBegin) override;
     QPointF getDefaultEditorPosition() const override;
     int numHandles() const override { return isLocal() ? 4 : 2; }
@@ -42,7 +42,7 @@ protected:
     KisPaintingAssistantHandleSP secondLocalHandle() const override;
 
 private:
-    QPointF project(const QPointF& pt, const QPointF& strokeBegin);
+    QPointF project(const QPointF& pt, const QPointF& strokeBegin, qreal moveThresholdPt);
     explicit ParallelRulerAssistant(const ParallelRulerAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 
 };

@@ -210,7 +210,107 @@
      </property>
     </widget>
    </item>
+  <item>
+    <widget class="Line" name="editor_widget_control_line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+    <item>
+    <widget class="QLabel" name="editorWidgetText">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Editor Widget Control:</string>
+     </property>
+    </widget>
+   </item>
+    <item>
+      <widget class="QCheckBox" name="showMove">
+        <property name="enabled">
+          <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+          </sizepolicy>
+        </property>
+        <property name="text">
+          <string>Show Move</string>
+        </property>
+      </widget>
+    </item>
+    <item>
+      <widget class="QCheckBox" name="showSnap">
+        <property name="enabled">
+          <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+          </sizepolicy>
+        </property>
+        <property name="text">
+          <string>Show Snapping</string>
+        </property>
+      </widget>
+    </item>
+    <item>
+      <widget class="QCheckBox" name="showLock">
+        <property name="enabled">
+          <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+          </sizepolicy>
+        </property>
+        <property name="text">
+          <string>Show Lock</string>
+        </property>
+      </widget>
+    </item>
    <item>
+      <widget class="QCheckBox" name="showDuplicate">
+        <property name="enabled">
+          <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+          </sizepolicy>
+        </property>
+        <property name="text">
+          <string>Show Duplicate</string>
+        </property>
+      </widget>
+    </item>
+    <item>
+      <widget class="QCheckBox" name="showDelete">
+        <property name="enabled">
+          <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+          </sizepolicy>
+        </property>
+        <property name="text">
+          <string>Show Delete</string>
+        </property>
+      </widget>
+    </item>
+  <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
       <widget class="KisSliderSpinBox" name="customColorOpacitySlider" native="true">

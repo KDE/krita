@@ -12,6 +12,7 @@
 #include "Node.h"
 #include <kis_transform_mask_params_factory_registry.h>
 #include <commands_new/KisSimpleModifyTransformMaskCommand.h>
+#include "commands_new/KisLazyCreateTransformMaskKeyframesCommand.h"
 #include <kis_processing_applicator.h>
 
 
@@ -87,23 +88,28 @@ bool TransformMask::fromXML (const QString &xml)
         return false;
     }
 
-    KisTransformMaskParamsInterfaceSP params = KisTransformMaskParamsFactoryRegistry::instance()->createParams(main.attribute("id"), data);
+    QString id = main.attribute("id", "not-valid");
+
+    // backward compatibility
+    if (id == "animatedtransformparams") {
+        id = "tooltransformparams";
+    }
+
+    KisTransformMaskParamsInterfaceSP params = KisTransformMaskParamsFactoryRegistry::instance()->createParams(id, data);
 
     if (!params) {
         return false;
     }
 
-    KUndo2Command *cmd = new KUndo2Command();
+    QScopedPointer<KUndo2Command> cmd(new KUndo2Command);
 
-    if (mask->isAnimated()) {
-        KisAnimatedTransformParamsInterface* animInterface = dynamic_cast<KisAnimatedTransformParamsInterface*>(mask->transformParams().data());
-        KIS_ASSERT(animInterface);
-        animInterface->initializeKeyframes(mask, params, cmd);
-    } else {
-        cmd = new KisSimpleModifyTransformMaskCommand(mask, mask->transformParams(), params);
+    if (KisLazyCreateTransformMaskKeyframesCommand::maskHasAnimation(mask)) {
+        new KisLazyCreateTransformMaskKeyframesCommand(mask, cmd.data());
     }
 
-    KisProcessingApplicator::runSingleCommandStroke(this->node()->image(), cmd);
+    new KisSimpleModifyTransformMaskCommand(mask, params, {}, cmd.data());
+
+    KisProcessingApplicator::runSingleCommandStroke(this->node()->image(), cmd.take());
 
     return true;
 }

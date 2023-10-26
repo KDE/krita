@@ -15,6 +15,9 @@
 #include <KoCanvasBase.h>
 #include <KoShapeStroke.h>
 
+#include <KisViewManager.h>
+#include <canvas/kis_canvas2.h>
+#include <kis_canvas_resource_provider.h>
 #include <kis_shape_tool_helper.h>
 #include "kis_figure_painting_tool_helper.h"
 #include <brushengine/kis_paintop_preset.h>
@@ -24,6 +27,10 @@ KisToolEllipse::KisToolEllipse(KoCanvasBase * canvas)
 {
     setObjectName("tool_ellipse");
     setSupportOutline(true);
+
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+
+    connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
 }
 
 KisToolEllipse::~KisToolEllipse()
@@ -32,7 +39,11 @@ KisToolEllipse::~KisToolEllipse()
 
 void KisToolEllipse::resetCursorStyle()
 {
-    KisToolEllipseBase::resetCursorStyle();
+    if (isEraser() && (nodePaintAbility() == NodePaintAbility::PAINT)) {
+        useCursor(KisCursor::load("tool_ellipse_eraser_cursor.png", 6, 6));
+    } else {
+        KisToolEllipseBase::resetCursorStyle();
+    }
 
     overrideCursorIfNotEditable();
 }

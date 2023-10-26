@@ -40,6 +40,9 @@ public:
     QTransform forwardTransform() const;
     QTransform backwardTransform() const;
 
+    bool forceSubPixelTranslation() const;
+    void setForceSubPixelTranslation(bool value);
+
 private:
     void init(const QTransform &transform);
 
@@ -61,6 +64,7 @@ private:
     bool m_isIdentity;
     bool m_isTranslating;
     bool m_cropDst;
+    bool m_forceSubPixelTranslation {false};
 };
 
 #endif

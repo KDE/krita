@@ -31,9 +31,6 @@ public:
 
     KisPaintOpSettingsSP clone() const override;
 
-    void setAngle(qreal value);
-    qreal angle();
-
     void setSpacing(qreal spacing);
     qreal spacing();
 
@@ -44,6 +41,9 @@ public:
 
     void setPaintOpSize(qreal value) override;
     qreal paintOpSize() const override;
+
+    void setPaintOpAngle(qreal value) override;
+    qreal paintOpAngle() const override;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy) override;
 

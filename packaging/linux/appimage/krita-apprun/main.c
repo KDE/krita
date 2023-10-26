@@ -79,66 +79,80 @@ int needs_replace_library(const char *library, const char *base_library)
     snprintf(str, length, format, __VA_ARGS__);   \
     putenv(str);
 
-int main(int argc, char **argv)
+void try_replace_library(const char *library_name, const char *fallback_dir_name)
 {
     char buf[PATH_MAX] = "";
     char real_library_path[PATH_MAX];
 
-    void *handle = dlopen("libstdc++.so.6", RTLD_LAZY);
+    void *handle = dlopen(library_name, RTLD_LAZY);
 
     if (handle) {
-        struct link_map *info;
-        int result = dlinfo(handle, RTLD_DI_LINKMAP, &info);
-        
-        if (result == 0) {
+         struct link_map *info;
+         int result = dlinfo(handle, RTLD_DI_LINKMAP, &info);
+
+         if (result == 0) {
             if (realpath(info->l_name, real_library_path)) {
                 // noop
             } else {
-                die("Couldn't resolve the name of system libstdc++.so.6");
+                die("Couldn't resolve the name of system %s", library_name);
             }
-        } else {
-            die("Couldn't get info for libstdc++.so.6");
-        }
+         } else {
+            die("Couldn't get info for %s", library_name);
+         }
     } else {
-        die("Couldn't load libstdc++.so.6");
+         die("Couldn't load %s", library_name);
     }
-    
+
     char appdir_buf[PATH_MAX] = "";
     char *appdir = dirname(realpath("/proc/self/exe", appdir_buf));
     if (!appdir) {
-        die("Could not access /proc/self/exe\n");
+         die("Could not access /proc/self/exe\n");
     }
 
     char fallback_library[PATH_MAX] = "";
-    strcat(fallback_library, appdir);
-    strcat(fallback_library, "/usr/libstdcpp-fallback/libstdc++.so.6");
-
+    snprintf(fallback_library, PATH_MAX, "%s/usr/%s/%s", appdir, fallback_dir_name, library_name);
 
     if (realpath(fallback_library, buf)) {
-        strcpy(fallback_library, buf);
+         strcpy(fallback_library, buf);
     } else {
-        die("Could not access $(APPDIR)/usr/libstdcpp-fallback/libstdc++.so.6\n");
+         die("Could not access $(APPDIR)/usr/%s/%s\n", fallback_dir_name, library_name);
     }
 
-    char library_prefix[] = "libstdc++.so.";
-    char *fallback_library_name = strstr(fallback_library, "libstdc++.so.6");
-    char *real_library_name = strstr(real_library_path, "libstdc++.so.6");
 
-    // printf("fallback_library_name %s\n", fallback_library_name);
-    // printf("real_library_name %s\n", real_library_name);
+    const int version_offset = strlen(library_name) + 1;
+    char *fallback_library_name = strstr(fallback_library, library_name);
+    char *real_library_name = strstr(real_library_path, library_name);
 
-    size_t appdir_s = strlen(appdir);
+//    printf("fallback_library_name %s\n", fallback_library_name);
+//    printf("real_library_name %s\n", real_library_name);
 
     char *old_env;
     size_t length;
     const char *format;
 
-    if (needs_replace_library(real_library_name + sizeof(library_prefix), fallback_library_name + sizeof(library_prefix))) {
-        printf("Replacing libstdc++.so.6 with the fallback version: %s -> %s\n", real_library_name, fallback_library_name);
+    if (needs_replace_library(real_library_name + version_offset, fallback_library_name + version_offset)) {
+         printf("Replacing %s with the fallback version: %s -> %s\n", library_name, real_library_name, fallback_library_name);
 
-        old_env = getenv("LD_LIBRARY_PATH") ?: "";
-        SET_NEW_ENV(new_ld_library_path, appdir_s*10 + strlen(old_env), "LD_LIBRARY_PATH=%s/usr/libstdcpp-fallback/:%s", appdir, old_env);
+         old_env = getenv("LD_LIBRARY_PATH");
+         if (!old_env) old_env = "";
+
+         SET_NEW_ENV(new_ld_library_path,
+                     strlen(appdir) + strlen(fallback_dir_name) + strlen(old_env),
+                     "LD_LIBRARY_PATH=%s/usr/%s/:%s", appdir, fallback_dir_name, old_env);
+         old_env = getenv("LD_LIBRARY_PATH") ?: "";
     }
+}
+
+
+int main(int argc, char **argv)
+{
+    char appdir_buf[PATH_MAX] = "";
+    char *appdir = dirname(realpath("/proc/self/exe", appdir_buf));
+    if (!appdir) {
+         die("Could not access /proc/self/exe\n");
+    }
+
+    try_replace_library("libstdc++.so.6", "libstdcpp-fallback");
 
     char exec_path[PATH_MAX] = "";
     strcpy(exec_path, appdir);

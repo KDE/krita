@@ -213,11 +213,11 @@ public:
      * Resets the internal state of the matcher, tries to resync it to the state
      * passed via argument and activates the prepared action if possible.
      *
-     * This synchronization should happen when the user hovers Krita windows,
+     * This synchronization happens when the user hovers Krita windows,
      * **without** having keyboard focus set to it (therefore matcher cannot
-     * get key press and release events).
+     * get key press and release events), and is also used for various other fixes.
      */
-    void recoveryModifiersWithoutFocus(const QVector<Qt::Key> &keys);
+    void handlePolledKeys(const QVector<Qt::Key> &keys);
 
     /**
      * Sanity check correctness of the internal state of the matcher
@@ -228,10 +228,14 @@ public:
     bool sanityCheckModifiersCorrectness(Qt::KeyboardModifiers modifiers) const;
 
     /**
-     * Return the internal state of the tracked modifiers. Used for debugging
-     * and error reporting only.
+     * Return the internal state of the tracked modifiers.
      */
     QVector<Qt::Key> debugPressedKeys() const;
+
+    /**
+     * Check if polled keys are present, which signals that we need to call KisInputManager::Private::fixShortcutMatcherModifiersState.
+     */
+    bool hasPolledKeys();
 
     /**
      * Krita lost focus, it means that all the running actions should be ended
@@ -255,6 +259,22 @@ public:
     void suppressAllActions(bool value);
 
     /**
+     * Disable one-time actions whose shortcuts conflict with the listed shortcuts
+     */
+    void suppressConflictingKeyActions(const QVector<QKeySequence> &shortcuts);
+
+    /**
+     * Disable keyboard actions.
+     *
+     * This will disable all actions that consist of only
+     * keyboard keys being pressed without mouse or stylus
+     * buttons being pressed.
+     *
+     * This is turned on when the tool is in text mode.
+     */
+    void suppressAllKeyboardActions(bool value);
+
+    /**
      * Remove all shortcuts that have been registered.
      */
     void clearShortcuts();
@@ -268,7 +288,7 @@ private:
     void reset(QString msg);
 
     bool tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event);
-    template<typename T, typename U> bool tryRunSingleActionShortcutImpl(T param, U *event, const QSet<Qt::Key> &keysState);
+    template<typename T, typename U> bool tryRunSingleActionShortcutImpl(T param, U *event, const QSet<Qt::Key> &keysState, bool keyboard = true);
 
     void prepareReadyShortcuts();
 

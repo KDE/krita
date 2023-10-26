@@ -18,9 +18,6 @@ LangString SectionRemoveOldVerDesc ${CURRENT_LANG} "卸载之前安装的 Krita 
 LangString SectionShellEx ${CURRENT_LANG} "文件资源管理器插件"
 LangString SectionShellExDesc ${CURRENT_LANG} "安装此插件后，Windows 文件资源管理器即可显示 Krita 文件的缩略图和属性信息。$\r$\n$\r$\n版本: ${KRITASHELLEX_VERSION}"
 LangString SectionMainDesc ${CURRENT_LANG} "${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}$\r$\n$\r$\n版本: ${KRITA_VERSION}"
-# We don't actually bundle FFmpeg so these are not shown.
-LangString SectionBundledFfmpeg ${CURRENT_LANG} "FFmpeg 软件包"
-LangString SectionBundledFfmpegDesc ${CURRENT_LANG} "安装本安装程序自带的 FFmpeg 软件包，用于导出动画。"
 
 # Main dialog strings:
 LangString SetupLangPrompt ${CURRENT_LANG} "请选择安装程序显示的语言:"

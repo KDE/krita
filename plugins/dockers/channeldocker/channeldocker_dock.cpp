@@ -20,15 +20,15 @@
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_paint_device.h>
-#include "kis_signal_compressor.h"
 #include <KisView.h>
 #include <kis_idle_watcher.h>
+#include "KisChannelsThumbnailsStrokeStrategy.h"
+#include <kis_display_color_converter.h>
 
-ChannelDockerDock::ChannelDockerDock( ) :
-    QDockWidget(i18nc("Channel as in Color Channels", "Channels")),
-    m_imageIdleWatcher(new KisIdleWatcher(250, this)),
-    m_canvas(0)
+ChannelDockerDock::ChannelDockerDock()
 {
+    setWindowTitle(i18nc("Channel as in Color Channels", "Channels"));
+
     m_channelTable = new QTableView(this);
     m_model = new ChannelModel(this);
     m_channelTable->setModel(m_model);
@@ -47,68 +47,73 @@ ChannelDockerDock::ChannelDockerDock( ) :
     setWidget(m_channelTable);
 
     connect(m_channelTable,&QTableView::activated, m_model, &ChannelModel::rowActivated);
-    connect(m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &ChannelDockerDock::updateChannelTable);
 }
 
 void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
 {
-    if(m_canvas == canvas)
-        return;
-
-    setEnabled(canvas != 0);
-
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
         m_canvas->image()->disconnect(this);
     }
 
-    if (!canvas) {
-        m_canvas = 0;
-        return;
-    }
+    KisCanvas2 *newCanvas = canvas ? dynamic_cast<KisCanvas2*>(canvas) : nullptr;
 
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    if ( m_canvas && m_canvas->image() ) {
-        m_model->slotSetCanvas(m_canvas);
+    KisWidgetWithIdleTask<QDockWidget>::setCanvas(newCanvas);
+    m_model->setCanvas(newCanvas);
 
-        KisPaintDeviceSP dev = m_canvas->image()->projection();
-
-        m_imageIdleWatcher->setTrackedImage(m_canvas->image());
-
-        connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(startUpdateCanvasProjection()), Qt::UniqueConnection);
-
-        connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_model, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
+    if (m_canvas) {
+        connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()), SLOT(startUpdateCanvasProjection()));
         connect(m_model, SIGNAL(channelFlagsChanged()), m_canvas, SLOT(channelSelectionChanged()));
-        m_imageIdleWatcher->forceImageModified();
     }
 
+    setEnabled(bool(canvas));
 }
 
 void ChannelDockerDock::unsetCanvas()
 {
-    setEnabled(false);
-    m_canvas = 0;
-    m_model->unsetCanvas();
-}
-
-void ChannelDockerDock::showEvent(QShowEvent *event)
-{
-    Q_UNUSED(event);
-    m_imageIdleWatcher->forceImageModified();
+    setCanvas(0);
 }
 
 void ChannelDockerDock::startUpdateCanvasProjection()
 {
-    m_imageIdleWatcher->forceImageModified();
+    triggerCacheUpdate();
 }
 
-void ChannelDockerDock::updateChannelTable()
+KisIdleTasksManager::TaskGuard ChannelDockerDock::registerIdleTask(KisCanvas2 *canvas)
 {
-    if (isVisible() && m_canvas && m_canvas->image()){
-        m_model->updateData(m_canvas);
-        m_channelTable->resizeRowsToContents();
-        m_channelTable->resizeColumnsToContents();
-    }
+    return
+        canvas->viewManager()->idleTasksManager()->
+        addIdleTaskWithGuard([this](KisImageSP image) {
+            const KoColorProfile *profile =
+                m_canvas->displayColorConverter()->monitorProfile();
+            KoColorConversionTransformation::ConversionFlags conversionFlags =
+                m_canvas->displayColorConverter()->conversionFlags();
+            KoColorConversionTransformation::Intent renderingIntent =
+                m_canvas->displayColorConverter()->renderingIntent();
+
+            const QSize previewSize = m_model->thumbnailSizeLimit();
+
+            KisChannelsThumbnailsStrokeStrategy *strategy =
+                new KisChannelsThumbnailsStrokeStrategy(image->projection(), image->bounds(),
+                                                        previewSize, false, profile,
+                                                        renderingIntent, conversionFlags);
+
+            connect(strategy, SIGNAL(thumbnailsUpdated(QVector<QImage>, const KoColorSpace*)), this, SLOT(updateImageThumbnails(QVector<QImage>, const KoColorSpace*)));
+
+            return strategy;
+        });
+}
+
+void ChannelDockerDock::updateImageThumbnails(const QVector<QImage> &channels, const KoColorSpace *cs)
+{
+    m_model->setChannelThumbnails(channels, cs);
+    m_channelTable->resizeRowsToContents();
+    m_channelTable->resizeColumnsToContents();
+}
+
+void ChannelDockerDock::clearCachedState()
+{
+    m_model->setChannelThumbnails({}, nullptr);
 }
 
 

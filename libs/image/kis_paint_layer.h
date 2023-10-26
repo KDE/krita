@@ -143,6 +143,9 @@ public:
     void setDecorationsVisible(bool value, bool update) override;
     using KisDecoratedNodeInterface::setDecorationsVisible;
 
+    void handleKeyframeChannelFrameChange(const KisKeyframeChannel *channel, int time) override;
+    void handleKeyframeChannelFrameAdded(const KisKeyframeChannel *channel, int time) override;
+
 public Q_SLOTS:
     void slotExternalUpdateOnionSkins();
 
@@ -162,6 +165,7 @@ protected:
 
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
     bool supportsKeyframeChannel(const QString &id) override;
+    KisFrameChangeUpdateRecipe handleKeyframeChannelFrameAboutToBeRemovedImpl(const KisKeyframeChannel *channel, int time) override;
 
 private:
     struct Private;

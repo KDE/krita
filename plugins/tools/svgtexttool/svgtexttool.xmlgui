@@ -59,6 +59,12 @@
       <!--Action name="svg_align_justified"/-->
       <Separator/>
       <Action name="svg_font_kerning"/>
+      <Menu name="svg_text_wrapping">
+        <text>Text W&amp;rapping</text>
+        <Action name="svg_text_wrapping_legacy"/>
+        <Action name="svg_text_wrapping_css_pre"/>
+        <Action name="svg_text_wrapping_css_pre_wrap"/>
+      </Menu>
     </Menu>
     <Menu name="settings">
       <text>Setti&amp;ngs</text>
@@ -97,6 +103,12 @@
     <Action name="svg_line_height"/>
     <Action name="svg_letter_spacing"/>
     <Action name="svg_font_kerning"/>
+    <Menu name="svg_text_wrapping">
+      <text>Text W&amp;rapping</text>
+      <Action name="svg_text_wrapping_legacy"/>
+      <Action name="svg_text_wrapping_css_pre"/>
+      <Action name="svg_text_wrapping_css_pre_wrap"/>
+    </Menu>
   </ToolBar>
   
   

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
 
 set(SUPPORTED_LANGUAGES CXX C)
 
@@ -63,7 +63,12 @@ if (POLICY CMP0071)
     cmake_policy(SET CMP0071 NEW)
 endif()
 
+if (POLICY CMP0135)
+    cmake_policy(SET CMP0135 NEW)
+endif()
+
 if (APPLE)
+    add_subdirectory(packaging/macos)
     set(MACOSX_RPATH TRUE)
     set(APPLE_SUPPRESS_X11_WARNING TRUE)
     set(KDE_SKIP_RPATH_SETTINGS TRUE)
@@ -99,11 +104,11 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "5.2.0-prealpha")
+set(KRITA_VERSION_STRING "5.3.0-prealpha")
 # Major version: 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MAJOR 5)
 # Minor version: 0 for 4.0, 1 for 4.1, etc.
-set(KRITA_STABLE_VERSION_MINOR 2)
+set(KRITA_STABLE_VERSION_MINOR 3)
 # Bugfix release version, or 0 for before the first stable release
 set(KRITA_VERSION_RELEASE 0)
 # the 4th digit, really only used for the Windows installer:
@@ -258,6 +263,8 @@ option(KRITA_ENABLE_PCH "Enable precompiled headers support" OFF)
 add_feature_info("Precompiled Headers" KRITA_ENABLE_PCH "precompiled headers make build process faster on some systems")
 
 option(DISABLE_PO_INSTALLATION "Disable installation of po files" OFF)
+
+option(USE_EXTERNAL_RAQM "Fetch Raqm dependency online instead of the embedded one" OFF)
 
 set(ADDRESS_SANITIZER_ENABLED FALSE)
 if (ECM_ENABLE_SANITIZERS MATCHES address)
@@ -445,9 +452,8 @@ QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI);
     configure_file(config_use_qt_tablet_windows.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_use_qt_tablet_windows.h)
 endif ()     
 
-
-set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
-set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES})
+set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
+set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES})
 
 CHECK_CXX_SOURCE_COMPILES("
 #include <QSurfaceFormat>
@@ -472,6 +478,17 @@ QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRound
 HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
 )
 configure_file(config-high-dpi-scale-factor-rounding-policy.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-high-dpi-scale-factor-rounding-policy.h)
+
+CHECK_CXX_SOURCE_COMPILES("
+#include <QMdiArea>
+int main(int argc, char *argv[]) {
+QMdiArea area;
+area.setOption(QMdiArea::AlwaysShowSubwindowNameInTitleBar);
+}
+"
+HAVE_QMDIAREA_ALWAYS_SHOW_SUBWINDOW_TITLE
+)
+configure_file(config-qmdiarea-always-show-subwindow-title.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qmdiarea-always-show-subwindow-title.h)
 
 if (WIN32)
     CHECK_CXX_SOURCE_COMPILES("
@@ -1052,7 +1069,7 @@ endif()
 ##
 ## Test for xsimd
 ##
-foreach(xsimd_version 8.1.0 9 10)
+foreach(xsimd_version 8.1.0 9 10 11)
     if(NOT xsimd_FOUND)
         find_package(xsimd ${xsimd_version})
     endif()
@@ -1150,16 +1167,7 @@ if (HarfBuzz_FOUND)
     list(APPEND ANDROID_EXTRA_LIBS ${HarfBuzz_LIBRARIES})
 endif()
 
-##
-## Check for raqm
-##
-find_package(Raqm 0.10.0 REQUIRED)
-set_package_properties(Raqm PROPERTIES
-    DESCRIPTION "Raqm is a small library that encapsulates the logic for complex text layout and provides a convenient API."
-    URL "https://github.com/HOST-Oman/libraqm"
-    TYPE REQUIRED
-    PURPOSE "Needed for rendering text vector shapes."
-)
+# Note: We now build a patched raqm from source with Krita.
 
 ##
 ## Check for fontconfig
@@ -1180,6 +1188,27 @@ set_package_properties(libunibreak PROPERTIES
     TYPE REQUIRED
     PURPOSE "Needed for rendering text vector shapes."
 )
+
+##
+## Build vendored libraries
+##
+
+# Allow specification of a directory with pre-downloaded
+# requirements. This download directory is used for 3rdparty_vendor
+# download
+
+if(DEFINED ENV{EXTERNALS_DOWNLOAD_DIR})
+    set(EXTERNALS_DOWNLOAD_DIR $ENV{EXTERNALS_DOWNLOAD_DIR})
+endif()
+
+if(NOT IS_DIRECTORY ${EXTERNALS_DOWNLOAD_DIR})
+    message(WARNING "No externals download dir set, default location inside build tree is used. Use -DEXTERNALS_DOWNLOAD_DIR to override")
+else()
+    file(TO_CMAKE_PATH "${EXTERNALS_DOWNLOAD_DIR}" EXTERNALS_DOWNLOAD_DIR)
+endif()
+
+add_subdirectory(3rdparty_vendor)
+
 
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)
     find_package(KF5I18n CONFIG REQUIRED)

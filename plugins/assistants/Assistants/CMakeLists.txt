@@ -2,6 +2,7 @@ add_subdirectory(tests)
 
 set(kritaassistanttool_SOURCES
     ConcentricEllipseAssistant.cc
+    CurvilinearPerspectiveAssistant.cc
     Ellipse.cc
     EllipseAssistant.cc
     FisheyePointAssistant.cc

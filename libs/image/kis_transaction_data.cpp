@@ -243,7 +243,6 @@ void KisTransactionData::Private::possiblySwitchCurrentTime()
 {
     if (device->defaultBounds()->currentTime() == transactionTime) return;
 
-    qWarning() << "WARNING: undo command has been executed, when another frame has been active. That shouldn't have happened.";
     device->requestTimeSwitch(transactionTime);
 }
 

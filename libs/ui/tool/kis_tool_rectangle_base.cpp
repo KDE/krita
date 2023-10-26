@@ -320,17 +320,22 @@ void KisToolRectangleBase::endPrimaryAction(KoPointerEvent *event)
 
 void KisToolRectangleBase::requestStrokeEnd()
 {
+    if (mode() != KisTool::PAINT_MODE) {
+        return;
+    }
     endStroke();
 }
 
 void KisToolRectangleBase::requestStrokeCancellation()
 {
+    if (mode() != KisTool::PAINT_MODE) {
+        return;
+    }
     cancelStroke();
 }
 
 void KisToolRectangleBase::endStroke()
 {
-    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
     updateArea();
     finishRect(createRect(m_dragStart, m_dragEnd), m_roundCornersX, m_roundCornersY);
@@ -339,7 +344,6 @@ void KisToolRectangleBase::endStroke()
 
 void KisToolRectangleBase::cancelStroke()
 {
-    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
     updateArea();
     endShape();

@@ -232,7 +232,7 @@ SectionEnd
 
 Section "${KRITA_PRODUCTNAME}" SEC_product_main
 	# TODO: Maybe switch to explicit file list?
-	File /r /x ffmpeg.exe /x ffmpeg_README.txt /x ffmpeg_LICENSE.txt ${KRITA_PACKAGE_ROOT}\bin
+	File /r ${KRITA_PACKAGE_ROOT}\bin
 	File /r ${KRITA_PACKAGE_ROOT}\lib
 	File /r ${KRITA_PACKAGE_ROOT}\share
 	File /r ${KRITA_PACKAGE_ROOT}\python
@@ -284,14 +284,6 @@ Section "$(SectionShellEx)" SEC_shellex
 	                 "KritaExePath" "$INSTDIR\bin\krita.exe"
 SectionEnd
 
-!ifdef HAS_FFMPEG
-Section "$(SectionBundledFfmpeg)" SEC_ffmpeg
-	File /oname=bin\ffmpeg.exe ${KRITA_PACKAGE_ROOT}\bin\ffmpeg.exe
-	File /oname=bin\ffmpeg_LICENSE.txt ${KRITA_PACKAGE_ROOT}\bin\ffmpeg_LICENSE.txt
-	File /oname=bin\ffmpeg_README.txt ${KRITA_PACKAGE_ROOT}\bin\ffmpeg_README.txt
-SectionEnd
-!endif
-
 Section "-Main_refreshShell"
 	${RefreshShell}
 SectionEnd
@@ -315,9 +307,6 @@ SectionEnd
 	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_remove_old_version} "$(SectionRemoveOldVerDesc)"
 	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_product_main} "$(SectionMainDesc)"
 	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_shellex} "$(SectionShellExDesc)"
-!ifdef HAS_FFMPEG
-	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_ffmpeg} "$(SectionBundledFfmpegDesc)"
-!endif
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Section "un.$(SectionShellEx)"
@@ -388,9 +377,6 @@ Function .onInit
 	!insertmacro SetSectionFlag ${SEC_product_main} ${SF_RO}
 	!insertmacro SetSectionFlag ${SEC_product_main} ${SF_BOLD}
 	!insertmacro SetSectionFlag ${SEC_remove_old_version} ${SF_RO}
-!ifdef HAS_FFMPEG
-	!insertmacro SetSectionFlag ${SEC_ffmpeg} ${SF_RO}
-!endif
 	StrCpy $CreateDesktopIcon 1 # Create desktop icon by default
 	${IfNot} ${AtLeastWin7}
 		${IfNot} ${Silent}

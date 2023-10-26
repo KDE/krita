@@ -92,6 +92,13 @@ if [ -d $APPDIR/usr/lib/python3.10/site-packages ]; then
     rm -rf $APPDIR/usr/lib/python3.10/site-packages/easy-install.pth
 fi
 
+## Font related deps are explicitly ignored by AppImage build script,
+## so we should copy them manually
+cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libfontconfig.so.1* $APPDIR/usr/lib/
+cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libharfbuzz.so.0* $APPDIR/usr/lib/
+cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libfribidi.so.0* $APPDIR/usr/lib/
+cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libfreetype.so.6* $APPDIR/usr/lib/
+
 ## == MLT Dependencies and Resources ==
 cp -r $DEPS_INSTALL_PREFIX/share/mlt-7 $APPDIR/usr/share/mlt
 cp -r $DEPS_INSTALL_PREFIX/lib/mlt-7 $APPDIR/usr/lib/mlt

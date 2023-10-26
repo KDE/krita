@@ -5,6 +5,7 @@ set(KRITA_ANIMATIONDOCKER_SOURCES
     
     KisTimeBasedItemModel.cpp
 
+    KisAnimationPlaybackControlsModel.cpp
     KisAnimTimelineDocker.cpp
     KisAnimTimelineFramesModel.cpp
     KisAnimTimelineFramesView.cpp

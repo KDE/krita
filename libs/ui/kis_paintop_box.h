@@ -110,6 +110,8 @@ public Q_SLOTS:
     void slotColorSpaceChanged(const KoColorSpace* colorSpace);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
     void slotToggleEraserPreset(bool usingEraser);
+    void slotSelectEraserPreset();
+    void slotSelectBrushPreset();
     void slotCanvasResourceChangeAttempted(int key, const QVariant &value);
     void slotCanvasResourceChanged(int key, const QVariant& v);
     void resourceSelected(KoResourceSP resource);
@@ -173,6 +175,7 @@ private Q_SLOTS:
     void slotUpdateOptionsWidgetPopup();
 
     void togglePresetEditor();
+    void updatePresetConfig();
 
 private:
     KisCanvasResourceProvider*          m_resourceProvider {0};
@@ -200,7 +203,9 @@ private:
     KisFavoriteResourceManager*         m_favoriteResourceManager {0};
     QToolButton*                        m_reloadButton {0};
     KisAction*                          m_eraseAction {0};
-    KisAction*                          m_eraserPresetAction {0};
+    KisAction*                          m_eraserTogglePresetAction {0};
+    KisAction*                          m_eraserSelectPresetAction {0};
+    KisAction*                          m_brushSelectPresetAction {0};
     KisAction*                          m_reloadAction {0};
     KisAction*                          m_disablePressureAction {0};
 

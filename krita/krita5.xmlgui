@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="504"
+version="530"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
@@ -370,6 +370,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Separator/>
       <Action name="options_configure_toolbars"/>
       <Merge name="StandardToolBarMenuHandler" />
+      <Action name="lock_toolbars"/>
       <Separator/>
       <Action name="view_toggledockers"/>
       <Action name="settings_dockers_menu"/>
@@ -411,7 +412,9 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     <Action name="file_new"/>
     <Action name="file_open"/>
     <Action name="file_save"/>
-    <Separator/>
+  </ToolBar>
+  <ToolBar name="editToolBar" fullWidth="false" noMerge="1">
+    <Text>Edit</Text>
     <Action name="edit_undo"/>
     <Action name="edit_redo"/>
   </ToolBar>

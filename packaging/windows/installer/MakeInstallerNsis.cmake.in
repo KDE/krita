@@ -132,17 +132,6 @@ file(COPY "${CMAKE_CURRENT_LIST_DIR}/installer/"
 )
 
 
-# Detect FFmpeg (currently optional)
-if(EXISTS "${KRITA_PACKAGE_ROOT}/bin/ffmpeg.exe"
-    AND EXISTS "${KRITA_PACKAGE_ROOT}/bin/ffmpeg_LICENSE.txt"
-    AND EXISTS "${KRITA_PACKAGE_ROOT}/bin/ffmpeg_README.txt"
-)
-    set(ARG_HAS_FFMPEG "/DHAS_FFMPEG")
-else()
-    set(ARG_HAS_FFMPEG "/DNO_HAS_FFMPEG")
-endif()
-
-
 # Build installer
 message(STATUS "Building installer...")
 set(KRITA_VERSION_NUMBER "@KRITA_STABLE_VERSION_MAJOR@.@KRITA_STABLE_VERSION_MINOR@.@KRITA_VERSION_RELEASE@.@KRITA_VERSION_REVISION@")
@@ -158,7 +147,6 @@ execute_process(COMMAND "${TOOL_MAKENSIS}"
     "/DKRITA_INSTALLER_OUTPUT_DIR="
     "/DKRITA_INSTALLER_OUTPUT_NAME=${OUTPUT_FILEPATH}"
     "/DKRITA_PACKAGE_ROOT=${KRITA_PACKAGE_ROOT}"
-    "${ARG_HAS_FFMPEG}"
     "/XSetCompressor /SOLID lzma"
     "/V3"
     "/INPUTCHARSET" "UTF8"

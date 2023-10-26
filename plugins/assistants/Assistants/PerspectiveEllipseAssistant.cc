@@ -359,7 +359,7 @@ QPointF PerspectiveEllipseAssistant::project(const QPointF& pt, const QPointF& s
     return d->simpleEllipse.project(pt);
 }
 
-QPointF PerspectiveEllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
+QPointF PerspectiveEllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal /*moveThresholdPt*/)
 {
     return project(pt, strokeBegin);
 }

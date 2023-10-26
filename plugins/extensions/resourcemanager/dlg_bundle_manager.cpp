@@ -1,6 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2014 Victor Lafon metabolic.ewilan @hotmail.fr
- * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -19,7 +20,6 @@
 #include <QItemSelectionModel>
 #include <QStringLiteral>
 
-
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <KoIcon.h>
@@ -35,6 +35,7 @@
 #include <KisResourceLocator.h>
 #include <KisKineticScroller.h>
 #include <KisCursorOverrideLock.h>
+#include "KisBundleStorage.h"
 
 #include <KisMainWindow.h>
 #include <KisPart.h>
@@ -150,6 +151,9 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     m_ui->bnNew->setText(i18nc("In bundle manager; press button to create a new bundle", "Create Bundle"));
     connect(m_ui->bnNew, SIGNAL(clicked(bool)), SLOT(createBundle()));
 
+    m_ui->bnEdit->setIcon(KisIconUtils::loadIcon("document-new"));
+    m_ui->bnEdit->setText(i18nc("In bundle manager; press button to edit existing bundle", "Edit Bundle"));
+    connect(m_ui->bnEdit, SIGNAL(clicked(bool)), SLOT(editBundle()));
 
     setButtons(Close);
 
@@ -172,10 +176,11 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
 
     QItemSelectionModel* selectionModel = m_ui->listView->selectionModel();
     connect(selectionModel, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
-    //connect(m_ui->listView, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
 
     connect(KisStorageModel::instance(), &KisStorageModel::modelAboutToBeReset, this, &DlgBundleManager::slotModelAboutToBeReset);
     connect(KisStorageModel::instance(), &KisStorageModel::modelReset, this, &DlgBundleManager::slotModelReset);
+    connect(KisStorageModel::instance(), &KisStorageModel::rowsRemoved, this, &DlgBundleManager::slotRowsRemoved);
+    connect(KisStorageModel::instance(), &KisStorageModel::rowsInserted, this, &DlgBundleManager::slotRowsInserted);
 
     updateToggleButton(m_proxyModel->data(m_ui->listView->currentIndex(), Qt::UserRole + KisStorageModel::Active).toBool());
 }
@@ -269,6 +274,53 @@ void DlgBundleManager::createBundle()
     dlg->exec();
 }
 
+void DlgBundleManager::editBundle()
+{
+    KoFileDialog dlg(this, KoFileDialog::OpenFiles, i18n("Choose the bundle to edit"));
+    dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
+    dlg.setMimeTypeFilters(
+                {"application/x-krita-bundle", "image/x-adobe-brushlibrary", "application/x-photoshop-style-library"});
+    dlg.setCaption(i18n("Select the bundle"));
+
+
+    Q_FOREACH(const QString &filename, dlg.filenames()) {
+        if (!filename.isEmpty()) {
+
+            {
+                KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(filename);
+                KIS_ASSERT(!storage.isNull());
+
+                if (!storage->valid()) {
+                    qApp->restoreOverrideCursor();
+                    qWarning() << "Attempted to edit an invalid bundle!" << filename;
+                    QMessageBox::warning(this,
+                                         i18nc("@title:window", "Krita"),
+                                         i18n("Could not load bundle %1.", filename));
+                    qApp->setOverrideCursor(Qt::BusyCursor);
+                    continue;
+                }
+            }
+
+            KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(filename);
+            if (storage.isNull()){continue;}
+            if (storage->valid()) {
+                if (!KisResourceLocator::instance()->hasStorage(filename)) {
+                    if (!KisResourceLocator::instance()->addStorage(filename, storage)) {
+                        qWarning() << "Could not add bundle to the storages" << filename;
+                    }
+                }
+
+                KoResourceBundle *bundle = new KoResourceBundle(filename);
+                bool importedBundle = bundle->load();
+
+                KoResourceBundleSP bundleSP(bundle);
+                DlgCreateBundle* dlgBC = new DlgCreateBundle(bundleSP, this);
+                int response = dlgBC->exec();
+            }
+        }
+    }
+}
+
 void DlgBundleManager::toggleBundle()
 {
     QModelIndex idx = m_ui->listView->currentIndex();
@@ -282,6 +334,12 @@ void DlgBundleManager::toggleBundle()
     bool active = m_proxyModel->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
     idx = m_proxyModel->index(idx.row(), 0);
     m_proxyModel->setData(idx, QVariant(!active), Qt::CheckStateRole);
+
+    if (active) {
+        m_ui->bnEdit->setEnabled(false);
+    } else {
+        m_ui->bnEdit->setEnabled(true);
+    }
 
     currentCellSelectedChanged(idx, idx);
 
@@ -314,6 +372,16 @@ void DlgBundleManager::slotModelAboutToBeReset()
     ENTER_FUNCTION() << ppVar(lastIndex) << ppVar(lastIndex.isValid());
 }
 
+void DlgBundleManager::slotRowsRemoved(const QModelIndex &parent, int start, int end)
+{
+    m_proxyModel->removeRows(start, end - start + 1, parent);
+}
+
+void DlgBundleManager::slotRowsInserted(const QModelIndex &parent, int start, int end)
+{
+    m_proxyModel->insertRows(start, end - start + 1, parent);
+}
+
 void DlgBundleManager::slotModelReset()
 {
     ENTER_FUNCTION();
@@ -344,10 +412,12 @@ void DlgBundleManager::updateToggleButton(bool active)
         m_ui->bnToggle->setIcon(KisIconUtils::loadIcon("edit-delete"));
         m_ui->bnToggle->setText(i18nc("In bundle manager; press button to deactivate the bundle "
                                       "(remove resources from the bundle from the available resources)","Deactivate"));
+        m_ui->bnEdit->setEnabled(true);
     } else {
         m_ui->bnToggle->setIcon(QIcon());
         m_ui->bnToggle->setText(i18nc("In bundle manager; press button to activate the bundle "
                                       "(add resources from the bundle to the available resources)","Activate"));
+        m_ui->bnEdit->setEnabled(false);
     }
 }
 

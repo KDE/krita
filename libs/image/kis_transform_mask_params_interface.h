@@ -18,6 +18,15 @@ class QTransform;
 class QDomElement;
 class KisKeyframeChannel;
 
+class KisTransformMaskParamsInterface;
+typedef QSharedPointer<KisTransformMaskParamsInterface> KisTransformMaskParamsInterfaceSP;
+typedef QWeakPointer<KisTransformMaskParamsInterface> KisTransformMaskParamsInterfaceWSP;
+
+class KisAnimatedTransformParamsHolderInterface;
+typedef QSharedPointer<KisAnimatedTransformParamsHolderInterface> KisAnimatedTransformParamsHolderInterfaceSP;
+typedef QWeakPointer<KisAnimatedTransformParamsHolderInterface> KisAnimatedTransformParamsHolderInterfaceWSP;
+
+
 class KRITAIMAGE_EXPORT KisTransformMaskParamsInterface
 {
 public:
@@ -25,9 +34,16 @@ public:
 
     virtual QTransform finalAffineTransform() const = 0;
     virtual bool isAffine() const = 0;
-    virtual bool isHidden() const = 0;
 
-    virtual void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const = 0;
+    /**
+     * Hides the transform mask from the rendering stack. It is used by the
+     * legacy transform tool strategy to hide the mask during the overlay
+     * preview.
+     */
+    virtual bool isHidden() const = 0;
+    virtual void setHidden(bool value) = 0;
+
+    virtual void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool forceSubPixelTranslation) const = 0;
 
     virtual QString id() const = 0;
     virtual void toXML(QDomElement *e) const = 0;
@@ -39,67 +55,31 @@ public:
     virtual QRect nonAffineChangeRect(const QRect &rc) = 0;
     virtual QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds) = 0;
 
-    virtual void clearChangedFlag() = 0;
-    virtual bool hasChanged() const = 0;
+    virtual bool compareTransform(KisTransformMaskParamsInterfaceSP rhs) const = 0;
 
     virtual KisTransformMaskParamsInterfaceSP clone() const = 0;
 };
 
-class KRITAIMAGE_EXPORT KisAnimatedTransformParamsInterface
+class KRITAIMAGE_EXPORT KisAnimatedTransformParamsHolderInterface
 {
 public:
-    virtual ~KisAnimatedTransformParamsInterface();
+    virtual ~KisAnimatedTransformParamsHolderInterface();
 
-    virtual KisKeyframeChannel* requestKeyframeChannel(const QString &id, KisNodeWSP parent) = 0;
-    virtual KisKeyframeChannel* getKeyframeChannel(const KoID& koid) const = 0;
-    virtual void setKeyframeChannel(const QString &name, QSharedPointer<KisKeyframeChannel> kcsp) = 0;
-    virtual QList<KisKeyframeChannel*> copyChannelsFrom(const KisAnimatedTransformParamsInterface* other) = 0;
+    virtual bool isAnimated() const = 0;
 
-    virtual void initializeKeyframes(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, KUndo2Command* cmnd = nullptr) = 0;
-    virtual void setKeyframeData(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, KUndo2Command* cmnd = nullptr) = 0;
-};
+    virtual KisKeyframeChannel* requestKeyframeChannel(const QString &id) = 0;
+    virtual KisKeyframeChannel* getKeyframeChannel(const QString &id) const = 0;
 
-class QDomElement;
+    virtual KisTransformMaskParamsInterfaceSP bakeIntoParams() const = 0;
+    virtual void setParamsAtCurrentPosition(const KisTransformMaskParamsInterface *params, KUndo2Command *parentCommand) = 0;
 
-class KRITAIMAGE_EXPORT KisDumbTransformMaskParams : public KisTransformMaskParamsInterface
-{
-public:
-    KisDumbTransformMaskParams();
-    KisDumbTransformMaskParams(const QTransform &transform);
-    KisDumbTransformMaskParams(bool isHidden);
-    ~KisDumbTransformMaskParams() override;
+    virtual KisAnimatedTransformParamsHolderInterfaceSP clone() const = 0;
 
+    virtual void setDefaultBounds(KisDefaultBoundsBaseSP bounds) = 0;
+    virtual KisDefaultBoundsBaseSP defaultBounds() const = 0;
 
-    QTransform finalAffineTransform() const override;
-    bool isAffine() const override;
-    bool isHidden() const override;
-    void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const override;
+    virtual void syncLodCache() = 0;
 
-    QString id() const override;
-    void toXML(QDomElement *e) const override;
-    static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
-
-    void translateSrcAndDst(const QPointF &offset) override;
-    void transformSrcAndDst(const QTransform &t) override;
-    void translateDstSpace(const QPointF &offset) override;
-
-    // for testing purposes only
-    QTransform testingGetTransform() const;
-    void testingSetTransform(const QTransform &t);
-
-    QRect nonAffineChangeRect(const QRect &rc) override;
-    QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds) override;
-
-    bool isAnimated() const;
-    KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds);
-    void clearChangedFlag() override;
-    bool hasChanged() const override;
-
-    KisTransformMaskParamsInterfaceSP clone() const override;
-
-private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
 };
 
 #endif /* __KIS_TRANSFORM_MASK_PARAMS_INTERFACE_H */

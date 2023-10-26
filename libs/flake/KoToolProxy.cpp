@@ -34,6 +34,8 @@
 #include "KoShapeController.h"
 #include "KoViewConverter.h"
 #include "KoShapeFactoryBase.h"
+#include "kis_assert.h"
+#include "kactioncollection.h"
 
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
@@ -354,10 +356,33 @@ KisPopupWidgetInterface* KoToolProxy::popupWidget()
 
 void KoToolProxy::setActiveTool(KoToolBase *tool)
 {
-    if (d->activeTool)
+    if (d->activeTool) {
         disconnect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
+        d->toolPriorityShortcuts.clear();
+    }
+
     d->activeTool = tool;
+
     if (tool) {
+        KisKActionCollection *collection = d->controller->actionCollection();
+        KIS_SAFE_ASSERT_RECOVER_NOOP(collection);
+        if (collection) {
+            Q_FOREACH(QAction *action, collection->actions()) {
+
+                const QVariant prop = action->property("tool_action");
+
+                if (prop.isValid()) {
+                    const QStringList tools = prop.toStringList();
+
+                    if (tools.contains(d->activeTool->toolId())) {
+                        const QList<QKeySequence> shortcuts = action->shortcuts();
+                        std::copy(shortcuts.begin(), shortcuts.end(),
+                                  std::back_inserter(d->toolPriorityShortcuts));
+                    }
+                }
+            }
+        }
+
         connect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
         d->selectionChanged(hasSelection());
         emit toolChanged(tool->toolId());
@@ -392,6 +417,11 @@ void KoToolProxy::touchEvent(QTouchEvent* event, const QPointF& point)
 KoPointerEvent *KoToolProxy::lastDeliveredPointerEvent() const
 {
     return d->lastPointerEvent ? &(d->lastPointerEvent->event) : 0;
+}
+
+QVector<QKeySequence> KoToolProxy::toolPriorityShortcuts() const
+{
+    return d->toolPriorityShortcuts;
 }
 
 void KoToolProxyPrivate::setCanvasController(KoCanvasController *c)

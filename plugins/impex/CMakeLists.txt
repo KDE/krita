@@ -60,3 +60,5 @@ endif()
 if (JPEGXL_FOUND)
     add_subdirectory(jxl)
 endif()
+
+add_subdirectory(rgbe)

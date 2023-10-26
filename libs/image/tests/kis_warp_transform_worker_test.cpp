@@ -87,7 +87,7 @@ void KisWarpTransformWorkerTest::testQImage()
 
 //    QImage image(TestUtil::fetchDataFileLazy("test_transform_quality.png"));
     QImage image(TestUtil::fetchDataFileLazy("test_transform_quality_second.png"));
-    image = image.convertToFormat(QImage::Format_ARGB32);
+    image.convertTo(QImage::Format_ARGB32);
 
     dbgKrita << ppVar(image.format());
 

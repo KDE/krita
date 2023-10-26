@@ -212,7 +212,7 @@ void KisTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
 static void saveAsQuadraticPng(const QPixmap &pixmap, const QString &fileName)
 {
     QImage icon = pixmap.toImage();
-    icon = icon.convertToFormat(QImage::Format_ARGB32);
+    icon.convertTo(QImage::Format_ARGB32);
     const int iconExtent = qMax(icon.width(), icon.height());
     icon = icon.copy((icon.width() - iconExtent) / 2, (icon.height() - iconExtent) / 2, iconExtent, iconExtent);
     icon.save(fileName, "PNG");

@@ -131,7 +131,6 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
             }
             case Qt::UserRole + ResourceType:
                 return d->resourceType;
-            case Qt::CheckStateRole:
             case Qt::UserRole + Active:
                 return true;
             case Qt::UserRole + KisTagRole:
@@ -159,7 +158,6 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
             }
             case Qt::UserRole + ResourceType:
                 return d->resourceType;
-            case Qt::CheckStateRole:
             case Qt::UserRole + Active:
                 return true;
             case Qt::UserRole + KisTagRole:
@@ -203,7 +201,6 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
                 return d->query.value("url");
             case Qt::UserRole + ResourceType:
                 return d->query.value("resource_type");
-            case Qt::CheckStateRole:
             case Qt::UserRole + Active:
                 return d->query.value("active");
             case Qt::UserRole + KisTagRole:
@@ -226,7 +223,7 @@ bool KisAllTagsModel::setData(const QModelIndex &index, const QVariant &value, i
     int id = data(index, Qt::UserRole + Id).toInt();
 
     if (index.isValid() &&
-        (role == Qt::CheckStateRole || role == Active)) {
+        (role == Qt::UserRole + Active)) {
 
         QSqlQuery q;
         if (!q.prepare("UPDATE tags\n"
@@ -368,7 +365,7 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVec
     }
     else if (allowOverwrite) {
         KisTagSP trueTag = tagForUrl(tag->url());
-        r = setData(indexForTag(trueTag), QVariant::fromValue(true), Qt::CheckStateRole);
+        r = setData(indexForTag(trueTag), QVariant::fromValue(true), Qt::UserRole + KisAllTagsModel::Active);
         untagAllResources(trueTag);
         tag->setComment(trueTag->comment()); // id will be set later, comment and filename are the only thing left
         tag->setFilename(trueTag->filename());
@@ -404,7 +401,7 @@ bool KisAllTagsModel::setTagActive(const KisTagSP tag)
 
     tag->setActive(true);
 
-    return setData(indexForTag(tag), QVariant::fromValue(true), Qt::CheckStateRole);
+    return setData(indexForTag(tag), QVariant::fromValue(true), Qt::UserRole + KisAllTagsModel::Active);
 
 }
 
@@ -415,7 +412,7 @@ bool KisAllTagsModel::setTagInactive(const KisTagSP tag)
 
     tag->setActive(false);
 
-    return setData(indexForTag(tag), QVariant::fromValue(false), Qt::CheckStateRole);
+    return setData(indexForTag(tag), QVariant::fromValue(false), Qt::UserRole + KisAllTagsModel::Active);
 }
 
 bool KisAllTagsModel::renameTag(const KisTagSP tag, const QString &newName, const bool allowOverwrite)
@@ -465,7 +462,7 @@ bool KisAllTagsModel::changeTagActive(const KisTagSP tag, bool active)
 
     QModelIndex idx = indexForTag(tag);
     tag->setActive(active);
-    return setData(idx, QVariant::fromValue(active), Qt::CheckStateRole);
+    return setData(idx, QVariant::fromValue(active), Qt::UserRole + KisAllTagsModel::Active);
 
 }
 

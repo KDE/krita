@@ -25,6 +25,7 @@ set(kritaglobal_LIB_SRCS
     kis_latency_tracker.cpp
     KisQPainterStateSaver.cpp
     KisRollingMeanAccumulatorWrapper.cpp
+    KisRollingSumAccumulatorWrapper.cpp
     kis_config_notifier.cpp
     KisDeleteLaterWrapper.cpp
     KisUsageLogger.cpp
@@ -84,6 +85,12 @@ endif ()
 if (ANDROID)
     target_link_libraries(kritaglobal PRIVATE ${unwindstack_LIBRARIES} Qt5::AndroidExtras log)
 endif()
+
+if(APPLE)
+    target_link_libraries(kritaglobal PRIVATE
+        kritamacosutils
+    )
+endif ()
 
 set_target_properties(kritaglobal PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

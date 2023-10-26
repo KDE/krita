@@ -229,3 +229,28 @@ void KisHalftoneFilterConfiguration::setBackgroundOpacity(const QString & prefix
 {
     setProperty(prefix + "background_opacity", newBackgroundOpacity);
 }
+
+void KisHalftoneFilterConfiguration::setProperty(const QString &name, const QVariant &value)
+{
+    KisFilterConfiguration::setProperty(name, value);
+
+    // The generator configurations are cached, so we need to check if the
+    // property name of a property being set represents a property of a
+    // generator configuration, and in that case we must remove the cache entry
+    // that property belongs to, so that the configuration can be regenerated
+    // later. This is an issue mainly when setting the properties directly
+    // (through python for example) instead of using the high level methods.
+    const QStringList nameParts = name.split('_');
+    if (nameParts.size() < 3) {
+        return;
+    }
+    const int generatorKeywordIndex = nameParts[0] == "alpha" || nameParts[0] == "intensity" ? 1 : 2;
+    if (nameParts[generatorKeywordIndex] != "generator") {
+        return;
+    }
+    if (generatorKeywordIndex == 1) {
+        m_generatorConfigurationsCache.remove(nameParts[0] + "_");
+    } else {
+        m_generatorConfigurationsCache.remove(nameParts[0] + "_" + nameParts[1] + "_");
+    }
+}

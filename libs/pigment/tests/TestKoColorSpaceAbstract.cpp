@@ -398,5 +398,205 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlphaLinear()
     QCOMPARE(outputPixel[COLOR_CHANNEL_2], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_2], pixel2[COLOR_CHANNEL_2], weights));
 }
 
+#include <KoColorSpaceRegistry.h>
+#include <QByteArray>
+#include <KoColor.h>
+#include <KoCompositeOpRegistry.h>
 
-QTEST_GUILESS_MAIN(TestKoColorSpaceAbstract)
+KoColor makeColor(std::initializer_list<quint8> data, const KoColorSpace *cs)
+{
+    std::vector<quint8> buffer(data);
+    return KoColor(buffer.data(), cs);
+}
+
+QBitArray makeChannelFlags(std::initializer_list<bool> flags)
+{
+    QBitArray result(flags.size());
+
+    for (auto it = flags.begin(); it != flags.end(); ++it) {
+        result.setBit(std::distance(flags.begin(), it), *it);
+    }
+
+    return result;
+}
+
+void TestKoColorSpaceAbstract::testBitBltCrossColorSpaceWithChannelFlags_data()
+{
+    QTest::addColumn<KoColor>("srcColor");
+    QTest::addColumn<KoColor>("dstColor");
+    QTest::addColumn<QBitArray>("channelFlags");
+    QTest::addColumn<KoColor>("expectedColor");
+
+    const KoColorSpace *alphaSpace = KoColorSpaceRegistry::instance()->alpha8();
+    const KoColorSpace *rgbSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cmykSpace = KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id());
+
+    KIS_ASSERT(alphaSpace);
+    KIS_ASSERT(rgbSpace);
+    KIS_ASSERT(cmykSpace);
+
+    QTest::newRow("rgb->cmyk (full)")
+        << makeColor({160,160,160,255}, rgbSpace)
+        << makeColor({0,0,255,0,255}, cmykSpace)
+        << QBitArray()
+        << makeColor({0,0,0,108,255}, cmykSpace);
+
+    QTest::newRow("rgb->cmyk (full, explicit)")
+        << makeColor({160,160,160,255}, rgbSpace)
+        << makeColor({0,0,255,0,255}, cmykSpace)
+        << makeChannelFlags({true, true, true, true})
+        << makeColor({0,0,0,108,255}, cmykSpace);
+
+    QTest::newRow("rgb->cmyk (blue)")
+        << makeColor({160,160,160,255}, rgbSpace)
+        << makeColor({0,0,255,0,255}, cmykSpace)
+        << makeChannelFlags({true, false, false, true})
+        << makeColor({252,231,0,39,255}, cmykSpace);
+
+    QTest::newRow("rgb->cmyk (green)")
+        << makeColor({160,160,160,255}, rgbSpace)
+        << makeColor({0,0,255,0,255}, cmykSpace)
+        << makeChannelFlags({false, true, false, true})
+        << makeColor({173,0,252,35,255}, cmykSpace);
+
+    QTest::newRow("rgb->cmyk (red)")
+        << makeColor({160,160,160,255}, rgbSpace)
+        << makeColor({0,0,255,0,255}, cmykSpace)
+        << makeChannelFlags({false, false, true, true})
+        << makeColor({0,227,245,78,255}, cmykSpace);
+
+    QTest::newRow("cmyk->rgb (full)")
+        << makeColor({160,160,160,160,255}, cmykSpace)
+        << makeColor({0,255,0,255}, rgbSpace)
+        << QBitArray()
+        << makeColor({51,46,56,255}, rgbSpace);
+
+    QTest::newRow("cmyk->rgb (full, explicit)")
+        << makeColor({160,160,160,160,255}, cmykSpace)
+        << makeColor({0,255,0,255}, rgbSpace)
+        << makeChannelFlags({true, true, true, true, true})
+        << makeColor({51,46,56,255}, rgbSpace);
+
+    QTest::newRow("cmyk->rgb (cyan)")
+        << makeColor({160,160,160,160,255}, cmykSpace)
+        << makeColor({0,255,0,255}, rgbSpace)
+        << makeChannelFlags({true, false, false, false, true})
+        << makeColor({234,181,22,255}, rgbSpace);
+
+    QTest::newRow("cmyk->rgb (magenta)")
+        << makeColor({160,160,160,160,255}, cmykSpace)
+        << makeColor({0,255,0,255}, rgbSpace)
+        << makeChannelFlags({false, true, false, false, true})
+        << makeColor({166,111,241,255}, rgbSpace);
+
+    QTest::newRow("cmyk->rgb (yellow)")
+        << makeColor({160,160,160,160,255}, cmykSpace)
+        << makeColor({0,255,0,255}, rgbSpace)
+        << makeChannelFlags({false, false, true, false, true})
+        << makeColor({102,244,255,255}, rgbSpace);
+
+    QTest::newRow("cmyk->rgb (black)")
+        << makeColor({160,160,160,160,255}, cmykSpace)
+        << makeColor({0,255,0,255}, rgbSpace)
+        << makeChannelFlags({false, false, false, true, true})
+        << makeColor({108,107,109,255}, rgbSpace);
+
+    QTest::newRow("cmyk->rgb (black, no-alpha)")
+        << makeColor({160,160,160,160,255}, cmykSpace)
+        << makeColor({0,255,0,180}, rgbSpace)
+        << makeChannelFlags({false, false, false, true, false})
+        << makeColor({108,107,109,180}, rgbSpace);
+
+    QTest::newRow("rgb->cmyk (blue, no-alpha)")
+        << makeColor({160,160,160,255}, rgbSpace)
+        << makeColor({0,0,255,0,180}, cmykSpace)
+        << makeChannelFlags({true, false, false, false})
+        << makeColor({252,231,0,39,180}, cmykSpace);
+
+    QTest::newRow("rgb->alpha (full)")
+        << makeColor({120,120,120,255}, rgbSpace)
+        << makeColor({188}, alphaSpace)
+        << QBitArray()
+        << makeColor({120}, alphaSpace);
+
+    QTest::newRow("rgb->alpha (full, explicit)")
+        << makeColor({120,120,120,255}, rgbSpace)
+        << makeColor({188}, alphaSpace)
+        << makeChannelFlags({true, true, true, true})
+        << makeColor({120}, alphaSpace);
+
+    QTest::newRow("rgb->alpha (transp source)")
+        << makeColor({120,120,120,128}, rgbSpace)
+        << makeColor({188}, alphaSpace)
+        << makeChannelFlags({true, true, true, true})
+        << makeColor({154}, alphaSpace);
+
+    // dst color is always fully opaque in alpha channel
+    QTest::newRow("rgb->alpha (alpha locked)")
+        << makeColor({120,120,120,128}, rgbSpace)
+        << makeColor({188}, alphaSpace)
+        << makeChannelFlags({true, true, true, false})
+        << makeColor({154}, alphaSpace);
+
+    QTest::newRow("rgb->alpha (colors locked)")
+        << makeColor({120,120,120,128}, rgbSpace)
+        << makeColor({188}, alphaSpace)
+        << makeChannelFlags({false, false, false, true})
+        << makeColor({188}, alphaSpace);
+}
+
+void TestKoColorSpaceAbstract::testBitBltCrossColorSpaceWithChannelFlags()
+{
+    QFETCH(const KoColor, srcColor);
+    QFETCH(const KoColor, dstColor);
+    QFETCH(const KoColor, expectedColor);
+    QFETCH(const QBitArray, channelFlags);
+
+    const KoColorSpace *srcSpace = srcColor.colorSpace();
+    const KoColorSpace *dstSpace = dstColor.colorSpace();
+
+    const int numColumns = 17;
+    const int numRows = 23;
+    const int numPixels = numColumns * numRows;
+    const int srcPixelSize = srcSpace->pixelSize();
+    const int dstPixelSize = dstSpace->pixelSize();
+
+    QByteArray srcData(numColumns * numRows * srcPixelSize, Qt::Uninitialized);
+    QByteArray dstData(numColumns * numRows * dstPixelSize, Qt::Uninitialized);
+
+    quint8 *srcPtr = reinterpret_cast<quint8*>(srcData.data());
+    quint8 *dstPtr = reinterpret_cast<quint8*>(dstData.data());
+
+    for (int i = 0; i < numPixels; i++) {
+        memcpy(srcPtr + i * srcPixelSize, srcColor.data(), srcPixelSize);
+        memcpy(dstPtr + i * dstPixelSize, dstColor.data(), dstPixelSize);
+    }
+
+    const KoCompositeOp *op = dstSpace->compositeOp(COMPOSITE_OVER);
+
+    KoCompositeOp::ParameterInfo params;
+    params.rows = numRows;
+    params.cols = numColumns;
+    params.srcRowStart = srcPtr;
+    params.srcRowStride = numColumns * srcPixelSize;
+    params.dstRowStart = dstPtr;
+    params.dstRowStride = numColumns * dstPixelSize;
+    params.channelFlags = channelFlags;
+
+    dstSpace->bitBlt(srcSpace, params, op,
+                     KoColorConversionTransformation::internalRenderingIntent(),
+                     KoColorConversionTransformation::internalConversionFlags());
+
+    for (int i = 0; i < numPixels; i++) {
+        KoColor srcPixel(srcPtr + i * srcPixelSize, srcSpace);
+        KoColor dstPixel(dstPtr + i * dstPixelSize, dstSpace);
+
+//        if (i == 0) {
+//            qDebug() << ppVar(i) << ppVar(srcPixel) << ppVar(dstPixel);
+//        }
+        QCOMPARE(dstPixel, expectedColor);
+    }
+}
+
+
+SIMPLE_TEST_MAIN(TestKoColorSpaceAbstract)

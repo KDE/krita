@@ -706,12 +706,6 @@ protected:
     const KoColorConversionTransformation* fromRgbA16Converter() const;
 
     /**
-     * Returns the thread-local conversion cache. If it doesn't exist
-     * yet, it is created. If it is currently too small, it is resized.
-     */
-    QVector<quint8> * threadLocalConversionCache(quint32 size) const;
-
-    /**
      * This function defines the behavior of the bitBlt function
      * when the composition of pixels in different colorspaces is
      * requested, that is in case:

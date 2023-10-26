@@ -82,6 +82,7 @@ private:
 
     static void getDefaultVideoEncoderOptions(const QString &mimeType,
                                               KisPropertiesConfigurationSP cfg,
+                                              const QStringList &availableEncoders,
                                               QString *customFFMpegOptionsString,
                                               bool *forceHDRVideo);
 

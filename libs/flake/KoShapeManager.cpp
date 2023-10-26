@@ -321,7 +321,7 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &sha
      * to the GUI thread.
      */
     this->moveToThread(qApp->thread());
-    connect(&d->updateCompressor, SIGNAL(timeout()), this, SLOT(forwardCompressedUpdate()));
+    connect(d->updateCompressor, SIGNAL(timeout()), this, SLOT(forwardCompressedUpdate()));
 }
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
@@ -332,7 +332,7 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
 
     // see a comment in another constructor
     this->moveToThread(qApp->thread());
-    connect(&d->updateCompressor, SIGNAL(timeout()), this, SLOT(forwardCompressedUpdate()));
+    connect(d->updateCompressor, SIGNAL(timeout()), this, SLOT(forwardCompressedUpdate()));
 }
 
 void KoShapeManager::Private::unlinkFromShapesRecursively(const QList<KoShape*> &shapes)
@@ -701,7 +701,7 @@ void KoShapeManager::update(const QRectF &rect, const KoShape *shape, bool selec
         }
     }
 
-    d->updateCompressor.start();
+    d->updateCompressor->start();
 }
 
 void KoShapeManager::setUpdatesBlocked(bool value)

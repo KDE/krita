@@ -65,6 +65,7 @@ KisInputManager::KisInputManager(QObject *parent)
 
     connect(KoToolManager::instance(), SIGNAL(aboutToChangeTool(KoCanvasController*)), SLOT(slotAboutToChangeTool()));
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*)), SLOT(slotToolChanged()));
+    connect(KoToolManager::instance(), SIGNAL(textModeChanged(bool)), SLOT(slotTextModeChanged()));
     connect(&d->moveEventCompressor, SIGNAL(timeout()), SLOT(slotCompressedMoveEvent()));
 
 
@@ -232,31 +233,6 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
                   std::is_same<Event, QTouchEvent>::value,
                   "event should be a mouse or a tablet event");
 
-#ifdef Q_OS_WIN32
-    /**
-     * On Windows, when the user presses some global window manager shortcuts,
-     * e.g. Alt+Space (to show window title menu), events for these key presses
-     * and releases are not delivered (see bug 424319). This code is a workaround
-     * for this problem. It checks consistency of standard modifiers and resets
-     * shortcut's matcher state in case of a trouble.
-     */
-    if (event->type() == QEvent::MouseButtonPress ||
-        event->type() == QEvent::MouseButtonRelease ||
-        event->type() == QEvent::MouseMove ||
-        event->type() == QEvent::TabletMove ||
-        event->type() == QEvent::TabletPress ||
-        event->type() == QEvent::TabletRelease) {
-
-        QInputEvent *inputEvent = static_cast<QInputEvent*>(event);
-        if (!d->matcher.sanityCheckModifiersCorrectness(inputEvent->modifiers())) {
-            qWarning() << "WARNING: modifiers state became inconsistent! Trying to fix that...";
-            qWarning() << "    " << ppVar(inputEvent->modifiers());
-            qWarning() << "    " << ppVar(d->matcher.debugPressedKeys());
-
-            d->fixShortcutMatcherModifiersState();
-        }
-    }
-#endif
 
     bool retval = false;
 
@@ -339,6 +315,59 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->accumulatedScrollDelta = 0;
     }
 
+    if (event->type() == QEvent::MouseMove ||
+        event->type() == QEvent::MouseButtonPress ||
+        event->type() == QEvent::MouseButtonRelease ||
+        event->type() == QEvent::TabletMove ||
+        event->type() == QEvent::TabletPress ||
+        event->type() == QEvent::TabletRelease ||
+        event->type() == QEvent::Wheel) {
+
+        /**
+         * When Krita (as an application) has no input focus, we cannot
+         * handle key events. But at the same time, when the user hovers
+         * Krita canvas, we should still show him the correct cursor.
+         *
+         * So here we just add a simple workaround to resync shortcut
+         * matcher's state at least against the basic modifiers, like
+         * Shift, Control and Alt.
+         */
+        QWidget *receivingWidget = dynamic_cast<QWidget*>(d->eventsReceiver);
+        if (receivingWidget && !receivingWidget->hasFocus()) {
+            qWarning() << "WARNING: Fix unfocused keys state";
+
+            d->fixShortcutMatcherModifiersState();
+        } else {
+            /**
+             * On Windows, when the user presses some global window manager shortcuts,
+             * e.g. Alt+Space (to show window title menu), events for these key presses
+             * and releases are not delivered (see bug 424319). This code is a workaround
+             * for this problem. It checks consistency of standard modifiers and resets
+             * shortcut's matcher state in case of a trouble.
+             */
+            QInputEvent *inputEvent = static_cast<QInputEvent*>(event);
+            if (event->type() != QEvent::ShortcutOverride &&
+                !d->matcher.sanityCheckModifiersCorrectness(inputEvent->modifiers())) {
+
+                qWarning() << "WARNING: modifiers state became inconsistent! Trying to fix that...";
+                qWarning() << "    " << ppVar(inputEvent->modifiers());
+                qWarning() << "    " << ppVar(d->matcher.debugPressedKeys());
+
+                d->fixShortcutMatcherModifiersState();
+            } else if (d->matcher.hasPolledKeys()) {
+                /**
+                 * Re-check the native platform key API against keys we are unsure about,
+                 * and fix them in case they now show as released.
+                 *
+                 * The other part of the fix is placed in the handler of ShortcutOverride,
+                 * because it needs a custom set of the presset keys.
+                 */
+                qWarning() << "WARNING: Fixing polled keys state";
+                d->fixShortcutMatcherModifiersState();
+            }
+        }
+    }
+
     switch (event->type()) {
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
@@ -374,8 +403,14 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(keyEvent);
 
-        // see a comment in the handler of KeyRelease event
-        if (d->shouldSynchronizeOnNextKeyPress) {
+        /** See a comment in the handler of KeyRelease event for
+         * shouldSynchronizeOnNextKeyPress explanation
+         *
+         * There is also a case when Krita gets focus via Win+1 key, then
+         * the polled key '1' gets into the matcher, but OS does not deliver any
+         * signals for it (see bug 451424)
+         */
+        if (d->shouldSynchronizeOnNextKeyPress || d->matcher.hasPolledKeys()) {
             QVector<Qt::Key> guessedKeys;
             KisExtendedModifiersMapper mapper;
             Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
@@ -387,7 +422,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             if (!d->matcher.debugPressedKeys().contains(key)) {
                 guessedKeys.removeOne(key);
             }
-
+            qWarning() << "WARNING: fixing polled keys in ShortcutOverride";
             d->fixShortcutMatcherModifiersState(guessedKeys, modifiers);
             d->shouldSynchronizeOnNextKeyPress = false;
         }
@@ -890,13 +925,30 @@ void KisInputManager::slotToolChanged()
         d->setMaskSyntheticEvents(tool->maskSyntheticEvents());
         if (tool->isInTextMode()) {
             d->forwardAllEventsToTool = true;
-            d->matcher.suppressAllActions(true);
+            d->matcher.suppressAllKeyboardActions(true);
         } else {
             d->forwardAllEventsToTool = false;
-            d->matcher.suppressAllActions(false);
+            d->matcher.suppressAllKeyboardActions(false);
         }
 
+        d->matcher.suppressConflictingKeyActions(toolProxy()->toolPriorityShortcuts());
         d->matcher.toolHasBeenActivated();
+    }
+}
+
+void KisInputManager::slotTextModeChanged()
+{
+    if (!d->canvas) return;
+    KoToolManager *toolManager = KoToolManager::instance();
+    KoToolBase *tool = toolManager->toolById(canvas(), toolManager->activeToolId());
+    if (tool) {
+        if (tool->isInTextMode()) {
+            d->forwardAllEventsToTool = true;
+            d->matcher.suppressAllKeyboardActions(true);
+        } else {
+            d->forwardAllEventsToTool = false;
+            d->matcher.suppressAllKeyboardActions(false);
+        }
     }
 }
 

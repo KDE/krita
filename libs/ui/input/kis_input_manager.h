@@ -97,6 +97,7 @@ public:
 private Q_SLOTS:
     void slotAboutToChangeTool();
     void slotToolChanged();
+    void slotTextModeChanged();
     void profileChanged();
     void slotCompressedMoveEvent();
     void deregisterPopupWidget();

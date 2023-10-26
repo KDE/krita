@@ -109,8 +109,8 @@ KoInteractionStrategy * PointHandle::handleMousePress(KoPointerEvent *event)
         }
         // TODO remove canvas from call ?
         if (m_activePointType == KoPathPoint::Node) {
-            QPointF startPoint = m_activePoint->parent()->shapeToDocument(m_activePoint->point());
-            return new KoPathPointMoveStrategy(m_tool, startPoint);
+            QPointF movedPointPosition = m_activePoint->parent()->shapeToDocument(m_activePoint->point());
+            return new KoPathPointMoveStrategy(m_tool, event->point, movedPointPosition);
         } else {
             KoPathShape * pathShape = m_activePoint->parent();
             KoPathPointData pd(pathShape, pathShape->pathPointIndex(m_activePoint));

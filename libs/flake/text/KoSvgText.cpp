@@ -819,6 +819,10 @@ TextTransformInfo parseTextTransform(const QString &value)
             textTransform.fullWidth = true;
         } else if (param == "full-size-kana") {
             textTransform.fullSizeKana = true;
+        } else if (param == "none") {
+            textTransform.capitals = TextTransformNone;
+            textTransform.fullWidth = false;
+            textTransform.fullSizeKana = false;
         } else {
             qWarning() << "Unknown parameter in text-transform" << param;
         }
@@ -999,6 +1003,13 @@ LineHeightInfo parseLineHeight(const QString &value, const SvgLoadingContext &co
         } else {
             lineHeight.value = SvgUtil::parseUnitXY(context.currentGC(), value);
         }
+    }
+
+    // Negative line-height is invalid
+    if (!lineHeight.isNormal && lineHeight.value < 0) {
+        lineHeight.isNormal = true;
+        lineHeight.isNumber = false;
+        lineHeight.value = 0;
     }
 
     return lineHeight;

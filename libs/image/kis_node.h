@@ -29,7 +29,7 @@ class KisProjectionLeaf;
 class KisKeyframeChannel;
 class KisTimeSpan;
 class KisUndoAdapter;
-
+struct KisFrameChangeUpdateRecipe;
 
 /**
  * A KisNode is a KisBaseNode that knows about its direct peers, parent
@@ -147,7 +147,10 @@ public:
      */
     void invalidateFrames(const KisTimeSpan &range, const QRect &rect);
 
-    void handleKeyframeChannelUpdate(const KisTimeSpan &range, const QRect &rect);
+    virtual void handleKeyframeChannelFrameChange(const KisKeyframeChannel *channel, int time);
+    virtual void handleKeyframeChannelFrameAdded(const KisKeyframeChannel *channel, int time);
+    void handleKeyframeChannelFrameAboutToBeRemoved(const KisKeyframeChannel *channel, int time);
+    void handleKeyframeChannelFrameHasBeenRemoved(const KisKeyframeChannel *channel, int time);
 
     /**
      * Informs that the current world time should be changed.
@@ -371,6 +374,8 @@ protected:
 
 protected:
     void addKeyframeChannel(KisKeyframeChannel* channel) override;
+    virtual KisFrameChangeUpdateRecipe handleKeyframeChannelFrameAboutToBeRemovedImpl(const KisKeyframeChannel *channel, int time);
+
 private:
 
     friend class KisNodeFacade;

@@ -9,6 +9,7 @@
 #include <QMetaObject>
 #include <QMetaProperty>
 #include <QAbstractButton>
+#include <QAction>
 #include <QComboBox>
 #include <QButtonGroup>
 #include <QSpinBox>
@@ -75,7 +76,8 @@ private:
 
 namespace KisWidgetConnectionUtils {
 
-void connectControl(QAbstractButton *button, QObject *source, const char *property)
+template<typename Button>
+void connectButtonLikeControl(Button *button, QObject *source, const char *property)
 {
     const QMetaObject* meta = source->metaObject();
     QMetaProperty prop = meta->property(meta->indexOfProperty(property));
@@ -90,15 +92,25 @@ void connectControl(QAbstractButton *button, QObject *source, const char *proper
     const QMetaObject* dstMeta = button->metaObject();
 
     QMetaMethod updateSlot = dstMeta->method(
-                dstMeta->indexOfSlot("setChecked(bool)"));
+        dstMeta->indexOfSlot("setChecked(bool)"));
     QObject::connect(source, signal, button, updateSlot);
 
     button->setChecked(prop.read(source).toBool());
 
     if (prop.isWritable()) {
-        QObject::connect(button, &QAbstractButton::toggled,
+        QObject::connect(button, &Button::toggled,
                          source, [prop, source] (bool value) { prop.write(source, value); });
     }
+}
+
+void connectControl(QAbstractButton *button, QObject *source, const char *property)
+{
+    connectButtonLikeControl(button, source, property);
+}
+
+void connectControl(QAction *button, QObject *source, const char *property)
+{
+    connectButtonLikeControl(button, source, property);
 }
 
 void connectControl(QSpinBox *spinBox, QObject *source, const char *property)

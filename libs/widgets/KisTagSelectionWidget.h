@@ -53,7 +53,7 @@ class WdgAddTagButton : public QToolButton
     Q_OBJECT
 
 public:
-    explicit WdgAddTagButton(QWidget* parent);
+    explicit WdgAddTagButton(QWidget* parent, bool createNew = true);
     ~WdgAddTagButton() override;
 
     void setAvailableTagsList(QList<KoID> &notSelected);
@@ -90,6 +90,8 @@ private:
     QString m_lastTagToCreate {""};
 
     UserInputTagAction* m_createNewTagAction {0};
+    QAction* m_noTags {0};
+    bool m_createNew;
 
     friend class TestKisTagSelectionWidget;
 
@@ -100,7 +102,7 @@ class KRITAWIDGETS_EXPORT KisTagSelectionWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit KisTagSelectionWidget(QWidget *parent = 0);
+    explicit KisTagSelectionWidget(QWidget *parent = 0, bool createNew = true);
     ~KisTagSelectionWidget() override;
 
     void setTagList(bool editable, QList<KoID> &selected, QList<KoID> &notSelected);
@@ -121,6 +123,7 @@ private:
     QLayout* m_layout {nullptr};
     QToolButton* m_addTagButton {nullptr};
     bool m_editable {false};
+    bool m_createNew {true};
 
     friend class TestKisTagSelectionWidget;
 };

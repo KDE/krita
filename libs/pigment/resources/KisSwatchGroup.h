@@ -88,12 +88,12 @@ public:
 private:
 
     friend class KoColorSet;
-    friend class AddSwatchCommand;
-    friend class RemoveGroupCommand;
-    friend class RemoveSwatchCommand;
-    friend class AddGroupCommand;
-    friend class ClearCommand;
-    friend class SetColumnCountCommand;
+    friend struct AddSwatchCommand;
+    friend struct RemoveGroupCommand;
+    friend struct RemoveSwatchCommand;
+    friend struct AddGroupCommand;
+    friend struct ClearCommand;
+    friend struct SetColumnCountCommand;
     friend class TestKisSwatchGroup;
     friend class TestKoColorSet;
 

@@ -38,5 +38,29 @@ QList<QAction *> KisToolPaintFactoryBase::createActionsImpl()
 
     actions << decreaseBrushSize;
 
+    KisAction *rotateBrushTipClockwise = new KisAction(i18n("Rotate brush tip clockwise"), this);
+    rotateBrushTipClockwise->setObjectName("rotate_brush_tip_clockwise");
+    actionRegistry->propertizeAction("rotate_brush_tip_clockwise", rotateBrushTipClockwise);
+
+    actions << rotateBrushTipClockwise;
+
+    KisAction *rotateBrushTipClockwisePrecise = new KisAction(i18n("Rotate brush tip clockwise (precise)"), this);
+    rotateBrushTipClockwisePrecise->setObjectName("rotate_brush_tip_clockwise_precise");
+    actionRegistry->propertizeAction("rotate_brush_tip_clockwise_precise", rotateBrushTipClockwisePrecise);
+
+    actions << rotateBrushTipClockwisePrecise;
+
+    KisAction *rotateBrushTipCounterClockwise = new KisAction(i18n("Rotate brush tip counter-clockwise"), this);
+    rotateBrushTipCounterClockwise->setObjectName("rotate_brush_tip_counter_clockwise");
+    actionRegistry->propertizeAction("rotate_brush_tip_counter_clockwise", rotateBrushTipCounterClockwise);
+
+    actions << rotateBrushTipCounterClockwise;
+
+    KisAction *rotateBrushTipCounterClockwisePrecise = new KisAction(i18n("Rotate brush tip counter-clockwise (precise)"), this);
+    rotateBrushTipCounterClockwisePrecise->setObjectName("rotate_brush_tip_counter_clockwise_precise");
+    actionRegistry->propertizeAction("rotate_brush_tip_counter_clockwise_precise", rotateBrushTipCounterClockwisePrecise);
+
+    actions << rotateBrushTipCounterClockwisePrecise;
+
     return actions;
 }

@@ -69,7 +69,7 @@ QPointF RulerAssistant::project(const QPointF& pt) const
     return t * u + pt1;
 }
 
-QPointF RulerAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/, const bool /*snapToAny*/)
+QPointF RulerAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/, const bool /*snapToAny*/, qreal /*moveThresholdPt*/)
 {
     return project(pt);
 }

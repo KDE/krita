@@ -268,6 +268,8 @@ public Q_SLOTS:
      */
     void slotConfigChanged();
 
+    void slotScreenChanged(QScreen *screen);
+
 
 private Q_SLOTS:
 

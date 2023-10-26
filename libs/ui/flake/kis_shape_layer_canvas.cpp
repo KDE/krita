@@ -196,6 +196,10 @@ void KisShapeLayerCanvas::setImage(KisImageWSP image)
         m_projection->convertTo(image->colorSpace());
     }
     m_projection->setDefaultBounds(new KisDefaultBounds(image));
+    if (image && m_hasUpdateOnSetImage) {
+        m_hasUpdateOnSetImage = false;
+        updateCanvas(m_cachedImageRect);
+    }
 }
 
 class KisRepaintShapeLayerLayerJob : public KisSpontaneousJob
@@ -241,6 +245,10 @@ private:
 
 void KisShapeLayerCanvas::updateCanvas(const QVector<QRectF> &region)
 {
+    if (!m_image){
+        m_hasUpdateOnSetImage = true;
+        return;
+    }
     if (!m_parentLayer->image() || m_isDestroying) {
         return;
     }
@@ -266,8 +274,8 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 
 void KisShapeLayerCanvas::slotStartAsyncRepaint()
 {
-    KisImageSP parentImage = m_parentLayer->image();
-    if (!parentImage) {
+    KisImageSP image = m_image;
+    if (!image || !m_parentLayer->image()) {
         return;
     }
 
@@ -276,7 +284,7 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
      * is locked. It may happen on loading, when all necessary
      * conversions are not yet finished.
      */
-    if (parentImage->locked()) {
+    if (image->locked()) {
         m_asyncUpdateSignalCompressor.start();
         return;
     }
@@ -312,7 +320,7 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
         // Crop the update rect by the image bounds. We keep the cache consistent
         // by tracking the size of the image in slotImageSizeChanged()
         uncroppedRepaintRect = repaintRect;
-        repaintRect = repaintRect.intersected(parentImage->bounds());
+        repaintRect = repaintRect.intersected(image->bounds());
     } else {
         const QRectF shapesBounds = KoShape::boundingRect(m_shapeManager->shapes());
         repaintRect |= kisGrowRect(viewConverter()->documentToView(shapesBounds).toAlignedRect(), 2);
@@ -370,7 +378,7 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
     }
 
     m_hasUpdateInCompressor = false;
-    m_image->addSpontaneousJob(new KisRepaintShapeLayerLayerJob(m_parentLayer, this));
+    image->addSpontaneousJob(new KisRepaintShapeLayerLayerJob(m_parentLayer, this));
 }
 
 void KisShapeLayerCanvas::slotImageSizeChanged()
@@ -509,6 +517,7 @@ bool KisShapeLayerCanvas::hasPendingUpdates() const
 
 void KisShapeLayerCanvas::forceRepaintWithHiddenAreas()
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_image);
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_parentLayer->image());
     KIS_SAFE_ASSERT_RECOVER_RETURN(!m_isDestroying);
 

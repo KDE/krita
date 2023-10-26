@@ -43,25 +43,35 @@ public:
     void showEvent(QShowEvent *event) override {
         BaseWidget::showEvent(event);
 
-        KIS_SAFE_ASSERT_RECOVER(!m_idleTaskGuard.isValid()) {
-            m_idleTaskGuard = KisIdleTasksManager::TaskGuard();
-        }
+        // see a comment at the declaration of `m_isVisibleState`
+        if (!m_isVisibleState) {
+            m_isVisibleState = true;
 
-        if (m_canvas) {
-            m_idleTaskGuard = registerIdleTask(m_canvas);
-        }
-        if (m_idleTaskGuard.isValid()) {
-            m_idleTaskGuard.trigger();
+            KIS_SAFE_ASSERT_RECOVER(!m_idleTaskGuard.isValid()) {
+                m_idleTaskGuard = KisIdleTasksManager::TaskGuard();
+            }
+
+            if (m_canvas) {
+                m_idleTaskGuard = registerIdleTask(m_canvas);
+            }
+            if (m_idleTaskGuard.isValid()) {
+                m_idleTaskGuard.trigger();
+            }
         }
     }
 
     void hideEvent(QHideEvent *event) override {
         BaseWidget::hideEvent(event);
 
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_canvas || m_idleTaskGuard.isValid());
-        m_idleTaskGuard = KisIdleTasksManager::TaskGuard();
+        // see a comment at the declaration of `m_isVisibleState`
+        if (m_isVisibleState) {
+            m_isVisibleState = false;
 
-        clearCachedState();
+            KIS_SAFE_ASSERT_RECOVER_NOOP(!m_canvas || m_idleTaskGuard.isValid());
+            m_idleTaskGuard = KisIdleTasksManager::TaskGuard();
+
+            clearCachedState();
+        }
     }
 
     void triggerCacheUpdate() {
@@ -77,6 +87,14 @@ public:
 protected:
     KisCanvas2 *m_canvas {0};
     KisIdleTasksManager::TaskGuard m_idleTaskGuard;
+
+    /**
+     * Hide/show events may be unbalanced so we track their parity with
+     * an internal state. Also, we cannot rely on this->isVisible(),
+     * because its state is different on different platforms during the
+     * event delivery.
+     */
+    bool m_isVisibleState {false};
 };
 
 #endif // KISWIDGETWITHIDLETASK_H

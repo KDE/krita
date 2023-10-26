@@ -43,6 +43,16 @@ qreal KisGridPaintOpSettings::paintOpSize() const
     return option.diameter;
 }
 
+void KisGridPaintOpSettings::setPaintOpAngle(qreal value)
+{
+    Q_UNUSED(value);
+}
+
+qreal KisGridPaintOpSettings::paintOpAngle() const
+{
+    return 0.0;
+}
+
 KisGridPaintOpSettings::~KisGridPaintOpSettings()
 {
 }

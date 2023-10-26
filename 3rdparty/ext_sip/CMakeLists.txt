@@ -62,15 +62,16 @@ elseif (WIN32)
             wheel_update_setuptools
             COMMAND ${CMAKE_COMMAND} -E env 
             PYTHONPATH=${_krita_pythonpath}
+            PYTHONUSERBASE=${_sip_prefix}
             ${Python_EXECUTABLE} -m pip install -U pip setuptools>==59.8.0
-                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../ext_python/sitecustomize.py ${KRITA_PYTHONPATH}
+                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../ext_python/sitecustomize.py ${_sip_prefix}\\lib\\site-packages
 
             DEPENDERS build
         )
         message(STATUS "Using mingw, Will deploy workaround for setuptools.")
         ExternalProject_Add_Step(ext_sip
             distutils_system_mod
-            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../ext_python/_distutils_system_mod.py ${KRITA_PYTHONPATH}
+            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../ext_python/_distutils_system_mod.py ${_sip_prefix}\\lib\\site-packages
 
             DEPENDERS build
         )

@@ -7,16 +7,60 @@
 #include "graphemebreak.h"
 #include <QChar>
 
-QString KoCssTextUtils::transformTextCapitalize(const QString &text, const QString langCode)
+QVector<QPair<int, int>> positionDifference(QStringList a, QStringList b) {
+    QVector<QPair<int, int>> positions;
+
+    int countA = 0;
+    int countB = 0;
+    for (int i=0; i< a.size(); i++) {
+        QString textA = a.at(i);
+        QString textB = b.at(i);
+        if (textA.size() > textB.size()) {
+            for (int j=0; j < textA.size(); j++) {
+                int k = j < textB.size()? countB+j: -1;
+                positions.append(QPair(countA+j, k));
+            }
+        } else {
+            for (int j=0; j < textB.size(); j++) {
+                int k = j < textA.size()? countA+j: -1;
+                positions.append(QPair(k, countB+j));
+            }
+        }
+        countA += textA.size();
+        countB += textB.size();
+    }
+
+    return positions;
+}
+
+QString KoCssTextUtils::transformTextToUpperCase(const QString &text, const QString &langCode, QVector<QPair<int, int> > &positions)
 {
     QLocale locale(langCode.split("-").join("_"));
+    QString transformedText = locale.toUpper(text);
+    positions = positionDifference(textToUnicodeGraphemeClusters(text, langCode), textToUnicodeGraphemeClusters(transformedText, langCode));
+    return transformedText;
+}
+
+QString KoCssTextUtils::transformTextToLowerCase(const QString &text, const QString &langCode, QVector<QPair<int, int> > &positions)
+{
+    QLocale locale(langCode.split("-").join("_"));
+    QString transformedText = locale.toLower(text);
+    positions = positionDifference(textToUnicodeGraphemeClusters(text, langCode), textToUnicodeGraphemeClusters(transformedText, langCode));
+    return transformedText;
+};
+
+QString KoCssTextUtils::transformTextCapitalize(const QString &text, const QString langCode, QVector<QPair<int, int>> &positions)
+{
+    QLocale locale(langCode);
 
     QStringList graphemes = textToUnicodeGraphemeClusters(text, langCode);
+    QStringList oldGraphemes = graphemes;
     bool capitalizeGrapheme = true;
     for (int i = 0; i < graphemes.size(); i++) {
         QString grapheme = graphemes.at(i);
         if (grapheme.isEmpty() || IsCssWordSeparator(grapheme)) {
             capitalizeGrapheme = true;
+
         } else if (capitalizeGrapheme) {
             graphemes[i] = locale.toUpper(grapheme);
             if (i + 1 < graphemes.size()) {
@@ -31,6 +75,7 @@ QString KoCssTextUtils::transformTextCapitalize(const QString &text, const QStri
         }
     }
 
+    positions = positionDifference(oldGraphemes, graphemes);
     return graphemes.join("");
 }
 
@@ -221,6 +266,37 @@ bool KoCssTextUtils::collapseLastSpace(const QChar c, KoSvgText::TextSpaceCollap
     return collapse;
 }
 
+bool KoCssTextUtils::hangLastSpace(const QChar c,
+                                   KoSvgText::TextSpaceCollapse collapseMethod,
+                                   KoSvgText::TextWrap wrapMethod,
+                                   bool &force,
+                                   bool nextCharIsHardBreak)
+{
+    if (c.isSpace()) {
+        if (collapseMethod == KoSvgText::Collapse || collapseMethod == KoSvgText::PreserveBreaks) {
+            // [css-text-3] white-space is set to normal, nowrap, or pre-line; or
+            // [css-text-4] white-space-collapse is collapse or preserve-breaks:
+            // hang unconditionally.
+            force = true;
+            return true;
+        } else if (collapseMethod == KoSvgText::Preserve && wrapMethod != KoSvgText::NoWrap) {
+            // [css-text-3] white-space is set to pre-wrap; or
+            // [css-text-4] white-space-collapse is preserve and text-wrap is not nowrap:
+            // hang unconditionally, unless followed by a force line break,
+            // in which case conditionally hang.
+
+            if (nextCharIsHardBreak) {
+                force = false;
+            } else {
+                force = true;
+            }
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool KoCssTextUtils::characterCanHang(const QChar c, KoSvgText::HangingPunctuations hangType)
 {
     if (hangType.testFlag(KoSvgText::HangFirst)) {
@@ -276,7 +352,7 @@ bool KoCssTextUtils::IsCssWordSeparator(const QString grapheme)
         grapheme == "\u1039F");
 }
 
-QStringList KoCssTextUtils::textToUnicodeGraphemeClusters(const QString text, const QString langCode)
+QStringList KoCssTextUtils::textToUnicodeGraphemeClusters(const QString &text, const QString &langCode)
 {
     QVector<char> graphemeBreaks(text.size());
     set_graphemebreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), langCode.toUtf8().data(), graphemeBreaks.data());

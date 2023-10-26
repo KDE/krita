@@ -619,10 +619,10 @@ const KoColorSpace *KoColorSpaceRegistry::graya16(const QString &profile)
 const KoColorSpace *KoColorSpaceRegistry::graya16(const KoColorProfile *profile)
 {
     if (!profile) {
-        return graya8();
+        return graya16();
     }
     else {
-        return KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+        return KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), profile);
     }
 }
 

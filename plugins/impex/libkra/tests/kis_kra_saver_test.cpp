@@ -39,7 +39,9 @@
 #include "kis_layer_properties_icons.h"
 #include <KisGlobalResourcesInterface.h>
 
-#include "kis_transform_mask_params_interface.h"
+#include "KritaTransformMaskStubs.h"
+#include "KisDumbTransformMaskParams.h"
+
 #include "StoryboardItem.h"
 
 #include <generator/kis_generator_registry.h>
@@ -57,6 +59,8 @@ void KisKraSaverTest::initTestCase()
 
     KisFilterRegistry::instance();
     KisGeneratorRegistry::instance();
+
+    TestUtil::registerTransformMaskStubs();
 }
 
 void KisKraSaverTest::testCrashyShapeLayer()

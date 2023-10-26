@@ -35,7 +35,7 @@
 void KisQmicTests::initTestCase()
 {
     m_qimage = QImage(QString(FILES_DATA_DIR) + "/" + "poster_rodents_bunnysize.jpg");
-    m_qimage = m_qimage.convertToFormat(QImage::Format_ARGB32);
+    m_qimage.convertTo(QImage::Format_ARGB32);
 }
 
 void KisQmicTests::cleanupTestCase()

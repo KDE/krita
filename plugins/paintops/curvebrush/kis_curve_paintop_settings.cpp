@@ -37,6 +37,16 @@ qreal KisCurvePaintOpSettings::paintOpSize() const
     return option.curve_line_width;
 }
 
+void KisCurvePaintOpSettings::setPaintOpAngle(qreal value)
+{
+    Q_UNUSED(value);
+}
+
+qreal KisCurvePaintOpSettings::paintOpAngle() const
+{
+    return 0.0;
+}
+
 bool KisCurvePaintOpSettings::paintIncremental()
 {
     KisPaintingModeOptionData data;

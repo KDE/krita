@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: GPL-3.0-or-later
+ </author>
+ <class>WdgSvgTextOptionWidget</class>
+ <widget class="QWidget" name="WdgSvgTextOptionWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QPushButton" name="btnEdit">
+     <property name="text">
+      <string>Edit Text</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="defsOptions">
+     <property name="title">
+      <string>Create new texts with...</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QFontComboBox" name="defFont"/>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="alignButtons">
+        <item>
+         <widget class="QComboBox" name="defPointSize"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="alignLeft">
+          <property name="toolTip">
+           <string>Anchor text to the left.</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="alignCenter">
+          <property name="toolTip">
+           <string>Anchor text to the middle.</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="alignRight">
+          <property name="toolTip">
+           <string>Anchor text to the right.</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="defLetterSpacing">
+          <property name="toolTip">
+           <string>Letter Spacing</string>
+          </property>
+          <property name="minimum">
+           <double>-20.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>20.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.500000000000000</double>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QPushButton" name="btnEditSvg">
+     <property name="text">
+      <string>Edit SVG Source</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="0">
+    <widget class="QGroupBox" name="groupBoxDebug">
+     <property name="title">
+      <string notr="true">Debug Tools</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QCheckBox" name="chkDbgCharBbox">
+        <property name="text">
+         <string notr="true">Show char bounding boxes</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chkDbgLineBox">
+        <property name="text">
+         <string notr="true">Show line boxes</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

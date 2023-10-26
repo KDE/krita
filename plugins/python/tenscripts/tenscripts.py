@@ -16,8 +16,9 @@ class TenScriptsExtension(krita.Extension):
     def __init__(self, parent):
         super(TenScriptsExtension, self).__init__(parent)
 
-        self.actions = []
         self.scripts = []
+        self.actionToIndex = {}
+        self.indexToAction = {}
 
     def setup(self):
         self.readSettings()
@@ -39,14 +40,10 @@ class TenScriptsExtension(krita.Extension):
     def writeSettings(self):
 
         saved_scripts = self.uitenscripts.saved_scripts()
-
-        for index, script in enumerate(saved_scripts):
-            self.actions[index].script = script
+        self.scripts = saved_scripts
 
         Application.writeSetting(
             "tenscripts", "scripts", ','.join(map(str, saved_scripts)))
-
-        self.scripts = saved_scripts
 
     def loadActions(self, window):
         for index, item in enumerate(['1', '2', '3', '4', '5',
@@ -55,17 +52,15 @@ class TenScriptsExtension(krita.Extension):
                 "execute_script_" + item,
                 str(i18n("Execute Script {num}")).format(num=item),
                 "")
-            action.script = None
             action.triggered.connect(self._executeScript)
-
-            if index < len(self.scripts):
-                action.script = self.scripts[index]
-
-            self.actions.append(action)
+            self.actionToIndex[action.objectName()] = index
+            self.indexToAction[index] = action.objectName()
 
     def _executeScript(self):
-        script = self.sender().script
+        scriptIndex = self.actionToIndex[self.sender().objectName()]
+        script = self.scripts[scriptIndex] if len(self.scripts) > scriptIndex else None
         window = Application.activeWindow()
+
         if script:
             try:
                 if sys.version_info[0] > 2:

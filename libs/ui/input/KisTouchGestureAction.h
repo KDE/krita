@@ -18,6 +18,15 @@ public:
         ToggleCanvasOnlyShortcut,
         ToggleEraserMode,
         ResetDisplay,
+        PreviousPresetShortcut,
+        ColorSampler,
+        Deselect,
+        NextLayer,
+        PreviousLayer,
+        FreehandBrush,
+        KisToolSelectContiguous,
+        KisToolMove,
+        KisToolTransform,
     };
 
     KisTouchGestureAction();

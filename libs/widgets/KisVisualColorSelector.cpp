@@ -619,7 +619,7 @@ QVector4D KisVisualColorSelector::calculateMaxChannelValues()
 {
     // Note: This calculation only makes sense for HDR color spaces
     QVector4D maxChannelValues = QVector4D(1, 1, 1, 1);
-    QList<KoChannelInfo *> channels = m_d->selectorModel->colorSpace()->channels();
+    const QList<KoChannelInfo *> channels = m_d->selectorModel->colorSpace()->channels();
 
     for (int i = 0; i < channels.size(); i++) {
         const KoChannelInfo *channel = channels.at(i);

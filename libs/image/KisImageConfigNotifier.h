@@ -25,11 +25,23 @@ public:
      */
     void notifyConfigChanged(void);
 
+    /**
+     * Notify that the animation keyframing configuration has changed.
+     * This will cause the autoKeyFrameConfigurationChanged() signal
+     * to be emitted.
+     */
+    void notifyAutoKeyFrameConfigurationChanged();
+
 Q_SIGNALS:
     /**
      * This signal is emitted whenever notifyConfigChanged() is called.
      */
     void configChanged(void);
+
+    /**
+     * This signal is emitted whenever notifyConfigChanged() is called.
+     */
+    void autoKeyFrameConfigurationChanged();
 
 private:
     Q_DISABLE_COPY(KisImageConfigNotifier)

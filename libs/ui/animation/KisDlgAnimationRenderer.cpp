@@ -192,23 +192,20 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 
     m_page->chkOnlyUniqueFrames->setChecked(lastUsedOptions.wantsOnlyUniqueFrameSequence);
 
-    if (lastUsedOptions.shouldDeleteSequence) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(lastUsedOptions.shouldEncodeVideo);
-        m_page->shouldExportOnlyVideo->setChecked(true);
-    } else if (!lastUsedOptions.shouldEncodeVideo) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!lastUsedOptions.shouldDeleteSequence);
-        m_page->shouldExportOnlyImageSequence->setChecked(true);
-    } else {
-        // export to both
-        m_page->shouldExportOnlyVideo->setChecked(true);
-        m_page->shouldExportOnlyImageSequence->setChecked(true);
-    }
-
+    m_page->shouldExportOnlyVideo->setChecked(lastUsedOptions.shouldEncodeVideo);
+    m_page->shouldExportOnlyImageSequence->setChecked(!lastUsedOptions.shouldDeleteSequence);
+    slotExportTypeChanged();
 
     {
         KisPropertiesConfigurationSP settings = loadLastConfiguration("VIDEO_ENCODER");
 
+        QStringList encodersPresent;
+        Q_FOREACH(const QString& key, ffmpegEncoderTypes.keys()) {
+            encodersPresent << ffmpegEncoderTypes[key];
+        }
+
         getDefaultVideoEncoderOptions(lastUsedOptions.videoMimeType, settings,
+                                      encodersPresent,
                                       &m_customFFMpegOptionsString,
                                       &m_wantsRenderWithHDR);
     }
@@ -220,8 +217,14 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 
     // Initialize FFmpeg location... (!)
     KisConfig cfg(false);
-    const QString cfgFFmpegPath = cfg.ffmpegLocation();
-    const QString likelyFFmpegPath = [&]() {
+    QString cfgFFmpegPath = cfg.ffmpegLocation();
+#ifdef Q_OS_MACOS
+    if (cfgFFmpegPath.isEmpty()) {
+        QJsonObject ffmpegInfo =  KisFFMpegWrapper::findFFMpeg(cfgFFmpegPath);
+        cfgFFmpegPath = (ffmpegInfo["enabled"].toBool()) ? ffmpegInfo["path"].toString() : "";
+    }
+#endif
+    QString likelyFFmpegPath = [&]() {
         if (!cfgFFmpegPath.isEmpty()) {
             return cfgFFmpegPath;
         }
@@ -232,6 +235,12 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 
         return QStandardPaths::findExecutable("ffmpeg");
     }();
+
+    if (likelyFFmpegPath.isEmpty() || !QFileInfo(likelyFFmpegPath).isExecutable()) {
+        QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg("");
+
+        likelyFFmpegPath = (ffmpegJsonObj["enabled"].toBool()) ? ffmpegJsonObj["path"].toString() : "";
+    }
 
     m_page->ffmpegLocation->setFileName(likelyFFmpegPath);
     m_page->ffmpegLocation->setStartDir(QFileInfo(m_doc->localFilePath()).path());
@@ -261,16 +270,16 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 }
 
 void KisDlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeType,
-                                                         KisPropertiesConfigurationSP cfg,
-                                                         QString *customFFMpegOptionsString,
-                                                         bool *renderHDR)
+                                                            KisPropertiesConfigurationSP cfg,
+                                                            const QStringList &availableEncoders,
+                                                            QString *customFFMpegOptionsString,
+                                                            bool *renderHDR)
 {
     const KisVideoExportOptionsDialog::ContainerType containerType =
             KisVideoExportOptionsDialog::mimeToContainer(mimeType);
 
-
     QScopedPointer<KisVideoExportOptionsDialog> encoderConfigWidget(
-        new KisVideoExportOptionsDialog(containerType, {},   0));
+        new KisVideoExportOptionsDialog(containerType, availableEncoders,   0));
 
     // we always enable HDR, letting the user to force it
     encoderConfigWidget->setSupportsHDR(true);
@@ -536,8 +545,14 @@ void KisDlgAnimationRenderer::selectRenderType(int index)
         // If this is removed from the configuration, ogg vorbis can fail to render on first attempt. BUG:421658
         // This should be revisited at some point, too much configuration juggling in this class makes it error-prone...
 
+        QStringList encodersPresent;
+        Q_FOREACH(const QString& key, ffmpegEncoderTypes.keys()) {
+            encodersPresent << ffmpegEncoderTypes[key];
+        }
+
         KisPropertiesConfigurationSP settings = loadLastConfiguration("VIDEO_ENCODER");
         getDefaultVideoEncoderOptions(mimeType, settings,
+                                      encodersPresent,
                                       &m_customFFMpegOptionsString,
                                       &m_wantsRenderWithHDR);
     }
@@ -641,8 +656,8 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
     options.lastFrame = m_page->intEnd->value();
     options.sequenceStart = m_page->sequenceStart->value();
 
-    options.shouldEncodeVideo = !m_page->shouldExportOnlyImageSequence->isChecked();
-    options.shouldDeleteSequence = m_page->shouldExportOnlyVideo->isChecked();
+    options.shouldEncodeVideo = m_page->shouldExportOnlyVideo->isChecked();
+    options.shouldDeleteSequence = !m_page->shouldExportOnlyImageSequence->isChecked();
     options.includeAudio = m_page->chkIncludeAudio->isChecked();
     options.wantsOnlyUniqueFrameSequence = m_page->chkOnlyUniqueFrames->isChecked();
 
@@ -747,6 +762,16 @@ void KisDlgAnimationRenderer::slotExportTypeChanged()
          // videos always uses PNG for creating video, so disable the ability to change the format
          m_page->cmbMimetype->setEnabled(false);
          m_page->cmbMimetype->setCurrentIndex(m_page->cmbMimetype->findData("image/png"));
+    }
+
+    /**
+     * A fallback fix for a case when both checkboxes are unchecked
+     */
+    if (!m_page->shouldExportOnlyVideo->isChecked() &&
+        !m_page->shouldExportOnlyImageSequence->isChecked()) {
+
+         KisSignalsBlocker b(m_page->shouldExportOnlyImageSequence);
+         m_page->shouldExportOnlyImageSequence->setChecked(true);
     }
 }
 

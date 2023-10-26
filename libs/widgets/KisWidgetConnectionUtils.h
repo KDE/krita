@@ -13,6 +13,7 @@
 #include "kritawidgets_export.h"
 
 class QAbstractButton;
+class QAction;
 class QComboBox;
 class QButtonGroup;
 class QSpinBox;
@@ -86,6 +87,7 @@ using IntSpinBoxState = SpinBoxState<int>;
 using DoubleSpinBoxState = SpinBoxState<qreal>;
 
 void KRITAWIDGETS_EXPORT connectControl(QAbstractButton *button, QObject *source, const char *property);
+void KRITAWIDGETS_EXPORT connectControl(QAction *button, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QSpinBox *spinBox, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QDoubleSpinBox *spinBox, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControlState(QDoubleSpinBox *spinBox, QObject *source, const char *readStateProperty, const char *writeProperty);

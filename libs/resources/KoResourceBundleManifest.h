@@ -11,6 +11,7 @@
 #include <QPair>
 #include <QMap>
 #include <QMultiMap>
+#include <QDomElement>
 
 #include <kritaresources_export.h>
 
@@ -90,7 +91,8 @@ public:
     void removeFile(QString fileName);
 
 private:
-    QMap<QString, QMap<QString, ResourceReference> > m_resources;
+    QMap<QString, QMap<QString, ResourceReference>> m_resources;
+    bool parseFileEntry(const QDomElement &e);
 };
 
 

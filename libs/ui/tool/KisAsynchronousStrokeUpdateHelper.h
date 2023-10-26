@@ -52,7 +52,30 @@ public:
     KisAsynchronousStrokeUpdateHelper();
     ~KisAsynchronousStrokeUpdateHelper();
 
+    /**
+     * Initialize the update helper and start the steam of the
+     * update events. This is just a simple combination of
+     * initUpdateStreamLowLevel() and startUpdateStreamLowLevel().
+     */
     void startUpdateStream(KisStrokesFacade *strokesFacade, KisStrokeId strokeId);
+
+    /**
+     *  A low-level version of startUpdateStream(...), initializes
+     *  the helper but doesn't start the stream of update events.
+     *  That is needed for the tool to issue endUpdateStream()
+     *  signals, when the action has been ended **before** the
+     *  stroke actually managed to initialize itself.
+     */
+    void initUpdateStreamLowLevel(KisStrokesFacade *strokesFacade, KisStrokeId strokeId);
+
+    /**
+     * Start the stream of the update events on **already
+     * initialized** helper. One should call
+     * initUpdateStreamWithoutStart() before calling
+     * startUpdateStream().
+     */
+    void startUpdateStreamLowLevel();
+
     void endUpdateStream();
     void cancelUpdateStream();
 

@@ -88,6 +88,3 @@ void KisHairyInkOptionWidget::readOptionSetting(const KisPropertiesConfiguration
     data.read(setting.data());
     m_d->model.optionData.set(data);
 }
-
-
-#include "KisHairyInkOptionWidget.moc"

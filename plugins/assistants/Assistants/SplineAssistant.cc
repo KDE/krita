@@ -207,7 +207,7 @@ QPointF SplineAssistant::project(const QPointF& pt, const QPointF& strokeBegin) 
     return draw_pos;
 }
 
-QPointF SplineAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
+QPointF SplineAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal /*moveThresholdPt*/)
 {
     return project(pt, strokeBegin);
 }

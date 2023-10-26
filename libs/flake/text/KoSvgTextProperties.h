@@ -186,8 +186,11 @@ public:
      * parentProperties. The property is considered "inherited" **iff* it is
      * inheritable according to SVG and the parent defined the same property
      * with the same value.
+     * @param keepFontSize whether to keep the font size, use for root nodes
+     * so that it won't be omitted and inheriting from the "default", which may
+     * not be deterministic.
      */
-    KoSvgTextProperties ownProperties(const KoSvgTextProperties &parentProperties) const;
+    KoSvgTextProperties ownProperties(const KoSvgTextProperties &parentProperties, bool keepFontSize = false) const;
 
     /**
      * @brief parseSvgTextAttribute add a property according to an XML attribute value.

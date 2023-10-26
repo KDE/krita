@@ -115,6 +115,7 @@ void benchmarkBrushUnthreaded(const QString &presetName)
 }
 
 #include <KoResourcePaths.h>
+#include <KisSupportedArchitectures.h>
 
 void FreehandStrokeBenchmark::initTestCase()
 {
@@ -143,6 +144,10 @@ void FreehandStrokeBenchmark::initTestCase()
         tester.benchmark();
         QTest::qSleep(500);
     }
+
+    qDebug() << "Base instruction set:" << KisSupportedArchitectures::baseArchName();
+    qDebug() << "Optimized code uses set:" << KisSupportedArchitectures::bestArchName();
+    qDebug() << "Supported instruction sets:" << KisSupportedArchitectures::supportedInstructionSets();
 }
 
 void FreehandStrokeBenchmark::testDefaultTip()

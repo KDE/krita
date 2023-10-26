@@ -1,5 +1,6 @@
 ﻿/*
  *  Copyright (c) 2020 Agata Cacko cacko.azh@gmail.com
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -219,6 +220,8 @@ void KisWdgTagSelectionControllerBundleTags::slotRemoveTag(KoID custom)
             updateView();
         }
     }
+    
+    emit tagRemoved(custom);
 }
 
 void KisWdgTagSelectionControllerBundleTags::slotAddTag(KoID custom)
@@ -230,6 +233,21 @@ void KisWdgTagSelectionControllerBundleTags::slotAddTag(KoID custom)
         m_selectedTagsByResourceType[m_resourceType].append(custom);
         updateView();
     }
+
+    emit tagAdded(custom);
+}
+
+void KisWdgTagSelectionControllerBundleTags::addTag(KoID custom)
+{
+    if (!m_selectedTagsByResourceType.contains(m_resourceType)) {
+        m_selectedTagsByResourceType.insert(m_resourceType, QList<KoID>());
+    }
+    if (!m_selectedTagsByResourceType[m_resourceType].contains(custom)) {
+        m_selectedTagsByResourceType[m_resourceType].append(custom);
+        updateView();
+    }
+
+    emit tagAdded(custom);
 }
 
 void KisWdgTagSelectionControllerBundleTags::updateView()

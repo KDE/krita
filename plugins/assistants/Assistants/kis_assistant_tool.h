@@ -88,7 +88,8 @@ private:
     void beginActionImpl(KoPointerEvent *event);
     void continueActionImpl(KoPointerEvent *event);
     void endActionImpl(KoPointerEvent *event);
-
+    //function to calculate new button positions for editor widget
+    void updateEditorWidgetData();
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
@@ -120,6 +121,14 @@ private Q_SLOTS:
     void slotSelectedAssistantTypeChanged();
     void slotChangeFixedLengthUnit(int index);
 
+    //When the user checks an editor widget button checkbox, update the AssistantEditorData
+    //struct within the current document's KisPaintingAssistantsDecoration instance
+    void slotToggleMoveButton(int index);
+    void slotToggleSnapButton(int index);
+    void slotToggleLockButton(int index);
+    void slotToggleDuplicateButton(int index);
+    void slotToggleDeleteButton(int index);
+    
 protected:
     /// Draws the editor widget controls with move, activate, and delete
     /// This also creates a lot of assistant specific stuff for vanishing points and perspective grids
@@ -156,7 +165,7 @@ protected:
     QPointF m_dragEnd;
     int m_handleSize {17}; // how large the editor handles will appear
     int m_handleMaxDist {81}; // how far away the user can click and still select a handle
-
+    bool assistantDuplicatingFlag {false}; // this flag is set during an assistant duplication
 
 private:
     void drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& _gc);

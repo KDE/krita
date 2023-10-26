@@ -61,57 +61,52 @@ bool KoResourceBundle::load()
     if (!resourceStore || resourceStore->bad()) {
         qWarning() << "Could not open store on bundle" << m_filename;
         return false;
-
     }
-    else {
 
-        m_metadata.clear();
+    m_metadata.clear();
 
-        if (resourceStore->open("META-INF/manifest.xml")) {
-            if (!m_manifest.load(resourceStore->device())) {
-                qWarning() << "Could not open manifest for bundle" << m_filename;
-                return false;
-            }
-            resourceStore->close();
-
-            Q_FOREACH (KoResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
-                if (!resourceStore->hasFile(ref.resourcePath)) {
-                    m_manifest.removeResource(ref);
-                    qWarning() << "Bundle" << filename() <<  "is broken. File" << ref.resourcePath << "is missing";
-                }
-            }
-
-        } else {
-            qWarning() << "Could not load META-INF/manifest.xml";
+    if (resourceStore->open("META-INF/manifest.xml")) {
+        if (!m_manifest.load(resourceStore->device())) {
+            qWarning() << "Could not open manifest for bundle" << m_filename;
             return false;
         }
+        resourceStore->close();
 
-        bool versionFound = false;
-        if (!readMetaData(resourceStore.data())) {
-            qWarning() << "Could not load meta.xml";
-            return false;
+        Q_FOREACH (KoResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
+            if (!resourceStore->hasFile(ref.resourcePath)) {
+                m_manifest.removeResource(ref);
+                qWarning() << "Bundle" << filename() <<  "is broken. File" << ref.resourcePath << "is missing";
+            }
         }
 
-        if (resourceStore->open("preview.png")) {
-            // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
-            // fails with "libpng error: IDAT: CRC error"
-            QByteArray data = resourceStore->device()->readAll();
-            QBuffer buffer(&data);
-            m_thumbnail.load(&buffer, "PNG");
-            resourceStore->close();
-        }
-        else {
-            qWarning() << "Could not open preview.png";
-        }
+    } else {
+        qWarning() << "Could not load META-INF/manifest.xml";
+        return false;
+    }
 
-        /*
-         * If no version is found it's an old bundle with md5 hashes to fix, or if some manifest resource entry
-         * doesn't not correspond to a file the bundle is "broken", in both cases we need to recreate the bundle.
-         */
-        if (!versionFound) {
-            m_metadata.insert(KisResourceStorage::s_meta_version, "1");
-        }
+    bool versionFound = false;
+    if (!readMetaData(resourceStore.data())) {
+        qWarning() << "Could not load meta.xml";
+        return false;
+    }
 
+    if (resourceStore->open("preview.png")) {
+        // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
+        // fails with "libpng error: IDAT: CRC error"
+        QByteArray data = resourceStore->device()->readAll();
+        QBuffer buffer(&data);
+        m_thumbnail.load(&buffer, "PNG");
+        resourceStore->close();
+    } else {
+        qWarning() << "Could not open preview.png";
+    }
+
+    /*
+     * If no version is found it's an old bundle with md5 hashes to fix, or if some manifest resource entry
+     * doesn't not correspond to a file the bundle is "broken", in both cases we need to recreate the bundle.
+     */
+    if (!versionFound) {
+        m_metadata.insert(KisResourceStorage::s_meta_version, "1");
     }
 
     return true;
@@ -298,6 +293,20 @@ void KoResourceBundle::setThumbnail(QString filename)
     }
 }
 
+void KoResourceBundle::setThumbnail(QImage image)
+{
+    if (!image.isNull()) {
+        m_thumbnail = image;
+        m_thumbnail = m_thumbnail.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
+    else {
+        m_thumbnail = QImage(256, 256, QImage::Format_ARGB32);
+        QPainter gc(&m_thumbnail);
+        gc.fillRect(0, 0, 256, 256, Qt::red);
+        gc.end();
+    }
+}
+
 void KoResourceBundle::writeMeta(const QString &metaTag, KoXmlWriter *writer)
 {
     if (m_metadata.contains(metaTag)) {
@@ -321,61 +330,57 @@ void KoResourceBundle::writeUserDefinedMeta(const QString &metaTag, KoXmlWriter 
 
 bool KoResourceBundle::readMetaData(KoStore *resourceStore)
 {
-    if (resourceStore->open("meta.xml")) {
-        QDomDocument doc;
-        if (!doc.setContent(resourceStore->device())) {
-            qWarning() << "Could not parse meta.xml for" << m_filename;
-            return false;
-        }
-        // First find the manifest:manifest node.
-        QDomNode n = doc.firstChild();
-        for (; !n.isNull(); n = n.nextSibling()) {
-            if (!n.isElement()) {
+    if (!resourceStore->open("meta.xml")) {
+        qWarning() << "Could not open meta.xml for" << m_filename;
+        return false;
+    }
+
+    QDomDocument doc;
+    if (!doc.setContent(resourceStore->device())) {
+        qWarning() << "Could not parse meta.xml for" << m_filename;
+        return false;
+    }
+
+    const QDomElement root = doc.documentElement();
+    if (root.tagName() != "meta:meta") {
+        qWarning() << "Expected meta:meta element root, but found"
+                   << root.tagName();
+        return false;
+    }
+
+    QDomElement e;
+    for (e = root.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+        QString name  = e.tagName();
+        QString value = e.text();
+        if (name == "meta:meta-userdefined") {
+            name  = e.attribute("meta:name");
+            value = e.attribute("meta:value");
+
+            if (name == "tag") {
+                m_bundletags << value;
                 continue;
             }
-            if (n.toElement().tagName() == "meta:meta") {
-                break;
+
+            if (name != "email"   &&
+                name != "license" &&
+                name != "website") {
+                qWarning() << "Unrecognized metadata: "
+                           << e.tagName()
+                           << name
+                           << value;
             }
+
+            m_metadata.insert(name, value);
+            name = "meta:" + name;
         }
 
-        if (n.isNull()) {
-            qWarning() << "Could not find manifest node for bundle" << m_filename;
-            return false;
+        if (!m_metadata.contains(name)) {
+            m_metadata.insert(name, value);
         }
-
-        const QDomElement  metaElement = n.toElement();
-        for (n = metaElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
-            if (n.isElement()) {
-                QDomElement e = n.toElement();
-                if (e.tagName() == "meta:meta-userdefined") {
-                    if (e.attribute("meta:name") == "tag") {
-                        m_bundletags << e.attribute("meta:value");
-                    }
-                    else {
-                        QString metaName = e.attribute("meta:name");
-                        if (!metaName.startsWith("meta:") && !metaName.startsWith("dc:")) {
-                            if (metaName == "email" || metaName == "license" || metaName == "website") { // legacy metadata options
-                                if (!m_metadata.contains("meta:" + metaName)) {
-                                    m_metadata.insert("meta:" + metaName, e.attribute("meta:value"));
-                                }
-                            } else {
-                                qWarning() << "Unrecognized metadata: " << e.tagName() << e.attribute("meta:name") << e.attribute("meta:value");
-                            }
-                        }
-                        m_metadata.insert(e.attribute("meta:name"), e.attribute("meta:value"));
-                    }
-                }
-                else {
-                    if (!m_metadata.contains(e.tagName())) {
-                        m_metadata.insert(e.tagName(), e.firstChild().toText().data());
-                    }
-                }
-            }
-        }
-        resourceStore->close();
-        return true;
     }
-    return false;
+
+    resourceStore->close();
+    return true;
 }
 
 void KoResourceBundle::saveMetadata(QScopedPointer<KoStore> &store)

@@ -106,6 +106,11 @@ KisIndexColorTransformation::KisIndexColorTransformation(IndexColorPalette palet
 
 void KisIndexColorTransformation::transform(const quint8* src, quint8* dst, qint32 nPixels) const
 {
+    if (m_palette.numColors() <= 0) {
+        memcpy(dst, src, nPixels * m_colorSpace->pixelSize());
+        return;
+    }
+
     union
     {
         quint16 laba[4];

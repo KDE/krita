@@ -49,7 +49,6 @@
 #include <kis_selection.h>
 
 #include "KisDocument.h"
-#include "KisImageSignals.h"
 #include "KisImportExportManager.h"
 #include "KisMainWindow.h"
 #include "KisMimeDatabase.h"
@@ -58,7 +57,6 @@
 #include "KisRemoteFileFetcher.h"
 #include "KisSynchronizedConnection.h"
 #include "KisViewManager.h"
-#include "dialogs/kis_dlg_paste_format.h"
 #include "input/kis_input_manager.h"
 #include "kis_canvas2.h"
 #include "kis_canvas_controller.h"
@@ -71,19 +69,14 @@
 #include "kis_image_manager.h"
 #include "kis_import_catcher.h"
 #include "kis_mimedata.h"
-#include "kis_mirror_axis.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_node_manager.h"
 #include "kis_paint_layer.h"
 #include "kis_painting_assistants_decoration.h"
-#include "kis_processing_applicator.h"
-#include "kis_progress_widget.h"
 #include "kis_resources_snapshot.h"
 #include "kis_selection_manager.h"
 #include "kis_shape_controller.h"
 #include "kis_signal_compressor.h"
-#include "kis_statusbar.h"
-#include "kis_tool_freehand.h"
 #include "kis_zoom_manager.h"
 #include "krita_utils.h"
 #include "processing/fill_processing_visitor.h"
@@ -93,6 +86,10 @@
 #include <commands_new/kis_processing_command.h>
 #include <commands_new/kis_update_command.h>
 #include <kis_command_utils.h>
+#include <KisScreenMigrationTracker.h>
+#include "kis_memory_statistics_server.h"
+#include "kformat.h"
+
 
 //static
 QString KisView::newObjectName()
@@ -117,6 +114,7 @@ public:
         , zoomManager(_q, &this->viewConverter, &this->canvasController)
         , viewManager(viewManager)
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
+        , screenMigrationTracker(_q)
     {
     }
 
@@ -145,6 +143,8 @@ public:
 
     KisSynchronizedConnection<KisNodeSP> addNodeConnection;
     KisSynchronizedConnection<KisNodeSP> removeNodeConnection;
+
+    KisScreenMigrationTracker screenMigrationTracker;
 
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
@@ -205,7 +205,6 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
     , d(new Private(this, document, viewManager))
 {
     Q_ASSERT(document);
-    connect(document, SIGNAL(titleModified(QString,bool)), this, SIGNAL(titleModified(QString,bool)));
     setObjectName(newObjectName());
 
     d->document = document;
@@ -236,7 +235,6 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
     setAcceptDrops(true);
 
     connect(d->document, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
-    connect(d->document, SIGNAL(sigSavingFinished(QString)), this, SLOT(slotSavingFinished()));
 
     d->referenceImagesDecoration = new KisReferenceImagesDecoration(this, document, /* viewReady = */ false);
     d->canvas.addDecoration(d->referenceImagesDecoration);
@@ -248,6 +246,16 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
 
     d->showFloatingMessage = cfg.showCanvasMessages();
     d->zoomManager.updateScreenResolution(this);
+
+    connect(document, SIGNAL(sigReadWriteChanged(bool)), this, SLOT(slotUpdateDocumentTitle()));
+    connect(document, SIGNAL(sigRecoveredChanged(bool)), this, SLOT(slotUpdateDocumentTitle()));
+    connect(document, SIGNAL(sigPathChanged(QString)), this, SLOT(slotUpdateDocumentTitle()));
+    connect(KisMemoryStatisticsServer::instance(),
+            SIGNAL(sigUpdateMemoryStatistics()),
+            SLOT(slotUpdateDocumentTitle()));
+    connect(document, SIGNAL(modified(bool)), this, SLOT(setWindowModified(bool)));
+    slotUpdateDocumentTitle();
+    setWindowModified(document->isModified());
 }
 
 KisView::~KisView()
@@ -1139,9 +1147,9 @@ QList<QAction*> KisView::createChangeUnitActions(bool addPixelUnit)
 
 void KisView::closeEvent(QCloseEvent *event)
 {
-    // Check whether we're the last (user visible) view
+    // Check whether we're the last view
     int viewCount = KisPart::instance()->viewCount(document());
-    if (viewCount > 1 || !isVisible()) {
+    if (viewCount > 1) {
         // there are others still, so don't bother the user
         event->accept();
         return;
@@ -1200,9 +1208,23 @@ bool KisView::queryClose()
 
 }
 
-void KisView::slotScreenChanged()
+void KisView::slotMigratedToScreen(QScreen *screen)
 {
+    d->canvas.slotScreenChanged(screen);
+}
+
+void KisView::slotScreenOrResolutionChanged()
+{
+    /**
+     * slotScreenOrResolutionChanged() is guaranteed to come after
+     * slotMigratedToScreen() when a migration happens
+     */
     d->zoomManager.updateScreenResolution(this);
+}
+
+QScreen* KisView::currentScreen() const
+{
+    return d->screenMigrationTracker.currentScreen();
 }
 
 void KisView::slotThemeChanged(QPalette pal)
@@ -1220,6 +1242,30 @@ void KisView::slotThemeChanged(QPalette pal)
     if (canvasController()) {
         canvasController()->setPalette(pal);
     }
+}
+
+void KisView::slotUpdateDocumentTitle()
+{
+    QString title = d->document->caption();
+
+    if (!d->document->isReadWrite()) {
+        title += " " + i18n("Write Protected");
+    }
+
+    if (d->document->isRecovered()) {
+        title += " " + i18n("Recovered");
+    }
+
+    // show the file size for the document
+    KisMemoryStatisticsServer::Statistics fileSizeStats = KisMemoryStatisticsServer::instance()->fetchMemoryStatistics(d->document->image());
+
+    if (fileSizeStats.imageSize) {
+        title += QString(" (").append( KFormat().formatByteSize(qreal(fileSizeStats.imageSize))).append( ") ");
+    }
+
+    title += "[*]";
+
+    this->setWindowTitle(title);
 }
 
 void KisView::resetImageSizeAndScroll(bool changeCentering,
@@ -1449,15 +1495,9 @@ void KisView::slotLoadingFinished()
     }
 
     setCurrentNode(activeNode);
-    connect(d->viewManager->mainWindow(), SIGNAL(screenChanged()), SLOT(slotScreenChanged()));
+    connect(&d->screenMigrationTracker, SIGNAL(sigScreenChanged(QScreen*)), this, SLOT(slotMigratedToScreen(QScreen*)));
+    connect(&d->screenMigrationTracker, SIGNAL(sigScreenOrResolutionChanged(QScreen*)), this, SLOT(slotScreenOrResolutionChanged()));
     zoomManager()->updateImageBoundsSnapping();
-}
-
-void KisView::slotSavingFinished()
-{
-    if (d->viewManager && d->viewManager->mainWindow()) {
-        d->viewManager->mainWindow()->updateCaption();
-    }
 }
 
 void KisView::slotImageResolutionChanged()

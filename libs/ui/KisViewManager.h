@@ -161,6 +161,8 @@ public:  // Krita specific interfaces
      */
     void blockUntilOperationsFinishedForced(KisImageSP image);
 
+    void notifyWorkspaceLoaded();
+
 public:
 
     KisGridManager * gridManager() const;
@@ -248,7 +250,6 @@ private Q_SLOTS:
     void showStatusBar(bool toggled);
     void toggleTabletLogger();
     void openResourcesDirectory();
-    void initializeStatusBarVisibility();
     void guiUpdateTimeout();
     void slotUpdatePixelGridAction();
     void slotSaveShowRulersState(bool value);

@@ -11,6 +11,8 @@
 #include <KoPointerEvent.h>
 #include <KoShapeStroke.h>
 #include <KisViewManager.h>
+#include <canvas/kis_canvas2.h>
+#include <kis_canvas_resource_provider.h>
 
 #include <kis_cursor.h>
 
@@ -18,11 +20,19 @@ KisToolPencil::KisToolPencil(KoCanvasBase * canvas)
     : DelegatedPencilTool(canvas, Qt::ArrowCursor,
                           new __KisToolPencilLocalTool(canvas, this))
 {
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+
+    connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
 }
 
 void KisToolPencil::resetCursorStyle()
 {
-    DelegatedPencilTool::resetCursorStyle();
+    if (isEraser() && (nodePaintAbility() == PAINT)) {
+        useCursor(KisCursor::eraserCursor());
+    } else {
+        DelegatedPencilTool::resetCursorStyle();
+    }
+
     overrideCursorIfNotEditable();
 }
 

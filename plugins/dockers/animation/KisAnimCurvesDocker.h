@@ -23,6 +23,7 @@ class KisDoubleParseSpinBox;
 class KisSliderSpinBox;
 class KisZoomButton;
 class KisCollapsibleButtonGroup;
+class KisPlaybackEngine;
 
 /** @brief A customized titlebar for the Animation Curves Docker that's
  * packed with useful widgets and menus.
@@ -84,6 +85,7 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
     void setViewManager(KisViewManager *kisview) override;
+    void setPlaybackEngine(KisPlaybackEngine *playbackEngine);
 
 public Q_SLOTS:
     void slotScrollerStateChanged(QScroller::State state);
@@ -91,7 +93,6 @@ public Q_SLOTS:
     void updateFrameRegister();
 
     void handleFrameRateChange();
-    void handlePlaybackSpeedChange(double normalizedSpeed);
 
 private Q_SLOTS:
     void slotUpdateIcons();

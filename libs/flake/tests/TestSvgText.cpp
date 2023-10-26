@@ -79,6 +79,32 @@ void TestSvgText::initTestCase()
     /// that has already been set as the default application
     /// font.
     qApp->setFont(QFont("sans", 10));
+
+    for (const char *const fontFile : {
+             "fonts/DejaVuSans.ttf",
+             "fonts/FreeSans.ttf",
+             "fonts/Krita_Test_Unicode_Variation_A.ttf",
+             "fonts/Krita_Test_Unicode_Variation_B.ttf",
+             "fonts/Ahem/ahem.ttf",
+             "fonts/krita-pixel-test.otb",
+             "fonts/variabletest_matching.ttf",
+             "fonts/FontWithFancyFeatures.otf",
+             "fonts/testFontsCozens/BaselineTest-Regular-with-BASE.otf",
+         }) {
+        QString fileName = TestUtil::fetchDataFileLazy(fontFile);
+        bool res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
+
+        QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg(fontFile).toLatin1());
+    }
+
+    for (const char *const fontDir : {
+             "fonts/CSSTest",
+             "fonts/testFontsCozens",
+         }) {
+        QString fileName = TestUtil::fetchDataFileLazy(fontDir);
+        bool res = KoFontRegistry::instance()->addFontFileDirectoryToRegistery(fileName);
+        QVERIFY2(res, QString("KoFontRegistry could not add the directory of test fonts %1").arg(fontDir).toLatin1());
+    }
 }
 
 void TestSvgText::testTextProperties()
@@ -173,6 +199,8 @@ void TestSvgText::testTextPropertiesDifference()
     props.setProperty(KoSvgTextProperties::TextOrientationId, OrientationSideWays);
     props.setProperty(KoSvgTextProperties::LetterSpacingId, fromAutoValue(AutoValue(20)));
     props.setProperty(KoSvgTextProperties::WordSpacingId, fromAutoValue(AutoValue(30)));
+    props.setProperty(KoSvgTextProperties::FontSizeId,
+                      KoSvgTextProperties::defaultProperties().property(KoSvgTextProperties::FontSizeId));
 
     KoSvgTextProperties newProps = props;
 
@@ -187,6 +215,9 @@ void TestSvgText::testTextPropertiesDifference()
     QVERIFY(!diff.hasProperty(KoSvgTextProperties::WritingModeId));
     QVERIFY(!diff.hasProperty(KoSvgTextProperties::DirectionId));
 
+    KoSvgTextProperties diff2 = newProps.ownProperties(props, true);
+
+    QVERIFY(diff2.hasProperty(KoSvgTextProperties::FontSizeId));
 
 }
 
@@ -339,11 +370,6 @@ void TestSvgText::testSimpleText()
     QXmlInputSource data;
     data.setData(file.readAll());
 
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg("DejaVu Sans").toLatin1());
-
     SvgRenderTester t(data.data());
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text_simple", QSize(140, 40), 72.0);
@@ -399,11 +425,6 @@ void TestSvgText::testComplexText()
 
     QXmlInputSource data;
     data.setData(file.readAll());
-
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg("DejaVu Sans").toLatin1());
 
     SvgRenderTester t(data.data());
     t.setCheckQImagePremultiplied(true);
@@ -531,11 +552,6 @@ void TestSvgText::testHindiText()
     QXmlInputSource data;
     data.setData(file.readAll());
 
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/FreeSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg("FreeSans").toLatin1());
-
     SvgRenderTester t(data.data());
 
     t.setCheckQImagePremultiplied(true);
@@ -558,11 +574,6 @@ void TestSvgText::testTextBaselineShift()
 
     QXmlInputSource data;
     data.setData(file.readAll());
-
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg("DejaVu Sans").toLatin1());
 
     SvgRenderTester t(data.data());
 
@@ -594,11 +605,6 @@ void TestSvgText::testTextSpacing()
     QXmlInputSource data;
     data.setData(file.readAll());
 
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg("DejaVu Sans").toLatin1());
-
     SvgRenderTester t(data.data());
     t.setCheckQImagePremultiplied(true);
     t.setFuzzyThreshold(5);
@@ -626,11 +632,6 @@ void TestSvgText::testTextTabSpacing()
     QXmlInputSource data;
     data.setData(file.readAll());
 
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg("DejaVu Sans").toLatin1());
-
     SvgRenderTester t(data.data());
     t.setFuzzyThreshold(5);
     t.setCheckQImagePremultiplied(true);
@@ -657,11 +658,6 @@ void TestSvgText::testTextDecorations()
     QXmlInputSource data;
     data.setData(file.readAll());
 
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg("DejaVu Sans").toLatin1());
-
     SvgRenderTester t(data.data());
     t.setFuzzyThreshold(5);
     t.setCheckQImagePremultiplied(true);
@@ -683,11 +679,6 @@ void TestSvgText::testRightToLeft()
 
     QXmlInputSource data;
     data.setData(file.readAll());
-
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg("DejaVu Sans").toLatin1());
 
     SvgRenderTester t(data.data());
     t.setCheckQImagePremultiplied(true);
@@ -719,11 +710,6 @@ void TestSvgText::testRightToLeftAnchoring()
     QXmlInputSource data;
     data.setData(file.readAll());
 
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg("DejaVu Sans").toLatin1());
-
     SvgRenderTester t(data.data());
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text_right_to_left_anchoring", QSize(500, 500), 72.0);
@@ -737,9 +723,6 @@ void TestSvgText::testVerticalText()
 
     QXmlInputSource data;
     data.setData(file.readAll());
-
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
 
     SvgRenderTester t(data.data());
     t.setFuzzyThreshold(5);
@@ -856,11 +839,6 @@ void TestSvgText::testTextOutlineSolid()
     QXmlInputSource data;
     data.setData(file.readAll());
 
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg("DejaVu Sans").toLatin1());
-
     SvgRenderTester t(data.data());
     t.test_standard("text_outline_solid", QSize(30, 30), 72.0);
 }
@@ -878,11 +856,6 @@ void TestSvgText::testNbspHandling()
 
     QXmlInputSource data;
     data.setData(file.readAll());
-
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg("DejaVu Sans").toLatin1());
 
     SvgRenderTester t(data.data());
     t.test_standard("text_nbsp", QSize(30, 30), 72.0);
@@ -906,11 +879,6 @@ void TestSvgText::testMulticolorText()
 
     QXmlInputSource data;
     data.setData(file.readAll());
-
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg("DejaVu Sans").toLatin1());
 
     SvgRenderTester t(data.data());
     t.setFuzzyThreshold(5);
@@ -1156,9 +1124,6 @@ void TestSvgText::testWhiteSpaceRules()
     QXmlInputSource data;
     data.setData(file.readAll());
 
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
     SvgRenderTester t(data.data());
     t.setFuzzyThreshold(5);
     t.test_standard("text-test-white-space", QSize(400, 320), 72.0);
@@ -1210,9 +1175,6 @@ void TestSvgText::testTextWithMultipleRelativeOffsets()
     QXmlInputSource data;
     data.setData(file.readAll());
 
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
     SvgRenderTester t(data.data());
     t.setFuzzyThreshold(5);
     t.test_standard("text_multiple_relative_offsets", QSize(300, 80), 72.0);
@@ -1237,9 +1199,6 @@ void TestSvgText::testTextWithMultipleAbsoluteOffsetsArabic()
     QXmlInputSource data;
     data.setData(file.readAll());
 
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
     SvgRenderTester t(data.data());
     t.setFuzzyThreshold(5);
     t.test_standard("text_multiple_absolute_offsets_arabic", QSize(530, 70), 72.0);
@@ -1262,9 +1221,6 @@ void TestSvgText::testTextWithMultipleRelativeOffsetsArabic()
 
     QXmlInputSource data;
     data.setData(file.readAll());
-
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
 
     SvgRenderTester t(data.data());
 
@@ -1290,9 +1246,6 @@ void TestSvgText::testTextWithMultipleRelativeOffsetsVertical()
     QXmlInputSource data;
     data.setData(file.readAll());
 
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
     SvgRenderTester t(data.data());
     t.setFuzzyThreshold(5);
     t.test_standard("text_multiple_relative_offsets_vertical", QSize(80, 400), 72.0);
@@ -1313,11 +1266,6 @@ void TestSvgText::testTextWithMultipleRotations()
     QXmlInputSource data;
     data.setData(file.readAll());
 
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-    fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
     SvgRenderTester t(data.data());
     t.setFuzzyThreshold(5);
     t.test_standard("text_multiple_rotations", QSize(340, 400), 72.0);
@@ -1331,11 +1279,6 @@ void TestSvgText::testTextOutline()
 
     QXmlInputSource data;
     data.setData(file.readAll());
-
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg("DejaVu Sans").toLatin1());
 
     SvgRenderTester t(data.data());
 
@@ -1473,18 +1416,12 @@ void TestSvgText::testTextFontSize()
 void TestSvgText::testAddingTestFont()
 {
     QString fontName = "Ahem";
-    QString fontFileName = "fonts/Ahem/ahem.ttf";
-    QString fileName = TestUtil::fetchDataFileLazy(fontFileName);
-
-    bool res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg(fontName).toLatin1());
 
     QVector<int> lengths;
     QMap<QString, qreal> axisSettings;
     const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues({fontName}, lengths, axisSettings);
 
-    res = false;
+    bool res = false;
     for (const FT_FaceUP &face : faces) {
         // qDebug() << face->family_name;
         if (face->family_name == fontName) {
@@ -1618,13 +1555,9 @@ void TestSvgText::testFontSelectionForText()
     // Test the letter a.
 
     QString test = "a";
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/CSSTest");
     QMap<QString, qreal> axisSettings;
 
     // First we verify that we can find the test fonts.
-
-    bool res = KoFontRegistry::instance()->addFontFileDirectoryToRegistery(fileName);
-    QVERIFY2(res, QString("KoFontRegistry could not add the directory of test fonts %1").arg(fileName).toLatin1());
 
     QVector<int> lengths;
     const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues({"CSSTest Verify"}, lengths, axisSettings, test);
@@ -1643,10 +1576,6 @@ void TestSvgText::testFontSelectionForText()
                   << "CSSTest Verify";
     QVector<int> expectedLengths;
     expectedLengths << 4 << 3;
-    fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg("DejaVu Sans").toLatin1());
 
     const std::vector<FT_FaceUP> faces2 = KoFontRegistry::instance()->facesForCSSValues(fontFamilies, lengths, axisSettings, test);
     QVERIFY2(lengths == expectedLengths, QString("KoFontRegistry returns the wrong lengths for string %1").arg(test).toLatin1());
@@ -1683,8 +1612,6 @@ void TestSvgText::testFontSelectionForText()
     fontFamilies << "Krita_Test_Unicode_Variation_A";
     expectedLengths.clear();
     expectedLengths << 5 << 2 << 4 << 1;
-    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
-    KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
 
     foundFonts.clear();
     expectedFonts.clear();
@@ -1708,8 +1635,6 @@ void TestSvgText::testFontSelectionForText()
     // What we want to do here is check whether if we have a font with a character and a selector,
     // it will select that font over others that may only have the base character.
 
-    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_B.ttf");
-    KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
     foundFonts.clear();
     expectedFonts.clear();
     expectedFonts << "CSSTest Verify"
@@ -1802,20 +1727,16 @@ void TestSvgText::testFontSelectionForText()
 void TestSvgText::testFontStyleSelection()
 {
     QString verifyCSSTest = "CSSTest Verify";
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/CSSTest");
     QString test = "A";
     QMap<QString, qreal> axisSettings;
 
     // First we verify that we can find the test fonts.
 
-    bool res = KoFontRegistry::instance()->addFontFileDirectoryToRegistery(fileName);
-    QVERIFY2(res, QString("KoFontRegistry could not add the directory of test fonts %1").arg(fileName).toLatin1());
-
     {
         QVector<int> lengths;
         const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues({verifyCSSTest}, lengths, axisSettings, test);
 
-        res = false;
+        bool res = false;
         for (const FT_FaceUP &face : faces) {
             // qDebug() << face->family_name;
             if (face->family_name == verifyCSSTest) {
@@ -1852,7 +1773,7 @@ void TestSvgText::testFontStyleSelection()
         const std::vector<FT_FaceUP> faces =
             KoFontRegistry::instance()->facesForCSSValues({testItalic}, lengths, axisSettings, test, 72, 72, 1, 1.0, 400, 100, true);
 
-        res = false;
+        bool res = false;
         for (const FT_FaceUP &face : faces) {
             // qDebug() << face->family_name;
             if (face->style_flags == FT_STYLE_FLAG_ITALIC) {
@@ -1871,14 +1792,8 @@ void TestSvgText::testFontStyleSelection()
 void TestSvgText::testFontSizeConfiguration()
 {
     QString fontName = "Ahem";
-    QString fontFileName = "fonts/Ahem/ahem.ttf";
-    QString fileName = TestUtil::fetchDataFileLazy(fontFileName);
     qreal freetypefontfactor = 64.0;
     QMap<QString, qreal> axisSettings;
-
-    bool res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg(fontName).toLatin1());
 
     {
         QVector<int> lengths;
@@ -1897,12 +1812,6 @@ void TestSvgText::testFontSizeConfiguration()
     // The krita test font has support for 4, 8, and 12, so we'll test 4, 8, *10* and 12 :)
 
     fontName = "krita-pixel-test";
-    fontFileName = "fonts/krita-pixel-test.otb";
-    fileName = TestUtil::fetchDataFileLazy(fontFileName);
-
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg(fontName).toLatin1());
 
     {
         QVector<qreal> testSizes;
@@ -1961,11 +1870,6 @@ void TestSvgText::testFontSizeRender()
     QXmlInputSource data;
     data.setData(file.readAll());
 
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg("DejaVu Sans").toLatin1());
-
     SvgRenderTester t(data.data());
     t.setCheckQImagePremultiplied(true);
     t.test_standard("font-sizes", QSize(140, 40), 72.0);
@@ -1981,17 +1885,11 @@ void TestSvgText::testFontSizeRender()
 void TestSvgText::testFontOpenTypeVariationsConfiguration()
 {
     QString fontName = "Variable Test Axis Matching";
-    QString fontFileName = "fonts/variabletest_matching.ttf";
-    QString fileName = TestUtil::fetchDataFileLazy(fontFileName);
-
-    bool res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg(fontName).toLatin1());
 
     // Testing rendering.
 
     QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/font-opentype-variations.svg"));
-    res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
     QXmlInputSource data;
@@ -2018,11 +1916,6 @@ void TestSvgText::testFontColorRender()
     testFonts << "CFF Outlines and COLR";
 
     // testFonts << "CFF Outlines and SBIX" << "CFF Outlines and SVG" << "CFF COLR and SVG";
-
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/testFontsCozens");
-
-    bool res = KoFontRegistry::instance()->addFontFileDirectoryToRegistery(fileName);
-    QVERIFY2(res, QString("KoFontRegistry could not add the directory of test fonts %1").arg(fileName).toLatin1());
 
     const QString dataFront =
         "<svg width=\"70px\" height=\"45px\""
@@ -2054,12 +1947,6 @@ void TestSvgText::testFontColorRender()
 void TestSvgText::testCssFontVariants()
 {
     QString fontName = "FontWithFeaturesOTF";
-    QString fontFileName = "fonts/FontWithFancyFeatures.otf";
-    QString fileName = TestUtil::fetchDataFileLazy(fontFileName);
-
-    bool res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
-    QVERIFY2(res, QString("KoFontRegistry could not add the test font %1").arg(fontName).toLatin1());
 
     QMap<QString, QRect> testFiles;
     testFiles.insert("font-test-font-variant-basic", QRect(0, 0, 230, 200));
@@ -2070,7 +1957,7 @@ void TestSvgText::testCssFontVariants()
     testFiles.insert("font-test-font-variant-position", QRect(0, 0, 160, 70));
     for (QString testFile : testFiles.keys()) {
         QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/" + testFile + ".svg"));
-        res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+        bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
         QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
         QXmlInputSource data;
@@ -2095,11 +1982,6 @@ void TestSvgText::testTextLength()
 
     QXmlInputSource data;
     data.setData(file.readAll());
-
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
 
     SvgRenderTester t(data.data());
     t.setFuzzyThreshold(5);
@@ -2158,11 +2040,6 @@ void TestSvgText::testTextLength()
  */
 void TestSvgText::testTextPathBasic()
 {
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    bool res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
     QMap<QString, QRect> testFiles;
     // Basic text path.
     testFiles.insert("textPath-test-basic", QRect(0, 0, 230, 170));
@@ -2176,7 +2053,7 @@ void TestSvgText::testTextPathBasic()
     testFiles.insert("textPath-test-method", QRect(0, 0, 460, 270));
     for (QString testFile : testFiles.keys()) {
         QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/" + testFile + ".svg"));
-        res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+        bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
         QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
         QXmlInputSource data;
@@ -2195,11 +2072,6 @@ void TestSvgText::testTextPathBasic()
  */
 void TestSvgText::testTextPathComplex()
 {
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    bool res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
     QMap<QString, QRect> testFiles;
     // Tests what happens if you apply transforms on text paths.
     testFiles.insert("textPath-test-transforms", QRect(0, 0, 300, 240));
@@ -2211,7 +2083,7 @@ void TestSvgText::testTextPathComplex()
     testFiles.insert("textPath-test-text-decoration", QRect(0, 0, 230, 170));
     for (QString testFile : testFiles.keys()) {
         QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/" + testFile + ".svg"));
-        res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+        bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
         QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
         QXmlInputSource data;
@@ -2237,18 +2109,19 @@ void TestSvgText::testCssTextTransform()
     QString capitalize = "Aaa Bbb Ccc Ddd Eee Fff Ggg Hhh Iii Jjj Kkk Lll Mmm Nnn Ooo Ppp Qqq Rrr Sss Ttt Uuu Vvv Www Xxx Yyy Zzz";
     QString uppercase = "AAA BBB CCC DDD EEE FFF GGG HHH III JJJ KKK LLL MMM NNN OOO PPP QQQ RRR SSS TTT UUU VVV WWW XXX YYY ZZZ";
 
-    QVERIFY2(KoCssTextUtils::transformTextToLowerCase(capitalize, "") == lower, QString("Transform to lower case does not match lowercase string").toLatin1());
-    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(capitalize, "") == uppercase,
+    QVector<QPair<int, int>> positions;
+    QVERIFY2(KoCssTextUtils::transformTextToLowerCase(capitalize, "", positions) == lower, QString("Transform to lower case does not match lowercase string").toLatin1());
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(capitalize, "", positions) == uppercase,
              QString("Transform to upper case does not match uppercase string").toLatin1());
-    QVERIFY2(KoCssTextUtils::transformTextCapitalize(lower, "") == capitalize,
+    QVERIFY2(KoCssTextUtils::transformTextCapitalize(lower, "", positions) == capitalize,
              QString("Capitalization transform does not match capitalized string").toLatin1());
-    QVERIFY2(KoCssTextUtils::transformTextCapitalize(uppercase, "") == uppercase,
+    QVERIFY2(KoCssTextUtils::transformTextCapitalize(uppercase, "", positions) == uppercase,
              QString("Capitalization transform on uppercase string does not match uppercase string").toLatin1());
 
     // Turkish differentiates between İ and I, little details like these are why we use QLocale, and in effect, this tests whether the QLocale support is
     // lacking on whichever system we're building for.
     QString uppercaseTurkish = "AAA BBB CCC DDD EEE FFF GGG HHH Iİİ JJJ KKK LLL MMM NNN OOO PPP QQQ RRR SSS TTT UUU VVV WWW XXX YYY ZZZ";
-    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(capitalize, "tr") == uppercaseTurkish,
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(capitalize, "tr", positions) == uppercaseTurkish,
              QString("Transform to upper case in Turkish locale does not match reference string, QLocale might not be able to provide good text transforms")
                  .toLatin1());
 
@@ -2279,25 +2152,25 @@ void TestSvgText::testCssTextTransform()
     QString ijDigraphTest = "ijsland";
     QString ijDigraphRef = "IJsland";
 
-    QVERIFY2(KoCssTextUtils::transformTextCapitalize(ijDigraphTest, "nl") == ijDigraphRef, QString("IJ disgraph tailor test is failing").toLatin1());
+    QVERIFY2(KoCssTextUtils::transformTextCapitalize(ijDigraphTest, "nl", positions) == ijDigraphRef, QString("IJ disgraph tailor test is failing").toLatin1());
 
     // Adapted from web platform test text-transform-tailoring-002.html
     QString greekTonosTest = "καλημέρα αύριο";
     QString greekTonosRef = "ΚΑΛΗΜΕΡΑ ΑΥΡΙΟ";
-    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el") == greekTonosRef, QString("Greek tonos tailor test is failing").toLatin1());
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el", positions) == greekTonosRef, QString("Greek tonos tailor test is failing").toLatin1());
 
     // Adapted from web platform test text-transform-tailoring-002a.html
     greekTonosTest = "θεϊκό";
     greekTonosRef = "ΘΕΪΚΟ";
 
-    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el") == greekTonosRef,
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el", positions) == greekTonosRef,
              QString("Greek tonos tailor test for dialytika is failing").toLatin1());
 
     // Adapted from web platform test text-transform-tailoring-003.html
     greekTonosTest = "ευφυΐα Νεράιδα";
     greekTonosRef = "ΕΥΦΥΪΑ ΝΕΡΑΪΔΑ";
 
-    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el") == greekTonosRef,
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el", positions) == greekTonosRef,
              QString("Greek tonos tailor test number 3 is failing.").toLatin1());
 
     // Adapted from web platform test text-transform-tailoring-004.html
@@ -2315,8 +2188,18 @@ void TestSvgText::testCssTextTransform()
 
     greekTonosTest = "ήσουν ή εγώ ή εσύ";
     greekTonosRef = "ΗΣΟΥΝ Ή ΕΓΩ Ή ΕΣΥ";
-    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el") == greekTonosRef,
+    positions.clear();
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el", positions) == greekTonosRef,
              QString("Greek tonos tailor test number 5 is failing").toLatin1());
+    // This particular transformation also has a difference in characters between the before and after,
+    // so let's test the positions too.
+    QVector<QPair<int, int>> refPositions;
+    refPositions << QPair(0,0) << QPair(1,1) << QPair(2,2) << QPair(3,3) << QPair(4,4) << QPair(5,5)
+                 << QPair(6,6) << QPair(-1,7) << QPair(7,8) << QPair(8,9) << QPair(9,10)
+                 << QPair(10,11) << QPair(11,12) << QPair(12,13) << QPair(-1,14) << QPair(13,15)
+                 << QPair(14,16) << QPair(15,17) <<  QPair(16,18);
+    QVERIFY2(positions == refPositions,
+             QString("positions returned by Greek Tonos test number 5 are incorrect.").toLatin1());
 }
 
 /*
@@ -2332,11 +2215,6 @@ void TestSvgText::testTextInlineSize()
 
     QXmlInputSource data;
     data.setData(file.readAll());
-
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
 
     SvgRenderTester t(data.data());
     t.setFuzzyThreshold(5);
@@ -2375,11 +2253,6 @@ void TestSvgText::testTextInlineSize()
 
 void TestSvgText::testTextWrap()
 {
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    bool res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
     QMap<QString, QRect> testFiles;
     // Tests differrent line-height configurations.
     testFiles.insert("textWrap-test-css-line-height", QRect(0, 0, 120, 180));
@@ -2394,7 +2267,7 @@ void TestSvgText::testTextWrap()
     testFiles.insert("textWrap-test-css-mixed-markup", QRect(0, 0, 420, 100));
     for (QString testFile : testFiles.keys()) {
         QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/" + testFile + ".svg"));
-        res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+        bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
         QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
         QXmlInputSource data;
@@ -2421,9 +2294,6 @@ void TestSvgText::testTextBaselineAlignment()
 
     QXmlInputSource data;
     data.setData(file.readAll());
-
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/testFontsCozens/BaselineTest-Regular-with-BASE.otf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
 
     SvgRenderTester t(data.data());
     t.setFuzzyThreshold(5);
@@ -2469,11 +2339,6 @@ void TestSvgText::testCssShapeParsing()
 
 void TestSvgText::testShapeInsideRender()
 {
-    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
-    bool res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
-    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
-
     QMap<QString, QRect> testFiles;
     testFiles.insert("textShape-test-complex-shapes", QRect(0, 0, 380, 380));
     // Tests basic text align.
@@ -2492,7 +2357,7 @@ void TestSvgText::testShapeInsideRender()
 
     for (QString testFile : testFiles.keys()) {
         QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/" + testFile + ".svg"));
-        res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+        bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
         QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
         QXmlInputSource data;
@@ -2502,6 +2367,140 @@ void TestSvgText::testShapeInsideRender()
         t.setFuzzyThreshold(5);
         t.test_standard(testFile, testFiles.value(testFile).size(), 72.0);
     }
+}
+/**
+ * Test text insertion.
+ * This tests basic text insertion and inserting text at end.
+ */
+void TestSvgText::testTextInsertion()
+{
+    // Insert some text.
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    QString ref ("The quick brown fox");
+    textShape->insertText(0, ref);
+    QVERIFY2(ref == textShape->plainText(), QString("Text shape plain text does not match inserted text.").toLatin1());
+
+    // Append at end.
+    QString ref2(" jumps over the lazy dog.");
+    textShape->insertText(19, ref2);
+    ref.insert(19, ref2);
+    QVERIFY2(ref == textShape->plainText(), QString("Text shape plain text does not match reference text.").toLatin1());
+}
+/**
+ * This tests basic text deletion.
+ */
+void TestSvgText::testTextDeletion()
+{
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    QString ref ("The quick brown fox jumps over the lazy dog.");
+    textShape->insertText(0, ref);
+
+    ref.remove(15, 10);
+    textShape->removeText(15, 10);
+    QVERIFY2(ref == textShape->plainText(),
+             QString("Mismatch between textShape plain text and reference for text-removal.").toLatin1());
+}
+/**
+ * Test the cursor navigation. In particular we're
+ * testing the logic for the up/down/left/right pos
+ */
+void TestSvgText::testNavigation()
+{
+    // Test basic left-to-right horizontal.
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    QString ref ("<text style=\"inline-size:50.0; font-size:10.0;font-family:Deja Vu Sans\">The quick brown fox jumps over the lazy dog.</text>");
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    int cursorPos = 0;
+    for (int i=0; i<4; i++) {
+        cursorPos = textShape->posRight(cursorPos);
+    }
+    QVERIFY(cursorPos == 4);
+    for (int i=0; i<5; i++) {
+        cursorPos = textShape->posLeft(cursorPos);
+    }
+    QVERIFY(cursorPos == 0);
+    for (int i=0; i<8; i++) {
+        cursorPos = textShape->posRight(cursorPos);
+    }
+    cursorPos = textShape->posDown(cursorPos);
+    QVERIFY(cursorPos == 18);
+    QVERIFY(textShape->lineStart(cursorPos) == 10);
+    QVERIFY(textShape->lineEnd(cursorPos) == 19);
+
+    // Test right-to-left horizontal.
+    QString rtlRef ("<text style=\"inline-size:50.0; font-size:10.0; direction:rtl; font-family:Deja Vu Sans\">داستان SVG 1.1 SE طولا ني است.</text>");
+    converter.convertFromSvg(rtlRef, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    cursorPos = 0;
+    for (int i=0; i<10; i++) {
+        cursorPos = textShape->posLeft(cursorPos, false);
+    }
+    QVERIFY(cursorPos == 10);
+    for (int i=0; i<11; i++) {
+        cursorPos = textShape->posRight(cursorPos, false);
+    }
+    QVERIFY(cursorPos == 0);
+
+
+    // Test right-to-left bidi with visual.
+    for (int i=0; i<10; i++) {
+        cursorPos = textShape->posLeft(cursorPos, true);
+    }
+    QVERIFY(cursorPos == 11);
+    for (int i=0; i<10; i++) {
+        cursorPos = textShape->posLeft(cursorPos, true);
+    }
+    QVERIFY(cursorPos == 20);
+
+    // Test top-to-bottom.
+    QString ttbRef ("<text style=\"inline-size:50.0; font-size:10.0; writing-mode:vertical-rl; font-family:Deja Vu Sans\">A B C D E F G H I J K L M N O P</text>");
+    converter.convertFromSvg(ttbRef, QString(), QRectF(0, 0, 300, 300), 72.0);
+    cursorPos = 0;
+    for (int i=0; i<5; i++) {
+        cursorPos = textShape->posDown(cursorPos);
+    }
+    QVERIFY(cursorPos == 5);
+    for (int i=0; i<10; i++) {
+        cursorPos = textShape->posUp(cursorPos);
+    }
+    QVERIFY(cursorPos == 0);
+    for (int i=0; i<5; i++) {
+        cursorPos = textShape->posDown(cursorPos);
+    }
+    cursorPos = textShape->posLeft(cursorPos);
+    QVERIFY(cursorPos == 11);
+    QVERIFY(textShape->lineStart(cursorPos) == 6);
+    QVERIFY(textShape->lineEnd(cursorPos) == 11);
+
+    cursorPos = textShape->posRight(cursorPos);
+    cursorPos = textShape->posRight(cursorPos);
+    QVERIFY(cursorPos == 0);
+
+    // Test vertical left-to-right.
+    QString ttbRef2 ("<text style=\"inline-size:50.0; font-size:10.0; writing-mode:vertical-lr; font-family:Deja Vu Sans\">A B C D E F G H I J K L M N O P</text>");
+    converter.convertFromSvg(ttbRef2, QString(), QRectF(0, 0, 300, 300), 72.0);
+    cursorPos = 0;
+    for (int i=0; i<5; i++) {
+        cursorPos = textShape->posDown(cursorPos);
+    }
+    QVERIFY(cursorPos == 5);
+    for (int i=0; i<10; i++) {
+        cursorPos = textShape->posUp(cursorPos);
+    }
+    QVERIFY(cursorPos == 0);
+    for (int i=0; i<5; i++) {
+        cursorPos = textShape->posDown(cursorPos);
+    }
+    cursorPos = textShape->posRight(cursorPos);
+    QVERIFY(cursorPos == 11);
+    QVERIFY(textShape->lineStart(cursorPos) == 6);
+    QVERIFY(textShape->lineEnd(cursorPos) == 11);
+
+    cursorPos = textShape->posLeft(cursorPos);
+    cursorPos = textShape->posLeft(cursorPos);
+    QVERIFY(cursorPos == 0);
 }
 
 #include "kistest.h"

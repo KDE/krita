@@ -16,6 +16,7 @@
 #include "kis_touch_shortcut.h"
 #include "kis_native_gesture_shortcut.h"
 #include "kis_config.h"
+#include "kis_extended_modifiers_mapper.h"
 #include <KoPointerEvent.h>
 
 //#define DEBUG_MATCHER
@@ -52,6 +53,7 @@ public:
         , nativeGestureShortcut(0)
         , actionGroupMask([] () { return AllActionGroup; })
         , suppressAllActions(false)
+        , suppressAllKeyboardActions(false)
         , cursorEntered(false)
         , usingTouch(false)
         , usingNativeGesture(false)
@@ -65,12 +67,15 @@ public:
     }
 
     QList<KisSingleActionShortcut*> singleActionShortcuts;
+    QSet<KisSingleActionShortcut*> suppressedSingleActionShortcuts;
     QList<KisStrokeShortcut*> strokeShortcuts;
     QList<KisTouchShortcut*> touchShortcuts;
     QList<KisNativeGestureShortcut*> nativeGestureShortcuts;
 
     QSet<Qt::Key> keys; // Model of currently pressed keys
     QSet<Qt::MouseButton> buttons; // Model of currently pressed buttons
+
+    QSet<Qt::Key> polledKeys; // Keys that were polled using native platform APIs and thus need to be treated carefully, as they may not generate QT key events.
 
     KisStrokeShortcut *runningShortcut;
     KisStrokeShortcut *readyShortcut;
@@ -87,6 +92,7 @@ public:
 
     std::function<KisInputActionGroupsMask()> actionGroupMask;
     bool suppressAllActions;
+    bool suppressAllKeyboardActions;
     bool cursorEntered;
     bool usingTouch;
     bool usingNativeGesture;
@@ -142,6 +148,10 @@ public:
 
     inline bool actionsSuppressedIgnoreFocus() const {
         return suppressAllActions;
+    }
+
+    inline bool KeyboardActionsSuppressed() const {
+        return suppressAllKeyboardActions;
     }
 
     // only for touch events with touchPoints count >= 2
@@ -225,6 +235,10 @@ bool KisShortcutMatcher::autoRepeatedKeyPressed(Qt::Key key)
 
     if (!m_d->keys.contains(key)) { DEBUG_ACTION("Peculiar, autorepeated key but can't remember it was pressed"); }
 
+    if (m_d->polledKeys.contains(key)) {
+        m_d->polledKeys.remove(key);
+    }
+
     if (notifier.isInRecursion()) {
         forceDeactivateAllActions();
     } else if (!m_d->runningShortcut) {
@@ -243,6 +257,8 @@ bool KisShortcutMatcher::keyReleased(Qt::Key key)
 
     if (!m_d->keys.contains(key)) { DEBUG_ACTION("Peculiar, key released but can't remember it was pressed"); }
     else m_d->keys.remove(key);
+
+    m_d->polledKeys.remove(key);
 
     DEBUG_KEY("Released");
 
@@ -579,7 +595,7 @@ void KisShortcutMatcher::reinitializeButtons()
     }
 }
 
-void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &keys)
+void KisShortcutMatcher::handlePolledKeys(const QVector<Qt::Key> &keys)
 {
     Q_FOREACH (Qt::Key key, m_d->keys) {
         if (!keys.contains(key)) {
@@ -590,6 +606,7 @@ void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &k
     Q_FOREACH (Qt::Key key, keys) {
         if (!m_d->keys.contains(key)) {
             keyPressed(key);
+            m_d->polledKeys << key;
         }
     }
 
@@ -623,6 +640,11 @@ QVector<Qt::Key> KisShortcutMatcher::debugPressedKeys() const
     QVector<Qt::Key> keys;
     std::copy(m_d->keys.begin(), m_d->keys.end(), std::back_inserter(keys));
     return keys;
+}
+
+bool KisShortcutMatcher::hasPolledKeys()
+{
+    return !m_d->polledKeys.empty();
 }
 
 void KisShortcutMatcher::lostFocusEvent(const QPointF &localPos)
@@ -673,6 +695,24 @@ void KisShortcutMatcher::suppressAllActions(bool value)
     m_d->suppressAllActions = value;
 }
 
+void KisShortcutMatcher::suppressConflictingKeyActions(const QVector<QKeySequence> &shortcuts)
+{
+    m_d->suppressedSingleActionShortcuts.clear();
+
+    Q_FOREACH (KisSingleActionShortcut *s, m_d->singleActionShortcuts) {
+        Q_FOREACH (const QKeySequence &seq, shortcuts) {
+            if (s->conflictsWith(seq)) {
+                m_d->suppressedSingleActionShortcuts.insert(s);
+            }
+        }
+    }
+}
+
+void KisShortcutMatcher::suppressAllKeyboardActions(bool value)
+{
+    m_d->suppressAllKeyboardActions = value;
+}
+
 void KisShortcutMatcher::clearShortcuts()
 {
     reset("Clearing shortcuts");
@@ -694,14 +734,14 @@ void KisShortcutMatcher::setInputActionGroupsMaskCallback(std::function<KisInput
 
 bool KisShortcutMatcher::tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event)
 {
-    return tryRunSingleActionShortcutImpl(wheelAction, event, m_d->keys);
+    return tryRunSingleActionShortcutImpl(wheelAction, event, m_d->keys, false);
 }
 
 // Note: sometimes event can be zero!!
 template<typename T, typename U>
-bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const QSet<Qt::Key> &keysState)
+bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const QSet<Qt::Key> &keysState, bool keyboard)
 {
-    if (m_d->actionsSuppressedIgnoreFocus()) {
+    if (m_d->actionsSuppressedIgnoreFocus() || (keyboard && m_d->KeyboardActionsSuppressed())) {
         DEBUG_EVENT_ACTION("Event suppressed", event)
         return false;
     }
@@ -709,7 +749,8 @@ bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const
     KisSingleActionShortcut *goodCandidate = 0;
 
     Q_FOREACH (KisSingleActionShortcut *s, m_d->singleActionShortcuts) {
-        if(s->isAvailable(m_d->actionGroupMask()) &&
+        if (!m_d->suppressedSingleActionShortcuts.contains(s) &&
+           s->isAvailable(m_d->actionGroupMask()) &&
            s->match(keysState, param) &&
            (!goodCandidate || s->priority() > goodCandidate->priority())) {
 
@@ -732,6 +773,11 @@ void KisShortcutMatcher::prepareReadyShortcuts()
 {
     m_d->candidateShortcuts.clear();
     if (m_d->actionsSuppressed()) return;
+    if (m_d->KeyboardActionsSuppressed()
+            && !m_d->keys.isEmpty()
+            && m_d->buttons.isEmpty()) {
+        return;
+    }
 
     Q_FOREACH (KisStrokeShortcut *s, m_d->strokeShortcuts) {
         if (s->matchReady(m_d->keys, m_d->buttons)) {

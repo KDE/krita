@@ -47,6 +47,8 @@ set(kritawidgetutils_LIB_SRCS
     KisRepaintDebugger.cpp
     KisMenuStyleDontCloseOnAlt.cpp
     KisSpinBoxPluralHelper.cpp
+    KisDoubleSpinBoxPluralHelper.cpp
+    KisScreenMigrationTracker.cpp
 
     config/kcolorscheme.cpp
     config/kcolorschememanager.cpp
@@ -82,6 +84,7 @@ set(kritawidgetutils_LIB_SRCS
     xmlgui/ktoggletoolbaraction.cpp
     xmlgui/ktoolbar.cpp
     xmlgui/ktoolbarhandler.cpp
+    xmlgui/KisToolBarStateModel.cpp
     xmlgui/kundoactions.cpp
     xmlgui/kxmlguibuilder.cpp
     xmlgui/kxmlguiclient.cpp
@@ -92,6 +95,8 @@ set(kritawidgetutils_LIB_SRCS
 
     katecommandbar.cpp
     commandmodel.cpp
+
+    KisClickableLabel.cpp
 )
 
 if (HAVE_DBUS)
@@ -124,6 +129,10 @@ endif ()
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
     set(KRITA_WIDGET_UTILS_EXTRA_LIBS ${KRITA_WIDGET_UTILS_EXTRA_LIBS} ${FOUNDATION_LIBRARY})
+    target_include_directories(kritawidgetutils PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../macosutils>
+    )
+    target_link_libraries(kritawidgetutils PRIVATE kritamacosutils)
 endif ()
 
 target_link_libraries(kritawidgetutils

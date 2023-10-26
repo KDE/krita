@@ -32,11 +32,7 @@ public:
      * qLocale's format.
      * @return the transformed string.
      */
-    static QString transformTextToUpperCase(const QString &text, const QString &langCode)
-    {
-        QLocale locale(langCode.split("-").join("_"));
-        return locale.toUpper(text);
-    };
+    static QString transformTextToUpperCase(const QString &text, const QString &langCode, QVector<QPair<int, int>> &positions);
 
     /**
      * @brief transformTextToUpperCase
@@ -49,11 +45,7 @@ public:
      * qLocale's format.
      * @return the transformed string.
      */
-    static QString transformTextToLowerCase(const QString &text, const QString &langCode)
-    {
-        QLocale locale(langCode.split("-").join("_"));
-        return locale.toLower(text);
-    };
+    static QString transformTextToLowerCase(const QString &text, const QString &langCode, QVector<QPair<int, int>> &positions);
 
     /**
      * @brief transformTextToUpperCase
@@ -68,7 +60,7 @@ public:
      * qLocale's format.
      * @return the transformed string.
      */
-    static QString transformTextCapitalize(const QString &text, QString langCode);
+    static QString transformTextCapitalize(const QString &text, QString langCode, QVector<QPair<int, int>> &positions);
 
     /**
      * @brief transformTextFullWidth
@@ -119,6 +111,22 @@ public:
     static bool collapseLastSpace(QChar c, KoSvgText::TextSpaceCollapse collapseMethod);
 
     /**
+     * @brief hangLastSpace
+     * Some versions of CSS-Text 'white-space' or 'text-space-collapse' will
+     * hang the final space depending on the situation.
+     * @param c the character in question.
+     * @param collapseMethod the collapse method
+     * @param wrapMethod the wrap method.
+     * @param force whether said hang is a forced hang or not.
+     * @param nextCharIsHardBreak whether the next char is a line break.
+     * @return
+     */
+    static bool hangLastSpace(const QChar c,
+                              KoSvgText::TextSpaceCollapse collapseMethod,
+                              KoSvgText::TextWrap wrapMethod,
+                              bool &force, bool nextCharIsHardBreak);
+
+    /**
      * @brief characterCanHang
      * The function returns whether the character qualifies for
      * 'hanging-punctuation', using the given hang-type.
@@ -153,7 +161,7 @@ public:
      * @param langCode the language code of the text, BCP style.
      * @return a QStringList of the graphemes as seperate strings.
      */
-    static QStringList textToUnicodeGraphemeClusters(QString text, QString langCode);
+    static QStringList textToUnicodeGraphemeClusters(const QString &text, const QString &langCode);
 
     /**
      * @brief justificationOpportunities

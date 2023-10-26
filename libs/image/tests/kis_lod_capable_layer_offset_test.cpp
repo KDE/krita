@@ -16,10 +16,10 @@ bool checkOffset(const KisLodCapableLayerOffset &o,
 {
     bool result = true;
 
-    if (!(o.x() == x && o.y() == y)) {
+    if (!(o->x() == x && o->y() == y)) {
         qDebug() << "Failed to compare an offset:";
-        qDebug() << ppVar(o.x()) << ppVar(x);
-        qDebug() << ppVar(o.y()) << ppVar(y);
+        qDebug() << ppVar(o->x()) << ppVar(x);
+        qDebug() << ppVar(o->y()) << ppVar(y);
         result = false;
     }
 
@@ -34,8 +34,8 @@ void KisLodCapableLayerOffsetTest::test()
 
 
     KisLodCapableLayerOffset refOffset(bounds);
-    refOffset.setX(12);
-    refOffset.setY(16);
+    refOffset->setX(12);
+    refOffset->setY(16);
 
     QVERIFY(checkOffset(refOffset, 12, 16));
 
@@ -43,12 +43,12 @@ void KisLodCapableLayerOffsetTest::test()
 
     QVERIFY(checkOffset(refOffset, 0, 0));
 
-    refOffset.syncLodOffset();
+    refOffset.syncLodCache();
 
     QVERIFY(checkOffset(refOffset, 6, 8));
 
-    refOffset.setX(2);
-    refOffset.setY(6);
+    refOffset->setX(2);
+    refOffset->setY(6);
 
     QVERIFY(checkOffset(refOffset, 2, 6));
 
@@ -58,7 +58,7 @@ void KisLodCapableLayerOffsetTest::test()
 
     bounds->testingSetLod(1);
 
-    refOffset.syncLodOffset();
+    refOffset.syncLodCache();
 
     QVERIFY(checkOffset(refOffset, 6, 8));
 

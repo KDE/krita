@@ -280,7 +280,7 @@ void KisTextureOption::apply(KisFixedPaintDeviceSP dab, const QPoint &offset, co
     KoChannelInfo::enumChannelValueType alphaChannelType = KoChannelInfo::UINT8;
     int alphaChannelOffset = -1;
 
-    QList<KoChannelInfo *> channels = dab->colorSpace()->channels();
+    const QList<KoChannelInfo *> channels = dab->colorSpace()->channels();
     for (quint32 i = 0; i < dab->pixelSize(); i++) {
         if (channels[i]->channelType() == KoChannelInfo::ALPHA) {
             // TODO: check correctness for 16bits!

@@ -63,11 +63,17 @@ void KisToolChangesTracker::reset()
     m_d->redoStack.clear();
 }
 
-bool KisToolChangesTracker::isEmpty(bool undo) const
+bool KisToolChangesTracker::isEmpty() const
 {
-    if (undo) {
-        return m_d->undoStack.isEmpty();
-    } else {
-        return m_d->redoStack.isEmpty();
-    }
+    return m_d->undoStack.isEmpty() && m_d->redoStack.isEmpty();
+}
+
+bool KisToolChangesTracker::canUndo() const
+{
+    return m_d->undoStack.size() > 1;
+}
+
+bool KisToolChangesTracker::canRedo() const
+{
+    return !m_d->redoStack.isEmpty();
 }

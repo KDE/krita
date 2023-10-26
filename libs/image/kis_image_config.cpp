@@ -27,6 +27,7 @@
 
 #ifdef Q_OS_MACOS
 #include <errno.h>
+#include "KisMacosSecurityBookmarkManager.h"
 #endif
 
 KisImageConfig::KisImageConfig(bool readOnly)
@@ -237,10 +238,24 @@ QString KisImageConfig::safelyGetWritableTempLocation(const QString &suffix, con
     // nice to the user. having a clearly named swap file in the home folder is
     // much nicer to Krita's users.
 
+    // NOTE: QStandardPaths::AppLocalDataLocation on macos sandboxed envs
+    // does not return writable locations at all times, using QDir static methods
+    // will always return locations inside the sandbox Container
+
     // furthermore, this is just a default and swapDir can always be configured
     // to another location.
 
-    QString swap = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + '/' + suffix;
+    QString swap;
+
+    KisMacosSecurityBookmarkManager *bookmarkmngr = KisMacosSecurityBookmarkManager::instance();
+    if ( bookmarkmngr->isSandboxed() ) {
+        QDir sandboxHome = QDir::home();
+        if (sandboxHome.cd("tmp")) {
+            swap = sandboxHome.path();
+        }
+    } else {
+        swap = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + '/' + suffix;
+    }
 #else
     Q_UNUSED(suffix);
     QString swap = QDir::tempPath();
@@ -255,6 +270,7 @@ QString KisImageConfig::safelyGetWritableTempLocation(const QString &suffix, con
 
     QString chosenLocation;
     QStringList proposedSwapLocations;
+
     proposedSwapLocations << swap;
     proposedSwapLocations << QDir::tempPath();
     proposedSwapLocations << QDir::homePath();

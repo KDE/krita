@@ -278,10 +278,6 @@ public:
     {
         std::array<quint8, 3> qcolordata;
 
-        qcolordata[2] = static_cast<quint8>(color->red());
-        qcolordata[1] = static_cast<quint8>(color->green());
-        qcolordata[0] = static_cast<quint8>(color->blue());
-
         // Default sRGB transform
         KIS_ASSERT(d->defaultTransformations && d->defaultTransformations->toRGB);
         cmsDoTransform(d->defaultTransformations->toRGB, src, qcolordata.data(), 1);
@@ -292,11 +288,7 @@ public:
 
     void toQColor16(const quint8 *src, QColor *color) const override
     {
-        std::array<quint8, 3> qcolordata;
-
-        qcolordata[2] = static_cast<quint8>(color->red());
-        qcolordata[1] = static_cast<quint8>(color->green());
-        qcolordata[0] = static_cast<quint8>(color->blue());
+        std::array<quint16, 3> qcolordata;
 
         // Default sRGB transform
         Q_ASSERT(d->defaultTransformations && d->defaultTransformations->toRGB16);

@@ -77,7 +77,7 @@ public:
     void setImage(KisImageWSP image) override;
 
     KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer) override;
-    void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer) override;
+    void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer, bool skipPaintingThisLayer) override;
 public:
 
     // KoShape overrides
@@ -200,6 +200,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotMoveShapes(const QPointF &diff);
     void slotTransformShapes(const QTransform &transform);
+    void slotImageResolutionChanged();
 
 private:
     QList<KoShape*> shapesToBeTransformed();

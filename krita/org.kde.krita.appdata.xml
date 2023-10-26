@@ -211,7 +211,7 @@
     <p xml:lang="bg">Krita е чудесен избор за създаване на концептуално изкуство, комикси, текстури за визуализация и матови картини. Krita поддържа много цветови пространства като RGB и CMYK с 8 и 16 бита целочислени канали, както и 16 и 32 бита плаващи канали. точка канали.</p>
     <p xml:lang="bs">Krita je odličan izbor za kreiranje konceptualne umjetnosti, stripove, teksture za obradu i mat slike. Krita podržava mnoge prostore boja kao RGB i CMIK na 8 i 16 bitnim cjelobrojnim kanalimaa, kao i 16 i 32 bita floating point kanalima.</p>
     <p xml:lang="ca">El Krita és una gran elecció per a crear art conceptual, còmics, textures per a renderitzar i pintures «matte». El Krita permet molts espais de color com el RGB i el CMYK amb canals enters de 8 i 16 bits així com canals de coma flotant de 16 i 32 bits.</p>
-    <p xml:lang="ca-valencia">Krita és una gran elecció per a crear art conceptual, còmics, textures per a renderitzar i pintures «matte». Krita permet molts espais de color com el RGB i el CMYK amb canals enters de 8 i 16 bits així com canals de coma flotant de 16 i 32 bits.</p>
+    <p xml:lang="ca-valencia">Krita és una gran elecció per a crear art conceptual, còmics, textures per a renderitzar i pintures «matte». Krita permet molts espais de color com RGB i CMYK amb canals enters de 8 i 16 bits així com canals de coma flotant de 16 i 32 bits.</p>
     <p xml:lang="de">Krita ist eine großartige Wahl zur Erstellung von Concept Art, Comics, Rendertexturen und Vorsatzmalerei. Krita unterstützt viele Farbräume, wie RGB und CMYK mit 8 oder 16 Bit Integerkanälen, sowie 16 und 32 Bit Fließkomma-Kanälen.</p>
     <p xml:lang="el">Το Krita είναι μια εξαιρετική επιλογή για τη δημιουργία αφηρημένης τέχνης, ιστοριών με εικόνες, υφής για ζωγραφική αποτύπωσης και διάχυσης φωτός. Το Krita υποστηρίζει πολλούς χρωματικούς χώρους όπως τα RGB και CMYK σε 8 και 16 bit κανάλια ακεραίων καθώς επίσης και σε 16 και 32 bit κανάλια κινητής υποδιαστολής,</p>
     <p xml:lang="en-GB">Krita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colourspaces like RGB and CMYK at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.</p>
@@ -267,7 +267,7 @@
     <p xml:lang="ja">Krita のソフトウェアとしての生産性を高めている先進的なブラシエンジンや素晴らしいフィルタのほか、便利な機能の数々をお楽しみください。</p>
     <p xml:lang="ko">Krita의 고급 브러시 엔진, 다양한 필터, 여러 도움이 되는 기능으로 생산성을 즐겁게 향상시킬 수 있습니다.</p>
     <p xml:lang="nl">Veel plezier met schilderen met the geavanceerde penseel-engines, filters vol verbazing en vele handige mogelijkheden die maken dat Krita enorm productief is.</p>
-    <p xml:lang="nn">Leik deg med avanserte penselmotorar og fantastiske biletfilter – og mange andre nyttige funksjonar som gjer deg produktiv.</p>
+    <p xml:lang="nn">Leik deg med avanserte penselmotorar og flotte biletfilter – og mange andre nyttige funksjonar som gjer deg produktiv.</p>
     <p xml:lang="pl">Baw się przy malowaniu przy użyciu zaawansowanych silników pędzli, zadziwiających filtrów i wielu innych przydatnych cech, które czynią z Krity bardzo produktywną.</p>
     <p xml:lang="pt">Divirta-se a pintar com os motores de pincéis avançados, os filtros espantosos e muitas outras funcionalidades úteis que tornam o Krita altamente produtivo.</p>
     <p xml:lang="pt-BR">Divirta-se pintando com os mecanismos de pincéis avançados, filtros maravilhosos e muitas outras funcionalidades úteis que tornam o Krita altamente produtivo.</p>
@@ -643,10 +643,10 @@
           <location>https://download.kde.org/stable/krita/5.1.5/krita-x86-5.1.5-setup.exe</location>
         </artifact>
         <artifact type="binary" platform="android-arm64_v8a">
-          <location>https://download.kde.org/stable/krita/5.1.5/krita_build_apk-release-arm64_v8a-release.apk</location>
+          <location>https://download.kde.org/stable/krita/5.1.5/krita-arm64-v8a-5.1.5-release-signed.apk</location>
         </artifact>
         <artifact type="binary" platform="android-armeabi_v7a">
-          <location>https://download.kde.org/stable/krita/5.1.5/krita_build_apk-release-armeabi_v7a-release.apk</location>
+          <location>https://download.kde.org/stable/krita/5.1.5/krita-armeabi-v7a-5.1.5-release-signed.apk</location>
         </artifact>
         <artifact type="source">
           <location>https://download.kde.org/stable/krita/5.1.5/krita-5.1.5.tar.xz</location>

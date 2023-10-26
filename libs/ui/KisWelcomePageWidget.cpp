@@ -14,12 +14,18 @@
 #include <QImage>
 #include <QMessageBox>
 #include <QTemporaryFile>
+#include <QByteArray>
+#include <QBuffer>
+#include <QNetworkAccessManager>
+#include <QEventLoop>
+#include <QDomDocument>
 
 #include "KisRemoteFileFetcher.h"
 #include "kactioncollection.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include <KisMimeDatabase.h>
+#include <KisApplication.h>
 
 #include "KConfigGroup"
 #include "KSharedConfig"
@@ -113,6 +119,8 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 {
     setupUi(this);
 
+    setupBanner();
+
     // URLs that go to web browser...
     devBuildIcon->setIcon(KisIconUtils::loadIcon("warning"));
     devBuildLabel->setVisible(false);
@@ -126,10 +134,12 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     recentDocumentsListView->viewport()->setAutoFillBackground(false);
     recentDocumentsListView->setSpacing(2);
     recentDocumentsListView->installEventFilter(this);
+    recentDocumentsListView->setViewMode(QListView::IconMode);
+    recentDocumentsListView->setSelectionMode(QAbstractItemView::NoSelection);
 
-    recentItemDelegate.reset(new RecentItemDelegate(this));
-    recentItemDelegate->setItemHeight(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH);
-    recentDocumentsListView->setItemDelegate(recentItemDelegate.data());
+//    m_recentItemDelegate.reset(new RecentItemDelegate(this));
+//    m_recentItemDelegate->setItemHeight(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH);
+//    recentDocumentsListView->setItemDelegate(m_recentItemDelegate.data());
     recentDocumentsListView->setIconSize(QSize(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH, KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH));
     recentDocumentsListView->setVerticalScrollMode(QListView::ScrollPerPixel);
     recentDocumentsListView->verticalScrollBar()->setSingleStep(50);
@@ -164,48 +174,49 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
     connect(labelNoFeed, SIGNAL(linkActivated(QString)), showNewsAction, SLOT(enableFromLink(QString)));
 
+    labelNoFeed->setDismissable(false);
+
 #ifdef ENABLE_UPDATERS
     connect(showNewsAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleUpdateChecks(bool)));
 #endif
 
 #ifdef Q_OS_ANDROID
-    dragImageHereLabel->hide();
-    newFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    openFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+//    newFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+//    openFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    donationLink = new QPushButton(dropFrameBorder);
-    donationLink->setFlat(true);
-    QFont f = font();
-    f.setPointSize(15);
-    f.setUnderline(true);
-    donationLink->setFont(f);
-    donationLink->setStyleSheet("padding-left: 5px; padding-right: 5px;");
+//    donationLink = new QPushButton(dropFrameBorder);
+//    donationLink->setFlat(true);
+//    QFont f = font();
+//    f.setPointSize(15);
+//    f.setUnderline(true);
+//    donationLink->setFont(f);
+//    donationLink->setStyleSheet("padding-left: 5px; padding-right: 5px;");
 
-    connect(donationLink, SIGNAL(clicked(bool)), this, SLOT(slotStartDonationFlow()));
+//    connect(donationLink, SIGNAL(clicked(bool)), this, SLOT(slotStartDonationFlow()));
 
-    horizontalSpacer_19->changeSize(10, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    horizontalSpacer_20->changeSize(10, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+//    horizontalSpacer_19->changeSize(10, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+//    horizontalSpacer_20->changeSize(10, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    horizontalLayout_9->addWidget(donationLink);
+//    horizontalLayout_9->addWidget(donationLink);
 
-    donationBannerImage = new QLabel(dropFrameBorder);
-    QString bannerPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "share/krita/donation/banner.png");
-    donationBannerImage->setPixmap(QPixmap(bannerPath));
+//    donationBannerImage = new QLabel(dropFrameBorder);
+//    QString bannerPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "share/krita/donation/banner.png");
+//    donationBannerImage->setPixmap(QPixmap(bannerPath));
 
-    verticalLayout->addWidget(donationBannerImage);
+//    verticalLayout->addWidget(donationBannerImage);
 
-    donationLink->show();
-    donationBannerImage->hide();
+//    donationLink->show();
+//    donationBannerImage->hide();
 
-    // this will asynchronously lead to donationSuccessful (i.e if it *is* successful) which will hide the
-    // link and enable the donation banner.
-    QAndroidJniObject::callStaticMethod<void>("org/krita/android/DonationHelper", "checkBadgePurchased",
-                                              "()V");
+//    // this will asynchronously lead to donationSuccessful (i.e if it *is* successful) which will hide the
+//    // link and enable the donation banner.
+//    QAndroidJniObject::callStaticMethod<void>("org/krita/android/DonationHelper", "checkBadgePurchased",
+//                                              "()V");
 #endif
 
     // configure the News area
     KisConfig cfg(true);
-    m_checkUpdates = cfg.readEntry<bool>("FetchNews", false);
+    m_networkIsAllowed = cfg.readEntry<bool>("FetchNews", false);
 
 
 #ifdef ENABLE_UPDATERS
@@ -243,7 +254,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 		connect(m_versionUpdater.data(), SIGNAL(sigUpdateCheckStateChange(KisUpdaterStatus)),
 				this, SLOT(slotSetUpdateStatus(const KisUpdaterStatus&)));
 
-		if (m_checkUpdates) { // only if the user wants them
+        if (m_networkIsAllowed) { // only if the user wants them
 			m_versionUpdater->checkForUpdate();
 		}
 	}
@@ -251,9 +262,9 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #endif // ENABLE_UPDATERS
 
 
-    showNewsAction->setChecked(m_checkUpdates);
-    newsWidget->setVisible(m_checkUpdates);
-    versionNotificationLabel->setEnabled(m_checkUpdates);
+    showNewsAction->setChecked(m_networkIsAllowed);
+    newsWidget->setVisible(m_networkIsAllowed);
+    versionNotificationLabel->setEnabled(m_networkIsAllowed);
 
     // Drop area..
     setAcceptDrops(true);
@@ -290,8 +301,7 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         newsWidget->setAnalyticsTracking("?" + analyticsString);
 
         KisRecentDocumentsModelWrapper *recentFilesModel = KisRecentDocumentsModelWrapper::instance();
-        connect(recentFilesModel, SIGNAL(sigModelIsUpToDate()),
-                this, SLOT(slotRecentFilesModelIsUpToDate()));
+        connect(recentFilesModel, SIGNAL(sigModelIsUpToDate()), this, SLOT(slotRecentFilesModelIsUpToDate()));
         recentDocumentsListView->setModel(&recentFilesModel->model());
         slotRecentFilesModelIsUpToDate();
     }
@@ -342,10 +352,6 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     newFileLink->setStyleSheet(blendedStyle);
     openFileLink->setStyleSheet(blendedStyle);
 
-    // giving the drag area messaging a dotted border
-    QString dottedBorderStyle = QString("border: 2px dotted ").append(blendedColor.name()).append("; color:").append(blendedColor.name()).append( ";");
-    dragImageHereLabel->setStyleSheet(dottedBorderStyle);
-
     // make drop area QFrame have a dotted line
     dropFrameBorder->setObjectName("dropAreaIndicator");
     QString dropFrameStyle = QString("QFrame#dropAreaIndicator { border: 4px dotted ").append(blendedColor.name()).append("}");
@@ -355,8 +361,9 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     showDropAreaIndicator(false);
 
     // add icons for new and open settings to make them stand out a bit more
-    openFileLink->setIconSize(QSize(30, 30));
-    newFileLink->setIconSize(QSize(30, 30));
+    openFileLink->setIconSize(QSize(48, 48));
+    newFileLink->setIconSize(QSize(48, 48));
+
     openFileLink->setIcon(KisIconUtils::loadIcon("document-open"));
     newFileLink->setIcon(KisIconUtils::loadIcon("document-new"));
 
@@ -373,17 +380,27 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
     kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")));
 
+    lblBanner->setUnscaledPixmap(QPixmap::fromImage(m_bannerImage));
+    connect(lblBanner, SIGNAL(clicked()), this, SLOT(slotBannerClicked()));
+    connect(lblBanner, &KisClickableLabel::dismissed, this, [&](){
+        lblBanner->setVisible(false);
+
+        KisConfig cfg(false);
+        cfg.setHideDevFundBanner(true);
+    });
+    lblBanner->setVisible(m_showBanner);
+
     // HTML links seem to be a bit more stubborn with theme changes... setting inline styles to help with color change
     userCommunityLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita-artists.org\">")
                                .append(i18n("User Community")).append("</a>"));
 
-    gettingStartedLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org/en/user_manual/getting_started.html\">")
+    gettingStartedLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org/user_manual/getting_started.html\">")
                                 .append(i18n("Getting Started")).append("</a>"));
 
     manualLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org\">")
                         .append(i18n("User Manual")).append("</a>"));
 
-    supportKritaLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita.org/en/support-us/donations?" + analyticsString + "donations" + "\">")
+    supportKritaLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita.org/support-us/donations?" + analyticsString + "donations" + "\">")
                               .append(i18n("Support Krita")).append("</a>"));
 
     kritaWebsiteLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://www.krita.org?" + analyticsString + "marketing-site" + "\">")
@@ -416,8 +433,8 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 #endif
 
 #ifdef Q_OS_ANDROID
-    donationLink->setStyleSheet(blendedStyle);
-    donationLink->setText(QString(i18n("Get your Krita Supporter Badge here!")));
+    // donationLink->setStyleSheet(blendedStyle);
+    // donationLink->setText(QString(i18n("Get your Krita Supporter Badge here!")));
 #endif
 }
 
@@ -620,7 +637,7 @@ void KisWelcomePageWidget::showDevVersionHighlight()
     if (isDevelopmentBuild()) {
         QString devBuildLabelText = QString("<a style=\"color: " +
                                            blendedColor.name() +
-                                           " \" href=\"https://docs.krita.org/en/untranslatable_pages/triaging_bugs.html?"
+                                           " \" href=\"https://docs.krita.org/untranslatable_pages/triaging_bugs.html?"
                                            + analyticsString + "dev-build" + "\">")
                                   .append(i18n("DEV BUILD")).append("</a>");
 
@@ -676,6 +693,11 @@ void KisWelcomePageWidget::slotOpenFileClicked()
     m_mainWindow->slotFileOpen();
 }
 
+void KisWelcomePageWidget::slotBannerClicked()
+{
+    QDesktopServices::openUrl(QUrl(m_bannerUrl));
+}
+
 void KisWelcomePageWidget::slotRecentFilesModelIsUpToDate()
 {
     KisRecentDocumentsModelWrapper *recentFilesModel = KisRecentDocumentsModelWrapper::instance();
@@ -696,9 +718,9 @@ void KisWelcomePageWidget::slotToggleUpdateChecks(bool state)
 		return;
 	}
 
-	m_checkUpdates = state;
+    m_networkIsAllowed = state;
 
-    if (m_checkUpdates) {
+    if (m_networkIsAllowed) {
         m_versionUpdater->checkForUpdate();
     }
 
@@ -710,7 +732,7 @@ void KisWelcomePageWidget::slotRunVersionUpdate()
 		return;
 	}
 
-	if (m_checkUpdates) {
+    if (m_networkIsAllowed) {
 		m_versionUpdater->doUpdate();
 	}
 }
@@ -733,7 +755,7 @@ void KisWelcomePageWidget::updateVersionUpdaterFrame()
     bnVersionUpdate->setVisible(false);
     bnErrorDetails->setVisible(false);
 
-    if (!m_checkUpdates || m_versionUpdater.isNull()) {
+    if (!m_networkIsAllowed || m_versionUpdater.isNull()) {
         return;
     }
 
@@ -795,8 +817,8 @@ Java_org_krita_android_JNIWrappers_donationSuccessful(JNIEnv* /*env*/,
                                                       jobject /*obj*/,
                                                       jint    /*n*/)
 {
-    KisWelcomePageWidget::donationLink->hide();
-    KisWelcomePageWidget::donationBannerImage->show();
+    // KisWelcomePageWidget::donationLink->hide();
+    // KisWelcomePageWidget::donationBannerImage->show();
 }
 #endif
 
@@ -805,4 +827,58 @@ QFont KisWelcomePageWidget::largerFont()
     QFont larger = font();
     larger.setPointSizeF(larger.pointSizeF() * 1.1f);
     return larger;
+}
+
+void KisWelcomePageWidget::setupBanner()
+{
+    m_bannerUrl = "https://krita.org/support-us/donations";
+    m_bannerImage = QImage(QStringLiteral(":/default_banner.png"));
+    KisApplication *kisApp = static_cast<KisApplication*>(qApp);
+
+    KisConfig cfg(true);
+
+    m_showBanner = (!kisApp->isStoreApplication() && !cfg.hideDevFundBanner());
+
+//    if (m_networkIsAllowed) {
+//        QByteArray ba = KisRemoteFileFetcher::fetchFile("https://download.kde.org/stable/krita/banner/banner.xml");
+//        QImage overrideBanner;
+//        QString overrideUrl;
+//        bool overrideStore;
+
+//        if (!ba.isEmpty()) {
+//            QDomDocument doc();
+//            if (doc.setContent(ba)) {
+//                QDomNode n = doc.documentElement().firstChild();
+//                while (!n) {
+//                    QDomElement e = n.toElement();
+//                    if (!e.isNull()) {
+//                        if (e.tagName() == "image") {
+//                            QString bannerName = e.text();
+//                            if (!bannerName.isEmpty()) {
+//                                // XXX: get the locale so we can get localized banners
+//                                ba = KisRemoteFileFetcher::fetchFile(QString("https://download.kde.org/stable/krita/banner/").append(bannerName));
+//                                if (!ba.isEmpty()) {
+//                                    QBuffer buf(&ba);
+//                                    overrideBanner = QImage::load(&buf, QFileInfo(bannerName).suffix());
+//                                }
+//                            }
+//                        }
+//                        else if (e.tagName() == "start") {
+
+//                        }
+//                        else if (e.tagName() = "end") {
+
+//                        }
+//                        else if (e.tagName() == "override_store") {
+
+//                        }
+//                    }
+//                    else if (e.tagName() == "url") {
+
+//                        }
+//                    n = n.nextSibling();
+//                }
+//            }
+//        }
+//    }
 }

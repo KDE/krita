@@ -78,6 +78,7 @@ public:
 
 private:
     inline void setTextureParameters();
+    inline void restoreTextureParameters();
 
     void setNeedsMipmapRegeneration();
     void setPreparedLodPlane(int lod);

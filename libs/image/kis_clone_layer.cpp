@@ -102,6 +102,7 @@ KisLayerSP KisCloneLayer::reincarnateAsPaintLayer() const
 void KisCloneLayer::setImage(KisImageWSP image)
 {
     m_d->fallback->setDefaultBounds(new KisDefaultBounds(image));
+    m_d->offset.setDefaultBounds(new KisDefaultBounds(image));
     KisLayer::setImage(image);
 }
 
@@ -134,7 +135,7 @@ KisPaintDeviceSP KisCloneLayer::original() const
 
 bool KisCloneLayer::needProjection() const
 {
-    return m_d->offset.x() || m_d->offset.y();
+    return m_d->offset->x() || m_d->offset->y();
 }
 
 const KoColorSpace *KisCloneLayer::colorSpace() const
@@ -147,7 +148,7 @@ void KisCloneLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         const QRect& rect) const
 {
     QRect copyRect = rect;
-    copyRect.translate(-m_d->offset.x(), -m_d->offset.y());
+    copyRect.translate(-m_d->offset->x(), -m_d->offset->y());
 
     KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, copyRect);
 }
@@ -203,19 +204,19 @@ QRect KisCloneLayer::needRectOnSourceForMasks(const QRect &rc) const
 
 qint32 KisCloneLayer::x() const
 {
-    return m_d->offset.x();
+    return m_d->offset->x();
 }
 qint32 KisCloneLayer::y() const
 {
-    return m_d->offset.y();
+    return m_d->offset->y();
 }
 void KisCloneLayer::setX(qint32 x)
 {
-    m_d->offset.setX(x);
+    m_d->offset->setX(x);
 }
 void KisCloneLayer::setY(qint32 y)
 {
-    m_d->offset.setY(y);
+    m_d->offset->setY(y);
 }
 
 QRect KisCloneLayer::extent() const
@@ -239,8 +240,8 @@ QRect KisCloneLayer::accessRect(const QRect &rect, PositionToFilthy pos) const
     QRect resultRect = rect;
 
     if(pos & (N_FILTHY_PROJECTION | N_FILTHY)) {
-        if (m_d->offset.x() || m_d->offset.y()) {
-            resultRect |= rect.translated(-m_d->offset.x(), -m_d->offset.y());
+        if (m_d->offset->x() || m_d->offset->y()) {
+            resultRect |= rect.translated(-m_d->offset->x(), -m_d->offset->y());
         }
 
         /**
@@ -256,7 +257,7 @@ QRect KisCloneLayer::accessRect(const QRect &rect, PositionToFilthy pos) const
 
 QRect KisCloneLayer::outgoingChangeRect(const QRect &rect) const
 {
-    return rect.translated(m_d->offset.x(), m_d->offset.y());
+    return rect.translated(m_d->offset->x(), m_d->offset->y());
 }
 
 bool KisCloneLayer::accept(KisNodeVisitor & v)
@@ -325,6 +326,6 @@ KisBaseNode::PropertyList KisCloneLayer::sectionModelProperties() const
 void KisCloneLayer::syncLodCache()
 {
     KisLayer::syncLodCache();
-    m_d->offset.syncLodOffset();
+    m_d->offset.syncLodCache();
 }
 

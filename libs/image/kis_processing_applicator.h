@@ -39,6 +39,13 @@ public:
                             const KUndo2MagicString &name = KUndo2MagicString(),
                             KUndo2CommandExtraData *extraData = 0,
                             int macroId = -1);
+    KisProcessingApplicator(KisImageWSP image,
+                            KisNodeList nodes = KisNodeList(),
+                            ProcessingFlags flags = NONE,
+                            KisImageSignalVector emitSignals = KisImageSignalVector(),
+                            const KUndo2MagicString &name = KUndo2MagicString(),
+                            KUndo2CommandExtraData *extraData = 0,
+                            int macroId = -1);
 
     ~KisProcessingApplicator();
 
@@ -103,7 +110,7 @@ private:
 
 private:
     KisImageWSP m_image;
-    KisNodeSP m_node;
+    KisNodeList m_nodes;
     ProcessingFlags m_flags;
     KisImageSignalVector m_emitSignals;
     KisStrokeId m_strokeId;

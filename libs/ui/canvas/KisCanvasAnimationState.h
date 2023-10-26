@@ -64,12 +64,22 @@ public:
 
     class KisFrameDisplayProxy *displayProxy();
 
+    void setPlaybackSpeed(qreal value);
+    qreal playbackSpeed() const;
+
+    /**
+     * @brief Sets up the audio tracks for a given animation.
+     * (The only reason this is public is because we have to defer this until after canvas construction.)
+     */
+    void setupAudioTracks();
+
 public Q_SLOTS:
-    void showFrame(int frame, bool finalize = false); // TODO: Remove in favor of getting displayProxy and calling on that?
+    void showFrame(int frame, bool finalize = false);
 
 Q_SIGNALS:
     void sigPlaybackStateChanged(PlaybackState state);
     void sigPlaybackStatisticsUpdated();
+    void sigPlaybackSpeedChanged(qreal value);
     void sigFrameChanged();
     void sigPlaybackMediaChanged();
     void sigAudioLevelChanged(qreal value);
@@ -77,10 +87,7 @@ Q_SIGNALS:
     void sigCancelPlayback();
 
 private:
-    void updateDropFramesMode();
     KisTimeSpan activePlaybackRange();
-
-    void setupAudioTracks();
 
     struct Private;
     QScopedPointer<Private> m_d;

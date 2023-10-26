@@ -97,6 +97,8 @@ public:
     const QString& name() const;
     bool isSnappingActive() const;
     void setSnappingActive(bool set);
+    //copy SharedData from an assistant to this
+    void copySharedData(KisPaintingAssistantSP assistant);
 
 
     /**
@@ -107,8 +109,10 @@ public:
      *         snapToAny true means that you can use any of the inside assistant, while it being false
      *         means you should use the last used one. The logic determining when it happens (first stroke etc.)
      *         is in the decoration, so those two options are enough.
+     * @param moveThresholdPt the threshold for the "move" of the cursor measured in pt
+     *                        (usually equals to 2px in screen coordinates converted to pt)
      */
-    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, bool snapToAny) = 0;
+    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, bool snapToAny, qreal moveThresholdPt) = 0;
     virtual void adjustLine(QPointF& point, QPointF& strokeBegin) = 0;
     virtual void endStroke();
     virtual void setAdjustedBrushPosition(const QPointF position);
@@ -143,6 +147,18 @@ public:
      * @param value set the indication if the assistant is locked (= cannot be moved, or edited in any way) or not
      */
     void setLocked(bool value);
+    /**
+     * @brief isDuplicating
+     * @return If the duplication button is pressed
+     */
+    /*The duplication button must be depressed when the user clicks it. This getter function indicates to the 
+    render function when the button is clicked*/
+    bool isDuplicating();
+    /**
+     * @brief setDuplicating
+     * @param value setter function sets the indication that the duplication button is pressed
+     */
+    void setDuplicating(bool value);
 
     QPointF editorWidgetOffset();
     void setEditorWidgetOffset(QPointF offset);

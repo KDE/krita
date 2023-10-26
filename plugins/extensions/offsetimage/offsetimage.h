@@ -29,6 +29,7 @@ public Q_SLOTS:
     void slotOffsetLayer();
 
     void offsetImpl(const KUndo2MagicString &actionName, KisNodeSP node, const QPoint &offsetPoint);
+    void offsetImpl(const KUndo2MagicString &actionName, KisNodeList nodes, const QPoint &offsetPoint);
 private:
     QRect offsetWrapRect();
 

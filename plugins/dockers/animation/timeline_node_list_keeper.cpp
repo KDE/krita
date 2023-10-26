@@ -150,7 +150,7 @@ void TimelineNodeListKeeper::Private::tryConnectDummy(KisNodeDummy *dummy)
     if (connectionsSet.contains(dummy)) return;
 
     Q_FOREACH(KisKeyframeChannel *channel, channels) {
-        connect(channel, SIGNAL(sigChannelUpdated(KisTimeSpan,QRect)), &dummiesUpdateMapper, SLOT(map()));
+        connect(channel, SIGNAL(sigAnyKeyframeChange()), &dummiesUpdateMapper, SLOT(map()));
         dummiesUpdateMapper.setMapping(channel, (QObject*)dummy);
     }
     connectionsSet.insert(dummy);

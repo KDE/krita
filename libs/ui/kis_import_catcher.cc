@@ -38,14 +38,14 @@ public:
 
     QString prettyLayerName(QString layerName) const;
     void importAsPaintLayer(KisPaintDeviceSP device, QString layerName);
-    void importAsTransparencyMask(KisPaintDeviceSP device);
+    void importShapeLayer(KisShapeLayerSP shapeLayer);
 };
 
 QString KisImportCatcher::Private::prettyLayerName(QString layerName) const
 {
     QString name = QFileInfo(path).fileName();
     QString fileName = !name.isEmpty() ? name : path;
-    return layerName=="Background" ? fileName : layerName;
+    return (layerName.isEmpty() || layerName == "Background") ? fileName : layerName;
 }
 
 void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device, QString layerName)
@@ -55,7 +55,7 @@ void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device, QStr
                                             OPACITY_OPAQUE_U8,
                                             device);
 
-    KisNodeSP parent = 0;
+    KisNodeSP parent = nullptr;
     KisLayerSP currentActiveLayer = view->activeLayer();
 
     if (currentActiveLayer) {
@@ -68,6 +68,23 @@ void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device, QStr
 
     KisNodeCommandsAdapter adapter(view);
     adapter.addNode(newLayer, parent, currentActiveLayer);
+}
+
+void KisImportCatcher::Private::importShapeLayer(KisShapeLayerSP shapeLayer)
+{
+    KisNodeSP parent = nullptr;
+    KisLayerSP currentActiveLayer = view->activeLayer();
+
+    if (currentActiveLayer) {
+        parent = currentActiveLayer->parent();
+    }
+
+    if (parent.isNull()) {
+        parent = view->image()->rootLayer();
+    }
+
+    KisNodeCommandsAdapter adapter(view);
+    adapter.addNode(shapeLayer, parent, currentActiveLayer);
 }
 
 KisImportCatcher::KisImportCatcher(const QString &path, KisViewManager *view, const QString &layerType)
@@ -108,7 +125,10 @@ void KisImportCatcher::slotLoadingFinished()
             }
         }
         else if (m_d->layerType == "KisShapeLayer") {
-            KisShapeLayerSP shapeLayer = dynamic_cast<KisShapeLayer*>(m_d->view->nodeManager()->createNode(m_d->layerType, false, importedImage->projection()).data());
+            KisShapeLayerSP shapeLayer = new KisShapeLayer(m_d->view->document()->shapeController(),
+                                                           m_d->view->image().data(),
+                                                           m_d->prettyLayerName(QString()),
+                                                           OPACITY_OPAQUE_U8);
             KisShapeLayerSP imported = dynamic_cast<KisShapeLayer*>(importedImage->rootLayer()->firstChild().data());
 
             const QTransform thisInvertedTransform = shapeLayer->absoluteTransformation().inverted();
@@ -118,6 +138,7 @@ void KisImportCatcher::slotLoadingFinished()
                 clonedShape->setTransformation(shape->absoluteTransformation() * thisInvertedTransform);
                 shapeLayer->addShape(clonedShape);
             }
+            m_d->importShapeLayer(shapeLayer);
             m_d->numLayersImported++;
         }
         else {

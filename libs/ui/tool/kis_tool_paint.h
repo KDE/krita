@@ -84,6 +84,8 @@ protected:
     bool isOutlineVisible() const;
     void setOutlineVisible(bool visible);
 
+    bool isEraser() const;
+
     /// Add the tool-specific layout to the default option widget layout.
     void addOptionWidgetLayout(QLayout *layout);
 
@@ -117,6 +119,11 @@ private Q_SLOTS:
     void increaseBrushSize();
     void decreaseBrushSize();
     void showBrushSize();
+
+    void rotateBrushTipClockwise();
+    void rotateBrushTipClockwisePrecise();
+    void rotateBrushTipCounterClockwise();
+    void rotateBrushTipCounterClockwisePrecise();
 
 protected:
     quint8 m_opacity {OPACITY_OPAQUE_U8};
@@ -152,6 +159,9 @@ private:
     KisAsyncColorSamplerHelper m_colorSamplerHelper;
 
     void tryRestoreOpacitySnapshot();
+
+    struct Private;
+    QScopedPointer<Private> m_d;
 
 Q_SIGNALS:
     void sigPaintingFinished();

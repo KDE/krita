@@ -123,7 +123,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(KisConfigNotifier::instance(), SIGNAL(pixelGridModeChanged()), SLOT(slotPixelGridModeChanged()));
 
-    connect(canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEraserModeToggled(bool)), SLOT(slotUpdateCursorColor()));
+    connect(canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(slotUpdateCursorColor()));
     connect(canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigPaintOpPresetChanged(KisPaintOpPresetSP)), SLOT(slotUpdateCursorColor()));
 
     slotConfigChanged();
@@ -252,6 +252,8 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *e)
          * See https://bugs.kde.org/show_bug.cgi?id=441216
          */
         d->updateRect = e->rect();
+    } else {
+        d->updateRect = this->rect();
     }
 
     QOpenGLWidget::paintEvent(e);

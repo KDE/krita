@@ -23,7 +23,7 @@ struct  Q_DECL_HIDDEN KisResourceItemListView::Private
     QScroller* scroller {0};
     QString prev_scrollbar_style;
 
-    QSize requestedItemSize = QSize(64, 64);
+    QSize requestedItemSize = QSize(56, 56);
 };
 
 KisResourceItemListView::KisResourceItemListView(QWidget *parent)
@@ -37,8 +37,10 @@ KisResourceItemListView::KisResourceItemListView(QWidget *parent)
 
     // Default configuration
     setViewMode(QListView::IconMode);
-    setGridSize(QSize(64, 64));
-    setIconSize(QSize(64, 64));
+    setGridSize(QSize(56, 56));
+    setIconSize(QSize(56, 56));
+    setResizeMode(QListView::Adjust);
+    setUniformItemSizes(true);
 
     m_d->scroller = KisKineticScroller::createPreconfiguredScroller(this);
     if (m_d->scroller) {
@@ -90,8 +92,10 @@ void KisResourceItemListView::setListViewMode(ListViewMode viewMode)
         setFlow(Flow::TopToBottom);
         setWrapping(false);
         restoreScrollbar();
-
         setItemSize(m_d->requestedItemSize);
+        // horizontalScrollBar()->setStyleSheet(m_d->prev_scrollbar_style);
+        setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
+        setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
         break;
     }
     }
@@ -219,4 +223,5 @@ void KisResourceItemListView::resizeEvent(QResizeEvent *event)
         setItemSize(m_d->requestedItemSize);
     }
     }
+    scrollTo(currentIndex(), QAbstractItemView::PositionAtCenter);
 }

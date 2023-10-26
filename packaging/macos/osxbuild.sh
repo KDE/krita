@@ -388,7 +388,6 @@ build_3rdparty () {
         ext_freetype \
         ext_fontconfig \
         ext_fribidi \
-        ext_raqm \
         ext_unibreak \
         ext_poppler
 

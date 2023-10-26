@@ -18,14 +18,18 @@ class KRITATOOLTRANSFORM_EXPORT KisTransformMaskAdapter : public KisTransformMas
 {
 public:
     KisTransformMaskAdapter();
-    KisTransformMaskAdapter(const ToolTransformArgs &args);
+    KisTransformMaskAdapter(const ToolTransformArgs &args, bool isHidden = false, bool isInitialized = true);
     ~KisTransformMaskAdapter() override;
 
     QTransform finalAffineTransform() const override;
     bool isAffine() const override;
+
+    bool isInitialized() const;
+
+    void setHidden(bool value) override;
     bool isHidden() const override;
 
-    void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const override;
+    void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool forceSubPixelTranslation) const override;
 
     virtual const QSharedPointer<ToolTransformArgs> transformArgs() const;
     void setBaseArgs(const ToolTransformArgs& args);
@@ -42,12 +46,11 @@ public:
     QRect nonAffineChangeRect(const QRect &rc) override;
     QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds) override;
 
-    bool isAnimated() const;
     KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds);
-    void clearChangedFlag() override;
-    bool hasChanged() const override;
 
     KisTransformMaskParamsInterfaceSP clone() const override;
+
+    bool compareTransform(KisTransformMaskParamsInterfaceSP rhs) const override;
 
 private:
     struct Private;

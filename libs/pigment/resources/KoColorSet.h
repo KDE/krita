@@ -265,16 +265,16 @@ private:
 
     void setModified(bool);
 
-    friend class AddSwatchCommand;
-    friend class RemoveSwatchCommand;
-    friend class ChangeGroupNameCommand;
-    friend class AddGroupCommand;
-    friend class RemoveGroupCommand;
-    friend class ClearCommand;
-    friend class SetColumnCountCommand;
-    friend class SetCommentCommand;
-    friend class SetPaletteTypeCommand;
-    friend class MoveGroupCommand;
+    friend struct AddSwatchCommand;
+    friend struct RemoveSwatchCommand;
+    friend struct ChangeGroupNameCommand;
+    friend struct AddGroupCommand;
+    friend struct RemoveGroupCommand;
+    friend struct ClearCommand;
+    friend struct SetColumnCountCommand;
+    friend struct SetCommentCommand;
+    friend struct SetPaletteTypeCommand;
+    friend struct MoveGroupCommand;
     friend class TestKoColorSet;
     friend class TestKisPaletteModel;
 

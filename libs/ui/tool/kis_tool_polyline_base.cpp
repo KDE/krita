@@ -16,6 +16,7 @@
 
 #include "kis_tool_polyline_base.h"
 #include "kis_canvas2.h"
+#include <kis_canvas_resource_provider.h>
 #include <KisViewManager.h>
 #include <kis_action.h>
 #include <kactioncollection.h>
@@ -33,6 +34,9 @@ KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas,  KisToolPolyline
       m_type(type),
       m_closeSnappingActivated(false)
 {
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+
+    connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
 }
 
 

@@ -18,6 +18,8 @@
 #include "kis_command_utils.h"
 #include "kis_processing_applicator.h"
 
+#include "KisAnimAutoKey.h"
+
 #include <QApplication>
 
 namespace KisToolUtils {
@@ -204,6 +206,14 @@ namespace KisToolUtils {
                             [node, selection] () {
                                 KisPaintDeviceSP device = node->paintDevice();
 
+                                QScopedPointer<KisCommandUtils::CompositeCommand> parentCommand(
+                                    new KisCommandUtils::CompositeCommand());
+
+                                KUndo2Command *autoKeyframeCommand = KisAutoKey::tryAutoCreateDuplicatedFrame(device);
+                                if (autoKeyframeCommand) {
+                                    parentCommand->addCommand(autoKeyframeCommand);
+                                }
+
                                 KisTransaction transaction(kundo2_noi18n("internal-clear-command"), device);
 
                                 QRect dirtyRect;
@@ -216,7 +226,9 @@ namespace KisToolUtils {
                                 }
 
                                 device->setDirty(dirtyRect);
-                                return transaction.endAndTake();
+                                parentCommand->addCommand(transaction.endAndTake());
+
+                                return parentCommand.take();
                             });
                     applicator.applyCommand(cmd, KisStrokeJobData::CONCURRENT);
                 }

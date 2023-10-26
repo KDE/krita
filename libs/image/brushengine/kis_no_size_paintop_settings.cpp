@@ -21,3 +21,12 @@ qreal KisNoSizePaintOpSettings::paintOpSize() const
     return 1.0;
 }
 
+void KisNoSizePaintOpSettings::setPaintOpAngle(qreal value)
+{
+    Q_UNUSED(value);
+}
+
+qreal KisNoSizePaintOpSettings::paintOpAngle() const
+{
+    return 0.0;
+}

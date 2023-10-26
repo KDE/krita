@@ -70,8 +70,8 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 
     KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas)->viewManager()->canvasResourceProvider();
 
-    connect(provider, SIGNAL(sigEraserModeToggled(bool)), SLOT(explicitUpdateOutline()));
-    connect(provider, SIGNAL(sigEraserModeToggled(bool)), SLOT(resetCursorStyle()));
+    connect(provider, SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(explicitUpdateOutline()));
+    connect(provider, SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
     connect(provider, SIGNAL(sigPaintOpPresetChanged(KisPaintOpPresetSP)), SLOT(explicitUpdateOutline()));
     connect(provider, SIGNAL(sigPaintOpPresetChanged(KisPaintOpPresetSP)), SLOT(resetCursorStyle()));
 }
@@ -97,8 +97,7 @@ void KisToolFreehand::resetCursorStyle()
 {
     KisConfig cfg(true);
 
-    bool useSeparateEraserCursor = cfg.separateEraserCursor() &&
-            canvas()->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE;
+    bool useSeparateEraserCursor = cfg.separateEraserCursor() && isEraser();
 
     switch (useSeparateEraserCursor ? cfg.eraserCursorStyle() : cfg.newCursorStyle()) {
     case CURSOR_STYLE_NO_CURSOR:

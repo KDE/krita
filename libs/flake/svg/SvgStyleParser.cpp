@@ -32,6 +32,7 @@ public:
         : context(loadingContext)
     {
         textAttributes << KoSvgTextProperties::supportedXmlAttributes();
+        textAttributes.removeAll("xml:space");
 
         // the order of the font attributes is important, don't change without reason !!!
         fontAttributes << "font-family"
@@ -61,8 +62,8 @@ public:
                        << "baseline-shift"
                        << "vertical-align"
                        << "line-height"
-                       << "white-space"
                        << "xml:space"
+                       << "white-space"
                        << "text-transform"
                        << "text-indent"
                        << "word-break"

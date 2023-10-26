@@ -3,7 +3,7 @@ add_subdirectory(tests)
 set(kritatooltransform_static_SRCS
     tool_transform_args.cc
     kis_transform_mask_adapter.cpp
-    kis_animated_transform_parameters.cpp
+    KisAnimatedTransformMaskParamsHolder.cpp
     kis_tool_transform.cc
     kis_tool_transform_config_widget.cpp
     kis_transform_strategy_base.cpp
@@ -19,7 +19,6 @@ set(kritatooltransform_static_SRCS
     kis_free_transform_strategy_gsl_helpers.cpp
     kis_perspective_transform_strategy.cpp
     kis_transform_utils.cpp
-    kis_modify_transform_mask_command.cpp
     strokes/transform_stroke_strategy.cpp
     strokes/inplace_transform_stroke_strategy.cpp
     )

@@ -13,21 +13,20 @@
 #include "kis_raster_keyframe_channel.h"
 #include "animation/KisFrameDisplayProxy.h"
 #include "KisViewManager.h"
+#include "kis_config.h"
 
 #include "kis_onion_skin_compositor.h"
 
 struct KisPlaybackEngine::Private {
 public:
-    Private()
-        : activeCanvas(nullptr) {
-
+    Private() {
     }
 
     ~Private() {
-
     }
 
-    KisCanvas2* activeCanvas;
+    KisCanvas2* activeCanvas {nullptr};
+    bool dropFramesMode {true};
 };
 
 //=====
@@ -36,6 +35,8 @@ KisPlaybackEngine::KisPlaybackEngine(QObject *parent)
     : QObject(parent)
     , m_d(new Private)
 {
+    KisConfig cfg(true);
+    m_d->dropFramesMode = cfg.animationDropFrames();
 }
 
 KisPlaybackEngine::~KisPlaybackEngine()
@@ -256,6 +257,19 @@ void KisPlaybackEngine::nextUnfilteredKeyframe()
     nextKeyframeWithColor(KisOnionSkinCompositor::instance()->colorLabelFilter());
 }
 
+void KisPlaybackEngine::setDropFramesMode(bool value)
+{
+    if (value != m_d->dropFramesMode) {
+        m_d->dropFramesMode = value;
+        Q_EMIT sigDropFramesModeChanged(value);
+    }
+}
+
+bool KisPlaybackEngine::dropFrames() const
+{
+    return m_d->dropFramesMode;
+}
+
 int KisPlaybackEngine::frameWrap(int frame, int startFrame, int endFrame)
 {
     // Since Krita has always considered the end frame as inclusive, we need
@@ -291,9 +305,8 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
         KisCanvasAnimationState* animState = m_d->activeCanvas->animationState();
         KIS_SAFE_ASSERT_RECOVER_RETURN(animState);
 
-        connect(animState, &KisCanvasAnimationState::sigCancelPlayback, this, [this](){
-            stop();
-        });
+        connect(animState, &KisCanvasAnimationState::sigCancelPlayback,
+                this, &KisPlaybackEngine::stop);
 
         /**
          * TODO: This forced updates causes image recalculation on every document

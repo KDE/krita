@@ -63,6 +63,10 @@ KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
     m_shape = KisGradientPainter::GradientShapeLinear;
     m_repeat = KisGradientPainter::GradientRepeatNone;
     m_antiAliasThreshold = 0.2;
+
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+
+    connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
 }
 
 KisToolGradient::~KisToolGradient()
@@ -71,7 +75,11 @@ KisToolGradient::~KisToolGradient()
 
 void KisToolGradient::resetCursorStyle()
 {
-    KisToolPaint::resetCursorStyle();
+    if (isEraser()) {
+        useCursor(KisCursor::load("tool_gradient_eraser_cursor.png", 6, 6));
+    } else {
+        KisToolPaint::resetCursorStyle();
+    }
 
     overrideCursorIfNotEditable();
 }

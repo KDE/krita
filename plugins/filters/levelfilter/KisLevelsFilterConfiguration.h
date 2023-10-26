@@ -36,8 +36,10 @@ public:
     void fromXML(const QDomElement& e) override;
     void toXML(QDomDocument& doc, QDomElement& root) const override;
 
-    const QVector<KisLevelsCurve>& levelsCurves() const;
-    const KisLevelsCurve& lightnessLevelsCurve() const;
+    void setProperty(const QString &name, const QVariant &value) override;
+
+    const QVector<KisLevelsCurve> levelsCurves() const;
+    const KisLevelsCurve lightnessLevelsCurve() const;
     void setLevelsCurves(const QVector<KisLevelsCurve> &newLevelsCurves);
     void setLightnessLevelsCurve(const KisLevelsCurve &newLightnessLevelsCurve);
     const QVector<QVector<quint16>>& transfers() const;
@@ -49,18 +51,18 @@ public:
     void setShowLogarithmicHistogram(bool newShowLogarithmicHistogram);
 
     bool isCompatible(const KisPaintDeviceSP) const override;
-    bool compareTo(const KisPropertiesConfiguration *rhs) const override;
 
     void setDefaults();
 
 private:
-    int m_channelCount;
-    QVector<KisLevelsCurve> m_levelsCurves;
-    KisLevelsCurve m_lightnessLevelsCurve;
     QVector<QVector<quint16>> m_transfers;
     QVector<quint16> m_lightnessTransfer;
-    bool m_showLogarithmicHistogram;
-    bool m_useLightnessMode;
+
+    int channelCount() const;
+    void setChannelCount(int newChannelCount);
+
+    void setLightessLevelsCurveFromLegacyValues();
+    void setLegacyValuesFromLightnessLevelsCurve();
 
     void updateTransfers();
     void updateLightnessTransfer();

@@ -63,6 +63,7 @@
 #include "commands/KoShapeReorderCommand.h"
 #include "kis_do_something_command.h"
 #include <KisSafeBlockingQueueConnectionProxy.h>
+#include <kis_signal_auto_connection.h>
 #include <QThread>
 #include <QApplication>
 
@@ -88,6 +89,7 @@ public:
             QTransform parentTransform = q->absoluteTransformation();
             child->applyAbsoluteTransformation(parentTransform.inverted());
         }
+        child->setResolution(m_xRes, m_yRes);
     }
 
     void remove(KoShape *child) override {
@@ -100,8 +102,20 @@ public:
         SimpleShapeContainerModel::remove(child);
     }
 
+    void setResolution(qreal xRes, qreal yRes) {
+        if (!qFuzzyCompare(m_xRes, xRes) || !qFuzzyCompare(m_yRes, yRes)) {
+            m_xRes = xRes;
+            m_yRes = yRes;
+            Q_FOREACH (KoShape *shape, shapes()) {
+                shape->setResolution(xRes, yRes);
+            }
+        }
+    }
+
 private:
     KisShapeLayer *q;
+    qreal m_xRes{72.0};
+    qreal m_yRes{72.0};
 };
 
 
@@ -120,6 +134,7 @@ public:
     KoShapeControllerBase* controller;
     int x;
     int y;
+    KisSignalAutoConnectionsStore imageConnections;
 };
 
 
@@ -275,6 +290,11 @@ void KisShapeLayer::initShapeLayerImpl(KoShapeControllerBase* controller,
     ShapeLayerContainerModel *model = dynamic_cast<ShapeLayerContainerModel*>(this->model());
     KIS_SAFE_ASSERT_RECOVER_RETURN(model);
     model->setAssociatedRootShapeManager(m_d->canvas->shapeManager());
+
+    if (this->image()) {
+        m_d->imageConnections.addUniqueConnection(this->image(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageResolutionChanged()));
+        slotImageResolutionChanged();
+    }
 }
 
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const
@@ -284,10 +304,15 @@ bool KisShapeLayer::allowAsChild(KisNodeSP node) const
 
 void KisShapeLayer::setImage(KisImageWSP _image)
 {
+    m_d->imageConnections.clear();
     KisLayer::setImage(_image);
     m_d->canvas->setImage(_image);
     if (m_d->paintDevice) {
         m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(_image));
+    }
+    if (_image) {
+        m_d->imageConnections.addUniqueConnection(_image, SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageResolutionChanged()));
+        slotImageResolutionChanged();
     }
 }
 
@@ -301,10 +326,10 @@ KisLayerSP KisShapeLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
         return KisExternalLayer::createMergedLayerTemplate(prevLayer);
 }
 
-void KisShapeLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer)
+void KisShapeLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer, bool skipPaintingThisLayer)
 {
     if (!dynamic_cast<KisShapeLayer*>(dstLayer.data())) {
-        KisLayer::fillMergedLayerTemplate(dstLayer, prevLayer);
+        KisLayer::fillMergedLayerTemplate(dstLayer, prevLayer, skipPaintingThisLayer);
     }
 }
 
@@ -521,11 +546,10 @@ QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QSt
         errKrita << "Parsing error in contents.svg! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
         << " Error message: " << errorMsg << endl;
-        errKrita << i18n("Parsing error in the main document at line %1, column %2\nError message: %3"
-                         , errorLine , errorColumn , errorMsg);
 
         if (errors) {
-            *errors  << QString("Parsing error in the main document at line %1, column %2\nError message: %3").arg(errorLine).arg(errorColumn).arg(errorMsg);
+            *errors << i18n("Parsing error in the main document at line %1, column %2\nError message: %3"
+                         , errorLine , errorColumn , errorMsg);
         }
         return QList<KoShape*>();
     }
@@ -709,4 +733,13 @@ KoShapeControllerBase *KisShapeLayer::shapeController() const
 KisShapeLayerCanvasBase *KisShapeLayer::canvas() const
 {
     return m_d->canvas;
+}
+
+void KisShapeLayer::slotImageResolutionChanged()
+{
+    ShapeLayerContainerModel *model = dynamic_cast<ShapeLayerContainerModel*>(this->model());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(model);
+    if (this->image()) {
+        model->setResolution(image()->xRes() * 72.0, image()->yRes() * 72.0);
+    }
 }

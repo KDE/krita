@@ -17,7 +17,7 @@ namespace kpou = KisPaintOpOptionUtils;
 
 
 KisSharpnessOption::KisSharpnessOption(const KisPropertiesConfiguration *setting)
-    : KisCurveOption(kpou::loadOptionData<KisSharpnessOptionData>(setting))
+    : KisSharpnessOption(kpou::loadOptionData<KisSharpnessOptionData>(setting))
 {
 }
 

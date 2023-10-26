@@ -200,6 +200,7 @@ public Q_SLOTS:
     void mirrorAllNodesY();
 
     void mirrorNode(KisNodeSP node, const KUndo2MagicString& commandName, Qt::Orientation orientation, KisSelectionSP selection);
+    void mirrorNodes(KisNodeList nodes, const KUndo2MagicString& commandName, Qt::Orientation orientation, KisSelectionSP selection);
 
     void activateNextNode(bool siblingsOnly = false);
     void activateNextSiblingNode();

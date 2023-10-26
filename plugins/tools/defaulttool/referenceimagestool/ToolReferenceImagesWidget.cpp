@@ -16,6 +16,7 @@
 #include <kis_signals_blocker.h>
 #include <kis_signal_compressor.h>
 #include <KisReferenceImage.h>
+#include <KisDoubleSpinBoxPluralHelper.h>
 #include <kis_clipboard.h>
 
 #include <QApplication>
@@ -41,15 +42,17 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->setupUi(this);
 
     d->ui->opacitySlider->setRange(0, 100);
-    d->ui->opacitySlider->setPrefixes(i18n("Opacity: "), i18n("Opacity [*varies*]: "));
-    d->ui->opacitySlider->setSuffix(i18n(" %"));
+    KisDoubleSpinBoxPluralHelper::install(d->ui->opacitySlider, [](double value) {
+        return i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%", value);
+    });
     d->ui->opacitySlider->setValueGetter(
         [](KoShape *s){ return 100.0 * (1.0 - s->transparency()); }
     );
 
     d->ui->saturationSlider->setRange(0, 100);
-    d->ui->saturationSlider->setPrefixes(i18n("Saturation: "), i18n("Saturation [*varies*]: "));
-    d->ui->saturationSlider->setSuffix(i18n(" %"));
+    KisDoubleSpinBoxPluralHelper::install(d->ui->saturationSlider, [](double value) {
+        return i18nc("{n} is the number value, % is the percent sign", "Saturation: {n}%", value);
+    });
     d->ui->saturationSlider->setValueGetter(
         [](KoShape *s){
             auto *r = dynamic_cast<KisReferenceImage*>(s);

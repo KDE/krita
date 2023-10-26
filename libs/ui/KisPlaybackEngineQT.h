@@ -33,18 +33,19 @@ public:
     explicit KisPlaybackEngineQT(QObject *parent = nullptr);
     ~KisPlaybackEngineQT();
 
-    virtual void seek(int frameIndex, SeekOptionFlags flags = SEEK_FINALIZE | SEEK_PUSH_AUDIO) override;
+    void seek(int frameIndex, SeekOptionFlags flags = SEEK_FINALIZE | SEEK_PUSH_AUDIO) override;
 
-    virtual void setPlaybackSpeedPercent(int percentage) override;
-    virtual void setPlaybackSpeedNormalized(double value) override;
+    void setMute(bool) override {}
+    bool isMute() override { return true; }
 
-    virtual void setMute(bool) override {}
-    virtual bool isMute() override { return true; }
+    bool supportsAudio() override {return false;}
+    bool supportsVariablePlaybackSpeed() override { return true; }
 
-    virtual bool supportsAudio() override {return false;}
-    virtual bool supportsVariablePlaybackSpeed() override { return true; }
+    void setDropFramesMode(bool value) override;
 
-    boost::optional<int64_t> activeFramesPerSecond();
+    boost::optional<int64_t> activeFramesPerSecond() const;
+
+    PlaybackStats playbackStatistics() const override;
 
 protected Q_SLOTS:
     /**
@@ -57,11 +58,8 @@ protected Q_SLOTS:
 
 
 protected:
-    virtual void setCanvas(KoCanvasBase* canvas) override;
-    virtual void unsetCanvas() override;
-
-private:
-    void recreateDriver(boost::optional<QFileInfo> file);
+    void setCanvas(KoCanvasBase* canvas) override;
+    void unsetCanvas() override;
 
 private:
     struct Private;

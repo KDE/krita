@@ -35,6 +35,7 @@
 #include "KisRunnableStrokeJobsInterface.h"
 #include "KisRunnableStrokeJobUtils.h"
 #include <KisStrokeCompatibilityInfo.h>
+#include "KisAnimAutoKey.h"
 
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QLatin1String &id,
@@ -73,8 +74,6 @@ KisPainterBasedStrokeStrategy::~KisPainterBasedStrokeStrategy()
 
 void KisPainterBasedStrokeStrategy::init()
 {
-    m_autokeyMode = KisAutoKey::activeMode();
-
     enableJob(KisSimpleStrokeStrategy::JOB_INIT);
     enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
     enableJob(KisSimpleStrokeStrategy::JOB_CANCEL, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
@@ -86,7 +85,6 @@ void KisPainterBasedStrokeStrategy::init()
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs, int levelOfDetail)
     : KisRunnableBasedStrokeStrategy(rhs),
       m_resources(rhs.m_resources),
-      m_autokeyMode(rhs.m_autokeyMode),
       m_useMergeID(rhs.m_useMergeID),
       m_supportsMaskingBrush(rhs.m_supportsMaskingBrush),
       m_supportsIndirectPainting(rhs.m_supportsIndirectPainting),
@@ -255,50 +253,13 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
 
     KritaUtils::addJobSequential(jobs, [this] () {
         KisNodeSP node = m_resources->currentNode();
-        const int time = node->paintDevice()->defaultBounds()->currentTime();
-        const bool isLodNMode = node->paintDevice()->defaultBounds()->currentLevelOfDetail() > 0;
 
-        KisRasterKeyframeChannel* channel = dynamic_cast<KisRasterKeyframeChannel*>(node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
-        if (channel) {
-            KisKeyframeSP keyframe = channel->keyframeAt(time);
-            if (!keyframe && m_autokeyMode != KisAutoKey::NONE) {
-
-                /**
-                 * In instant preview mode we just reuse the LodN plane.
-                 * If autokey mode is "blank", then we just clear the LodN
-                 * plane.
-                 */
-                if (!isLodNMode) {
-                    int activeKeyTime = channel->activeKeyframeTime(time);
-
-                    m_autokeyCommand.reset(new KUndo2Command());
-
-                    KUndo2Command *keyframeCommand = new  KisCommandUtils::SkipFirstRedoWrapper(nullptr, m_autokeyCommand.data());
-
-                    if (m_autokeyMode == KisAutoKey::DUPLICATE) {
-                        channel->copyKeyframe(activeKeyTime, time, keyframeCommand);
-                    } else { // Otherwise, create a fresh keyframe.
-                        channel->addKeyframe(time, keyframeCommand);
-                    }
-
-                    keyframe = channel->keyframeAt(time);
-                    KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
-
-                    // Use the same color label as previous keyframe...
-                    KisKeyframeSP previousKey = channel->keyframeAt(activeKeyTime);
-                    if (previousKey) {
-                        keyframe->setColorLabel(previousKey->colorLabel());
-                    }
-                } else {
-                    if (m_autokeyMode == KisAutoKey::BLANK) {
-                        const QRect originalDirtyRect = node->exactBounds();
-                        KisTransaction transaction(node->paintDevice());
-                        node->paintDevice()->clear();
-                        node->setDirty(originalDirtyRect);
-                        m_autokeyCommand.reset(transaction.endAndTake());
-                    }
-                }
-            }
+        KUndo2Command *autoKeyframeCommand =
+            KisAutoKey::tryAutoCreateDuplicatedFrame(node->paintDevice(),
+                                                     KisAutoKey::AllowBlankMode |
+                                                         KisAutoKey::SupportsLod);
+        if (autoKeyframeCommand) {
+            m_autokeyCommand.reset(autoKeyframeCommand);
         }
     });
 

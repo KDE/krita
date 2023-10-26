@@ -417,8 +417,3 @@ void KisPredefinedBrushChooser::slotImportNewBrushResource() {
 void KisPredefinedBrushChooser::slotDeleteBrushResource() {
     m_itemChooser->slotButtonClicked(KisResourceItemChooser::Button_Remove);
 }
-
-
-#include "kis_predefined_brush_chooser.moc"
-
-

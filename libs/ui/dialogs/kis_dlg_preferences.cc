@@ -43,6 +43,8 @@
 #include <KisDocument.h>
 #include <kis_icon.h>
 #include <KisPart.h>
+#include <KisSpinBoxPluralHelper.h>
+#include <KisDoubleSpinBoxPluralHelper.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceEngine.h>
@@ -51,7 +53,6 @@
 #include <KoFileDialog.h>
 #include "KoID.h"
 #include <KoVBox.h>
-#include <KisSpinBoxPluralHelper.h>
 
 #include <KTitleWidget>
 #include <KoResourcePaths.h>
@@ -1367,15 +1368,21 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     const double totalRAM = cfg.totalRAM();
     lblTotalMemory->setText(KFormat().formatByteSize(totalRAM * 1024 * 1024, 0, KFormat::IECBinaryDialect, KFormat::UnitMegaByte));
 
-    sliderMemoryLimit->setSuffix(i18n(" %"));
+    KisDoubleSpinBoxPluralHelper::install(sliderMemoryLimit, [](double value) {
+        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+    });
     sliderMemoryLimit->setRange(1, 100, 2);
     sliderMemoryLimit->setSingleStep(0.01);
 
-    sliderPoolLimit->setSuffix(i18n(" %"));
+    KisDoubleSpinBoxPluralHelper::install(sliderPoolLimit, [](double value) {
+        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+    });
     sliderPoolLimit->setRange(0, 20, 2);
     sliderPoolLimit->setSingleStep(0.01);
 
-    sliderUndoLimit->setSuffix(i18n(" %"));
+    KisDoubleSpinBoxPluralHelper::install(sliderUndoLimit, [](double value) {
+        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+    });
     sliderUndoLimit->setRange(0, 50, 2);
     sliderUndoLimit->setSingleStep(0.01);
 
@@ -1457,7 +1464,9 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     intCachedFramesSizeLimit->setPageStep(1000);
 
     intRegionOfInterestMargin->setRange(1, 100);
-    intRegionOfInterestMargin->setSuffix(i18n(" %"));
+    KisSpinBoxPluralHelper::install(intRegionOfInterestMargin, [](int value) {
+        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+    });
     intRegionOfInterestMargin->setSingleStep(1);
     intRegionOfInterestMargin->setPageStep(10);
 

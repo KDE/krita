@@ -35,9 +35,9 @@ public:
 
 namespace KisHSVCurve {
     enum ColorChannel {
-        Red = 0,
-        Green = 1,
-        Blue = 2,
+        RGBChannel0 = 0,
+        RGBChannel1 = 1,
+        RGBChannel2 = 2,
         Alpha = 3,
         AllColors = 4,
         Hue = 5,

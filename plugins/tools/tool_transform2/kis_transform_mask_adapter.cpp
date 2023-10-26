@@ -11,7 +11,7 @@
 
 #include "tool_transform_args.h"
 #include "kis_transform_utils.h"
-#include "kis_animated_transform_parameters.h"
+#include "KisAnimatedTransformMaskParamsHolder.h"
 
 #include "kis_node.h"
 
@@ -19,6 +19,8 @@
 struct KisTransformMaskAdapter::Private
 {
     QSharedPointer<ToolTransformArgs> args;
+    bool isHidden {false};
+    bool isInitialized {true};
 };
 
 
@@ -28,10 +30,12 @@ KisTransformMaskAdapter::KisTransformMaskAdapter()
     m_d->args.reset(new ToolTransformArgs());
 }
 
-KisTransformMaskAdapter::KisTransformMaskAdapter(const ToolTransformArgs &args)
+KisTransformMaskAdapter::KisTransformMaskAdapter(const ToolTransformArgs &args, bool isHidden, bool isInitialized)
     : m_d(new Private)
 {
     m_d->args = toQShared(new ToolTransformArgs(args));
+    m_d->isHidden = isHidden;
+    m_d->isInitialized = isInitialized;
 }
 
 KisTransformMaskAdapter::~KisTransformMaskAdapter()
@@ -49,21 +53,31 @@ bool KisTransformMaskAdapter::isAffine() const
     const ToolTransformArgs args = *transformArgs();
 
     return args.mode() == ToolTransformArgs::FREE_TRANSFORM ||
-        args.mode() == ToolTransformArgs::PERSPECTIVE_4POINT;
+            args.mode() == ToolTransformArgs::PERSPECTIVE_4POINT;
+}
+
+bool KisTransformMaskAdapter::isInitialized() const
+{
+    return m_d->isInitialized;
+}
+
+void KisTransformMaskAdapter::setHidden(bool value)
+{
+    m_d->isHidden = value;
 }
 
 bool KisTransformMaskAdapter::isHidden() const
 {
-    return false;
+    return m_d->isHidden;
 }
 
-void KisTransformMaskAdapter::transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const
+void KisTransformMaskAdapter::transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool forceSubPixelTranslation) const
 {
     dst->prepareClone(src);
 
     KisProcessingVisitor::ProgressHelper helper(node);
 
-    KisTransformUtils::transformDeviceWithCroppedDst(*transformArgs(), src, dst, &helper);
+    KisTransformUtils::transformDeviceWithCroppedDst(*transformArgs(), src, dst, &helper, forceSubPixelTranslation);
 }
 
 const QSharedPointer<ToolTransformArgs> KisTransformMaskAdapter::transformArgs() const {
@@ -116,11 +130,6 @@ QRect KisTransformMaskAdapter::nonAffineNeedRect(const QRect &rc, const QRect &s
     return KisTransformUtils::needRect(*transformArgs(), rc, srcBounds);
 }
 
-bool KisTransformMaskAdapter::isAnimated() const
-{
-    return false;
-}
-
 KisKeyframeChannel *KisTransformMaskAdapter::getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds)
 {
     Q_UNUSED(id);
@@ -128,25 +137,17 @@ KisKeyframeChannel *KisTransformMaskAdapter::getKeyframeChannel(const QString &i
     return 0;
 }
 
-void KisTransformMaskAdapter::clearChangedFlag()
-{}
-
-bool KisTransformMaskAdapter::hasChanged() const
-{
-    return false;
-}
-
 KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::clone() const {
-    return toQShared(new KisTransformMaskAdapter(*this->transformArgs()));
+    return toQShared(new KisTransformMaskAdapter(*this->transformArgs(), this->isHidden(), this->isInitialized()));
 }
 
-#include "kis_transform_mask_params_factory_registry.h"
+bool KisTransformMaskAdapter::compareTransform(KisTransformMaskParamsInterfaceSP rhs) const
+{
+    QSharedPointer<KisTransformMaskAdapter> adapter = rhs.dynamicCast<KisTransformMaskAdapter>();
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(adapter, false);
 
-struct ToolTransformParamsRegistrar {
-    ToolTransformParamsRegistrar() {
-        KisTransformMaskParamsFactory f(KisTransformMaskAdapter::fromXML);
-        KisTransformMaskParamsFactoryRegistry::instance()->addFactory("tooltransformparams", f);
-    }
-};
-static ToolTransformParamsRegistrar __toolTransformParamsRegistrar;
+    QSharedPointer<ToolTransformArgs> lhsArgs = transformArgs();
+    QSharedPointer<ToolTransformArgs> rhsArgs = adapter->transformArgs();
 
+    return lhsArgs->isSameMode(*rhsArgs);
+}

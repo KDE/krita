@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2006-2007, 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2023 Carsten Hartenfels <carsten.hartenfels@pm.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -167,6 +168,9 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
         if (compop == "svg:add") layer->setCompositeOpId(COMPOSITE_ADD);
     }
 
+    if (elem.hasAttribute("alpha-preserve") && elem.attribute("alpha-preserve") == "true") {
+        layer->disableAlphaChannel(true);
+    }
 }
 
 void KisOpenRasterStackLoadVisitor::loadAdjustmentLayer(const QDomElement& elem, KisAdjustmentLayerSP aL)

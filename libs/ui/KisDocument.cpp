@@ -137,6 +137,10 @@
 
 #include <unistd.h>
 
+#ifdef Q_OS_MACOS
+#include "KisMacosSecurityBookmarkManager.h"
+#endif
+
 using namespace std;
 
 namespace {
@@ -597,6 +601,13 @@ KisDocument::KisDocument(bool addStorage)
     connect(d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setObjectName(newObjectName());
 
+#ifdef Q_OS_MACOS
+    KisMacosSecurityBookmarkManager *bookmarkmngr = KisMacosSecurityBookmarkManager::instance();
+    if (bookmarkmngr->isSandboxed()) {
+        connect(this, SIGNAL(sigSavingFinished(const QString&)), bookmarkmngr, SLOT(slotCreateBookmark(const QString&)));
+    }
+#endif
+
 
     if (addStorage) {
         d->linkedResourcesStorageID = QUuid::createUuid().toString();
@@ -741,6 +752,18 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
             // We deal with URIs, there may or may not be a "directory"
             backupDir = KisAutoSaveRecoveryDialog::autoSaveLocation();
             QDir().mkpath(backupDir);
+#endif
+
+#ifdef Q_OS_MACOS
+            KisMacosSecurityBookmarkManager *bookmarkmngr = KisMacosSecurityBookmarkManager::instance();
+            if (bookmarkmngr->isSandboxed()) {
+                // If the user does not have directory permission force backup
+                // files to be inside Container tmp
+                QUrl fileUrl = QUrl::fromLocalFile(job.filePath);
+                if( !bookmarkmngr->parentDirHasPermissions(fileUrl.path()) ) {
+                    backupDir = QDir::tempPath();
+                }
+            }
 #endif
 
             // Do nothing: the empty string is user file location
@@ -1653,11 +1676,17 @@ void KisDocument::finishExportInBackground()
 
 void KisDocument::setReadWrite(bool readwrite)
 {
+    const bool changed = readwrite != d->readwrite;
+
     d->readwrite = readwrite;
     setNormalAutoSaveInterval();
 
     Q_FOREACH (KisMainWindow *mainWindow, KisPart::instance()->mainWindows()) {
         mainWindow->setReadWrite(readwrite);
+    }
+
+    if (changed) {
+        Q_EMIT sigReadWriteChanged(readwrite);
     }
 }
 
@@ -1798,7 +1827,6 @@ bool KisDocument::importDocument(const QString &_path)
     if (ret) {
         dbgUI << "success, resetting url";
         resetPath();
-        setTitleModified();
     }
 
     return ret;
@@ -2028,14 +2056,18 @@ void KisDocument::setModified(bool mod)
         documentInfo()->updateParameters();
     }
 
-    // This influences the title
-    setTitleModified();
     emit modified(mod);
 }
 
 void KisDocument::setRecovered(bool value)
 {
+    const bool changed = value != d->isRecovered;
+
     d->isRecovered = value;
+
+    if (changed) {
+        Q_EMIT sigRecoveredChanged(value);
+    }
 }
 
 bool KisDocument::isRecovered() const
@@ -2083,11 +2115,6 @@ QString KisDocument::caption() const
     }
 
     return c;
-}
-
-void KisDocument::setTitleModified()
-{
-    emit titleModified(caption(), isModified());
 }
 
 QDomDocument KisDocument::createDomDocument(const QString& tagName, const QString& version) const
@@ -2443,7 +2470,13 @@ bool KisDocument::closePath(bool promptToSave)
 
 void KisDocument::setPath(const QString &path)
 {
+    const bool changed = path != d->m_path;
+
     d->m_path = path;
+
+    if (changed) {
+        Q_EMIT sigPathChanged(path);
+    }
 }
 
 QString KisDocument::localFilePath() const

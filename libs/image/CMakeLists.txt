@@ -117,6 +117,7 @@ set(kritaimage_LIB_SRCS
    commands_new/KisUpdateCommandEx.cpp
    commands_new/KisDisableDirtyRequestsCommand.cpp
    commands_new/KisResetGroupLayerCacheCommand.cpp
+   commands_new/KisLazyCreateTransformMaskKeyframesCommand.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_convert_color_space_processing_visitor.cpp
@@ -144,6 +145,7 @@ set(kritaimage_LIB_SRCS
    lazybrush/KisWatershedWorker.cpp
    lazybrush/kis_colorize_mask.cpp
    lazybrush/kis_colorize_stroke_strategy.cpp
+   KisFrameChangeUpdateRecipe.cpp
    KisAnimAutoKey.cpp
    KisDelayedUpdateNodeInterface.cpp
    KisCroppedOriginalLayerInterface.cpp
@@ -389,6 +391,10 @@ if(OpenEXR_FOUND)
 endif()
 
 target_link_libraries(kritaimage PRIVATE ${FFTW3_LIBRARIES})
+
+if(APPLE)
+    target_link_libraries(kritaimage PRIVATE kritamacosutils)
+endif()
 
 target_link_libraries(kritaimage PUBLIC kritamultiarch)
 

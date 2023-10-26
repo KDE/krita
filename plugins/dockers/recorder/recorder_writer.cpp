@@ -46,6 +46,10 @@ public:
     volatile bool imageModified = false;
     volatile bool skipCapturing = false; // set true on move or transform enabled to prevent tool deactivation
 
+    const KoColorSpace *targetCs =
+        KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
+                                                     Integer8BitsColorDepthID.id(),
+                                                     KoColorSpaceRegistry::instance()->p709SRGBProfile());
 
     int findLastIndex(const QString &directory)
     {
@@ -81,7 +85,33 @@ public:
 
         KisImageSP image = canvas->image();
 
-        KisPaintDeviceSP device = image->projection();
+        // Create detached paint device that can be converted to target colorspace
+        KisPaintDeviceSP device = new KisPaintDevice(image->colorSpace());
+
+        // we don't want image->barrierLock() because it will wait until the full stroke is finished
+        image->immediateLockForReadOnly();
+        device->makeCloneFromRough(image->projection(), image->bounds());
+        image->unlock();
+
+        const bool needSrgbConversion = [&]() {
+            if (image->colorSpace()->colorDepthId() != Integer8BitsColorDepthID
+                || image->colorSpace()->colorModelId() != RGBAColorModelID) {
+                return true;
+            }
+            const bool hasPrimaries = image->colorSpace()->profile()->hasColorants();
+            const TransferCharacteristics gamma = image->colorSpace()->profile()->getTransferCharacteristics();
+            if (hasPrimaries) {
+                const ColorPrimaries primaries = image->colorSpace()->profile()->getColorPrimaries();
+                if (gamma == TRC_IEC_61966_2_1 && primaries == PRIMARIES_ITU_R_BT_709_5) {
+                    return false;
+                }
+            }
+            return true;
+        }();
+
+        if (targetCs && needSrgbConversion) {
+            device->convertTo(targetCs);
+        }
 
         // truncate uneven image width/height making it even for subdivided size too
         const quint32 bitmask = ~(0xFFFFFFFFu >> (31 - settings.resolution));
@@ -102,10 +132,7 @@ public:
             frame = QImage(outData, outWidth, outHeight, QImage::Format_ARGB32);
         }
 
-        // we don't want image->barrierLock() because it will wait until the full stroke is finished
-        image->immediateLockForReadOnly();
         device->readBytes(reinterpret_cast<quint8 *>(imageBuffer.data()), 0, 0, width, height);
-        image->unlock();
 
         imageBufferWidth = width;
         imageBufferHeight = height;

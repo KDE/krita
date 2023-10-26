@@ -38,9 +38,11 @@ VirtualChannelInfo::VirtualChannelInfo(Type type,
         m_valueTypeOverride = KoChannelInfo::FLOAT32;
         m_channelSizeOverride = 4;
     } else if (m_type == ALL_COLORS) {
+        const QList<KoChannelInfo*> channels = cs->channels();
+
         m_nameOverride = cs->colorModelId().id();
-        m_valueTypeOverride = cs->channels().first()->channelValueType();
-        m_channelSizeOverride = cs->channels().first()->size();
+        m_valueTypeOverride = channels.first()->channelValueType();
+        m_channelSizeOverride = channels.first()->size();
     }
 }
 

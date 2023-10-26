@@ -25,6 +25,25 @@
 
 #include "KoFontLibraryResourceUtils.h"
 
+
+static unsigned int firstCharUcs4(const QStringView qsv)
+{
+    if (Q_UNLIKELY(qsv.isEmpty())) {
+        return 0;
+    }
+    const QChar high = qsv.first();
+    if (Q_LIKELY(!high.isSurrogate())) {
+        return high.unicode();
+    }
+    if (Q_LIKELY(high.isHighSurrogate() && qsv.length() >= 2)) {
+        const QChar low = qsv[1];
+        if (Q_LIKELY(low.isLowSurrogate())) {
+            return QChar::surrogateToUcs4(high, low);
+        }
+    }
+    return QChar::ReplacementCharacter;
+}
+
 Q_GLOBAL_STATIC(KoFontRegistry, s_instance)
 
 class Q_DECL_HIDDEN KoFontRegistry::Private
@@ -166,7 +185,9 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
     }
     FcPatternAddInteger(p.data(), FC_WEIGHT, FcWeightFromOpenType(weight));
     FcPatternAddInteger(p.data(), FC_WIDTH, width);
-    FcPatternAddBool(p.data(), FC_OUTLINE, true);
+
+    double pixelSize = size*(qMin(xRes, yRes)/72.0);
+    FcPatternAddDouble(p.data(), FC_PIXEL_SIZE, pixelSize);
 
     FcConfigSubstitute(nullptr, p.data(), FcMatchPattern);
     FcDefaultSubstitute(p.data());
@@ -203,7 +224,9 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         QString fileName;
         int fontIndex;
 
+
         static std::optional<FontEntry> get(const FcPattern *p) {
+
             FcChar8 *fileValue{};
             if (FcPatternGetString(p, FC_FILE, 0, &fileValue) != FcResultMatch) {
                 debugFlake << "Failed to get font file for" << p;
@@ -249,6 +272,18 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         // Parse over the fonts and graphemes and try to see if we can get the
         // best match for a given grapheme.
         for (int i = 0; i < fontSet->nfont; i++) {
+
+            double fontsize = 0.0;
+            FcBool isScalable = false;
+            FcPatternGetBool(fontSet->fonts[i], FC_SCALABLE, 0, &isScalable);
+            FcPatternGetDouble(fontSet->fonts[i], FC_PIXEL_SIZE, 0, &fontsize);
+            if (!isScalable && pixelSize != fontsize) {
+                // For some reason, FC will sometimes consider a smaller font pixel-size
+                // to be more relevant to the requested pattern than a bigger one. This
+                // skips those fonts, but it does mean that such pixel fonts would not
+                // be used for fallback.
+                continue;
+            }
             if (FcPatternGetCharSet(fontSet->fonts[i], FC_CHARSET, 0, &set) == FcResultMatch) {
                 int index = 0;
                 Q_FOREACH (const QString &grapheme, graphemes) {
@@ -256,7 +291,8 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
                     // Don't worry about matching controls directly,
                     // as they are not important to font-selection (and many
                     // fonts have no glyph entry for these)
-                    if (grapheme.at(0).category() == QChar::Other_Control) {
+                    if (const uint first = firstCharUcs4(grapheme); QChar::category(first) == QChar::Other_Control
+                        || QChar::category(first) == QChar::Other_Format) {
                         index += grapheme.size();
                         continue;
                     }
@@ -355,7 +391,7 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
 
     for (int i = 0; i < lengths.size(); i++) {
         const FontEntry &font = fonts.at(i);
-        const QString fontCacheEntry = font.fileName + "#" + QString::number(font.fontIndex) + modifications;
+        const QString fontCacheEntry = font.fileName + "#" + QString::number(font.fontIndex) + "#" + modifications;
         auto entry = d->typeFaces().find(fontCacheEntry);
         if (entry != d->typeFaces().end()) {
             faces.emplace_back(entry.value());

@@ -228,5 +228,3 @@ KisBrushSP KisAutoBrushWidget::brush()
 
     return brush;
 }
-
-#include "kis_auto_brush_widget.moc"

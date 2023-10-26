@@ -146,7 +146,6 @@ Q_SIGNALS:
     /// Emitted when an *already selected* resource is clicked
     /// again
     void resourceClicked(KoResourceSP resource);
-    void splitterMoved();
 
 public Q_SLOTS:
     void slotButtonClicked(int button);
@@ -161,6 +160,7 @@ private Q_SLOTS:
     void contextMenuRequested(const QPoint &pos);
     void baseLengthChanged(int length);
     void afterFilterChanged();
+    void slotSaveSplitterState();
 
 protected:
     void showEvent(QShowEvent *event) override;

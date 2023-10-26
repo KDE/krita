@@ -11,6 +11,7 @@
 #include <QWheelEvent>
 #include <KoColorSpaceRegistry.h>
 #include "KisPaletteModel.h"
+#include <KisSpinBoxPluralHelper.h>
 
 #include "kis_config.h"
 #include <resources/KoColorSet.h>
@@ -120,8 +121,9 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
               "if the gap is smaller than \"Gap close hint\" value"));
 
     m_d->ui->intCleanUp->setRange(0, 100);
-    m_d->ui->intCleanUp->setSuffix(i18n(" %"));
-    m_d->ui->intCleanUp->setPrefix(i18n("Clean up: "));
+    KisSpinBoxPluralHelper::install(m_d->ui->intCleanUp, [](int value) {
+        return i18nc("{n} is the number value, % is the percent sign", "Clean up: {n}%", value);
+    });
     m_d->ui->intCleanUp->setToolTip(
         i18nc("@info:tooltip",
               "The mask will try to remove parts of the key strokes "

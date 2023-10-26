@@ -66,6 +66,10 @@ include (KritaExternalProject)
 
 # allow specification of a directory with pre-downloaded
 # requirements
+if(DEFINED ENV{EXTERNALS_DOWNLOAD_DIR})
+    set(EXTERNALS_DOWNLOAD_DIR $ENV{EXTERNALS_DOWNLOAD_DIR})
+endif()
+
 if(NOT IS_DIRECTORY ${EXTERNALS_DOWNLOAD_DIR})
     message(FATAL_ERROR "No externals download dir set. Use -DEXTERNALS_DOWNLOAD_DIR")
 else()
@@ -250,7 +254,7 @@ if (DEFINED EP_PREFIX)
 endif ()
 
 if (WIN32)
-   set(PATCH_COMMAND myptch)
+   set(PATCH_COMMAND patch)
 endif()
 
 if (MSYS)
@@ -521,6 +525,8 @@ if (NOT MESON_BINARY_PATH)
     add_subdirectory(ext_meson)
 endif()
 
+set(MESON_NASM_PATH "${EXTPREFIX}/bin/nasm${CMAKE_EXECUTABLE_SUFFIX}")
+
 if (NOT PKG_CONFIG_FOUND OR WIN32)
     set(PKG_CONFIG_DEP ext_pkgconfig)
     if (NOT WIN32)
@@ -711,7 +717,6 @@ add_subdirectory(ext_freetype)
 add_subdirectory(ext_fontconfig)
 add_subdirectory(ext_poppler)
 add_subdirectory(ext_fribidi)
-add_subdirectory(ext_raqm)
 add_subdirectory(ext_unibreak)
 
 add_subdirectory(ext_ffmpeg)

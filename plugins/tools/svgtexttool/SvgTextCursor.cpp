@@ -17,6 +17,7 @@
 #include <QKeyEvent>
 #include <QKeySequence>
 #include <QAction>
+#include <kis_assert.h>
 
 struct Q_DECL_HIDDEN SvgTextCursor::Private {
     KoCanvasBase *canvas;

@@ -159,14 +159,14 @@ QByteArray Channel::pixelData(const QRect &rect) const
     if (d->node->colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
         while(srcIt.nextPixel()) {
             quint8 v;
-            std::memcpy(&v, srcIt.rawDataConst() + d->channel->pos(), sizeof(v));
+            memcpy(&v, srcIt.rawDataConst() + d->channel->pos(), sizeof(v));
             stream << v;
         }
     }
     else if (d->node->colorSpace()->colorDepthId() ==  Integer16BitsColorDepthID) {
         while(srcIt.nextPixel()) {
             quint16 v;
-            std::memcpy(&v, srcIt.rawDataConst() + d->channel->pos(), sizeof(v));
+            memcpy(&v, srcIt.rawDataConst() + d->channel->pos(), sizeof(v));
             stream << v;
         }
     }
@@ -174,7 +174,7 @@ QByteArray Channel::pixelData(const QRect &rect) const
     else if (d->node->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
         while(srcIt.nextPixel()) {
             half v;
-            std::memcpy(&v, srcIt.rawDataConst() + d->channel->pos(), sizeof(v));
+            memcpy(&v, srcIt.rawDataConst() + d->channel->pos(), sizeof(v));
             stream << (float) v;
         }
     }
@@ -182,7 +182,7 @@ QByteArray Channel::pixelData(const QRect &rect) const
     else if (d->node->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
         while(srcIt.nextPixel()) {
             float v;
-            std::memcpy(&v, srcIt.rawDataConst() + d->channel->pos(), sizeof(v));
+            memcpy(&v, srcIt.rawDataConst() + d->channel->pos(), sizeof(v));
             stream << v;
         }
 
@@ -202,14 +202,14 @@ void Channel::setPixelData(QByteArray value, const QRect &rect)
         while (dstIt.nextPixel()) {
             quint8 v;
             stream >> v;
-            std::memcpy(dstIt.rawData() + d->channel->pos(), &v, sizeof(v));
+            memcpy(dstIt.rawData() + d->channel->pos(), &v, sizeof(v));
         }
     }
     else if (d->node->colorSpace()->colorDepthId() ==  Integer16BitsColorDepthID) {
         while (dstIt.nextPixel()) {
             quint16 v;
             stream >> v;
-            std::memcpy(dstIt.rawData() + d->channel->pos(), &v, sizeof(v));
+            memcpy(dstIt.rawData() + d->channel->pos(), &v, sizeof(v));
         }
     }
 #ifdef HAVE_OPENEXR
@@ -218,7 +218,7 @@ void Channel::setPixelData(QByteArray value, const QRect &rect)
             float f;
             stream >> f;
             half v = f;
-            std::memcpy(dstIt.rawData() + d->channel->pos(), &v, sizeof(v));
+            memcpy(dstIt.rawData() + d->channel->pos(), &v, sizeof(v));
         }
 
     }
@@ -227,7 +227,7 @@ void Channel::setPixelData(QByteArray value, const QRect &rect)
         while (dstIt.nextPixel()) {
             float v;
             stream >> v;
-            std::memcpy(dstIt.rawData() + d->channel->pos(), &v, sizeof(v));
+            memcpy(dstIt.rawData() + d->channel->pos(), &v, sizeof(v));
         }
     }
 }

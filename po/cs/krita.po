@@ -12841,9 +12841,7 @@ msgid "File"
 msgstr "Soubor"
 
 #: krita/krita5.xmlgui:416
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "Upravit"
 
@@ -17037,7 +17035,7 @@ msgstr "Změnit rozlišení obrázku"
 #: libs/image/kis_image.cc:1034
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
-msgstr "Měřítko vrstvy"
+msgstr ""
 
 #: libs/image/kis_image.cc:1159
 msgctxt "(qtundo-format)"
@@ -17052,7 +17050,7 @@ msgstr "Otočit masku"
 #: libs/image/kis_image.cc:1167
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
-msgstr "Otočit vrstvu"
+msgstr ""
 
 #: libs/image/kis_image.cc:1248
 msgctxt "(qtundo-format)"
@@ -17062,7 +17060,7 @@ msgstr "Zkosit masku"
 #: libs/image/kis_image.cc:1251
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
-msgstr "Zkosit vrstvu"
+msgstr ""
 
 #: libs/image/kis_image.cc:1258
 msgctxt "(qtundo-format)"
@@ -27303,7 +27301,7 @@ msgstr "Velikost vrstvy"
 #: libs/ui/imagesize/imagesize.cc:119
 #, kde-format
 msgid "Resize Layer"
-msgstr "Změnit velikost vrstvy"
+msgstr ""
 
 #: libs/ui/imagesize/imagesize.cc:167
 #, kde-format
@@ -28820,7 +28818,7 @@ msgstr ""
 #: libs/ui/kis_node_manager.cpp:1038
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
-msgstr "Zrcadlení vrstvy X"
+msgstr ""
 
 #: libs/ui/kis_node_manager.cpp:1040
 msgctxt "(qtundo-format)"
@@ -28830,7 +28828,7 @@ msgstr "Zrcadlení masky podle X"
 #: libs/ui/kis_node_manager.cpp:1051
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
-msgstr "Zrcadlení vrstvy Y"
+msgstr ""
 
 #: libs/ui/kis_node_manager.cpp:1053
 msgctxt "(qtundo-format)"
@@ -41505,13 +41503,13 @@ msgstr "Posunout obrázek"
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
-msgstr "Posunout vrstvu"
+msgstr ""
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
 #, kde-format
 msgctxt "@title:window"
 msgid "Offset Layer"
-msgstr "Posunout vrstvu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -42352,7 +42350,7 @@ msgstr "Zrcadlit obrázek vodorovně"
 #: plugins/extensions/rotateimage/rotateimage.cc:144
 #, kde-format
 msgid "Rotate Layer"
-msgstr "Otočit vrstvu"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -42493,7 +42491,7 @@ msgstr "Zkosit obrázek"
 #: plugins/extensions/shearimage/shearimage.cc:72
 #, kde-format
 msgid "Shear Layer"
-msgstr "Zkosit vrstvu"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -44340,10 +44338,9 @@ msgstr "Velikost okna:"
 
 #: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgid "Reset Transparent"
-msgstr "Průhledné"
+msgstr ""
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format

@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-25 02:40+0000\n"
-"PO-Revision-Date: 2023-10-22 15:34+0200\n"
+"PO-Revision-Date: 2023-10-23 12:05+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -17170,6 +17170,9 @@ msgid "Change Image Resolution"
 msgstr "Modifier la résolution de l'image"
 
 #: libs/image/kis_image.cc:1034
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "Redimensionner le calque"
@@ -17185,6 +17188,9 @@ msgid "Rotate Mask"
 msgstr "Rotation masque"
 
 #: libs/image/kis_image.cc:1167
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "Rotation calque"
@@ -17195,6 +17201,9 @@ msgid "Shear Mask"
 msgstr "Cisailler le masque"
 
 #: libs/image/kis_image.cc:1251
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "Cisailler le calque"
@@ -27923,7 +27932,8 @@ msgid "Layer Size"
 msgstr "Taille du calque"
 
 #: libs/ui/imagesize/imagesize.cc:119
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resize Layer"
 msgid "Resize Layer"
 msgstr "Redimensionner le calque"
 
@@ -29467,6 +29477,9 @@ msgid "Remove Nodes"
 msgstr "Supprimer les nœuds"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
 msgstr "Miroir du calque selon X"
@@ -29477,6 +29490,9 @@ msgid "Mirror Mask X"
 msgstr "Miroir du masque selon X"
 
 #: libs/ui/kis_node_manager.cpp:1051
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
 msgstr "Miroir du calque selon Y"
@@ -42846,12 +42862,17 @@ msgid "Offset Image"
 msgstr "Décaler l'image"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgstr "Décaler le calque"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Offset Layer"
 msgctxt "@title:window"
 msgid "Offset Layer"
 msgstr "Décaler le calque"
@@ -43740,7 +43761,8 @@ msgid "Mirror Image Horizontally"
 msgstr "Retourner l'image horizontalement"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:144
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Rotate Layer"
 msgid "Rotate Layer"
 msgstr "Tourner le calque"
 
@@ -43883,7 +43905,8 @@ msgid "Shear Image"
 msgstr "Cisailler l'image"
 
 #: plugins/extensions/shearimage/shearimage.cc:72
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Shear Layer"
 msgid "Shear Layer"
 msgstr "Cisailler le calque"
 

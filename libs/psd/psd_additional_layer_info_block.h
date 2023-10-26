@@ -1174,6 +1174,121 @@ struct KRITAPSD_EXPORT psd_vector_stroke_data {
     }
 };
 
+struct psd_vector_origination_data {
+    int originType = -1; ///< 1 = rect, 2 = rounded rect, 3 = ? 4 = ? 5 = ellipse, 6 = ?, 7 = polygon, 8 = star, 9 = premade path shape.
+    QRectF originShapeBBox; ///< pre-transform bbox.
+    double originResolution = 72.0; ///< Resolution of the coordinates.
+    QTransform transform;
+    int originIndex = 0; // unknown, always 0.
+
+    QPolygonF originBoxCorners; ///< post-transform bbox as a polygon, seen on 1, 7, 8 and 9.
+    int originPolySides = 0; ///< Only for 7 and 8.
+    double originPolyStarRatio = 100.0; ///< Only for 8, percentage of small radius to big radius.
+    bool isStar = false;
+    double originPolyPixelHSF = 1.0; ///< Only 7 and 8, no clue.
+    QPolygonF originPolyPreviousTightBoxCorners; ///< Only 7 an 8, same as originBoxCorners.
+    QPolygonF originPolyTrueRectCorners;///< Only 7 an 8, same as originBoxCorners.
+
+    void setOriginType(int type) {
+        originType = type;
+    }
+
+    void setOriginResolution(double res) {
+        originResolution = res;
+    }
+
+    void setTransform(QTransform t) {
+        transform = t;
+    }
+
+    void setOriginShapeBBox(QRectF ShapeBBox) {
+        originShapeBBox = ShapeBBox;
+    }
+    void setOriginBoxCorners(QPointF p) {
+        originBoxCorners.append(p);
+    }
+    void setOriginPolyTightBoxCorners(QPointF p) {
+        originPolyPreviousTightBoxCorners.append(p);
+    }
+    void setOriginPolyTrueRectCorners(QPointF p) {
+        originPolyTrueRectCorners.append(p);
+    }
+
+    void setOriginPolySides(int sides) {
+        originPolySides = sides;
+    }
+
+    void setOriginPolyStarRatio(double ratio) {
+        originPolyStarRatio = ratio;
+        isStar = true;
+    }
+
+    static void setupCatcher(const QString path, KisAslCallbackObjectCatcher &catcher, psd_vector_origination_data *data) {
+        QString descriptorPath = path+"/keyDescriptorList/null";
+        catcher.subscribeInteger(descriptorPath + "/keyOriginType", std::bind(&psd_vector_origination_data::setOriginType, data, std::placeholders::_1));
+        catcher.subscribeDouble(descriptorPath + "/keyOriginResolution", std::bind(&psd_vector_origination_data::setOriginResolution, data, std::placeholders::_1));
+        catcher.subscribeTransform(descriptorPath + "/Trnf", std::bind(&psd_vector_origination_data::setTransform, data, std::placeholders::_1));
+        catcher.subscribeUnitRect(descriptorPath + "/keyOriginShapeBBox", "#Pxl", std::bind(&psd_vector_origination_data::setOriginShapeBBox, data, std::placeholders::_1));
+
+        catcher.subscribePoint(descriptorPath + "/keyOriginBoxCorners/rectangleCornerA", std::bind(&psd_vector_origination_data::setOriginBoxCorners, data, std::placeholders::_1));
+        catcher.subscribePoint(descriptorPath + "/keyOriginBoxCorners/rectangleCornerB", std::bind(&psd_vector_origination_data::setOriginBoxCorners, data, std::placeholders::_1));
+        catcher.subscribePoint(descriptorPath + "/keyOriginBoxCorners/rectangleCornerC", std::bind(&psd_vector_origination_data::setOriginBoxCorners, data, std::placeholders::_1));
+        catcher.subscribePoint(descriptorPath + "/keyOriginBoxCorners/rectangleCornerD", std::bind(&psd_vector_origination_data::setOriginBoxCorners, data, std::placeholders::_1));
+
+        catcher.subscribePoint(descriptorPath + "/keyOriginPolyPreviousTightBoxCorners/rectangleCornerA", std::bind(&psd_vector_origination_data::setOriginPolyTightBoxCorners, data, std::placeholders::_1));
+        catcher.subscribePoint(descriptorPath + "/keyOriginPolyPreviousTightBoxCorners/rectangleCornerB", std::bind(&psd_vector_origination_data::setOriginPolyTightBoxCorners, data, std::placeholders::_1));
+        catcher.subscribePoint(descriptorPath + "/keyOriginPolyPreviousTightBoxCorners/rectangleCornerC", std::bind(&psd_vector_origination_data::setOriginPolyTightBoxCorners, data, std::placeholders::_1));
+        catcher.subscribePoint(descriptorPath + "/keyOriginPolyPreviousTightBoxCorners/rectangleCornerD", std::bind(&psd_vector_origination_data::setOriginPolyTightBoxCorners, data, std::placeholders::_1));
+
+        catcher.subscribePoint(descriptorPath + "/keyOriginPolyTrueRectCorners/rectangleCornerA", std::bind(&psd_vector_origination_data::setOriginPolyTrueRectCorners, data, std::placeholders::_1));
+        catcher.subscribePoint(descriptorPath + "/keyOriginPolyTrueRectCorners/rectangleCornerB", std::bind(&psd_vector_origination_data::setOriginPolyTrueRectCorners, data, std::placeholders::_1));
+        catcher.subscribePoint(descriptorPath + "/keyOriginPolyTrueRectCorners/rectangleCornerC", std::bind(&psd_vector_origination_data::setOriginPolyTrueRectCorners, data, std::placeholders::_1));
+        catcher.subscribePoint(descriptorPath + "/keyOriginPolyTrueRectCorners/rectangleCornerD", std::bind(&psd_vector_origination_data::setOriginPolyTrueRectCorners, data, std::placeholders::_1));
+
+        catcher.subscribeInteger(descriptorPath + "/keyOriginPolySides", std::bind(&psd_vector_origination_data::setOriginPolySides, data, std::placeholders::_1));
+        catcher.subscribeUnitFloat(descriptorPath + "/keyOriginPolyStarRatio", "#Prc", std::bind(&psd_vector_origination_data::setOriginPolyStarRatio, data, std::placeholders::_1));
+
+    }
+
+    QString elementType () {
+        QString el;
+        if (originType == 1) {
+            el = "rect";
+        } else if (originType == 5) {
+            el = "ellipse";
+        } else if (originType == 7) {
+            el = "regular-polygon";
+        } else if (originType == 8) {
+            el = "regular-polygon";
+        }
+        return el;
+    }
+
+    bool canMakeParametricShape() {
+        bool p = !elementType().isEmpty();
+        return p;
+    }
+
+    /**
+     * For some reason, instead of putting the whole transformation into the
+     * transform, PSD instead creates a list points that represents the transformed
+     * bounding box. To get the original width and height and angle,
+     * one must first untransform this polygon and use it to determine the appropriate
+     * values.
+     */
+    void OriginalSizeAndAngle(QSizeF &size, double &angle) {
+        size = originShapeBBox.size();
+        angle = QLineF(originShapeBBox.topLeft(), originShapeBBox.topRight()).angle();
+        if (originBoxCorners.size() == 4) {
+            QPolygonF poly = transform.inverted().map(originBoxCorners);
+            angle = QLineF(poly.first(), poly.value(1)).angle();
+            double w = QLineF(poly.first(), poly.value(1)).length();
+            double h = QLineF(poly.first(), poly.value(3)).length();
+            size = QSizeF(w, h);
+        }
+    }
+};
+
 /**
  * @brief The PsdAdditionalLayerInfoBlock class implements the Additional Layer Information block
  *
@@ -1227,6 +1342,7 @@ public:
 
     psd_vector_mask vectorMask;
     QDomDocument vectorStroke;
+    QDomDocument vectorOriginationData;
 
     psd_section_type sectionDividerType;
     QString sectionDividerBlendMode;

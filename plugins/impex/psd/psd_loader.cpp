@@ -21,6 +21,12 @@
 #include <KoPathShape.h>
 #include <KoShapeStroke.h>
 #include <kis_shape_selection.h>
+#include <SvgShape.h>
+#include <KoShapeFactoryBase.h>
+#include <KoShapeRegistry.h>
+#include <KoXmlNS.h>
+#include <KoDocumentResourceManager.h>
+#include <KoProperties.h>
 
 #include <kis_annotation.h>
 #include <kis_types.h>
@@ -317,12 +323,69 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 QDomDocument fillConfig;
                 KisAslCallbackObjectCatcher catcher;
 
-                KoPathShape *vectorMask = nullptr;
+                KoShape *vectorMask = nullptr;
                 if (layerRecord->infoBlocks.keys.contains("vmsk") || layerRecord->infoBlocks.keys.contains("vsms")) {
-                    double width = m_image->width() / m_image->xRes();
-                    double height = m_image->height() / m_image->yRes();
-                    vectorMask = layerRecord->constructPathShape(layerRecord->infoBlocks.vectorMask.path, width, height);
-                    vectorMask->setUserData(new KisShapeSelectionMarker);
+                    psd_vector_origination_data data;
+                    if (!layerRecord->infoBlocks.vectorOriginationData.isNull()) {
+                        KisAslCallbackObjectCatcher catcher;
+                        psd_vector_origination_data::setupCatcher("/null", catcher, &data);
+                        KisAslXmlParser parser;
+                        parser.parseXML(layerRecord->infoBlocks.vectorOriginationData, catcher);
+                    }
+                    if (!data.canMakeParametricShape()) {
+                        double width = m_image->width() / m_image->xRes();
+                        double height = m_image->height() / m_image->yRes();
+                        vectorMask = layerRecord->constructPathShape(layerRecord->infoBlocks.vectorMask.path, width, height);
+                        vectorMask->setUserData(new KisShapeSelectionMarker);
+                    } else {
+                        QString el = data.elementType();
+                        QList<KoShapeFactoryBase*> factories = KoShapeRegistry::instance()->factoriesForElement(KoXmlNS::draw, el);
+
+                        QSizeF size;
+                        double angle;
+                        data.OriginalSizeAndAngle(size, angle);
+                        QTransform scaleToPt = QTransform::fromScale(m_image->xRes(), m_image->yRes()).inverted();
+                        size = QSizeF(size.width()/m_image->xRes(), size.height()/m_image->yRes());
+                        Q_FOREACH(const KoShapeFactoryBase *f, factories) {
+                            KoDocumentResourceManager manager;
+                            KoProperties props;
+                            if (el == "rect") {
+                                props.setProperty("x", 0);
+                                props.setProperty("y", 0);
+                                props.setProperty("width", size.width());
+                                props.setProperty("height", size.height());
+                            } else if (el == "regular-polygon") {
+                                props.setProperty("corners", data.originPolySides);
+                                props.setProperty("convex", !data.isStar);
+
+                                double angle = 360.0/(data.originPolySides*2);
+                                double a = cos(kisDegreesToRadians(angle)) * 100.0;
+                                double totalHeight = a + 100.0;
+                                double l = size.height() / totalHeight * 100;
+
+                                if (data.isStar) {
+                                    // 100% is a normal polygon.
+                                    a = cos(kisDegreesToRadians(angle)) * ((data.originPolyStarRatio*0.01) * l);
+                                    props.setProperty("baseRadius", a);
+                                }
+                                props.setProperty("tipRadius", l);
+                                props.setProperty("baseRoundness", 0.0);
+                                props.setProperty("tipRoundness", 0.0);
+                            }
+                            KoShape *shape = f->createShape(&props, &manager);
+                            if (!shape)
+                                continue;
+                            shape->setSize(size);
+                            QTransform t;
+                            t.rotate(360.0-angle);
+
+                            shape->setTransformation(t * scaleToPt.inverted() * data.transform * scaleToPt);
+                            shape->setAbsolutePosition(scaleToPt.map(data.originShapeBBox.center()));
+
+                            vectorMask = shape;
+                            break;
+                        }
+                    }
                 }
                 if (layerRecord->infoBlocks.fillType == psd_fill_gradient) {
                     cfg = KisGeneratorRegistry::instance()->value("gradient")->defaultConfiguration(resourceProxy.resourcesInterface());

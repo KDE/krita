@@ -87,6 +87,7 @@ public:
      * @param path a psd path struct.
      * @param shapeWidth the image width in points
      * @param shapeHeight the image height in points
+     * @param vogk extra vector data from the vogk layer info block.
      * @return a KoPathShape.
      */
     KoPathShape *constructPathShape(psd_path path, double shapeWidth, double shapeHeight);

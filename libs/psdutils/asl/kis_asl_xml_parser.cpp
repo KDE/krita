@@ -604,6 +604,105 @@ bool tryParseDescriptor(const QDomElement &el, const QString &path, const QStrin
         }
 
         catcher.addGradient(path, gradient);
+    } else if (classId == "Trnf") {
+
+        double xx = 1.0;
+        double xy = 0.0;
+        double yx = 0.0;
+        double yy = 1.0;
+        double tx = 0.0;
+        double ty = 0.0;
+
+        QDomNode child = el.firstChild();
+        while (!child.isNull()) {
+            QDomElement childEl = child.toElement();
+
+            QString type = childEl.attribute("type", "<unknown>");
+            QString key = childEl.attribute("key", "");
+            double value = KisDomUtils::toDouble(childEl.attribute("value"));
+
+
+            if (type == "Double") {
+                if (key == "xx") {
+                    xx = value;
+                } else if (key == "xy") {
+                    xy = value;
+                } else if (key == "yx") {
+                    yx = value;
+                } else if (key == "yy") {
+                    yy = value;
+                } else if (key == "tx") {
+                    tx = value;
+                } else if (key == "ty") {
+                    ty = value;
+                }
+            }
+
+            child = child.nextSibling();
+        }
+        catcher.addTransform(path, QTransform(xx, xy, yx, yy, tx, ty));
+    } else if (classId == "classFloatRect") {
+
+        QRectF rect;
+
+        QDomNode child = el.firstChild();
+        while (!child.isNull()) {
+            QDomElement childEl = child.toElement();
+
+            QString type = childEl.attribute("type", "<unknown>");
+            QString key = childEl.attribute("key", "");
+            double value = KisDomUtils::toDouble(childEl.attribute("value"));
+
+
+            if (type == "Double") {
+                if (key == "Top ") {
+                    rect.setTop(value);
+                } else if (key == "Left") {
+                    rect.setLeft(value);
+                } else if (key == "Btom") {
+                    rect.setBottom(value);
+                } else if (key == "Rght") {
+                    rect.setRight(value);
+                }
+            }
+            child = child.nextSibling();
+        }
+
+        if (el.attribute("key", " ") == "keyOriginShapeBBox") {
+            catcher.addUnitRect(path, "#Pxl", rect);
+        } else {
+            catcher.addRect(path, rect);
+        }
+    } else if (classId == "unitRect") {
+        QRectF rect;
+
+        QDomNode child = el.firstChild();
+        QString unit;
+        while (!child.isNull()) {
+            QDomElement childEl = child.toElement();
+
+            QString type = childEl.attribute("type", "<unknown>");
+            QString key = childEl.attribute("key", "");
+            unit = childEl.attribute("unit", unit);
+            double value = KisDomUtils::toDouble(childEl.attribute("value"));
+
+
+            if (type == "UnitFloat") {
+                if (key == "Top ") {
+                    rect.setTop(value);
+                } else if (key == "Left") {
+                    rect.setLeft(value);
+                } else if (key == "Btom") {
+                    rect.setBottom(value);
+                } else if (key == "Rght") {
+                    rect.setRight(value);
+                }
+            }
+            child = child.nextSibling();
+        }
+
+        catcher.addUnitRect(path, unit, rect);
+
     } else {
         retval = false;
     }

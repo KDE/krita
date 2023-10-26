@@ -343,7 +343,8 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
                 }
             }
         } else if (key == "sn2P") {
-        } else if (key == "vogk") {
+        } else if (key == "vogk") { // Live path shapes, these are similar to parametric shapes.
+            vectorOriginationData = KisAslReader::readVectorOriginationData(io, byteOrder);
         } else if (key == "Mtrn" || key == "Mt16" || key == "Mt32") { // There is no data associated with these keys.
 
         } else if (key == "LMsk") {

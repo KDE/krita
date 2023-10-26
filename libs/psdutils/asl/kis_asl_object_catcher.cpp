@@ -88,6 +88,21 @@ void KisAslObjectCatcher::addRawData(const QString &path, QByteArray ba)
     dbgKrita << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "bytearray";
 }
 
+void KisAslObjectCatcher::addTransform(const QString &path, const QTransform &transform)
+{
+    dbgKrita << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "transform" << transform;
+}
+
+void KisAslObjectCatcher::addRect(const QString &path, const QRectF &rect)
+{
+    dbgKrita << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "corner rect" << rect;
+}
+
+void KisAslObjectCatcher::addUnitRect(const QString &path, const QString &unit, const QRectF &rect)
+{
+    dbgKrita << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "unit rect" << unit << "rect" << rect;
+}
+
 void KisAslObjectCatcher::newStyleStarted()
 {
     dbgKrita << "Unhandled:"

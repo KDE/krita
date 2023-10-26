@@ -927,6 +927,51 @@ QDomDocument readVectorStrokeImpl(QIODevice &device)
 }
 
 template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+QDomDocument readVectorOriginationDataImpl(QIODevice &device);
+QDomDocument KisAslReader::readVectorOriginationData(QIODevice &device, psd_byte_order byteOrder)
+{
+    switch (byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        return readVectorOriginationDataImpl<psd_byte_order::psdLittleEndian>(device);
+    default:
+        return readVectorOriginationDataImpl(device);
+    }
+}
+
+template<psd_byte_order byteOrder>
+QDomDocument readVectorOriginationDataImpl(QIODevice &device)
+{
+    QDomDocument doc;
+
+    if (device.isSequential()) {
+        warnKrita << "WARNING: *** KisAslReader::readVectorStroke: the supplied"
+                  << "IO device is sequential. Chances are that"
+                  << "the fill config will *not* be loaded correctly!";
+    }
+    try {
+
+        {
+            quint32 version = GARBAGE_VALUE_MARK;
+            SAFE_READ_SIGNATURE_EX(byteOrder, device, version, 1);
+        }
+        {
+            quint32 descriptorVersion = GARBAGE_VALUE_MARK;
+            SAFE_READ_SIGNATURE_EX(byteOrder, device, descriptorVersion, 16);
+        }
+
+        QDomElement root = doc.createElement("asl");
+        doc.appendChild(root);
+
+        Private::readDescriptor<byteOrder>(device, "", &root, &doc);
+
+    } catch (KisAslReaderUtils::ASLParseException &e) {
+        warnKrita << "WARNING: PSD: vogk section:" << e.what();
+    }
+
+    return doc;
+}
+
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
 QDomDocument readPsdSectionPatternImpl(QIODevice &device, qint64 bytesLeft);
 
 QDomDocument KisAslReader::readPsdSectionPattern(QIODevice &device, qint64 bytesLeft, psd_byte_order byteOrder)

@@ -936,6 +936,7 @@ bool PSDLayerRecord::readMask(QIODevice &io, KisPaintDeviceSP dev, ChannelInfo *
 KoPathShape *PSDLayerRecord::constructPathShape(psd_path path, double shapeWidth, double shapeHeight)
 {
     KoPathShape *shape = new KoPathShape();
+
     // psd paths are stored normalized.
     QTransform tf = QTransform::fromScale(shapeWidth, shapeHeight);
 

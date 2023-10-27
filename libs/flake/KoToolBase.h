@@ -270,6 +270,19 @@ public:
     virtual bool paste();
 
     /**
+     * @brief selectAll
+     * select all data the tool can select.
+     * @return true if something happened, false if nothing happened.
+     */
+    virtual bool selectAll();
+
+    /**
+     * @brief deselect
+     * the tool should clear the selection if it has one.
+     */
+    virtual void deselect();
+
+    /**
      * Handle the dragMoveEvent
      * A tool typically has one or more shapes selected and dropping into should do
      * something meaningful for this specific shape and tool combination. For example

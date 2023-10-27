@@ -457,6 +457,23 @@ bool KoToolProxy::paste()
     return success;
 }
 
+bool KoToolProxy::selectAll()
+{
+    bool success = false;
+
+    if (d->activeTool && d->isActiveLayerEditable()) {
+        success = d->activeTool->selectAll();
+    }
+
+    return success;
+}
+
+void KoToolProxy::deselect()
+{
+    if (d->activeTool)
+        d->activeTool->deselect();
+}
+
 void KoToolProxy::dragMoveEvent(QDragMoveEvent *event, const QPointF &point)
 {
     if (d->activeTool)

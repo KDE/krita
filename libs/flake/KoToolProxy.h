@@ -122,6 +122,12 @@ public:
     bool paste();
 
     /// Forwarded to the current KoToolBase
+    bool selectAll();
+
+    /// Forwarded to the current KoToolBase
+    void deselect();
+
+    /// Forwarded to the current KoToolBase
     void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
 
     /// Forwarded to the current KoToolBase

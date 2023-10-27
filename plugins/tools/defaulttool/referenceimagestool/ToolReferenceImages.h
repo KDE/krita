@@ -70,6 +70,9 @@ public Q_SLOTS:
     void copy() const override;
     bool paste() override;
 
+    bool selectAll() override;
+    void deselect() override;
+
 
 private:
     friend class ToolReferenceImagesWidget;

@@ -65,6 +65,13 @@ public:
 
     ///reimplemented
     bool paste() override;
+
+    ///reimplemented
+    bool selectAll() override;
+
+    ///reimplemented
+    void deselect() override;
+
     ///reimplemented
     KoToolSelection *selection() override;
 

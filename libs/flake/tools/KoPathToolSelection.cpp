@@ -107,6 +107,20 @@ void KoPathToolSelection::selectPoints(const QRectF &rect, bool clearSelection)
     emit selectionChanged();
 }
 
+void KoPathToolSelection::selectAll()
+{
+    blockSignals(true);
+    Q_FOREACH (KoPathShape* shape, m_selectedShapes) {
+        KoParameterShape *parameterShape = dynamic_cast<KoParameterShape*>(shape);
+        if (parameterShape && parameterShape->isParametricShape())
+            continue;
+        Q_FOREACH (KoPathPoint* point, shape->pointsAt(shape->outlineRect().adjusted(-2, -2, 2, 2)))
+            add(point, false);
+    }
+    blockSignals(false);
+    emit selectionChanged();
+}
+
 int KoPathToolSelection::objectCount() const
 {
     return m_shapePointMap.size();

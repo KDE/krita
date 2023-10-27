@@ -317,6 +317,15 @@ bool KoToolBase::paste()
     return false;
 }
 
+bool KoToolBase::selectAll()
+{
+    return false;
+}
+
+void KoToolBase::deselect()
+{
+}
+
 void KoToolBase::copy() const
 {
 }

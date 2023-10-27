@@ -134,6 +134,8 @@ public:
      */
     bool paste();
 
+    void deselectText();
+
     void paintDecorations(QPainter &gc, QColor selectionColor);
 
     // Reimplemented.

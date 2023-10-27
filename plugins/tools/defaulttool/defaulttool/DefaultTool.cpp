@@ -1041,6 +1041,27 @@ bool DefaultTool::paste()
     return false;
 }
 
+bool DefaultTool::selectAll()
+{
+    Q_ASSERT(canvas());
+    Q_ASSERT(canvas()->selectedShapesProxy());
+    Q_FOREACH(KoShape *shape, canvas()->shapeManager()->shapes()) {
+        if (!shape->isSelectable()) continue;
+        canvas()->selectedShapesProxy()->selection()->select(shape);
+    }
+    repaintDecorations();
+
+    return true;
+}
+
+void DefaultTool::deselect()
+{
+    Q_ASSERT(canvas());
+    Q_ASSERT(canvas()->selectedShapesProxy());
+    canvas()->selectedShapesProxy()->selection()->deselectAll();
+    repaintDecorations();
+}
+
 KoSelection *DefaultTool::koSelection() const
 {
     Q_ASSERT(canvas());

@@ -74,6 +74,10 @@ public:
     bool paste() override;
     /// reimplemented from superclass
     bool hasSelection() override;
+
+    bool selectAll() override;
+
+    void deselect() override;
     /// reimplemented from superclass
     KoToolSelection * selection() override;
     

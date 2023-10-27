@@ -146,6 +146,10 @@ void KisSelectAllActionFactory::run(KisViewManager *view)
     KisImageWSP image = view->image();
     if (!image) return;
 
+    if (view->canvasBase()->toolProxy()->selectAll()) {
+        return;
+    }
+
     KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Select All"));
 
     ap->applyCommand(new KisCommandUtils::LambdaCommand(
@@ -179,6 +183,15 @@ void KisDeselectActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
+
+    if (view->canvasBase()->toolProxy()->hasSelection()) {
+        // see KisCutCopyActionFactory::run
+        KisImageBarrierLock lock(image, std::try_to_lock);
+        if (!lock.owns_lock()) return;
+
+        view->canvasBase()->toolProxy()->deselect();
+        return;
+    }
 
     KUndo2Command *cmd = new KisDeselectActiveSelectionCommand(view->selection(), image);
 

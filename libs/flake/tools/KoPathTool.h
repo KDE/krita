@@ -57,6 +57,9 @@ public:
     void requestStrokeEnd() override;
     void explicitUserStrokeEndRequest() override;
 
+    bool selectAll() override;
+    void deselect() override;
+
     QMenu* popupActionsMenu() override;
 
     // for KoPathToolSelection

@@ -356,6 +356,24 @@ bool ToolReferenceImages::paste()
     pasteReferenceImage();
     return true;
 }
+
+bool ToolReferenceImages::selectAll()
+{
+    Q_FOREACH(KoShape *shape, shapeManager()->shapes()) {
+        if (!shape->isSelectable()) continue;
+        koSelection()->select(shape);
+    }
+    repaintDecorations();
+
+    return true;
+}
+
+void ToolReferenceImages::deselect()
+{
+    koSelection()->deselectAll();
+    repaintDecorations();
+}
+
 KisDocument *ToolReferenceImages::document() const
 {
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());

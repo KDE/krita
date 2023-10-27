@@ -65,6 +65,8 @@ public:
      */
     void selectPoints(const QRectF &rect, bool clearSelection);
 
+    void selectAll();
+
     /**
     * @brief Get the number of path objects in the selection
     *

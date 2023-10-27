@@ -230,6 +230,11 @@ bool SvgTextCursor::paste()
     return success;
 }
 
+void SvgTextCursor::deselectText()
+{
+    setPos(d->pos, d->pos);
+}
+
 void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
 {
     if (d->shape) {

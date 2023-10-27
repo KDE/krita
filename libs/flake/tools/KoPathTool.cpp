@@ -1211,3 +1211,16 @@ void KoPathTool::explicitUserStrokeEndRequest()
 {
     KoToolManager::instance()->switchToolRequested("InteractionTool");
 }
+
+bool KoPathTool::selectAll()
+{
+    m_pointSelection.selectAll();
+    repaintDecorations();
+    return true;
+}
+
+void KoPathTool::deselect()
+{
+    clearActivePointSelectionReferences();
+    repaintDecorations();
+}

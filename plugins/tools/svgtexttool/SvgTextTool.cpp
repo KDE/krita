@@ -357,6 +357,18 @@ bool SvgTextTool::hasSelection()
     return m_textCursor.hasSelection();
 }
 
+bool SvgTextTool::selectAll()
+{
+    m_textCursor.moveCursor(SvgTextCursor::ParagraphStart, true);
+    m_textCursor.moveCursor(SvgTextCursor::ParagraphEnd, false);
+    return true;
+}
+
+void SvgTextTool::deselect()
+{
+    m_textCursor.deselectText();
+}
+
 KoToolSelection *SvgTextTool::selection()
 {
     return &m_textCursor;

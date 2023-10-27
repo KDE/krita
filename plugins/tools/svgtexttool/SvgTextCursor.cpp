@@ -43,6 +43,7 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     QPainterPath selection;
     QRectF oldSelectionRect;
 
+
     // This is used to adjust cursorpositions better on text-shape relayouts.
     int posIndex = 0;
     int anchorIndex = 0;
@@ -52,6 +53,8 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     SvgTextInsertCommand *preEditCommand {nullptr};
     int preEditStart = -1;
     int preEditLength = -1;
+    QPainterPath IMEDecoration;
+    QRectF oldIMEDecorationRect;
 };
 
 SvgTextCursor::SvgTextCursor(KoCanvasBase *canvas) :
@@ -264,9 +267,7 @@ void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
             pen.setColor(selectionColor);
             pen.setWidth(d->cursorWidth);
             gc.setPen(pen);
-            int index = d->shape->indexForPos(d->preEditStart) + d->preEditLength;
-            int anchor = d->shape->posForIndex(index);
-            gc.drawPath(d->shape->underlines(d->preEditStart, anchor));
+            gc.drawPath(d->IMEDecoration);
             gc.restore();
         }
         gc.restore();
@@ -468,6 +469,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
             updateCursor();
         }
     }
+    updateIMEDecoration();
     event->accept();
 }
 
@@ -763,6 +765,17 @@ void SvgTextCursor::updateSelection()
         d->shape->cursorForPos(d->anchor, d->anchorCaret);
         d->selection = d->shape->selectionBoxes(d->pos, d->anchor);
         emit updateCursorDecoration(d->shape->shapeToDocument(d->selection.boundingRect()) | d->oldSelectionRect);
+    }
+}
+
+void SvgTextCursor::updateIMEDecoration()
+{
+    if (d->shape) {
+        d->oldIMEDecorationRect = d->shape->shapeToDocument(d->IMEDecoration.boundingRect());
+        int index = d->shape->indexForPos(d->preEditStart) + d->preEditLength;
+        int anchor = d->shape->posForIndex(index);
+        d->IMEDecoration = d->preEditCommand? d->shape->underlines(d->preEditStart, anchor): QPainterPath();
+        emit updateCursorDecoration(d->shape->shapeToDocument(d->IMEDecoration.boundingRect()) | d->oldIMEDecorationRect);
     }
 }
 

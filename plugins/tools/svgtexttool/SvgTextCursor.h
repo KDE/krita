@@ -179,6 +179,7 @@ private:
 
     void updateCursor();
     void updateSelection();
+    void updateIMEDecoration();
     void addCommandToUndoAdapter(KUndo2Command *cmd);
 
     int moveModeResult(MoveMode &mode, int &pos, bool visual = false) const;

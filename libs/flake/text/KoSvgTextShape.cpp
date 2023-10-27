@@ -240,6 +240,10 @@ int KoSvgTextShape::previousCluster(int pos)
     }
     int currentCluster = d->cursorPos.at(pos).cluster;
 
+    if (currentCluster == d->cursorPos.first().cluster) {
+        return 0;
+    }
+
     for (int i = pos; i > 0; i--) {
         if (d->cursorPos.at(i).cluster < currentCluster) {
             return i;

@@ -4,14 +4,14 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "kis_update_info.h"
-#include <KisStaticRegistrar.h>
+#include <KisStaticInitializer.h>
 
 /**
  * The connection in KisCanvas2 uses queued signals
  * with an argument of KisNodeSP type, so we should
  * register it beforehand
  */
-KIS_DECLARE_STATIC_REGISTRAR {
+KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KisUpdateInfoSP>("KisUpdateInfoSP");
 }
 

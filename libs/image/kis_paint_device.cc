@@ -57,9 +57,9 @@
 #include "kis_transform_worker.h"
 #include "kis_filter_strategy.h"
 #include "krita_utils.h"
-#include <KisStaticRegistrar.h>
+#include <KisStaticInitializer.h>
 
-KIS_DECLARE_STATIC_REGISTRAR {
+KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KisPaintDeviceSP>("KisPaintDeviceSP");
 }
 

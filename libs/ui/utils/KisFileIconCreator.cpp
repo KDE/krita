@@ -19,12 +19,12 @@
 
 #include <kis_painting_tweaks.h>
 #include <kis_debug.h>
-#include <KisStaticRegistrar.h>
+#include <KisStaticInitializer.h>
 
 namespace
 {
 
-KIS_DECLARE_STATIC_REGISTRAR {
+KIS_DECLARE_STATIC_INITIALIZER {
     KisPreviewFileDialog::s_iconCreator = new KisFileIconCreator();
 }
 

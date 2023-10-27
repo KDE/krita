@@ -9,9 +9,9 @@
 #include <kis_psd_layer_style.h>
 
 #include <QFileInfo>
-#include <KisStaticRegistrar.h>
+#include <KisStaticInitializer.h>
 
-KIS_DECLARE_STATIC_REGISTRAR {
+KIS_DECLARE_STATIC_INITIALIZER {
     KisStoragePluginRegistry::instance()->addStoragePluginFactory(KisResourceStorage::StorageType::AdobeStyleLibrary, new KisStoragePluginFactory<KisAslStorage>());
 }
 

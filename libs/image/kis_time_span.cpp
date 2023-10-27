@@ -10,9 +10,9 @@
 #include "kis_keyframe_channel.h"
 #include "kis_node.h"
 #include "kis_layer_utils.h"
-#include <KisStaticRegistrar.h>
+#include <KisStaticInitializer.h>
 
-KIS_DECLARE_STATIC_REGISTRAR {
+KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KisTimeSpan>("KisTimeSpan");
 }
 

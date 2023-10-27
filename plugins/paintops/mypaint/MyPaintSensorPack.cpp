@@ -20,11 +20,11 @@
 #include <MyPaintCurveRangeModel.h>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <KisStaticRegistrar.h>
+#include <KisStaticInitializer.h>
 
 namespace detail {
 
-KIS_DECLARE_STATIC_REGISTRAR {
+KIS_DECLARE_STATIC_INITIALIZER {
     auto addFactory = [](const KoID &id,
                          int minimumValue,
                          int maximumValue,

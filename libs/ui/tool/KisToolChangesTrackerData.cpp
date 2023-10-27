@@ -5,9 +5,9 @@
  */
 
 #include "KisToolChangesTrackerData.h"
-#include <KisStaticRegistrar.h>
+#include <KisStaticInitializer.h>
 
-KIS_DECLARE_STATIC_REGISTRAR {
+KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KisToolChangesTrackerDataSP>("KisToolChangesTrackerDataSP");
 }
 

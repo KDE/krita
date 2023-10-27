@@ -7,7 +7,7 @@
 #include "kis_image_signal_router.h"
 
 #include <QThread>
-#include <KisStaticRegistrar.h>
+#include <KisStaticInitializer.h>
 
 #include "kis_image.h"
 
@@ -18,7 +18,7 @@
 #define CONNECT_TO_IMAGE_QUEUED(signal)                                 \
     connect(this, SIGNAL(signal), m_image, SIGNAL(signal), Qt::QueuedConnection)
 
-KIS_DECLARE_STATIC_REGISTRAR {
+KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KisImageSignalType>("KisImageSignalType");
 }
 

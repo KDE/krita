@@ -21,9 +21,9 @@
 
 #include <KoSvgTextChunkShape.h>
 #include <KoSvgTextChunkShapeLayoutInterface.h>
-#include <KisStaticRegistrar.h>
+#include <KisStaticInitializer.h>
 
-KIS_DECLARE_STATIC_REGISTRAR {
+KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KoSvgText::AutoValue>("KoSvgText::AutoValue");
     QMetaType::registerEqualsComparator<KoSvgText::AutoValue>();
     QMetaType::registerDebugStreamOperator<KoSvgText::AutoValue>();

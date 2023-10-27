@@ -10,9 +10,9 @@
 #include "kis_sequential_iterator.h"
 #include "KoColorModelStandardIds.h"
 #include "KoColorSpace.h"
-#include <KisStaticRegistrar.h>
+#include <KisStaticInitializer.h>
 
-KIS_DECLARE_STATIC_REGISTRAR {
+KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<QVector<QImage>>("QVector<QImage>");
     QMetaType::registerEqualsComparator<QVector<QImage>>();
 }

@@ -26,7 +26,7 @@
 #include "KisReferenceImagesLayer.h"
 #include "KisScreenColorSampler.h"
 #include "KisDlgInternalColorSelector.h"
-#include <KisStaticRegistrar.h>
+#include <KisStaticInitializer.h>
 
 struct KisScreenColorSampler::Private
 {
@@ -304,7 +304,7 @@ bool KisScreenColorSamplingEventFilter::eventFilter(QObject *, QEvent *event)
 }
 
 // Register the color sampler factory with the internal color selector
-KIS_DECLARE_STATIC_REGISTRAR {
+KIS_DECLARE_STATIC_INITIALIZER {
     KisDlgInternalColorSelector::setScreenColorSamplerFactory(KisScreenColorSampler::createScreenColorSampler);
 }
 

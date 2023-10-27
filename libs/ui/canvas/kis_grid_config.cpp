@@ -11,9 +11,9 @@
 #include "kis_config.h"
 #include "kis_dom_utils.h"
 #include "kis_algebra_2d.h"
-#include <KisStaticRegistrar.h>
+#include <KisStaticInitializer.h>
 
-KIS_DECLARE_STATIC_REGISTRAR {
+KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KisGridConfig>("KisGridConfig");
 }
 

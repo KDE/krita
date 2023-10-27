@@ -14,9 +14,9 @@
 #include "kis_image_animation_interface.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_image_config.h"
-#include <KisStaticRegistrar.h>
+#include <KisStaticInitializer.h>
 
-KIS_DECLARE_STATIC_REGISTRAR {
+KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KisAsyncAnimationRendererBase::CancelReason>("KisAsyncAnimationRendererBase::CancelReason");
 }
 

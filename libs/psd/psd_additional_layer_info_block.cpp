@@ -281,6 +281,7 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
                 } else if (recordType == 8) {
                     quint16 length;
                     psdread<byteOrder>(io, length);
+                    dbgFile << "\trecord" << recordType << "length" << length;
                     vectorMask.path.initialFillRecord = (length > 0);
                     io.skip(22);
                 } else {
@@ -628,7 +629,7 @@ void PsdAdditionalLayerInfoBlock::writeVectorMaskImpl(QIODevice &io, psd_vector_
     // initial fill rule record
     recordType = 8;
     SAFE_WRITE_EX(byteOrder, io, recordType);
-    quint16 fillType = mask.path.initialFillRecord;
+    quint16 fillType = mask.path.initialFillRecord? 1: 0;
     SAFE_WRITE_EX(byteOrder, io, fillType);
     // 22 empty bits
     const quint16 halfZero = 0;

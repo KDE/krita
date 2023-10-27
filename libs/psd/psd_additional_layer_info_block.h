@@ -635,7 +635,7 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
 
 struct KRITAPSD_EXPORT psd_layer_pattern_fill {
     double angle {0.0};
-    double scale {1.0};
+    double scale {100.0};
     QPointF offset;
     QString patternName;
     QString patternID;
@@ -772,6 +772,11 @@ struct KRITAPSD_EXPORT psd_layer_pattern_fill {
             KoResourceLoadResult res = KisGlobalResourcesInterface::instance()->source(ResourceType::Patterns).fallbackResource();
             bg->setPattern(res.resource<KoPattern>()->pattern());
         }
+        QSizeF size = bg->patternOriginalSize();
+        QPointF refPoint(offset.x()/size.width(), offset.y()/size.height());
+        size = QSizeF(size.width() * (0.01*scale), size.height() * (0.01*scale));
+        bg->setPatternDisplaySize(size);
+        bg->setReferencePointOffset(refPoint);
         return bg;
     }
 
@@ -954,7 +959,7 @@ struct KRITAPSD_EXPORT psd_path_sub_path {
     bool isClosed {false};
 };
 struct KRITAPSD_EXPORT psd_path {
-    bool initialFillRecord;
+    bool initialFillRecord {false};
     QRectF clipBoardBounds;
     double clipBoardResolution;
     QList<psd_path_sub_path> subPaths;

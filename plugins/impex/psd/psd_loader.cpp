@@ -344,8 +344,9 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                         QSizeF size;
                         double angle;
                         data.OriginalSizeAndAngle(size, angle);
-                        QTransform scaleToPt = QTransform::fromScale(m_image->xRes(), m_image->yRes()).inverted();
-                        size = QSizeF(size.width()/m_image->xRes(), size.height()/m_image->yRes());
+                        double resMultiplier = data.originResolution/72.0;
+                        QTransform scaleToPt = QTransform::fromScale(resMultiplier, resMultiplier).inverted();
+                        size = QSizeF(size.width()/resMultiplier, size.height()/resMultiplier);
                         Q_FOREACH(const KoShapeFactoryBase *f, factories) {
                             KoDocumentResourceManager manager;
                             KoProperties props;

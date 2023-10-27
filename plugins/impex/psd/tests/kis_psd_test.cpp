@@ -30,6 +30,7 @@
 #include <kis_guides_config.h>
 #include <kis_shape_layer.h>
 #include <KoShape.h>
+#include <KoPathShape.h>
 #include <KoShapeStroke.h>
 #include <KoSvgTextShape.h>
 #include <KisGlobalResourcesInterface.h>
@@ -376,6 +377,9 @@ void KisPSDTest::testLoadVectorShapes()
     QVERIFY(layer->shapes().size() == 1);
     KoShape *shape = layer->shapes().first();
     QVERIFY(shape);
+    QVERIFY(shape->shapeId() == "KoPathShape");
+    KoPathShape *path = dynamic_cast<KoPathShape*>(shape);
+    QVERIFY(path->pathShapeId() == "StarShape");
     QVERIFY(!shape->background());
     QVERIFY(shape->stroke());
     KoShapeStrokeSP shapeStroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
@@ -390,6 +394,9 @@ void KisPSDTest::testLoadVectorShapes()
     QVERIFY(shape);
     QVERIFY(shape->background());
     QVERIFY(shape->stroke());
+    QVERIFY(shape->shapeId() == "KoPathShape");
+    path = dynamic_cast<KoPathShape*>(shape);
+    QVERIFY(path->pathShapeId() == "StarShape");
     shapeStroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
     QVERIFY(shapeStroke->capStyle() == Qt::SquareCap);
     QVERIFY(shapeStroke->joinStyle() == Qt::BevelJoin);
@@ -403,6 +410,9 @@ void KisPSDTest::testLoadVectorShapes()
     QVERIFY(shape);
     QVERIFY(shape->background());
     QVERIFY(shape->stroke());
+    QVERIFY(shape->shapeId() == "KoPathShape");
+    path = dynamic_cast<KoPathShape*>(shape);
+    QVERIFY(path->pathShapeId() == "EllipseShape");
     shapeStroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
     QVERIFY(shapeStroke->capStyle() == Qt::RoundCap);
     QVERIFY(shapeStroke->joinStyle() == Qt::RoundJoin);
@@ -416,6 +426,9 @@ void KisPSDTest::testLoadVectorShapes()
     QVERIFY(shape);
     QVERIFY(shape->background());
     QVERIFY(shape->stroke());
+    QVERIFY(shape->shapeId() == "KoPathShape");
+    path = dynamic_cast<KoPathShape*>(shape);
+    QVERIFY(path->pathShapeId() == "RectangleShape");
     shapeStroke = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
     QVERIFY(!shapeStroke->isVisible());
 }

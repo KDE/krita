@@ -53,3 +53,5 @@
 %Include Swatch.sip
 
 %Include KisCubicCurve.sip
+
+%Include AngleSelector.sip

@@ -37,6 +37,8 @@ set(kritalibkis_LIB_SRCS
     GroupShape.cpp
 
     LibKisUtils.cpp
+
+    AngleSelector.cpp
 )
 
 kis_add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS})

@@ -161,6 +161,7 @@ private:
     DragMode m_dragging {DragMode::None};
     std::unique_ptr<KoInteractionStrategy> m_interactionStrategy;
     HighlightItem m_highlightItem {HighlightItem::None};
+    bool m_strategyAddingCommand {false};
 
     QButtonGroup *m_defAlignment {nullptr};
     QButtonGroup *m_defWritingMode {nullptr};

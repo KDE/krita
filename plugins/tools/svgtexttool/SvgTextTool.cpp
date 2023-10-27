@@ -451,7 +451,7 @@ KoToolSelection *SvgTextTool::selection()
 
 void SvgTextTool::requestStrokeEnd()
 {
-    if (!m_textCursor.isAddingCommand()) {
+    if (!m_textCursor.isAddingCommand() && !m_strategyAddingCommand) {
         if (m_interactionStrategy) {
             m_dragging = DragMode::None;
             m_interactionStrategy->cancelInteraction();
@@ -785,7 +785,9 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
         m_interactionStrategy->finishInteraction(event->modifiers());
         KUndo2Command *const command = m_interactionStrategy->createCommand();
         if (command) {
+            m_strategyAddingCommand = true;
             canvas()->addCommand(command);
+            m_strategyAddingCommand = false;
         }
         m_interactionStrategy = nullptr;
         if (m_dragging != DragMode::Select) {

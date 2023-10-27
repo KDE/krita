@@ -1,7 +1,6 @@
 # Translation of krita.po to Catalan
 # Copyright (C) 2000-2023 This_file_is_part_of_KDE
 #
-# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Josep M. Ferrer <txemaq@gmail.com>
 # Sebastià Pla <sastia@retemail.es>, 2000.
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2006, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
@@ -9,13 +8,13 @@
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
-# Josep M. Ferrer <txemaq@gmail.com>, 2023.
+# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-26 00:40+0000\n"
-"PO-Revision-Date: 2023-10-25 09:38+0200\n"
+"POT-Creation-Date: 2023-10-27 00:40+0000\n"
+"PO-Revision-Date: 2023-10-26 12:04+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -16354,7 +16353,7 @@ msgstr "Una forma senzilla de camí"
 msgid "%1 Options"
 msgstr "Opcions de %1"
 
-#: libs/flake/KoToolManager.cpp:572
+#: libs/flake/KoToolManager.cpp:576
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Eina activa: %1"
@@ -16371,25 +16370,25 @@ msgstr ""
 "document, l'objecte de text es convertirà al format del Krita 5, el qual ja "
 "no serà admès pel Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:276
+#: libs/flake/text/KoSvgTextShape.cpp:855
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:278
-#: libs/flake/text/KoSvgTextShape.cpp:286
+#: libs/flake/text/KoSvgTextShape.cpp:857
+#: libs/flake/text/KoSvgTextShape.cpp:865
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma de text SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:284
+#: libs/flake/text/KoSvgTextShape.cpp:863
 #, kde-format
 msgid "SVG Text"
 msgstr "Text SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:298
-#: libs/flake/text/KoSvgTextShape.cpp:313
+#: libs/flake/text/KoSvgTextShape.cpp:877
+#: libs/flake/text/KoSvgTextShape.cpp:892
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20388,52 +20387,52 @@ msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Capa d'emplenat per flux"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:346
+#: libs/ui/actions/kis_selection_action_factories.cpp:352
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Retalla"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:347
+#: libs/ui/actions/kis_selection_action_factories.cpp:353
 msgctxt "(qtundo-format)"
 msgid "Copy"
 msgstr "Copia"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:432
+#: libs/ui/actions/kis_selection_action_factories.cpp:438
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "Còpia fusionada"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:449
+#: libs/ui/actions/kis_selection_action_factories.cpp:455
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
 msgstr "La selecció ja es troba en un format vectorial"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:474
-#: libs/ui/actions/kis_selection_action_factories.cpp:494
+#: libs/ui/actions/kis_selection_action_factories.cpp:480
+#: libs/ui/actions/kis_selection_action_factories.cpp:500
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "Converteix a selecció amb vectors"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:489
+#: libs/ui/actions/kis_selection_action_factories.cpp:495
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr "La selecció ja es troba en un format ràster"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:535
+#: libs/ui/actions/kis_selection_action_factories.cpp:541
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "La forma ja pertany a una selecció"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:541
+#: libs/ui/actions/kis_selection_action_factories.cpp:547
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Converteix les formes a selecció amb vectors"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:594
-#: libs/ui/actions/kis_selection_action_factories.cpp:653
+#: libs/ui/actions/kis_selection_action_factories.cpp:600
+#: libs/ui/actions/kis_selection_action_factories.cpp:659
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
@@ -37093,47 +37092,39 @@ msgstr "Color personalitzat"
 
 #. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
-#, fuzzy, kde-format
-#| msgid "Editor text color"
+#, kde-format
 msgid "Editor Widget Control:"
-msgstr "Editor del color de text"
+msgstr "Control del giny editor:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
-#, fuzzy, kde-format
-#| msgid "Sh&adow Mode:"
+#, kde-format
 msgid "Show Move"
-msgstr "Mode d'ombr&a:"
+msgstr "Mostra el moviment"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Snap Options Popup"
+#, kde-format
 msgid "Show Snapping"
-msgstr "Mostra un quadre emergent amb les opcions d'ajustament"
+msgstr "Mostra l'ajust"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgid "Show Lock"
-msgstr "Mostra els acobladors"
+msgstr "Mostra el bloqueig"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
-#, fuzzy, kde-format
-#| msgid "Duplicate"
+#, kde-format
 msgid "Show Duplicate"
-msgstr "Duplica"
+msgstr "Mostra la duplicació"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgid "Show Delete"
-msgstr "Suprimeix"
+msgstr "Mostra la supressió"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
@@ -37158,16 +37149,14 @@ msgid "Concentric Ellipse"
 msgstr "El·lipse concèntrica"
 
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:28
-#, fuzzy, kde-format
-#| msgid "Perspective assistant"
+#, kde-format
 msgid "Curvilinear Perspective assistant"
-msgstr "Assistent de perspectiva"
+msgstr "Assistent de perspectiva curvilínia"
 
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
-#, fuzzy, kde-format
-#| msgid "2 Point Perspective"
+#, kde-format
 msgid "Curvilinear Perspective"
-msgstr "Perspectiva de 2 punts"
+msgstr "Perspectiva curvilínia"
 
 #: plugins/assistants/Assistants/EditAssistantsCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -58946,6 +58935,21 @@ msgstr "100%"
 msgid "Letter Spacing"
 msgstr "Espaiat de les lletres"
 
+#: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
+#, fuzzy
+#| msgid "Inverted Text"
+msgctxt "(qtundo-format)"
+msgid "Insert Text"
+msgstr "Text invertit"
+
+#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:26
+#, fuzzy
+#| msgctxt "@title:window"
+#| msgid "Remove Template"
+msgctxt "(qtundo-format)"
+msgid "Remove Text"
+msgstr "Elimina la plantilla"
+
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
 #, kde-format
@@ -59390,7 +59394,7 @@ msgstr ""
 "Usa el mode d'ajust CSS `white-space: pre-wrap` de SVG, amb `inline-size` "
 "definint l'amplada del text."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:240
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

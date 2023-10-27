@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-26 00:40+0000\n"
+"POT-Creation-Date: 2023-10-27 00:40+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -17079,7 +17079,7 @@ msgstr "Намунани яратиш"
 msgid "%1 Options"
 msgstr "Қоидадан ташқари ҳолат"
 
-#: libs/flake/KoToolManager.cpp:572
+#: libs/flake/KoToolManager.cpp:576
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "Матнни ўчириш"
@@ -17093,25 +17093,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:276
+#: libs/flake/text/KoSvgTextShape.cpp:855
 #, fuzzy, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Матнни қўшиш"
 
-#: libs/flake/text/KoSvgTextShape.cpp:278
-#: libs/flake/text/KoSvgTextShape.cpp:286
+#: libs/flake/text/KoSvgTextShape.cpp:857
+#: libs/flake/text/KoSvgTextShape.cpp:865
 #, fuzzy, kde-format
 msgid "SVG Text Shape"
 msgstr "Тўлқин"
 
-#: libs/flake/text/KoSvgTextShape.cpp:284
+#: libs/flake/text/KoSvgTextShape.cpp:863
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "Матнни қўшиш"
 
-#: libs/flake/text/KoSvgTextShape.cpp:298
-#: libs/flake/text/KoSvgTextShape.cpp:313
+#: libs/flake/text/KoSvgTextShape.cpp:877
+#: libs/flake/text/KoSvgTextShape.cpp:892
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -21309,61 +21309,61 @@ msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Сония"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:346
+#: libs/ui/actions/kis_selection_action_factories.cpp:352
 #, fuzzy
 #| msgid "Custom"
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Бошқа"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:347
+#: libs/ui/actions/kis_selection_action_factories.cpp:353
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Copy"
 msgstr "Ташкилот"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:432
+#: libs/ui/actions/kis_selection_action_factories.cpp:438
 #, fuzzy
 #| msgid "Green"
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "Яшил"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:449
+#: libs/ui/actions/kis_selection_action_factories.cpp:455
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
 msgstr ""
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:474
-#: libs/ui/actions/kis_selection_action_factories.cpp:494
+#: libs/ui/actions/kis_selection_action_factories.cpp:480
+#: libs/ui/actions/kis_selection_action_factories.cpp:500
 #, fuzzy
 #| msgid "Completion"
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "Тўлдириш"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:489
+#: libs/ui/actions/kis_selection_action_factories.cpp:495
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr ""
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:535
+#: libs/ui/actions/kis_selection_action_factories.cpp:541
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr ""
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:541
+#: libs/ui/actions/kis_selection_action_factories.cpp:547
 #, fuzzy
 #| msgid "Completion"
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Тўлдириш"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:594
-#: libs/ui/actions/kis_selection_action_factories.cpp:653
+#: libs/ui/actions/kis_selection_action_factories.cpp:600
+#: libs/ui/actions/kis_selection_action_factories.cpp:659
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -60718,6 +60718,20 @@ msgstr ""
 msgid "Letter Spacing"
 msgstr "&Сатрлар орасидаги масофа"
 
+#: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
+#, fuzzy
+#| msgid "Line &Spacing"
+msgctxt "(qtundo-format)"
+msgid "Insert Text"
+msgstr "&Сатрлар орасидаги масофа"
+
+#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:26
+#, fuzzy
+#| msgid "Remove Template"
+msgctxt "(qtundo-format)"
+msgid "Remove Text"
+msgstr "Намунани олиб ташлаш"
+
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
 #, fuzzy, kde-format
@@ -61172,7 +61186,7 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:240
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:258
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

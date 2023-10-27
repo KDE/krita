@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-26 00:40+0000\n"
+"POT-Creation-Date: 2023-10-27 00:40+0000\n"
 "PO-Revision-Date: 2023-10-22 20:46+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -16375,7 +16375,7 @@ msgstr "Una forma semplice per tracciati"
 msgid "%1 Options"
 msgstr "Opzioni %1"
 
-#: libs/flake/KoToolManager.cpp:572
+#: libs/flake/KoToolManager.cpp:576
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Strumento attivo: %1"
@@ -16392,25 +16392,25 @@ msgstr ""
 "il documento l'oggetto di testo sarà convertito nel formato di Krita 5 che "
 "diverrà incompatibile con Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:276
+#: libs/flake/text/KoSvgTextShape.cpp:855
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Testo"
 
-#: libs/flake/text/KoSvgTextShape.cpp:278
-#: libs/flake/text/KoSvgTextShape.cpp:286
+#: libs/flake/text/KoSvgTextShape.cpp:857
+#: libs/flake/text/KoSvgTextShape.cpp:865
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma di testo SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:284
+#: libs/flake/text/KoSvgTextShape.cpp:863
 #, kde-format
 msgid "SVG Text"
 msgstr "Testo SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:298
-#: libs/flake/text/KoSvgTextShape.cpp:313
+#: libs/flake/text/KoSvgTextShape.cpp:877
+#: libs/flake/text/KoSvgTextShape.cpp:892
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20415,52 +20415,52 @@ msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Livello Riempimento"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:346
+#: libs/ui/actions/kis_selection_action_factories.cpp:352
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Taglia"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:347
+#: libs/ui/actions/kis_selection_action_factories.cpp:353
 msgctxt "(qtundo-format)"
 msgid "Copy"
 msgstr "Copia"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:432
+#: libs/ui/actions/kis_selection_action_factories.cpp:438
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "Copia fuso"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:449
+#: libs/ui/actions/kis_selection_action_factories.cpp:455
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
 msgstr "La selezione è già in formato vettoriale"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:474
-#: libs/ui/actions/kis_selection_action_factories.cpp:494
+#: libs/ui/actions/kis_selection_action_factories.cpp:480
+#: libs/ui/actions/kis_selection_action_factories.cpp:500
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "Converti in selezione vettoriale"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:489
+#: libs/ui/actions/kis_selection_action_factories.cpp:495
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr "La selezione è già in formato raster"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:535
+#: libs/ui/actions/kis_selection_action_factories.cpp:541
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "La forma appartiene già a una selezione"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:541
+#: libs/ui/actions/kis_selection_action_factories.cpp:547
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Converti forme a selezione vettoriale"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:594
-#: libs/ui/actions/kis_selection_action_factories.cpp:653
+#: libs/ui/actions/kis_selection_action_factories.cpp:600
+#: libs/ui/actions/kis_selection_action_factories.cpp:659
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
@@ -59044,6 +59044,21 @@ msgstr "100%"
 msgid "Letter Spacing"
 msgstr "Spaziatura dei caratteri"
 
+#: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
+#, fuzzy
+#| msgid "Inverted Text"
+msgctxt "(qtundo-format)"
+msgid "Insert Text"
+msgstr "Testo invertito"
+
+#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:26
+#, fuzzy
+#| msgctxt "@title:window"
+#| msgid "Remove Template"
+msgctxt "(qtundo-format)"
+msgid "Remove Text"
+msgstr "Rimuovi modello"
+
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
 #, kde-format
@@ -59488,7 +59503,7 @@ msgstr ""
 "Usa la modalità di testo a capo `white-space: pre-wrap` dello stile CSS di "
 "SVG con `inline-size` che definisce la larghezza del testo."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:240
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

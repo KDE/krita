@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-26 00:40+0000\n"
+"POT-Creation-Date: 2023-10-27 00:40+0000\n"
 "PO-Revision-Date: 2023-08-01 13:34+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -16329,7 +16329,7 @@ msgstr "一個簡單路徑形狀"
 msgid "%1 Options"
 msgstr "%1的選項"
 
-#: libs/flake/KoToolManager.cpp:572
+#: libs/flake/KoToolManager.cpp:576
 #, kde-format
 msgid "Active tool: %1"
 msgstr "使用中工具：%1"
@@ -16345,25 +16345,25 @@ msgstr ""
 "文件內含有由 Krita 4.x 建立的向量文字。當您儲存文件時，這些文字物件將會被轉換"
 "為 Krita 5 格式而不再兼容 Krita 4.x 版本"
 
-#: libs/flake/text/KoSvgTextShape.cpp:276
+#: libs/flake/text/KoSvgTextShape.cpp:855
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:278
-#: libs/flake/text/KoSvgTextShape.cpp:286
+#: libs/flake/text/KoSvgTextShape.cpp:857
+#: libs/flake/text/KoSvgTextShape.cpp:865
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 文字形狀"
 
-#: libs/flake/text/KoSvgTextShape.cpp:284
+#: libs/flake/text/KoSvgTextShape.cpp:863
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:298
-#: libs/flake/text/KoSvgTextShape.cpp:313
+#: libs/flake/text/KoSvgTextShape.cpp:877
+#: libs/flake/text/KoSvgTextShape.cpp:892
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20323,52 +20323,52 @@ msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "浸漫填充圖層"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:346
+#: libs/ui/actions/kis_selection_action_factories.cpp:352
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "剪下"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:347
+#: libs/ui/actions/kis_selection_action_factories.cpp:353
 msgctxt "(qtundo-format)"
 msgid "Copy"
 msgstr "複製"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:432
+#: libs/ui/actions/kis_selection_action_factories.cpp:438
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "合併複製"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:449
+#: libs/ui/actions/kis_selection_action_factories.cpp:455
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
 msgstr "選取區域已是向量格式"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:474
-#: libs/ui/actions/kis_selection_action_factories.cpp:494
+#: libs/ui/actions/kis_selection_action_factories.cpp:480
+#: libs/ui/actions/kis_selection_action_factories.cpp:500
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "轉成向量選取區域"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:489
+#: libs/ui/actions/kis_selection_action_factories.cpp:495
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr "選取區域已是點陣格式"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:535
+#: libs/ui/actions/kis_selection_action_factories.cpp:541
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "此形狀已屬於一個選取區域"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:541
+#: libs/ui/actions/kis_selection_action_factories.cpp:547
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "轉換形狀為向量選取區域"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:594
-#: libs/ui/actions/kis_selection_action_factories.cpp:653
+#: libs/ui/actions/kis_selection_action_factories.cpp:600
+#: libs/ui/actions/kis_selection_action_factories.cpp:659
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
@@ -58063,6 +58063,21 @@ msgstr "100%"
 msgid "Letter Spacing"
 msgstr "字距"
 
+#: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
+#, fuzzy
+#| msgid "Inverted Text"
+msgctxt "(qtundo-format)"
+msgid "Insert Text"
+msgstr "反轉文字"
+
+#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:26
+#, fuzzy
+#| msgctxt "@title:window"
+#| msgid "Remove Template"
+msgctxt "(qtundo-format)"
+msgid "Remove Text"
+msgstr "移除範本"
+
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
 #, kde-format
@@ -58500,7 +58515,7 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:240
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

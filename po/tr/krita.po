@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-26 00:40+0000\n"
+"POT-Creation-Date: 2023-10-27 00:40+0000\n"
 "PO-Revision-Date: 2023-10-25 12:57+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -16315,7 +16315,7 @@ msgstr "Bir basit bir yol şekli"
 msgid "%1 Options"
 msgstr "%1 Seçenekler"
 
-#: libs/flake/KoToolManager.cpp:572
+#: libs/flake/KoToolManager.cpp:576
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Etkin araç: %1"
@@ -16332,25 +16332,25 @@ msgstr ""
 "metin nesnesi Krita 5 biçimine dönüştürülür ve Krita 4.x ile uyumlu olmaktan "
 "çıkar."
 
-#: libs/flake/text/KoSvgTextShape.cpp:276
+#: libs/flake/text/KoSvgTextShape.cpp:855
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:278
-#: libs/flake/text/KoSvgTextShape.cpp:286
+#: libs/flake/text/KoSvgTextShape.cpp:857
+#: libs/flake/text/KoSvgTextShape.cpp:865
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Metin Şekli"
 
-#: libs/flake/text/KoSvgTextShape.cpp:284
+#: libs/flake/text/KoSvgTextShape.cpp:863
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:298
-#: libs/flake/text/KoSvgTextShape.cpp:313
+#: libs/flake/text/KoSvgTextShape.cpp:877
+#: libs/flake/text/KoSvgTextShape.cpp:892
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20346,52 +20346,52 @@ msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Taşkın Dolgu Katman"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:346
+#: libs/ui/actions/kis_selection_action_factories.cpp:352
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Kes"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:347
+#: libs/ui/actions/kis_selection_action_factories.cpp:353
 msgctxt "(qtundo-format)"
 msgid "Copy"
 msgstr "Kopyala"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:432
+#: libs/ui/actions/kis_selection_action_factories.cpp:438
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "Birleştirileni Kopyala"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:449
+#: libs/ui/actions/kis_selection_action_factories.cpp:455
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
 msgstr "Seçim zaten vektör biçimde "
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:474
-#: libs/ui/actions/kis_selection_action_factories.cpp:494
+#: libs/ui/actions/kis_selection_action_factories.cpp:480
+#: libs/ui/actions/kis_selection_action_factories.cpp:500
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "Vektör Seçime Dönüştür"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:489
+#: libs/ui/actions/kis_selection_action_factories.cpp:495
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr "Seçim zaten raster biçimde "
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:535
+#: libs/ui/actions/kis_selection_action_factories.cpp:541
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "Şekil zaten bir seçime ait"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:541
+#: libs/ui/actions/kis_selection_action_factories.cpp:547
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Şekilleri Vektör Seçime Dönüştür"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:594
-#: libs/ui/actions/kis_selection_action_factories.cpp:653
+#: libs/ui/actions/kis_selection_action_factories.cpp:600
+#: libs/ui/actions/kis_selection_action_factories.cpp:659
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
@@ -58667,6 +58667,21 @@ msgstr "%​100"
 msgid "Letter Spacing"
 msgstr "Harf Aralığı"
 
+#: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
+#, fuzzy
+#| msgid "Inverted Text"
+msgctxt "(qtundo-format)"
+msgid "Insert Text"
+msgstr "Tersine Çevrilmiş Metin"
+
+#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:26
+#, fuzzy
+#| msgctxt "@title:window"
+#| msgid "Remove Template"
+msgctxt "(qtundo-format)"
+msgid "Remove Text"
+msgstr "Şablonu Kaldır"
+
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
 #, kde-format
@@ -59109,7 +59124,7 @@ msgstr ""
 "SVG'nin CSS `white-space: pre` mutlak kaydırma kipini, metin genişliğini "
 "tanımlayan `inline-size` ile kullanın."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:240
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

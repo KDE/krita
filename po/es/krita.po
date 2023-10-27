@@ -65,8 +65,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-26 00:40+0000\n"
-"PO-Revision-Date: 2023-10-24 13:33+0100\n"
+"POT-Creation-Date: 2023-10-27 00:40+0000\n"
+"PO-Revision-Date: 2023-10-26 11:32+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -9183,12 +9183,10 @@ msgstr "Aumentar el tamaño del pincel"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:879 krita/krita.action:881 krita/krita.action:882
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise"
-msgstr "Rotar el objeto 90° a la derecha"
+msgstr "Rotar la punta del pincel en sentido horario"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9197,11 +9195,10 @@ msgstr "Rotar el objeto 90° a la derecha"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:891 krita/krita.action:893 krita/krita.action:894
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "Rotar la selección 90 grados en sentido horario"
+msgstr "Rotar la punta del pincel en sentido horario (preciso)"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
@@ -9210,12 +9207,10 @@ msgstr "Rotar la selección 90 grados en sentido horario"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:903 krita/krita.action:905 krita/krita.action:906
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Rotar el objeto 90° a la izquierda"
+msgstr "Rotar la punta del pincel en sentido antihorario"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9224,11 +9219,10 @@ msgstr "Rotar el objeto 90° a la izquierda"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:915 krita/krita.action:917 krita/krita.action:918
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Rotar la selección 90 grados en sentido antihorario"
+msgstr "Rotar la punta del pincel en sentido antihorario (preciso)"
 
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
@@ -16388,7 +16382,7 @@ msgstr "Una forma de ruta sencilla"
 msgid "%1 Options"
 msgstr "Opciones de %1"
 
-#: libs/flake/KoToolManager.cpp:572
+#: libs/flake/KoToolManager.cpp:576
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Herramienta activa: %1"
@@ -16405,25 +16399,25 @@ msgstr ""
 "documento, el objeto de texto se convertirá al formato de Krita 5, que ya no "
 "será compatible con Krita 4.x."
 
-#: libs/flake/text/KoSvgTextShape.cpp:276
+#: libs/flake/text/KoSvgTextShape.cpp:855
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:278
-#: libs/flake/text/KoSvgTextShape.cpp:286
+#: libs/flake/text/KoSvgTextShape.cpp:857
+#: libs/flake/text/KoSvgTextShape.cpp:865
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma de texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:284
+#: libs/flake/text/KoSvgTextShape.cpp:863
 #, kde-format
 msgid "SVG Text"
 msgstr "Texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:298
-#: libs/flake/text/KoSvgTextShape.cpp:313
+#: libs/flake/text/KoSvgTextShape.cpp:877
+#: libs/flake/text/KoSvgTextShape.cpp:892
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20419,52 +20413,52 @@ msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Rellenar una capa"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:346
+#: libs/ui/actions/kis_selection_action_factories.cpp:352
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Cortar"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:347
+#: libs/ui/actions/kis_selection_action_factories.cpp:353
 msgctxt "(qtundo-format)"
 msgid "Copy"
 msgstr "Copiar"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:432
+#: libs/ui/actions/kis_selection_action_factories.cpp:438
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "Copia fusionada"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:449
+#: libs/ui/actions/kis_selection_action_factories.cpp:455
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
 msgstr "La selección ya está en un formato vectorial"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:474
-#: libs/ui/actions/kis_selection_action_factories.cpp:494
+#: libs/ui/actions/kis_selection_action_factories.cpp:480
+#: libs/ui/actions/kis_selection_action_factories.cpp:500
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "Convertir a selección vectorial"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:489
+#: libs/ui/actions/kis_selection_action_factories.cpp:495
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr "La selección ya está en formato de mapa de bits"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:535
+#: libs/ui/actions/kis_selection_action_factories.cpp:541
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "La forma ya pertenece a una selección"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:541
+#: libs/ui/actions/kis_selection_action_factories.cpp:547
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Convertir formas a selección vectorial"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:594
-#: libs/ui/actions/kis_selection_action_factories.cpp:653
+#: libs/ui/actions/kis_selection_action_factories.cpp:600
+#: libs/ui/actions/kis_selection_action_factories.cpp:659
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
@@ -32770,30 +32764,24 @@ msgid "Decrease Brush Size"
 msgstr "Disminuir el tamaño del pincel"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgid "Rotate brush tip clockwise"
-msgstr "Rotar el objeto 90° a la derecha"
+msgstr "Rotar la punta del pincel en sentido horario"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "Rotar la selección 90 grados en sentido horario"
+msgstr "Rotar la punta del pincel en sentido horario (preciso)"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Rotar el objeto 90° a la izquierda"
+msgstr "Rotar la punta del pincel en sentido antihorario"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Rotar la selección 90 grados en sentido antihorario"
+msgstr "Rotar la punta del pincel en sentido antihorario (preciso)"
 
 #: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, kde-format
@@ -37159,47 +37147,39 @@ msgstr "Color personalizado"
 
 #. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
-#, fuzzy, kde-format
-#| msgid "Editor text color"
+#, kde-format
 msgid "Editor Widget Control:"
-msgstr "Color del editor de texto"
+msgstr "Color del panel del editor:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
-#, fuzzy, kde-format
-#| msgid "Sh&adow Mode:"
+#, kde-format
 msgid "Show Move"
-msgstr "Modo de sombr&a:"
+msgstr "Mostrar mover"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Snap Options Popup"
+#, kde-format
 msgid "Show Snapping"
-msgstr "Mostrar ventana emergente de opciones de ajuste"
+msgstr "Mostrar ajuste"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgid "Show Lock"
-msgstr "Mostrar paneles"
+msgstr "Mostrar bloqueo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
-#, fuzzy, kde-format
-#| msgid "Duplicate"
+#, kde-format
 msgid "Show Duplicate"
-msgstr "Duplicar"
+msgstr "Mostrar duplicar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgid "Show Delete"
-msgstr "Borrar"
+msgstr "Mostrar borrar"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
@@ -37224,16 +37204,14 @@ msgid "Concentric Ellipse"
 msgstr "Elipse concéntrica"
 
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:28
-#, fuzzy, kde-format
-#| msgid "Perspective assistant"
+#, kde-format
 msgid "Curvilinear Perspective assistant"
-msgstr "Asistente de perspectiva"
+msgstr "Asistente de perspectiva curvilínea"
 
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
-#, fuzzy, kde-format
-#| msgid "Clear Perspective Grid"
+#, kde-format
 msgid "Curvilinear Perspective"
-msgstr "Despejar la cuadrícula de perspectiva"
+msgstr "Perspectiva curvilínea"
 
 #: plugins/assistants/Assistants/EditAssistantsCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -59029,6 +59007,21 @@ msgstr "100%"
 msgid "Letter Spacing"
 msgstr "Espacio entre letras"
 
+#: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
+#, fuzzy
+#| msgid "Inverted Text"
+msgctxt "(qtundo-format)"
+msgid "Insert Text"
+msgstr "Texto inverso"
+
+#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:26
+#, fuzzy
+#| msgctxt "@title:window"
+#| msgid "Remove Template"
+msgctxt "(qtundo-format)"
+msgid "Remove Text"
+msgstr "Eliminar plantilla"
+
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
 #, kde-format
@@ -59474,7 +59467,7 @@ msgstr ""
 "Usar el modo de ajuste CSS `white-space: pre-wrap` de SVG, con `inline-size` "
 "para definir la anchura del texto."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:240
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

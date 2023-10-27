@@ -12,6 +12,7 @@
 #include "SvgCreateTextStrategy.h"
 #include "SvgInlineSizeChangeCommand.h"
 #include "SvgInlineSizeChangeStrategy.h"
+#include "SvgSelectTextStrategy.h"
 #include "SvgInlineSizeHelper.h"
 #include "SvgMoveTextCommand.h"
 #include "SvgMoveTextStrategy.h"
@@ -519,19 +520,20 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
 
     KoSvgTextShape *hoveredShape = dynamic_cast<KoSvgTextShape *>(canvas()->shapeManager()->shapeAt(event->point));
 
-    if (!selectedShape || hoveredShape != selectedShape) {
-        canvas()->shapeManager()->selection()->deselectAll();
-
-        if (hoveredShape) {
-            canvas()->shapeManager()->selection()->select(hoveredShape);
-            m_textCursor.setPosToPoint(event->point);
-        } else if (!this->isInTextMode()){
-            m_interactionStrategy.reset(new SvgCreateTextStrategy(this, event->point));
-            m_dragging = DragMode::Create;
-        }
+    if (!selectedShape && !hoveredShape) {
+        m_interactionStrategy.reset(new SvgCreateTextStrategy(this, event->point));
+        m_dragging = DragMode::Create;
         event->accept();
-    } else if (hoveredShape == selectedShape){
-        m_textCursor.setPosToPoint(event->point);
+    } else if (hoveredShape) {
+        if (hoveredShape != selectedShape) {
+            canvas()->shapeManager()->selection()->deselectAll();
+            canvas()->shapeManager()->selection()->select(hoveredShape);
+        }
+        m_interactionStrategy.reset(new SvgSelectTextStrategy(this, &m_textCursor, event->point));
+        m_dragging = DragMode::Select;
+        event->accept();
+    } else { // if there's a selected shape but no hovered shape...
+        canvas()->shapeManager()->selection()->deselectAll();
         event->accept();
     }
 
@@ -571,6 +573,13 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
         m_interactionStrategy->handleMouseMove(event->point, event->modifiers());
         if (m_dragging == DragMode::Create) {
             useCursor(m_text_inline_horizontal);
+        } else if (m_dragging == DragMode::Select) {
+            // Todo: replace with something a little less hacky.
+            if (selectedShape()->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt() == 0) {
+                useCursor(m_ibeam_horizontal);
+            } else {
+                useCursor(m_ibeam_vertical);
+            }
         }
         event->accept();
     } else {
@@ -655,7 +664,12 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
             canvas()->addCommand(command);
         }
         m_interactionStrategy = nullptr;
+        if (m_dragging != DragMode::Select) {
+            useCursor(m_base_cursor);
+        }
         m_dragging = DragMode::None;
+        event->accept();
+    } else {
         useCursor(m_base_cursor);
     }
     event->accept();
@@ -695,10 +709,25 @@ void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
     if (canvas()->shapeManager()->shapeAt(event->point) != selectedShape()) {
         event->ignore(); // allow the event to be used by another
         return;
+    } else {
+        m_textCursor.setPosToPoint(event->point, true);
+        m_textCursor.moveCursor(SvgTextCursor::MoveWordLeft, true);
+        m_textCursor.moveCursor(SvgTextCursor::MoveWordRight, false);
     }
     const QRectF updateRect = std::exchange(m_hoveredShapeHighlightRect, QPainterPath()).boundingRect();
     canvas()->updateCanvas(kisGrowRect(updateRect, 100));
     event->accept();
+}
+
+void SvgTextTool::mouseTripleClickEvent(KoPointerEvent *event)
+{
+    if (canvas()->shapeManager()->shapeAt(event->point) == selectedShape()) {
+        // TODO: Consider whether we want to use sentence based selection instead:
+        // QTextBoundaryFinder allows us to find sentences if necessary.
+        m_textCursor.moveCursor(SvgTextCursor::ParagraphStart, true);
+        m_textCursor.moveCursor(SvgTextCursor::ParagraphEnd, false);
+        event->accept();
+    }
 }
 
 qreal SvgTextTool::grabSensitivityInPt() const

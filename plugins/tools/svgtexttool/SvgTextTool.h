@@ -50,6 +50,8 @@ public:
     /// reimplemented from superclass
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
     /// reimplemented from KoToolBase
+    void mouseTripleClickEvent(KoPointerEvent *event) override;
+    /// reimplemented from KoToolBase
     void mouseMoveEvent(KoPointerEvent *event) override;
     /// reimplemented from KoToolBase
     void mouseReleaseEvent(KoPointerEvent *event) override;
@@ -131,6 +133,7 @@ private:
     enum class DragMode {
         None = 0,
         Create,
+        Select,
         InlineSizeHandle,
         Move,
     };

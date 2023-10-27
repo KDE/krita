@@ -8,6 +8,7 @@ set (SvgTextTool_SRCS
     SvgCreateTextStrategy.cpp
     SvgInlineSizeChangeCommand.cpp
     SvgInlineSizeChangeStrategy.cpp
+    SvgSelectTextStrategy.cpp
     SvgMoveTextCommand.cpp
     SvgMoveTextStrategy.cpp
     SvgTextChangeCommand.cpp

@@ -97,7 +97,7 @@ public:
     void setPos(int pos, int anchor);
 
     /// Set the pos from a point. This currently does a search inside the text shape.
-    void setPosToPoint(QPointF point);
+    void setPosToPoint(QPointF point, bool moveAnchor = true);
 
     /// Move the cursor, and, if you don't want a selection, move the anchor.
     void moveCursor(MoveMode mode, bool moveAnchor = true);

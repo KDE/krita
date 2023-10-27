@@ -103,11 +103,14 @@ void SvgTextCursor::setPos(int pos, int anchor)
     updateSelection();
 }
 
-void SvgTextCursor::setPosToPoint(QPointF point)
+void SvgTextCursor::setPosToPoint(QPointF point, bool moveAnchor)
 {
     if (d->shape) {
         d->pos = d->shape->posForPoint(d->shape->documentToShape(point));
-        d->anchor = d->pos;
+        if (moveAnchor) {
+            d->anchor = d->pos;
+        }
+        updateSelection();
         updateCursor();
         updateSelection();
     }

@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-27 00:40+0000\n"
-"PO-Revision-Date: 2023-10-25 12:57+0300\n"
+"POT-Creation-Date: 2023-10-28 00:41+0000\n"
+"PO-Revision-Date: 2023-10-28 01:53+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.11.70\n"
+"X-Generator: Lokalize 23.08.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -15850,8 +15850,8 @@ msgstr ""
 "Krita, Wayland platformunu desteklemiyor. Krita'yi Wayland üzerinde "
 "çalıştırmak için XWayland kullanın. Krita şimdi kapanacak."
 
-#: krita/main.cc:667 libs/ui/KisApplication.cpp:412
-#: libs/ui/KisApplication.cpp:683
+#: krita/main.cc:667 libs/ui/KisApplication.cpp:413
+#: libs/ui/KisApplication.cpp:684
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -15973,7 +15973,7 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
 msgstr "Fırça Rastgeleliği önerilen değeri 0,0"
 
-#: libs/brush/kis_brush.cpp:756 libs/brush/KisBrushModel.cpp:76
+#: libs/brush/kis_brush.cpp:755 libs/brush/KisBrushModel.cpp:76
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -16165,7 +16165,7 @@ msgstr "Şekilleri Dağıt"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1230
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1251
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Şekilleri Grupla"
@@ -16254,7 +16254,7 @@ msgid "Unclip Shapes"
 msgstr "Şekilleri Kırpmayı Geri Al"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1258
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1279
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Şekillerin Gruplamasını Kaldır"
@@ -16332,25 +16332,25 @@ msgstr ""
 "metin nesnesi Krita 5 biçimine dönüştürülür ve Krita 4.x ile uyumlu olmaktan "
 "çıkar."
 
-#: libs/flake/text/KoSvgTextShape.cpp:855
+#: libs/flake/text/KoSvgTextShape.cpp:859
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:857
-#: libs/flake/text/KoSvgTextShape.cpp:865
+#: libs/flake/text/KoSvgTextShape.cpp:861
+#: libs/flake/text/KoSvgTextShape.cpp:869
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Metin Şekli"
 
-#: libs/flake/text/KoSvgTextShape.cpp:863
+#: libs/flake/text/KoSvgTextShape.cpp:867
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:877
-#: libs/flake/text/KoSvgTextShape.cpp:892
+#: libs/flake/text/KoSvgTextShape.cpp:881
+#: libs/flake/text/KoSvgTextShape.cpp:896
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16874,7 +16874,7 @@ msgid "Node Rename"
 msgstr "Düğümü Yeniden Adlandır"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:852
+#: libs/image/kis_image.cc:849
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Görseli Yeniden Boyutlandır"
@@ -17093,55 +17093,55 @@ msgstr "Mitchell"
 msgid "Pass Through"
 msgstr "Geçiş"
 
-#: libs/image/kis_image.cc:382
+#: libs/image/kis_image.cc:379
 #, kde-format
 msgid "Imported Image"
 msgstr "İçe Aktarılmış Görsel"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1895
+#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1895
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
 msgstr "Seçim Maskesi"
 
-#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Arka Plan"
 
-#: libs/image/kis_image.cc:752 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:749 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "Boya Katmanı"
 
-#: libs/image/kis_image.cc:851
+#: libs/image/kis_image.cc:848
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Görseli Kırp"
 
-#: libs/image/kis_image.cc:947
+#: libs/image/kis_image.cc:944
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Katmanı Kırp"
 
-#: libs/image/kis_image.cc:948
+#: libs/image/kis_image.cc:945
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Maskeyi Kırp"
 
-#: libs/image/kis_image.cc:985
+#: libs/image/kis_image.cc:982
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Görseli Ölçekle"
 
-#: libs/image/kis_image.cc:986
+#: libs/image/kis_image.cc:983
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Görsel Çözünürlüğünü Değiştir"
 
-#: libs/image/kis_image.cc:1037
+#: libs/image/kis_image.cc:1034
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -17149,17 +17149,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Katmanı Ölçekle"
 msgstr[1] "%1 Katmanı Ölçekle"
 
-#: libs/image/kis_image.cc:1178
+#: libs/image/kis_image.cc:1175
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Görseli Döndür"
 
-#: libs/image/kis_image.cc:1188
+#: libs/image/kis_image.cc:1185
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Maskeyi Döndür"
 
-#: libs/image/kis_image.cc:1191
+#: libs/image/kis_image.cc:1188
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -17167,12 +17167,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Katmanı Döndür"
 msgstr[1] "%1 Katmanı Döndür"
 
-#: libs/image/kis_image.cc:1291
+#: libs/image/kis_image.cc:1288
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Maskeyi Kırk"
 
-#: libs/image/kis_image.cc:1295
+#: libs/image/kis_image.cc:1292
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -17180,37 +17180,37 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Katmanı Kırk"
 msgstr[1] "%1 Katmanı Kırk"
 
-#: libs/image/kis_image.cc:1302
+#: libs/image/kis_image.cc:1299
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Görseli Kırk"
 
-#: libs/image/kis_image.cc:1320
+#: libs/image/kis_image.cc:1317
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Katman Renk Uzayını Dönüştür"
 
-#: libs/image/kis_image.cc:1371
+#: libs/image/kis_image.cc:1368
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Görsel Renk Uzayı Dönüştür"
 
-#: libs/image/kis_image.cc:1372
+#: libs/image/kis_image.cc:1369
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Yansıma Renk Uzayını Dönüştür"
 
-#: libs/image/kis_image.cc:1430
+#: libs/image/kis_image.cc:1427
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Katmana Profil Ata"
 
-#: libs/image/kis_image.cc:1471
+#: libs/image/kis_image.cc:1468
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profil Ata"
 
-#: libs/image/kis_image.cc:2531
+#: libs/image/kis_image.cc:2528
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Seçimleri Kırp"
@@ -19475,10 +19475,10 @@ msgstr "Yerel Özkaynaklar"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
-#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1011
-#: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
-#: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
-#: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
+#: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
+#: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
 #: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
@@ -20335,63 +20335,63 @@ msgstr "Bu etiketi sil"
 msgid "Undelete"
 msgstr "Kurtar"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:149
+#: libs/ui/actions/kis_selection_action_factories.cpp:153
 msgctxt "(qtundo-format)"
 msgid "Select All"
 msgstr "Tümünü Seç"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:225
+#: libs/ui/actions/kis_selection_action_factories.cpp:238
 #: libs/ui/KisView.cpp:792
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Taşkın Dolgu Katman"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:352
+#: libs/ui/actions/kis_selection_action_factories.cpp:365
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Kes"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:353
+#: libs/ui/actions/kis_selection_action_factories.cpp:366
 msgctxt "(qtundo-format)"
 msgid "Copy"
 msgstr "Kopyala"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:438
+#: libs/ui/actions/kis_selection_action_factories.cpp:451
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "Birleştirileni Kopyala"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:455
+#: libs/ui/actions/kis_selection_action_factories.cpp:468
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
 msgstr "Seçim zaten vektör biçimde "
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:480
-#: libs/ui/actions/kis_selection_action_factories.cpp:500
+#: libs/ui/actions/kis_selection_action_factories.cpp:493
+#: libs/ui/actions/kis_selection_action_factories.cpp:513
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "Vektör Seçime Dönüştür"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:495
+#: libs/ui/actions/kis_selection_action_factories.cpp:508
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr "Seçim zaten raster biçimde "
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:541
+#: libs/ui/actions/kis_selection_action_factories.cpp:554
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "Şekil zaten bir seçime ait"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:547
+#: libs/ui/actions/kis_selection_action_factories.cpp:560
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Şekilleri Vektör Seçime Dönüştür"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:600
-#: libs/ui/actions/kis_selection_action_factories.cpp:659
+#: libs/ui/actions/kis_selection_action_factories.cpp:613
+#: libs/ui/actions/kis_selection_action_factories.cpp:672
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
@@ -27535,7 +27535,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:354
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:355
 #, kde-format
 msgid "Sessions"
 msgstr "Oturumlar"
@@ -29056,7 +29056,7 @@ msgstr "Ö&n alan renk seçicisini aç"
 msgid "&Open Background color selector"
 msgstr "&Arka plan renk seçicisini aç"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:350
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:64
@@ -29070,8 +29070,8 @@ msgstr "Desenler"
 msgid "Custom Pattern"
 msgstr "Özel Desen"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:335
-#: libs/ui/KisApplication.cpp:336
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:336
+#: libs/ui/KisApplication.cpp:337
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:263
@@ -29854,20 +29854,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Yakınlaştır: %​%1"
 
-#: libs/ui/KisApplication.cpp:327
+#: libs/ui/KisApplication.cpp:328
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:257
 #, kde-format
 msgid "Brush presets"
 msgstr "Fırça önayarları"
 
-#: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
-#: libs/ui/KisApplication.cpp:332 libs/ui/KisApplication.cpp:333
+#: libs/ui/KisApplication.cpp:331 libs/ui/KisApplication.cpp:332
+#: libs/ui/KisApplication.cpp:333 libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
 #, kde-format
 msgid "Brush tips"
 msgstr "Fırça uçları"
 
-#: libs/ui/KisApplication.cpp:338
+#: libs/ui/KisApplication.cpp:339
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
@@ -29875,7 +29875,7 @@ msgstr "Fırça uçları"
 msgid "Palettes"
 msgstr "Paletler"
 
-#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:352 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:259
@@ -29883,34 +29883,34 @@ msgstr "Paletler"
 msgid "Workspaces"
 msgstr "Çalışma alanları"
 
-#: libs/ui/KisApplication.cpp:352
+#: libs/ui/KisApplication.cpp:353
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "SVG sembol kitaplıkları"
 
-#: libs/ui/KisApplication.cpp:353 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:354 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr "Pencere düzenleri"
 
-#: libs/ui/KisApplication.cpp:355
+#: libs/ui/KisApplication.cpp:356
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:264
 #, kde-format
 msgid "Gamut masks"
 msgstr "Gam maskeleri"
 
-#: libs/ui/KisApplication.cpp:357
+#: libs/ui/KisApplication.cpp:358
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExpr Betikleri"
 
-#: libs/ui/KisApplication.cpp:362
+#: libs/ui/KisApplication.cpp:363
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Katman biçemleri"
 
-#: libs/ui/KisApplication.cpp:375
+#: libs/ui/KisApplication.cpp:376
 #, kde-format
 msgid ""
 "%1\n"
@@ -29921,13 +29921,13 @@ msgstr ""
 "\n"
 "Krita şimdi çıkacak."
 
-#: libs/ui/KisApplication.cpp:375 libs/ui/KisApplication.cpp:381
+#: libs/ui/KisApplication.cpp:376 libs/ui/KisApplication.cpp:382
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Onulmaz Hata"
 
-#: libs/ui/KisApplication.cpp:381
+#: libs/ui/KisApplication.cpp:382
 #, kde-format
 msgid ""
 "\n"
@@ -29938,7 +29938,7 @@ msgstr ""
 "\n"
 "Krita şimdi çıkacak."
 
-#: libs/ui/KisApplication.cpp:413
+#: libs/ui/KisApplication.cpp:414
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -29949,65 +29949,65 @@ msgstr ""
 "Bu, önerilmez.\n"
 "Lütfen x64 yapısını indirip kurun."
 
-#: libs/ui/KisApplication.cpp:430
+#: libs/ui/KisApplication.cpp:431
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Global ayarlar ilklendiriliyor..."
 
-#: libs/ui/KisApplication.cpp:461
+#: libs/ui/KisApplication.cpp:462
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Özkaynak türleri ekleniyor..."
 
-#: libs/ui/KisApplication.cpp:465
+#: libs/ui/KisApplication.cpp:466
 #, kde-format
 msgid "Loading plugins..."
 msgstr "Eklentiler yükleniyor..."
 
-#: libs/ui/KisApplication.cpp:471
+#: libs/ui/KisApplication.cpp:472
 #, kde-format
 msgid "Loading resources..."
 msgstr "Özkaynaklar yükleniyor..."
 
-#: libs/ui/KisApplication.cpp:480
+#: libs/ui/KisApplication.cpp:481
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Ana pencere yükleniyor..."
 
-#: libs/ui/KisApplication.cpp:512
+#: libs/ui/KisApplication.cpp:513
 #, kde-format
 msgid "Launching..."
 msgstr "Başlatılıyor..."
 
-#: libs/ui/KisApplication.cpp:581
+#: libs/ui/KisApplication.cpp:582
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "MIME türü bulunamadı. -mimetype seçeneğini kullanmayı deneyin"
 
-#: libs/ui/KisApplication.cpp:637
+#: libs/ui/KisApplication.cpp:638
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Canlandırma kareleri sunulamadı!"
 
-#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:883
+#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:938
 #, kde-format
 msgid "File layer"
 msgstr "Dosya katman"
 
-#: libs/ui/KisApplication.cpp:672 libs/ui/KisApplication.cpp:677
-#: libs/ui/KisApplication.cpp:877 libs/ui/KisApplication.cpp:891
-#: libs/ui/KisApplication.cpp:896
+#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:678
+#: libs/ui/KisApplication.cpp:932 libs/ui/KisApplication.cpp:946
+#: libs/ui/KisApplication.cpp:951
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Uyarı"
 
-#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:892
+#: libs/ui/KisApplication.cpp:674 libs/ui/KisApplication.cpp:947
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "%1, bir dosya katman olarak eklenemiyor: Dosya yok."
 
-#: libs/ui/KisApplication.cpp:678
+#: libs/ui/KisApplication.cpp:679
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30028,7 +30028,7 @@ msgstr ""
 "olan bir belgeye eklemek istiyorsanız ayarlarda \"Krita'nın yalnızca bir "
 "örneğine izin ver\" onay kutusunu imleyin (Ayarlar -> Genel -> Pencere)."
 
-#: libs/ui/KisApplication.cpp:684
+#: libs/ui/KisApplication.cpp:685
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30039,32 +30039,32 @@ msgstr ""
 "--new-image seçeneğini kullanarak yeni bir belge oluşturabilir veya var olan "
 "bir dosyayı açabilirsiniz."
 
-#: libs/ui/KisApplication.cpp:878
+#: libs/ui/KisApplication.cpp:933
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "%1 dosyası açılamadı"
 
-#: libs/ui/KisApplication.cpp:897
+#: libs/ui/KisApplication.cpp:952
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Dosya katman eklenemiyor: Açık belge yok."
 
-#: libs/ui/KisApplication.cpp:1012
+#: libs/ui/KisApplication.cpp:1067
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Şunun için bir şablon bulunamadı: %1"
 
-#: libs/ui/KisApplication.cpp:1015
+#: libs/ui/KisApplication.cpp:1070
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Şunun için pek çok şablon bulundu: %1"
 
-#: libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:1086
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "%1 şablonu yüklenemedi."
 
-#: libs/ui/KisApplication.cpp:1063
+#: libs/ui/KisApplication.cpp:1118
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30079,7 +30079,7 @@ msgstr ""
 "\n"
 "Değişikliklerin etkin olması için Krita'yı yeniden başlatın."
 
-#: libs/ui/KisApplication.cpp:1077
+#: libs/ui/KisApplication.cpp:1132
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30090,7 +30090,7 @@ msgstr ""
 "\n"
 "Dosyayı başka bir programın kullanmadığından emin olun ve yeniden deneyin."
 
-#: libs/ui/KisApplication.cpp:1105
+#: libs/ui/KisApplication.cpp:1160
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Ayar dosyasını temizlemek istiyor musunuz?"
@@ -31332,35 +31332,35 @@ msgstr "Ancak Ekran Provası hâlâ kapalı."
 msgid "Gamut Warnings turned off."
 msgstr "Gam Uyarıları kapalı."
 
-#: libs/ui/KisViewManager.cpp:772
+#: libs/ui/KisViewManager.cpp:773
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Etkin Çizer Profili"
 
-#: libs/ui/KisViewManager.cpp:902
+#: libs/ui/KisViewManager.cpp:903
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (Kopya)"
 
-#: libs/ui/KisViewManager.cpp:1045 libs/ui/KisViewManager.cpp:1121
+#: libs/ui/KisViewManager.cpp:1046 libs/ui/KisViewManager.cpp:1122
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Alternatif adlar tükendi, yüksek bir sayı ile el ile kaydetmeyi deneyin"
 
-#: libs/ui/KisViewManager.cpp:1045
+#: libs/ui/KisViewManager.cpp:1046
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Artımlı sürüm kaydedilemedi"
 
-#: libs/ui/KisViewManager.cpp:1121
+#: libs/ui/KisViewManager.cpp:1122
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Artımlı yedek kaydedilemedi"
 
-#: libs/ui/KisViewManager.cpp:1309
+#: libs/ui/KisViewManager.cpp:1310
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31369,13 +31369,13 @@ msgstr ""
 "Yalnızca Tuval kipine geçiliyor.\n"
 "Geri gitmek için %1 düğmesine basın."
 
-#: libs/ui/KisViewManager.cpp:1351
+#: libs/ui/KisViewManager.cpp:1352
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Özkaynak Klasörünü Aç"
 
-#: libs/ui/KisViewManager.cpp:1355
+#: libs/ui/KisViewManager.cpp:1356
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31399,19 +31399,19 @@ msgstr ""
 "<p><b>Özel uygulama konumu</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1370
+#: libs/ui/KisViewManager.cpp:1371
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "&Kullanıcı AppData Klasöründe Aç"
 
-#: libs/ui/KisViewManager.cpp:1371
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Ö&zel Uygulama Konumunda Aç"
 
-#: libs/ui/KisViewManager.cpp:1484 libs/ui/KisViewManager.cpp:1502
+#: libs/ui/KisViewManager.cpp:1485 libs/ui/KisViewManager.cpp:1503
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -32509,7 +32509,7 @@ msgstr "Seçim Eylemleri"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1826
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1847
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
 #, kde-format
 msgid "Transform"
@@ -36948,47 +36948,39 @@ msgstr "Özel Renk"
 
 #. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
-#, fuzzy, kde-format
-#| msgid "Editor text color"
+#, kde-format
 msgid "Editor Widget Control:"
-msgstr "Düzenleyici metin rengi"
+msgstr "Düzenleyici araç takımı denetimi:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
-#, fuzzy, kde-format
-#| msgid "Sh&adow Mode:"
+#, kde-format
 msgid "Show Move"
-msgstr "Gö&lge kipi:"
+msgstr "Taşımayı göster"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Snap Options Popup"
+#, kde-format
 msgid "Show Snapping"
-msgstr "Tutturma Seçenekleri Açılır Penceresini Göster"
+msgstr "Tutturmayı göster"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgid "Show Lock"
-msgstr "Panelleri Göster"
+msgstr "Kilidi göster"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
-#, fuzzy, kde-format
-#| msgid "Duplicate"
+#, kde-format
 msgid "Show Duplicate"
-msgstr "Çoğalt"
+msgstr "Yinelenmişi göster"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgid "Show Delete"
-msgstr "Sil"
+msgstr "Silmeyi göster"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
@@ -37013,16 +37005,14 @@ msgid "Concentric Ellipse"
 msgstr "Ortak Merkezli Elips"
 
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:28
-#, fuzzy, kde-format
-#| msgid "Perspective assistant"
+#, kde-format
 msgid "Curvilinear Perspective assistant"
-msgstr "Perspektif yardımcısı"
+msgstr "Eğrisel Perspektif yardımcısı"
 
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
-#, fuzzy, kde-format
-#| msgid "2 Point Perspective"
+#, kde-format
 msgid "Curvilinear Perspective"
-msgstr "2 Noktalı Perspektif"
+msgstr "Eğrisel Perspektif"
 
 #: plugins/assistants/Assistants/EditAssistantsCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -57699,62 +57689,62 @@ msgstr ""
 "Bu araç yalnızca vektör katmanlarında çalışır. Büyük olasılıkla taşıma "
 "aracını istiyorsunuz."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1292
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1313
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Nesneyi 90° Saat Yönünde Döndür"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1296
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1317
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Nesneyi 90° Saat Yönünün Tersine Döndür"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1321
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Nesneyi 180° Döndür"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1304
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1325
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Nesneyi Yatay Olarak Yansıt"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1308
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1329
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Nesneyi Dikey Olarak Yansıt"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1312
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Nesne Dönüşümlerini Sıfırla"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1386
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1407
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Şekilleri Birleştir"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1400
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1421
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Şekilleri Kesiştir"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1410
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1431
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Şekilleri Çıkar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1455
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1476
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Şekilleri Böl"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1823
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1844
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Vektör Şekli Eylemleri"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1842
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
 #, kde-format
 msgid "Logical Operations"
 msgstr "Mantıksal İşlemler"
@@ -57906,7 +57896,7 @@ msgstr "Başvuru görseller kaydedilemedi."
 msgid "Reference Image Actions"
 msgstr "Başvuru Görsel Eylemleri"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:89
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:92
 #, kde-format
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
@@ -58668,19 +58658,14 @@ msgid "Letter Spacing"
 msgstr "Harf Aralığı"
 
 #: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
-#, fuzzy
-#| msgid "Inverted Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Text"
-msgstr "Tersine Çevrilmiş Metin"
+msgstr "Metin Ekle"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:26
-#, fuzzy
-#| msgctxt "@title:window"
-#| msgid "Remove Template"
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
-msgstr "Şablonu Kaldır"
+msgstr "Metni Kaldır"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -59124,7 +59109,7 @@ msgstr ""
 "SVG'nin CSS `white-space: pre` mutlak kaydırma kipini, metin genişliğini "
 "tanımlayan `inline-size` ile kullanın."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:258
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:259
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

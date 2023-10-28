@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-27 00:40+0000\n"
-"PO-Revision-Date: 2023-10-23 10:32+0200\n"
+"POT-Creation-Date: 2023-10-28 00:41+0000\n"
+"PO-Revision-Date: 2023-10-27 11:07+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -9135,12 +9135,10 @@ msgstr "Povečaj čopič"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:879 krita/krita.action:881 krita/krita.action:882
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise"
-msgstr "Zavrti predmet za 90° v desno"
+msgstr "Zavrti konico čopiča v smeri urinega kazalca"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9149,11 +9147,10 @@ msgstr "Zavrti predmet za 90° v desno"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:891 krita/krita.action:893 krita/krita.action:894
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "Zasukaj izbor za 90° v smeri urinega kazalca"
+msgstr "Zavrti konico čopiča v smeri urinega kazalca (natančno)"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
@@ -9162,12 +9159,10 @@ msgstr "Zasukaj izbor za 90° v smeri urinega kazalca"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:903 krita/krita.action:905 krita/krita.action:906
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Zavrti predmet za 90° v levo"
+msgstr "Zavrtii konico čopiča v obratni smeri urinega kazalca"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9176,11 +9171,10 @@ msgstr "Zavrti predmet za 90° v levo"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:915 krita/krita.action:917 krita/krita.action:918
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Zasukaj izbor za 90° v obratni smeri urinega kazalca"
+msgstr "Zavrtii konico čopiča v obratni smeri urinega kazalca (natančno)"
 
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
@@ -15862,8 +15856,8 @@ msgstr ""
 "Krita ne podpira platforme Wayland. Uporabite XWayland za izvajanje Krite na "
 "Waylandu. Krita se bo zaprla."
 
-#: krita/main.cc:667 libs/ui/KisApplication.cpp:412
-#: libs/ui/KisApplication.cpp:683
+#: krita/main.cc:667 libs/ui/KisApplication.cpp:413
+#: libs/ui/KisApplication.cpp:684
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -15983,7 +15977,7 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
 msgstr "Naključnost čopiča, priporočena vrednost 0,0"
 
-#: libs/brush/kis_brush.cpp:756 libs/brush/KisBrushModel.cpp:76
+#: libs/brush/kis_brush.cpp:755 libs/brush/KisBrushModel.cpp:76
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -16179,7 +16173,7 @@ msgstr "Razporedi like"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1230
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1251
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Združi like"
@@ -16268,7 +16262,7 @@ msgid "Unclip Shapes"
 msgstr "Odpni lik"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1258
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1279
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Razdruži oblike"
@@ -16346,25 +16340,25 @@ msgstr ""
 "dokument, bo besedilni predmet pretvorjen v obliko Krita 5, ki ne bo več "
 "združljiv s Krito 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:855
+#: libs/flake/text/KoSvgTextShape.cpp:859
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Besedilo"
 
-#: libs/flake/text/KoSvgTextShape.cpp:857
-#: libs/flake/text/KoSvgTextShape.cpp:865
+#: libs/flake/text/KoSvgTextShape.cpp:861
+#: libs/flake/text/KoSvgTextShape.cpp:869
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Besedilna oblika SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:863
+#: libs/flake/text/KoSvgTextShape.cpp:867
 #, kde-format
 msgid "SVG Text"
 msgstr "Besedilo SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:877
-#: libs/flake/text/KoSvgTextShape.cpp:892
+#: libs/flake/text/KoSvgTextShape.cpp:881
+#: libs/flake/text/KoSvgTextShape.cpp:896
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16887,7 +16881,7 @@ msgid "Node Rename"
 msgstr "Preimenuj vozlišče"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:852
+#: libs/image/kis_image.cc:849
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Spremeni velikost slike"
@@ -17106,136 +17100,130 @@ msgstr "Mitchell"
 msgid "Pass Through"
 msgstr "Prepusti skozi"
 
-#: libs/image/kis_image.cc:382
+#: libs/image/kis_image.cc:379
 #, kde-format
 msgid "Imported Image"
 msgstr "Uvožena slika"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1895
+#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1895
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
 msgstr "Maska izbora"
 
-#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Ozadje"
 
-#: libs/image/kis_image.cc:752 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:749 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "Plast slikanja"
 
-#: libs/image/kis_image.cc:851
+#: libs/image/kis_image.cc:848
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Obreži sliko"
 
-#: libs/image/kis_image.cc:947
+#: libs/image/kis_image.cc:944
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Obreži plast"
 
-#: libs/image/kis_image.cc:948
+#: libs/image/kis_image.cc:945
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Obreži masko"
 
-#: libs/image/kis_image.cc:985
+#: libs/image/kis_image.cc:982
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Spremeni merilo slike"
 
-#: libs/image/kis_image.cc:986
+#: libs/image/kis_image.cc:983
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Spremeni ločljivost slike"
 
-#: libs/image/kis_image.cc:1037
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Scale Layer"
+#: libs/image/kis_image.cc:1034
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
-msgstr[0] "Spremeni merilo plasti"
-msgstr[1] "Spremeni merilo plasti"
-msgstr[2] "Spremeni merilo plasti"
-msgstr[3] "Spremeni merilo plasti"
+msgstr[0] "Spremeni merilo %1 plasti"
+msgstr[1] "Spremeni merilo %1 plasti"
+msgstr[2] "Spremeni merilo %1 plasti"
+msgstr[3] "Spremeni merilo %1 plasti"
 
-#: libs/image/kis_image.cc:1178
+#: libs/image/kis_image.cc:1175
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Zavrti sliko"
 
-#: libs/image/kis_image.cc:1188
+#: libs/image/kis_image.cc:1185
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Zavrti masko"
 
-#: libs/image/kis_image.cc:1191
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate Layer"
+#: libs/image/kis_image.cc:1188
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
-msgstr[0] "Zavrti plast"
-msgstr[1] "Zavrti plast"
-msgstr[2] "Zavrti plast"
-msgstr[3] "Zavrti plast"
+msgstr[0] "Zavrti %1 plasti"
+msgstr[1] "Zavrti %1 plast"
+msgstr[2] "Zavrti %1 plasti"
+msgstr[3] "Zavrti %1 plasti"
 
-#: libs/image/kis_image.cc:1291
+#: libs/image/kis_image.cc:1288
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Ostriži masko"
 
-#: libs/image/kis_image.cc:1295
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Shear Layer"
+#: libs/image/kis_image.cc:1292
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
-msgstr[0] "Ostriži plast"
-msgstr[1] "Ostriži plast"
-msgstr[2] "Ostriži plast"
-msgstr[3] "Ostriži plast"
+msgstr[0] "Ostriži %1 plasti"
+msgstr[1] "Ostriži %1 plast"
+msgstr[2] "Ostriži %1 plasti"
+msgstr[3] "Ostriži %1 plasti"
 
-#: libs/image/kis_image.cc:1302
+#: libs/image/kis_image.cc:1299
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Ostriži sliko"
 
-#: libs/image/kis_image.cc:1320
+#: libs/image/kis_image.cc:1317
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Pretvori barvni prostor plasti"
 
-#: libs/image/kis_image.cc:1371
+#: libs/image/kis_image.cc:1368
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Pretvori barvni prostor slike"
 
-#: libs/image/kis_image.cc:1372
+#: libs/image/kis_image.cc:1369
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Pretvori barvni prostor projekcije"
 
-#: libs/image/kis_image.cc:1430
+#: libs/image/kis_image.cc:1427
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Dodeli profil plasti"
 
-#: libs/image/kis_image.cc:1471
+#: libs/image/kis_image.cc:1468
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Dodeli profil"
 
-#: libs/image/kis_image.cc:2531
+#: libs/image/kis_image.cc:2528
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Obreži izbore"
@@ -19497,10 +19485,10 @@ msgstr "Krajevni viri"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
-#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1011
-#: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
-#: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
-#: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
+#: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
+#: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
 #: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
@@ -20350,63 +20338,63 @@ msgstr "Izbriši to značko"
 msgid "Undelete"
 msgstr "Prekliči brisanje"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:149
+#: libs/ui/actions/kis_selection_action_factories.cpp:153
 msgctxt "(qtundo-format)"
 msgid "Select All"
 msgstr "Izberi vse"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:225
+#: libs/ui/actions/kis_selection_action_factories.cpp:238
 #: libs/ui/KisView.cpp:792
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Plast, zapolnjena s polnilom"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:352
+#: libs/ui/actions/kis_selection_action_factories.cpp:365
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Izreži"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:353
+#: libs/ui/actions/kis_selection_action_factories.cpp:366
 msgctxt "(qtundo-format)"
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:438
+#: libs/ui/actions/kis_selection_action_factories.cpp:451
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "Kopiraj združeno"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:455
+#: libs/ui/actions/kis_selection_action_factories.cpp:468
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
 msgstr "Izbor je že v vektorski obliki "
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:480
-#: libs/ui/actions/kis_selection_action_factories.cpp:500
+#: libs/ui/actions/kis_selection_action_factories.cpp:493
+#: libs/ui/actions/kis_selection_action_factories.cpp:513
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "Pretvori v vektorski izbor"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:495
+#: libs/ui/actions/kis_selection_action_factories.cpp:508
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr "Izbor je že v rastrski obliki "
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:541
+#: libs/ui/actions/kis_selection_action_factories.cpp:554
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "Lik že pripada izboru"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:547
+#: libs/ui/actions/kis_selection_action_factories.cpp:560
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Pretvori like v vektorski izbor"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:600
-#: libs/ui/actions/kis_selection_action_factories.cpp:659
+#: libs/ui/actions/kis_selection_action_factories.cpp:613
+#: libs/ui/actions/kis_selection_action_factories.cpp:672
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
@@ -27556,7 +27544,7 @@ msgid "HSV CCW"
 msgstr "HSV NSUK"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:354
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:355
 #, kde-format
 msgid "Sessions"
 msgstr "Seje"
@@ -27824,14 +27812,13 @@ msgid "Layer Size"
 msgstr "Velikost plasti"
 
 #: libs/ui/imagesize/imagesize.cc:126
-#, fuzzy, kde-format
-#| msgid "Resize Layer"
+#, kde-format
 msgid "Resize Layer"
 msgid_plural "Resize %1 Layers"
-msgstr[0] "Spremeni velikost plasti"
-msgstr[1] "Spremeni velikost plasti"
-msgstr[2] "Spremeni velikost plasti"
-msgstr[3] "Spremeni velikost plasti"
+msgstr[0] "Spremeni velikost %1 plasti"
+msgstr[1] "Spremeni velikost %1 plasti"
+msgstr[2] "Spremeni velikost %1 plasti"
+msgstr[3] "Spremeni velikost %1 plasti"
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, kde-format
@@ -29083,7 +29070,7 @@ msgstr "&Odpri izbirnik barv ospredja"
 msgid "&Open Background color selector"
 msgstr "&Odpri izbirnik barv ozadja"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:350
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:64
@@ -29097,8 +29084,8 @@ msgstr "Vzorci"
 msgid "Custom Pattern"
 msgstr "Vzorec po meri"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:335
-#: libs/ui/KisApplication.cpp:336
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:336
+#: libs/ui/KisApplication.cpp:337
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:263
@@ -29410,16 +29397,14 @@ msgid "Mirror Mask X"
 msgstr "Zrcali masko X"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
 msgid_plural "Mirror %1 Layers X"
-msgstr[0] "Zrcali plast X"
-msgstr[1] "Zrcali plast X"
-msgstr[2] "Zrcali plast X"
-msgstr[3] "Zrcali plast X"
+msgstr[0] "Zrcali %1 plasti X"
+msgstr[1] "Zrcali %1 plast X"
+msgstr[2] "Zrcali %1 plasti X"
+msgstr[3] "Zrcali %1 plasti X"
 
 #: libs/ui/kis_node_manager.cpp:1052
 msgctxt "(qtundo-format)"
@@ -29427,16 +29412,14 @@ msgid "Mirror Mask Y"
 msgstr "Zrcali masko Y"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
 msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Zrcali plast Y"
-msgstr[1] "Zrcali plast Y"
-msgstr[2] "Zrcali plast Y"
-msgstr[3] "Zrcali plast Y"
+msgstr[0] "Zrcali %1 plasti Y"
+msgstr[1] "Zrcali %1 plast Y"
+msgstr[2] "Zrcali %1 plasti Y"
+msgstr[3] "Zrcali %1 plasti Y"
 
 #: libs/ui/kis_node_manager.cpp:1063
 msgctxt "(qtundo-format)"
@@ -29889,20 +29872,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Povečava: %1 %"
 
-#: libs/ui/KisApplication.cpp:327
+#: libs/ui/KisApplication.cpp:328
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:257
 #, kde-format
 msgid "Brush presets"
 msgstr "Prednastavitve čopiča"
 
-#: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
-#: libs/ui/KisApplication.cpp:332 libs/ui/KisApplication.cpp:333
+#: libs/ui/KisApplication.cpp:331 libs/ui/KisApplication.cpp:332
+#: libs/ui/KisApplication.cpp:333 libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
 #, kde-format
 msgid "Brush tips"
 msgstr "Konice čopiča"
 
-#: libs/ui/KisApplication.cpp:338
+#: libs/ui/KisApplication.cpp:339
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
@@ -29910,7 +29893,7 @@ msgstr "Konice čopiča"
 msgid "Palettes"
 msgstr "Palete"
 
-#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:352 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:259
@@ -29918,34 +29901,34 @@ msgstr "Palete"
 msgid "Workspaces"
 msgstr "Delovni prostori"
 
-#: libs/ui/KisApplication.cpp:352
+#: libs/ui/KisApplication.cpp:353
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "Knjižnice simbolov SVG"
 
-#: libs/ui/KisApplication.cpp:353 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:354 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr "Postavitve oken"
 
-#: libs/ui/KisApplication.cpp:355
+#: libs/ui/KisApplication.cpp:356
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:264
 #, kde-format
 msgid "Gamut masks"
 msgstr "Maske gamuta"
 
-#: libs/ui/KisApplication.cpp:357
+#: libs/ui/KisApplication.cpp:358
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "Skripti SeExpr"
 
-#: libs/ui/KisApplication.cpp:362
+#: libs/ui/KisApplication.cpp:363
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Slogi plasti"
 
-#: libs/ui/KisApplication.cpp:375
+#: libs/ui/KisApplication.cpp:376
 #, kde-format
 msgid ""
 "%1\n"
@@ -29956,13 +29939,13 @@ msgstr ""
 "\n"
 "Krita se bo zdaj zaprla."
 
-#: libs/ui/KisApplication.cpp:375 libs/ui/KisApplication.cpp:381
+#: libs/ui/KisApplication.cpp:376 libs/ui/KisApplication.cpp:382
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: usodna napaka"
 
-#: libs/ui/KisApplication.cpp:381
+#: libs/ui/KisApplication.cpp:382
 #, kde-format
 msgid ""
 "\n"
@@ -29972,7 +29955,7 @@ msgstr ""
 "\n"
 "Krita se bo zdaj zaprla."
 
-#: libs/ui/KisApplication.cpp:413
+#: libs/ui/KisApplication.cpp:414
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -29983,65 +29966,65 @@ msgstr ""
 "To ni priporočljivo.\n"
 "Namesto tega prenesite in namestite gradnjo x64."
 
-#: libs/ui/KisApplication.cpp:430
+#: libs/ui/KisApplication.cpp:431
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Inicializacija globalnih vrednosti …"
 
-#: libs/ui/KisApplication.cpp:461
+#: libs/ui/KisApplication.cpp:462
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Dodajanje vrst virov …"
 
-#: libs/ui/KisApplication.cpp:465
+#: libs/ui/KisApplication.cpp:466
 #, kde-format
 msgid "Loading plugins..."
 msgstr "Nalaganje vstavkov ..."
 
-#: libs/ui/KisApplication.cpp:471
+#: libs/ui/KisApplication.cpp:472
 #, kde-format
 msgid "Loading resources..."
 msgstr "Nalaganje virov …"
 
-#: libs/ui/KisApplication.cpp:480
+#: libs/ui/KisApplication.cpp:481
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Nalaganje glavnega okna ..."
 
-#: libs/ui/KisApplication.cpp:512
+#: libs/ui/KisApplication.cpp:513
 #, kde-format
 msgid "Launching..."
 msgstr "Zaganjanje …"
 
-#: libs/ui/KisApplication.cpp:581
+#: libs/ui/KisApplication.cpp:582
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Vrste mime ni mogoče najti, poskusite z možnostjo -mimetype"
 
-#: libs/ui/KisApplication.cpp:637
+#: libs/ui/KisApplication.cpp:638
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Upodabljanja sličic animacije je spodletelo!"
 
-#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:883
+#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:938
 #, kde-format
 msgid "File layer"
 msgstr "Plast datoteke"
 
-#: libs/ui/KisApplication.cpp:672 libs/ui/KisApplication.cpp:677
-#: libs/ui/KisApplication.cpp:877 libs/ui/KisApplication.cpp:891
-#: libs/ui/KisApplication.cpp:896
+#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:678
+#: libs/ui/KisApplication.cpp:932 libs/ui/KisApplication.cpp:946
+#: libs/ui/KisApplication.cpp:951
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: opozorilo"
 
-#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:892
+#: libs/ui/KisApplication.cpp:674 libs/ui/KisApplication.cpp:947
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "%1 ni mogoče dodati kot plast datoteke: datoteka ne obstaja."
 
-#: libs/ui/KisApplication.cpp:678
+#: libs/ui/KisApplication.cpp:679
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30062,7 +30045,7 @@ msgstr ""
 "primerku programa Krita, v nastavitvah (Nastavitve -> Splošno -> Okno) "
 "preverite potrditveno polje »Dovoli samo en primerek Krite«."
 
-#: libs/ui/KisApplication.cpp:684
+#: libs/ui/KisApplication.cpp:685
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30073,32 +30056,32 @@ msgstr ""
 "Novo datoteko lahko ustvarite z možnostjo --new-image ali pa odprete "
 "obstoječo datoteko."
 
-#: libs/ui/KisApplication.cpp:878
+#: libs/ui/KisApplication.cpp:933
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Datoteke %1 ni mogoče odpreti"
 
-#: libs/ui/KisApplication.cpp:897
+#: libs/ui/KisApplication.cpp:952
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Plasti datoteke ni mogoče dodati: noben dokument ni odprt."
 
-#: libs/ui/KisApplication.cpp:1012
+#: libs/ui/KisApplication.cpp:1067
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Ni najdene predloge za: %1"
 
-#: libs/ui/KisApplication.cpp:1015
+#: libs/ui/KisApplication.cpp:1070
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Preveč predlog najdenih za %1"
 
-#: libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:1086
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Nalaganje predloge %1 je spodletelo."
 
-#: libs/ui/KisApplication.cpp:1063
+#: libs/ui/KisApplication.cpp:1118
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30113,7 +30096,7 @@ msgstr ""
 "\n"
 "Znova zaženite Krito, da spremembe začnejo veljati."
 
-#: libs/ui/KisApplication.cpp:1077
+#: libs/ui/KisApplication.cpp:1132
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30125,7 +30108,7 @@ msgstr ""
 "Prepričajte se, da noben drug program ne uporablja datoteke, in poskusite "
 "znova."
 
-#: libs/ui/KisApplication.cpp:1105
+#: libs/ui/KisApplication.cpp:1160
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Ali želite počistiti datoteko z nastavitvami?"
@@ -31370,35 +31353,35 @@ msgstr "Vendar je preverjanje videza še vedno vklopljeno."
 msgid "Gamut Warnings turned off."
 msgstr "Opozorila o gamutu so izklopljena."
 
-#: libs/ui/KisViewManager.cpp:772
+#: libs/ui/KisViewManager.cpp:773
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Profil aktivnega avtorja"
 
-#: libs/ui/KisViewManager.cpp:902
+#: libs/ui/KisViewManager.cpp:903
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (kopija)"
 
-#: libs/ui/KisViewManager.cpp:1045 libs/ui/KisViewManager.cpp:1121
+#: libs/ui/KisViewManager.cpp:1046 libs/ui/KisViewManager.cpp:1122
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Alternativna imena so izčrpana, poskusite ročno shraniti z večjo številko"
 
-#: libs/ui/KisViewManager.cpp:1045
+#: libs/ui/KisViewManager.cpp:1046
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Shranjevanje postopne različice ni bilo mogoče"
 
-#: libs/ui/KisViewManager.cpp:1121
+#: libs/ui/KisViewManager.cpp:1122
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Shranjevanje postopne varnostne kopije ni bilo mogoče"
 
-#: libs/ui/KisViewManager.cpp:1309
+#: libs/ui/KisViewManager.cpp:1310
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31407,13 +31390,13 @@ msgstr ""
 "Vstop v način samo za platno.\n"
 "Pritisnite %1, da se vrnete."
 
-#: libs/ui/KisViewManager.cpp:1351
+#: libs/ui/KisViewManager.cpp:1352
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Odpri mapo z viri"
 
-#: libs/ui/KisViewManager.cpp:1355
+#: libs/ui/KisViewManager.cpp:1356
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31437,19 +31420,19 @@ msgstr ""
 "<p><b>Zasebno mesto programov</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1370
+#: libs/ui/KisViewManager.cpp:1371
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Odpri v uporabnikovem &AppData"
 
-#: libs/ui/KisViewManager.cpp:1371
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Odpri v &zasebnem mestu programov"
 
-#: libs/ui/KisViewManager.cpp:1484 libs/ui/KisViewManager.cpp:1502
+#: libs/ui/KisViewManager.cpp:1485 libs/ui/KisViewManager.cpp:1503
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -32554,7 +32537,7 @@ msgstr "Dejanja izbora"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1826
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1847
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
 #, kde-format
 msgid "Transform"
@@ -32661,30 +32644,24 @@ msgid "Decrease Brush Size"
 msgstr "Pomanjšaj čopič"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgid "Rotate brush tip clockwise"
-msgstr "Zavrti predmet za 90° v desno"
+msgstr "Zavrti konico čopiča v smeri urinega kazalca"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "Zasukaj izbor za 90° v smeri urinega kazalca"
+msgstr "Zavrti konico čopiča v smeri urinega kazalca (natančno)"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Zavrti predmet za 90° v levo"
+msgstr "Zavrtii konico čopiča v obratni smeri urinega kazalca"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Zasukaj izbor za 90° v obratni smeri urinega kazalca"
+msgstr "Zavrtii konico čopiča v obratni smeri urinega kazalca (natančno)"
 
 #: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, kde-format
@@ -37023,47 +37000,39 @@ msgstr "Barva po meri"
 
 #. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
-#, fuzzy, kde-format
-#| msgid "Editor text color"
+#, kde-format
 msgid "Editor Widget Control:"
-msgstr "Barva besedila urejevalnika"
+msgstr "Kontrolnik gradnika urejevalnika:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
-#, fuzzy, kde-format
-#| msgid "Sh&adow Mode:"
+#, kde-format
 msgid "Show Move"
-msgstr "Način s&ence:"
+msgstr "Pokaži premik"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Snap Options Popup"
+#, kde-format
 msgid "Show Snapping"
-msgstr "Pokaži pojavne možnosti pripenjanja"
+msgstr "Pokaži pripenjanje"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgid "Show Lock"
-msgstr "Pokaži zložena okna"
+msgstr "Pokaži Zakleni"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
-#, fuzzy, kde-format
-#| msgid "Duplicate"
+#, kde-format
 msgid "Show Duplicate"
-msgstr "Podvoji"
+msgstr "Pokaži Podvoji"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgid "Show Delete"
-msgstr "Izbriši"
+msgstr "Pokaži Izbriši"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
@@ -37089,15 +37058,13 @@ msgstr "Koncentrična elipsa"
 
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:28
 #, fuzzy, kde-format
-#| msgid "Perspective assistant"
 msgid "Curvilinear Perspective assistant"
-msgstr "Pomočnik za perspektivo"
+msgstr "Pomočnik za ukrivljeno perspektivo"
 
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
 #, fuzzy, kde-format
-#| msgid "2 Point Perspective"
 msgid "Curvilinear Perspective"
-msgstr "Perspektiva dveh točk"
+msgstr "Ukrivljena perspektiva"
 
 #: plugins/assistants/Assistants/EditAssistantsCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -38129,9 +38096,6 @@ msgid "Zoom view to fit curve."
 msgstr "Približajte/oddaljite pogled, da se prilega krivulji."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Add scalar keyframes"
 msgctxt "(qtundo-format)"
 msgid "Add Scalar Keyframes"
 msgstr "Dodaj skalarne ključne sličice"
@@ -42754,28 +42718,24 @@ msgid "Offset Image"
 msgstr "Zamakni sliko"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Offset Layer"
 msgid_plural "Offset %1 Layers"
-msgstr[0] "Zamakni plast"
-msgstr[1] "Zamakni plast"
-msgstr[2] "Zamakni plast"
-msgstr[3] "Zamakni plast"
+msgstr[0] "Zamakni %1 plasti"
+msgstr[1] "Zamakni %1 plast"
+msgstr[2] "Zamakni %1 plasti"
+msgstr[3] "Zamakni %1 plasti"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgid_plural "Offset %1 Layers"
-msgstr[0] "Zamakni plast"
-msgstr[1] "Zamakni plast"
-msgstr[2] "Zamakni plast"
-msgstr[3] "Zamakni plast"
+msgstr[0] "Zamakni %1 plasti"
+msgstr[1] "Zamakni %1 plast"
+msgstr[2] "Zamakni %1 plasti"
+msgstr[3] "Zamakni %1 plasti"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -43747,14 +43707,13 @@ msgid "Mirror Image Horizontally"
 msgstr "Zrcali sliko vodoravno"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, fuzzy, kde-format
-#| msgid "Rotate Layer"
+#, kde-format
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
-msgstr[0] "Zavrti plast"
-msgstr[1] "Zavrti plast"
-msgstr[2] "Zavrti plast"
-msgstr[3] "Zavrti plast"
+msgstr[0] "Zavrti %1 plasti"
+msgstr[1] "Zavrti %1 plast"
+msgstr[2] "Zavrti %1 plasti"
+msgstr[3] "Zavrti %1 plasti"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -43895,14 +43854,13 @@ msgid "Shear Image"
 msgstr "Ostriži sliko"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
-#, fuzzy, kde-format
-#| msgid "Shear Layer"
+#, kde-format
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
-msgstr[0] "Ostriži plast"
-msgstr[1] "Ostriži plast"
-msgstr[2] "Ostriži plast"
-msgstr[3] "Ostriži plast"
+msgstr[0] "Ostriži %1 plasti"
+msgstr[1] "Ostriži %1 plast"
+msgstr[2] "Ostriži %1 plasti"
+msgstr[3] "Ostriži %1 plasti"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -45761,10 +45719,9 @@ msgstr "Velikost okna:"
 
 #: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgid "Reset Transparent"
-msgstr "Prosojno"
+msgstr "Ponastavi prosojnost"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -57816,62 +57773,62 @@ msgstr ""
 "To orodje deluje samo na vektorskih plasteh. Verjetno želite orodje za "
 "premikanje."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1292
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1313
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Zavrti predmet za 90° v SUK"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1296
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1317
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Zasukaj predmet za 90° nasprotno SUK"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1321
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Zavrti predmet za 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1304
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1325
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Zrcali predmet vodoravno"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1308
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1329
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Zrcali predmet navpično"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1312
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Ponastavi preoblikovanja predmetov"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1386
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1407
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Združi like"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1400
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1421
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Presekaj like"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1410
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1431
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Odštej like"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1455
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1476
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Razdeli like"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1823
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1844
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Dejanja vektorskega lika"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1842
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
 #, kde-format
 msgid "Logical Operations"
 msgstr "Logične operacije"
@@ -58022,7 +57979,7 @@ msgstr "Shranjevanje referenčnih slik ni uspelo."
 msgid "Reference Image Actions"
 msgstr "Dejanja referenčnih slik"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:89
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:92
 #, kde-format
 msgid "Reference Images Tool"
 msgstr "Orodje Referenčne slike"
@@ -59241,7 +59198,7 @@ msgstr ""
 "Uporabi način togega oblivanja SVG v CSS z `white-space: pre-wrap` in z "
 "določanjem širine besedila s parametrom `inline-size`"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:258
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:259
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -60882,40 +60839,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale Layers"
-#~ msgstr "Spremeni merilo plasti"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rotate Layers"
-#~ msgstr "Zavrti plasti"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Layers"
-#~ msgstr "Ostriži plasti"
-
-#~ msgid "Resize Layers"
-#~ msgstr "Spremeni velikost plasti"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layers X"
-#~ msgstr "Zrcali plasti X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layers Y"
-#~ msgstr "Zrcali plasti Y"
-
-#~ msgctxt "@title:window"
-#~ msgid "Offset Layers"
-#~ msgstr "Zamakni plasti"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Offset Layers"
-#~ msgstr "Zamakni plasti"
-
-#~ msgid "Rotate Layers"
-#~ msgstr "Zavrti plasti"
-
-#~ msgid "Shear Layers"
-#~ msgstr "Ostriži plasti"

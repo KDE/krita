@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-27 00:40+0000\n"
+"POT-Creation-Date: 2023-10-28 00:41+0000\n"
 "PO-Revision-Date: 2023-10-23 12:05+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
@@ -15981,8 +15981,8 @@ msgstr ""
 "Krita ne prend pas en charge la plate-forme « Wayland ». Veuillez utiliser "
 "« XWayland » pour exécuter Krita. Krita va maintenant se fermer."
 
-#: krita/main.cc:667 libs/ui/KisApplication.cpp:412
-#: libs/ui/KisApplication.cpp:683
+#: krita/main.cc:667 libs/ui/KisApplication.cpp:413
+#: libs/ui/KisApplication.cpp:684
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -16102,7 +16102,7 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
 msgstr "Valeur recommandée de l'aléa de brosse 0.0"
 
-#: libs/brush/kis_brush.cpp:756 libs/brush/KisBrushModel.cpp:76
+#: libs/brush/kis_brush.cpp:755 libs/brush/KisBrushModel.cpp:76
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -16294,7 +16294,7 @@ msgstr "Distribuer les formes"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1230
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1251
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Grouper les formes"
@@ -16383,7 +16383,7 @@ msgid "Unclip Shapes"
 msgstr "Libérer les formes"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1258
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1279
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Dégrouper les formes"
@@ -16461,25 +16461,25 @@ msgstr ""
 "enregistrez le document, l'objet de texte sera converti au format de Krita 5 "
 "et ne sera plus compatible avec Krita 4.x."
 
-#: libs/flake/text/KoSvgTextShape.cpp:855
+#: libs/flake/text/KoSvgTextShape.cpp:859
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texte"
 
-#: libs/flake/text/KoSvgTextShape.cpp:857
-#: libs/flake/text/KoSvgTextShape.cpp:865
+#: libs/flake/text/KoSvgTextShape.cpp:861
+#: libs/flake/text/KoSvgTextShape.cpp:869
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Objet textuel SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:863
+#: libs/flake/text/KoSvgTextShape.cpp:867
 #, kde-format
 msgid "SVG Text"
 msgstr "Texte SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:877
-#: libs/flake/text/KoSvgTextShape.cpp:892
+#: libs/flake/text/KoSvgTextShape.cpp:881
+#: libs/flake/text/KoSvgTextShape.cpp:896
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17002,7 +17002,7 @@ msgid "Node Rename"
 msgstr "Renommage du nœud :"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:852
+#: libs/image/kis_image.cc:849
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Re-dimensionner une image"
@@ -17221,55 +17221,55 @@ msgstr "Mitchell"
 msgid "Pass Through"
 msgstr "Passer à travers"
 
-#: libs/image/kis_image.cc:382
+#: libs/image/kis_image.cc:379
 #, kde-format
 msgid "Imported Image"
 msgstr "Importer une image"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1895
+#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1895
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
 msgstr "Masque de sélection"
 
-#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Arrière-plan"
 
-#: libs/image/kis_image.cc:752 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:749 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "Calque de dessin"
 
-#: libs/image/kis_image.cc:851
+#: libs/image/kis_image.cc:848
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Rogner l'image"
 
-#: libs/image/kis_image.cc:947
+#: libs/image/kis_image.cc:944
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Rogner le calque"
 
-#: libs/image/kis_image.cc:948
+#: libs/image/kis_image.cc:945
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Rogner le masque"
 
-#: libs/image/kis_image.cc:985
+#: libs/image/kis_image.cc:982
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Redimensionner l'image"
 
-#: libs/image/kis_image.cc:986
+#: libs/image/kis_image.cc:983
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Modifier la résolution de l'image"
 
-#: libs/image/kis_image.cc:1037
+#: libs/image/kis_image.cc:1034
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
@@ -17279,17 +17279,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Redimensionner le calque"
 msgstr[1] "Redimensionner le calque"
 
-#: libs/image/kis_image.cc:1178
+#: libs/image/kis_image.cc:1175
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rotation image"
 
-#: libs/image/kis_image.cc:1188
+#: libs/image/kis_image.cc:1185
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Rotation masque"
 
-#: libs/image/kis_image.cc:1191
+#: libs/image/kis_image.cc:1188
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
@@ -17299,12 +17299,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Rotation calque"
 msgstr[1] "Rotation calque"
 
-#: libs/image/kis_image.cc:1291
+#: libs/image/kis_image.cc:1288
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Cisailler le masque"
 
-#: libs/image/kis_image.cc:1295
+#: libs/image/kis_image.cc:1292
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
@@ -17314,37 +17314,37 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Cisailler le calque"
 msgstr[1] "Cisailler le calque"
 
-#: libs/image/kis_image.cc:1302
+#: libs/image/kis_image.cc:1299
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Cisailler l'image"
 
-#: libs/image/kis_image.cc:1320
+#: libs/image/kis_image.cc:1317
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Convertir l'espace colorimétrique du calque de couleurs"
 
-#: libs/image/kis_image.cc:1371
+#: libs/image/kis_image.cc:1368
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Convertir l'espace de couleur de l'image"
 
-#: libs/image/kis_image.cc:1372
+#: libs/image/kis_image.cc:1369
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Convertir l'espace de couleur de projection"
 
-#: libs/image/kis_image.cc:1430
+#: libs/image/kis_image.cc:1427
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Attribuer un profil à un calque"
 
-#: libs/image/kis_image.cc:1471
+#: libs/image/kis_image.cc:1468
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Associer un profil"
 
-#: libs/image/kis_image.cc:2531
+#: libs/image/kis_image.cc:2528
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Rogner les sélections"
@@ -19616,10 +19616,10 @@ msgstr "Ressources locales"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
-#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1011
-#: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
-#: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
-#: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
+#: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
+#: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
 #: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
@@ -20481,63 +20481,63 @@ msgstr "Supprimer cette étiquette"
 msgid "Undelete"
 msgstr "Restaurer"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:149
+#: libs/ui/actions/kis_selection_action_factories.cpp:153
 msgctxt "(qtundo-format)"
 msgid "Select All"
 msgstr "Tout sélectionner"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:225
+#: libs/ui/actions/kis_selection_action_factories.cpp:238
 #: libs/ui/KisView.cpp:792
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Calque pot de peinture"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:352
+#: libs/ui/actions/kis_selection_action_factories.cpp:365
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Couper"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:353
+#: libs/ui/actions/kis_selection_action_factories.cpp:366
 msgctxt "(qtundo-format)"
 msgid "Copy"
 msgstr "Copier"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:438
+#: libs/ui/actions/kis_selection_action_factories.cpp:451
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "Copier avec fusion"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:455
+#: libs/ui/actions/kis_selection_action_factories.cpp:468
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
 msgstr "La sélection est déjà dans un format vectoriel."
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:480
-#: libs/ui/actions/kis_selection_action_factories.cpp:500
+#: libs/ui/actions/kis_selection_action_factories.cpp:493
+#: libs/ui/actions/kis_selection_action_factories.cpp:513
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "Convertir en sélection vectorielle"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:495
+#: libs/ui/actions/kis_selection_action_factories.cpp:508
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr "La sélection est déjà dans un format matriciel."
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:541
+#: libs/ui/actions/kis_selection_action_factories.cpp:554
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "La forme appartient déjà à la sélection."
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:547
+#: libs/ui/actions/kis_selection_action_factories.cpp:560
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Convertir les tracés en sélection vectorielle"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:600
-#: libs/ui/actions/kis_selection_action_factories.cpp:659
+#: libs/ui/actions/kis_selection_action_factories.cpp:613
+#: libs/ui/actions/kis_selection_action_factories.cpp:672
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
@@ -27774,7 +27774,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:354
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:355
 #, kde-format
 msgid "Sessions"
 msgstr "Sessions"
@@ -29315,7 +29315,7 @@ msgstr "&Ouvrir le sélecteur de couleurs de premier plan"
 msgid "&Open Background color selector"
 msgstr "&Ouvrir le sélecteur de couleurs d'arrière-plan"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:350
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:64
@@ -29329,8 +29329,8 @@ msgstr "Motifs"
 msgid "Custom Pattern"
 msgstr "Motif personnalisé"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:335
-#: libs/ui/KisApplication.cpp:336
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:336
+#: libs/ui/KisApplication.cpp:337
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:263
@@ -30123,20 +30123,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Zoom : %1 %"
 
-#: libs/ui/KisApplication.cpp:327
+#: libs/ui/KisApplication.cpp:328
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:257
 #, kde-format
 msgid "Brush presets"
 msgstr "Préréglages des brosses"
 
-#: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
-#: libs/ui/KisApplication.cpp:332 libs/ui/KisApplication.cpp:333
+#: libs/ui/KisApplication.cpp:331 libs/ui/KisApplication.cpp:332
+#: libs/ui/KisApplication.cpp:333 libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
 #, kde-format
 msgid "Brush tips"
 msgstr "Infobulles de brosse"
 
-#: libs/ui/KisApplication.cpp:338
+#: libs/ui/KisApplication.cpp:339
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
@@ -30144,7 +30144,7 @@ msgstr "Infobulles de brosse"
 msgid "Palettes"
 msgstr "Palettes"
 
-#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:352 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:259
@@ -30152,34 +30152,34 @@ msgstr "Palettes"
 msgid "Workspaces"
 msgstr "Espaces de travail"
 
-#: libs/ui/KisApplication.cpp:352
+#: libs/ui/KisApplication.cpp:353
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "Bibliothèques de symboles SVG"
 
-#: libs/ui/KisApplication.cpp:353 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:354 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr "Agencements des fenêtres"
 
-#: libs/ui/KisApplication.cpp:355
+#: libs/ui/KisApplication.cpp:356
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:264
 #, kde-format
 msgid "Gamut masks"
 msgstr "Masques chromatiques"
 
-#: libs/ui/KisApplication.cpp:357
+#: libs/ui/KisApplication.cpp:358
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "Scripts « SeExpr »"
 
-#: libs/ui/KisApplication.cpp:362
+#: libs/ui/KisApplication.cpp:363
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Styles des calques"
 
-#: libs/ui/KisApplication.cpp:375
+#: libs/ui/KisApplication.cpp:376
 #, kde-format
 msgid ""
 "%1\n"
@@ -30190,13 +30190,13 @@ msgstr ""
 "\n"
 "Krita se fermera maintenant."
 
-#: libs/ui/KisApplication.cpp:375 libs/ui/KisApplication.cpp:381
+#: libs/ui/KisApplication.cpp:376 libs/ui/KisApplication.cpp:382
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita : erreur fatale"
 
-#: libs/ui/KisApplication.cpp:381
+#: libs/ui/KisApplication.cpp:382
 #, kde-format
 msgid ""
 "\n"
@@ -30207,7 +30207,7 @@ msgstr ""
 "\n"
 "Krita se fermera maintenant."
 
-#: libs/ui/KisApplication.cpp:413
+#: libs/ui/KisApplication.cpp:414
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -30219,67 +30219,67 @@ msgstr ""
 "Ceci est déconseillé.\n"
 "Veuillez télécharger et installer la version 64 bits à la place."
 
-#: libs/ui/KisApplication.cpp:430
+#: libs/ui/KisApplication.cpp:431
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Initialisation des paramètres globaux..."
 
-#: libs/ui/KisApplication.cpp:461
+#: libs/ui/KisApplication.cpp:462
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Ajouter des types de ressources..."
 
-#: libs/ui/KisApplication.cpp:465
+#: libs/ui/KisApplication.cpp:466
 #, kde-format
 msgid "Loading plugins..."
 msgstr "Chargement en cours de modules externes..."
 
-#: libs/ui/KisApplication.cpp:471
+#: libs/ui/KisApplication.cpp:472
 #, kde-format
 msgid "Loading resources..."
 msgstr "Chargement en cours de ressources..."
 
-#: libs/ui/KisApplication.cpp:480
+#: libs/ui/KisApplication.cpp:481
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Chargement de la fenêtre principale..."
 
-#: libs/ui/KisApplication.cpp:512
+#: libs/ui/KisApplication.cpp:513
 #, kde-format
 msgid "Launching..."
 msgstr "Lancement en cours..."
 
-#: libs/ui/KisApplication.cpp:581
+#: libs/ui/KisApplication.cpp:582
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 "Le type MIME est introuvable. Essayez d'utiliser l'option « -mimetype »"
 
-#: libs/ui/KisApplication.cpp:637
+#: libs/ui/KisApplication.cpp:638
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Impossible de réaliser un rendu pour les trames d'animations !"
 
-#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:883
+#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:938
 #, kde-format
 msgid "File layer"
 msgstr "Calque de fichier"
 
-#: libs/ui/KisApplication.cpp:672 libs/ui/KisApplication.cpp:677
-#: libs/ui/KisApplication.cpp:877 libs/ui/KisApplication.cpp:891
-#: libs/ui/KisApplication.cpp:896
+#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:678
+#: libs/ui/KisApplication.cpp:932 libs/ui/KisApplication.cpp:946
+#: libs/ui/KisApplication.cpp:951
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita : avertissement"
 
-#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:892
+#: libs/ui/KisApplication.cpp:674 libs/ui/KisApplication.cpp:947
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 "Impossible d'ajouter %1 comme calque de fichier : le fichier n'existe pas."
 
-#: libs/ui/KisApplication.cpp:678
+#: libs/ui/KisApplication.cpp:679
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30301,7 +30301,7 @@ msgstr ""
 "« N'autoriser qu'une seule instance de Krita » dans les paramètres "
 "(Paramètres / Général / Fenêtre)."
 
-#: libs/ui/KisApplication.cpp:684
+#: libs/ui/KisApplication.cpp:685
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30312,33 +30312,33 @@ msgstr ""
 "Vous pouvez soit créer un nouveau fichier en utilisant l'option « -new-"
 "image » soit ouvrir un fichier existant."
 
-#: libs/ui/KisApplication.cpp:878
+#: libs/ui/KisApplication.cpp:933
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Impossible d'ouvrir le fichier %1"
 
-#: libs/ui/KisApplication.cpp:897
+#: libs/ui/KisApplication.cpp:952
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 "Impossible d'ajouter un calque de fichier : aucun document n'est ouvert."
 
-#: libs/ui/KisApplication.cpp:1012
+#: libs/ui/KisApplication.cpp:1067
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Impossible de trouver un modèle pour %1"
 
-#: libs/ui/KisApplication.cpp:1015
+#: libs/ui/KisApplication.cpp:1070
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Trop de modèles trouvés pour : %1"
 
-#: libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:1086
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Échec du chargement du modèle %1"
 
-#: libs/ui/KisApplication.cpp:1063
+#: libs/ui/KisApplication.cpp:1118
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30353,7 +30353,7 @@ msgstr ""
 "\n"
 "Redémarrer Krita pour que les modifications prennent effet."
 
-#: libs/ui/KisApplication.cpp:1077
+#: libs/ui/KisApplication.cpp:1132
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30365,7 +30365,7 @@ msgstr ""
 "Veuillez vérifier qu'aucun autre programme n'utilise le fichier et essayez à "
 "nouveau."
 
-#: libs/ui/KisApplication.cpp:1105
+#: libs/ui/KisApplication.cpp:1160
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Voulez-vous vraiment effacer le fichier de paramètres ? "
@@ -31638,36 +31638,36 @@ msgstr "Mais l'épreuve numérique est encore active."
 msgid "Gamut Warnings turned off."
 msgstr "Signalement des couleurs non imprimables inactif."
 
-#: libs/ui/KisViewManager.cpp:772
+#: libs/ui/KisViewManager.cpp:773
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Profil de l'auteur courant"
 
-#: libs/ui/KisViewManager.cpp:902
+#: libs/ui/KisViewManager.cpp:903
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (Copie)"
 
-#: libs/ui/KisViewManager.cpp:1045 libs/ui/KisViewManager.cpp:1121
+#: libs/ui/KisViewManager.cpp:1046 libs/ui/KisViewManager.cpp:1122
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Noms alternatifs épuisés, essayez d'enregistrer manuellement avec un nombre "
 "plus élevé"
 
-#: libs/ui/KisViewManager.cpp:1045
+#: libs/ui/KisViewManager.cpp:1046
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Impossible d'enregistrer la version numérotée"
 
-#: libs/ui/KisViewManager.cpp:1121
+#: libs/ui/KisViewManager.cpp:1122
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Impossible d'enregistrer une copie de sauvegarde numérotée"
 
-#: libs/ui/KisViewManager.cpp:1309
+#: libs/ui/KisViewManager.cpp:1310
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31676,13 +31676,13 @@ msgstr ""
 "Entrée dans le mode Interface cachée. \n"
 "Appuyez sur %1 pour en sortir."
 
-#: libs/ui/KisViewManager.cpp:1351
+#: libs/ui/KisViewManager.cpp:1352
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Ouvrir le dossier de ressources"
 
-#: libs/ui/KisViewManager.cpp:1355
+#: libs/ui/KisViewManager.cpp:1356
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31707,19 +31707,19 @@ msgstr ""
 "<p><b>Emplacement privé de l'application</b> : <br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1370
+#: libs/ui/KisViewManager.cpp:1371
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Ouvrir dans le dossier « AppData » de l'&utilisateur"
 
-#: libs/ui/KisViewManager.cpp:1371
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Ouvrir dans l'emplacement d'une application &privée"
 
-#: libs/ui/KisViewManager.cpp:1484 libs/ui/KisViewManager.cpp:1502
+#: libs/ui/KisViewManager.cpp:1485 libs/ui/KisViewManager.cpp:1503
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -32825,7 +32825,7 @@ msgstr "Actions de sélection"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1826
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1847
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
 #, kde-format
 msgid "Transform"
@@ -58361,62 +58361,62 @@ msgstr ""
 "Cet outil ne peut être utilisé que sur un calque vectoriel. Vous cherchiez "
 "peut-être l'outil Déplacer."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1292
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1313
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Rotation 90° horaire"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1296
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1317
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Rotation 90° antihoraire"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1321
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Rotation 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1304
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1325
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Miroir horizontalement"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1308
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1329
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Miroir verticalement"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1312
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Ré-initialiser les transformations d'objets"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1386
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1407
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Union des formes"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1400
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1421
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Intersection des formes"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1410
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1431
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Soustraction des formes"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1455
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1476
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Fraction des objets"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1823
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1844
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Actions pour les formes vectorielles"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1842
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
 #, kde-format
 msgid "Logical Operations"
 msgstr "Opérations"
@@ -58570,7 +58570,7 @@ msgstr "Échec de l'enregistrement des images de référence."
 msgid "Reference Image Actions"
 msgstr "Actions de l'image de référence"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:89
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:92
 #, kde-format
 msgid "Reference Images Tool"
 msgstr "Images de référence"
@@ -59798,7 +59798,7 @@ msgstr ""
 "Utiliser le mode d'emballage « SVG » avec option « CSS `white-space: pre-"
 "wrap` », avec le paramètre « inline-size » définissant la largeur du texte."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:258
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:259
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

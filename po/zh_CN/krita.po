@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-27 00:40+0000\n"
+"POT-Creation-Date: 2023-10-28 00:41+0000\n"
 "PO-Revision-Date: 2023-10-21 13:54\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -15861,8 +15861,8 @@ msgstr ""
 "Krita 不支持 Wayland 环境。请使用 XWayland 来在 Wayland 环境下运行 Krita。"
 "Krita 现在将会关闭。"
 
-#: krita/main.cc:667 libs/ui/KisApplication.cpp:412
-#: libs/ui/KisApplication.cpp:683
+#: krita/main.cc:667 libs/ui/KisApplication.cpp:413
+#: libs/ui/KisApplication.cpp:684
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -15979,7 +15979,7 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
 msgstr "笔刷随机度建议值为 0.0"
 
-#: libs/brush/kis_brush.cpp:756 libs/brush/KisBrushModel.cpp:76
+#: libs/brush/kis_brush.cpp:755 libs/brush/KisBrushModel.cpp:76
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -16169,7 +16169,7 @@ msgstr "分布形状"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1230
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1251
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "编组形状"
@@ -16258,7 +16258,7 @@ msgid "Unclip Shapes"
 msgstr "取消剪贴形状"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1258
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1279
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "取消编组形状"
@@ -16335,25 +16335,25 @@ msgstr ""
 "此图像包含在 Krita 4.x 中创建的矢量文字对象。它们将在保存时转换为 Krita 5 格"
 "式。转换后的文字对象将不再兼容 Krita 4.x。"
 
-#: libs/flake/text/KoSvgTextShape.cpp:855
+#: libs/flake/text/KoSvgTextShape.cpp:859
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:857
-#: libs/flake/text/KoSvgTextShape.cpp:865
+#: libs/flake/text/KoSvgTextShape.cpp:861
+#: libs/flake/text/KoSvgTextShape.cpp:869
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 文字形状"
 
-#: libs/flake/text/KoSvgTextShape.cpp:863
+#: libs/flake/text/KoSvgTextShape.cpp:867
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:877
-#: libs/flake/text/KoSvgTextShape.cpp:892
+#: libs/flake/text/KoSvgTextShape.cpp:881
+#: libs/flake/text/KoSvgTextShape.cpp:896
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16873,7 +16873,7 @@ msgid "Node Rename"
 msgstr "节点重命名"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:852
+#: libs/image/kis_image.cc:849
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "更改图像大小"
@@ -17086,55 +17086,55 @@ msgstr "Mitchell"
 msgid "Pass Through"
 msgstr "穿透"
 
-#: libs/image/kis_image.cc:382
+#: libs/image/kis_image.cc:379
 #, kde-format
 msgid "Imported Image"
 msgstr "导入的图像"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1895
+#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1895
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
 msgstr "选区蒙版"
 
-#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "背景"
 
-#: libs/image/kis_image.cc:752 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:749 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "颜料图层"
 
-#: libs/image/kis_image.cc:851
+#: libs/image/kis_image.cc:848
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "裁剪图像"
 
-#: libs/image/kis_image.cc:947
+#: libs/image/kis_image.cc:944
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "裁剪图层"
 
-#: libs/image/kis_image.cc:948
+#: libs/image/kis_image.cc:945
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "裁剪蒙版"
 
-#: libs/image/kis_image.cc:985
+#: libs/image/kis_image.cc:982
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "缩放图像大小"
 
-#: libs/image/kis_image.cc:986
+#: libs/image/kis_image.cc:983
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "更改图像分辨率"
 
-#: libs/image/kis_image.cc:1037
+#: libs/image/kis_image.cc:1034
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
@@ -17143,17 +17143,17 @@ msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
 msgstr[0] "缩放图层"
 
-#: libs/image/kis_image.cc:1178
+#: libs/image/kis_image.cc:1175
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "旋转图像"
 
-#: libs/image/kis_image.cc:1188
+#: libs/image/kis_image.cc:1185
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "旋转蒙版"
 
-#: libs/image/kis_image.cc:1191
+#: libs/image/kis_image.cc:1188
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
@@ -17162,12 +17162,12 @@ msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
 msgstr[0] "旋转图层"
 
-#: libs/image/kis_image.cc:1291
+#: libs/image/kis_image.cc:1288
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "斜切蒙版"
 
-#: libs/image/kis_image.cc:1295
+#: libs/image/kis_image.cc:1292
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
@@ -17176,37 +17176,37 @@ msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
 msgstr[0] "斜切图层"
 
-#: libs/image/kis_image.cc:1302
+#: libs/image/kis_image.cc:1299
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "斜切图像"
 
-#: libs/image/kis_image.cc:1320
+#: libs/image/kis_image.cc:1317
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "转换图层色彩空间"
 
-#: libs/image/kis_image.cc:1371
+#: libs/image/kis_image.cc:1368
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "转换图像色彩空间"
 
-#: libs/image/kis_image.cc:1372
+#: libs/image/kis_image.cc:1369
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "转换视图色彩空间"
 
-#: libs/image/kis_image.cc:1430
+#: libs/image/kis_image.cc:1427
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "为图层指定特性文件"
 
-#: libs/image/kis_image.cc:1471
+#: libs/image/kis_image.cc:1468
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "色彩特性文件指定"
 
-#: libs/image/kis_image.cc:2531
+#: libs/image/kis_image.cc:2528
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "裁剪选区"
@@ -19454,10 +19454,10 @@ msgstr "本地资源"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
-#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1011
-#: libs/ui/KisApplication.cpp:1014 libs/ui/KisApplication.cpp:1030
-#: libs/ui/KisApplication.cpp:1062 libs/ui/KisApplication.cpp:1076
-#: libs/ui/KisApplication.cpp:1104 libs/ui/KisDocument.cpp:969
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
+#: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
+#: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
 #: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
@@ -20305,63 +20305,63 @@ msgstr "删除此标签"
 msgid "Undelete"
 msgstr "取消删除"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:149
+#: libs/ui/actions/kis_selection_action_factories.cpp:153
 msgctxt "(qtundo-format)"
 msgid "Select All"
 msgstr "全部选择"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:225
+#: libs/ui/actions/kis_selection_action_factories.cpp:238
 #: libs/ui/KisView.cpp:792
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "浸漫填充图层"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:352
+#: libs/ui/actions/kis_selection_action_factories.cpp:365
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "剪切"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:353
+#: libs/ui/actions/kis_selection_action_factories.cpp:366
 msgctxt "(qtundo-format)"
 msgid "Copy"
 msgstr "复制"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:438
+#: libs/ui/actions/kis_selection_action_factories.cpp:451
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "合并复制"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:455
+#: libs/ui/actions/kis_selection_action_factories.cpp:468
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
 msgstr "选区已是矢量格式 "
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:480
-#: libs/ui/actions/kis_selection_action_factories.cpp:500
+#: libs/ui/actions/kis_selection_action_factories.cpp:493
+#: libs/ui/actions/kis_selection_action_factories.cpp:513
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "转换为矢量选区"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:495
+#: libs/ui/actions/kis_selection_action_factories.cpp:508
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr "选区已是栅格格式 "
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:541
+#: libs/ui/actions/kis_selection_action_factories.cpp:554
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "此形状已属于一个选区"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:547
+#: libs/ui/actions/kis_selection_action_factories.cpp:560
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "形状转换为矢量选区"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:600
-#: libs/ui/actions/kis_selection_action_factories.cpp:659
+#: libs/ui/actions/kis_selection_action_factories.cpp:613
+#: libs/ui/actions/kis_selection_action_factories.cpp:672
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
@@ -27381,7 +27381,7 @@ msgid "HSV CCW"
 msgstr "HSV 逆时针色相"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:354
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:355
 #, kde-format
 msgid "Sessions"
 msgstr "会话管理"
@@ -28889,7 +28889,7 @@ msgstr "打开前景色拾色器(&O)"
 msgid "&Open Background color selector"
 msgstr "打开背景色拾色器(&O)"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:350
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:64
@@ -28903,8 +28903,8 @@ msgstr "图案"
 msgid "Custom Pattern"
 msgstr "自定义图案"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:335
-#: libs/ui/KisApplication.cpp:336
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:336
+#: libs/ui/KisApplication.cpp:337
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:263
@@ -29682,20 +29682,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "缩放：%1 %"
 
-#: libs/ui/KisApplication.cpp:327
+#: libs/ui/KisApplication.cpp:328
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:257
 #, kde-format
 msgid "Brush presets"
 msgstr "笔刷预设"
 
-#: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
-#: libs/ui/KisApplication.cpp:332 libs/ui/KisApplication.cpp:333
+#: libs/ui/KisApplication.cpp:331 libs/ui/KisApplication.cpp:332
+#: libs/ui/KisApplication.cpp:333 libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
 #, kde-format
 msgid "Brush tips"
 msgstr "笔尖"
 
-#: libs/ui/KisApplication.cpp:338
+#: libs/ui/KisApplication.cpp:339
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
@@ -29703,7 +29703,7 @@ msgstr "笔尖"
 msgid "Palettes"
 msgstr "色板"
 
-#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:352 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:259
@@ -29711,34 +29711,34 @@ msgstr "色板"
 msgid "Workspaces"
 msgstr "工作区"
 
-#: libs/ui/KisApplication.cpp:352
+#: libs/ui/KisApplication.cpp:353
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "矢量图形库"
 
-#: libs/ui/KisApplication.cpp:353 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:354 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr "窗口布局"
 
-#: libs/ui/KisApplication.cpp:355
+#: libs/ui/KisApplication.cpp:356
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:264
 #, kde-format
 msgid "Gamut masks"
 msgstr "色域蒙版"
 
-#: libs/ui/KisApplication.cpp:357
+#: libs/ui/KisApplication.cpp:358
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExpr 脚本"
 
-#: libs/ui/KisApplication.cpp:362
+#: libs/ui/KisApplication.cpp:363
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "图层样式"
 
-#: libs/ui/KisApplication.cpp:375
+#: libs/ui/KisApplication.cpp:376
 #, kde-format
 msgid ""
 "%1\n"
@@ -29749,13 +29749,13 @@ msgstr ""
 "\n"
 "Krita 将会立即退出。"
 
-#: libs/ui/KisApplication.cpp:375 libs/ui/KisApplication.cpp:381
+#: libs/ui/KisApplication.cpp:376 libs/ui/KisApplication.cpp:382
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita：发生严重错误"
 
-#: libs/ui/KisApplication.cpp:381
+#: libs/ui/KisApplication.cpp:382
 #, kde-format
 msgid ""
 "\n"
@@ -29766,7 +29766,7 @@ msgstr ""
 "\n"
 "Krita 将会立即退出。"
 
-#: libs/ui/KisApplication.cpp:413
+#: libs/ui/KisApplication.cpp:414
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -29777,65 +29777,65 @@ msgstr ""
 "这将导致程序性能低下，或者引发其他问题。\n"
 "请下载并安装 64 位版本的 Krita。"
 
-#: libs/ui/KisApplication.cpp:430
+#: libs/ui/KisApplication.cpp:431
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "正在初始化全局参数..."
 
-#: libs/ui/KisApplication.cpp:461
+#: libs/ui/KisApplication.cpp:462
 #, kde-format
 msgid "Adding resource types..."
 msgstr "正在添加资源类型..."
 
-#: libs/ui/KisApplication.cpp:465
+#: libs/ui/KisApplication.cpp:466
 #, kde-format
 msgid "Loading plugins..."
 msgstr "正在加载插件..."
 
-#: libs/ui/KisApplication.cpp:471
+#: libs/ui/KisApplication.cpp:472
 #, kde-format
 msgid "Loading resources..."
 msgstr "正在加载资源..."
 
-#: libs/ui/KisApplication.cpp:480
+#: libs/ui/KisApplication.cpp:481
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "正在加载主窗口..."
 
-#: libs/ui/KisApplication.cpp:512
+#: libs/ui/KisApplication.cpp:513
 #, kde-format
 msgid "Launching..."
 msgstr "正在启动..."
 
-#: libs/ui/KisApplication.cpp:581
+#: libs/ui/KisApplication.cpp:582
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "无法找到 MIME 类型，请尝试使用 -mimetype 选项"
 
-#: libs/ui/KisApplication.cpp:637
+#: libs/ui/KisApplication.cpp:638
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "动画帧处理失败。"
 
-#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:883
+#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:938
 #, kde-format
 msgid "File layer"
 msgstr "文件图层"
 
-#: libs/ui/KisApplication.cpp:672 libs/ui/KisApplication.cpp:677
-#: libs/ui/KisApplication.cpp:877 libs/ui/KisApplication.cpp:891
-#: libs/ui/KisApplication.cpp:896
+#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:678
+#: libs/ui/KisApplication.cpp:932 libs/ui/KisApplication.cpp:946
+#: libs/ui/KisApplication.cpp:951
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita：警告"
 
-#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:892
+#: libs/ui/KisApplication.cpp:674 libs/ui/KisApplication.cpp:947
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "无法将 %1 添加为文件图层：该文件不存在。"
 
-#: libs/ui/KisApplication.cpp:678
+#: libs/ui/KisApplication.cpp:679
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29854,7 +29854,7 @@ msgstr ""
 "如果您想要将文件图层添加到某个已经在运行的 Krita 实例，请检查是否在设置 (菜单"
 "栏 -> 设置 -> 配置 Krita -> 常规 -> 窗口) 中勾选了“只允许一个 Krita 实例”。"
 
-#: libs/ui/KisApplication.cpp:684
+#: libs/ui/KisApplication.cpp:685
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29864,32 +29864,32 @@ msgstr ""
 "无法添加文件图层：没有已打开的图像。\n"
 "您可以使用 --new-image 参数新建一个图像，也可以打开一个已有图像。"
 
-#: libs/ui/KisApplication.cpp:878
+#: libs/ui/KisApplication.cpp:933
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "无法打开图像 %1"
 
-#: libs/ui/KisApplication.cpp:897
+#: libs/ui/KisApplication.cpp:952
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "无法添加文件图层：没有已打开的图像。"
 
-#: libs/ui/KisApplication.cpp:1012
+#: libs/ui/KisApplication.cpp:1067
 #, kde-format
 msgid "No template found for: %1"
 msgstr "找不到适用于 %1 的模板"
 
-#: libs/ui/KisApplication.cpp:1015
+#: libs/ui/KisApplication.cpp:1070
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "适用于 %1 的模板过多"
 
-#: libs/ui/KisApplication.cpp:1031
+#: libs/ui/KisApplication.cpp:1086
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "模板 %1 加载失败。"
 
-#: libs/ui/KisApplication.cpp:1063
+#: libs/ui/KisApplication.cpp:1118
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29904,7 +29904,7 @@ msgstr ""
 "\n"
 "请重新启动 Krita 使更改生效。"
 
-#: libs/ui/KisApplication.cpp:1077
+#: libs/ui/KisApplication.cpp:1132
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29915,7 +29915,7 @@ msgstr ""
 "\n"
 "请确保没有其他程序正在使用该文件，然后重试。"
 
-#: libs/ui/KisApplication.cpp:1105
+#: libs/ui/KisApplication.cpp:1160
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "您想要清除设置文件吗？"
@@ -31140,34 +31140,34 @@ msgstr "但色彩校样尚未启用。"
 msgid "Gamut Warnings turned off."
 msgstr "色域超出警告色已关闭。"
 
-#: libs/ui/KisViewManager.cpp:772
+#: libs/ui/KisViewManager.cpp:773
 #, kde-format
 msgid "Active Author Profile"
 msgstr "作者档案切换"
 
-#: libs/ui/KisViewManager.cpp:902
+#: libs/ui/KisViewManager.cpp:903
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (副本)"
 
-#: libs/ui/KisViewManager.cpp:1045 libs/ui/KisViewManager.cpp:1121
+#: libs/ui/KisViewManager.cpp:1046 libs/ui/KisViewManager.cpp:1122
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr "备用名称数字已用尽，请手动输入更大的数字保存文件"
 
-#: libs/ui/KisViewManager.cpp:1045
+#: libs/ui/KisViewManager.cpp:1046
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "无法保存增量版本"
 
-#: libs/ui/KisViewManager.cpp:1121
+#: libs/ui/KisViewManager.cpp:1122
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "无法保存增量备份"
 
-#: libs/ui/KisViewManager.cpp:1309
+#: libs/ui/KisViewManager.cpp:1310
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31176,13 +31176,13 @@ msgstr ""
 "已切换到隐藏面板模式\n"
 "按 %1 返回"
 
-#: libs/ui/KisViewManager.cpp:1351
+#: libs/ui/KisViewManager.cpp:1352
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "打开资源文件夹"
 
-#: libs/ui/KisViewManager.cpp:1355
+#: libs/ui/KisViewManager.cpp:1356
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31205,19 +31205,19 @@ msgstr ""
 "<p><b>私人应用目录</b>：<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1370
+#: libs/ui/KisViewManager.cpp:1371
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "打开用户 AppData 目录(&U)"
 
-#: libs/ui/KisViewManager.cpp:1371
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "打开私人应用目录(&P)"
 
-#: libs/ui/KisViewManager.cpp:1484 libs/ui/KisViewManager.cpp:1502
+#: libs/ui/KisViewManager.cpp:1485 libs/ui/KisViewManager.cpp:1503
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -32295,7 +32295,7 @@ msgstr "选区操作"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1826
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1847
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
 #, kde-format
 msgid "Transform"
@@ -57052,62 +57052,62 @@ msgstr "点击并拖拽以调整选区大小。中键点击以设定高亮显示
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr "此工具只适用于矢量图层。要移动颜料图层，请使用移动工具。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1292
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1313
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "顺时针旋转对象90°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1296
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1317
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "逆时针旋转对象90°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1321
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "旋转对象180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1304
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1325
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "水平翻转对象"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1308
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1329
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "垂直翻转对象"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1312
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "重置对象变形"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1386
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1407
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "形状并集"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1400
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1421
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "形状交集"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1410
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1431
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "形状差集"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1455
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1476
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "形状拆分"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1823
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1844
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "矢量形状操作"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1842
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
 #, kde-format
 msgid "Logical Operations"
 msgstr "布尔逻辑操作"
@@ -57255,7 +57255,7 @@ msgstr "保存参考图像失败。"
 msgid "Reference Image Actions"
 msgstr "参考图像操作"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:89
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:92
 #, kde-format
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
@@ -58468,7 +58468,7 @@ msgstr ""
 "使用 SVG 规范的 CSS “white-space: pre-wrap”自动换行模式，以“inline-size”定义"
 "每行文字宽度。"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:258
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:259
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

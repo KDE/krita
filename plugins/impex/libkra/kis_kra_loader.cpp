@@ -882,10 +882,9 @@ KisNodeSP KisKraLoader::loadNode(const QDomElement& element, KisImageSP image)
     if ((element.attribute(COLORSPACE_NAME)).isNull()) {
         dbgFile << "No attribute color space for layer: " << name;
         colorSpace = image->colorSpace();
-    }
-    else {
+    } else {
         QString colorspacename = element.attribute(COLORSPACE_NAME);
-        QString profileProductName;
+        QString profileProductName = element.attribute(PROFILE);;
 
         convertColorSpaceNames(colorspacename, profileProductName);
 
@@ -894,7 +893,13 @@ KisNodeSP KisKraLoader::loadNode(const QDomElement& element, KisImageSP image)
         dbgFile << "Searching color space: " << colorspacename << colorspaceModel << colorspaceDepth << " for layer: " << name;
         // use default profile - it will be replaced later in completeLoading
 
-        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
+        if (profileProductName.isNull()) {
+            // no mention of profile so get default profile";
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
+        } else {
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, profileProductName);
+        }
+
         dbgFile << "found colorspace" << colorSpace;
         if (!colorSpace) {
             m_d->warningMessages << i18n("Layer %1 specifies an unsupported color model: %2.", name, colorspacename);
@@ -1145,11 +1150,9 @@ KisNodeSP KisKraLoader::loadGroupLayer(const QDomElement& element, KisImageSP im
                                        const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     Q_UNUSED(element);
-    Q_UNUSED(cs);
-    QString attr;
     KisGroupLayer* layer;
 
-    layer = new KisGroupLayer(image, name, opacity);
+    layer = new KisGroupLayer(image, name, opacity, cs);
     Q_CHECK_PTR(layer);
 
     return layer;

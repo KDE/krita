@@ -131,11 +131,8 @@ void KisConvertColorSpaceProcessingVisitor::visit(KisGroupLayer *layer, KisUndoA
 
     bool alphaDisabled = layer->alphaChannelDisabled();
 
-    /// Group layers are supposed to always be in the image colorspace,
-    /// having groups in any other color space is not yet supported by
-    /// .kra file format
     const KoColorSpace *srcColorSpace = layer->colorSpace();
-    const KoColorSpace *dstColorSpace = layer->image() ? layer->image()->colorSpace() : m_dstColorSpace;
+    const KoColorSpace *dstColorSpace = m_dstColorSpace;
 
     // the swap of FINALIZING/INITIALIZING is intentional here, see the comment above
     undoAdapter->addCommand(new KisResetGroupLayerCacheCommand(layer, dstColorSpace, KisResetGroupLayerCacheCommand::FINALIZING));

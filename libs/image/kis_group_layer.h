@@ -23,7 +23,7 @@ class KRITAIMAGE_EXPORT KisGroupLayer : public KisLayer
     Q_OBJECT
 
 public:
-    KisGroupLayer(KisImageWSP image, const QString &name, quint8 opacity);
+    KisGroupLayer(KisImageWSP image, const QString &name, quint8 opacity, const KoColorSpace * colorSpace = 0);
     KisGroupLayer(const KisGroupLayer& rhs);
     ~KisGroupLayer() override;
 

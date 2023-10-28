@@ -15,6 +15,7 @@
 #include <KoProperties.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
+#include <KoColorProfile.h>
 
 #include <kis_debug.h>
 #include <filter/kis_filter_configuration.h>
@@ -147,6 +148,8 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
         layerElement = m_doc.createElement(LAYER);
         saveLayer(layerElement, GROUP_LAYER, layer);
         layerElement.setAttribute(PASS_THROUGH_MODE, layer->passThroughMode());
+        layerElement.setAttribute(COLORSPACE_NAME, layer->colorSpace()->id());
+        layerElement.setAttribute(PROFILE, layer->colorSpace()->profile()->name());
         m_elem.appendChild(layerElement);
     }
     QDomElement elem = m_doc.createElement(LAYERS);

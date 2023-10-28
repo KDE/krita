@@ -46,11 +46,11 @@ public:
     std::tuple<KisPaintDeviceSP, bool> originalImpl() const;
 };
 
-KisGroupLayer::KisGroupLayer(KisImageWSP image, const QString &name, quint8 opacity) :
+KisGroupLayer::KisGroupLayer(KisImageWSP image, const QString &name, quint8 opacity, const KoColorSpace * colorSpace) :
     KisLayer(image, name, opacity),
     m_d(new Private())
 {
-    resetCache();
+    resetCache(colorSpace);
 }
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :

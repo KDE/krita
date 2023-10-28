@@ -168,7 +168,7 @@ void KisToolMultihand::paint(QPainter& gc, const KoViewConverter &converter)
     QPainterPath path;
 
     if (m_showAxes) {
-        int axisLength = currentImage()->height() + currentImage()->width();
+        const int axisLength = currentImage()->height() + currentImage()->width();
 
         // add division guide lines if using multiple brushes
         if ((m_handsCount > 1 && m_transformMode == SYMMETRY) ||
@@ -180,9 +180,9 @@ void KisToolMultihand::paint(QPainter& gc, const KoViewConverter &converter)
             else {
                 axesCount = m_handsCount*2;
             }
-            qreal axesAngle = 360.0 / float(axesCount);
+            const qreal axesAngle = 360.0 / float(axesCount);
             float currentAngle = 0.0;
-            float startingInsetLength = 20; // don't start each line at the origin so we can see better when all points converge
+            const float startingInsetLength = 20; // don't start each line at the origin so we can see better when all points converge
 
             // draw lines radiating from the origin
             for( int i=0; i < axesCount; i++) {
@@ -192,7 +192,7 @@ void KisToolMultihand::paint(QPainter& gc, const KoViewConverter &converter)
                 // convert angles to radians since cos and sin need that
                 currentAngle = currentAngle * 0.017453 + m_angle; // m_angle is current rotation set on UI
 
-                QPoint startingSpot = QPoint(m_axesPoint.x()+ (sin(currentAngle)*startingInsetLength), m_axesPoint.y()- (cos(currentAngle))*startingInsetLength );
+                const QPoint startingSpot = QPoint(m_axesPoint.x()+ (sin(currentAngle)*startingInsetLength), m_axesPoint.y()- (cos(currentAngle))*startingInsetLength );
                 path.moveTo(startingSpot.x(), startingSpot.y());
                 QPointF symmetryLinePoint(m_axesPoint.x()+ (sin(currentAngle)*axisLength), m_axesPoint.y()- (cos(currentAngle))*axisLength );
                 path.lineTo(symmetryLinePoint);
@@ -213,14 +213,14 @@ void KisToolMultihand::paint(QPainter& gc, const KoViewConverter &converter)
         }
         else if (m_transformMode == COPYTRANSLATE) {
 
-            int ellipsePreviewSize = 10;
+            const int ellipsePreviewSize = 10;
             // draw ellipse at origin to emphasize this is a drawing point
             path.addEllipse(m_axesPoint.x()-(ellipsePreviewSize),
                             m_axesPoint.y()-(ellipsePreviewSize),
                             ellipsePreviewSize*2,
                             ellipsePreviewSize*2);
 
-            for (QPointF dPos : m_subbrOriginalLocations) {
+            Q_FOREACH (QPointF dPos, m_subbrOriginalLocations) {
                 path.addEllipse(dPos, ellipsePreviewSize, ellipsePreviewSize);  // Show subbrush reference locations while in add mode
             }
 
@@ -232,9 +232,9 @@ void KisToolMultihand::paint(QPainter& gc, const KoViewConverter &converter)
 
         }
         else if (m_transformMode == COPYTRANSLATEINTERVALS) {
-            int ellipsePreviewSize = 10;
+            const int ellipsePreviewSize = 10;
 
-            for (QPointF dPos : intervalLocations()) {
+            Q_FOREACH (QPointF dPos, intervalLocations()) {
                 path.addEllipse(dPos, ellipsePreviewSize, ellipsePreviewSize);
             }
         }
@@ -252,7 +252,7 @@ void KisToolMultihand::paint(QPainter& gc, const KoViewConverter &converter)
         // not showing axis
         if (m_transformMode == COPYTRANSLATE) {
 
-            for (QPointF dPos : m_subbrOriginalLocations) {
+            Q_FOREACH (QPointF dPos, m_subbrOriginalLocations) {
                 // Show subbrush reference locations while in add mode
                 if (m_addSubbrushesMode) {
                     path.addEllipse(dPos, 10, 10);
@@ -277,7 +277,7 @@ void KisToolMultihand::paint(QPainter& gc, const KoViewConverter &converter)
     if (m_showAxes && m_transformMode != COPYTRANSLATEINTERVALS) {
         // draw a dot at the origin point to help with precisely moving
         QPainterPath dotPath;
-        int dotRadius = 4;
+        const int dotRadius = 4;
         dotPath.moveTo(m_axesPoint.x(), m_axesPoint.y());
         dotPath.addEllipse(m_axesPoint.x()- dotRadius*0.25, m_axesPoint.y()- dotRadius*0.25, dotRadius, dotRadius); // last 2 parameters are dot's size
 
@@ -303,7 +303,7 @@ void KisToolMultihand::initTransformations()
 
     if(m_transformMode == SYMMETRY) {
         qreal angle = 0;
-        qreal angleStep = (2 * M_PI) / m_handsCount;
+        const qreal angleStep = (2 * M_PI) / m_handsCount;
 
         for(int i = 0; i < m_handsCount; i++) {
             m.translate(m_axesPoint.x(), m_axesPoint.y());
@@ -351,7 +351,7 @@ void KisToolMultihand::initTransformations()
     }
     else if(m_transformMode == SNOWFLAKE) {
         qreal angle = 0;
-        qreal angleStep = (2 * M_PI) / m_handsCount/4;
+        const qreal angleStep = (2 * M_PI) / m_handsCount/4;
 
         for(int i = 0; i < m_handsCount*4; i++) {
            if ((i%2)==1) {
@@ -385,8 +385,8 @@ void KisToolMultihand::initTransformations()
          * strokes
          */
         for (int i = 0; i < m_handsCount; i++){
-            qreal angle = drand48() * M_PI * 2;
-            qreal length = drand48();
+            const qreal angle = drand48() * M_PI * 2;
+            const qreal length = drand48();
 
             // convert the Polar coordinates to Cartesian coordinates
             qreal nx = (m_translateRadius * cos(angle) * length);
@@ -402,8 +402,8 @@ void KisToolMultihand::initTransformations()
         }
     } else if (m_transformMode == COPYTRANSLATE) {
         transformations << m;
-        for (QPointF dPos : m_subbrOriginalLocations) {
-            QPointF resPos = dPos-m_axesPoint; // Calculate the difference between subbrush reference position and "origin" reference
+        Q_FOREACH (QPointF dPos, m_subbrOriginalLocations) {
+            const QPointF resPos = dPos-m_axesPoint; // Calculate the difference between subbrush reference position and "origin" reference
             m.translate(resPos.x(), resPos.y());
             transformations << m;
             m.reset();
@@ -411,15 +411,15 @@ void KisToolMultihand::initTransformations()
     } else if (m_transformMode == COPYTRANSLATEINTERVALS) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         Q_ASSERT(kisCanvas);
-        QRect bounds = kisCanvas->viewManager()->selection() ?
+        const QRect bounds = kisCanvas->viewManager()->selection() ?
             kisCanvas->viewManager()->selection()->selectedExactRect() :
             kisCanvas->currentImage()->bounds();
-        QPoint dPos = bounds.topLeft() +
+        const QPoint dPos = bounds.topLeft() +
                       QPoint(m_intervalX ? m_intervalX * floor((m_axesPoint.x() - bounds.left()) / m_intervalX) : 0,
                              m_intervalY ? m_intervalY * floor((m_axesPoint.y() - bounds.top()) / m_intervalY) : 0);
 
-        for (QPoint pos : intervalLocations()) {
-                QPointF resPos = pos - dPos;
+        Q_FOREACH (QPoint pos, intervalLocations()) {
+                const QPointF resPos = pos - dPos;
                 m.translate(resPos.x(), resPos.y());
                 transformations << m;
                 m.reset();
@@ -559,11 +559,11 @@ QVector<QPoint> KisToolMultihand::intervalLocations()
 
     KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
-    QRect bounds = kisCanvas->viewManager()->selection() ?
+    const QRect bounds = kisCanvas->viewManager()->selection() ?
         kisCanvas->viewManager()->selection()->selectedExactRect() :
         kisCanvas->currentImage()->bounds();
 
-    int intervals = m_intervalX ? (bounds.width() / m_intervalX) : 0 +
+    const int intervals = m_intervalX ? (bounds.width() / m_intervalX) : 0 +
                     m_intervalY ? (bounds.height() / m_intervalY) : 0;
     if (intervals > MAXIMUM_BRUSHES) {
         kisCanvas->viewManager()->showFloatingMessage(

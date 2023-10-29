@@ -611,6 +611,19 @@ void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisNodeSP layer, bool
     adjustLayerPosition(layer, activeNode, parent, above);
 
     KisGroupLayer *group = dynamic_cast<KisGroupLayer*>(parent.data());
+
+    if (layer->inherits("KisGroupLayer") || layer->inherits("KisPaintLayer")) {
+        const KoColorSpace *colorSpace = group->colorSpace();
+
+        if (layer->inherits("KisGroupLayer")) {
+            KisGroupLayer *newLayer = dynamic_cast<KisGroupLayer*>(layer.data());
+            newLayer->resetCache(colorSpace);
+        } else {
+            KisPaintLayer *newLayer = qobject_cast<KisPaintLayer *>(layer.data());
+            newLayer->paintDevice()->convertTo(colorSpace);
+        }
+    }
+
     const bool parentForceUpdate = group && !group->projectionIsValid();
     updateImage |= parentForceUpdate;
 
@@ -873,6 +886,11 @@ void KisLayerManager::mergeLayer()
                 strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view->mainWindow());
             }
 
+																					
+																								 
+		 
+			  
+																																 
             if (!strategy) return;
 
             if (!layer->isAnimated() && prevLayer->isAnimated()) {

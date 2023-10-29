@@ -886,11 +886,6 @@ void KisLayerManager::mergeLayer()
                 strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view->mainWindow());
             }
 
-																					
-																								 
-		 
-			  
-																																 
             if (!strategy) return;
 
             if (!layer->isAnimated() && prevLayer->isAnimated()) {

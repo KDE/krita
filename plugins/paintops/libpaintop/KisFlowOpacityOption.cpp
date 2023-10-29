@@ -8,7 +8,6 @@
 
 
 #include <kis_properties_configuration.h>
-//#include <kis_paint_information.h>
 #include <kis_painter.h>
 #include <kis_node.h>
 #include <kis_indirect_painting_support.h>
@@ -38,7 +37,9 @@ void KisFlowOpacityOption2::apply(KisPainter* painter, const KisPaintInformation
 
 void KisFlowOpacityOption2::apply(const KisPaintInformation &info, quint8 *opacity, quint8 *flow)
 {
-    *opacity = quint8(m_opacityOption.computeSizeLikeValue(info, !m_indirectPaintingActive) * 255.0);
+    if (m_opacityOption.isChecked()) {
+        *opacity = quint8(m_opacityOption.computeSizeLikeValue(info, !m_indirectPaintingActive) * 255.0);
+    }
     *flow = quint8(m_flowOption.apply(info) * 255.0);
 }
 

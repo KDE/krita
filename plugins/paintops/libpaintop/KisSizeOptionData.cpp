@@ -6,13 +6,11 @@
 #include "KisSizeOptionData.h"
 
 
-KisSizeOptionData::KisSizeOptionData(bool isCheckable, const QString &prefix)
-    : KisCurveOptionData(
+KisSizeOptionData::KisSizeOptionData(const QString &prefix)
+    : KisCurveOptionData(prefix,
           KoID("Size", i18n("Size")),
-          isCheckable,
-          !isCheckable)
+          Checkability::CheckableIfHasPrefix)
 {
-    this->prefix = prefix;
 }
 
 KisPaintopLodLimitations KisSizeOptionData::lodLimitations() const

@@ -80,7 +80,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent, KisResources
     addPaintOpOption(maskingOption);
 
     addPaintOpOption(kpowu::createMaskingOpacityOptionWidget());
-    addPaintOpOption(kpowu::createOptionWidget<KisSizeOptionWidget>(KisSizeOptionData(true, KisPaintOpUtils::MaskingBrushPresetPrefix), KisPaintOpOption::MASKING_BRUSH));
+    addPaintOpOption(kpowu::createOptionWidget<KisSizeOptionWidget>(KisSizeOptionData(KisPaintOpUtils::MaskingBrushPresetPrefix), KisPaintOpOption::MASKING_BRUSH));
     addPaintOpOption(kpowu::createMaskingFlowOptionWidget());
     addPaintOpOption(kpowu::createMaskingRatioOptionWidget());
     addPaintOpOption(kpowu::createMaskingRotationOptionWidget());

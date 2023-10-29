@@ -180,6 +180,13 @@ public:
      */
     void setPrefixedProperties(const QString &prefix, const KisPropertiesConfigurationSP config);
 
+    /**
+     * After calling `getPropertiesConfiguration()` the resulting properties
+     * will contain the prefix they were packed with. The prefix can be requested
+     * with the key returned by `extractedPrefixKey()` function.
+     */
+    static QString extractedPrefixKey();
+
     static QString escapeString(const QString &string);
     static QString unescapeString(const QString &string);
 

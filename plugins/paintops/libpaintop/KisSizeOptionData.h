@@ -11,7 +11,7 @@
 
 struct PAINTOP_EXPORT KisSizeOptionData : KisCurveOptionData
 {
-    KisSizeOptionData(bool isCheckable = true, const QString &prefix = QString());
+    KisSizeOptionData(const QString &prefix = QString());
     KisPaintopLodLimitations lodLimitations() const;
 };
 

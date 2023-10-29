@@ -12,9 +12,7 @@ struct KisOffsetScaleOptionData : KisCurveOptionData
 {
     KisOffsetScaleOptionData()
         : KisCurveOptionData(
-              KoID("Offset scale", i18n("Offset scale")),
-              true, false,
-              0.0, 1.0)
+              KoID("Offset scale", i18n("Offset scale")))
     {}
 };
 
@@ -22,9 +20,7 @@ struct KisLineWidthOptionData : KisCurveOptionData
 {
     KisLineWidthOptionData()
         : KisCurveOptionData(
-              KoID("Line width", i18n("Line width")),
-              true, false,
-              0.0, 1.0)
+              KoID("Line width", i18n("Line width")))
     {}
 };
 
@@ -32,9 +28,7 @@ struct KisDensityOptionData : KisCurveOptionData
 {
     KisDensityOptionData()
         : KisCurveOptionData(
-              KoID("Density", i18n("Density")),
-              true, false,
-              0.0, 1.0)
+              KoID("Density", i18n("Density")))
     {}
 };
 

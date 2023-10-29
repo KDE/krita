@@ -11,23 +11,22 @@
 
 struct KisOpacityOptionData : KisCurveOptionData
 {
-    KisOpacityOptionData(bool isCheckable = false, const QString &prefix = QString())
+    KisOpacityOptionData(const QString &prefix = QString())
         : KisCurveOptionData(
               prefix,
               KoID("Opacity", i18n("Opacity")),
-              isCheckable, !isCheckable)
+              Checkability::CheckableIfHasPrefix)
     {
     }
 };
 
 struct KisFlowOptionData : KisCurveOptionData
 {
-    KisFlowOptionData(bool isCheckable = false, const QString &prefix = QString())
+    KisFlowOptionData(const QString &prefix = QString())
         : KisCurveOptionData(
               prefix,
               KoID("Flow", i18n("Flow")),
-              isCheckable,
-              !isCheckable)
+              Checkability::CheckableIfHasPrefix)
     {
     }
 };
@@ -48,8 +47,8 @@ struct KisSoftnessOptionData : KisCurveOptionData
     KisSoftnessOptionData()
         : KisCurveOptionData(
               KoID("Softness", i18n("Softness")),
-              true, false,
-              0.1, 1.0)
+              Checkability::Checkable, std::nullopt,
+              std::make_pair(0.1, 1.0))
     {}
 };
 

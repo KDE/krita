@@ -333,6 +333,17 @@ void KisPropertiesConfiguration::getPrefixedProperties(const QString &prefix, Ki
             config->setProperty(key.mid(prefixSize), getProperty(key));
         }
     }
+
+    QString fullPrefix;
+    const QString parentPrefix = getString(extractedPrefixKey());
+    if (!parentPrefix.isEmpty()) {
+        fullPrefix = parentPrefix + "/" + prefix;
+    } else {
+        fullPrefix = prefix;
+    }
+
+    config->setProperty(extractedPrefixKey(), fullPrefix);
+    config->setPropertyNotSaved(extractedPrefixKey());
 }
 
 void KisPropertiesConfiguration::getPrefixedProperties(const QString &prefix, KisPropertiesConfigurationSP config) const
@@ -351,6 +362,12 @@ void KisPropertiesConfiguration::setPrefixedProperties(const QString &prefix, co
 void KisPropertiesConfiguration::setPrefixedProperties(const QString &prefix, const KisPropertiesConfigurationSP config)
 {
     setPrefixedProperties(prefix, config.data());
+}
+
+QString KisPropertiesConfiguration::extractedPrefixKey()
+{
+    static const QString key = "__extractedFromPrefix";
+    return key;
 }
 
 QString KisPropertiesConfiguration::escapeString(const QString &string)

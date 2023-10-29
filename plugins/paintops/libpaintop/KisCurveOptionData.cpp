@@ -8,26 +8,25 @@
 
 KisCurveOptionData::KisCurveOptionData(const QString &prefix,
                                        const KoID &id,
-                                       bool isCheckable,
-                                       bool isChecked,
-                                       qreal minValue,
-                                       qreal maxValue)
+                                       Checkability checkability,
+                                       std::optional<bool> isChecked,
+                                       const std::pair<qreal, qreal> &valueRange)
     : KisCurveOptionDataCommon(prefix,
                                id,
-                               isCheckable,
-                               isChecked,
-                               minValue,
-                               maxValue,
-                               new KisKritaSensorPack())
+                               checkability == Checkability::Checkable ||
+                                   (checkability == Checkability::CheckableIfHasPrefix && !prefix.isEmpty()),
+                               isChecked ? *isChecked : checkability == Checkability::NotCheckable,
+                               valueRange.first,
+                               valueRange.second,
+                               new KisKritaSensorPack(checkability))
 {
 }
 
 KisCurveOptionData::KisCurveOptionData(const KoID &id,
-                                       bool isCheckable,
-                                       bool isChecked,
-                                       qreal minValue,
-                                       qreal maxValue)
-    : KisCurveOptionData("", id, isCheckable, isChecked, minValue, maxValue)
+                                       Checkability checkability,
+                                       std::optional<bool> isChecked,
+                                       const std::pair<qreal, qreal> &valueRange)
+    : KisCurveOptionData("", id, checkability, isChecked, valueRange)
 {
 }
 

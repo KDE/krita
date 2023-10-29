@@ -58,7 +58,21 @@ struct PAINTOP_EXPORT KisKritaSensorData : boost::equality_comparable<KisKritaSe
 class PAINTOP_EXPORT KisKritaSensorPack : public KisSensorPackInterface
 {
 public:
-    KisKritaSensorPack() = default;
+    /**
+     * Some options make be uncheckable in normal situation, and become
+     * checkable when loaded from a prefix. E.g. Opacity, Flow and Size
+     * options of the masking brush. Such options will be marked with
+     * `CheckableIfHasPrefix` and their state will be deduced from the
+     * prefix.
+     */
+    enum class Checkability {
+        NotCheckable,
+        Checkable,
+        CheckableIfHasPrefix,
+    };
+
+public:
+    KisKritaSensorPack(Checkability checkability);
     KisKritaSensorPack(const KisKritaSensorPack &rhs) = default;
 
     KisSensorPackInterface * clone() const override;
@@ -77,6 +91,7 @@ public:
 
 private:
     KisKritaSensorData m_data;
+    Checkability m_checkability;
 };
 
 #endif // KISKRITASENSORPACK_H

@@ -10,7 +10,7 @@
 void KisCurveOptionDataTest::testCurveOptionData()
 {
     KisCurveOptionData data(KoID("Opacity"),
-                            false, true);
+                            KisCurveOptionData::Checkability::NotCheckable);
 
     KisCurveOptionData data2 = data;
 
@@ -51,7 +51,7 @@ void KisCurveOptionDataTest::testCurveOptionData()
 void KisCurveOptionDataTest::testSerializeDisabledSensors()
 {
     KisCurveOptionData data(KoID("Opacity"),
-                            false, true);
+                            KisCurveOptionData::Checkability::NotCheckable);
 
     // sensor is disabled!
     data.sensorStruct().sensorPressure.isActive = false;
@@ -61,13 +61,13 @@ void KisCurveOptionDataTest::testSerializeDisabledSensors()
     data.sensorStruct().sensorRotation.curve = "0.0,0.5;1,1;";
 
     KisCurveOptionData data2(KoID("Opacity"),
-                             KisPaintOpOption::GENERAL);
+                             KisCurveOptionData::Checkability::NotCheckable);
 
     data2 = data;
     QVERIFY(data == data2);
 
     data2 = KisCurveOptionData(KoID("Opacity"),
-                               KisPaintOpOption::GENERAL);
+                               KisCurveOptionData::Checkability::NotCheckable);
     QVERIFY(data != data2);
 
     KisPropertiesConfiguration config;
@@ -93,7 +93,7 @@ void KisCurveOptionDataTest::testSerializeDisabledSensors()
 void KisCurveOptionDataTest::testSerializeNoSensors()
 {
     KisCurveOptionData data(KoID("Opacity"),
-                            false, true);
+                            KisCurveOptionData::Checkability::NotCheckable);
 
     /**
      * When Krita loads a configuration with no sensors

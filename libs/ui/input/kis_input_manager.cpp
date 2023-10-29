@@ -333,8 +333,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
          */
         QWidget *receivingWidget = dynamic_cast<QWidget*>(d->eventsReceiver);
         if (receivingWidget && !receivingWidget->hasFocus()) {
-            qWarning() << "WARNING: Fix unfocused keys state";
-
             d->fixShortcutMatcherModifiersState();
         } else {
             /**
@@ -348,10 +346,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             if (event->type() != QEvent::ShortcutOverride &&
                 !d->matcher.sanityCheckModifiersCorrectness(inputEvent->modifiers())) {
 
-                qWarning() << "WARNING: modifiers state became inconsistent! Trying to fix that...";
-                qWarning() << "    " << ppVar(inputEvent->modifiers());
-                qWarning() << "    " << ppVar(d->matcher.debugPressedKeys());
-
                 d->fixShortcutMatcherModifiersState();
             } else if (d->matcher.hasPolledKeys()) {
                 /**
@@ -361,7 +355,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
                  * The other part of the fix is placed in the handler of ShortcutOverride,
                  * because it needs a custom set of the presset keys.
                  */
-                qWarning() << "WARNING: Fixing polled keys state";
                 d->fixShortcutMatcherModifiersState();
             }
         }
@@ -421,7 +414,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             if (!d->matcher.debugPressedKeys().contains(key)) {
                 guessedKeys.removeOne(key);
             }
-            qWarning() << "WARNING: fixing polled keys in ShortcutOverride";
+
             d->fixShortcutMatcherModifiersState(guessedKeys, modifiers);
             d->shouldSynchronizeOnNextKeyPress = false;
         }

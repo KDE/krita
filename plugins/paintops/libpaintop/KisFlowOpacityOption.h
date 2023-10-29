@@ -8,7 +8,6 @@
 
 #include "KisStandardOptions.h"
 #include "KisOpacityOption.h"
-#include "KisPaintingModeOptionData.h"
 
 class PAINTOP_EXPORT KisFlowOpacityOption2
 {

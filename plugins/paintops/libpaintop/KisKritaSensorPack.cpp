@@ -71,6 +71,11 @@ KisKritaSensorData::KisKritaSensorData()
     sensorPressure.isActive = true;
 }
 
+KisKritaSensorPack::KisKritaSensorPack(Checkability checkability)
+    : m_checkability(checkability)
+{
+}
+
 KisSensorPackInterface * KisKritaSensorPack::clone() const
 {
     return new KisKritaSensorPack(*this);
@@ -100,12 +105,18 @@ bool KisKritaSensorPack::compare(const KisSensorPackInterface *rhs) const
 {
     const KisKritaSensorPack *pack = dynamic_cast<const KisKritaSensorPack*>(rhs);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(pack, false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_checkability == pack->m_checkability, false);
 
     return m_data == pack->m_data;
 }
 
 bool KisKritaSensorPack::read(KisCurveOptionDataCommon &data, const KisPropertiesConfiguration *setting) const
 {
+    data.isCheckable = m_checkability == Checkability::Checkable ||
+        (m_checkability == Checkability::CheckableIfHasPrefix &&
+         (!data.prefix.isEmpty() ||
+          !setting->getString(KisPropertiesConfiguration::extractedPrefixKey()).isEmpty()));
+
     data.isChecked = !data.isCheckable || setting->getBool("Pressure" + data.id.id(), false);
 
     std::vector<KisSensorData*> sensors = data.sensors();

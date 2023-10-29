@@ -13,9 +13,9 @@
 namespace KisPaintOpOptionWidgetUtils {
 
 namespace detail {
-KisCurveOptionWidget *createOpacityOptionWidgetImpl(bool isCheckable, KisPaintOpOption::PaintopCategory category, const QString &prefix)
+KisCurveOptionWidget *createOpacityOptionWidgetImpl(KisPaintOpOption::PaintopCategory category, const QString &prefix)
 {
-    return createCurveOptionWidget(KisOpacityOptionData(isCheckable, prefix),
+    return createCurveOptionWidget(KisOpacityOptionData(prefix),
                                    category,
                                    i18n("Transparent"),
                                    i18n("Opaque"));
@@ -31,7 +31,7 @@ KisCurveOptionWidget *createRotationOptionWidgetImpl(KisPaintOpOption::PaintopCa
 
 KisCurveOptionWidget *createOpacityOptionWidget()
 {
-    return detail::createOpacityOptionWidgetImpl(false, KisPaintOpOption::GENERAL, "");
+    return detail::createOpacityOptionWidgetImpl(KisPaintOpOption::GENERAL, "");
 }
 
 KisCurveOptionWidget *createFlowOptionWidget()
@@ -184,12 +184,12 @@ KisCurveOptionWidget *createStrengthOptionWidget()
 
 KisCurveOptionWidget *createMaskingOpacityOptionWidget()
 {
-    return detail::createOpacityOptionWidgetImpl(true, KisPaintOpOption::MASKING_BRUSH, KisPaintOpUtils::MaskingBrushPresetPrefix);
+    return detail::createOpacityOptionWidgetImpl(KisPaintOpOption::MASKING_BRUSH, KisPaintOpUtils::MaskingBrushPresetPrefix);
 }
 
 KisCurveOptionWidget *createMaskingFlowOptionWidget()
 {
-    return createCurveOptionWidget(KisFlowOptionData(true, KisPaintOpUtils::MaskingBrushPresetPrefix),
+    return createCurveOptionWidget(KisFlowOptionData(KisPaintOpUtils::MaskingBrushPresetPrefix),
                                    KisPaintOpOption::MASKING_BRUSH);
 }
 

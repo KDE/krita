@@ -9,8 +9,8 @@
 KisSmudgeRadiusOptionData::KisSmudgeRadiusOptionData()
     : KisCurveOptionData(
           KoID("SmudgeRadius", i18n("Smudge Radius")),
-          true, false,
-          0.0, 3.0)
+          Checkability::Checkable, std::nullopt,
+          std::make_pair(0.0, 3.0))
 {
     valueFixUpReadCallback = [] (KisCurveOptionDataCommon *data, const KisPropertiesConfiguration *setting) {
         const int smudgeRadiusVersion = setting->getInt("SmudgeRadiusVersion", 1);

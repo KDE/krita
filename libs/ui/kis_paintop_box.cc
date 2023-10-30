@@ -37,6 +37,7 @@
 
 #include <KoResource.h>
 #include <KisDirtyStateSaver.h>
+#include <KisDoubleSpinBoxPluralHelper.h>
 
 #include <kis_paint_device.h>
 #include <brushengine/kis_paintop_registry.h>
@@ -278,7 +279,9 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
         slOpacity->setRange(0, 100, 0);
         slOpacity->setValue(100);
         slOpacity->setSingleStep(5);
-        slOpacity->setSuffix(i18n("%"));
+        KisDoubleSpinBoxPluralHelper::install(slOpacity, [](double value) {
+            return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+        });
         slOpacity->setMinimumWidth(qMax(sliderWidth, slOpacity->sizeHint().width()));
         slOpacity->setFixedHeight(buttonsize);
         slOpacity->setBlockUpdateSignalOnDrag(true);
@@ -286,7 +289,9 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
         slFlow->setRange(0, 100, 0);
         slFlow->setValue(100);
         slFlow->setSingleStep(5);
-        slFlow->setSuffix(i18n("%"));
+        KisDoubleSpinBoxPluralHelper::install(slFlow, [](double value) {
+            return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+        });
         slFlow->setMinimumWidth(qMax(sliderWidth, slFlow->sizeHint().width()));
         slFlow->setFixedHeight(buttonsize);
         slFlow->setBlockUpdateSignalOnDrag(true);

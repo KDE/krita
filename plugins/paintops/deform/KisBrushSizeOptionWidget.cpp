@@ -8,6 +8,7 @@
 #include <lager/constant.hpp>
 #include "ui_wdgBrushSizeOptions.h"
 
+#include <KisDoubleSpinBoxPluralHelper.h>
 #include "KisBrushSizeOptionModel.h"
 
 namespace {
@@ -40,7 +41,9 @@ public:
 
 
         densityBox->setRange(0.0, 100.0, 0);
-        densityBox->setSuffix(i18n("%"));
+        KisDoubleSpinBoxPluralHelper::install(densityBox, [](double value) {
+            return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+        });
 
 
         jitterMove->setRange(0.0, 5.0, 2);

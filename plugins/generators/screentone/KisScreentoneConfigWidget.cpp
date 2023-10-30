@@ -14,6 +14,7 @@
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <KisSpinBoxPluralHelper.h>
+#include <KisDoubleSpinBoxPluralHelper.h>
 #include <KoUnit.h>
 
 #include "KisScreentoneConfigWidget.h"
@@ -35,17 +36,23 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     m_ui.buttonEqualizationTemplateBased->setGroupPosition(KoGroupButton::GroupRight);
 
     m_ui.sliderForegroundOpacity->setRange(0, 100);
-    m_ui.sliderForegroundOpacity->setPrefix(i18n("Opacity: "));
-    m_ui.sliderForegroundOpacity->setSuffix(i18n("%"));
+    KisSpinBoxPluralHelper::install(m_ui.sliderForegroundOpacity, [](int value) {
+        return i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%", value);
+    });
     m_ui.sliderBackgroundOpacity->setRange(0, 100);
-    m_ui.sliderBackgroundOpacity->setPrefix(i18n("Opacity: "));
-    m_ui.sliderBackgroundOpacity->setSuffix(i18n("%"));
+    KisSpinBoxPluralHelper::install(m_ui.sliderBackgroundOpacity, [](int value) {
+        return i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%", value);
+    });
     m_ui.sliderBrightness->setRange(0.0, 100.0, 2);
     m_ui.sliderBrightness->setSingleStep(1.0);
-    m_ui.sliderBrightness->setSuffix(i18n("%"));
+    KisDoubleSpinBoxPluralHelper::install(m_ui.sliderBrightness, [](double value) {
+        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+    });
     m_ui.sliderContrast->setRange(0.0, 100.0, 2);
     m_ui.sliderContrast->setSingleStep(1.0);
-    m_ui.sliderContrast->setSuffix(i18n("%"));
+    KisDoubleSpinBoxPluralHelper::install(m_ui.sliderContrast, [](double value) {
+        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+    });
 
     m_ui.buttonSizeModeResolutionBased->setGroupPosition(KoGroupButton::GroupLeft);
     m_ui.buttonSizeModePixelBased->setGroupPosition(KoGroupButton::GroupRight);

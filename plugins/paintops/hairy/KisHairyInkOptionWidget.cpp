@@ -10,6 +10,7 @@
 
 #include "KisHairyInkOptionModel.h"
 #include "KisCurveWidgetConnectionHelper.h"
+#include <KisSpinBoxPluralHelper.h>
 
 namespace {
 
@@ -21,16 +22,24 @@ public:
         setupUi(this);
 
         pressureSlider->setRange(0, 100, 0);
-        pressureSlider->setSuffix(i18n("%"));
+        KisSpinBoxPluralHelper::install(pressureSlider, [](int value) {
+            return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+        });
 
         bristleLengthSlider->setRange(0, 100, 0);
-        bristleLengthSlider->setSuffix(i18n("%"));
+        KisSpinBoxPluralHelper::install(bristleLengthSlider, [](int value) {
+            return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+        });
 
         bristleInkAmountSlider->setRange(0, 100, 0);
-        bristleInkAmountSlider->setSuffix(i18n("%"));
+        KisSpinBoxPluralHelper::install(bristleInkAmountSlider, [](int value) {
+            return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+        });
 
         inkDepletionSlider->setRange(0, 100, 0);
-        inkDepletionSlider->setSuffix(i18n("%"));
+        KisSpinBoxPluralHelper::install(inkDepletionSlider, [](int value) {
+            return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+        });
     }
 };
 

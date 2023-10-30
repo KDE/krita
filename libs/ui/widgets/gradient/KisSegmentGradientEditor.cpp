@@ -25,6 +25,7 @@
 
 #include <kis_icon_utils.h>
 #include <kis_signals_blocker.h>
+#include <KisDoubleSpinBoxPluralHelper.h>
 
 #include "KisSegmentGradientEditor.h"
 
@@ -158,11 +159,13 @@ KisSegmentGradientEditor::KisSegmentGradientEditor(QWidget *parent)
     constrainStopButton->setKeepAspectRatio(false);
     constrainStopButton->setToolTip(i18nc("Button to link both end colors of a stop handle in the segment gradient editor", "Link colors"));
     stopPositionSlider->setRange(0, 100, 2);
-    stopPositionSlider->setPrefix(i18n("Position: "));
-    stopPositionSlider->setSuffix(i18n("%"));
+    KisDoubleSpinBoxPluralHelper::install(stopPositionSlider, [](double value) {
+        return i18nc("{n} is the number value, % is the percent sign", "Position: {n}%", value);
+    });
     midPointPositionSlider->setRange(0, 100, 2);
-    midPointPositionSlider->setPrefix(i18n("Position: "));
-    midPointPositionSlider->setSuffix(i18n("%"));
+    KisDoubleSpinBoxPluralHelper::install(midPointPositionSlider, [](double value) {
+        return i18nc("{n} is the number value, % is the percent sign", "Position: {n}%", value);
+    });
 
     setCompactMode(false);
     setGradient(0);

@@ -22,6 +22,7 @@
 #include "kis_action.h"
 #include <KoColorSpaceRegistry.h>
 #include "KisMainWindow.h"
+#include <KisDoubleSpinBoxPluralHelper.h>
 
 #include "kis_equalizer_widget.h"
 #include "kis_color_label_button.h"
@@ -43,8 +44,9 @@ KisOnionSkinsDocker::KisOnionSkinsDocker(QWidget *parent) :
 
     ui->doubleTintFactor->setMinimum(0);
     ui->doubleTintFactor->setMaximum(100);
-    ui->doubleTintFactor->setPrefix(i18n("Tint: "));
-    ui->doubleTintFactor->setSuffix(i18n("%"));
+    KisDoubleSpinBoxPluralHelper::install(ui->doubleTintFactor, [](double value) {
+        return i18nc("{n} is the number value, % is the percent sign", "Tint: {n}%", value);
+    });
 
     ui->btnBackwardColor->setToolTip(i18n("Tint color for past frames"));
     ui->btnForwardColor->setToolTip(i18n("Tint color for future frames"));

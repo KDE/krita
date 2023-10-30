@@ -592,10 +592,10 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
                     return QString(compositeOpDesc);
                 }
                 if (compositeOpId == defaultOpId) {
-                    return QString("%1%2").arg(opacityString).arg(i18n("%"));
+                    return i18nc("%1 is the percent value, % is the percent sign", "%1%", opacityString);
                 }
             }
-            infoText = QString("%1%2 %3").arg(opacityString).arg(i18n("%")).arg(compositeOpDesc);
+            infoText = i18nc("%1 is the percent value, % is the percent sign", "%1% %2", opacityString, compositeOpDesc);
         }
         return infoText;
     }

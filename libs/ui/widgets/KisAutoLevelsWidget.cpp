@@ -7,13 +7,16 @@
  */
 
 #include "KisAutoLevelsWidget.h"
+#include <KisDoubleSpinBoxPluralHelper.h>
 
 KisAutoLevelsWidget::KisAutoLevelsWidget(QWidget *parent)
     : QWidget(parent)
 {
     m_ui.setupUi(this);
 
-    m_ui.sliderShadowsClipping->setSuffix(i18n("%"));
+    KisDoubleSpinBoxPluralHelper::install(m_ui.sliderShadowsClipping, [](double value) {
+        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+    });
     m_ui.sliderShadowsClipping->setRange(0.0, 10.0, 2);
     m_ui.sliderShadowsClipping->setValue(0.1);
     m_ui.sliderShadowsClipping->setSingleStep(0.1);

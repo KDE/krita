@@ -18,6 +18,7 @@
 
 #include <KoColorSpace.h>
 
+#include <KisSpinBoxPluralHelper.h>
 #include "KisViewManager.h"
 #include <kis_debug.h>
 #include <kis_global.h>
@@ -94,7 +95,9 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
     connect(d->page->editName, SIGNAL(textChanged(QString)), SLOT(slotNameValueChangedExternally()));
 
     d->page->intOpacity->setRange(0, 100);
-    d->page->intOpacity->setSuffix(i18n("%"));
+    KisSpinBoxPluralHelper::install(d->page->intOpacity, [](int value) {
+        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+    });
     d->opacityProperty.reset(new KisMultinodeOpacityProperty(nodes));
     d->opacityProperty->connectIgnoreCheckBox(d->page->chkOpacity);
     d->opacityProperty->connectAutoEnableWidget(d->page->intOpacity);

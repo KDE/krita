@@ -9,7 +9,7 @@
 KisSizeOptionData::KisSizeOptionData(const QString &prefix)
     : KisCurveOptionData(prefix,
           KoID("Size", i18n("Size")),
-          Checkability::CheckableIfHasPrefix)
+          Checkability::Checkable)
 {
 }
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-25 02:40+0000\n"
+"POT-Creation-Date: 2023-10-30 02:25+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -45465,7 +45465,7 @@ msgstr "Тўйинтириш"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:226
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:29
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:86
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:85
 #, fuzzy, kde-format
 msgid "Hue"
 msgstr "Ранг туси"
@@ -45475,7 +45475,7 @@ msgstr "Ранг туси"
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:33
 #: plugins/paintops/hairy/wdghairyeoptions.ui:314
 #: plugins/paintops/hairy/wdgInkOptions.ui:75
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:94
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:93
 #, fuzzy, kde-format
 msgid "Saturation"
 msgstr "Тўйинтириш"
@@ -52334,13 +52334,13 @@ msgid "Value"
 msgstr "Кўк"
 
 #: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:15
-#: plugins/paintops/sketch/KisSketchStandardOptionData.h:25
+#: plugins/paintops/sketch/KisSketchStandardOptionData.h:23
 #, fuzzy, kde-format
 #| msgid "Line width:"
 msgid "Line width"
 msgstr "Чизиқнинг эни:"
 
-#: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:25
+#: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:26
 #, fuzzy, kde-format
 msgid "Curves opacity"
 msgstr "Скрипт"
@@ -53080,13 +53080,13 @@ msgid "Hatching Angle"
 msgstr "Бетга мослаш"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:128
-#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:36
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:32
 #, fuzzy, kde-format
 msgid "Separation"
 msgstr "Тўйинтириш"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:158
-#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:46
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:42
 #, fuzzy, kde-format
 msgid "Thickness"
 msgstr "Тўлқин"
@@ -53107,7 +53107,7 @@ msgstr "Қоидадан ташқари ҳолат"
 msgid "Hatching preferences"
 msgstr "Бетга мослаш"
 
-#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:26
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:24
 #, fuzzy, kde-format
 msgid "Crosshatching"
 msgstr "Рўйхатнинг турини ўзгартириш"
@@ -54288,13 +54288,13 @@ msgstr "Тўлқин"
 msgid "Soften edge:"
 msgstr "Филтерни танлаш"
 
-#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:25
+#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:23
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fuzzy (sensor)"
 msgstr ""
 
-#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:29
+#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:27
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fade (sensor)"
@@ -54415,56 +54415,56 @@ msgctxt "Higher HSV brightness"
 msgid "Higher value"
 msgstr "Оч кулранг"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:41
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:40
 #, fuzzy, kde-format
 #| msgid "Completion"
 msgid "Ratio"
 msgstr "Тўлдириш"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:50
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:49
 #, fuzzy, kde-format
 #| msgid "Choose Filter"
 msgid "Softness"
 msgstr "Филтерни танлаш"
 
 #. i18n: ectx: property (title), widget (QGroupBox, rotationGroup)
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:61
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:60
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:739
 #, fuzzy, kde-format
 msgid "Rotation"
 msgstr "Тўйинтириш"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:70
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:69
 #, fuzzy, kde-format
 #| msgid "Date"
 msgid "Darken"
 msgstr "Сана"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:78
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:77
 #, kde-format
 msgctxt "Mixing of colors"
 msgid "Mix"
 msgstr ""
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:102
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:101
 #, fuzzy, kde-format
 #| msgid "Blue"
 msgctxt "Label of Brightness value in Color Smudge brush engine options"
 msgid "Value"
 msgstr "Кўк"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:110
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:109
 #, fuzzy, kde-format
 msgid "Rate"
 msgstr "Сана:"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:118
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:117
 #, fuzzy, kde-format
 #| msgid "Street:"
 msgid "Strength"
 msgstr "Кўча:"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:126
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:125
 #, fuzzy, kde-format
 msgid "Lightness Strength"
 msgstr "Оч кулранг"
@@ -54967,7 +54967,7 @@ msgstr ""
 msgid "Offset scale"
 msgstr "Соя:"
 
-#: plugins/paintops/sketch/KisSketchStandardOptionData.h:35
+#: plugins/paintops/sketch/KisSketchStandardOptionData.h:31
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:158
 #, fuzzy, kde-format
 #| msgid "City:"

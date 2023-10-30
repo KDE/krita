@@ -27,6 +27,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+constexpr qreal SHAPE_PRECISION = 1e-6; ///< Value that indcates the precision for testing coordinates for text-in-shape layout.
+
 class KoPathShape;
 struct raqm_glyph_t;
 
@@ -242,16 +244,20 @@ struct LineBox {
         for (int i=0; i<chunks.size(); i++) {
             LineChunk chunk = chunks.at(i);
             if (isHorizontal) {
-                if ((pos.x() < qMax(chunk.length.p1().x(), chunk.length.p2().x())) &&
-                        (pos.x() >= qMin(chunk.length.p1().x(), chunk.length.p2().x()))) {
+                qreal min = qMin(chunk.length.p1().x(), chunk.length.p2().x()) - SHAPE_PRECISION;
+                qreal max = qMax(chunk.length.p1().x(), chunk.length.p2().x()) + SHAPE_PRECISION;
+                if ((pos.x() < max) &&
+                        (pos.x() >= min)) {
                         currentChunk = i;
                         break;
                 }
             } else {
-                if ((pos.y() < qMax(chunk.length.p1().y(), chunk.length.p2().y())) &&
-                        (pos.y() >= qMin(chunk.length.p1().y(), chunk.length.p2().y()))) {
-                        currentChunk = i;
-                        break;
+                qreal min = qMin(chunk.length.p1().y(), chunk.length.p2().y()) - SHAPE_PRECISION;
+                qreal max = qMax(chunk.length.p1().y(), chunk.length.p2().y()) + SHAPE_PRECISION;
+                if ((pos.y() < max) &&
+                        (pos.y() >= min)) {
+                    currentChunk = i;
+                    break;
                 }
             }
         }

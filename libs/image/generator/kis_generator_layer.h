@@ -78,7 +78,7 @@ public:
     void setX(qint32 x) override;
     void setY(qint32 y) override;
 
-    void resetCache() override;
+    void resetCache(const KoColorSpace *colorSpace) override;
 
     void forceUpdateTimedNode() override;
     bool hasPendingTimedUpdates() const override;
@@ -94,7 +94,7 @@ private:
     /**
      * Resets the projection cache without triggering the update job.
      */
-    void resetCacheWithoutUpdate();
+    void resetCacheWithoutUpdate(const KoColorSpace *colorSpace);
 
 public:
     // KisIndirectPaintingSupport

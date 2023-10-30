@@ -93,7 +93,7 @@ public:
 
     // KisExternalLayer implementation
     QIcon icon() const override;
-    void resetCache() override;
+    void resetCache(const KoColorSpace *colorSpace) override;
 
     KisPaintDeviceSP original() const override;
     KisPaintDeviceSP paintDevice() const override;

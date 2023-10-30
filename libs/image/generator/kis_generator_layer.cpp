@@ -123,7 +123,7 @@ void KisGeneratorLayer::requestUpdateJobsWithStroke(KisStrokeId strokeId, KisFil
 
     if (filterConfig != m_d->preparedForFilter) {
         locker.unlock();
-        resetCacheWithoutUpdate();
+        resetCacheWithoutUpdate(this->paintDevice()->colorSpace());
         locker.relock();
     }
 
@@ -225,9 +225,9 @@ void KisGeneratorLayer::setY(qint32 y)
     m_d->updateSignalCompressor.start();
 }
 
-void KisGeneratorLayer::resetCache()
+void KisGeneratorLayer::resetCache(const KoColorSpace *colorSpace)
 {
-    resetCacheWithoutUpdate();
+    resetCacheWithoutUpdate(colorSpace);
     m_d->updateSignalCompressor.start();
 }
 
@@ -246,9 +246,9 @@ bool KisGeneratorLayer::hasPendingTimedUpdates() const
     return m_d->updateSignalCompressor.isActive();
 }
 
-void KisGeneratorLayer::resetCacheWithoutUpdate()
+void KisGeneratorLayer::resetCacheWithoutUpdate(const KoColorSpace *colorSpace)
 {
-    KisSelectionBasedLayer::resetCache();
+    KisSelectionBasedLayer::resetCache(colorSpace);
     {
         QMutexLocker locker(&m_d->mutex);
         m_d->preparedRect = QRect();

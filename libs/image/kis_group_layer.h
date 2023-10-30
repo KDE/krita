@@ -46,7 +46,7 @@ public:
     /**
      * Clear the projection
      */
-    void resetCache(const KoColorSpace *colorSpace = 0);
+    void resetCache(const KoColorSpace *colorSpace);
 
     /**
      * XXX: make the colorspace of a layergroup user-settable: we want

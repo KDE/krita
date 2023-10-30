@@ -47,7 +47,7 @@ public:
 
     bool hasChangedWhileBeingInvisible();
     virtual void rerenderAfterBeingInvisible() = 0;
-    virtual void resetCache() = 0;
+    virtual void resetCache(const KoColorSpace *colorSpace) = 0;
 
     KoShapeManager *shapeManager() const override;
     const KoViewConverter *viewConverter() const override;
@@ -100,7 +100,7 @@ public:
 
     void forceRepaintWithHiddenAreas() override;
 
-    void resetCache() override;
+    void resetCache(const KoColorSpace *colorSpace = 0) override;
     void rerenderAfterBeingInvisible() override;
 
 

@@ -33,7 +33,7 @@ public:
         return KisIconUtils::loadIcon("view-refresh");
     }
 
-    virtual void resetCache();
+    virtual void resetCache(const KoColorSpace *colorSpace = 0);
 
     virtual KUndo2Command* crop(const QRect & rect) {
         Q_UNUSED(rect);

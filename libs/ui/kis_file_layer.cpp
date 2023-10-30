@@ -95,8 +95,9 @@ QIcon KisFileLayer::icon() const
     return KisIconUtils::loadIcon("fileLayer");
 }
 
-void KisFileLayer::resetCache()
+void KisFileLayer::resetCache(const KoColorSpace *colorSpace)
 {
+    Q_UNUSED(colorSpace);
     m_loader.reloadImage();
 }
 

@@ -43,7 +43,7 @@ template <class LayerType>
 struct ResetOp
 {
     void operator() (LayerType layer) {
-        layer->resetCache();
+        layer->resetCache(layer->colorSpace());
     }
 };
 

@@ -664,9 +664,9 @@ bool KisShapeLayer::loadLayer(KoStore* store, QStringList *warnings)
 
 }
 
-void KisShapeLayer::resetCache()
+void KisShapeLayer::resetCache(const KoColorSpace *colorSpace)
 {
-    m_d->canvas->resetCache();
+    m_d->canvas->resetCache(colorSpace);
 }
 
 KUndo2Command* KisShapeLayer::crop(const QRect & rect)

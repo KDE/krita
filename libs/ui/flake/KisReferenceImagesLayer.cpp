@@ -128,7 +128,10 @@ public:
     }
 
     void rerenderAfterBeingInvisible() override {}
-    void resetCache() override {}
+
+    void resetCache(const KoColorSpace *colorSpace) override { 
+        Q_UNUSED(colorSpace); 
+    }
 
     KisPaintDeviceSP projection() const override {
         return m_fallbackProjection;

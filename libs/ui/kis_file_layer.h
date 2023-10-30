@@ -42,7 +42,7 @@ public:
 
     QIcon icon() const override;
 
-    void resetCache() override;
+    void resetCache(const KoColorSpace *colorSpace = 0) override;
 
     KisPaintDeviceSP original() const override;
     KisPaintDeviceSP paintDevice() const override;

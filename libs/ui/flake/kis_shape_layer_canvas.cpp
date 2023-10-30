@@ -532,8 +532,9 @@ void KisShapeLayerCanvas::forceRepaintWithHiddenAreas()
     m_safeForcedConnection.start();
 }
 
-void KisShapeLayerCanvas::resetCache()
+void KisShapeLayerCanvas::resetCache(const KoColorSpace *colorSpace)
 {
+    Q_UNUSED(colorSpace);
     m_projection->clear();
 
     QList<KoShape*> shapes = m_shapeManager->shapes();

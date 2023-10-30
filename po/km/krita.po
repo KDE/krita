@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-28 00:41+0000\n"
+"POT-Creation-Date: 2023-10-30 00:41+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -17006,7 +17006,9 @@ msgstr "ទំហំ"
 #: plugins/tools/basictools/kis_tool_fill.cc:588
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
-#: plugins/tools/basictools/kis_tool_multihand.cpp:451
+#: plugins/tools/basictools/kis_tool_multihand.cpp:486
+#: plugins/tools/basictools/kis_tool_multihand.cpp:497
+#: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
@@ -32652,7 +32654,7 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
 #: plugins/tools/basictools/kis_tool_line.cc:293
-#: plugins/tools/basictools/kis_tool_multihand.cpp:499
+#: plugins/tools/basictools/kis_tool_multihand.cpp:550
 #, kde-format
 msgid ""
 "X: %1 px\n"
@@ -44285,7 +44287,7 @@ msgstr "មិន​ជ្រាប"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:226
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:29
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:86
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:85
 #, kde-format
 msgid "Hue"
 msgstr "ភាព​លាំៗ​នៃ​ពណ៌"
@@ -44295,7 +44297,7 @@ msgstr "ភាព​លាំៗ​នៃ​ពណ៌"
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:33
 #: plugins/paintops/hairy/wdghairyeoptions.ui:314
 #: plugins/paintops/hairy/wdgInkOptions.ui:75
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:94
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:93
 #, kde-format
 msgid "Saturation"
 msgstr "តិត្ថិភាព"
@@ -50927,12 +50929,12 @@ msgid "Value"
 msgstr "តម្លៃ"
 
 #: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:15
-#: plugins/paintops/sketch/KisSketchStandardOptionData.h:25
+#: plugins/paintops/sketch/KisSketchStandardOptionData.h:23
 #, kde-format
 msgid "Line width"
 msgstr "ទទឹង​ជួរ"
 
-#: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:25
+#: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:26
 #, fuzzy, kde-format
 msgid "Curves opacity"
 msgstr "មើល​ជា​មុន ៖ "
@@ -51635,13 +51637,13 @@ msgid "Hatching Angle"
 msgstr "សរសៃ​ជក់"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:128
-#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:36
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:32
 #, kde-format
 msgid "Separation"
 msgstr "តិត្ថិភាព"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:158
-#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:46
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:42
 #, kde-format
 msgid "Thickness"
 msgstr "កម្រាស"
@@ -51662,7 +51664,7 @@ msgstr "សរសៃ​ជក់"
 msgid "Hatching preferences"
 msgstr "សរសៃ​ជក់"
 
-#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:26
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:24
 #, kde-format
 msgid "Crosshatching"
 msgstr "​ខ្វែង"
@@ -52823,13 +52825,13 @@ msgstr "ភាព​ច្បាស់ ៖​"
 msgid "Soften edge:"
 msgstr "ភាព​ស្រទន់"
 
-#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:25
+#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:23
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fuzzy (sensor)"
 msgstr ""
 
-#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:29
+#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:27
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fade (sensor)"
@@ -52952,53 +52954,53 @@ msgctxt "Higher HSV brightness"
 msgid "Higher value"
 msgstr "តម្លៃ​ពន្លឺ ៖"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:41
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:40
 #, kde-format
 msgid "Ratio"
 msgstr "សមាមាត្រ​ ៖​"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:50
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:49
 #, kde-format
 msgid "Softness"
 msgstr "ភាព​ស្រទន់"
 
 #. i18n: ectx: property (title), widget (QGroupBox, rotationGroup)
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:61
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:60
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:739
 #, kde-format
 msgid "Rotation"
 msgstr "​បង្វិល"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:70
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:69
 #, kde-format
 msgid "Darken"
 msgstr "ធ្វើ​ឲ្យ​ងងឹត​"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:78
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:77
 #, fuzzy, kde-format
 #| msgid "Mix"
 msgctxt "Mixing of colors"
 msgid "Mix"
 msgstr "លាយ"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:102
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:101
 #, fuzzy, kde-format
 #| msgid "Value"
 msgctxt "Label of Brightness value in Color Smudge brush engine options"
 msgid "Value"
 msgstr "តម្លៃ"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:110
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:109
 #, kde-format
 msgid "Rate"
 msgstr "អត្រា"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:118
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:117
 #, fuzzy, kde-format
 msgid "Strength"
 msgstr "កម្លាំង ៖"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:126
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:125
 #, fuzzy, kde-format
 msgid "Lightness Strength"
 msgstr "ភាព​ភ្លឺ"
@@ -53495,7 +53497,7 @@ msgstr ""
 msgid "Offset scale"
 msgstr "មាត្រដ្ឋាន​អុហ្វសិត"
 
-#: plugins/paintops/sketch/KisSketchStandardOptionData.h:35
+#: plugins/paintops/sketch/KisSketchStandardOptionData.h:31
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:168
 #, kde-format
 msgid "Density"
@@ -57235,40 +57237,51 @@ msgstr ""
 msgid "Move Tool"
 msgstr "ឧបករណ៍​របស់​កម្មវិធី​គូរ"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:53
+#: plugins/tools/basictools/kis_tool_multihand.cpp:57
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "ជក់"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:419
+#: plugins/tools/basictools/kis_tool_multihand.cpp:454
 #, fuzzy, kde-format
 msgid "Symmetry"
 msgstr "ជម្រើស​ធរណីមាត្រ"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:420
+#: plugins/tools/basictools/kis_tool_multihand.cpp:455
 #, fuzzy, kde-format
 #| msgid "Mirror"
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "ឆ្លុះ"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:421
+#: plugins/tools/basictools/kis_tool_multihand.cpp:456
 #, fuzzy, kde-format
 msgid "Translate"
 msgstr "ត្រីកោណ"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:422
+#: plugins/tools/basictools/kis_tool_multihand.cpp:457
 #, kde-format
 msgid "Snowflake"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:423
+#: plugins/tools/basictools/kis_tool_multihand.cpp:458
 #, fuzzy, kde-format
 msgid "Copy Translate"
 msgstr "ត្រីកោណ"
 
-#: plugins/tools/basictools/kis_tool_multihand.h:91
+#: plugins/tools/basictools/kis_tool_multihand.cpp:459
+#, fuzzy, kde-format
+msgid "Copy Translate at Intervals"
+msgstr "ត្រីកោណ"
+
+#: plugins/tools/basictools/kis_tool_multihand.cpp:570
+#, kde-format
+msgid ""
+"Multibrush Tool does not support more than %1 brushes; use a larger interval."
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_multihand.h:97
 #, fuzzy, kde-format
 msgid "Multibrush Tool"
 msgstr "ជក់"
@@ -57656,6 +57669,18 @@ msgstr "បន្ថែម​ស្រទាប់​"
 #, fuzzy, kde-format
 msgid "Remove All"
 msgstr "យក​ជក់​ចេញ"
+
+#. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
+#: plugins/tools/basictools/wdgmultihandtool.ui:250
+#, fuzzy, kde-format
+msgid "Interval X:"
+msgstr "ត្របាញ់"
+
+#. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
+#: plugins/tools/basictools/wdgmultihandtool.ui:263
+#, fuzzy, kde-format
+msgid "Interval Y:"
+msgstr "ត្របាញ់"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:744
 #, kde-format

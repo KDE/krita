@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-28 00:41+0000\n"
-"PO-Revision-Date: 2023-10-27 11:07+0200\n"
+"POT-Creation-Date: 2023-10-30 00:41+0000\n"
+"PO-Revision-Date: 2023-10-29 10:27+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -16765,7 +16765,9 @@ msgstr "Velikost"
 #: plugins/tools/basictools/kis_tool_fill.cc:588
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
-#: plugins/tools/basictools/kis_tool_multihand.cpp:451
+#: plugins/tools/basictools/kis_tool_multihand.cpp:486
+#: plugins/tools/basictools/kis_tool_multihand.cpp:497
+#: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
@@ -32613,7 +32615,7 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
 #: plugins/tools/basictools/kis_tool_line.cc:293
-#: plugins/tools/basictools/kis_tool_multihand.cpp:499
+#: plugins/tools/basictools/kis_tool_multihand.cpp:550
 #, kde-format
 msgid ""
 "X: %1 px\n"
@@ -37057,12 +37059,12 @@ msgid "Concentric Ellipse"
 msgstr "Koncentrična elipsa"
 
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "Curvilinear Perspective assistant"
 msgstr "Pomočnik za ukrivljeno perspektivo"
 
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
-#, fuzzy, kde-format
+#, kde-format
 msgid "Curvilinear Perspective"
 msgstr "Ukrivljena perspektiva"
 
@@ -44399,7 +44401,7 @@ msgstr "Zmanjšaj nasičenost"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:226
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:29
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:86
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:85
 #, kde-format
 msgid "Hue"
 msgstr "Odtenek"
@@ -44409,7 +44411,7 @@ msgstr "Odtenek"
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:33
 #: plugins/paintops/hairy/wdghairyeoptions.ui:314
 #: plugins/paintops/hairy/wdgInkOptions.ui:75
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:94
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:93
 #, kde-format
 msgid "Saturation"
 msgstr "Nasičenost"
@@ -51285,12 +51287,12 @@ msgid "Value"
 msgstr "Vrednost"
 
 #: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:15
-#: plugins/paintops/sketch/KisSketchStandardOptionData.h:25
+#: plugins/paintops/sketch/KisSketchStandardOptionData.h:23
 #, kde-format
 msgid "Line width"
 msgstr "Širina črte"
 
-#: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:25
+#: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:26
 #, kde-format
 msgid "Curves opacity"
 msgstr "Prekrivnost krivulj"
@@ -51989,13 +51991,13 @@ msgid "Hatching Angle"
 msgstr "Kot šrafiranja"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:128
-#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:36
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:32
 #, kde-format
 msgid "Separation"
 msgstr "Ločevanje"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:158
-#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:46
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:42
 #, kde-format
 msgid "Thickness"
 msgstr "Debelina"
@@ -52016,7 +52018,7 @@ msgstr "Možnosti šrafiranja"
 msgid "Hatching preferences"
 msgstr "Nastavitve šrafiranja"
 
-#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:26
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:24
 #, kde-format
 msgid "Crosshatching"
 msgstr "Navzkrižno šrafiranje"
@@ -53194,13 +53196,13 @@ msgstr "Ostrina"
 msgid "Soften edge:"
 msgstr "Zmehčaj rob:"
 
-#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:25
+#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:23
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fuzzy (sensor)"
 msgstr "Velikost -> nejasno (tipalo)"
 
-#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:29
+#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:27
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fade (sensor)"
@@ -53319,51 +53321,51 @@ msgctxt "Higher HSV brightness"
 msgid "Higher value"
 msgstr "Višja vrednost"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:41
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:40
 #, kde-format
 msgid "Ratio"
 msgstr "Razmerje"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:50
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:49
 #, kde-format
 msgid "Softness"
 msgstr "Mehkoba"
 
 #. i18n: ectx: property (title), widget (QGroupBox, rotationGroup)
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:61
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:60
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:739
 #, kde-format
 msgid "Rotation"
 msgstr "Vrtenje"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:70
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:69
 #, kde-format
 msgid "Darken"
 msgstr "Potemni"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:78
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:77
 #, kde-format
 msgctxt "Mixing of colors"
 msgid "Mix"
 msgstr "Mešano"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:102
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:101
 #, kde-format
 msgctxt "Label of Brightness value in Color Smudge brush engine options"
 msgid "Value"
 msgstr "Vrednost"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:110
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:109
 #, kde-format
 msgid "Rate"
 msgstr "Razmerje"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:118
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:117
 #, kde-format
 msgid "Strength"
 msgstr "Jakost"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:126
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:125
 #, kde-format
 msgid "Lightness Strength"
 msgstr "Moč svetlosti"
@@ -53827,7 +53829,7 @@ msgstr "Skicirni čopič (razlike pri povezovanju črt so možne)"
 msgid "Offset scale"
 msgstr "Odmik merila"
 
-#: plugins/paintops/sketch/KisSketchStandardOptionData.h:35
+#: plugins/paintops/sketch/KisSketchStandardOptionData.h:31
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:168
 #, kde-format
 msgid "Density"
@@ -57322,38 +57324,50 @@ msgstr "Izbrano območje nima slikovnih točk"
 msgid "Move Tool"
 msgstr "Orodje Premakni"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:53
+#: plugins/tools/basictools/kis_tool_multihand.cpp:57
 msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "Poteza več čopičev"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:419
+#: plugins/tools/basictools/kis_tool_multihand.cpp:454
 #, kde-format
 msgid "Symmetry"
 msgstr "Simetrija"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:420
+#: plugins/tools/basictools/kis_tool_multihand.cpp:455
 #, kde-format
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "Zrcali"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:421
+#: plugins/tools/basictools/kis_tool_multihand.cpp:456
 #, kde-format
 msgid "Translate"
 msgstr "Premakni"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:422
+#: plugins/tools/basictools/kis_tool_multihand.cpp:457
 #, kde-format
 msgid "Snowflake"
 msgstr "Snežinka"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:423
+#: plugins/tools/basictools/kis_tool_multihand.cpp:458
 #, kde-format
 msgid "Copy Translate"
 msgstr "Kopiraj translacijo"
 
-#: plugins/tools/basictools/kis_tool_multihand.h:91
+#: plugins/tools/basictools/kis_tool_multihand.cpp:459
+#, fuzzy, kde-format
+#| msgid "Copy Translate"
+msgid "Copy Translate at Intervals"
+msgstr "Kopiraj translacijo"
+
+#: plugins/tools/basictools/kis_tool_multihand.cpp:570
+#, kde-format
+msgid ""
+"Multibrush Tool does not support more than %1 brushes; use a larger interval."
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_multihand.h:97
 #, kde-format
 msgid "Multibrush Tool"
 msgstr "Orodje Več čopičev"
@@ -57735,6 +57749,20 @@ msgstr "Dodaj"
 #, kde-format
 msgid "Remove All"
 msgstr "Odstrani vse"
+
+#. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
+#: plugins/tools/basictools/wdgmultihandtool.ui:250
+#, fuzzy, kde-format
+#| msgid "Internal"
+msgid "Interval X:"
+msgstr "Notranje"
+
+#. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
+#: plugins/tools/basictools/wdgmultihandtool.ui:263
+#, fuzzy, kde-format
+#| msgid "Internal"
+msgid "Interval Y:"
+msgstr "Notranje"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:744
 #, kde-format
@@ -58739,19 +58767,14 @@ msgid "Letter Spacing"
 msgstr "Razmik med črkami"
 
 #: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
-#, fuzzy
-#| msgid "Inverted Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Text"
-msgstr "Preobrnjeno besedilo"
+msgstr "Vstavi besedilo"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:26
-#, fuzzy
-#| msgctxt "@title:window"
-#| msgid "Remove Template"
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
-msgstr "Odstrani predlogo"
+msgstr "Odstrani besedilo"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4

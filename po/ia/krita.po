@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-28 00:41+0000\n"
+"POT-Creation-Date: 2023-10-30 00:41+0000\n"
 "PO-Revision-Date: 2023-05-30 22:55+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -17145,7 +17145,9 @@ msgstr "Dimension"
 #: plugins/tools/basictools/kis_tool_fill.cc:588
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
-#: plugins/tools/basictools/kis_tool_multihand.cpp:451
+#: plugins/tools/basictools/kis_tool_multihand.cpp:486
+#: plugins/tools/basictools/kis_tool_multihand.cpp:497
+#: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
@@ -32950,7 +32952,7 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
 #: plugins/tools/basictools/kis_tool_line.cc:293
-#: plugins/tools/basictools/kis_tool_multihand.cpp:499
+#: plugins/tools/basictools/kis_tool_multihand.cpp:550
 #, kde-format
 msgid ""
 "X: %1 px\n"
@@ -44874,7 +44876,7 @@ msgstr "De-satura"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:226
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:29
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:86
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:85
 #, kde-format
 msgid "Hue"
 msgstr "Tinta"
@@ -44884,7 +44886,7 @@ msgstr "Tinta"
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:33
 #: plugins/paintops/hairy/wdghairyeoptions.ui:314
 #: plugins/paintops/hairy/wdgInkOptions.ui:75
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:94
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:93
 #, kde-format
 msgid "Saturation"
 msgstr "Saturation"
@@ -51752,12 +51754,12 @@ msgid "Value"
 msgstr "Valor"
 
 #: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:15
-#: plugins/paintops/sketch/KisSketchStandardOptionData.h:25
+#: plugins/paintops/sketch/KisSketchStandardOptionData.h:23
 #, kde-format
 msgid "Line width"
 msgstr "Largessa de linea"
 
-#: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:25
+#: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:26
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Increase opacity"
@@ -52496,13 +52498,13 @@ msgid "Hatching Angle"
 msgstr "Paginas flancate"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:128
-#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:36
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:32
 #, kde-format
 msgid "Separation"
 msgstr "Separation"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:158
-#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:46
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:42
 #, kde-format
 msgid "Thickness"
 msgstr "Spissor"
@@ -52524,7 +52526,7 @@ msgstr "Optiones de texto"
 msgid "Hatching preferences"
 msgstr "Paginas flancate"
 
-#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:26
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:24
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Change Styles"
@@ -53682,13 +53684,13 @@ msgstr "Acutessa"
 msgid "Soften edge:"
 msgstr "Mollir"
 
-#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:25
+#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:23
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fuzzy (sensor)"
 msgstr ""
 
-#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:29
+#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:27
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fade (sensor)"
@@ -53808,51 +53810,51 @@ msgctxt "Higher HSV brightness"
 msgid "Higher value"
 msgstr "Vlor plus alte"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:41
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:40
 #, kde-format
 msgid "Ratio"
 msgstr "Proportion:"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:50
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:49
 #, kde-format
 msgid "Softness"
 msgstr "Mollessa"
 
 #. i18n: ectx: property (title), widget (QGroupBox, rotationGroup)
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:61
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:60
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:739
 #, kde-format
 msgid "Rotation"
 msgstr "Rotation"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:70
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:69
 #, kde-format
 msgid "Darken"
 msgstr "Obscura"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:78
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:77
 #, kde-format
 msgctxt "Mixing of colors"
 msgid "Mix"
 msgstr "Mix"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:102
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:101
 #, kde-format
 msgctxt "Label of Brightness value in Color Smudge brush engine options"
 msgid "Value"
 msgstr "Valor"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:110
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:109
 #, kde-format
 msgid "Rate"
 msgstr "Frequentia"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:118
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:117
 #, kde-format
 msgid "Strength"
 msgstr "Fortia"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:126
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:125
 #, fuzzy, kde-format
 #| msgid "Lightness: "
 msgid "Lightness Strength"
@@ -54370,7 +54372,7 @@ msgstr ""
 msgid "Offset scale"
 msgstr "Redimensiona image"
 
-#: plugins/paintops/sketch/KisSketchStandardOptionData.h:35
+#: plugins/paintops/sketch/KisSketchStandardOptionData.h:31
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:168
 #, kde-format
 msgid "Density"
@@ -57928,41 +57930,53 @@ msgstr ""
 msgid "Move Tool"
 msgstr "Instrumento de Mover"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:53
+#: plugins/tools/basictools/kis_tool_multihand.cpp:57
 #, fuzzy
 #| msgid "Split into Layers"
 msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "Divide in stratos (Layers)"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:419
+#: plugins/tools/basictools/kis_tool_multihand.cpp:454
 #, kde-format
 msgid "Symmetry"
 msgstr "Symmetria"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:420
+#: plugins/tools/basictools/kis_tool_multihand.cpp:455
 #, kde-format
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "Speculo"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:421
+#: plugins/tools/basictools/kis_tool_multihand.cpp:456
 #, kde-format
 msgid "Translate"
 msgstr "Traduce"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:422
+#: plugins/tools/basictools/kis_tool_multihand.cpp:457
 #, kde-format
 msgid "Snowflake"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:423
+#: plugins/tools/basictools/kis_tool_multihand.cpp:458
 #, fuzzy, kde-format
 #| msgid "Translate"
 msgid "Copy Translate"
 msgstr "Traduce"
 
-#: plugins/tools/basictools/kis_tool_multihand.h:91
+#: plugins/tools/basictools/kis_tool_multihand.cpp:459
+#, fuzzy, kde-format
+#| msgid "Translate"
+msgid "Copy Translate at Intervals"
+msgstr "Traduce"
+
+#: plugins/tools/basictools/kis_tool_multihand.cpp:570
+#, kde-format
+msgid ""
+"Multibrush Tool does not support more than %1 brushes; use a larger interval."
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_multihand.h:97
 #, kde-format
 msgid "Multibrush Tool"
 msgstr "Instrumento multi pincel"
@@ -58336,6 +58350,20 @@ msgstr "Adde"
 #, kde-format
 msgid "Remove All"
 msgstr "Remove Toto"
+
+#. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
+#: plugins/tools/basictools/wdgmultihandtool.ui:250
+#, fuzzy, kde-format
+#| msgid "Internal"
+msgid "Interval X:"
+msgstr "Interne"
+
+#. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
+#: plugins/tools/basictools/wdgmultihandtool.ui:263
+#, fuzzy, kde-format
+#| msgid "Internal"
+msgid "Interval Y:"
+msgstr "Interne"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:744
 #, kde-format

@@ -165,17 +165,20 @@ public:
     /**
      * @brief nextCluster
      * Return the first cursor position with a
-     * higher cluster.
+     * higher cluster or same cluster and higher offset.
      * @param pos the cursor position.
-     * @return the first pos with a higher cluster.
+     * @return the first pos with a higher cluster
+     * or same cluster and higher offset.
      */
     int nextCluster(int pos);
 
     /**
      * @brief previousCluster
-     * Return the first pos which has a lower cluster.
+     * Return the first pos which has a lower cluster
+     * or same cluster and lower offset.
      * @param pos the cursor position.
-     * @return the first cursor position with a lower cluster.
+     * @return the first cursor position with a lower cluster
+     * or same cluster and lower offset..
      */
     int previousCluster(int pos);
 

@@ -224,9 +224,13 @@ int KoSvgTextShape::nextCluster(int pos)
         return pos;
     }
     int currentCluster = d->cursorPos.at(pos).cluster;
+    int currentOffset = d->cursorPos.at(pos).offset;
 
     for (int i = pos; i < d->cursorPos.size(); i++) {
-        if (d->cursorPos.at(i).cluster > currentCluster) {
+        int cluster = d->cursorPos.at(i).cluster;
+        int offset = d->cursorPos.at(i).offset;
+        if ((cluster > currentCluster)
+                || (cluster == currentCluster && offset > currentOffset)) {
             return i;
         }
     }
@@ -239,13 +243,13 @@ int KoSvgTextShape::previousCluster(int pos)
         return pos;
     }
     int currentCluster = d->cursorPos.at(pos).cluster;
+    int currentOffset = d->cursorPos.at(pos).offset;
 
-    if (currentCluster == d->cursorPos.first().cluster) {
-        return 0;
-    }
-
-    for (int i = pos; i > 0; i--) {
-        if (d->cursorPos.at(i).cluster < currentCluster) {
+    for (int i = pos; i >= 0; i--) {
+        int cluster = d->cursorPos.at(i).cluster;
+        int offset = d->cursorPos.at(i).offset;
+        if ((cluster < currentCluster)
+                || (cluster == currentCluster && offset < currentOffset)) {
             return i;
         }
     }

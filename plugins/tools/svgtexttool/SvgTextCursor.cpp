@@ -119,27 +119,9 @@ void SvgTextCursor::setPosToPoint(QPointF point, bool moveAnchor)
 void SvgTextCursor::moveCursor(MoveMode mode, bool moveAnchor)
 {
     if (d->shape) {
-        if (mode == MoveWordLeft || mode == MoveWordRight) {
-            int pos = moveModeResult(mode, d->pos, d->visualNavigation);
-            if (pos == d->pos) {
-                MoveMode shift = mode == MoveWordLeft? MoveLeft: MoveRight;
-                pos = moveModeResult(shift, pos, false);
-                d->pos = moveModeResult(mode, pos, d->visualNavigation);
-            } else {
-                d->pos = pos;
-            }
-        } else if (mode == MoveWordStart || mode == MoveWordEnd) {
-            int pos = moveModeResult(mode, d->pos, d->visualNavigation);
-            if (pos == d->pos) {
-                MoveMode shift = mode == MoveWordStart? MovePreviousChar: MoveNextChar;
-                pos = moveModeResult(shift, pos, false);
-                d->pos = moveModeResult(mode, pos, d->visualNavigation);
-            } else {
-                d->pos = pos;
-            }
-        } else {
-            d->pos = moveModeResult(mode, d->pos, d->visualNavigation);
-        }
+
+        d->pos = moveModeResult(mode, d->pos, d->visualNavigation);
+
         if (moveAnchor) {
             d->anchor = d->pos;
         }
@@ -597,15 +579,31 @@ int SvgTextCursor::moveModeResult(SvgTextCursor::MoveMode &mode, int &pos, bool 
         break;
     case MoveWordLeft:
         newPos = d->shape->wordLeft(pos, visual);
+        if (newPos == pos) {
+            newPos = d->shape->posLeft(pos, visual);
+            newPos = d->shape->wordLeft(newPos, visual);
+        }
         break;
     case MoveWordRight:
         newPos = d->shape->wordRight(pos, visual);
+        if (newPos == pos) {
+            newPos = d->shape->posRight(pos, visual);
+            newPos = d->shape->wordRight(newPos, visual);
+        }
         break;
     case MoveWordStart:
         newPos = d->shape->wordStart(pos);
+        if (newPos == pos) {
+            newPos = d->shape->previousCluster(pos);
+            newPos = d->shape->wordStart(newPos);
+        }
         break;
     case MoveWordEnd:
         newPos = d->shape->wordEnd(pos);
+        if (newPos == pos) {
+            newPos = d->shape->nextCluster(pos);
+            newPos = d->shape->wordEnd(newPos);
+        }
         break;
     case MoveLineStart:
         newPos = d->shape->lineStart(pos);
@@ -622,6 +620,7 @@ int SvgTextCursor::moveModeResult(SvgTextCursor::MoveMode &mode, int &pos, bool 
     }
     return newPos;
 }
+
 /// More or less copied from bool QInputControl::isAcceptableInput(const QKeyEvent *event) const
 bool SvgTextCursor::acceptableInput(const QKeyEvent *event) const
 {

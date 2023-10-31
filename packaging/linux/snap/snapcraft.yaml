@@ -106,7 +106,7 @@ parts:
         after:
         - kde-neon
         source: https://github.com/harfbuzz/harfbuzz.git
-        source-tag: 8.2.1
+        source-tag: 8.2.2
         plugin: cmake
         cmake-parameters:
         - -DKDE_INSTALL_USE_QT_SYS_PATHS=FALSE
@@ -115,8 +115,9 @@ parts:
         - -DENABLE_TESTING=OFF
         - -DBUILD_TESTING=OFF
         - -DKDE_SKIP_TEST_SETTINGS=ON
-        - -DCMAKE_FIND_ROOT_PATH=/usr\;$CRAFT_STAGE\;/snap/kf5-5-111-qt-5-15-11-core22-sdk/current
-        - -DBUILD_KRITA_QT_DESIGNER_PLUGINS=OFF
+        - -DBUILD_SHARED_LIBS=ON
+        - -DHB_HAVE_FREETYPE=ON
+        - -DCMAKE_FIND_ROOT_PATH="$CRAFT_STAGE\\;/snap/kf5-5-111-qt-5-15-11-core22-sdk/current\\;/usr"
         build-packages:
         - cmake
         - meson
@@ -143,7 +144,7 @@ parts:
         - -DENABLE_TESTING=OFF
         - -DBUILD_TESTING=OFF
         - -DKDE_SKIP_TEST_SETTINGS=ON
-        - -DCMAKE_FIND_ROOT_PATH=/usr\;$CRAFT_STAGE\;/snap/kf5-5-111-qt-5-15-11-core22-sdk/current
+        - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kf5-5-111-qt-5-15-11-core22-sdk/current"
         - -DBUILD_KRITA_QT_DESIGNER_PLUGINS=OFF
         build-packages:
         - cmake
@@ -156,7 +157,6 @@ parts:
         - libfftw3-dev
         - libgif-dev
         - libgsl-dev
-        - libharfbuzz-dev
         - libheif-dev
         - libimmer-dev
         - libjpeg-dev
@@ -191,6 +191,12 @@ parts:
         - vc-dev
         - xtl-dev
         - zlib1g-dev
+        - libmlt-dev
+        - libmlt++-dev
+        - libsdl2-dev
+        - libfribidi-dev
+        - libtiff5-dev
+        - libfreetype6-dev
         build-snaps:
         - ffmpeg-2204-sdk
         parse-info:
@@ -221,7 +227,6 @@ parts:
         - libpoppler-qt5-1
         - libpython3.10
         - libquazip5-1
-        - libraqm0
         - libstdc++6
         - libtiff5
         - libturbojpeg
@@ -233,6 +238,10 @@ parts:
         - zlib1g
         - colord
         - qml-module-org-kde-qqc2desktopstyle
+        - libmlt7
+        - libsdl2-2.0-0
+        - libmlt++7
+        - libtiff5
         stage-snaps:
         - ffmpeg-2204
         prime:
@@ -256,6 +265,7 @@ parts:
         - *id002
         - *id003
         - *id004
+        - LD_LIBRARY_PATH: "$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET/:/snap/kf5-5-111-qt-5-15-11-core22-sdk/usr/lib/$CRAFT_ARCH_TRIPLET"
     cleanup:
         after:
         - krita

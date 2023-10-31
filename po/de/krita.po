@@ -17837,6 +17837,9 @@ msgid "Change Image Resolution"
 msgstr "Bildauflösung ändern"
 
 #: libs/image/kis_image.cc:1034
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "Ebene skalieren"
@@ -17852,6 +17855,9 @@ msgid "Rotate Mask"
 msgstr "Maske drehen"
 
 #: libs/image/kis_image.cc:1167
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "Ebene drehen"
@@ -17862,6 +17868,9 @@ msgid "Shear Mask"
 msgstr "Maske neigen"
 
 #: libs/image/kis_image.cc:1251
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "Ebene neigen"
@@ -28603,7 +28612,8 @@ msgid "Layer Size"
 msgstr "Ebenengröße"
 
 #: libs/ui/imagesize/imagesize.cc:119
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resize Layer"
 msgid "Resize Layer"
 msgstr "Ebenengröße ändern"
 
@@ -30198,6 +30208,9 @@ msgid "Remove Nodes"
 msgstr "Knoten entfernen"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
 msgstr "Ebene X spiegeln"
@@ -30208,6 +30221,9 @@ msgid "Mirror Mask X"
 msgstr "Maske X spiegeln"
 
 #: libs/ui/kis_node_manager.cpp:1051
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
 msgstr "Ebene Y spiegeln"
@@ -43616,12 +43632,17 @@ msgid "Offset Image"
 msgstr "Bild versetzen"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgstr "Ebene versetzen"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Offset Layer"
 msgctxt "@title:window"
 msgid "Offset Layer"
 msgstr "Ebene versetzen"
@@ -44488,7 +44509,8 @@ msgid "Mirror Image Horizontally"
 msgstr "Bild waagerecht spiegeln"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:144
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Rotate Layer"
 msgid "Rotate Layer"
 msgstr "Ebene drehen"
 
@@ -44629,7 +44651,8 @@ msgid "Shear Image"
 msgstr "Bild neigen"
 
 #: plugins/extensions/shearimage/shearimage.cc:72
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Shear Layer"
 msgid "Shear Layer"
 msgstr "Ebene neigen"
 

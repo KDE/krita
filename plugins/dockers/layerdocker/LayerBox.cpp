@@ -1245,6 +1245,8 @@ void LayerBox::updateLayerOpMenu(const QModelIndex &index, QMenu &menu) {
             addActionToMenu(convertToMenu, "convert_to_filter_mask");
             addActionToMenu(convertToMenu, "convert_to_selection_mask");
             addActionToMenu(convertToMenu, "convert_to_file_layer");
+            addActionToMenu(convertToMenu, "convert_to_animated");
+            addActionToMenu(convertToMenu, "layercolorspaceconversion");
 
             QMenu *splitAlphaMenu = menu.addMenu(i18n("S&plit Alpha"));
             addActionToMenu(splitAlphaMenu, "split_alpha_into_mask");

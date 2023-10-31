@@ -30,6 +30,7 @@
 #include <KoColorSpaceTraits.h>
 
 #include <KoPathShape.h>
+#include <KoPathSegment.h>
 #include <KoPathPoint.h>
 
 #include <asl/kis_asl_reader_utils.h>
@@ -974,6 +975,7 @@ KoPathShape *PSDLayerRecord::constructPathShape(psd_path path, double shapeWidth
             }
             shape->closeMerge();
         }
+
     }
     if (shape->pointCount() > 0) {
         shape->loadNodeTypes(nodeTypes);
@@ -987,15 +989,17 @@ void PSDLayerRecord::addPathShapeToPSDPath(psd_path &path, KoPathShape *shape, d
     QTransform tf = QTransform::fromScale(shapeWidth, shapeHeight).inverted();
     tf = shape->absoluteTransformation()*tf;
 
+
     for (int i = 0; i < shape->subpathCount(); i++) {
         psd_path_sub_path subPath;
         subPath.isClosed = shape->isClosedSubpath(i);
         while(subPath.nodes.size() < shape->subpathPointCount(i)) {
-            KoPathPoint *point = shape->pointByIndex(KoPathPointIndex(i, subPath.nodes.size()));
+            const KoPathPoint *point = shape->pointByIndex(KoPathPointIndex(i, subPath.nodes.size()));
             psd_path_node node;
-            node.control1 = tf.map(point->controlPoint1());
-            node.control2 = tf.map(point->controlPoint2());
             node.node = tf.map(point->point());
+            node.control1 = point->activeControlPoint1()? tf.map(point->controlPoint1()): node.node;
+            node.control2 = point->activeControlPoint2()? tf.map(point->controlPoint2()): node.node;
+
             node.isSmooth = (point->properties().testFlag(KoPathPoint::IsSmooth)
                     || point->properties().testFlag(KoPathPoint::IsSymmetric));
             subPath.nodes.append(node);

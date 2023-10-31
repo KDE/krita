@@ -277,6 +277,7 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
                         currentPath = psd_path_sub_path();
                         currentPath.isClosed = (recordType == 0);
                     }
+                    firstPath = false;
                     io.skip(22);
                 } else if (recordType == 8) {
                     quint16 length;

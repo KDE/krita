@@ -53,8 +53,7 @@ struct AssistantEditorData {
     const QPixmap m_iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(buttonSize, buttonSize);
     const QPixmap m_iconLockOn = KisIconUtils::loadIcon("layer-locked").pixmap(buttonSize, buttonSize);
     const QPixmap m_iconLockOff = KisIconUtils::loadIcon("layer-unlocked").pixmap(buttonSize, buttonSize);
-    const QPixmap m_iconDuplicateOff = KisIconUtils::loadIcon("dark_duplicateitem").pixmap(buttonSize, buttonSize);
-    const QPixmap m_iconDuplicateOn = KisIconUtils::loadIcon("light_duplicateitem").pixmap(buttonSize, buttonSize);
+    const QPixmap m_iconDuplicate = KisIconUtils::loadIcon("duplicateitem").pixmap(buttonSize, buttonSize);
     const QPixmap m_iconDelete = KisIconUtils::loadIcon("deletelayer").pixmap(buttonSize, buttonSize);
     //how many buttons fit horizontally before extending to the next row
     const int horizontalButtonLimit = 4;

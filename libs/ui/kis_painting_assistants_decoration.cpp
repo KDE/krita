@@ -658,10 +658,14 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     }
     if (globalEditorWidgetData.duplicateButtonActivated) {
         QPointF iconDuplicatePosition(actionsPosition + globalEditorWidgetData.duplicateIconPosition);
-        if(assistant->isDuplicating()){
-            gc.drawPixmap(iconDuplicatePosition,globalEditorWidgetData.m_iconDuplicateOff);
-        }else{
-            gc.drawPixmap(iconDuplicatePosition,globalEditorWidgetData.m_iconDuplicateOn);
+        if(assistant->isDuplicating()) {
+            //draw button depressed
+            qreal oldOpacity = gc.opacity();
+            gc.setOpacity(0.35);
+            gc.drawPixmap(iconDuplicatePosition,globalEditorWidgetData.m_iconDuplicate);
+            gc.setOpacity(oldOpacity);
+        }else {
+            gc.drawPixmap(iconDuplicatePosition,globalEditorWidgetData.m_iconDuplicate);
         }
     }
     if (globalEditorWidgetData.deleteButtonActivated) {

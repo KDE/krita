@@ -24,7 +24,6 @@
 #include <SvgShape.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
-#include <KoXmlNS.h>
 #include <KoDocumentResourceManager.h>
 #include <KoProperties.h>
 
@@ -332,60 +331,58 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                         KisAslXmlParser parser;
                         parser.parseXML(layerRecord->infoBlocks.vectorOriginationData, catcher);
                     }
-                    if (!data.canMakeParametricShape()) {
+                    QString shapeName = data.shapeName();
+                    qDebug() << data.originType << shapeName;
+                    const KoShapeFactoryBase *f = KoShapeRegistry::instance()->value(shapeName);
+                    if (!(data.canMakeParametricShape() && f)) {
                         double width = m_image->width() / m_image->xRes();
                         double height = m_image->height() / m_image->yRes();
                         vectorMask = layerRecord->constructPathShape(layerRecord->infoBlocks.vectorMask.path, width, height);
                         vectorMask->setUserData(new KisShapeSelectionMarker);
                     } else {
-                        QString el = data.elementType();
-                        QList<KoShapeFactoryBase*> factories = KoShapeRegistry::instance()->factoriesForElement(KoXmlNS::draw, el);
-
                         QSizeF size;
                         double angle;
                         data.OriginalSizeAndAngle(size, angle);
                         double resMultiplier = data.originResolution/72.0;
                         QTransform scaleToPt = QTransform::fromScale(resMultiplier, resMultiplier).inverted();
                         size = QSizeF(size.width()/resMultiplier, size.height()/resMultiplier);
-                        Q_FOREACH(const KoShapeFactoryBase *f, factories) {
-                            KoDocumentResourceManager manager;
-                            KoProperties props;
-                            if (el == "rect") {
-                                props.setProperty("x", 0);
-                                props.setProperty("y", 0);
-                                props.setProperty("width", size.width());
-                                props.setProperty("height", size.height());
-                            } else if (el == "regular-polygon") {
-                                props.setProperty("corners", data.originPolySides);
-                                props.setProperty("convex", !data.isStar);
 
-                                double angle = 360.0/(data.originPolySides*2);
-                                double a = cos(kisDegreesToRadians(angle)) * 100.0;
-                                double totalHeight = a + 100.0;
-                                double l = size.height() / totalHeight * 100.0;
+                        KoDocumentResourceManager manager;
+                        KoProperties props;
+                        if (shapeName == "RectangleShape") {
+                            props.setProperty("x", 0);
+                            props.setProperty("y", 0);
+                            props.setProperty("width", size.width());
+                            props.setProperty("height", size.height());
+                        } else if (shapeName == "StarShape") {
+                            props.setProperty("corners", data.originPolySides);
+                            props.setProperty("convex", !data.isStar);
 
-                                if (data.isStar) {
-                                    // 100% is a normal polygon.
-                                    a = cos(kisDegreesToRadians(angle)) * ((data.originPolyStarRatio*0.01) * l);
-                                    props.setProperty("baseRadius", a);
-                                }
-                                props.setProperty("tipRadius", l);
-                                props.setProperty("baseRoundness", 0.0);
-                                props.setProperty("tipRoundness", 0.0);
+                            double angle = 360.0/(data.originPolySides*2);
+                            double a = cos(kisDegreesToRadians(angle)) * 100.0;
+                            double totalHeight = a + 100.0;
+                            double l = size.height() / totalHeight * 100.0;
+
+                            if (data.isStar) {
+                                // 100% is a normal polygon.
+                                a = cos(kisDegreesToRadians(angle)) * ((data.originPolyStarRatio*0.01) * l);
+                                props.setProperty("baseRadius", a);
                             }
-                            KoShape *shape = f->createShape(&props, &manager);
-                            if (!shape)
-                                continue;
-                            shape->setSize(size);
-                            QTransform t;
-                            t.rotate(360.0-angle);
-
-                            shape->setTransformation(t * scaleToPt.inverted() * data.transform * scaleToPt);
-                            shape->setAbsolutePosition(scaleToPt.map(data.originShapeBBox.center()));
-
-                            vectorMask = shape;
-                            break;
+                            props.setProperty("tipRadius", l);
+                            props.setProperty("baseRoundness", 0.0);
+                            props.setProperty("tipRoundness", 0.0);
                         }
+                        KoShape *shape = f->createShape(&props, &manager);
+                        if (!shape)
+                            continue;
+                        shape->setSize(size);
+                        QTransform t;
+                        t.rotate(360.0-angle);
+
+                        shape->setTransformation(t * scaleToPt.inverted() * data.transform * scaleToPt);
+                        shape->setAbsolutePosition(scaleToPt.map(data.originShapeBBox.center()));
+
+                        vectorMask = shape;
                     }
                 }
                 if (layerRecord->infoBlocks.fillType == psd_fill_gradient) {

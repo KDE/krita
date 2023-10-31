@@ -659,6 +659,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 psd_layer_type_shape textData;
                 psd_vector_mask vectorMask;
                 QDomDocument strokeData;
+                QDomDocument vogkData;
 
                 if (shapeLayer && !shapeLayer->isFakeNode()) {
                     // only store the first shape.
@@ -690,6 +691,19 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                             KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shapeLayer->shapes().first());
                             if (pathShape){
                                 layerRecord->addPathShapeToPSDPath(vectorMask.path, pathShape, vectorWidth, vectorHeight);
+
+                                // Right now only saving rect and ellipse when they are 'simple', as the actual parametric
+                                // shapes themselves are plugins, so we cannot include them and access the object data.
+                                if ((pathShape->pathShapeId() == "RectangleShape" || pathShape->pathShapeId() == "EllipseShape")
+                                        && pathShape->pointCount() == 4) {
+                                    psd_vector_origination_data data;
+                                    data.originType = data.typeToName.key(pathShape->pathShapeId(), 1);
+                                    QPolygonF poly = pathShape->absoluteTransformation().map(pathShape->outlineRect());
+                                    data.originShapeBBox = poly.boundingRect();
+                                    data.originBoxCorners = poly;
+                                    data.transform = pathShape->absoluteTransformation();
+                                    vogkData = data.getASL();
+                                }
                                 KoColorBackground *b = dynamic_cast<KoColorBackground *>(pathShape->background().data());
                                 KoGradientBackground *g = dynamic_cast<KoGradientBackground *>(pathShape->background().data());
                                 KoPatternBackground *p = dynamic_cast<KoPatternBackground *>(pathShape->background().data());
@@ -729,7 +743,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                                 if (shapeStroke) {
                                     psd_vector_stroke_data strokeDataStruct;
                                     strokeDataStruct.loadFromShapeStroke(shapeStroke);
-                                    strokeDataStruct.strokeEnabled = true;
+                                    strokeDataStruct.strokeEnabled = shapeStroke->isVisible();
                                     strokeDataStruct.fillEnabled = pathShape->background()? true: false;
                                     strokeDataStruct.resolution = node->image()->xRes()*72.0;
                                     strokeData = strokeDataStruct.getASLXML();
@@ -867,6 +881,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
 
                 layerRecord->vectorMask = vectorMask;
                 layerRecord->vectorStroke = strokeData;
+                layerRecord->vectorOriginationData = vogkData;
 
                 layerRecord->textShape = textData;
 

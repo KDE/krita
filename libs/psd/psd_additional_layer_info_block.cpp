@@ -523,6 +523,18 @@ void PsdAdditionalLayerInfoBlock::writeVectorStrokeDataEx(QIODevice &io, const Q
     }
 }
 
+void PsdAdditionalLayerInfoBlock::writeVectorOriginationDataEx(QIODevice &io, const QDomDocument &vectorOrigination)
+{
+    switch (m_header.byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        writeVectorOriginationDataImpl<psd_byte_order::psdLittleEndian>(io, vectorOrigination);
+        break;
+    default:
+        writeVectorOriginationDataImpl(io, vectorOrigination);
+        break;
+    }
+}
+
 template<psd_byte_order byteOrder>
 void PsdAdditionalLayerInfoBlock::writePattBlockExImpl(QIODevice &io, const QDomDocument &patternsXmlDoc)
 {
@@ -733,4 +745,23 @@ void PsdAdditionalLayerInfoBlock::writeTxt2BlockExImpl(QIODevice &io, const QVar
     quint32 length = ba.size();
     SAFE_WRITE_EX(byteOrder, io, length);
     io.write(ba);
+}
+
+template<psd_byte_order byteOrder>
+void PsdAdditionalLayerInfoBlock::writeVectorOriginationDataImpl(QIODevice &io, const QDomDocument &vectorOrigination)
+{
+    KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+    KisAslWriterUtils::writeFixedString<byteOrder>("vogk", io);
+    KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> strokeSizeTag(io, 2);
+    try {
+        KisAslWriter writer(byteOrder);
+
+        writer.writeVectorOriginationDataEx(io, vectorOrigination);
+
+    } catch (KisAslWriterUtils::ASLWriteException &e) {
+        warnKrita << "WARNING: Couldn't save vector stroke layer block:" << PREPEND_METHOD(e.what());
+
+        // TODO: make this error recoverable!
+        throw e;
+    }
 }

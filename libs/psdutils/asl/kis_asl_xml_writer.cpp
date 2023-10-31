@@ -491,3 +491,58 @@ void KisAslXmlWriter::writeRawData(const QString key, const QByteArray *rawData)
     dataElement.appendChild(dataSection);
     m_d->currentElement.appendChild(dataElement);
 }
+
+void KisAslXmlWriter::writeTransform(const QString &key, const QTransform &transform)
+{
+    enterDescriptor(key, "Transform", "Trnf");
+
+    writeDouble("xx", transform.m11());
+    writeDouble("xy", transform.m12());
+    writeDouble("yx", transform.m21());
+    writeDouble("yy", transform.m22());
+    writeDouble("tx", transform.dx());
+    writeDouble("ty", transform.dy());
+
+    leaveDescriptor();
+}
+
+void KisAslXmlWriter::writeUnitRect(const QString &key, const QString &unit, const QRectF &rect)
+{
+    enterDescriptor(key, "", "unitRect");
+
+    writeInteger("unitValueQuadVersion", 1);
+    writeUnitFloat("Top ", unit, rect.top());
+    writeUnitFloat("Left", unit, rect.left());
+    writeUnitFloat("Btom", unit, rect.bottom());
+    writeUnitFloat("Rght", unit, rect.right());
+
+    leaveDescriptor();
+}
+
+void KisAslXmlWriter::writeFloatRect(const QString &key, const QRectF &rect)
+{
+    enterDescriptor(key, "", "classFloatRect");
+
+    writeDouble("Top ", rect.top());
+    writeDouble("Left", rect.left());
+    writeDouble("Btom", rect.bottom());
+    writeDouble("Rght", rect.right());
+
+    leaveDescriptor();
+}
+
+void KisAslXmlWriter::writePointRect(const QString &key, const QPolygonF &transformedRect)
+{
+    if (transformedRect.size() < 4) {
+        warnKrita << "KisAslXmlWriter::writePointRect(): too few points to write descriptor.";
+        return;
+    }
+    enterDescriptor(key, "", "null");
+
+    writePoint("rectangleCornerA", transformedRect.at(0));
+    writePoint("rectangleCornerB", transformedRect.at(1));
+    writePoint("rectangleCornerC", transformedRect.at(2));
+    writePoint("rectangleCornerD", transformedRect.at(3));
+
+    leaveDescriptor();
+}

@@ -392,6 +392,32 @@ void writeVectorStrokeDataImpl(QIODevice &device, const QDomDocument &doc)
     }
 }
 
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+void writeVectorOriginationDataImpl(QIODevice &device, const QDomDocument &doc)
+{
+    QDomElement root = doc.documentElement();
+    KIS_ASSERT_RECOVER_RETURN(root.tagName() == "asl");
+
+    {
+        quint32 version = 1;
+        SAFE_WRITE_EX(byteOrder, device, version);
+    }
+    {
+        quint32 descriptorVersion = 16;
+        SAFE_WRITE_EX(byteOrder, device, descriptorVersion);
+    }
+
+    QDomNode child = root.firstChild();
+    parseElement<byteOrder>(child.toElement(), device);
+
+    // ASL files' size should be 4-bytes aligned
+    const qint64 paddingSize = 4 - (device.pos() & 0x3);
+    if (paddingSize != 4) {
+        QByteArray padding(static_cast<int>(paddingSize), '\0');
+        device.write(padding);
+    }
+}
+
 } // namespace
 
 KisAslWriter::KisAslWriter(psd_byte_order byteOrder)
@@ -452,6 +478,18 @@ void KisAslWriter::writeVectorStrokeDataEx(QIODevice &device, const QDomDocument
         break;
     default:
         Private::writeVectorStrokeDataImpl(device, doc);
+        break;
+    }
+}
+
+void KisAslWriter::writeVectorOriginationDataEx(QIODevice &device, const QDomDocument &doc)
+{
+    switch (m_byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        Private::writeVectorOriginationDataImpl<psd_byte_order::psdLittleEndian>(device, doc);
+        break;
+    default:
+        Private::writeVectorOriginationDataImpl(device, doc);
         break;
     }
 }

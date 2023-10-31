@@ -1180,7 +1180,15 @@ struct KRITAPSD_EXPORT psd_vector_stroke_data {
 };
 
 struct psd_vector_origination_data {
-    int originType = -1; ///< 1 = rect, 2 = rounded rect, 3 = ? 4 = ? 5 = ellipse, 6 = ?, 7 = polygon, 8 = star, 9 = premade path shape.
+    int originType = -1; ///< 1 = rect, 2 = rounded rect?, 3 = ? 4 = ? 5 = ellipse, 6 = ?, 7 = polygon, 8 = star, 9 = premade path shape.
+
+    const QMap<int, QString> typeToName {
+        {1, "RectangleShape"},
+        {5, "EllipseShape"},
+        {7, "StarShape"},
+        {8, "StarShape"},
+    };
+
     QRectF originShapeBBox; ///< pre-transform bbox.
     double originResolution = 72.0; ///< Resolution of the coordinates.
     QTransform transform;
@@ -1255,22 +1263,53 @@ struct psd_vector_origination_data {
 
     }
 
-    QString elementType () {
-        QString el;
-        if (originType == 1) {
-            el = "rect";
-        } else if (originType == 5) {
-            el = "ellipse";
-        } else if (originType == 7) {
-            el = "regular-polygon";
-        } else if (originType == 8) {
-            el = "regular-polygon";
+    QDomDocument getASL() {
+        KisAslXmlWriter w;
+        w.enterDescriptor("", "", "null");
+
+        w.enterList("keyDescriptorList");
+
+        w.enterDescriptor("", "", "null");
+
+        w.writeInteger("keyOriginType", originType);
+        w.writeDouble("keyOriginResolution", originResolution);
+
+        if (originType == 1 || originType == 5) {
+            w.writeUnitRect("keyOriginShapeBBox", "#Pxl", originShapeBBox);
+            w.writePointRect("keyOriginBoxCorners", originBoxCorners);
+        } else if (originType == 7 || originType == 8) {
+            w.writeInteger("keyOriginPolySides", originPolySides);
+            if (originPolyStarRatio != 100) {
+                w.writeUnitFloat("keyOriginPolyStarRatio", "#Prc", originPolyStarRatio);
+            }
+            w.writePointRect("keyOriginBoxCorners", originBoxCorners);
+            w.writeFloatRect("keyOriginShapeBBox", originShapeBBox);
+            w.writePointRect("keyOriginPolyPreviousTightBoxCorners", originBoxCorners);
+            w.writePointRect("keyOriginPolyTrueRectCorners", originBoxCorners);
+            w.writeDouble("keyOriginPolyPixelHSF", 1);
         }
-        return el;
+
+        w.writeTransform("Trnf", transform);
+
+        w.writeInteger("keyOriginIndex", originIndex);
+
+        w.leaveDescriptor();
+
+        w.leaveList();
+
+        w.leaveDescriptor();
+
+        return w.document();
+    }
+
+
+
+    QString shapeName () {
+        return typeToName.value(originType, QString());
     }
 
     bool canMakeParametricShape() {
-        bool p = !elementType().isEmpty();
+        bool p = !shapeName().isEmpty();
         return p;
     }
 
@@ -1323,6 +1362,7 @@ public:
     void writeVmskBlockEx(QIODevice &io, psd_vector_mask mask);
     void writeTypeToolBlockEx(QIODevice &io, psd_layer_type_shape typeTool);
     void writeVectorStrokeDataEx(QIODevice &io, const QDomDocument &vectorStroke);
+    void writeVectorOriginationDataEx(QIODevice &io, const QDomDocument &vectorOrigination);
     void writeTxt2BlockEx(QIODevice &io, const QVariantHash txt2Hash);
 
     bool valid();
@@ -1382,6 +1422,9 @@ private:
 
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     void writeVectorStrokeDataImpl(QIODevice &io, const QDomDocument &vectorStroke);
+
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    void writeVectorOriginationDataImpl(QIODevice &io, const QDomDocument &vectorOrigination);
 
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     void writeTxt2BlockExImpl(QIODevice &io, const QVariantHash txt2Hash);

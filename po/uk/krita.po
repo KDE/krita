@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-30 00:41+0000\n"
-"PO-Revision-Date: 2023-10-27 08:52+0300\n"
+"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"PO-Revision-Date: 2023-10-30 08:51+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -16440,25 +16440,25 @@ msgstr ""
 "зберігатимете документ, текстовий об'єкт буде перетворено у формат Krita 5, "
 "який є несумісним із подальшим редагуванням у Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:859
+#: libs/flake/text/KoSvgTextShape.cpp:863
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:861
-#: libs/flake/text/KoSvgTextShape.cpp:869
+#: libs/flake/text/KoSvgTextShape.cpp:865
+#: libs/flake/text/KoSvgTextShape.cpp:873
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Форма-текст SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:867
+#: libs/flake/text/KoSvgTextShape.cpp:871
 #, kde-format
 msgid "SVG Text"
 msgstr "Текст SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:881
-#: libs/flake/text/KoSvgTextShape.cpp:896
+#: libs/flake/text/KoSvgTextShape.cpp:885
+#: libs/flake/text/KoSvgTextShape.cpp:900
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -58100,16 +58100,17 @@ msgid "Copy Translate"
 msgstr "Копіювальне перенесення"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:459
-#, fuzzy, kde-format
-#| msgid "Copy Translate"
+#, kde-format
 msgid "Copy Translate at Intervals"
-msgstr "Копіювальне перенесення"
+msgstr "Копіювальне перенесення за інтервалами"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:570
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
+"Для інструмента мультипензля передбачено підтримку не більше %1 пензлів; "
+"скористайтеся більшим інтервалом."
 
 #: plugins/tools/basictools/kis_tool_multihand.h:97
 #, kde-format
@@ -58510,17 +58511,15 @@ msgstr "Вилучити усі"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:250
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval X:"
-msgstr "Вбудований"
+msgstr "Інтервал за X:"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:263
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval Y:"
-msgstr "Вбудований"
+msgstr "Інтервал за Y:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:744
 #, kde-format

@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-30 02:25+0000\n"
-"PO-Revision-Date: 2023-10-23 12:05+0200\n"
+"PO-Revision-Date: 2023-10-30 20:16+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -111,7 +111,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.2\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -17170,12 +17170,9 @@ msgid "Change Image Resolution"
 msgstr "Modifier la résolution de l'image"
 
 #: libs/image/kis_image.cc:1034
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
-msgstr "Redimensionner le calque"
+msgstr "Ajuster la dimension du calque"
 
 #: libs/image/kis_image.cc:1159
 msgctxt "(qtundo-format)"
@@ -17188,12 +17185,9 @@ msgid "Rotate Mask"
 msgstr "Rotation masque"
 
 #: libs/image/kis_image.cc:1167
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
-msgstr "Rotation calque"
+msgstr "Faire tourner le calque"
 
 #: libs/image/kis_image.cc:1248
 msgctxt "(qtundo-format)"
@@ -27932,8 +27926,7 @@ msgid "Layer Size"
 msgstr "Taille du calque"
 
 #: libs/ui/imagesize/imagesize.cc:119
-#, fuzzy, kde-format
-#| msgid "Resize Layer"
+#, kde-format
 msgid "Resize Layer"
 msgstr "Redimensionner le calque"
 
@@ -43761,10 +43754,9 @@ msgid "Mirror Image Horizontally"
 msgstr "Retourner l'image horizontalement"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:144
-#, fuzzy, kde-format
-#| msgid "Rotate Layer"
+#, kde-format
 msgid "Rotate Layer"
-msgstr "Tourner le calque"
+msgstr "Faire tourner le calque"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -45777,10 +45769,9 @@ msgstr "Taille de la fenêtre :"
 
 #: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgid "Reset Transparent"
-msgstr "Transparent"
+msgstr "Ré-initialiser la transparence"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format

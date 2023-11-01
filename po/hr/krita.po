@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -29113,44 +29113,44 @@ msgstr "Premjesti označeno"
 #: libs/ui/kis_node_manager.cpp:1038
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "/Hrpa/Spusti Sloj"
+msgid "Mirror Mask Horizontally"
+msgstr "Triangular Wave"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "/Hrpa/Spusti Sloj"
-msgstr[1] "/Hrpa/Spusti Sloj"
-msgstr[2] "/Hrpa/Spusti Sloj"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Triangular Wave"
+msgstr[1] "Triangular Wave"
+msgstr[2] "Triangular Wave"
 
 #: libs/ui/kis_node_manager.cpp:1052
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "/Hrpa/Spusti Sloj"
+msgid "Mirror Mask Vertically"
+msgstr "Triangular Wave"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "/Hrpa/Spusti Sloj"
-msgstr[1] "/Hrpa/Spusti Sloj"
-msgstr[2] "/Hrpa/Spusti Sloj"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Triangular Wave"
+msgstr[1] "Triangular Wave"
+msgstr[2] "Triangular Wave"
 
 #: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "/Hrpa/Spusti Sloj"
+msgid "Mirror All Layers Horizontally"
+msgstr "Triangular Wave"
 
 #: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "/Hrpa/Spusti Sloj"
+msgid "Mirror All Layers Vertically"
+msgstr "Triangular Wave"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, fuzzy, kde-format
@@ -42603,18 +42603,6 @@ msgstr "Odabir"
 #, fuzzy, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "Odabir"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -59729,6 +59717,42 @@ msgstr "Podešenja"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "/Hrpa/Spusti Sloj"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "/Hrpa/Spusti Sloj"
+#~ msgstr[1] "/Hrpa/Spusti Sloj"
+#~ msgstr[2] "/Hrpa/Spusti Sloj"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "/Hrpa/Spusti Sloj"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "/Hrpa/Spusti Sloj"
+#~ msgstr[1] "/Hrpa/Spusti Sloj"
+#~ msgstr[2] "/Hrpa/Spusti Sloj"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "/Hrpa/Spusti Sloj"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "/Hrpa/Spusti Sloj"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
 #~ msgid "Scale Layers"
 #~ msgstr "Promjeni veličinu sloja u mjerilu..."
 
@@ -73201,17 +73225,7 @@ msgstr "Podešenja"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "Triangular Wave"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
-#~ msgstr "Triangular Wave"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
 #~ msgstr "Triangular Wave"
 
 #, fuzzy

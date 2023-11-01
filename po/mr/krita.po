@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -30047,42 +30047,42 @@ msgstr "पेंटरची साधने (&P)"
 #: libs/ui/kis_node_manager.cpp:1038
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "X मुखवटा प्रतिबिंबित करा"
+msgid "Mirror Mask Horizontally"
+msgstr "स्तर आडवेरित्या प्रतिबिंबित करा"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "X स्तर प्रतिबिंबित करा"
-msgstr[1] "X स्तर प्रतिबिंबित करा"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "स्तर आडवेरित्या प्रतिबिंबित करा"
+msgstr[1] "स्तर आडवेरित्या प्रतिबिंबित करा"
 
 #: libs/ui/kis_node_manager.cpp:1052
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Y मुखवटा प्रतिबिंबित करा"
+msgid "Mirror Mask Vertically"
+msgstr "स्तर उभेरित्या प्रतिबिंबित करा"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Y स्तर प्रतिबिंबित करा"
-msgstr[1] "Y स्तर प्रतिबिंबित करा"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "स्तर उभेरित्या प्रतिबिंबित करा"
+msgstr[1] "स्तर उभेरित्या प्रतिबिंबित करा"
 
 #: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "X स्तर प्रतिबिंबित करा"
+msgid "Mirror All Layers Horizontally"
+msgstr "स्तर आडवेरित्या प्रतिबिंबित करा"
 
 #: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "Y स्तर प्रतिबिंबित करा"
+msgid "Mirror All Layers Vertically"
+msgstr "स्तर उभेरित्या प्रतिबिंबित करा"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, fuzzy, kde-format
@@ -44061,18 +44061,6 @@ msgstr "चौकोनी भाग निवडा"
 #, fuzzy, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "स्तरासाठी ब्लेंडिंग पद्धत निवडा."
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -61945,6 +61933,40 @@ msgstr "25%"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "X मुखवटा प्रतिबिंबित करा"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "X स्तर प्रतिबिंबित करा"
+#~ msgstr[1] "X स्तर प्रतिबिंबित करा"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Y मुखवटा प्रतिबिंबित करा"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Y स्तर प्रतिबिंबित करा"
+#~ msgstr[1] "Y स्तर प्रतिबिंबित करा"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "X स्तर प्रतिबिंबित करा"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Y स्तर प्रतिबिंबित करा"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
 #~ msgid "Scale Layers"
 #~ msgstr "स्तर चढवा"
 
@@ -78569,17 +78591,7 @@ msgstr "25%"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "स्तर आडवेरित्या प्रतिबिंबित करा"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
-#~ msgstr "स्तर उभेरित्या प्रतिबिंबित करा"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
 #~ msgstr "स्तर उभेरित्या प्रतिबिंबित करा"
 
 #, fuzzy

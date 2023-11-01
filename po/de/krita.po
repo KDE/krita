@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2022-08-28 09:26+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -30420,50 +30420,56 @@ msgid "Remove Nodes"
 msgstr "Knoten entfernen"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "Maske X spiegeln"
+msgid "Mirror Mask Horizontally"
+msgstr "Waagerecht spiegeln"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
+#| msgctxt "(qtundo-format) action"
+#| msgid "Mirror Layer Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "Ebene X spiegeln"
-msgstr[1] "Ebene X spiegeln"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Ebene waagerecht spiegeln"
+msgstr[1] "Ebene waagerecht spiegeln"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Maske Y spiegeln"
+msgid "Mirror Mask Vertically"
+msgstr "Senkrecht spiegeln"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
+#| msgctxt "(qtundo-format) action"
+#| msgid "Mirror Layer Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Ebene Y spiegeln"
-msgstr[1] "Ebene Y spiegeln"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Ebene senkrecht spiegeln"
+msgstr[1] "Ebene senkrecht spiegeln"
 
 #: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
+#| msgctxt "action"
+#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "Ebene X spiegeln"
+msgid "Mirror All Layers Horizontally"
+msgstr "Alle Ebenen waagerecht spiegeln"
 
 #: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
+#| msgctxt "action"
+#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "Ebene Y spiegeln"
+msgid "Mirror All Layers Vertically"
+msgstr "Alle Ebenen senkrecht spiegeln"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -44637,18 +44643,6 @@ msgstr "Wählen Sie einen Ordner zum Speichern des Pakets aus"
 #| msgid "Select file to use as dynamic file layer."
 msgid "Select file to use as bundle icon"
 msgstr "Wählen Sie eine Datei, die als dynamische Dateiebene verwendet wird."
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -62351,6 +62345,46 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referenzbilder"
 
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "Maske X spiegeln"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "Ebene X spiegeln"
+#~ msgstr[1] "Ebene X spiegeln"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Maske Y spiegeln"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Ebene Y spiegeln"
+#~ msgstr[1] "Ebene Y spiegeln"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "Ebene X spiegeln"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Ebene Y spiegeln"
+
 #, fuzzy
 #~| msgctxt "(qtundo-format)"
 #~| msgid "Scale Layer"
@@ -78623,16 +78657,8 @@ msgstr "Referenzbilder"
 #~ msgstr "Ebene &waagerecht spiegeln"
 
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "Ebene waagerecht spiegeln"
-
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
 #~ msgstr "Ebene &senkrecht spiegeln"
-
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
-#~ msgstr "Ebene senkrecht spiegeln"
 
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "&Rotate Layer..."

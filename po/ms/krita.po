@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -29361,42 +29361,42 @@ msgstr "Alihkan alat"
 #: libs/ui/kis_node_manager.cpp:1038
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "Cermin Lapisan X"
+msgid "Mirror Mask Horizontally"
+msgstr "Cetak Timbul Mendatar Sahaja"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "Cermin Lapisan X"
-msgstr[1] "Cermin Lapisan X"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Cetak Timbul Mendatar Sahaja"
+msgstr[1] "Cetak Timbul Mendatar Sahaja"
 
 #: libs/ui/kis_node_manager.cpp:1052
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Cermin Lapisan X"
+msgid "Mirror Mask Vertically"
+msgstr "Cetak Timbul Menegak Sahaja"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Cermin Lapisan Y"
-msgstr[1] "Cermin Lapisan Y"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Cetak Timbul Menegak Sahaja"
+msgstr[1] "Cetak Timbul Menegak Sahaja"
 
 #: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "Cermin Lapisan X"
+msgid "Mirror All Layers Horizontally"
+msgstr "Cetak Timbul Mendatar Sahaja"
 
 #: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "Cermin Lapisan Y"
+msgid "Mirror All Layers Vertically"
+msgstr "Cetak Timbul Menegak Sahaja"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, fuzzy, kde-format
@@ -42911,18 +42911,6 @@ msgstr "Pilih Segiempat Tepat"
 #, fuzzy, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "Pilih Segiempat Tepat"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -60122,6 +60110,40 @@ msgstr "Ungu Lembut Gangguan"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "Cermin Lapisan X"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "Cermin Lapisan X"
+#~ msgstr[1] "Cermin Lapisan X"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Cermin Lapisan X"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Cermin Lapisan Y"
+#~ msgstr[1] "Cermin Lapisan Y"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "Cermin Lapisan X"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Cermin Lapisan Y"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
 #~ msgid "Scale Layers"
 #~ msgstr "Skalakan Lapisan"
 
@@ -74820,17 +74842,7 @@ msgstr "Ungu Lembut Gangguan"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "Cetak Timbul Mendatar Sahaja"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
-#~ msgstr "Cetak Timbul Menegak Sahaja"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
 #~ msgstr "Cetak Timbul Menegak Sahaja"
 
 #, fuzzy

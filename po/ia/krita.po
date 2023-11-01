@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2023-05-30 22:55+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -29791,45 +29791,47 @@ msgid "Remove Nodes"
 msgstr "Instrumento de Linea"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "Axes de Speculo"
+msgid "Mirror Mask Horizontally"
+msgstr "Reflecte Horizontalmente"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Move strato (layer)"
 msgstr[1] "Move strato (layer)"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Axes de Speculo"
+msgid "Mirror Mask Vertically"
+msgstr "Reflecte Verticalmente"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Move strato (layer)"
 msgstr[1] "Move strato (layer)"
 
 #: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
+msgid "Mirror All Layers Horizontally"
 msgstr "Move strato (layer)"
 
 #: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
+msgid "Mirror All Layers Vertically"
 msgstr "Move strato (layer)"
 
 #: libs/ui/kis_node_manager.cpp:1202
@@ -43859,18 +43861,6 @@ msgstr "Selige disposition (Layer)"
 #, fuzzy, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "Selige disposition (Layer)"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -61503,6 +61493,42 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Instrumento de Inages de Referentia"
 
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "Axes de Speculo"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "Move strato (layer)"
+#~ msgstr[1] "Move strato (layer)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Axes de Speculo"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Move strato (layer)"
+#~ msgstr[1] "Move strato (layer)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "Move strato (layer)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Move strato (layer)"
+
 #, fuzzy
 #~| msgctxt "(qtundo-format)"
 #~| msgid "Scale Layer"
@@ -75022,17 +75048,7 @@ msgstr "Instrumento de Inages de Referentia"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "Move strato (layer)"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
-#~ msgstr "Move strato (layer)"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
 #~ msgstr "Move strato (layer)"
 
 #, fuzzy

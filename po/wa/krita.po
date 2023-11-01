@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2011-01-17 21:35+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -29757,42 +29757,42 @@ msgstr "Usteyes då &pondeu"
 #: libs/ui/kis_node_manager.cpp:1038
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "Masse muroe X"
+msgid "Mirror Mask Horizontally"
+msgstr "Muroe di coutchî"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "Coûtche e muroe X"
-msgstr[1] "Coûtche e muroe X"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Muroe di coutchî"
+msgstr[1] "Muroe di coutchî"
 
 #: libs/ui/kis_node_manager.cpp:1052
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Masse muroe X"
+msgid "Mirror Mask Vertically"
+msgstr "Muroe d' astampé"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Coûtche muroe Y"
-msgstr[1] "Coûtche muroe Y"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Muroe d' astampé"
+msgstr[1] "Muroe d' astampé"
 
 #: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "Coûtche e muroe X"
+msgid "Mirror All Layers Horizontally"
+msgstr "Muroe di coutchî"
 
 #: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "Coûtche muroe Y"
+msgid "Mirror All Layers Vertically"
+msgstr "Muroe d' astampé"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, fuzzy, kde-format
@@ -43652,18 +43652,6 @@ msgstr "Tchoezi ene redjon rectangulåre"
 #, fuzzy, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "Tchoezi l' eshonna d' canås en alaedje."
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -61280,6 +61268,40 @@ msgstr "Imådje di referince:"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "Masse muroe X"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "Coûtche e muroe X"
+#~ msgstr[1] "Coûtche e muroe X"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Masse muroe X"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Coûtche muroe Y"
+#~ msgstr[1] "Coûtche muroe Y"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "Coûtche e muroe X"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Coûtche muroe Y"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
 #~ msgid "Scale Layers"
 #~ msgstr "Mete al schåle coûtche"
 
@@ -77655,17 +77677,7 @@ msgstr "Imådje di referince:"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "Muroe di coutchî"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
-#~ msgstr "Muroe d' astampé"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
 #~ msgstr "Muroe d' astampé"
 
 #, fuzzy

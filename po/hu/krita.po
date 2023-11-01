@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -30052,42 +30052,42 @@ msgstr "Elmozgatás"
 #: libs/ui/kis_node_manager.cpp:1038
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "Maszk tükrözése az X tengelyre"
+msgid "Mirror Mask Horizontally"
+msgstr "Réteg tükrözése vízszintesen"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "Réteg tükrözése az X tengelyre"
-msgstr[1] "Réteg tükrözése az X tengelyre"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Réteg tükrözése vízszintesen"
+msgstr[1] "Réteg tükrözése vízszintesen"
 
 #: libs/ui/kis_node_manager.cpp:1052
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Maszk tükrözése az Y tengelyre"
+msgid "Mirror Mask Vertically"
+msgstr "Réteg tükrözése függőlegesen"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Réteg tükrözése az Y tengelyre"
-msgstr[1] "Réteg tükrözése az Y tengelyre"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Réteg tükrözése függőlegesen"
+msgstr[1] "Réteg tükrözése függőlegesen"
 
 #: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "Réteg tükrözése az X tengelyre"
+msgid "Mirror All Layers Horizontally"
+msgstr "Réteg tükrözése vízszintesen"
 
 #: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "Réteg tükrözése az Y tengelyre"
+msgid "Mirror All Layers Vertically"
+msgstr "Réteg tükrözése függőlegesen"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, fuzzy, kde-format
@@ -44245,18 +44245,6 @@ msgstr "Válasszon egy könyvtárat"
 #| msgid "Select file to use as dynamic file layer."
 msgid "Select file to use as bundle icon"
 msgstr "Válassza ki a dinamikus fájlrétegként használandó fájlt."
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -62185,6 +62173,40 @@ msgstr "Nagyító eszköz"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referenciaképek eszköz"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "Maszk tükrözése az X tengelyre"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "Réteg tükrözése az X tengelyre"
+#~ msgstr[1] "Réteg tükrözése az X tengelyre"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Maszk tükrözése az Y tengelyre"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Réteg tükrözése az Y tengelyre"
+#~ msgstr[1] "Réteg tükrözése az Y tengelyre"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "Réteg tükrözése az X tengelyre"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Réteg tükrözése az Y tengelyre"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
@@ -80507,17 +80529,7 @@ msgstr "Referenciaképek eszköz"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "Réteg tükrözése vízszintesen"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
-#~ msgstr "Réteg tükrözése függőlegesen"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
 #~ msgstr "Réteg tükrözése függőlegesen"
 
 #, fuzzy

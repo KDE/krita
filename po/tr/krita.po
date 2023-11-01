@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2023-10-30 05:07+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -29380,40 +29380,56 @@ msgid "Remove Nodes"
 msgstr "Düğümleri Kaldır"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "X Maskesini Yansıt"
+msgid "Mirror Mask Horizontally"
+msgstr "Yatay Yansıt"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Mirror Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "X Katmanını Yansıt"
-msgstr[1] "%1 X Katmanını Yansıt"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Katmanları yatay olarak yansıt"
+msgstr[1] "Katmanları yatay olarak yansıt"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Y Maskesini Yansıt"
+msgid "Mirror Mask Vertically"
+msgstr "Dikey Yansıt"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Mirror Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Y Katmanını Yansıt"
-msgstr[1] "%1 Y Katmanını Yansıt"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Katmanları dikey olarak yansıt"
+msgstr[1] "Katmanları dikey olarak yansıt"
 
 #: libs/ui/kis_node_manager.cpp:1063
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "Tüm X Katmanlarını Yansıt"
+msgid "Mirror All Layers Horizontally"
+msgstr "Tüm Katmanları Yatay Yansıt"
 
 #: libs/ui/kis_node_manager.cpp:1070
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "Tüm Y Katmanlarını Yansıt"
+msgid "Mirror All Layers Vertically"
+msgstr "Tüm Katmanları Dikey Yansıt"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -43347,18 +43363,6 @@ msgstr "Demeti kaydetmek için bir dizin seç"
 #, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "Demet simge olarak kullanılacak dosyayı seç"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr "Sihirbaz Sayfası"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -60779,6 +60783,37 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "X Maskesini Yansıt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "X Katmanını Yansıt"
+#~ msgstr[1] "%1 X Katmanını Yansıt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Y Maskesini Yansıt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Y Katmanını Yansıt"
+#~ msgstr[1] "%1 Y Katmanını Yansıt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "Tüm X Katmanlarını Yansıt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Tüm Y Katmanlarını Yansıt"
+
+#~ msgid "WizardPage"
+#~ msgstr "Sihirbaz Sayfası"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Scale Layers"

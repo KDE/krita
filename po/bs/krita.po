@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -30400,52 +30400,46 @@ msgid "Remove Nodes"
 msgstr "Alat za linije"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "Ogledalo maske X"
+msgid "Mirror Mask Horizontally"
+msgstr "preslikano vodoravno"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "Sloj X u ogledalu"
-msgstr[1] "Sloj X u ogledalu"
-msgstr[2] "Sloj X u ogledalu"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Sloj ogledala horizontalno"
+msgstr[1] "Sloj ogledala horizontalno"
+msgstr[2] "Sloj ogledala horizontalno"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Ogledaj masku Y"
+msgid "Mirror Mask Vertically"
+msgstr "preslikano uspravno"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Sloj Y u ogledalu"
-msgstr[1] "Sloj Y u ogledalu"
-msgstr[2] "Sloj Y u ogledalu"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Sloj ogledala vertikalno"
+msgstr[1] "Sloj ogledala vertikalno"
+msgstr[2] "Sloj ogledala vertikalno"
 
 #: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "Sloj X u ogledalu"
+msgid "Mirror All Layers Horizontally"
+msgstr "Sloj ogledala horizontalno"
 
 #: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "Sloj Y u ogledalu"
+msgid "Mirror All Layers Vertically"
+msgstr "Sloj ogledala vertikalno"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -44796,18 +44790,6 @@ msgstr "Odaberite direktorij za spremanje snopa"
 #| msgid "Select file to use as dynamic file layer."
 msgid "Select file to use as bundle icon"
 msgstr "Odaberi datoteku za korištenje kao sloj dinamičke datoteke."
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -63028,6 +63010,48 @@ msgstr "Uvećaj sve"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referentne slike"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "Ogledalo maske X"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "Sloj X u ogledalu"
+#~ msgstr[1] "Sloj X u ogledalu"
+#~ msgstr[2] "Sloj X u ogledalu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Ogledaj masku Y"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Sloj Y u ogledalu"
+#~ msgstr[1] "Sloj Y u ogledalu"
+#~ msgstr[2] "Sloj Y u ogledalu"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "Sloj X u ogledalu"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Sloj Y u ogledalu"
 
 #, fuzzy
 #~| msgctxt "(qtundo-format)"
@@ -82295,17 +82319,7 @@ msgstr "Referentne slike"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "Sloj ogledala horizontalno"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
-#~ msgstr "Sloj ogledala vertikalno"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
 #~ msgstr "Sloj ogledala vertikalno"
 
 #, fuzzy

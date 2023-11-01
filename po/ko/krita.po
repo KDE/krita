@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2023-07-24 21:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -30491,42 +30491,54 @@ msgid "Remove Nodes"
 msgstr "노드 삭제"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "마스크 X 반전"
+msgid "Mirror Mask Horizontally"
+msgstr "좌우 반전"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
+#| msgctxt "action"
+#| msgid "Mirror Layer Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "레이어 X 반전"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "레이어 좌우 반전"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "마스크 Y 반전"
+msgid "Mirror Mask Vertically"
+msgstr "상하 반전"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
+#| msgctxt "action"
+#| msgid "Mirror Layer Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "레이어 Y 반전"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "레이어 상하 반전"
 
 #: libs/ui/kis_node_manager.cpp:1063
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "모든 레이어 X 반전"
+msgid "Mirror All Layers Horizontally"
+msgstr "모든 레이어 좌우 반전"
 
 #: libs/ui/kis_node_manager.cpp:1070
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "모든 레이어 Y 반전"
+msgid "Mirror All Layers Vertically"
+msgstr "모든 레이어 상하 반전"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -44653,18 +44665,6 @@ msgstr "번들을 저장할 디렉터리 선택"
 #, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "번들 아이콘에 사용할 파일 선택"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -62198,6 +62198,38 @@ msgstr "확대/축소 도구"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "참조 이미지 도구"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "마스크 X 반전"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "레이어 X 반전"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "마스크 Y 반전"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "레이어 Y 반전"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "모든 레이어 X 반전"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "모든 레이어 Y 반전"
 
 #, fuzzy
 #~| msgctxt "(qtundo-format)"
@@ -82404,24 +82436,10 @@ msgstr "참조 이미지 도구"
 
 #, fuzzy
 #~| msgctxt "action"
-#~| msgid "Mirror Layer Horizontally"
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "레이어 좌우 반전"
-
-#, fuzzy
-#~| msgctxt "action"
 #~| msgid "Mirror Layer &Vertically"
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
 #~ msgstr "레이어 상하 반전(&V)"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Mirror Layer Vertically"
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
-#~ msgstr "레이어 상하 반전"
 
 #, fuzzy
 #~| msgid "&Rotate Layer..."

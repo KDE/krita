@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -29584,46 +29584,58 @@ msgid "Remove Nodes"
 msgstr "Odstrániť uzly"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "Zrkadlová maska X"
+msgid "Mirror Mask Horizontally"
+msgstr "Zrkadliť horizontálne"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
+#| msgctxt "(qtundo-format) action"
+#| msgid "Mirror Layer Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "Zrkadliť vrstvu X"
-msgstr[1] "Zrkadliť vrstvu X"
-msgstr[2] "Zrkadliť vrstvu X"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Zrkadliť vrstvu horizontálne"
+msgstr[1] "Zrkadliť vrstvu horizontálne"
+msgstr[2] "Zrkadliť vrstvu horizontálne"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Zrkadlová maska Y"
+msgid "Mirror Mask Vertically"
+msgstr "Zrkadliť vertikálne"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
+#| msgctxt "(qtundo-format) action"
+#| msgid "Mirror Layer Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Zrkadliť vrstvu Y"
-msgstr[1] "Zrkadliť vrstvu Y"
-msgstr[2] "Zrkadliť vrstvu Y"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Zrkadliť vrstvu vertikálne"
+msgstr[1] "Zrkadliť vrstvu vertikálne"
+msgstr[2] "Zrkadliť vrstvu vertikálne"
 
 #: libs/ui/kis_node_manager.cpp:1063
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "Zrkadliť všetky vrstvy X"
+msgid "Mirror All Layers Horizontally"
+msgstr "Zrkadliť všetky vrstvy horizontálne"
 
 #: libs/ui/kis_node_manager.cpp:1070
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "Zrkadliť všetky vrstvy Y"
+msgid "Mirror All Layers Vertically"
+msgstr "Zrkadliť všetky vrstvy vertikálne"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -43777,18 +43789,6 @@ msgstr "Vybrať adresár na uloženie balíka"
 #, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "Vyberte súbor, ktorý sa použije ako ikona balíka"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -61223,6 +61223,42 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Nástroj referenčných obrázkov"
 
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "Zrkadlová maska X"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "Zrkadliť vrstvu X"
+#~ msgstr[1] "Zrkadliť vrstvu X"
+#~ msgstr[2] "Zrkadliť vrstvu X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Zrkadlová maska Y"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Zrkadliť vrstvu Y"
+#~ msgstr[1] "Zrkadliť vrstvu Y"
+#~ msgstr[2] "Zrkadliť vrstvu Y"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "Zrkadliť všetky vrstvy X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Zrkadliť všetky vrstvy Y"
+
 #, fuzzy
 #~| msgctxt "(qtundo-format)"
 #~| msgid "Scale Layer"
@@ -78310,15 +78346,7 @@ msgstr "Nástroj referenčných obrázkov"
 #~ msgstr "Zrkadliť vrstvu horizontálne"
 
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "Zrkadliť vrstvu horizontálne"
-
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
-#~ msgstr "Zrkadliť vrstvu vertikálne"
-
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
 #~ msgstr "Zrkadliť vrstvu vertikálne"
 
 #~ msgctxt "(qtundo-format) action"

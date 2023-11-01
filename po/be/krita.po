@@ -37,7 +37,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2008-01-01 23:08+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -29119,46 +29119,46 @@ msgstr "Набор прылад мастака"
 #: libs/ui/kis_node_manager.cpp:1038
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "Гарызантальнае адлюстраванне пласта"
+msgid "Mirror Mask Horizontally"
+msgstr "Толькі па гарызанталі"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "Гарызантальнае адлюстраванне пласта"
-msgstr[1] "Гарызантальнае адлюстраванне пласта"
-msgstr[2] "Гарызантальнае адлюстраванне пласта"
-msgstr[3] "Гарызантальнае адлюстраванне пласта"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Толькі па гарызанталі"
+msgstr[1] "Толькі па гарызанталі"
+msgstr[2] "Толькі па гарызанталі"
+msgstr[3] "Толькі па гарызанталі"
 
 #: libs/ui/kis_node_manager.cpp:1052
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Гарызантальнае адлюстраванне пласта"
+msgid "Mirror Mask Vertically"
+msgstr "Толькі па вертыкалі"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Вертыкальнае адлюстраванне пласта"
-msgstr[1] "Вертыкальнае адлюстраванне пласта"
-msgstr[2] "Вертыкальнае адлюстраванне пласта"
-msgstr[3] "Вертыкальнае адлюстраванне пласта"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Толькі па вертыкалі"
+msgstr[1] "Толькі па вертыкалі"
+msgstr[2] "Толькі па вертыкалі"
+msgstr[3] "Толькі па вертыкалі"
 
 #: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "Гарызантальнае адлюстраванне пласта"
+msgid "Mirror All Layers Horizontally"
+msgstr "Толькі па гарызанталі"
 
 #: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "Вертыкальнае адлюстраванне пласта"
+msgid "Mirror All Layers Vertically"
+msgstr "Толькі па вертыкалі"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, fuzzy, kde-format
@@ -42540,18 +42540,6 @@ msgstr "Прастакутнае вылучэнне"
 #, fuzzy, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "Прастакутнае вылучэнне"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -59625,6 +59613,44 @@ msgstr "Інтэрферэнцыйны бэзавы"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "Гарызантальнае адлюстраванне пласта"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "Гарызантальнае адлюстраванне пласта"
+#~ msgstr[1] "Гарызантальнае адлюстраванне пласта"
+#~ msgstr[2] "Гарызантальнае адлюстраванне пласта"
+#~ msgstr[3] "Гарызантальнае адлюстраванне пласта"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Гарызантальнае адлюстраванне пласта"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Вертыкальнае адлюстраванне пласта"
+#~ msgstr[1] "Вертыкальнае адлюстраванне пласта"
+#~ msgstr[2] "Вертыкальнае адлюстраванне пласта"
+#~ msgstr[3] "Вертыкальнае адлюстраванне пласта"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "Гарызантальнае адлюстраванне пласта"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Вертыкальнае адлюстраванне пласта"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
 #~ msgid "Scale Layers"
 #~ msgstr "Маштабаванне пласта"
 
@@ -73660,17 +73686,7 @@ msgstr "Інтэрферэнцыйны бэзавы"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "Толькі па гарызанталі"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
-#~ msgstr "Толькі па вертыкалі"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
 #~ msgstr "Толькі па вертыкалі"
 
 #, fuzzy

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2023-06-06 00:31-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -29704,42 +29704,54 @@ msgid "Remove Nodes"
 msgstr "レイヤーを削除"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "マスクを反転 X"
+msgid "Mirror Mask Horizontally"
+msgstr "水平方向に鏡像反転"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
+#| msgctxt "action"
+#| msgid "Mirror Layer Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "レイヤーを反転 X"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "レイヤーを上下反転"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "マスクを反転 Y"
+msgid "Mirror Mask Vertically"
+msgstr "垂直方向に鏡像反転"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
+#| msgctxt "action"
+#| msgid "Mirror Layer Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "レイヤーを反転 Y"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "レイヤーを上下反転"
 
 #: libs/ui/kis_node_manager.cpp:1063
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "すべてのレイヤーを反転 X"
+msgid "Mirror All Layers Horizontally"
+msgstr "すべてのレイヤーを上下反転"
 
 #: libs/ui/kis_node_manager.cpp:1070
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "すべてのレイヤーを反転 Y"
+msgid "Mirror All Layers Vertically"
+msgstr "すべてのレイヤーを上下反転"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -43933,18 +43945,6 @@ msgstr "ディレクトリを選んでバンドルを保存"
 #, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "バンドルのアイコンとして使うファイルを選択します"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -61483,6 +61483,38 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "マスクを反転 X"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "レイヤーを反転 X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "マスクを反転 Y"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "レイヤーを反転 Y"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "すべてのレイヤーを反転 X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "すべてのレイヤーを反転 Y"
 
 #, fuzzy
 #~| msgctxt "(qtundo-format)"

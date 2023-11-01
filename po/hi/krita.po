@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -29253,44 +29253,52 @@ msgid "Remove Nodes"
 msgstr "बिंदुओं को हटाएँ"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "प्रतिबिम्ब मास्क एक्स"
+msgid "Mirror Mask Horizontally"
+msgstr "क्षैतिज रूप से पलटें"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "प्रतिबिम्ब परत एक्स"
-msgstr[1] "प्रतिबिम्ब परत एक्स"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "मास्क को आड़े में प्रतिबिम्ब बनाएं"
+msgstr[1] "मास्क को आड़े में प्रतिबिम्ब बनाएं"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "प्रतिबिम्ब मास्क वाय"
+msgid "Mirror Mask Vertically"
+msgstr "लंबवत रूप से पलटें"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "परत वाय का प्रतिबिम्ब"
-msgstr[1] "परत वाय का प्रतिबिम्ब"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "मास्क को खड़े में प्रतिबिम्ब बनाएं"
+msgstr[1] "मास्क को खड़े में प्रतिबिम्ब बनाएं"
 
 #: libs/ui/kis_node_manager.cpp:1063
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "सभी परत प्रतिबिम्बित एक्स"
+msgid "Mirror All Layers Horizontally"
+msgstr "सभी परतों को आड़े में प्रतिबिंबित करें"
 
 #: libs/ui/kis_node_manager.cpp:1070
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "सभी परत प्रतिबिम्बित वाय"
+msgid "Mirror All Layers Vertically"
+msgstr "सभी परतों को खडे रूप से पलटें"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -43131,18 +43139,6 @@ msgstr "कोई चतुर्भुजीय क्षेत्र चुन
 #, fuzzy, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "सक्रिय चैनल का सेट चुनें."
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -60358,6 +60354,40 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "संदर्भ छवि औज़ार"
 
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "प्रतिबिम्ब मास्क एक्स"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "प्रतिबिम्ब परत एक्स"
+#~ msgstr[1] "प्रतिबिम्ब परत एक्स"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "प्रतिबिम्ब मास्क वाय"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "परत वाय का प्रतिबिम्ब"
+#~ msgstr[1] "परत वाय का प्रतिबिम्ब"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "सभी परत प्रतिबिम्बित एक्स"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "सभी परत प्रतिबिम्बित वाय"
+
 #, fuzzy
 #~| msgctxt "(qtundo-format)"
 #~| msgid "Scale Layer"
@@ -75677,17 +75707,7 @@ msgstr "संदर्भ छवि औज़ार"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "मास्क को आड़े में प्रतिबिम्ब बनाएं"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
-#~ msgstr "मास्क को खड़े में प्रतिबिम्ब बनाएं"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
 #~ msgstr "मास्क को खड़े में प्रतिबिम्ब बनाएं"
 
 #, fuzzy

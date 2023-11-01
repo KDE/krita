@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -31534,49 +31534,49 @@ msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
 #: libs/ui/kis_node_manager.cpp:1038
 #, fuzzy
-#| msgid "Zoom"
+#| msgid "Position"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "ਜ਼ੂਮ"
+msgid "Mirror Mask Horizontally"
+msgstr "ਸਥਿਤੀ"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
-#| msgid "Layer"
+#| msgid "Position"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "ਪਰਤ"
-msgstr[1] "ਪਰਤ"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "ਸਥਿਤੀ"
+msgstr[1] "ਸਥਿਤੀ"
 
 #: libs/ui/kis_node_manager.cpp:1052
 #, fuzzy
-#| msgid "Zoom"
+#| msgid "Set border"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "ਜ਼ੂਮ"
+msgid "Mirror Mask Vertically"
+msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
-#| msgid "Layer"
+#| msgid "Set border"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "ਪਰਤ"
-msgstr[1] "ਪਰਤ"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
+msgstr[1] "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
 #: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
-#| msgid "Layer"
+#| msgid "Position"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "ਪਰਤ"
+msgid "Mirror All Layers Horizontally"
+msgstr "ਸਥਿਤੀ"
 
 #: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
-#| msgid "Layer"
+#| msgid "Set border"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "ਪਰਤ"
+msgid "Mirror All Layers Vertically"
+msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, fuzzy, kde-format
@@ -46467,18 +46467,6 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #| msgid "Import Document"
 msgid "Select file to use as bundle icon"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -65359,6 +65347,46 @@ msgstr "ਜ਼ੂਮ"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "ਤਬਦੀਲ"
+
+#, fuzzy
+#~| msgid "Zoom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "ਜ਼ੂਮ"
+
+#, fuzzy
+#~| msgid "Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "ਪਰਤ"
+#~ msgstr[1] "ਪਰਤ"
+
+#, fuzzy
+#~| msgid "Zoom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "ਜ਼ੂਮ"
+
+#, fuzzy
+#~| msgid "Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "ਪਰਤ"
+#~ msgstr[1] "ਪਰਤ"
+
+#, fuzzy
+#~| msgid "Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "ਪਰਤ"
+
+#, fuzzy
+#~| msgid "Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "ਪਰਤ"
 
 #, fuzzy
 #~| msgid "New Layer"

@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2023-10-29 09:46+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -29497,42 +29497,58 @@ msgid "Remove Nodes"
 msgstr "Usuń węzły"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "Odbij maskę względem X"
+msgid "Mirror Mask Horizontally"
+msgstr "Lustrzane odbicie poziome"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format) action"
+#| msgid "Mirror Layer Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "Odbij warstwę względem X"
-msgstr[1] "Odbij %1 warstwę względem X"
-msgstr[2] "Odbij %1 warstw względem X"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Odbij lustrzanie warstwę w poziomie"
+msgstr[1] "Odbij lustrzanie warstwę w poziomie"
+msgstr[2] "Odbij lustrzanie warstwę w poziomie"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Odbij maskę względem Y"
+msgid "Mirror Mask Vertically"
+msgstr "Lustrzane odbicie pionowe"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format) action"
+#| msgid "Mirror Layer Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Odbij warstwę względem Y"
-msgstr[1] "Odbij %1 warstwy względem Y"
-msgstr[2] "Odbij %1 warstw względem Y"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Odbij lustrzanie warstwę w p&ionie"
+msgstr[1] "Odbij lustrzanie warstwę w p&ionie"
+msgstr[2] "Odbij lustrzanie warstwę w p&ionie"
 
 #: libs/ui/kis_node_manager.cpp:1063
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "Odbij wszystkie warstwy względem X"
+msgid "Mirror All Layers Horizontally"
+msgstr "Odbij wszystkie warstwy lustrzanie w poziomie"
 
 #: libs/ui/kis_node_manager.cpp:1070
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "Odbij wszystkie warstwy względem Y"
+msgid "Mirror All Layers Vertically"
+msgstr "Odbij wszystkie warstwy lustrzanie w pionie"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -43523,18 +43539,6 @@ msgstr "Wybierz katalog do zapisania zestawu"
 #, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "Wybierz plik do użycia jako zestaw ikon"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr "Strona pomocnika"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -61000,6 +61004,39 @@ msgid "Reference Images Tool"
 msgstr "Narzędzie obrazów wzorcowych"
 
 #~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "Odbij maskę względem X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "Odbij warstwę względem X"
+#~ msgstr[1] "Odbij %1 warstwę względem X"
+#~ msgstr[2] "Odbij %1 warstw względem X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Odbij maskę względem Y"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Odbij warstwę względem Y"
+#~ msgstr[1] "Odbij %1 warstwy względem Y"
+#~ msgstr[2] "Odbij %1 warstw względem Y"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "Odbij wszystkie warstwy względem X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Odbij wszystkie warstwy względem Y"
+
+#~ msgid "WizardPage"
+#~ msgstr "Strona pomocnika"
+
+#~ msgctxt "(qtundo-format)"
 #~ msgid "Scale Layers"
 #~ msgstr "Przeskaluj warstwy"
 
@@ -77574,15 +77611,7 @@ msgstr "Narzędzie obrazów wzorcowych"
 #~ msgstr "Odbij lustrzanie warstwę w p&oziomie"
 
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "Odbij lustrzanie warstwę w poziomie"
-
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
-#~ msgstr "Odbij lustrzanie warstwę w p&ionie"
-
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
 #~ msgstr "Odbij lustrzanie warstwę w p&ionie"
 
 #~ msgctxt "(qtundo-format) action"

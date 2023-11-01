@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2023-09-18 09:43-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -29635,44 +29635,56 @@ msgid "Remove Nodes"
 msgstr "Remover os nós"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "Máscara espelho de X"
+msgid "Mirror Mask Horizontally"
+msgstr "Espelhar horizontalmente"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
+#| msgctxt "action"
+#| msgid "Mirror Layer Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "Camada espelho de X"
-msgstr[1] "Camada espelho de X"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Espelhar a camada horizontalmente"
+msgstr[1] "Espelhar a camada horizontalmente"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Máscara espelho de Y"
+msgid "Mirror Mask Vertically"
+msgstr "Espelhar verticalmente"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
+#| msgctxt "action"
+#| msgid "Mirror Layer Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Camada espelho de Y"
-msgstr[1] "Camada espelho de Y"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Espelhar a camada verticalmente"
+msgstr[1] "Espelhar a camada verticalmente"
 
 #: libs/ui/kis_node_manager.cpp:1063
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "Espelhar todas as camadas em X"
+msgid "Mirror All Layers Horizontally"
+msgstr "Espelhar todas as camadas horizontalmente"
 
 #: libs/ui/kis_node_manager.cpp:1070
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "Espelhar todas as camadas em Y"
+msgid "Mirror All Layers Vertically"
+msgstr "Espelhar todas as camadas verticalmente"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -43905,18 +43917,6 @@ msgstr "Selecione uma pasta onde salvar o grupo de recursos"
 #, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "Selecione o arquivo para usar como um ícone de grupo de recursos"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -61599,6 +61599,40 @@ msgstr "Ferramenta Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta Imagens de Referência"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "Máscara espelho de X"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "Camada espelho de X"
+#~ msgstr[1] "Camada espelho de X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Máscara espelho de Y"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Camada espelho de Y"
+#~ msgstr[1] "Camada espelho de Y"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "Espelhar todas as camadas em X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Espelhar todas as camadas em Y"
 
 #, fuzzy
 #~| msgctxt "(qtundo-format)"
@@ -83156,24 +83190,10 @@ msgstr "Ferramenta Imagens de Referência"
 
 #, fuzzy
 #~| msgctxt "action"
-#~| msgid "Mirror Layer Horizontally"
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "Espelhar a camada horizontalmente"
-
-#, fuzzy
-#~| msgctxt "action"
 #~| msgid "Mirror Layer &Vertically"
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
 #~ msgstr "Espelhar a camada &verticalmente"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Mirror Layer Vertically"
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
-#~ msgstr "Espelhar a camada verticalmente"
 
 #, fuzzy
 #~| msgctxt "action"

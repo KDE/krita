@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
-"PO-Revision-Date: 2023-10-23 12:05+0200\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
+"PO-Revision-Date: 2023-10-30 20:16+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -111,7 +111,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.2\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -29643,44 +29643,56 @@ msgid "Remove Nodes"
 msgstr "Supprimer les nœuds"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "Miroir du masque selon X"
+msgid "Mirror Mask Horizontally"
+msgstr "Miroir horizontal"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
+#| msgctxt "action"
+#| msgid "Mirror Layer Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "Miroir du calque selon X"
-msgstr[1] "Miroir du calque selon X"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Faire un miroir du calque horizontalement"
+msgstr[1] "Faire un miroir du calque horizontalement"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Miroir du masque selon Y"
+msgid "Mirror Mask Vertically"
+msgstr "Miroir vertical"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
+#| msgctxt "action"
+#| msgid "Mirror Layer Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Miroir du calque selon Y"
-msgstr[1] "Miroir du calque selon Y"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Faire un miroir du calque verticalement"
+msgstr[1] "Faire un miroir du calque verticalement"
 
 #: libs/ui/kis_node_manager.cpp:1063
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "Faire un reflet de tous les calques selon X"
+msgid "Mirror All Layers Horizontally"
+msgstr "Refléter tous les calques horizontalement"
 
 #: libs/ui/kis_node_manager.cpp:1070
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "Faire un reflet de tous les calques selon Y"
+msgid "Mirror All Layers Vertically"
+msgstr "Refléter tous les calques verticalement"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -37377,10 +37389,9 @@ msgstr "Éditeur de la couleur du texte"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
-#, fuzzy, kde-format
-#| msgid "Sh&adow Mode:"
+#, kde-format
 msgid "Show Move"
-msgstr "Mode d'ombr&age :"
+msgstr "Afficher le déplacement"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
@@ -37392,25 +37403,21 @@ msgstr "Afficher les paramètres contextuels d'aimantation"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgid "Show Lock"
-msgstr "Afficher les panneaux"
+msgstr "Afficher le verrouillage"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
-#, fuzzy, kde-format
-#| msgid "Duplicate"
+#, kde-format
 msgid "Show Duplicate"
-msgstr "Dupliquer"
+msgstr "Afficher le duplicata"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgid "Show Delete"
-msgstr "Supprimer"
+msgstr "Afficher la suppression"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
@@ -43838,18 +43845,6 @@ msgstr "Sélectionner un dossier où enregistrer le pack"
 msgid "Select file to use as bundle icon"
 msgstr "Sélectionner un fichier pour l'utiliser comme icône du pack"
 
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr "Page d'assistant"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
 #, kde-format
@@ -44123,12 +44118,11 @@ msgid "Mirror Image Horizontally"
 msgstr "Retourner l'image horizontalement"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, fuzzy, kde-format
-#| msgid "Rotate Layer"
+#, kde-format
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
-msgstr[0] "Tourner le calque"
-msgstr[1] "Tourner le calque"
+msgstr[0] "Faire tourner le calque"
+msgstr[1] "Faire tourner les %1 calques"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -46143,10 +46137,9 @@ msgstr "Taille de la fenêtre :"
 
 #: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgid "Reset Transparent"
-msgstr "Transparent"
+msgstr "Ré-initialiser la transparence"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -59365,19 +59358,14 @@ msgid "Letter Spacing"
 msgstr "Espacement des lettres"
 
 #: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
-#, fuzzy
-#| msgid "Inverted Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Text"
-msgstr "Inverser le texte"
+msgstr "Insérer du texte"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:26
-#, fuzzy
-#| msgctxt "@title:window"
-#| msgid "Remove Template"
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
-msgstr "Supprimer le modèle"
+msgstr "Supprimer le texte"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -61480,6 +61468,43 @@ msgstr "Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Images de référence"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "Miroir du masque selon X"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "Miroir du calque selon X"
+#~ msgstr[1] "Miroir du calque selon X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Miroir du masque selon Y"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Miroir du calque selon Y"
+#~ msgstr[1] "Miroir du calque selon Y"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "Faire un reflet de tous les calques selon X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Faire un reflet de tous les calques selon Y"
+
+#~ msgid "WizardPage"
+#~ msgstr "Page d'assistant"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Scale Layers"
@@ -82804,24 +82829,10 @@ msgstr "Images de référence"
 
 #, fuzzy
 #~| msgctxt "action"
-#~| msgid "Mirror Layer Horizontally"
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "Faire un miroir du calque horizontalement"
-
-#, fuzzy
-#~| msgctxt "action"
 #~| msgid "Mirror Layer &Vertically"
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
 #~ msgstr "Faire un miroir du calque &verticalement"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Mirror Layer Vertically"
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
-#~ msgstr "Faire un miroir du calque verticalement"
 
 #, fuzzy
 #~| msgid "&Rotate Layer..."

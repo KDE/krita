@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -29725,48 +29725,48 @@ msgstr "Gan Uirlis Bheo"
 #: libs/ui/kis_node_manager.cpp:1038
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "Scáthánaigh Masc X"
+msgid "Mirror Mask Horizontally"
+msgstr "Scáthánaigh go Cothrománach"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "Scáthánaigh Sraith X"
-msgstr[1] "Scáthánaigh Sraith X"
-msgstr[2] "Scáthánaigh Sraith X"
-msgstr[3] "Scáthánaigh Sraith X"
-msgstr[4] "Scáthánaigh Sraith X"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Scáthánaigh go Cothrománach"
+msgstr[1] "Scáthánaigh go Cothrománach"
+msgstr[2] "Scáthánaigh go Cothrománach"
+msgstr[3] "Scáthánaigh go Cothrománach"
+msgstr[4] "Scáthánaigh go Cothrománach"
 
 #: libs/ui/kis_node_manager.cpp:1052
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Scáthánaigh Masc X"
+msgid "Mirror Mask Vertically"
+msgstr "Scáthánaigh go hIngearach"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Scáthánaigh Sraith Y"
-msgstr[1] "Scáthánaigh Sraith Y"
-msgstr[2] "Scáthánaigh Sraith Y"
-msgstr[3] "Scáthánaigh Sraith Y"
-msgstr[4] "Scáthánaigh Sraith Y"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Scáthánaigh go hIngearach"
+msgstr[1] "Scáthánaigh go hIngearach"
+msgstr[2] "Scáthánaigh go hIngearach"
+msgstr[3] "Scáthánaigh go hIngearach"
+msgstr[4] "Scáthánaigh go hIngearach"
 
 #: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "Scáthánaigh Sraith X"
+msgid "Mirror All Layers Horizontally"
+msgstr "Scáthánaigh go Cothrománach"
 
 #: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "Scáthánaigh Sraith Y"
+msgid "Mirror All Layers Vertically"
+msgstr "Scáthánaigh go hIngearach"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, fuzzy, kde-format
@@ -43643,18 +43643,6 @@ msgstr "Roghnaigh limistéar dronuilleogach"
 #, fuzzy, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "Roghnaigh limistéar dronuilleogach"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -61241,6 +61229,46 @@ msgstr "Athainmnigh Íomhá"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "Scáthánaigh Masc X"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "Scáthánaigh Sraith X"
+#~ msgstr[1] "Scáthánaigh Sraith X"
+#~ msgstr[2] "Scáthánaigh Sraith X"
+#~ msgstr[3] "Scáthánaigh Sraith X"
+#~ msgstr[4] "Scáthánaigh Sraith X"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Scáthánaigh Masc X"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Scáthánaigh Sraith Y"
+#~ msgstr[1] "Scáthánaigh Sraith Y"
+#~ msgstr[2] "Scáthánaigh Sraith Y"
+#~ msgstr[3] "Scáthánaigh Sraith Y"
+#~ msgstr[4] "Scáthánaigh Sraith Y"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "Scáthánaigh Sraith X"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Scáthánaigh Sraith Y"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
 #~ msgid "Scale Layers"
 #~ msgstr "Scálaigh Sraith"
 
@@ -76574,17 +76602,7 @@ msgstr "Athainmnigh Íomhá"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "Scáthánaigh go Cothrománach"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
-#~ msgstr "Scáthánaigh go hIngearach"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
 #~ msgstr "Scáthánaigh go hIngearach"
 
 #, fuzzy

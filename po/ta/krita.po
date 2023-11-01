@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -29165,42 +29165,42 @@ msgstr "நகர்த்தும் கருவி"
 #: libs/ui/kis_node_manager.cpp:1038
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "அடுக்கை இறக்கு"
+msgid "Mirror Mask Horizontally"
+msgstr "இடவலதை மட்டும் புடைத்துநிற்கும்படி செய்"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "அடுக்கை இறக்கு"
-msgstr[1] "அடுக்கை இறக்கு"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "இடவலதை மட்டும் புடைத்துநிற்கும்படி செய்"
+msgstr[1] "இடவலதை மட்டும் புடைத்துநிற்கும்படி செய்"
 
 #: libs/ui/kis_node_manager.cpp:1052
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "அடுக்கை இறக்கு"
+msgid "Mirror Mask Vertically"
+msgstr "மேல்கீழ் மட்டும் புடைத்துநிற்கும்படி செய்"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "அடுக்கை இறக்கு"
-msgstr[1] "அடுக்கை இறக்கு"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "மேல்கீழ் மட்டும் புடைத்துநிற்கும்படி செய்"
+msgstr[1] "மேல்கீழ் மட்டும் புடைத்துநிற்கும்படி செய்"
 
 #: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "அடுக்கை இறக்கு"
+msgid "Mirror All Layers Horizontally"
+msgstr "இடவலதை மட்டும் புடைத்துநிற்கும்படி செய்"
 
 #: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "அடுக்கை இறக்கு"
+msgid "Mirror All Layers Vertically"
+msgstr "மேல்கீழ் மட்டும் புடைத்துநிற்கும்படி செய்"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, fuzzy, kde-format
@@ -42664,18 +42664,6 @@ msgstr "நீள்சதுரம்"
 #, fuzzy, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "நீள்சதுரம்"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -59823,6 +59811,40 @@ msgstr "உருவத்திற்கு மறுபெயரிடு"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "அடுக்கை இறக்கு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "அடுக்கை இறக்கு"
+#~ msgstr[1] "அடுக்கை இறக்கு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "அடுக்கை இறக்கு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "அடுக்கை இறக்கு"
+#~ msgstr[1] "அடுக்கை இறக்கு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "அடுக்கை இறக்கு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "அடுக்கை இறக்கு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
 #~ msgid "Scale Layers"
 #~ msgstr "அடுக்கை அளவாக்கு "
 
@@ -74332,17 +74354,7 @@ msgstr "உருவத்திற்கு மறுபெயரிடு"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "இடவலதை மட்டும் புடைத்துநிற்கும்படி செய்"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
-#~ msgstr "மேல்கீழ் மட்டும் புடைத்துநிற்கும்படி செய்"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
 #~ msgstr "மேல்கீழ் மட்டும் புடைத்துநிற்கும்படி செய்"
 
 #, fuzzy

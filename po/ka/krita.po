@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2023-10-27 06:00+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -28859,40 +28859,56 @@ msgid "Remove Nodes"
 msgstr "კვანძების წაშლა"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr ""
+msgid "Mirror Mask Horizontally"
+msgstr "ჰორიზონტალური ანარეკლი"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Mirror Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] ""
-msgstr[1] ""
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "ფენების ჰორიზონტალური ანარეკლი"
+msgstr[1] "ფენების ჰორიზონტალური ანარეკლი"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr ""
+msgid "Mirror Mask Vertically"
+msgstr "ვერტიკალურ ანარეკლი"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Mirror Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] ""
-msgstr[1] ""
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "ფენების ვერტიკალურ ანარეკლი"
+msgstr[1] "ფენების ვერტიკალურ ანარეკლი"
 
 #: libs/ui/kis_node_manager.cpp:1063
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr ""
+msgid "Mirror All Layers Horizontally"
+msgstr "ფენების ჰორიზონტალური ანარეკლი"
 
 #: libs/ui/kis_node_manager.cpp:1070
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr ""
+msgid "Mirror All Layers Vertically"
+msgstr "ფენების ვერტიკალურ ანარეკლი"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -42267,18 +42283,6 @@ msgstr ""
 #: plugins/extensions/resourcemanager/page_metadata_info.cpp:107
 #, kde-format
 msgid "Select file to use as bundle icon"
-msgstr ""
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)

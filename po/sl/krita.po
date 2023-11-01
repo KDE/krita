@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2023-10-29 10:27+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -29394,44 +29394,60 @@ msgid "Remove Nodes"
 msgstr "Odstrani vozlišča"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "Zrcali masko X"
+msgid "Mirror Mask Horizontally"
+msgstr "Zrcali vodoravno"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Mirror Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "Zrcali %1 plasti X"
-msgstr[1] "Zrcali %1 plast X"
-msgstr[2] "Zrcali %1 plasti X"
-msgstr[3] "Zrcali %1 plasti X"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Zrcali plasti vodoravno"
+msgstr[1] "Zrcali plasti vodoravno"
+msgstr[2] "Zrcali plasti vodoravno"
+msgstr[3] "Zrcali plasti vodoravno"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Zrcali masko Y"
+msgid "Mirror Mask Vertically"
+msgstr "Zrcali navpično"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Mirror Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Zrcali %1 plasti Y"
-msgstr[1] "Zrcali %1 plast Y"
-msgstr[2] "Zrcali %1 plasti Y"
-msgstr[3] "Zrcali %1 plasti Y"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Zrcali plasti navpično"
+msgstr[1] "Zrcali plasti navpično"
+msgstr[2] "Zrcali plasti navpično"
+msgstr[3] "Zrcali plasti navpično"
 
 #: libs/ui/kis_node_manager.cpp:1063
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "Zrcali vse plasti X"
+msgid "Mirror All Layers Horizontally"
+msgstr "Zrcali vse plasti vodoravno"
 
 #: libs/ui/kis_node_manager.cpp:1070
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "Zrcali vse plasti Y"
+msgid "Mirror All Layers Vertically"
+msgstr "Zrcali vse plasti navpično"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -43426,18 +43442,6 @@ msgstr "Izberite mapo za shranjevanje svežnja"
 #, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "Izberite datoteko, ki bo služila kot ikona svežnja"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr "Stran čarovnika"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -60862,3 +60866,38 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "Zrcali masko X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "Zrcali %1 plasti X"
+#~ msgstr[1] "Zrcali %1 plast X"
+#~ msgstr[2] "Zrcali %1 plasti X"
+#~ msgstr[3] "Zrcali %1 plasti X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Zrcali masko Y"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Zrcali %1 plasti Y"
+#~ msgstr[1] "Zrcali %1 plast Y"
+#~ msgstr[2] "Zrcali %1 plasti Y"
+#~ msgstr[3] "Zrcali %1 plasti Y"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "Zrcali vse plasti X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Zrcali vse plasti Y"
+
+#~ msgid "WizardPage"
+#~ msgstr "Stran čarovnika"

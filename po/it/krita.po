@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2023-10-22 20:46+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -29509,44 +29509,56 @@ msgid "Remove Nodes"
 msgstr "Rimuovi nodi"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "Rispecchia la maschera X"
+msgid "Mirror Mask Horizontally"
+msgstr "Rispecchia orizzontalmente"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
+#| msgctxt "action"
+#| msgid "Mirror Layer Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "Rispecchia il livello X"
-msgstr[1] "Rispecchia il livello X"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Rispecchia il livello orizzontalmente"
+msgstr[1] "Rispecchia il livello orizzontalmente"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "Rispecchia la maschera Y"
+msgid "Mirror Mask Vertically"
+msgstr "Rispecchia verticalmente"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
+#| msgctxt "action"
+#| msgid "Mirror Layer Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "Rispecchia il livello Y"
-msgstr[1] "Rispecchia il livello Y"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Rispecchia il livello verticalmente"
+msgstr[1] "Rispecchia il livello verticalmente"
 
 #: libs/ui/kis_node_manager.cpp:1063
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "Rispecchia tutti i livelli X"
+msgid "Mirror All Layers Horizontally"
+msgstr "Rispecchia orizzontalmente tutti i livelli"
 
 #: libs/ui/kis_node_manager.cpp:1070
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "Rispecchia tutti i livelli Y"
+msgid "Mirror All Layers Vertically"
+msgstr "Rispecchia il verticalmente tutti i livelli"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -43601,18 +43613,6 @@ msgstr "Seleziona una cartella dove salvare il gruppo"
 #, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "Seleziona il file da usare come icona del gruppo"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr "Procedura guidata"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -61178,6 +61178,43 @@ msgstr "Strumento Ingrandimento"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Strumento Immagini di riferimento"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "Rispecchia la maschera X"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "Rispecchia il livello X"
+#~ msgstr[1] "Rispecchia il livello X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "Rispecchia la maschera Y"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "Rispecchia il livello Y"
+#~ msgstr[1] "Rispecchia il livello Y"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "Rispecchia tutti i livelli X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "Rispecchia tutti i livelli Y"
+
+#~ msgid "WizardPage"
+#~ msgstr "Procedura guidata"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Scale Layers"
@@ -83084,24 +83121,10 @@ msgstr "Strumento Immagini di riferimento"
 
 #, fuzzy
 #~| msgctxt "action"
-#~| msgid "Mirror Layer Horizontally"
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "Rispecchia il livello orizzontalmente"
-
-#, fuzzy
-#~| msgctxt "action"
 #~| msgid "Mirror Layer &Vertically"
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
 #~ msgstr "Rispecchia il livello &verticalmente"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Mirror Layer Vertically"
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
-#~ msgstr "Rispecchia il livello verticalmente"
 
 #, fuzzy
 #~| msgid "&Rotate Layer..."

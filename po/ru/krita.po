@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2023-03-12 19:06+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -30034,76 +30034,56 @@ msgstr ""
 "удаление узлов"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr ""
-"Горизонтальное отражение маски\n"
-"горизонтальное отражение маски"
+msgid "Mirror Mask Horizontally"
+msgstr "Отразить по горизонтали"
 
-# tied to action "Mirror Layer Horizontally" --aspotashev
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] ""
-"Горизонтальное отражение слоя\n"
-"горизонтальное отражение слоя"
-msgstr[1] ""
-"Горизонтальное отражение слоя\n"
-"горизонтальное отражение слоя"
-msgstr[2] ""
-"Горизонтальное отражение слоя\n"
-"горизонтальное отражение слоя"
-msgstr[3] ""
-"Горизонтальное отражение слоя\n"
-"горизонтальное отражение слоя"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Отразить слой по горизонтали"
+msgstr[1] "Отразить слой по горизонтали"
+msgstr[2] "Отразить слой по горизонтали"
+msgstr[3] "Отразить слой по горизонтали"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr ""
-"Вертикальное отражение маски\n"
-"вертикальное отражение маски"
+msgid "Mirror Mask Vertically"
+msgstr "Отразить по вертикали"
 
-# tied to action "Mirror Layer Vertically" --aspotashev
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] ""
-"Вертикальное отражение слоя\n"
-"вертикальное отражение слоя"
-msgstr[1] ""
-"Вертикальное отражение слоя\n"
-"вертикальное отражение слоя"
-msgstr[2] ""
-"Вертикальное отражение слоя\n"
-"вертикальное отражение слоя"
-msgstr[3] ""
-"Вертикальное отражение слоя\n"
-"вертикальное отражение слоя"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Отразить слой по вертикали"
+msgstr[1] "Отразить слой по вертикали"
+msgstr[2] "Отразить слой по вертикали"
+msgstr[3] "Отразить слой по вертикали"
 
-# tied to action "Mirror Layer Horizontally" --aspotashev
 #: libs/ui/kis_node_manager.cpp:1063
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr ""
-"Отражение всех слоёв относительно оси X\n"
-"отражение всех слоёв относительно оси X"
+msgid "Mirror All Layers Horizontally"
+msgstr "Отразить все слои по горизонтали"
 
-# tied to action "Mirror Layer Vertically" --aspotashev
 #: libs/ui/kis_node_manager.cpp:1070
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr ""
-"Отражение всех слоёв относительно оси Y\n"
-"отражение всех слоёв относительно оси Y"
+msgid "Mirror All Layers Vertically"
+msgstr "Отразить все слои по вертикали"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -44474,18 +44454,6 @@ msgstr "Выберите папку для сохранения пакета"
 #, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "Выберите файл, чтобы использовать его как значок пакета"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -62110,6 +62078,72 @@ msgstr "Изменение масштаба"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Эталонные изображения"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr ""
+#~ "Горизонтальное отражение маски\n"
+#~ "горизонтальное отражение маски"
+
+# tied to action "Mirror Layer Horizontally" --aspotashev
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] ""
+#~ "Горизонтальное отражение слоя\n"
+#~ "горизонтальное отражение слоя"
+#~ msgstr[1] ""
+#~ "Горизонтальное отражение слоя\n"
+#~ "горизонтальное отражение слоя"
+#~ msgstr[2] ""
+#~ "Горизонтальное отражение слоя\n"
+#~ "горизонтальное отражение слоя"
+#~ msgstr[3] ""
+#~ "Горизонтальное отражение слоя\n"
+#~ "горизонтальное отражение слоя"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr ""
+#~ "Вертикальное отражение маски\n"
+#~ "вертикальное отражение маски"
+
+# tied to action "Mirror Layer Vertically" --aspotashev
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] ""
+#~ "Вертикальное отражение слоя\n"
+#~ "вертикальное отражение слоя"
+#~ msgstr[1] ""
+#~ "Вертикальное отражение слоя\n"
+#~ "вертикальное отражение слоя"
+#~ msgstr[2] ""
+#~ "Вертикальное отражение слоя\n"
+#~ "вертикальное отражение слоя"
+#~ msgstr[3] ""
+#~ "Вертикальное отражение слоя\n"
+#~ "вертикальное отражение слоя"
+
+# tied to action "Mirror Layer Horizontally" --aspotashev
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr ""
+#~ "Отражение всех слоёв относительно оси X\n"
+#~ "отражение всех слоёв относительно оси X"
+
+# tied to action "Mirror Layer Vertically" --aspotashev
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr ""
+#~ "Отражение всех слоёв относительно оси Y\n"
+#~ "отражение всех слоёв относительно оси Y"
 
 #, fuzzy
 #~| msgctxt "(qtundo-format)"
@@ -80551,18 +80585,8 @@ msgstr "Эталонные изображения"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Horizontally"
-#~ msgstr "Отразить слой по горизонтали"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer &Vertically"
 #~ msgstr "Отразить слой по &вертикали"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Mirror Layer Vertically"
-#~ msgstr "Отразить слой по вертикали"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2023-10-30 08:51+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -29781,68 +29781,60 @@ msgstr ""
 "вилучення вузлів"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr ""
-"Віддзеркалити маску відносно X\n"
-"віддзеркалення маски відносно X"
+msgid "Mirror Mask Horizontally"
+msgstr "Віддзеркалити горизонтально"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Mirror Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] ""
-"Віддзеркалити %1 шар горизонтально\n"
-"віддзеркалення %1 шару горизонтально"
-msgstr[1] ""
-"Віддзеркалити %1 шари горизонтально\n"
-"віддзеркалення %1 шарів горизонтально"
-msgstr[2] ""
-"Віддзеркалити %1 шарів горизонтально\n"
-"віддзеркалення %1 шарів горизонтально"
-msgstr[3] ""
-"Віддзеркалити шар горизонтально\n"
-"віддзеркалення шару горизонтально"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "Віддзеркалити шари горизонтально"
+msgstr[1] "Віддзеркалити шари горизонтально"
+msgstr[2] "Віддзеркалити шари горизонтально"
+msgstr[3] "Віддзеркалити шари горизонтально"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr ""
-"Віддзеркалити маску відносно Y\n"
-"віддзеркалення маски відносно Y"
+msgid "Mirror Mask Vertically"
+msgstr "Віддзеркалити вертикально"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Mirror Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] ""
-"Віддзеркалити %1 шар вертикально\n"
-"віддзеркалення %1 шару вертикально"
-msgstr[1] ""
-"Віддзеркалити %1 шари вертикально\n"
-"віддзеркалення %1 шарів вертикально"
-msgstr[2] ""
-"Віддзеркалити %1 шарів вертикально\n"
-"віддзеркалення %1 шарів вертикально"
-msgstr[3] ""
-"Віддзеркалити шар вертикально\n"
-"віддзеркалення шару вертикально"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "Віддзеркалити шари вертикально"
+msgstr[1] "Віддзеркалити шари вертикально"
+msgstr[2] "Віддзеркалити шари вертикально"
+msgstr[3] "Віддзеркалити шари вертикально"
 
 #: libs/ui/kis_node_manager.cpp:1063
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr ""
-"Віддзеркалити усі шари відносно X\n"
-"віддзеркалення усіх шарів відносно X"
+msgid "Mirror All Layers Horizontally"
+msgstr "Віддзеркалити усі шари горизонтально"
 
 #: libs/ui/kis_node_manager.cpp:1070
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr ""
-"Віддзеркалити усі шари відносно Y\n"
-"віддзеркалення усіх шарів відносно Y"
+msgid "Mirror All Layers Vertically"
+msgstr "Віддзеркалити усі шари вертикально"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -44053,18 +44045,6 @@ msgid "Select file to use as bundle icon"
 msgstr ""
 "Виберіть файл, зображення з якого слід використовувати як піктограму "
 "комплекту."
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr "Сторінка майстра"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -61687,6 +61667,65 @@ msgstr "Інструмент масштабування"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Інструмент еталонних зображень"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr ""
+#~ "Віддзеркалити маску відносно X\n"
+#~ "віддзеркалення маски відносно X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] ""
+#~ "Віддзеркалити %1 шар горизонтально\n"
+#~ "віддзеркалення %1 шару горизонтально"
+#~ msgstr[1] ""
+#~ "Віддзеркалити %1 шари горизонтально\n"
+#~ "віддзеркалення %1 шарів горизонтально"
+#~ msgstr[2] ""
+#~ "Віддзеркалити %1 шарів горизонтально\n"
+#~ "віддзеркалення %1 шарів горизонтально"
+#~ msgstr[3] ""
+#~ "Віддзеркалити шар горизонтально\n"
+#~ "віддзеркалення шару горизонтально"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr ""
+#~ "Віддзеркалити маску відносно Y\n"
+#~ "віддзеркалення маски відносно Y"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] ""
+#~ "Віддзеркалити %1 шар вертикально\n"
+#~ "віддзеркалення %1 шару вертикально"
+#~ msgstr[1] ""
+#~ "Віддзеркалити %1 шари вертикально\n"
+#~ "віддзеркалення %1 шарів вертикально"
+#~ msgstr[2] ""
+#~ "Віддзеркалити %1 шарів вертикально\n"
+#~ "віддзеркалення %1 шарів вертикально"
+#~ msgstr[3] ""
+#~ "Віддзеркалити шар вертикально\n"
+#~ "віддзеркалення шару вертикально"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr ""
+#~ "Віддзеркалити усі шари відносно X\n"
+#~ "віддзеркалення усіх шарів відносно X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr ""
+#~ "Віддзеркалити усі шари відносно Y\n"
+#~ "віддзеркалення усіх шарів відносно Y"
+
+#~ msgid "WizardPage"
+#~ msgstr "Сторінка майстра"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Scale Layers"

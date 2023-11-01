@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:40+0000\n"
+"POT-Creation-Date: 2023-11-01 00:40+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -30420,58 +30420,64 @@ msgid "Remove Nodes"
 msgstr "إزالة العقد"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask X"
-msgstr "اعكس القناع سينيًّا"
+msgid "Mirror Mask Horizontally"
+msgstr "اعكس أفقيًّا"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
+#| msgctxt "action"
+#| msgid "Mirror Layer Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer X"
-msgid_plural "Mirror %1 Layers X"
-msgstr[0] "اعكس الطّبقة سينيًّا"
-msgstr[1] "اعكس الطّبقة سينيًّا"
-msgstr[2] "اعكس الطّبقة سينيًّا"
-msgstr[3] "اعكس الطّبقة سينيًّا"
-msgstr[4] "اعكس الطّبقة سينيًّا"
-msgstr[5] "اعكس الطّبقة سينيًّا"
+msgid "Mirror Layer Horizontally"
+msgid_plural "Mirror %1 Layers Horizontally"
+msgstr[0] "اعكس الطّبقة أفقيًّا"
+msgstr[1] "اعكس الطّبقة أفقيًّا"
+msgstr[2] "اعكس الطّبقة أفقيًّا"
+msgstr[3] "اعكس الطّبقة أفقيًّا"
+msgstr[4] "اعكس الطّبقة أفقيًّا"
+msgstr[5] "اعكس الطّبقة أفقيًّا"
 
 #: libs/ui/kis_node_manager.cpp:1052
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Mask Y"
-msgstr "اعكس القناع صاديًّا"
+msgid "Mirror Mask Vertically"
+msgstr "اعكس رأسيًّا"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
+#| msgctxt "action"
+#| msgid "Mirror Layer Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror Layer Y"
-msgid_plural "Mirror %1 Layers Y"
-msgstr[0] "اعكس الطّبقة صاديًّا"
-msgstr[1] "اعكس الطّبقة صاديًّا"
-msgstr[2] "اعكس الطّبقة صاديًّا"
-msgstr[3] "اعكس الطّبقة صاديًّا"
-msgstr[4] "اعكس الطّبقة صاديًّا"
-msgstr[5] "اعكس الطّبقة صاديًّا"
+msgid "Mirror Layer Vertically"
+msgid_plural "Mirror %1 Layers Vertically"
+msgstr[0] "اعكس الطّبقة رأسيًّا"
+msgstr[1] "اعكس الطّبقة رأسيًّا"
+msgstr[2] "اعكس الطّبقة رأسيًّا"
+msgstr[3] "اعكس الطّبقة رأسيًّا"
+msgstr[4] "اعكس الطّبقة رأسيًّا"
+msgstr[5] "اعكس الطّبقة رأسيًّا"
 
 #: libs/ui/kis_node_manager.cpp:1063
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
+#| msgctxt "action"
+#| msgid "Mirror Layer Horizontally"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers X"
-msgstr "اعكس الطّبقة سينيًّا"
+msgid "Mirror All Layers Horizontally"
+msgstr "اعكس الطّبقة أفقيًّا"
 
 #: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
+#| msgctxt "action"
+#| msgid "Mirror Layer Vertically"
 msgctxt "(qtundo-format)"
-msgid "Mirror All Layers Y"
-msgstr "اعكس الطّبقة صاديًّا"
+msgid "Mirror All Layers Vertically"
+msgstr "اعكس الطّبقة رأسيًّا"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -44701,18 +44707,6 @@ msgstr "اختر دليلًا لحفظ الحزمة فيه"
 #, kde-format
 msgid "Select file to use as bundle icon"
 msgstr "اختر ملفًّا لاستخدامه كأيقونة للحزمة"
-
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageResourceChooser)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageBundleSaver)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageMetadataInfo)
-#. i18n: ectx: property (windowTitle), widget (QWizardPage, PageTagChooser)
-#: plugins/extensions/resourcemanager/pagebundlesaver.ui:20
-#: plugins/extensions/resourcemanager/pagemetadatainfo.ui:20
-#: plugins/extensions/resourcemanager/pageresourcechooser.ui:26
-#: plugins/extensions/resourcemanager/pagetagchooser.ui:20
-#, kde-format
-msgid "WizardPage"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
@@ -62556,6 +62550,54 @@ msgstr "أداة العدسة"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "الصّور المرجع"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask X"
+#~ msgstr "اعكس القناع سينيًّا"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer X"
+#~ msgid_plural "Mirror %1 Layers X"
+#~ msgstr[0] "اعكس الطّبقة سينيًّا"
+#~ msgstr[1] "اعكس الطّبقة سينيًّا"
+#~ msgstr[2] "اعكس الطّبقة سينيًّا"
+#~ msgstr[3] "اعكس الطّبقة سينيًّا"
+#~ msgstr[4] "اعكس الطّبقة سينيًّا"
+#~ msgstr[5] "اعكس الطّبقة سينيًّا"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Mask Y"
+#~ msgstr "اعكس القناع صاديًّا"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Layer Y"
+#~ msgid_plural "Mirror %1 Layers Y"
+#~ msgstr[0] "اعكس الطّبقة صاديًّا"
+#~ msgstr[1] "اعكس الطّبقة صاديًّا"
+#~ msgstr[2] "اعكس الطّبقة صاديًّا"
+#~ msgstr[3] "اعكس الطّبقة صاديًّا"
+#~ msgstr[4] "اعكس الطّبقة صاديًّا"
+#~ msgstr[5] "اعكس الطّبقة صاديًّا"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer X"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers X"
+#~ msgstr "اعكس الطّبقة سينيًّا"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Mirror Layer Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror All Layers Y"
+#~ msgstr "اعكس الطّبقة صاديًّا"
 
 #, fuzzy
 #~| msgctxt "(qtundo-format)"

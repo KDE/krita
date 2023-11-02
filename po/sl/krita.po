@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-01 00:40+0000\n"
-"PO-Revision-Date: 2023-10-29 10:27+0100\n"
+"PO-Revision-Date: 2023-10-31 21:20+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -57360,16 +57360,16 @@ msgid "Copy Translate"
 msgstr "Kopiraj translacijo"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:459
-#, fuzzy, kde-format
-#| msgid "Copy Translate"
+#, kde-format
 msgid "Copy Translate at Intervals"
-msgstr "Kopiraj translacijo"
+msgstr "Kopiraj translacijo ob intervalih"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:570
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
+"Orodje Več čopičev ne podpira več kot %1 čopičev; uporabite večji interval."
 
 #: plugins/tools/basictools/kis_tool_multihand.h:97
 #, kde-format
@@ -57756,17 +57756,15 @@ msgstr "Odstrani vse"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:250
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval X:"
-msgstr "Notranje"
+msgstr "Interval X:"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:263
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval Y:"
-msgstr "Notranje"
+msgstr "Interval Y:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:744
 #, kde-format

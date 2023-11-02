@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-01 00:40+0000\n"
-"PO-Revision-Date: 2023-10-30 08:51+0200\n"
+"PO-Revision-Date: 2023-11-01 08:08+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -29781,60 +29781,68 @@ msgstr ""
 "вилучення вузлів"
 
 #: libs/ui/kis_node_manager.cpp:1038
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
-msgstr "Віддзеркалити горизонтально"
+msgstr ""
+"Віддзеркалити маску горизонтально\n"
+"віддзеркалення маски горизонтально"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Horizontally"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
-msgstr[0] "Віддзеркалити шари горизонтально"
-msgstr[1] "Віддзеркалити шари горизонтально"
-msgstr[2] "Віддзеркалити шари горизонтально"
-msgstr[3] "Віддзеркалити шари горизонтально"
+msgstr[0] ""
+"Віддзеркалити %1 шар горизонтально\n"
+"віддзеркалення %1 шару горизонтально"
+msgstr[1] ""
+"Віддзеркалити %1 шари горизонтально\n"
+"віддзеркалення %1 шарів горизонтально"
+msgstr[2] ""
+"Віддзеркалити %1 шарів горизонтально\n"
+"віддзеркалення %1 шарів горизонтально"
+msgstr[3] ""
+"Віддзеркалити шар горизонтально\n"
+"віддзеркалення шару горизонтально"
 
 #: libs/ui/kis_node_manager.cpp:1052
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
-msgstr "Віддзеркалити вертикально"
+msgstr ""
+"Віддзеркалити маску горизонтально\n"
+"віддзеркалення маски горизонтально"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Vertically"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
-msgstr[0] "Віддзеркалити шари вертикально"
-msgstr[1] "Віддзеркалити шари вертикально"
-msgstr[2] "Віддзеркалити шари вертикально"
-msgstr[3] "Віддзеркалити шари вертикально"
+msgstr[0] ""
+"Віддзеркалити %1 шар вертикально\n"
+"віддзеркалення %1 шару вертикально"
+msgstr[1] ""
+"Віддзеркалити %1 шари вертикально\n"
+"віддзеркалення %1 шарів вертикально"
+msgstr[2] ""
+"Віддзеркалити %1 шарів вертикально\n"
+"віддзеркалення %1 шарів вертикально"
+msgstr[3] ""
+"Віддзеркалити шар вертикально\n"
+"віддзеркалення шару вертикально"
 
 #: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
-msgstr "Віддзеркалити усі шари горизонтально"
+msgstr ""
+"Віддзеркалити усі шари горизонтально\n"
+"віддзеркалення усіх шарів горизонтально"
 
 #: libs/ui/kis_node_manager.cpp:1070
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
-msgstr "Віддзеркалити усі шари вертикально"
+msgstr ""
+"Віддзеркалити усі шари вертикально\n"
+"віддзеркалення усіх шарів вертикально"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format

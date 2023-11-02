@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-01 00:40+0000\n"
-"PO-Revision-Date: 2023-10-30 05:07+0300\n"
+"PO-Revision-Date: 2023-11-01 06:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -7434,7 +7434,7 @@ msgstr "Sol kenarları eşit olarak dağıt"
 #, kde-format
 msgctxt "action"
 msgid "Distribute Centers Horizontally"
-msgstr "Merkezleri Yatay Olarak Dağıt"
+msgstr "Merkezleri Yatay Dağıt"
 
 #. i18n: context: toolTip @ Action (object_distribute_horizontal_center), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:137
@@ -7490,7 +7490,7 @@ msgstr "Üst kenarları eşit uzaklıkta dağıt"
 #, kde-format
 msgctxt "action"
 msgid "Distribute Centers Vertically"
-msgstr "Merkezleri Dikey olarak Dağıt"
+msgstr "Merkezleri Dikey Dağıt"
 
 #. i18n: context: toolTip @ Action (object_distribute_vertical_center), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:174
@@ -7581,7 +7581,7 @@ msgstr "Yatay Yansıt"
 #, kde-format
 msgctxt "action"
 msgid "Mirror object horizontally"
-msgstr "Nesneyi yatay yansıt"
+msgstr "Nesneyi yatay olarak yansıt"
 
 #. i18n: context: text @ Action (object_transform_mirror_vertically), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:241
@@ -7595,7 +7595,7 @@ msgstr "Dikey Yansıt"
 #, kde-format
 msgctxt "action"
 msgid "Mirror object vertically"
-msgstr "Nesneyi dikey yansıt"
+msgstr "Nesneyi dikey olarak yansıt"
 
 #. i18n: context: text @ Action (object_transform_reset), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:251
@@ -12223,7 +12223,7 @@ msgstr "Dalgacık Çözündür"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layers Hori&zontally"
-msgstr "Katmanları Yatay Ola&rak Yansıt"
+msgstr "Katmanları Yatay Y&ansıt"
 
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
@@ -12240,7 +12240,7 @@ msgstr "Katmanları yatay olarak yansıt"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layers &Vertically"
-msgstr "Katmanları &Dikey Olarak Yansıt"
+msgstr "Katmanları &Dikey Yansıt"
 
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
@@ -12369,7 +12369,7 @@ msgstr "Tüm Katmanları &Yatay Yansıt"
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Horizontally"
-msgstr "Tüm Katmanları Yatay Yansıt"
+msgstr "Tüm katmanları yatay olarak yansıt"
 
 #. i18n: context: text @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3314
@@ -12386,7 +12386,7 @@ msgstr "Tüm Katmanları &Dikey Yansıt"
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Vertically"
-msgstr "Tüm Katmanları Dikey Yansıt"
+msgstr "Tüm katmanları dikey olarak yansıt"
 
 #. i18n: context: text @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3326
@@ -13872,7 +13872,7 @@ msgstr "Her İki Yönde Sarmala"
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Horizontally"
-msgstr "Yatay Olarak Sarmala"
+msgstr "Yatay Sarmala"
 
 #. i18n: context: text @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
@@ -13885,7 +13885,7 @@ msgstr "Yatay Olarak Sarmala"
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Vertically"
-msgstr "Dikey Olarak Sarmala"
+msgstr "Dikey Sarmala"
 
 #. i18n: context: text @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:700
@@ -14715,7 +14715,7 @@ msgstr "Görseli Kırk"
 #, kde-format
 msgctxt "action"
 msgid "&Mirror Image Horizontally"
-msgstr "Görseli Yatay Olarak &Yansıt"
+msgstr "Görseli Yatay &Yansıt"
 
 #. i18n: context: toolTip @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
@@ -14725,14 +14725,14 @@ msgstr "Görseli Yatay Olarak &Yansıt"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Horizontally"
-msgstr "Görseli Yatay Olarak Yansıt"
+msgstr "Görseli yatay olarak yansıt"
 
 #. i18n: context: text @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1293
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image &Vertically"
-msgstr "Görseli Dikey Olarak &Yansıt"
+msgstr "Görseli Dikey &Yansıt"
 
 #. i18n: context: toolTip @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
@@ -14742,7 +14742,7 @@ msgstr "Görseli Dikey Olarak &Yansıt"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Vertically"
-msgstr "Görseli Dikey Olarak Yansıt"
+msgstr "Görseli dikey olarak yansıt"
 
 #. i18n: context: text @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1305
@@ -29380,53 +29380,37 @@ msgid "Remove Nodes"
 msgstr "Düğümleri Kaldır"
 
 #: libs/ui/kis_node_manager.cpp:1038
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
-msgstr "Yatay Yansıt"
+msgstr "Maskeyi Yatay Yansıt"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Horizontally"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
-msgstr[0] "Katmanları yatay olarak yansıt"
-msgstr[1] "Katmanları yatay olarak yansıt"
+msgstr[0] "Katmanı Yatay Yansıt"
+msgstr[1] "%1 Katmanı Yatay Yansıt"
 
 #: libs/ui/kis_node_manager.cpp:1052
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
-msgstr "Dikey Yansıt"
+msgstr "Maskeyi Dikey Yansıt"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Vertically"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
-msgstr[0] "Katmanları dikey olarak yansıt"
-msgstr[1] "Katmanları dikey olarak yansıt"
+msgstr[0] "Katmanı Dikey Yansıt"
+msgstr[1] "%1 Katmanı Dikey Yansıt"
 
 #: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Tüm Katmanları Yatay Yansıt"
 
 #: libs/ui/kis_node_manager.cpp:1070
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Tüm Katmanları Dikey Yansıt"
@@ -43627,12 +43611,12 @@ msgstr "SeExpr Betikleri"
 #: plugins/extensions/rotateimage/rotateimage.cc:120
 msgctxt "(qtundo-format)"
 msgid "Mirror Image Vertically"
-msgstr "Görseli Dikey Olarak Yansıt"
+msgstr "Görseli Dikey Yansıt"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:129
 msgctxt "(qtundo-format)"
 msgid "Mirror Image Horizontally"
-msgstr "Görseli Yatay Olarak Yansıt"
+msgstr "Görseli Yatay Yansıt"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
 #, kde-format
@@ -57738,12 +57722,12 @@ msgstr "Nesneyi 180° Döndür"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1325
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
-msgstr "Nesneyi Yatay Olarak Yansıt"
+msgstr "Nesneyi Yatay Yansıt"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1329
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
-msgstr "Nesneyi Dikey Olarak Yansıt"
+msgstr "Nesneyi Dikey Yansıt"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
 msgctxt "(qtundo-format)"

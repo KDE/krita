@@ -66,7 +66,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-01 00:40+0000\n"
-"PO-Revision-Date: 2023-10-28 02:40+0100\n"
+"PO-Revision-Date: 2023-11-02 01:25+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -29506,53 +29506,37 @@ msgid "Remove Nodes"
 msgstr "Eliminar nodos"
 
 #: libs/ui/kis_node_manager.cpp:1038
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
-msgstr "Reflejar horizontalmente"
+msgstr "Reflejar la máscara horizontalmente"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) action"
-#| msgid "Mirror Layer Horizontally"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
-msgstr[0] "Reflejar capa horizontalmente"
-msgstr[1] "Reflejar capa horizontalmente"
+msgstr[0] "Reflejar la capa horizontalmente"
+msgstr[1] "Reflejar %1 capas horizontalmente"
 
 #: libs/ui/kis_node_manager.cpp:1052
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
-msgstr "Reflejar verticalmente"
+msgstr "Reflejar la máscara verticalmente"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) action"
-#| msgid "Mirror Layer Vertically"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
-msgstr[0] "Reflejar capa verticalmente"
-msgstr[1] "Reflejar capa verticalmente"
+msgstr[0] "Reflejar la capa verticalmente"
+msgstr[1] "Reflejar %1 capas verticalmente"
 
 #: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Reflejar todas las capas horizontalmente"
 
 #: libs/ui/kis_node_manager.cpp:1070
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Reflejar todas las capas verticalmente"
@@ -57615,19 +57599,20 @@ msgstr "Copo de nieve"
 #: plugins/tools/basictools/kis_tool_multihand.cpp:458
 #, kde-format
 msgid "Copy Translate"
-msgstr "Traducir copia"
+msgstr "Copiar traducir"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:459
-#, fuzzy, kde-format
-#| msgid "Copy Translate"
+#, kde-format
 msgid "Copy Translate at Intervals"
-msgstr "Traducir copia"
+msgstr "Copiar traducir a intervalos"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:570
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
+"La herramienta de pincel múltiple no permite más de %1 pinceles. Use un "
+"intervalo mayor."
 
 #: plugins/tools/basictools/kis_tool_multihand.h:97
 #, kde-format
@@ -58018,17 +58003,15 @@ msgstr "Eliminar todo"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:250
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval X:"
-msgstr "Interno"
+msgstr "Intervalo X:"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:263
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval Y:"
-msgstr "Interno"
+msgstr "Intervalo Y:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:744
 #, kde-format

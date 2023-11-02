@@ -62,7 +62,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-01 00:40+0000\n"
-"PO-Revision-Date: 2023-10-30 10:09+0100\n"
+"PO-Revision-Date: 2023-11-01 10:04+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -29535,12 +29535,9 @@ msgid "Remove Nodes"
 msgstr "Knooppunten verwijderen"
 
 #: libs/ui/kis_node_manager.cpp:1038
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
-msgstr "Horizontaal spiegelen"
+msgstr "Masker horizontaal spiegelen"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, fuzzy, kde-format

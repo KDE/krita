@@ -529,7 +529,7 @@ QPainterPath KoSvgTextShape::selectionBoxes(int pos, int anchor)
     return p;
 }
 
-QPainterPath KoSvgTextShape::underlines(int pos, int anchor)
+QPainterPath KoSvgTextShape::underlines(int pos, int anchor, KoSvgText::TextDecorations decor, KoSvgText::TextDecorationStyle style)
 {
     int start = qMin(pos, anchor);
     int end = qMax(pos, anchor);
@@ -538,7 +538,22 @@ QPainterPath KoSvgTextShape::underlines(int pos, int anchor)
         return QPainterPath();
     }
 
+    QPainterPathStroker stroker;
+    qreal minimum = (1.0 / d->xRes) * 72.0;
+    stroker.setWidth(qMax(minimum, this->layoutInterface()->getTextDecorationWidth(KoSvgText::DecorationUnderline)));
+    KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    if (style == KoSvgText::Solid) {
+        stroker.setDashPattern(Qt::SolidLine);
+    } else if (style == KoSvgText::Dashed) {
+        stroker.setDashPattern(Qt::DashLine);
+    } else if (style == KoSvgText::Dotted) {
+        stroker.setDashPattern(Qt::DotLine);
+    } else {
+        stroker.setDashPattern(Qt::SolidLine);
+    }
+
     QPainterPath p;
+    QPointF inset = mode == KoSvgText::HorizontalTB? QPointF(stroker.width()*0.5, 0): QPointF(0, stroker.width()*0.5);
     for (int i = start+1; i <= end; i++) {
         CursorPos pos = d->cursorPos.at(i);
         CharacterResult res = d->result.at(pos.cluster);
@@ -548,15 +563,28 @@ QPainterPath KoSvgTextShape::underlines(int pos, int anchor)
         if (res.cursorInfo.rtl) {
             last  += res.cursorInfo.offsets.value(pos.offset-1,  res.advance);
             first += res.cursorInfo.offsets.value(pos.offset, QPointF());
+            if (i == start+1) {
+                first -= inset;
+            }
+            if (i == end) {
+                last += inset;
+            }
         } else {
             first += res.cursorInfo.offsets.value(pos.offset-1,  QPointF());
             last  += res.cursorInfo.offsets.value(pos.offset, res.advance);
+            if (i == start+1) {
+                first += inset;
+            }
+            if (i == end) {
+                last -= inset;
+            }
         }
+
         p.moveTo(tf.map(first));
         p.lineTo(tf.map(last));
     }
 
-    return p;
+    return stroker.createStroke(p);
 }
 
 int KoSvgTextShape::posForPoint(QPointF point, int start, int end, bool *overlaps)

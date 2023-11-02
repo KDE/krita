@@ -54,6 +54,8 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     int preEditStart = -1;
     int preEditLength = -1;
     QPainterPath IMEDecoration;
+    QVector<QTextCharFormat::UnderlineStyle> styleMap;
+    QVector<QPair<int, int>> styleLengths;
     QRectF oldIMEDecorationRect;
 };
 
@@ -262,12 +264,9 @@ void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
         }
         if (d->preEditCommand) {
             gc.save();
-            QPen pen;
-            pen.setCosmetic(true);
-            pen.setColor(selectionColor);
-            pen.setWidth(d->cursorWidth);
-            gc.setPen(pen);
-            gc.drawPath(d->IMEDecoration);
+            QBrush brush(selectionColor);
+            gc.setOpacity(0.5);
+            gc.fillPath(d->IMEDecoration, brush);
             gc.restore();
         }
         gc.restore();
@@ -446,6 +445,8 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
         d->preEditCommand = 0;
     }
     // Apply the cursor offset for the preedit.
+    QVector<QTextCharFormat::UnderlineStyle> styleMap;
+    QVector<QPair<int, int>> styleLenghts;
     Q_FOREACH(QInputMethodEvent::Attribute attribute, event->attributes()) {
         qDebug() << "attribute: "<< attribute.type << "start: " << attribute.start
                  << "length: " << attribute.length << "val: " << attribute.value;
@@ -453,9 +454,15 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
         // however, we can´t set them yet: we can't format yet, as well, all but qt's windows integration
         // just use an underline, and the windows integration just inverts the text colors... We can't actually
         // draw this. So we'll just use underlines for now.
-        //if (attribute.type == QInputMethodEvent::TextFormat) {
-        //    QTextCharFormat form = attribute.value.data();
-        //}
+
+        if (attribute.type == QInputMethodEvent::TextFormat) {
+            QVariant val = attribute.value;
+            QTextCharFormat form = val.value<QTextFormat>().toCharFormat();
+            if (form.font().underline()) {
+                styleMap.append(form.underlineStyle());
+                styleLenghts.append({attribute.start, attribute.length});
+            }
+        }
 
         // QInputMethodEvent::Language is about setting the locale on the given  preedit string, which is not possible yet.
         // QInputMethodEvent::Ruby is supossedly ruby info for the preedit string, but none of the platform integrations
@@ -469,6 +476,8 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
             updateCursor();
         }
     }
+    d->styleMap = styleMap;
+    d->styleLengths = styleLenghts;
     updateIMEDecoration();
     event->accept();
 }
@@ -772,9 +781,27 @@ void SvgTextCursor::updateIMEDecoration()
 {
     if (d->shape) {
         d->oldIMEDecorationRect = d->shape->shapeToDocument(d->IMEDecoration.boundingRect());
-        int index = d->shape->indexForPos(d->preEditStart) + d->preEditLength;
-        int anchor = d->shape->posForIndex(index);
-        d->IMEDecoration = d->preEditCommand? d->shape->underlines(d->preEditStart, anchor): QPainterPath();
+        KoSvgText::TextDecorations decor;
+        decor.setFlag(KoSvgText::DecorationUnderline, true);
+        d->IMEDecoration = QPainterPath();
+        if (d->preEditCommand) {
+            for(int i = 0; i< d->styleMap.size(); i++) {
+                const QPair<int, int> length = d->styleLengths.at(i);
+
+                int startIndex = d->shape->indexForPos(d->preEditStart) + length.first;
+                int endIndex = startIndex + length.second;
+
+                KoSvgText::TextDecorationStyle style = KoSvgText::Solid;
+                if (d->styleMap.at(i) == QTextCharFormat::DotLine) {
+                    style = KoSvgText::Dotted;
+                } else if (d->styleMap.at(i) == QTextCharFormat::DashUnderline) {
+                    style = KoSvgText::Dashed;
+                }
+                d->IMEDecoration.addPath(d->shape->underlines(d->shape->posForIndex(startIndex), d->shape->posForIndex(endIndex), decor, style));
+                d->IMEDecoration.setFillRule(Qt::WindingFill);
+            }
+        }
+
         emit updateCursorDecoration(d->shape->shapeToDocument(d->IMEDecoration.boundingRect()) | d->oldIMEDecorationRect);
     }
 }

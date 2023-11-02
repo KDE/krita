@@ -231,7 +231,7 @@ public:
      */
     QPainterPath selectionBoxes(int pos, int anchor);
 
-    QPainterPath underlines(int pos, int anchor);
+    QPainterPath underlines(int pos, int anchor, KoSvgText::TextDecorations decor, KoSvgText::TextDecorationStyle style);
 
     /**
      * @brief posForPoint

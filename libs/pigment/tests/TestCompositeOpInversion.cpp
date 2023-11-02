@@ -6,6 +6,8 @@
 #include "TestCompositeOpInversion.h"
 #include "KoColorModelStandardIds.h"
 
+#include <cstring>
+
 #include <simpletest.h>
 
 #include <KoColor.h>

@@ -5,6 +5,8 @@
  */
 #include "Channel.h"
 
+#include <cstring>
+
 #include <QByteArray>
 #include <QDataStream>
 

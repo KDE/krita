@@ -271,6 +271,7 @@ kis_ExternalProject_Add_with_separate_builds_apple(
           COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Disable-ebp_available-on-android.patch
           COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-libavutil-Don-t-disable-PIC-on-x86_32.patch
           COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-ffmpeg-Be-more-forceful-when-setting-PIC-on-x86_32.patch
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Copy-over-some-macros-from-libavutil-version.h.patch
 
     CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
             --libdir=lib

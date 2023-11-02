@@ -525,6 +525,8 @@ if (NOT MESON_BINARY_PATH)
     add_subdirectory(ext_meson)
 endif()
 
+set(MESON_NASM_PATH "${EXTPREFIX}/bin/nasm${CMAKE_EXECUTABLE_SUFFIX}")
+
 if (NOT PKG_CONFIG_FOUND OR WIN32)
     set(PKG_CONFIG_DEP ext_pkgconfig)
     if (NOT WIN32)

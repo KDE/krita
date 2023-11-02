@@ -1486,198 +1486,19 @@ void KoSvgTextShape::Private::computeTextDecorations( // NOLINT(readability-func
     if (decor != DecorationNone && chunkShape->textProperties().hasProperty(KoSvgTextProperties::TextDecorationLineId)) {
         KoSvgTextProperties properties = chunkShape->textProperties();
         TextDecorationStyle style = TextDecorationStyle(properties.propertyOrDefault(KoSvgTextProperties::TextDecorationStyleId).toInt());
-
-        QMap<TextDecoration, QPainterPath> decorationPaths;
-        QMap<TextDecoration, QPointF> decorationOffsets;
-
-        decorationPaths.insert(DecorationUnderline, QPainterPath());
-        decorationPaths.insert(DecorationOverline, QPainterPath());
-        decorationPaths.insert(DecorationLineThrough, QPainterPath());
-
-        Q_FOREACH (TextDecoration type, decorationPaths.keys()) {
-            qreal offset = chunkShape->layoutInterface()->getTextDecorationOffset(type);
-            decorationOffsets.insert(type, isHorizontal ? QPointF(0, offset) : QPointF(offset, 0));
-        }
+        TextDecorationUnderlinePosition underlinePosH =
+            TextDecorationUnderlinePosition(chunkShape->textProperties().propertyOrDefault(KoSvgTextProperties::TextDecorationPositionHorizontalId).toInt());
+        TextDecorationUnderlinePosition underlinePosV =
+            TextDecorationUnderlinePosition(chunkShape->textProperties().propertyOrDefault(KoSvgTextProperties::TextDecorationPositionVerticalId).toInt());
 
         QPainterPathStroker stroker;
-        stroker.setWidth(qMax(minimumDecorationThickness, chunkShape->layoutInterface()->getTextDecorationWidth(DecorationUnderline)));
-        stroker.setCapStyle(Qt::FlatCap);
-        if (style == Dotted) {
-            QPen pen;
-            pen.setStyle(Qt::DotLine);
-            stroker.setDashPattern(pen.dashPattern());
-        } else if (style == Dashed) {
-            QPen pen;
-            pen.setStyle(Qt::DashLine);
-            stroker.setDashPattern(pen.dashPattern());
-        }
-        qreal top = 0;
-        qreal bottom = 0;
-        QPointF currentFinalPos;
-        QVector<QRectF> decorationRects;
-        QVector<QPointF> firstPos;
-        QRectF currentRect;
 
-        for (int k = i; k < j; k++) {
-            CharacterResult charResult = result.at(k);
-
-            if (currentTextPath) {
-                characterResultOnPath(charResult,
-                                      currentTextPath->outline().length(),
-                                      currentTextPathOffset,
-                                      isHorizontal,
-                                      currentTextPath->isClosedSubpath(0));
-            }
-
-            if (charResult.hidden || !charResult.addressable) {
-                continue;
-            }
-            if (charResult.anchored_chunk) {
-                QPointF fp = isHorizontal ? QPointF(currentRect.x(), currentFinalPos.y()) : QPointF(currentFinalPos.x(), currentRect.y());
-                firstPos.append(fp);
-                decorationRects.append(currentRect);
-                currentRect = QRectF();
-            }
-
-            currentFinalPos = charResult.finalPosition;
-
-            const QRectF bbox = charResult.boundingBox;
-
-            top = isHorizontal ? qMin(top, bbox.top()) : qMax(top, bbox.right());
-            bottom = isHorizontal ? qMax(bottom, bbox.bottom()) : qMin(bottom, bbox.left());
-
-            currentRect |= bbox.translated(charResult.finalPosition);
-        }
-        decorationRects.append(currentRect);
-        QPointF fp = isHorizontal ? QPointF(currentRect.x(), currentFinalPos.y()) : QPointF(currentFinalPos.x(), currentRect.y());
-        firstPos.append(fp);
-
-        // Computing the various offsets from the 'top' & 'bottom' values.
-
-        bool underlineOverlineFlipped = false;
-        if (isHorizontal) {
-            decorationOffsets[DecorationOverline] = QPointF(0, top);
-            TextDecorationUnderlinePosition underlinePosH =
-                TextDecorationUnderlinePosition(properties.propertyOrDefault(KoSvgTextProperties::TextDecorationPositionHorizontalId).toInt());
-            if (underlinePosH == UnderlineUnder) {
-                decorationOffsets[DecorationUnderline] = QPointF(0, bottom);
-            }
-        } else {
-            TextDecorationUnderlinePosition underlinePosV =
-                TextDecorationUnderlinePosition(properties.propertyOrDefault(KoSvgTextProperties::TextDecorationPositionVerticalId).toInt());
-            if (underlinePosV == UnderlineRight) {
-                decorationOffsets[DecorationOverline] = QPointF(bottom, 0);
-                decorationOffsets[DecorationUnderline] = QPointF(top, 0);
-                underlineOverlineFlipped = true;
-            } else {
-                decorationOffsets[DecorationOverline] = QPointF(top, 0);
-                decorationOffsets[DecorationUnderline] = QPointF(bottom, 0);
-            }
-        }
-        decorationOffsets[DecorationLineThrough] = (decorationOffsets.value(DecorationUnderline) + decorationOffsets.value(DecorationOverline)) * 0.5;
-
-        // Now to create a QPainterPath for the given style that stretches
-        // over a single decoration rect,
-        // transform that and add it to the general paths.
-        for (int i = 0; i < decorationRects.size(); i++) {
-            QRectF rect = decorationRects.at(i);
-            QPainterPath p;
-            QPointF pathWidth;
-            if (style != Wavy) {
-                p.moveTo(QPointF());
-                // We're segmenting the path here so it'll be easier to warp
-                // when text-on-path is happening.
-                if (currentTextPath) {
-                    if (isHorizontal) {
-                        const qreal total = std::floor(rect.width() / (stroker.width() * 2));
-                        const qreal segment = qreal(rect.width() / total);
-                        for (int i = 0; i < total; i++) {
-                            p.lineTo(p.currentPosition() + QPointF(segment, 0));
-                        }
-                    } else {
-                        const qreal total = std::floor(rect.height() / (stroker.width() * 2));
-                        const qreal segment = qreal(rect.height() / total);
-                        for (int i = 0; i < total; i++) {
-                            p.lineTo(p.currentPosition() + QPointF(0, segment));
-                        }
-                    }
-                } else {
-                    if (isHorizontal) {
-                        p.lineTo(rect.width(), 0);
-                    } else {
-                        p.lineTo(0, rect.height());
-                    }
-                }
-            }
-            if (style == Double) {
-                qreal linewidthOffset = qMax(stroker.width() * 1.5, minimumDecorationThickness * 2);
-                if (isHorizontal) {
-                    p.addPath(p.translated(0, linewidthOffset));
-                    pathWidth = QPointF(0, -linewidthOffset);
-                } else {
-                    p.addPath(p.translated(linewidthOffset, 0));
-                    pathWidth = QPointF(linewidthOffset, 0);
-                }
-
-            } else if (style == Wavy) {
-                qreal width = isHorizontal ? rect.width() : rect.height();
-                qreal height = stroker.width() * 2;
-
-                bool down = true;
-                p.moveTo(QPointF());
-
-                for (int i = 0; i < qFloor(width / height); i++) {
-                    if (down) {
-                        p.lineTo(p.currentPosition().x() + height, height);
-                    } else {
-                        p.lineTo(p.currentPosition().x() + height, 0);
-                    }
-                    down = !down;
-                }
-                qreal offset = fmod(width, height);
-                if (down) {
-                    p.lineTo(width, offset);
-                } else {
-                    p.lineTo(width, height - offset);
-                }
-                pathWidth = QPointF(0, -stroker.width());
-
-                // Rotate for vertical.
-                if (!isHorizontal) {
-                    for (int i = 0; i < p.elementCount(); i++) {
-                        p.setElementPositionAt(i, p.elementAt(i).y - (stroker.width() * 2), p.elementAt(i).x);
-                    }
-                    pathWidth = QPointF(stroker.width(), 0);
-                }
-            }
-
-            p.translate(firstPos.at(i).x(), firstPos.at(i).y());
-            if (underlineOverlineFlipped) {
-                decorationOffsets[DecorationUnderline] += pathWidth;
-            } else {
-                decorationOffsets[DecorationOverline] += pathWidth;
-            }
-            decorationOffsets[DecorationLineThrough] += (pathWidth * 0.5);
-
-            Q_FOREACH (TextDecoration type, decorationPaths.keys()) {
-                if (decor.testFlag(type)) {
-                    QPointF offset = decorationOffsets.value(type);
-
-                    if (currentTextPath) {
-                        QPainterPath path = currentTextPath->outline();
-                        path = currentTextPath->transformation().map(path);
-                        if (textPathSide) {
-                            path = path.toReversed();
-                        }
-
-                        decorationPaths[type].addPath(
-                            stretchGlyphOnPath(p.translated(offset), path, isHorizontal, currentTextPathOffset, currentTextPath->isClosedSubpath(0)));
-                    } else {
-                        decorationPaths[type].addPath(p.translated(offset));
-                    }
-                }
-            }
-        }
+        QMap<TextDecoration, QPainterPath> decorationPaths =
+                generateDecorationPaths(chunkShape, i, j,
+                                        result, stroker, isHorizontal, decor,
+                                        minimumDecorationThickness, style, false, currentTextPath,
+                                        currentTextPathOffset, textPathSide, underlinePosH, underlinePosV
+                                        );
 
         // And finally add the paths to the chunkshape.
 
@@ -1691,6 +1512,218 @@ void KoSvgTextShape::Private::computeTextDecorations( // NOLINT(readability-func
         }
     }
     currentIndex = j;
+}
+
+QMap<KoSvgText::TextDecoration, QPainterPath>
+KoSvgTextShape::Private::generateDecorationPaths(const KoSvgTextChunkShape *chunkShape,
+                                                 const int &start, const int &end,
+                                                 const QVector<CharacterResult> &result,
+                                                 QPainterPathStroker &stroker,
+                                                 const bool isHorizontal,
+                                                 const KoSvgText::TextDecorations &decor,
+                                                 const qreal &minimumDecorationThickness,
+                                                 const KoSvgText::TextDecorationStyle style,
+                                                 const bool textDecorationSkipInset,
+                                                 const KoPathShape *currentTextPath,
+                                                 const qreal currentTextPathOffset,
+                                                 const bool textPathSide,
+                                                 const KoSvgText::TextDecorationUnderlinePosition underlinePosH,
+                                                 const KoSvgText::TextDecorationUnderlinePosition underlinePosV) {
+    using namespace KoSvgText;
+
+    QMap<TextDecoration, QPainterPath> decorationPaths;
+
+    QMap<TextDecoration, QPointF> decorationOffsets;
+
+    decorationPaths.insert(DecorationUnderline, QPainterPath());
+    decorationPaths.insert(DecorationOverline, QPainterPath());
+    decorationPaths.insert(DecorationLineThrough, QPainterPath());
+
+    Q_FOREACH (TextDecoration type, decorationPaths.keys()) {
+        qreal offset = chunkShape->layoutInterface()->getTextDecorationOffset(type);
+        decorationOffsets.insert(type, isHorizontal ? QPointF(0, offset) : QPointF(offset, 0));
+    }
+
+    stroker.setWidth(qMax(minimumDecorationThickness, chunkShape->layoutInterface()->getTextDecorationWidth(DecorationUnderline)));
+    stroker.setCapStyle(Qt::FlatCap);
+    if (style == Dotted) {
+        QPen pen;
+        pen.setStyle(Qt::DotLine);
+        stroker.setDashPattern(pen.dashPattern());
+    } else if (style == Dashed) {
+        QPen pen;
+        pen.setStyle(Qt::DashLine);
+        stroker.setDashPattern(pen.dashPattern());
+    }
+    qreal top = 0;
+    qreal bottom = 0;
+    QPointF currentFinalPos;
+    QVector<QRectF> decorationRects;
+    QVector<QPointF> firstPos;
+    QRectF currentRect;
+
+    for (int k = start; k < end; k++) {
+        CharacterResult charResult = result.at(k);
+
+        if (currentTextPath) {
+            characterResultOnPath(charResult,
+                                  currentTextPath->outline().length(),
+                                  currentTextPathOffset,
+                                  isHorizontal,
+                                  currentTextPath->isClosedSubpath(0));
+        }
+
+        if (charResult.hidden || !charResult.addressable) {
+            continue;
+        }
+        if (charResult.anchored_chunk) {
+            QPointF fp = isHorizontal ? QPointF(currentRect.x(), currentFinalPos.y()) : QPointF(currentFinalPos.x(), currentRect.y());
+            firstPos.append(fp);
+            decorationRects.append(currentRect);
+            currentRect = QRectF();
+        }
+
+        currentFinalPos = charResult.finalPosition;
+
+        const QRectF bbox = charResult.boundingBox;
+
+        top = isHorizontal ? qMin(top, bbox.top()) : qMax(top, bbox.right());
+        bottom = isHorizontal ? qMax(bottom, bbox.bottom()) : qMin(bottom, bbox.left());
+
+        currentRect |= bbox.translated(charResult.finalPosition);
+    }
+    decorationRects.append(currentRect);
+    QPointF fp = isHorizontal ? QPointF(currentRect.x(), currentFinalPos.y()) : QPointF(currentFinalPos.x(), currentRect.y());
+    firstPos.append(fp);
+
+    // Computing the various offsets from the 'top' & 'bottom' values.
+
+    bool underlineOverlineFlipped = false;
+    if (isHorizontal) {
+        decorationOffsets[DecorationOverline] = QPointF(0, top);
+        if (underlinePosH == UnderlineUnder) {
+            decorationOffsets[DecorationUnderline] = QPointF(0, bottom);
+        }
+    } else {
+        if (underlinePosV == UnderlineRight) {
+            decorationOffsets[DecorationOverline] = QPointF(bottom, 0);
+            decorationOffsets[DecorationUnderline] = QPointF(top, 0);
+            underlineOverlineFlipped = true;
+        } else {
+            decorationOffsets[DecorationOverline] = QPointF(top, 0);
+            decorationOffsets[DecorationUnderline] = QPointF(bottom, 0);
+        }
+    }
+    decorationOffsets[DecorationLineThrough] = (decorationOffsets.value(DecorationUnderline) + decorationOffsets.value(DecorationOverline)) * 0.5;
+
+    // Now to create a QPainterPath for the given style that stretches
+    // over a single decoration rect,
+    // transform that and add it to the general paths.
+    for (int i = 0; i < decorationRects.size(); i++) {
+        QRectF rect = decorationRects.at(i);
+        if (textDecorationSkipInset) {
+            qreal inset = stroker.width() * 0.5;
+            rect.adjust(-inset, -inset, inset, inset);
+        }
+        QPainterPath p;
+        QPointF pathWidth;
+        if (style != Wavy) {
+            p.moveTo(QPointF());
+            // We're segmenting the path here so it'll be easier to warp
+            // when text-on-path is happening.
+            if (currentTextPath) {
+                if (isHorizontal) {
+                    const qreal total = std::floor(rect.width() / (stroker.width() * 2));
+                    const qreal segment = qreal(rect.width() / total);
+                    for (int i = 0; i < total; i++) {
+                        p.lineTo(p.currentPosition() + QPointF(segment, 0));
+                    }
+                } else {
+                    const qreal total = std::floor(rect.height() / (stroker.width() * 2));
+                    const qreal segment = qreal(rect.height() / total);
+                    for (int i = 0; i < total; i++) {
+                        p.lineTo(p.currentPosition() + QPointF(0, segment));
+                    }
+                }
+            } else {
+                if (isHorizontal) {
+                    p.lineTo(rect.width(), 0);
+                } else {
+                    p.lineTo(0, rect.height());
+                }
+            }
+        }
+        if (style == Double) {
+            qreal linewidthOffset = qMax(stroker.width() * 1.5, minimumDecorationThickness * 2);
+            if (isHorizontal) {
+                p.addPath(p.translated(0, linewidthOffset));
+                pathWidth = QPointF(0, -linewidthOffset);
+            } else {
+                p.addPath(p.translated(linewidthOffset, 0));
+                pathWidth = QPointF(linewidthOffset, 0);
+            }
+
+        } else if (style == Wavy) {
+            qreal width = isHorizontal ? rect.width() : rect.height();
+            qreal height = stroker.width() * 2;
+
+            bool down = true;
+            p.moveTo(QPointF());
+
+            for (int i = 0; i < qFloor(width / height); i++) {
+                if (down) {
+                    p.lineTo(p.currentPosition().x() + height, height);
+                } else {
+                    p.lineTo(p.currentPosition().x() + height, 0);
+                }
+                down = !down;
+            }
+            qreal offset = fmod(width, height);
+            if (down) {
+                p.lineTo(width, offset);
+            } else {
+                p.lineTo(width, height - offset);
+            }
+            pathWidth = QPointF(0, -stroker.width());
+
+            // Rotate for vertical.
+            if (!isHorizontal) {
+                for (int i = 0; i < p.elementCount(); i++) {
+                    p.setElementPositionAt(i, p.elementAt(i).y - (stroker.width() * 2), p.elementAt(i).x);
+                }
+                pathWidth = QPointF(stroker.width(), 0);
+            }
+        }
+
+        p.translate(firstPos.at(i).x(), firstPos.at(i).y());
+        if (underlineOverlineFlipped) {
+            decorationOffsets[DecorationUnderline] += pathWidth;
+        } else {
+            decorationOffsets[DecorationOverline] += pathWidth;
+        }
+        decorationOffsets[DecorationLineThrough] += (pathWidth * 0.5);
+
+        Q_FOREACH (TextDecoration type, decorationPaths.keys()) {
+            if (decor.testFlag(type)) {
+                QPointF offset = decorationOffsets.value(type);
+
+                if (currentTextPath) {
+                    QPainterPath path = currentTextPath->outline();
+                    path = currentTextPath->transformation().map(path);
+                    if (textPathSide) {
+                        path = path.toReversed();
+                    }
+
+                    decorationPaths[type].addPath(
+                        stretchGlyphOnPath(p.translated(offset), path, isHorizontal, currentTextPathOffset, currentTextPath->isClosedSubpath(0)));
+                } else {
+                    decorationPaths[type].addPath(p.translated(offset));
+                }
+            }
+        }
+    }
+
+    return decorationPaths;
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)

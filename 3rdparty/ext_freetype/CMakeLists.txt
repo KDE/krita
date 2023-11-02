@@ -5,8 +5,8 @@ if (POLICY CMP0114)
     cmake_policy(SET CMP0114 NEW)
 endif()
 
-set(FREETYPE_URL https://downloads.sourceforge.net/project/freetype/freetype2/2.12.1/freetype-2.12.1.tar.xz)
-set(FREETYPE_SHA256 4766f20157cc4cf0cd292f80bf917f92d1c439b243ac3018debf6b9140c41a7f)
+set(FREETYPE_URL https://downloads.sourceforge.net/project/freetype/freetype2/2.13.2/freetype-2.13.2.tar.xz)
+set(FREETYPE_SHA256 12991c4e55c506dd7f9b765933e62fd2be2e06d421505d7950a132e4f1bb484d)
 
 ExternalProject_Add(ext_freetype_bootstrap
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -35,10 +35,8 @@ kis_ExternalProject_Add_with_separate_builds_apple(
     MESON
 
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/harfbuzz/harfbuzz/releases/download/5.3.1/harfbuzz-5.3.1.tar.xz
-    URL_HASH SHA256=4a6ce097b75a8121facc4ba83b5b083bfec657f45b003cd5a3424f2ae6b4434d
-
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/harfbuzz-clang16-fix.patch
+    URL https://github.com/harfbuzz/harfbuzz/releases/download/8.1.0/harfbuzz-8.1.0.tar.xz
+    URL_HASH SHA256=639596da7c26cc503b16b3bf4dfdca77fe832d3c9e06004ef63a7ce53cafbac9
 
     CONFIGURE_ARGS --prefix=${EXTPREFIX_harfbuzz}
         -Dglib=disabled

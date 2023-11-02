@@ -531,6 +531,12 @@ void SvgTextCursor::keyPressEvent(QKeyEvent *event)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(d->shape);
 
+    if (d->preEditCommand) {
+        //MacOS will keep sending keyboard events during IME handling.
+        event->accept();
+        return;
+    }
+
     bool select = event->modifiers().testFlag(Qt::ShiftModifier);
 
     if (!((Qt::ControlModifier | Qt::AltModifier | Qt::MetaModifier) & event->modifiers())) {

@@ -403,7 +403,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
                 underlinePosH = UnderlineUnder;
             } else if (param == "left") {
                 underlinePosV = UnderlineLeft;
-            } else if (param == "auto") {
+            } else if (param == "right") {
                 underlinePosV = UnderlineRight;
             } else if (QColor::isValidColor(param)) {
                 // TODO: Convert to KoColor::fromSvg11.

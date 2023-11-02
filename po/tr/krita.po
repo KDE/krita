@@ -8,13 +8,13 @@
 # Onur Soysal <e116511@ceng.metu.edu.tr>, 2000.
 # Anıl Özbek <ozbekanil@gmail.com>, 2012-2013.
 # Özer Kavak <ozerkavak@gmail.com>, 2008.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-30 02:25+0000\n"
-"PO-Revision-Date: 2023-10-22 01:14+0300\n"
+"PO-Revision-Date: 2023-11-01 06:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.11.70\n"
+"X-Generator: Lokalize 23.08.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7433,7 +7433,7 @@ msgstr "Sol kenarları eşit olarak dağıt"
 #, kde-format
 msgctxt "action"
 msgid "Distribute Centers Horizontally"
-msgstr "Merkezleri Yatay Olarak Dağıt"
+msgstr "Merkezleri Yatay Dağıt"
 
 #. i18n: context: toolTip @ Action (object_distribute_horizontal_center), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:137
@@ -7489,7 +7489,7 @@ msgstr "Üst kenarları eşit uzaklıkta dağıt"
 #, kde-format
 msgctxt "action"
 msgid "Distribute Centers Vertically"
-msgstr "Merkezleri Dikey olarak Dağıt"
+msgstr "Merkezleri Dikey Dağıt"
 
 #. i18n: context: toolTip @ Action (object_distribute_vertical_center), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:174
@@ -7580,7 +7580,7 @@ msgstr "Yatay Yansıt"
 #, kde-format
 msgctxt "action"
 msgid "Mirror object horizontally"
-msgstr "Nesneyi yatay yansıt"
+msgstr "Nesneyi yatay olarak yansıt"
 
 #. i18n: context: text @ Action (object_transform_mirror_vertically), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:241
@@ -7594,7 +7594,7 @@ msgstr "Dikey Yansıt"
 #, kde-format
 msgctxt "action"
 msgid "Mirror object vertically"
-msgstr "Nesneyi dikey yansıt"
+msgstr "Nesneyi dikey olarak yansıt"
 
 #. i18n: context: text @ Action (object_transform_reset), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:251
@@ -12304,7 +12304,7 @@ msgstr "Tüm Katmanları &Yatay Yansıt"
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Horizontally"
-msgstr "Tüm Katmanları Yatay Yansıt"
+msgstr "Tüm katmanları yatay olarak yansıt"
 
 #. i18n: context: text @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3232
@@ -12321,7 +12321,7 @@ msgstr "Tüm Katmanları &Dikey Yansıt"
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Vertically"
-msgstr "Tüm Katmanları Dikey Yansıt"
+msgstr "Tüm katmanları dikey olarak yansıt"
 
 #. i18n: context: text @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3244
@@ -13811,7 +13811,7 @@ msgstr "Her İki Yönde Sarmala"
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Horizontally"
-msgstr "Yatay Olarak Sarmala"
+msgstr "Yatay Sarmala"
 
 #. i18n: context: text @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
@@ -13824,7 +13824,7 @@ msgstr "Yatay Olarak Sarmala"
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Vertically"
-msgstr "Dikey Olarak Sarmala"
+msgstr "Dikey Sarmala"
 
 #. i18n: context: text @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:700
@@ -14654,7 +14654,7 @@ msgstr "Görseli Kırk"
 #, kde-format
 msgctxt "action"
 msgid "&Mirror Image Horizontally"
-msgstr "Görseli Yatay Olarak &Yansıt"
+msgstr "Görseli Yatay &Yansıt"
 
 #. i18n: context: toolTip @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
@@ -14664,14 +14664,14 @@ msgstr "Görseli Yatay Olarak &Yansıt"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Horizontally"
-msgstr "Görseli Yatay Olarak Yansıt"
+msgstr "Görseli yatay olarak yansıt"
 
 #. i18n: context: text @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1293
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image &Vertically"
-msgstr "Görseli Dikey Olarak &Yansıt"
+msgstr "Görseli Dikey &Yansıt"
 
 #. i18n: context: toolTip @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
@@ -14681,7 +14681,7 @@ msgstr "Görseli Dikey Olarak &Yansıt"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Vertically"
-msgstr "Görseli Dikey Olarak Yansıt"
+msgstr "Görseli dikey olarak yansıt"
 
 #. i18n: context: text @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1305
@@ -43319,12 +43319,12 @@ msgstr "SeExpr Betikleri"
 #: plugins/extensions/rotateimage/rotateimage.cc:120
 msgctxt "(qtundo-format)"
 msgid "Mirror Image Vertically"
-msgstr "Görseli Dikey Olarak Yansıt"
+msgstr "Görseli Dikey Yansıt"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:129
 msgctxt "(qtundo-format)"
 msgid "Mirror Image Horizontally"
-msgstr "Görseli Yatay Olarak Yansıt"
+msgstr "Görseli Yatay Yansıt"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:144
 #, kde-format
@@ -57408,12 +57408,12 @@ msgstr "Nesneyi 180° Döndür"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1304
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
-msgstr "Nesneyi Yatay Olarak Yansıt"
+msgstr "Nesneyi Yatay Yansıt"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1308
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
-msgstr "Nesneyi Dikey Olarak Yansıt"
+msgstr "Nesneyi Dikey Yansıt"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1312
 msgctxt "(qtundo-format)"

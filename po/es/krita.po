@@ -66,7 +66,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-30 02:25+0000\n"
-"PO-Revision-Date: 2023-10-26 11:32+0100\n"
+"PO-Revision-Date: 2023-11-02 01:25+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -57267,7 +57267,7 @@ msgstr "Copo de nieve"
 #: plugins/tools/basictools/kis_tool_multihand.cpp:423
 #, kde-format
 msgid "Copy Translate"
-msgstr "Traducir copia"
+msgstr "Copiar traducir"
 
 #: plugins/tools/basictools/kis_tool_multihand.h:91
 #, kde-format

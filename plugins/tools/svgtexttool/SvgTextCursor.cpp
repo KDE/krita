@@ -421,10 +421,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     qDebug() << "Replacement:"<< event->replacementStart() << event->replacementLength();
 
     QRectF updateRect = d->shape? d->shape->boundingRect(): QRectF();
-    //SvgTextShapeManagerBlocker blocker(d->canvas->shapeManager());
-    //blocker.lock();
-    bool oldUpdatesBlocked = d->canvas->shapeManager()->updatesBlocked();
-    d->canvas->shapeManager()->setUpdatesBlocked(true);
+    SvgTextShapeManagerBlocker blocker(d->canvas->shapeManager());
 
     bool isGettingInput = !event->commitString().isEmpty() || !event->preeditString().isEmpty()
                 || event->replacementLength() > 0;
@@ -439,8 +436,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     }
 
     if (!d->shape || !isGettingInput) {
-        //blocker.unlock();
-        d->canvas->shapeManager()->setUpdatesBlocked(oldUpdatesBlocked);
+        blocker.unlock();
         d->shape->updateAbsolute(updateRect);
         event->ignore();
         return;
@@ -540,9 +536,8 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
         }
     }
 
-    //blocker.unlock();
+    blocker.unlock();
 
-    d->canvas->shapeManager()->setUpdatesBlocked(oldUpdatesBlocked);
     updateRect |= d->shape->boundingRect();
     d->shape->updateAbsolute(updateRect);
     //qDebug() << "update" << updateRect << d->canvas->shapeManager()->updatesBlocked();

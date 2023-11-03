@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-25 02:40+0000\n"
+"POT-Creation-Date: 2023-10-30 02:25+0000\n"
 "PO-Revision-Date: 2023-07-30 21:46+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -17093,8 +17093,6 @@ msgstr "Endra biletoppløysing"
 
 #: libs/image/kis_image.cc:1034
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "Skaler lag"
@@ -17111,8 +17109,6 @@ msgstr "Drei maske"
 
 #: libs/image/kis_image.cc:1167
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "Drei lag"
@@ -17124,8 +17120,6 @@ msgstr "Skråstill maske"
 
 #: libs/image/kis_image.cc:1251
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "Skråstill lag"
@@ -27755,7 +27749,6 @@ msgstr "Lagstorleik"
 
 #: libs/ui/imagesize/imagesize.cc:119
 #, fuzzy, kde-format
-#| msgid "Resize Layer"
 msgid "Resize Layer"
 msgstr "Endra lagstorleik"
 
@@ -29292,8 +29285,6 @@ msgstr "Fjern nodar"
 
 #: libs/ui/kis_node_manager.cpp:1038
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
 msgstr "Spegla lag vassrett"
@@ -29305,8 +29296,6 @@ msgstr "Spegla maske vassrett"
 
 #: libs/ui/kis_node_manager.cpp:1051
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
 msgstr "Spegla lag loddrett"
@@ -42494,16 +42483,12 @@ msgstr "Forskyv bilete"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgstr "Forskyv lag"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
 #, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Offset Layer"
 msgctxt "@title:window"
 msgid "Offset Layer"
 msgstr "Forskyv lag"
@@ -43388,7 +43373,6 @@ msgstr "Spegla biletet vassrett"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:144
 #, fuzzy, kde-format
-#| msgid "Rotate Layer"
 msgid "Rotate Layer"
 msgstr "Drei laget"
 
@@ -43532,7 +43516,6 @@ msgstr "Skråstill bilete"
 
 #: plugins/extensions/shearimage/shearimage.cc:72
 #, fuzzy, kde-format
-#| msgid "Shear Layer"
 msgid "Shear Layer"
 msgstr "Skråstill lag"
 
@@ -44080,7 +44063,7 @@ msgstr "Avmetting"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:226
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:29
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:86
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:85
 #, kde-format
 msgid "Hue"
 msgstr "Kulør"
@@ -44090,7 +44073,7 @@ msgstr "Kulør"
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:33
 #: plugins/paintops/hairy/wdghairyeoptions.ui:314
 #: plugins/paintops/hairy/wdgInkOptions.ui:75
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:94
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:93
 #, kde-format
 msgid "Saturation"
 msgstr "Metting"
@@ -50936,13 +50919,13 @@ msgid "Value"
 msgstr "Verdi"
 
 #: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:15
-#: plugins/paintops/sketch/KisSketchStandardOptionData.h:25
+#: plugins/paintops/sketch/KisSketchStandardOptionData.h:23
 #, kde-format
 msgid "Line width"
 msgstr "Linjebreidd"
 
 # «Tettleik» vert òg brukt som omsetting av «density», i penselsamanheng. Det er litt uheldig, men ikkje noko stort problem, då orda ikkje vert brukte i same dialog. Og «tetthet» er omsettinga av «opacity» som Adobe-produkta brukar, eks. https://helpx.adobe.com/no/indesign/using/adding-transparency-effects.html
-#: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:25
+#: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:26
 #, kde-format
 msgid "Curves opacity"
 msgstr "Kurve-tettleik"
@@ -51643,13 +51626,13 @@ msgid "Hatching Angle"
 msgstr "Skraveringsvinkel"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:128
-#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:36
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:32
 #, kde-format
 msgid "Separation"
 msgstr "Skilje"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:158
-#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:46
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:42
 #, kde-format
 msgid "Thickness"
 msgstr "Tjukkleik"
@@ -51670,7 +51653,7 @@ msgstr "Skraveringsval"
 msgid "Hatching preferences"
 msgstr "Skraveringsinnstillingar"
 
-#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:26
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:24
 #, kde-format
 msgid "Crosshatching"
 msgstr "Kryss-skravering"
@@ -52856,13 +52839,13 @@ msgstr "Skarpleik"
 msgid "Soften edge:"
 msgstr "Mjukare kant:"
 
-#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:25
+#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:23
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fuzzy (sensor)"
 msgstr "Storleik → uklar (sensor)"
 
-#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:29
+#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:27
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fade (sensor)"
@@ -52981,51 +52964,51 @@ msgctxt "Higher HSV brightness"
 msgid "Higher value"
 msgstr "Høgare verdi"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:41
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:40
 #, kde-format
 msgid "Ratio"
 msgstr "Forhold"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:50
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:49
 #, kde-format
 msgid "Softness"
 msgstr "Mjukleik"
 
 #. i18n: ectx: property (title), widget (QGroupBox, rotationGroup)
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:61
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:60
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:739
 #, kde-format
 msgid "Rotation"
 msgstr "Dreiing"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:70
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:69
 #, kde-format
 msgid "Darken"
 msgstr "Gjer mørkare"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:78
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:77
 #, kde-format
 msgctxt "Mixing of colors"
 msgid "Mix"
 msgstr "Miks"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:102
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:101
 #, kde-format
 msgctxt "Label of Brightness value in Color Smudge brush engine options"
 msgid "Value"
 msgstr "Verdi"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:110
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:109
 #, kde-format
 msgid "Rate"
 msgstr "Forhold"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:118
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:117
 #, kde-format
 msgid "Strength"
 msgstr "Styrke"
 
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:126
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:125
 #, kde-format
 msgid "Lightness Strength"
 msgstr "Lysstyrke"
@@ -53489,7 +53472,7 @@ msgstr "Skissepensel (forskjellar i sambindingslinjer er mogleg)"
 msgid "Offset scale"
 msgstr "Forskyvingsskala"
 
-#: plugins/paintops/sketch/KisSketchStandardOptionData.h:35
+#: plugins/paintops/sketch/KisSketchStandardOptionData.h:31
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:158
 #, kde-format
 msgid "Density"

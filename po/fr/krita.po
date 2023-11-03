@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-30 02:25+0000\n"
-"PO-Revision-Date: 2023-10-30 20:16+0100\n"
+"PO-Revision-Date: 2023-11-01 11:01+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -42855,17 +42855,12 @@ msgid "Offset Image"
 msgstr "Décaler l'image"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgstr "Décaler le calque"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Offset Layer"
 msgstr "Décaler le calque"

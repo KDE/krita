@@ -38,7 +38,7 @@ ExternalProject_Add(
     ext_zlib
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://github.com/madler/zlib/releases/download/v1.3/zlib-1.3.tar.gz
-    URL_HASH SHA256SUM=ff0ba4c292013dbc27530b3a81e1f9a813cd39de01ca5e0f8bf355702efa593e
+    URL_HASH SHA256=ff0ba4c292013dbc27530b3a81e1f9a813cd39de01ca5e0f8bf355702efa593e
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_zlib} ${GLOBAL_PROFILE}
 

@@ -185,6 +185,8 @@ private:
     int moveModeResult(MoveMode &mode, int &pos, bool visual = false) const;
     bool acceptableInput(const QKeyEvent *event) const;
 
+    void commitIMEPreEdit();
+
     struct Private;
     const QScopedPointer<Private> d;
 };

@@ -95,15 +95,10 @@ SvgTextCursor::~SvgTextCursor()
     d->shape = nullptr;
 }
 
-
 void SvgTextCursor::setShape(KoSvgTextShape *textShape)
 {
     if (d->shape) {
-        if (d->preEditCommand) {
-            d->preEditCommand->undo();
-            d->preEditCommand = 0;
-        }
-        qApp->inputMethod()->reset();
+        commitIMEPreEdit();
         d->shape->removeShapeChangeListener(this);
     }
     d->shape = textShape;
@@ -151,15 +146,26 @@ void SvgTextCursor::setPos(int pos, int anchor)
 void SvgTextCursor::setPosToPoint(QPointF point, bool moveAnchor)
 {
     if (d->shape) {
-        qApp->inputMethod()->commit();
-        d->pos = d->shape->posForPointLineSensitive(d->shape->documentToShape(point));
+        int pos = d->pos = d->shape->posForPointLineSensitive(d->shape->documentToShape(point));
+        if (d->preEditCommand) {
+            int start = d->shape->indexForPos(d->preEditStart);
+            int end = start + d->preEditLength;
+            int posIndex = d->shape->indexForPos(pos);
+            if (posIndex > start && posIndex <= end) {
+                qDebug() << "Clicked on preedit string";
+                qApp->inputMethod()->invokeAction(QInputMethod::Click, posIndex - start);
+                return;
+            } else {qDebug() << "clicked outside preedit string";
+                commitIMEPreEdit();
+            }
+        }
+
+        d->pos = pos;
         if (moveAnchor) {
             d->anchor = d->pos;
         }
-        updateSelection();
         updateCursor();
         updateSelection();
-        qApp->inputMethod()->invokeAction(QInputMethod::Click, d->shape->indexForPos(d->pos));
     }
 }
 
@@ -413,6 +419,8 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     qDebug() << "Commit:"<< event->commitString() << "predit:"<< event->preeditString();
     qDebug() << "Replacement:"<< event->replacementStart() << event->replacementLength();
 
+    bool isGettingInput = !event->commitString().isEmpty() || !event->preeditString().isEmpty()
+                || event->replacementLength() > 0;
 
     // Remove previous preedit string.
     if (d->preEditCommand) {
@@ -422,8 +430,8 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
         d->preEditLength = -1;
     }
 
-    if (!d->shape) {
-        event->accept();
+    if (!d->shape || !isGettingInput) {
+        event->ignore();
         return;
     }
 
@@ -501,9 +509,14 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
         // QInputMethodEvent::Ruby is supossedly ruby info for the preedit string, but none of the platform integrations
         // actually implement this at time of writing, and it may have been something from a previous live of Qt's.
         if (attribute.type == QInputMethodEvent::Cursor) {
-            int index = d->shape->indexForPos(d->preEditStart);
-            d->pos = d->shape->posForIndex(index + attribute.start);
-            d->anchor = d->pos;
+            if (d->preEditStart < 0) {
+                d->anchor = d->pos;
+            } else {
+                int index = d->shape->indexForPos(d->preEditStart);
+                d->pos = d->shape->posForIndex(index + attribute.start);
+                d->anchor = d->pos;
+            }
+
             // attribute value is the cursor color, and should be used to paint the cursor.
             // attribute length is about whether the cursor should be visible at all...
             updateCursor();
@@ -950,4 +963,24 @@ bool SvgTextCursor::acceptableInput(const QKeyEvent *event) const
     if (c == QLatin1Char('\t'))
         return true;
     return false;
+}
+
+void SvgTextCursor::commitIMEPreEdit()
+{
+    if (!d->preEditCommand) {
+        return;
+    }
+
+    qApp->inputMethod()->commit();
+
+    if (!d->preEditCommand) {
+        return;
+    }
+
+    d->preEditCommand->undo();
+    d->preEditCommand = nullptr;
+    d->preEditStart = -1;
+    d->preEditLength = 0;
+    updateIMEDecoration();
+    updateCursor();
 }

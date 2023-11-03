@@ -57,6 +57,10 @@
 
 namespace KisLayerUtils {
 
+namespace Private {
+    void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea, const QRect &extraUpdateRect);
+}
+
     void fetchSelectionMasks(KisNodeList mergedNodes, QVector<KisSelectionMaskSP> &selectionMasks)
     {
         foreach (KisNodeSP node, mergedNodes) {
@@ -483,8 +487,11 @@ namespace KisLayerUtils {
     };
 
     struct RefreshHiddenAreas : public KUndo2Command {
+        struct refresh_entire_image_t {};
+        static constexpr refresh_entire_image_t refresh_entire_image{};
+
         RefreshHiddenAreas(MergeDownInfoBaseSP info) : m_image(info->image), m_nodes(info->allSrcNodes()) {}
-        RefreshHiddenAreas(KisImageSP image, KisNodeList nodes) : m_image(image), m_nodes(nodes) {}
+        RefreshHiddenAreas(MergeDownInfoBaseSP info, refresh_entire_image_t) : m_image(info->image), m_nodes(info->allSrcNodes()), m_extraUpdateRect(info->image->bounds()) {}
         RefreshHiddenAreas(KisImageSP image, KisNodeSP node) : m_image(image), m_nodes() {
             m_nodes << node;
         }
@@ -495,13 +502,14 @@ namespace KisLayerUtils {
                 m_image->bounds() : QRect();
 
             foreach (KisNodeSP node, m_nodes) {
-                refreshHiddenAreaAsync(m_image, node, preparedRect);
+                Private::refreshHiddenAreaAsync(m_image, node, preparedRect, m_extraUpdateRect);
             }
         }
 
     private:
         KisImageWSP m_image;
         KisNodeList m_nodes;
+        QRect m_extraUpdateRect;
     };
 
     struct RefreshDelayedUpdateLayers : public KUndo2Command {
@@ -1416,7 +1424,13 @@ namespace KisLayerUtils {
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 
                     applicator.applyCommand(new AddNewFrame(info, frame));
-                    applicator.applyCommand(new RefreshHiddenAreas(info));
+                    /**
+                     * When switching frames we need to update the entire image, not
+                     * only the **new** extent of the layer, hence we pass `refresh_entire_image`
+                     * to the command to make sure that the entire image bounds rect is added
+                     * to the update rect
+                     */
+                    applicator.applyCommand(new RefreshHiddenAreas(info, RefreshHiddenAreas::refresh_entire_image));
                     applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
 
                     /**
@@ -1823,7 +1837,13 @@ namespace KisLayerUtils {
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 
                     applicator.applyCommand(new AddNewFrame(info, frame));
-                    applicator.applyCommand(new RefreshHiddenAreas(info));
+                    /**
+                     * When switching frames we need to update the entire image, not
+                     * only the **new** extent of the layer, hence we pass `refresh_entire_image`
+                     * to the command to make sure that the entire image bounds rect is added
+                     * to the update rect
+                     */
+                    applicator.applyCommand(new RefreshHiddenAreas(info, RefreshHiddenAreas::refresh_entire_image));
                     applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
                     applicator.applyCommand(new MergeLayersMultiple(info), KisStrokeJobData::BARRIER);
 
@@ -2121,8 +2141,9 @@ namespace KisLayerUtils {
     }
     }
 
-    void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea) {
-        QRect realNodeRect = Private::realNodeChangeRect(rootNode);
+namespace Private {
+    void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea, const QRect &extraUpdateRect) {
+        QRect realNodeRect = Private::realNodeChangeRect(rootNode) | extraUpdateRect;
         if (!preparedArea.contains(realNodeRect)) {
 
             QRegion dirtyRegion = realNodeRect;
@@ -2134,6 +2155,11 @@ namespace KisLayerUtils {
                 rc++;
             }
         }
+    }
+} // namespace Private
+
+    void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea) {
+        Private::refreshHiddenAreaAsync(image, rootNode, preparedArea, QRect());
     }
 
     QRect recursiveTightNodeVisibleBounds(KisNodeSP rootNode)

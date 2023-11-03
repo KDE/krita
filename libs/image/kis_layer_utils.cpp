@@ -1420,6 +1420,12 @@ namespace Private {
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             if (info->frames.size() > 0) {
+                /**
+                 * Save the original time before we start switching is with
+                 * asynchronous SwitchFrameCommand.
+                 */
+                const int currentTimeOnStart = info->image->animationInterface()->currentTime();
+
                 foreach (int frame, info->frames) {
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 
@@ -1442,7 +1448,7 @@ namespace Private {
                      * See https://bugs.kde.org/show_bug.cgi?id=475550
                      */
                     const bool skipMergingSourceLayer = !layer->isAnimated() &&
-                            frame != info->image->animationInterface()->currentTime();
+                            frame != currentTimeOnStart;
 
                     applicator.applyCommand(new MergeLayers(info, skipMergingSourceLayer), KisStrokeJobData::BARRIER);
 

@@ -17,7 +17,9 @@ KisFlowOpacityOption2::KisFlowOpacityOption2(const KisPropertiesConfiguration *s
     : m_opacityOption(setting),
       m_flowOption(setting)
 {
-    if (currentNode) {
+    if (currentNode &&
+        setting->getString(KisPropertiesConfiguration::extractedPrefixKey()).isEmpty()) {
+
         KisIndirectPaintingSupport *indirect =
             dynamic_cast<KisIndirectPaintingSupport*>(currentNode.data());
         m_indirectPaintingActive = indirect && indirect->hasTemporaryTarget();

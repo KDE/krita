@@ -20,6 +20,7 @@ set (SvgTextTool_SRCS
     SvgTextTool.cpp
     SvgTextToolFactory.cpp
     FontSizeAction.cpp
+    SvgTextShapeManagerBlocker.cpp
 )
 
 ki18n_wrap_ui(SvgTextTool_SRCS 

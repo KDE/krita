@@ -8,6 +8,7 @@
 #include "KoSvgTextProperties.h"
 #include "SvgTextInsertCommand.h"
 #include "SvgTextRemoveCommand.h"
+#include "SvgTextShapeManagerBlocker.h"
 
 #include "KoViewConverter.h"
 #include "kis_coordinates_converter.h"
@@ -419,6 +420,12 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     qDebug() << "Commit:"<< event->commitString() << "predit:"<< event->preeditString();
     qDebug() << "Replacement:"<< event->replacementStart() << event->replacementLength();
 
+    QRectF updateRect = d->shape? d->shape->boundingRect(): QRectF();
+    //SvgTextShapeManagerBlocker blocker(d->canvas->shapeManager());
+    //blocker.lock();
+    bool oldUpdatesBlocked = d->canvas->shapeManager()->updatesBlocked();
+    d->canvas->shapeManager()->setUpdatesBlocked(true);
+
     bool isGettingInput = !event->commitString().isEmpty() || !event->preeditString().isEmpty()
                 || event->replacementLength() > 0;
 
@@ -428,12 +435,17 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
         d->preEditCommand = 0;
         d->preEditStart = -1;
         d->preEditLength = -1;
+        updateRect |= d->shape? d->shape->boundingRect(): QRectF();
     }
 
     if (!d->shape || !isGettingInput) {
+        //blocker.unlock();
+        d->canvas->shapeManager()->setUpdatesBlocked(oldUpdatesBlocked);
+        d->shape->updateAbsolute(updateRect);
         event->ignore();
         return;
     }
+
 
     // remove the selection if any.
     addCommandToUndoAdapter(removeSelectionImpl());
@@ -462,9 +474,9 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
             d->pos = d->shape->posForIndex(attribute.start);
             int index = d->shape->indexForPos(d->pos);
             d->anchor = d->shape->posForIndex(index + attribute.length);
-            updateCursor();
         }
     }
+
 
     // insert a preedit string, if any.
     if (!event->preeditString().isEmpty()) {
@@ -476,6 +488,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     } else {
         d->preEditCommand = 0;
     }
+
     // Apply the cursor offset for the preedit.
     QVector<IMEDecorationInfo> styleMap;
     Q_FOREACH(QInputMethodEvent::Attribute attribute, event->attributes()) {
@@ -519,11 +532,19 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
 
             // attribute value is the cursor color, and should be used to paint the cursor.
             // attribute length is about whether the cursor should be visible at all...
-            updateCursor();
         }
     }
+
+    //blocker.unlock();
+
+    d->canvas->shapeManager()->setUpdatesBlocked(oldUpdatesBlocked);
+    updateRect |= d->shape->boundingRect();
+    d->shape->updateAbsolute(updateRect);
+    //qDebug() << "update" << updateRect << d->canvas->shapeManager()->updatesBlocked();
     d->styleMap = styleMap;
     updateIMEDecoration();
+    updateSelection();
+    updateCursor();
     event->accept();
 }
 

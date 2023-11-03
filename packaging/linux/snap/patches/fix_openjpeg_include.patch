@@ -1,0 +1,14 @@
+diff --git a/plugins/impex/jp2/jp2_converter.cc b/plugins/impex/jp2/jp2_converter.cc
+index 956c792740..fb7a4f6ef9 100644
+--- a/plugins/impex/jp2/jp2_converter.cc
++++ b/plugins/impex/jp2/jp2_converter.cc
+@@ -6,7 +6,7 @@
+
+ #include "jp2_converter.h"
+
+-#include <openjpeg.h>
++#include <openjpeg-2.4/openjpeg.h>
+
+ #include <QFileInfo>
+ #include <QApplication>
+

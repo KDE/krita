@@ -242,6 +242,7 @@ parts:
         - libsdl2-2.0-0
         - libmlt++7
         - libtiff5
+        - libimath-3-1-29
         stage-snaps:
         - ffmpeg-2204
         prime:

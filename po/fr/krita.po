@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-01 00:40+0000\n"
-"PO-Revision-Date: 2023-10-30 20:16+0100\n"
+"PO-Revision-Date: 2023-11-01 11:01+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -43131,24 +43131,20 @@ msgid "Offset Image"
 msgstr "Décaler l'image"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Offset Layer"
 msgid_plural "Offset %1 Layers"
 msgstr[0] "Décaler le calque"
-msgstr[1] "Décaler le calque"
+msgstr[1] "Décaler %1 calques"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgid_plural "Offset %1 Layers"
 msgstr[0] "Décaler le calque"
-msgstr[1] "Décaler le calque"
+msgstr[1] "Décaler %1 calques"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -57943,6 +57939,8 @@ msgstr "Copier la traduction"
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
+"L'outil multi-brosses ne prend pas en charge plus de %1 brosses. Veuillez "
+"utiliser un intervalle plus large."
 
 #: plugins/tools/basictools/kis_tool_multihand.h:97
 #, kde-format
@@ -58332,17 +58330,15 @@ msgstr "Tout supprimer"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:250
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval X:"
-msgstr "Interne"
+msgstr "Intervalle en X :"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:263
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval Y:"
-msgstr "Interne"
+msgstr "Intervalle en Y :"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:744
 #, kde-format

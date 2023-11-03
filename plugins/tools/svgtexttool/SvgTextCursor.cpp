@@ -514,9 +514,11 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
             decoration.setDecorationFromQStyle(form.underlineStyle());
             if (form.background().isOpaque()) {
                 decoration.thick = true;
-                if (decoration.decor == KoSvgText::DecorationNone) {
-                    decoration.decor.setFlag(KoSvgText::DecorationUnderline, true);
-                }
+            }
+            if (decoration.decor == KoSvgText::DecorationNone) {
+                // On windows, the underline style is set, but no underline
+                // format is toggled, so we need to double check there's always one set.
+                decoration.decor.setFlag(KoSvgText::DecorationUnderline, true);
             }
             styleMap.append(decoration);
         }

@@ -92,7 +92,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-04 00:40+0000\n"
-"PO-Revision-Date: 2023-10-29 09:46+0100\n"
+"PO-Revision-Date: 2023-11-04 12:43+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -100,8 +100,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 23.04.3\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10"
+" || n%100>=20) ? 1 : 2);\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -29497,45 +29497,42 @@ msgid "Remove Nodes"
 msgstr "Usuń węzły"
 
 #: libs/ui/kis_node_manager.cpp:1038
-#, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
-msgstr "Lustrzane odbicie poziome"
+msgstr "Odbij maskę lustrzanie w poziomie"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, fuzzy, kde-format
+#, kde-format
 #| msgctxt "(qtundo-format) action"
 #| msgid "Mirror Layer Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
-msgstr[0] "Odbij lustrzanie warstwę w poziomie"
-msgstr[1] "Odbij lustrzanie warstwę w poziomie"
-msgstr[2] "Odbij lustrzanie warstwę w poziomie"
+msgstr[0] "Odbij warstwę lustrzanie w poziomie"
+msgstr[1] "Odbij %1 warstwy lustrzanie w poziomie"
+msgstr[2] "Odbij %1 warstw lustrzanie w poziomie"
 
 #: libs/ui/kis_node_manager.cpp:1052
-#, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
-msgstr "Lustrzane odbicie pionowe"
+msgstr "Odbij maskę lustrzanie w pionie"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, fuzzy, kde-format
+#, kde-format
 #| msgctxt "(qtundo-format) action"
 #| msgid "Mirror Layer Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
-msgstr[0] "Odbij lustrzanie warstwę w p&ionie"
-msgstr[1] "Odbij lustrzanie warstwę w p&ionie"
-msgstr[2] "Odbij lustrzanie warstwę w p&ionie"
+msgstr[0] "Odbij warstwę lustrzanie w pionie"
+msgstr[1] "Odbij %1 warstwy lustrzanie w pionie"
+msgstr[2] "Odbij %1 warstw lustrzanie w pionie"
 
 #: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
@@ -29543,7 +29540,6 @@ msgid "Mirror All Layers Horizontally"
 msgstr "Odbij wszystkie warstwy lustrzanie w poziomie"
 
 #: libs/ui/kis_node_manager.cpp:1070
-#, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
@@ -57488,16 +57484,18 @@ msgid "Copy Translate"
 msgstr "Skopiuj przeniesienie"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:459
-#, fuzzy, kde-format
+#, kde-format
 #| msgid "Copy Translate"
 msgid "Copy Translate at Intervals"
-msgstr "Skopiuj przeniesienie"
+msgstr "Skopiuj przeniesienie w odstępach"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:570
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
+"Narzędzie wielopędzla nie obsługuje więcej niż %1 pędzli; użyj większego"
+" odstępu."
 
 #: plugins/tools/basictools/kis_tool_multihand.h:97
 #, kde-format
@@ -57887,17 +57885,17 @@ msgstr "Usuń wszystko"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:250
-#, fuzzy, kde-format
+#, kde-format
 #| msgid "Internal"
 msgid "Interval X:"
-msgstr "Wewnętrzny"
+msgstr "Odstęp X:"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:263
-#, fuzzy, kde-format
+#, kde-format
 #| msgid "Internal"
 msgid "Interval Y:"
-msgstr "Wewnętrzny"
+msgstr "Odstęp Y:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:744
 #, kde-format

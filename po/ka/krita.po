@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-04 02:23+0000\n"
-"PO-Revision-Date: 2023-08-04 07:31+0200\n"
+"PO-Revision-Date: 2023-11-04 06:20+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -8025,7 +8025,7 @@ msgstr "კასკადი"
 #, kde-format
 msgctxt "action"
 msgid "&Tile"
-msgstr ""
+msgstr "&ფილა"
 
 #. i18n: context: toolTip @ Action (windows_tile), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (windows_tile), Actions (General), ActionCollection (Krita)
@@ -12800,9 +12800,7 @@ msgid "File"
 msgstr "ფაილი"
 
 #: krita/krita5.xmlgui:416
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "ჩასწორება"
 
@@ -20969,7 +20967,7 @@ msgstr "არა"
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "sub"
-msgstr ""
+msgstr "ქვე"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:80
 #, kde-format
@@ -29977,7 +29975,7 @@ msgstr "სტილები"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
-msgstr ""
+msgstr "&პანელები"
 
 #: libs/ui/KisMainWindow.cpp:185
 #, kde-format
@@ -43135,9 +43133,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelIn)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:71
-#, kde-format
+#, fuzzy, kde-format
 msgid "         Input:"
-msgstr ""
+msgstr "         შეყვანა:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelOut)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:97
@@ -44202,10 +44200,9 @@ msgstr ""
 
 #: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgid "Reset Transparent"
-msgstr "გამჭვირვალე"
+msgstr "გამჭვირვალობის ჩამოყრა"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -44940,7 +44937,7 @@ msgstr "&შაბლონი:"
 #: plugins/paintops/hairy/wdgbristleoptions.ui:118
 #, kde-format
 msgid "Shear:"
-msgstr ""
+msgstr "დახრა:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gb3dRotation)
 #: plugins/generators/pattern/wdgpatternoptions.ui:293
@@ -45224,7 +45221,7 @@ msgstr ""
 #, kde-format
 msgctxt "Screentone Pattern - Curtains Lines"
 msgid "Curtains"
-msgstr ""
+msgstr "ფარდები"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:53
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:58
@@ -48522,7 +48519,7 @@ msgstr ""
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:42
 #, kde-format
 msgid "Compression type"
-msgstr ""
+msgstr "შეკუმშვის ტიპი"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPredictor)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:56
@@ -50163,7 +50160,7 @@ msgstr ""
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:36
 #, kde-format
 msgid "Antialiased lines"
-msgstr ""
+msgstr "მომრგვალებული ხაზები"
 
 #. i18n: ectx: property (text), widget (QCheckBox, subpixelPrecisionCheckBox)
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:46
@@ -50953,12 +50950,12 @@ msgstr "ნელი"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
 #, kde-format
 msgid "Far"
-msgstr ""
+msgstr "შორს"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
 #, kde-format
 msgid "Near"
-msgstr ""
+msgstr "ახლოს"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:29
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
@@ -54858,7 +54855,7 @@ msgstr "დატბორვით შევსება"
 #, kde-format
 msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
 msgid "Scale: "
-msgstr ""
+msgstr "მასშტაბი: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:543
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:449
@@ -57706,7 +57703,7 @@ msgstr "ბადე"
 #, kde-format
 msgctxt "Cage Transform Tab Label"
 msgid "Cage"
-msgstr ""
+msgstr "გალია"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:128
 #, kde-format
@@ -57981,7 +57978,7 @@ msgstr "მოკეცვა"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:208
 #, kde-format
 msgid "Cage"
-msgstr ""
+msgstr "გალია"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, liquifyButton)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyButton)

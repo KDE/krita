@@ -92,7 +92,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-04 02:23+0000\n"
-"PO-Revision-Date: 2023-10-28 09:16+0200\n"
+"PO-Revision-Date: 2023-10-29 09:45+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -14769,7 +14769,7 @@ msgstr "Odsuń &obraz..."
 #, kde-format
 msgctxt "action"
 msgid "Offset Image"
-msgstr "Odsunięcie obrazu"
+msgstr "Odsuń obraz"
 
 #. i18n: context: text @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1329
@@ -42569,13 +42569,13 @@ msgstr "Zmniejsz od obramowania obrazu"
 #: plugins/extensions/offsetimage/offsetimage.cpp:56
 msgctxt "(qtundo-format)"
 msgid "Offset Image"
-msgstr "Odsunięcie obrazu"
+msgstr "Odsuń obraz"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:57
 #, kde-format
 msgctxt "@title:window"
 msgid "Offset Image"
-msgstr "Odsunięcie obrazu"
+msgstr "Odsuń obraz"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
 msgctxt "(qtundo-format)"

@@ -61,7 +61,6 @@ namespace
     boost::optional<KisOpenGLModeProber::Result> openGLCheckResult;
 
     bool g_needsFenceWorkaround = false;
-    bool g_needsPixmapCacheWorkaround = false;
 
     QString g_surfaceFormatDetectionLog;
     QString g_debugText("OpenGL Info\n  **OpenGL not initialized**");
@@ -234,22 +233,18 @@ void KisOpenGL::initialize()
     }
 
     /**
-     * NVidia + Qt's openGL don't play well together and one cannot
-     * draw a pixmap on a widget more than once in one rendering cycle.
+     * The large pixmap cache workaround was originally added to fix
+     * the bug 361709 and later extended to all GPU/OS configurations.
+     * This setting is still left here in case anyone finds the cached
+     * method performing better that the direct drawing of assistants
+     * onto the canvas.
      *
-     * It can be worked-around by drawing strictly via QPixmapCache and
-     * only when the pixmap size in bigger than doubled size of the
-     * display framebuffer. That is for 8-bit HD display, you should have
-     * a cache bigger than 16 MiB. Don't ask me why. (DK)
-     *
-     * See bug: https://bugs.kde.org/show_bug.cgi?id=361709
-     *
-     * TODO: check if this workaround is still needed after merging
-     *       Qt5+openGL3 branch.
+     * See bugs:
+     *   https://bugs.kde.org/show_bug.cgi?id=361709
+     *   https://bugs.kde.org/show_bug.cgi?id=401940
      */
 
-    g_needsPixmapCacheWorkaround = cfg.readEntry("needsPixmapCacheWorkaround", needsPixmapCacheWorkaround());
-    if (g_needsPixmapCacheWorkaround) {
+    if (cfg.assistantsDrawMode() == KisConfig::ASSISTANTS_DRAW_MODE_LARGE_PIXMAP_CACHE) {
         const qreal devicePixelRatio = QGuiApplication::primaryScreen()->devicePixelRatio();
         const QSize screenSize = QGuiApplication::primaryScreen()->size() * devicePixelRatio;
         const int minCacheSize = 20 * 1024;
@@ -397,12 +392,6 @@ bool KisOpenGL::needsFenceWorkaround()
 {
     initialize();
     return g_needsFenceWorkaround;
-}
-
-bool KisOpenGL::needsPixmapCacheWorkaround()
-{
-    initialize();
-    return openGLCheckResult->vendorString().toUpper().contains("NVIDIA") || KisOpenGL::hasOpenGLES();
 }
 
 void KisOpenGL::testingInitializeDefaultSurfaceFormat()

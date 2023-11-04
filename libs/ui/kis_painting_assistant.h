@@ -161,7 +161,7 @@ public:
     QColor assistantCustomColor();
     void setAssistantGlobalColorCache(const QColor &color);
 
-    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true,KisCanvas2 *canvas=0, bool assistantVisible=true, bool previewVisible=true);
+    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached, KisCanvas2 *canvas=0, bool assistantVisible=true, bool previewVisible=true);
     void uncache();
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();

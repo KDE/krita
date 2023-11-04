@@ -119,11 +119,6 @@ public:
      */
     static bool needsFenceWorkaround();
 
-    /**
-     * @see a comment in initializeContext()
-     */
-    static bool needsPixmapCacheWorkaround();
-
     static void testingInitializeDefaultSurfaceFormat();
     static void setDebugSynchronous(bool value);
 

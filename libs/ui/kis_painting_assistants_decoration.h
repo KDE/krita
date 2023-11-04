@@ -132,6 +132,7 @@ public Q_SLOTS:
     QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
 
     void slotUpdateDecorationVisibility();
+    void slotConfigChanged();
 
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;

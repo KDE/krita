@@ -545,6 +545,7 @@ QPainterPath KoSvgTextShape::underlines(int pos, int anchor, KoSvgText::TextDeco
     }
     stroker.setWidth(width);
     KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    stroker.setCapStyle(Qt::FlatCap);
     if (style == KoSvgText::Solid) {
         stroker.setDashPattern(Qt::SolidLine);
     } else if (style == KoSvgText::Dashed) {

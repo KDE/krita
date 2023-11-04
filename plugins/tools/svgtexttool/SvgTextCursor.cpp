@@ -496,27 +496,124 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
         // platform input contexts for both macOS and Windows.
 
         if (attribute.type == QInputMethodEvent::TextFormat) {
-            IMEDecorationInfo decoration;
             QVariant val = attribute.value;
             QTextCharFormat form = val.value<QTextFormat>().toCharFormat();
 
-            decoration.start = attribute.start;
-            decoration.length = attribute.length;
 
-            decoration.decor.setFlag(KoSvgText::DecorationUnderline, form.font().underline());
-            decoration.decor.setFlag(KoSvgText::DecorationOverline, form.font().overline());
-            decoration.decor.setFlag(KoSvgText::DecorationLineThrough, form.font().strikeOut());
+            int positionA = -1;
+            int positionB = -1;
+            for (int i=0; i< styleMap.size(); i++) {
+                if (attribute.start >= styleMap.at(i).start
+                        && attribute.start < styleMap.at(i).start + styleMap.at(i).length) {
+                    positionA = i;
+                }
+                if (attribute.start + attribute.length > styleMap.at(i).start
+                        && attribute.start + attribute.length <= styleMap.at(i).start + styleMap.at(i).length) {
+                    positionB = i;
+                }
+            }
 
-            decoration.setDecorationFromQStyle(form.underlineStyle());
-            if (form.background().isOpaque()) {
-                decoration.thick = true;
+            if (positionA > -1 && positionA == positionB) {
+                IMEDecorationInfo decoration1 = styleMap.at(positionA);
+                IMEDecorationInfo decoration2 = decoration1;
+                IMEDecorationInfo decoration3 = decoration1;
+                decoration3.start = (attribute.start+attribute.length);
+                decoration3.length = (decoration1.start + decoration1.length) - decoration3.start;
+                decoration1.length = attribute.start - decoration1.start;
+                decoration2.start = attribute.start;
+                decoration2.length = attribute.length;
+                if (decoration1.length > 0) {
+                    styleMap[positionA] = decoration1;
+                    if (decoration2.length > 0) {
+                        positionA += 1;
+                        styleMap.insert(positionA, decoration2);
+                    }
+                } else {
+                    styleMap[positionA] = decoration2;
+                }
+                if (decoration3.length > 0) {
+                    styleMap.insert(positionA + 1, decoration3);
+                }
+            } else if (positionA > -1 && positionB > -1 && positionA != positionB) {
+                IMEDecorationInfo decoration1 = styleMap.at(positionA);
+                IMEDecorationInfo decoration2 = decoration1;
+                IMEDecorationInfo decoration3 = styleMap.at(positionB);
+                IMEDecorationInfo decoration4 = decoration3;
+                decoration2.length = (decoration1.start + decoration1.length) - attribute.start;
+                decoration1.length =  attribute.start - decoration1.start;
+                decoration2.start  =  attribute.start;
+
+                decoration4.start = (attribute.start+attribute.length);
+                decoration3.length = (decoration3.start + decoration3.length) - decoration4.start;
+                decoration3.length = decoration4.start - decoration3.start;
+                if (decoration1.length > 0) {
+                    styleMap[positionA] = decoration1;
+                    if (decoration2.length > 0) {
+                        positionA += 1;
+                        styleMap.insert(positionA, decoration2);
+                    }
+                } else {
+                    styleMap[positionA] = decoration2;
+                }
+
+                if (decoration3.length > 0) {
+                    styleMap[positionB] = decoration3;
+                    if (decoration4.length > 0) {
+                        styleMap.insert(positionB + 1, decoration4);
+                    }
+                } else {
+                    styleMap[positionB] = decoration4;
+                }
             }
-            if (decoration.decor == KoSvgText::DecorationNone) {
-                // On windows, the underline style is set, but no underline
-                // format is toggled, so we need to double check there's always one set.
-                decoration.decor.setFlag(KoSvgText::DecorationUnderline, true);
+
+            if (positionA > -1) {
+                for(int i = positionA; i <= positionB; i++) {
+                    IMEDecorationInfo decoration = styleMap.at(i);
+                    if (form.hasProperty(QTextFormat::FontUnderline)) {
+                        decoration.decor.setFlag(KoSvgText::DecorationUnderline, form.property(QTextFormat::FontUnderline).toBool());
+                    }
+                    if (form.hasProperty(QTextFormat::FontOverline)) {
+                        decoration.decor.setFlag(KoSvgText::DecorationOverline, form.property(QTextFormat::FontOverline).toBool());
+                    }
+                    if (form.hasProperty(QTextFormat::FontStrikeOut)) {
+                        decoration.decor.setFlag(KoSvgText::DecorationLineThrough, form.property(QTextFormat::FontStrikeOut).toBool());
+                    }
+
+                    if (form.hasProperty(QTextFormat::TextUnderlineStyle)) {
+                        decoration.setDecorationFromQStyle(form.underlineStyle());
+                    }
+                    if (form.hasProperty(QTextFormat::BackgroundBrush)) {
+                        decoration.thick = form.background().isOpaque();
+                    }
+                    styleMap[i] = decoration;
+                }
+            } else {
+                IMEDecorationInfo decoration;
+                decoration.start = attribute.start;
+                decoration.length = attribute.length;
+                if (form.hasProperty(QTextFormat::FontUnderline)) {
+                    decoration.decor.setFlag(KoSvgText::DecorationUnderline, form.property(QTextFormat::FontUnderline).toBool());
+                }
+                if (form.hasProperty(QTextFormat::FontOverline)) {
+                    decoration.decor.setFlag(KoSvgText::DecorationOverline, form.property(QTextFormat::FontOverline).toBool());
+                }
+                if (form.hasProperty(QTextFormat::FontStrikeOut)) {
+                    decoration.decor.setFlag(KoSvgText::DecorationLineThrough, form.property(QTextFormat::FontStrikeOut).toBool());
+                }
+
+                if (form.hasProperty(QTextFormat::TextUnderlineStyle)) {
+                    decoration.setDecorationFromQStyle(form.underlineStyle());
+                }
+                if (form.hasProperty(QTextFormat::BackgroundBrush)) {
+                    decoration.thick = form.background().isOpaque();
+                }
+                if (decoration.decor == KoSvgText::DecorationNone) {
+                    // On windows, the underline style is set, but no underline
+                    // format is toggled, so we need to double check there's always one set.
+                    decoration.decor.setFlag(KoSvgText::DecorationUnderline, true);
+                }
+                styleMap.append(decoration);
             }
-            styleMap.append(decoration);
         }
 
         // QInputMethodEvent::Language is about setting the locale on the given  preedit string, which is not possible yet.

@@ -465,7 +465,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     }
 
     // set the selection...
-    Q_FOREACH(QInputMethodEvent::Attribute attribute, event->attributes()) {
+    Q_FOREACH(const QInputMethodEvent::Attribute attribute, event->attributes()) {
         if (attribute.type == QInputMethodEvent::Selection) {
             d->pos = d->shape->posForIndex(attribute.start);
             int index = d->shape->indexForPos(d->pos);
@@ -487,7 +487,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
 
     // Apply the cursor offset for the preedit.
     QVector<IMEDecorationInfo> styleMap;
-    Q_FOREACH(QInputMethodEvent::Attribute attribute, event->attributes()) {
+    Q_FOREACH(const QInputMethodEvent::Attribute attribute, event->attributes()) {
         qDebug() << "attribute: "<< attribute.type << "start: " << attribute.start
                  << "length: " << attribute.length << "val: " << attribute.value;
         // Text Format is about setting the look of the preedit string, and there can be multiple per event
@@ -643,10 +643,6 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
             // attribute value is the cursor color, and should be used to paint the cursor.
             // attribute length is about whether the cursor should be visible at all...
         }
-    }
-    for(int i = 0; i <= styleMap.size(); i++) {
-        IMEDecorationInfo deco = styleMap.value(i);
-        qDebug() << i << "deco" << deco.start << deco.length << deco.decor << deco.style << deco.thick;
     }
 
     blocker.unlock();

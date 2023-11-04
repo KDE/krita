@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-04 00:40+0000\n"
-"PO-Revision-Date: 2023-10-31 12:54+0000\n"
+"PO-Revision-Date: 2023-11-04 09:42+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
 "krita/zh_Hant/>\n"
@@ -12344,7 +12344,7 @@ msgstr "切變圖層"
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Hori&zontally"
-msgstr "水平鏡像所有圖層(&Z)"
+msgstr "水平翻轉所有圖層(&Z)"
 
 #. i18n: context: toolTip @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
@@ -12354,14 +12354,14 @@ msgstr "水平鏡像所有圖層(&Z)"
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Horizontally"
-msgstr "水平鏡像所有圖層"
+msgstr "水平翻轉所有圖層"
 
 #. i18n: context: text @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3314
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers &Vertically"
-msgstr "垂直鏡像所有圖層(&V)"
+msgstr "垂直翻轉所有圖層(&V)"
 
 #. i18n: context: toolTip @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
@@ -12371,7 +12371,7 @@ msgstr "垂直鏡像所有圖層(&V)"
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Vertically"
-msgstr "垂直鏡像所有圖層"
+msgstr "垂直翻轉所有圖層"
 
 #. i18n: context: text @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3326
@@ -14701,7 +14701,7 @@ msgstr "水平翻轉影像(&M)"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Horizontally"
-msgstr "水平鏡像影像"
+msgstr "水平翻轉影像"
 
 #. i18n: context: text @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1293
@@ -14718,7 +14718,7 @@ msgstr "垂直翻轉影像(&V)"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Vertically"
-msgstr "垂直鏡像影像"
+msgstr "垂直翻轉影像"
 
 #. i18n: context: text @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1305
@@ -23683,22 +23683,22 @@ msgstr ""
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+"css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita is an open source "
 "and community-driven tool for digital artists everywhere.<br />Progress is "
-"made possible thanks to ongoing support from our community of <a href="
-"\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, "
-"sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
+"made possible thanks to ongoing support from our community of <a "
+"href=\"https://docs.krita.org/en/contributors_manual.html\">contributors</"
+"a>, sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
 "a>members.</p></body></html>"
 msgstr ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+"css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
@@ -24294,11 +24294,11 @@ msgstr "色彩空間瀏覽器"
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
 #, kde-format
 msgid ""
-"<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-"\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
-"\">Color Spaces</span></a>  determine how colors are encoded in your files. "
-"Different color spaces have different properties and are used for different "
-"purposes.</p></body></html>"
+"<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/"
+"Color_space\"><span style=\" font-weight:600; text-decoration: underline; "
+"color:#006e28;\">Color Spaces</span></a>  determine how colors are encoded "
+"in your files. Different color spaces have different properties and are used "
+"for different purposes.</p></body></html>"
 msgstr ""
 "<html><head/><body><p><a href=\"https://zh.wikipedia.org/wiki/色彩空間"
 "\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
@@ -28040,8 +28040,8 @@ msgstr "修改工具主要設定"
 #: libs/ui/input/kis_change_primary_setting_action.cpp:23
 #, kde-format
 msgid ""
-"The <i>Change Primary Setting</i> action changes a tool's \"Primary Setting"
-"\", for example the brush size for the brush tool."
+"The <i>Change Primary Setting</i> action changes a tool's \"Primary "
+"Setting\", for example the brush size for the brush tool."
 msgstr ""
 "<b>修改工具主要設定</b>操作用於改變某個工具的主要選項，例如筆刷工具的筆刷大"
 "小。"
@@ -29165,54 +29165,38 @@ msgid "Remove Nodes"
 msgstr "刪除節點"
 
 #: libs/ui/kis_node_manager.cpp:1038
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
-msgstr "水平翻轉"
+msgstr "水平翻轉遮罩"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Horizontally"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
-msgstr[0] "水平翻轉圖層"
+msgstr[0] "水平翻轉 %1 個圖層"
 
 #: libs/ui/kis_node_manager.cpp:1052
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
-msgstr "垂直翻轉"
+msgstr "垂直翻轉遮罩"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Vertically"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
-msgstr[0] "垂直翻轉圖層"
+msgstr[0] "垂直翻轉 %1 個圖層"
 
 #: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
-msgstr "水平鏡像所有圖層"
+msgstr "水平翻轉所有圖層"
 
 #: libs/ui/kis_node_manager.cpp:1070
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
-msgstr "垂直鏡像所有圖層"
+msgstr "垂直翻轉所有圖層"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -29516,11 +29500,11 @@ msgid ""
 "org/support-us/\"><span style=\" text-decoration: underline; color:%1;"
 "\">Support Krita's Development!</span></a></p><p><a href=\"https://docs."
 "krita.org/en/user_manual/getting_started.html\"><span style=\" text-"
-"decoration: underline; color:%1;\">Getting Started</span></a></p><p><a href="
-"\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:"
-"%1;\">Manual</span></a></p><p><a href=\"https://krita.org/\"><span style=\" "
-"text-decoration: underline; color:%1;\">Krita Website</span></a></p></"
-"td><td><p><span style=\" color:%1;\"><b>Coding Krita</b></span></p><p><a "
+"decoration: underline; color:%1;\">Getting Started</span></a></p><p><a "
+"href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Manual</span></a></p><p><a href=\"https://krita.org/\"><span "
+"style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></"
+"p></td><td><p><span style=\" color:%1;\"><b>Coding Krita</b></span></p><p><a "
 "href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">User Community</span></a></p><p><a href=\"https://"
 "invent.kde.org/graphics/krita\"><span style=\" text-decoration: underline; "
@@ -33193,8 +33177,8 @@ msgid ""
 "<p><b>Extra notes on profiles by Elle Stone:</b></p><p><i>Krita comes with a "
 "number of high quality profiles created by <a href=\"https://"
 "ninedegreesbelow.com\">Elle Stone</a>. This is a summary. Please check <a "
-"href=\"https://ninedegreesbelow.com/photography/lcms-make-icc-profiles.html"
-"\">the full documentation</a> as well.</i></p>"
+"href=\"https://ninedegreesbelow.com/photography/lcms-make-icc-profiles."
+"html\">the full documentation</a> as well.</i></p>"
 msgstr ""
 "<p><b>Elle Stone 色彩特性檔案說明：</b></p><p><b>Krita 內建了一系列由 <a "
 "href=\"https://ninedegreesbelow.com\">Elle Stone</a> 製作的高品質色彩特性檔"
@@ -33274,10 +33258,10 @@ msgstr ""
 "可以容納現實世界的一切真實色彩。兩者的不同之處在於 AllColorsRGB 使用 D50 白點"
 "且具備稍寬的色域來容納那些在色域邊緣上被普通人認作非真實的色彩。</p><p>和 "
 "ACES 色域一樣， AllColorsRGB 包含有大量概念色 (imaginary colors) 。如需了解概"
-"念色，可閱讀<a href=\"https://ninedegreesbelow.com/photography/xyz-rgb.html"
-"\">《Painless Programmer's Guide to XYZ, RGB, ICC, xyY, and TRCs》</a>。</"
-"p><p>除非必須確保色彩空間包含一切真實色彩，否則不應使用此特性檔案來進行影像編"
-"輯。</p>"
+"念色，可閱讀<a href=\"https://ninedegreesbelow.com/photography/xyz-rgb."
+"html\">《Painless Programmer's Guide to XYZ, RGB, ICC, xyY, and TRCs》</a>。"
+"</p><p>除非必須確保色彩空間包含一切真實色彩，否則不應使用此特性檔案來進行影像"
+"編輯。</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:565
 #, kde-format
@@ -33701,8 +33685,8 @@ msgid ""
 "<p>Instant Preview may look different from the final result. In case of "
 "troubles try disabling the following options:<ul>%1</ul></p>"
 msgstr ""
-"<p>即時預覽的顯示效果可能與最終結果有所差異。如果遇到問題可停用下列選項：<ul>"
-"%1</ul></p>"
+"<p>即時預覽的顯示效果可能與最終結果有所差異。如果遇到問題可停用下列選項："
+"<ul>%1</ul></p>"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:162
 #, kde-format
@@ -34267,9 +34251,9 @@ msgid ""
 msgstr ""
 "<html><body><p><b>警告：</b> 此影像在變更色彩特性檔案後外觀會出現變化。這是因"
 "為此影像含有：<ul><li>多於一個圖層</li><li>一個或以上含有透明像素的圖層</"
-"li><li>使用「正常」(\"Normal\") 以外混色模式的圖層</li></ul></p><p><a href="
-"\"https://docs.krita.org/en/general_concepts/colors/color_managed_workflow."
-"html\">詳細資料</a></p></body></html>"
+"li><li>使用「正常」(\"Normal\") 以外混色模式的圖層</li></ul></p><p><a "
+"href=\"https://docs.krita.org/en/general_concepts/colors/"
+"color_managed_workflow.html\">詳細資料</a></p></body></html>"
 
 #: libs/ui/widgets/KoDualColorButton.cpp:426
 #, kde-format
@@ -35704,14 +35688,14 @@ msgstr "<html><font size=\"5\">KDE 桌面環境 - 一切自由</font></html>"
 #, kde-format
 msgid ""
 "<html><b>KDE</b> is a world-wide network of software engineers, artists, "
-"writers, translators and facilitators who are committed to <a href="
-"\"%1\">Free Software</a> development. This community has created hundreds of "
-"Free Software applications as part of the KDE frameworks, workspaces and "
-"applications.<br /><br />KDE is a cooperative enterprise in which no single "
-"entity controls the efforts or products of KDE to the exclusion of others. "
-"Everyone is welcome to join and contribute to KDE, including you.<br /><br /"
-">Visit <a href=\"%2\">%2</a> for more information about the KDE community "
-"and the software we produce.</html>"
+"writers, translators and facilitators who are committed to <a "
+"href=\"%1\">Free Software</a> development. This community has created "
+"hundreds of Free Software applications as part of the KDE frameworks, "
+"workspaces and applications.<br /><br />KDE is a cooperative enterprise in "
+"which no single entity controls the efforts or products of KDE to the "
+"exclusion of others. Everyone is welcome to join and contribute to KDE, "
+"including you.<br /><br />Visit <a href=\"%2\">%2</a> for more information "
+"about the KDE community and the software we produce.</html>"
 msgstr ""
 "<html><b>KDE</b> 是一個由眾多軟體工程師、藝術作業者、文字作業者、翻譯人員和其"
 "他有志於<a href=\"%1\">自由軟體</a>事業的人們組成的世界性社群網路。我們的社群"
@@ -35854,8 +35838,8 @@ msgid ""
 msgstr ""
 "<qt><p>回報問題前，請先閱讀<b><a href=\"https://docs.krita.org/en/"
 "untranslatable_pages/reporting_bugs.html\">這篇指南</a></b>！</p><p>要回報錯"
-"誤報告，請按下方的按鈕。這會開啟一個網址是 <a href=\"https://bugs.kde.org"
-"\">https://bugs.kde.org</a> 的瀏覽器視窗，這裡您能看到能讓您填寫的表單。</"
+"誤報告，請按下方的按鈕。這會開啟一個網址是 <a href=\"https://bugs.kde."
+"org\">https://bugs.kde.org</a> 的瀏覽器視窗，這裡您能看到能讓您填寫的表單。</"
 "p><p><b>請把下面的資訊貼到錯誤報告中！</b></p></qt>"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:207
@@ -50720,9 +50704,9 @@ msgstr "仿製全部可見圖層"
 #, kde-format
 msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Clone Brush:</span></"
-"p><p>Select the source point from the current layer with Ctrl-click. Use Ctrl"
-"+Alt-click to select a source from the previously picked layer.</p></body></"
-"html>"
+"p><p>Select the source point from the current layer with Ctrl-click. Use "
+"Ctrl+Alt-click to select a source from the previously picked layer.</p></"
+"body></html>"
 msgstr ""
 "<html><head/><body><p><span style=\" font-weight:600;\">仿製筆刷：</span></"
 "p><p>Ctrl + 點擊可在目前選定的圖層上取樣。Ctrl + Alt + 點擊則會從上一次選定的"
@@ -56496,8 +56480,8 @@ msgstr "長度：%1 px"
 #: plugins/tools/basictools/kis_tool_line.cc:460
 #, kde-format
 msgid ""
-"Alt+Drag will move the origin of the currently displayed line around, Shift"
-"+Drag will force you to draw straight lines"
+"Alt+Drag will move the origin of the currently displayed line around, "
+"Shift+Drag will force you to draw straight lines"
 msgstr ""
 "Alt + 拖曳可移動目前顯示線條的基點，Shift + 拖曳將強制在特殊角度上繪製直線"
 
@@ -60033,29 +60017,3 @@ msgstr "縮放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "參考圖工具"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Mask X"
-#~ msgstr "沿 X 軸翻轉遮罩"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layer X"
-#~ msgid_plural "Mirror %1 Layers X"
-#~ msgstr[0] "沿 X 軸翻轉 %1 個圖層"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Mask Y"
-#~ msgstr "沿 Y 軸翻轉遮罩"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layer Y"
-#~ msgid_plural "Mirror %1 Layers Y"
-#~ msgstr[0] "沿 Y 軸翻轉 %1 個圖層"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror All Layers X"
-#~ msgstr "沿 X 軸鏡像所有圖層"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror All Layers Y"
-#~ msgstr "沿 Y 軸鏡像所有圖層"

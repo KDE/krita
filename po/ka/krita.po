@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-04 00:40+0000\n"
-"PO-Revision-Date: 2023-10-27 06:00+0200\n"
+"PO-Revision-Date: 2023-11-04 06:30+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -12347,7 +12347,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Horizontally"
-msgstr ""
+msgstr "ყველა ფენის ჰორიზონტალური ანარეკლი"
 
 #. i18n: context: text @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3314
@@ -12364,7 +12364,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Vertically"
-msgstr ""
+msgstr "ყველა ფენის ვერტიკალურ ანარეკლი"
 
 #. i18n: context: text @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3326
@@ -23531,16 +23531,16 @@ msgstr ""
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+"css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita is an open source "
 "and community-driven tool for digital artists everywhere.<br />Progress is "
-"made possible thanks to ongoing support from our community of <a href="
-"\"https://docs.krita.org/en/contributors_manual.html\">contributors</a>, "
-"sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
+"made possible thanks to ongoing support from our community of <a "
+"href=\"https://docs.krita.org/en/contributors_manual.html\">contributors</"
+"a>, sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
 "a>members.</p></body></html>"
 msgstr ""
 
@@ -24122,11 +24122,11 @@ msgstr ""
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
 #, kde-format
 msgid ""
-"<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-"\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
-"\">Color Spaces</span></a>  determine how colors are encoded in your files. "
-"Different color spaces have different properties and are used for different "
-"purposes.</p></body></html>"
+"<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/"
+"Color_space\"><span style=\" font-weight:600; text-decoration: underline; "
+"color:#006e28;\">Color Spaces</span></a>  determine how colors are encoded "
+"in your files. Different color spaces have different properties and are used "
+"for different purposes.</p></body></html>"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
@@ -27742,8 +27742,8 @@ msgstr ""
 #: libs/ui/input/kis_change_primary_setting_action.cpp:23
 #, kde-format
 msgid ""
-"The <i>Change Primary Setting</i> action changes a tool's \"Primary Setting"
-"\", for example the brush size for the brush tool."
+"The <i>Change Primary Setting</i> action changes a tool's \"Primary "
+"Setting\", for example the brush size for the brush tool."
 msgstr ""
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:25
@@ -28859,56 +28859,40 @@ msgid "Remove Nodes"
 msgstr "კვანძების წაშლა"
 
 #: libs/ui/kis_node_manager.cpp:1038
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
-msgstr "ჰორიზონტალური ანარეკლი"
+msgstr "ნიღბის ჰორიზონტალური ანარეკლი"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Horizontally"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
-msgstr[0] "ფენების ჰორიზონტალური ანარეკლი"
-msgstr[1] "ფენების ჰორიზონტალური ანარეკლი"
+msgstr[0] "ფენის ჰორიზონტალური ანარეკლი"
+msgstr[1] "%1 ფენის ჰორიზონტალური ანარეკლი"
 
 #: libs/ui/kis_node_manager.cpp:1052
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
-msgstr "ვერტიკალურ ანარეკლი"
+msgstr "ნიღბის ვერტიკალურ ანარეკლი"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Vertically"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
-msgstr[0] "ფენების ვერტიკალურ ანარეკლი"
-msgstr[1] "ფენების ვერტიკალურ ანარეკლი"
+msgstr[0] "ფენის ვერტიკალურ ანარეკლი"
+msgstr[1] "%1 ფენის ვერტიკალურ ანარეკლი"
 
 #: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Layers Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
-msgstr "ფენების ჰორიზონტალური ანარეკლი"
+msgstr "ყველა ფენის ჰორიზონტალური ანარეკლი"
 
 #: libs/ui/kis_node_manager.cpp:1070
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Layers Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
-msgstr "ფენების ვერტიკალურ ანარეკლი"
+msgstr "ყველა ფენის ვერტიკალურ ანარეკლი"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -29206,11 +29190,11 @@ msgid ""
 "org/support-us/\"><span style=\" text-decoration: underline; color:%1;"
 "\">Support Krita's Development!</span></a></p><p><a href=\"https://docs."
 "krita.org/en/user_manual/getting_started.html\"><span style=\" text-"
-"decoration: underline; color:%1;\">Getting Started</span></a></p><p><a href="
-"\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:"
-"%1;\">Manual</span></a></p><p><a href=\"https://krita.org/\"><span style=\" "
-"text-decoration: underline; color:%1;\">Krita Website</span></a></p></"
-"td><td><p><span style=\" color:%1;\"><b>Coding Krita</b></span></p><p><a "
+"decoration: underline; color:%1;\">Getting Started</span></a></p><p><a "
+"href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Manual</span></a></p><p><a href=\"https://krita.org/\"><span "
+"style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></"
+"p></td><td><p><span style=\" color:%1;\"><b>Coding Krita</b></span></p><p><a "
 "href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">User Community</span></a></p><p><a href=\"https://"
 "invent.kde.org/graphics/krita\"><span style=\" text-decoration: underline; "
@@ -32712,8 +32696,8 @@ msgid ""
 "<p><b>Extra notes on profiles by Elle Stone:</b></p><p><i>Krita comes with a "
 "number of high quality profiles created by <a href=\"https://"
 "ninedegreesbelow.com\">Elle Stone</a>. This is a summary. Please check <a "
-"href=\"https://ninedegreesbelow.com/photography/lcms-make-icc-profiles.html"
-"\">the full documentation</a> as well.</i></p>"
+"href=\"https://ninedegreesbelow.com/photography/lcms-make-icc-profiles."
+"html\">the full documentation</a> as well.</i></p>"
 msgstr ""
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:521
@@ -35113,14 +35097,14 @@ msgstr "<html><font size=\"5\">KDE - იყავი თავისუფალ
 #, kde-format
 msgid ""
 "<html><b>KDE</b> is a world-wide network of software engineers, artists, "
-"writers, translators and facilitators who are committed to <a href="
-"\"%1\">Free Software</a> development. This community has created hundreds of "
-"Free Software applications as part of the KDE frameworks, workspaces and "
-"applications.<br /><br />KDE is a cooperative enterprise in which no single "
-"entity controls the efforts or products of KDE to the exclusion of others. "
-"Everyone is welcome to join and contribute to KDE, including you.<br /><br /"
-">Visit <a href=\"%2\">%2</a> for more information about the KDE community "
-"and the software we produce.</html>"
+"writers, translators and facilitators who are committed to <a "
+"href=\"%1\">Free Software</a> development. This community has created "
+"hundreds of Free Software applications as part of the KDE frameworks, "
+"workspaces and applications.<br /><br />KDE is a cooperative enterprise in "
+"which no single entity controls the efforts or products of KDE to the "
+"exclusion of others. Everyone is welcome to join and contribute to KDE, "
+"including you.<br /><br />Visit <a href=\"%2\">%2</a> for more information "
+"about the KDE community and the software we produce.</html>"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:69
@@ -35185,8 +35169,8 @@ msgstr ""
 "<br><br>KDE გუნდს ესაჭიროება ფინანსური დახმარება. თანხის უდიდესი ნაწილი "
 "იხარჯება მონაწილეების იმ ხარჯების ასანაზღაურებლად, რომლებიც მათ გასწიეს KDE "
 "პროექტში წვლილის შეტანისას. KDE გუნდის მხარდაჭერა შეგიძლიათ ფინანსური "
-"შეწირულობებით ან სხვადასხვა სახით, რომლებიც აღწერილია საიტზე <a href=\"%2\">"
-"%2</a>.<br><br>წინასწარ გმადლობთ მხარდაჭერისთვის!</html>"
+"შეწირულობებით ან სხვადასხვა სახით, რომლებიც აღწერილია საიტზე <a "
+"href=\"%2\">%2</a>.<br><br>წინასწარ გმადლობთ მხარდაჭერისთვის!</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:128
 #, kde-format
@@ -49840,9 +49824,9 @@ msgstr ""
 #, kde-format
 msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Clone Brush:</span></"
-"p><p>Select the source point from the current layer with Ctrl-click. Use Ctrl"
-"+Alt-click to select a source from the previously picked layer.</p></body></"
-"html>"
+"p><p>Select the source point from the current layer with Ctrl-click. Use "
+"Ctrl+Alt-click to select a source from the previously picked layer.</p></"
+"body></html>"
 msgstr ""
 
 #: plugins/paintops/deform/deform_paintop_plugin.cpp:29
@@ -55476,8 +55460,8 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_line.cc:460
 #, kde-format
 msgid ""
-"Alt+Drag will move the origin of the currently displayed line around, Shift"
-"+Drag will force you to draw straight lines"
+"Alt+Drag will move the origin of the currently displayed line around, "
+"Shift+Drag will force you to draw straight lines"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_line.h:115
@@ -55929,17 +55913,15 @@ msgstr "ყველას გამოერთება"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:250
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval X:"
-msgstr "შიდა"
+msgstr "X ინტერვალი:"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:263
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval Y:"
-msgstr "შიდა"
+msgstr "Y ინტერვალი:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:744
 #, kde-format

@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-01 00:40+0000\n"
-"PO-Revision-Date: 2023-10-31 21:20+0100\n"
+"POT-Creation-Date: 2023-11-04 00:40+0000\n"
+"PO-Revision-Date: 2023-11-03 09:19+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -17107,7 +17107,7 @@ msgstr "Prepusti skozi"
 msgid "Imported Image"
 msgstr "Uvožena slika"
 
-#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1895
+#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1921
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17369,63 +17369,63 @@ msgstr "Odpri datoteko"
 msgid "Error"
 msgstr "Napaka"
 
-#: libs/image/kis_layer_utils.cpp:609
+#: libs/image/kis_layer_utils.cpp:617
 #, kde-format
 msgid "Merged"
 msgstr "Spojeno"
 
-#: libs/image/kis_layer_utils.cpp:1389
+#: libs/image/kis_layer_utils.cpp:1397
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Spoji s spodnjim"
 
-#: libs/image/kis_layer_utils.cpp:1625
+#: libs/image/kis_layer_utils.cpp:1645
 #, kde-format
 msgid "Copy of"
 msgstr "Kopija"
 
-#: libs/image/kis_layer_utils.cpp:1698
+#: libs/image/kis_layer_utils.cpp:1718
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Spremeni barvo projekcije"
 
-#: libs/image/kis_layer_utils.cpp:1858
+#: libs/image/kis_layer_utils.cpp:1884
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Spoji izbrana vozlišča"
 
-#: libs/image/kis_layer_utils.cpp:1866
+#: libs/image/kis_layer_utils.cpp:1892
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Novo iz vidnega"
 
-#: libs/image/kis_layer_utils.cpp:1866
+#: libs/image/kis_layer_utils.cpp:1892
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Vidno"
 
-#: libs/image/kis_layer_utils.cpp:1944
+#: libs/image/kis_layer_utils.cpp:1970
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Spoji maske izbora"
 
-#: libs/image/kis_layer_utils.cpp:1967
+#: libs/image/kis_layer_utils.cpp:1993
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Splošči plast"
 
-#: libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_layer_utils.cpp:2006
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Splošči sliko"
 
-#: libs/image/kis_layer_utils.cpp:2198
+#: libs/image/kis_layer_utils.cpp:2230
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Razdeli alfo v masko"
 
-#: libs/image/kis_layer_utils.cpp:2224
+#: libs/image/kis_layer_utils.cpp:2256
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Pretvori v plast za slikanje"
@@ -29394,57 +29394,41 @@ msgid "Remove Nodes"
 msgstr "Odstrani vozlišča"
 
 #: libs/ui/kis_node_manager.cpp:1038
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
-msgstr "Zrcali vodoravno"
+msgstr "Zrcali masko vodoravno"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Horizontally"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
-msgstr[0] "Zrcali plasti vodoravno"
-msgstr[1] "Zrcali plasti vodoravno"
-msgstr[2] "Zrcali plasti vodoravno"
-msgstr[3] "Zrcali plasti vodoravno"
+msgstr[0] "Zrcali %1 plasti vodoravno"
+msgstr[1] "Zrcali %1 plast vodoravno"
+msgstr[2] "Zrcali %1 plasti vodoravno"
+msgstr[3] "Zrcali %1 plasti vodoravno"
 
 #: libs/ui/kis_node_manager.cpp:1052
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
-msgstr "Zrcali navpično"
+msgstr "Zrcali masko navpično"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Vertically"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
-msgstr[0] "Zrcali plasti navpično"
-msgstr[1] "Zrcali plasti navpično"
-msgstr[2] "Zrcali plasti navpično"
-msgstr[3] "Zrcali plasti navpično"
+msgstr[0] "Zrcali %1 plasti navpično"
+msgstr[1] "Zrcali %1 plast navpično"
+msgstr[2] "Zrcali %1 plasti navpično"
+msgstr[3] "Zrcali %1 plasti navpično"
 
 #: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Zrcali vse plasti vodoravno"
 
 #: libs/ui/kis_node_manager.cpp:1070
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Zrcali vse plasti navpično"
@@ -60864,38 +60848,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Mask X"
-#~ msgstr "Zrcali masko X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layer X"
-#~ msgid_plural "Mirror %1 Layers X"
-#~ msgstr[0] "Zrcali %1 plasti X"
-#~ msgstr[1] "Zrcali %1 plast X"
-#~ msgstr[2] "Zrcali %1 plasti X"
-#~ msgstr[3] "Zrcali %1 plasti X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Mask Y"
-#~ msgstr "Zrcali masko Y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layer Y"
-#~ msgid_plural "Mirror %1 Layers Y"
-#~ msgstr[0] "Zrcali %1 plasti Y"
-#~ msgstr[1] "Zrcali %1 plast Y"
-#~ msgstr[2] "Zrcali %1 plasti Y"
-#~ msgstr[3] "Zrcali %1 plasti Y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror All Layers X"
-#~ msgstr "Zrcali vse plasti X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror All Layers Y"
-#~ msgstr "Zrcali vse plasti Y"
-
-#~ msgid "WizardPage"
-#~ msgstr "Stran čarovnika"

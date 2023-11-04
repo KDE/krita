@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-01 00:40+0000\n"
+"POT-Creation-Date: 2023-11-04 00:40+0000\n"
 "PO-Revision-Date: 2023-11-01 07:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -17136,7 +17136,7 @@ msgstr "Skicka igenom"
 msgid "Imported Image"
 msgstr "Importerad bild"
 
-#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1895
+#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1921
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17392,63 +17392,63 @@ msgstr "Öppna fil"
 msgid "Error"
 msgstr "Fel"
 
-#: libs/image/kis_layer_utils.cpp:609
+#: libs/image/kis_layer_utils.cpp:617
 #, kde-format
 msgid "Merged"
 msgstr "Sammanfogade"
 
-#: libs/image/kis_layer_utils.cpp:1389
+#: libs/image/kis_layer_utils.cpp:1397
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Sammanfoga neråt"
 
-#: libs/image/kis_layer_utils.cpp:1625
+#: libs/image/kis_layer_utils.cpp:1645
 #, kde-format
 msgid "Copy of"
 msgstr "Kopia av"
 
-#: libs/image/kis_layer_utils.cpp:1698
+#: libs/image/kis_layer_utils.cpp:1718
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Ändra projektionsfärg"
 
-#: libs/image/kis_layer_utils.cpp:1858
+#: libs/image/kis_layer_utils.cpp:1884
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Sammanfoga markerade noder"
 
-#: libs/image/kis_layer_utils.cpp:1866
+#: libs/image/kis_layer_utils.cpp:1892
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nytt från synligt"
 
-#: libs/image/kis_layer_utils.cpp:1866
+#: libs/image/kis_layer_utils.cpp:1892
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Synligt"
 
-#: libs/image/kis_layer_utils.cpp:1944
+#: libs/image/kis_layer_utils.cpp:1970
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Sammanfoga markeringsmasker"
 
-#: libs/image/kis_layer_utils.cpp:1967
+#: libs/image/kis_layer_utils.cpp:1993
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Platta ut lager"
 
-#: libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_layer_utils.cpp:2006
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Platta ut bild"
 
-#: libs/image/kis_layer_utils.cpp:2198
+#: libs/image/kis_layer_utils.cpp:2230
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Dela alfa till en mask"
 
-#: libs/image/kis_layer_utils.cpp:2224
+#: libs/image/kis_layer_utils.cpp:2256
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Konvertera till målningslager"

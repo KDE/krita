@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-01 00:40+0000\n"
+"POT-Creation-Date: 2023-11-04 00:40+0000\n"
 "PO-Revision-Date: 2011-09-26 14:11+0330\n"
 "Last-Translator: Mohamad Reza Mirdamadi <mohi@ubuntu.ir>\n"
 "Language-Team: Farsi (Persian) <>\n"
@@ -17353,7 +17353,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr "واردات تصویر"
 
-#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1895
+#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1921
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17632,73 +17632,73 @@ msgstr "پالت"
 msgid "Error"
 msgstr "خط برش تصویر"
 
-#: libs/image/kis_layer_utils.cpp:609
+#: libs/image/kis_layer_utils.cpp:617
 #, fuzzy, kde-format
 msgid "Merged"
 msgstr "خط برش تصویر"
 
-#: libs/image/kis_layer_utils.cpp:1389
+#: libs/image/kis_layer_utils.cpp:1397
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "گزینه‌ها"
 
-#: libs/image/kis_layer_utils.cpp:1625
+#: libs/image/kis_layer_utils.cpp:1645
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "شرکت"
 
-#: libs/image/kis_layer_utils.cpp:1698
+#: libs/image/kis_layer_utils.cpp:1718
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "تغییر تورفتگی"
 
-#: libs/image/kis_layer_utils.cpp:1858
+#: libs/image/kis_layer_utils.cpp:1884
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "حذف رنگ برگزیده"
 
-#: libs/image/kis_layer_utils.cpp:1866
+#: libs/image/kis_layer_utils.cpp:1892
 #, fuzzy
 #| msgid "No profile"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "بدون profile"
 
-#: libs/image/kis_layer_utils.cpp:1866
+#: libs/image/kis_layer_utils.cpp:1892
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "مرئی"
 
-#: libs/image/kis_layer_utils.cpp:1944
+#: libs/image/kis_layer_utils.cpp:1970
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "پاک‌کن گزینش"
 
-#: libs/image/kis_layer_utils.cpp:1967
+#: libs/image/kis_layer_utils.cpp:1993
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "تخت کردن تصویر"
 
-#: libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_layer_utils.cpp:2006
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "تخت کردن تصویر"
 
-#: libs/image/kis_layer_utils.cpp:2198
+#: libs/image/kis_layer_utils.cpp:2230
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "گزینه‌های آلفا"
 
-#: libs/image/kis_layer_utils.cpp:2224
+#: libs/image/kis_layer_utils.cpp:2256
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"

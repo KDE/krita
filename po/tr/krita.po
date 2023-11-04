@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-01 00:40+0000\n"
+"POT-Creation-Date: 2023-11-04 00:40+0000\n"
 "PO-Revision-Date: 2023-11-01 06:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -17100,7 +17100,7 @@ msgstr "Geçiş"
 msgid "Imported Image"
 msgstr "İçe Aktarılmış Görsel"
 
-#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1895
+#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1921
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17356,63 +17356,63 @@ msgstr "Dosya Aç"
 msgid "Error"
 msgstr "Hata"
 
-#: libs/image/kis_layer_utils.cpp:609
+#: libs/image/kis_layer_utils.cpp:617
 #, kde-format
 msgid "Merged"
 msgstr "Birleştirilmiş"
 
-#: libs/image/kis_layer_utils.cpp:1389
+#: libs/image/kis_layer_utils.cpp:1397
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Aşağı Birleştir"
 
-#: libs/image/kis_layer_utils.cpp:1625
+#: libs/image/kis_layer_utils.cpp:1645
 #, kde-format
 msgid "Copy of"
 msgstr "Kopyası"
 
-#: libs/image/kis_layer_utils.cpp:1698
+#: libs/image/kis_layer_utils.cpp:1718
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Projeksiyon Rengini Değiştir"
 
-#: libs/image/kis_layer_utils.cpp:1858
+#: libs/image/kis_layer_utils.cpp:1884
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Seçili Düğümleri Birleştir"
 
-#: libs/image/kis_layer_utils.cpp:1866
+#: libs/image/kis_layer_utils.cpp:1892
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Görünürden Yeni"
 
-#: libs/image/kis_layer_utils.cpp:1866
+#: libs/image/kis_layer_utils.cpp:1892
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Görünür"
 
-#: libs/image/kis_layer_utils.cpp:1944
+#: libs/image/kis_layer_utils.cpp:1970
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Seçim Maskelerini Birleştir"
 
-#: libs/image/kis_layer_utils.cpp:1967
+#: libs/image/kis_layer_utils.cpp:1993
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Katmanı Düzleştir"
 
-#: libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_layer_utils.cpp:2006
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Görseli Düzleştir"
 
-#: libs/image/kis_layer_utils.cpp:2198
+#: libs/image/kis_layer_utils.cpp:2230
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Alfayı Maskelere Böl"
 
-#: libs/image/kis_layer_utils.cpp:2224
+#: libs/image/kis_layer_utils.cpp:2256
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Bir Boya Katmanına Dönüştür"

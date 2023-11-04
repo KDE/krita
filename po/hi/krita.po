@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-01 00:40+0000\n"
+"POT-Creation-Date: 2023-11-04 00:40+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -17197,7 +17197,7 @@ msgstr "पास थ्रू"
 msgid "Imported Image"
 msgstr "आयात किया हुआ चित्र"
 
-#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1895
+#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1921
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17460,63 +17460,63 @@ msgstr "फ़ाइल खोलें"
 msgid "Error"
 msgstr "एरर"
 
-#: libs/image/kis_layer_utils.cpp:609
+#: libs/image/kis_layer_utils.cpp:617
 #, kde-format
 msgid "Merged"
 msgstr "सम्मिलित"
 
-#: libs/image/kis_layer_utils.cpp:1389
+#: libs/image/kis_layer_utils.cpp:1397
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "नीचे सम्मिलित करें"
 
-#: libs/image/kis_layer_utils.cpp:1625
+#: libs/image/kis_layer_utils.cpp:1645
 #, kde-format
 msgid "Copy of"
 msgstr "नकल"
 
-#: libs/image/kis_layer_utils.cpp:1698
+#: libs/image/kis_layer_utils.cpp:1718
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "प्रक्षेपण रंग बदलें"
 
-#: libs/image/kis_layer_utils.cpp:1858
+#: libs/image/kis_layer_utils.cpp:1884
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "चयनित नोड्स का विलय करें"
 
-#: libs/image/kis_layer_utils.cpp:1866
+#: libs/image/kis_layer_utils.cpp:1892
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "दृश्यमान परतों से नई परत"
 
-#: libs/image/kis_layer_utils.cpp:1866
+#: libs/image/kis_layer_utils.cpp:1892
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "दृश्यमान से"
 
-#: libs/image/kis_layer_utils.cpp:1944
+#: libs/image/kis_layer_utils.cpp:1970
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "चयन मास्क का विलय करें"
 
-#: libs/image/kis_layer_utils.cpp:1967
+#: libs/image/kis_layer_utils.cpp:1993
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "परत समतल करें"
 
-#: libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_layer_utils.cpp:2006
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "चित्र समतल करें"
 
-#: libs/image/kis_layer_utils.cpp:2198
+#: libs/image/kis_layer_utils.cpp:2230
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "अल्फा को मास्क में विभाजित करें"
 
-#: libs/image/kis_layer_utils.cpp:2224
+#: libs/image/kis_layer_utils.cpp:2256
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "चित्रकारी परत में बदलें"

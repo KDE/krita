@@ -306,7 +306,7 @@ void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
 
 QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-    qDebug() << "receiving inputmethod query" << query;
+    //qDebug() << "receiving inputmethod query" << query;
 
     switch(query) {
     case Qt::ImEnabled:
@@ -499,74 +499,81 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
             QVariant val = attribute.value;
             QTextCharFormat form = val.value<QTextFormat>().toCharFormat();
 
+            if (attribute.length == 0 || attribute.start < 0 || !attribute.value.isValid()) {
+                continue;
+            }
 
             int positionA = -1;
             int positionB = -1;
-            for (int i=0; i< styleMap.size(); i++) {
-                if (attribute.start >= styleMap.at(i).start
-                        && attribute.start < styleMap.at(i).start + styleMap.at(i).length) {
-                    positionA = i;
+            if (!styleMap.isEmpty()) {
+                for (int i = 0; i < styleMap.size(); i++) {
+                    if (attribute.start >= styleMap.at(i).start
+                            && attribute.start < styleMap.at(i).start + styleMap.at(i).length) {
+                        positionA = i;
+                    }
+                    if (attribute.start + attribute.length > styleMap.at(i).start
+                            && attribute.start + attribute.length <= styleMap.at(i).start + styleMap.at(i).length) {
+                        positionB = i;
+                    }
                 }
-                if (attribute.start + attribute.length > styleMap.at(i).start
-                        && attribute.start + attribute.length <= styleMap.at(i).start + styleMap.at(i).length) {
-                    positionB = i;
+
+                if (positionA > -1 && positionA == positionB) {
+                    IMEDecorationInfo decoration1 = styleMap.at(positionA);
+                    IMEDecorationInfo decoration2 = decoration1;
+                    IMEDecorationInfo decoration3 = decoration1;
+                    decoration3.start = (attribute.start+attribute.length);
+                    decoration3.length = (decoration1.start + decoration1.length) - decoration3.start;
+                    decoration1.length = attribute.start - decoration1.start;
+                    decoration2.start = attribute.start;
+                    decoration2.length = attribute.length;
+                    if (decoration1.length > 0) {
+                        styleMap[positionA] = decoration1;
+                        if (decoration2.length > 0) {
+                            positionA += 1;
+                            styleMap.insert(positionA, decoration2);
+                        }
+                    } else {
+                        styleMap[positionA] = decoration2;
+                    }
+                    if (decoration3.length > 0) {
+                        styleMap.insert(positionA + 1, decoration3);
+                    }
+                } else if (positionA > -1 && positionB > -1
+                           && positionA != positionB) {
+                    IMEDecorationInfo decoration1 = styleMap.at(positionA);
+                    IMEDecorationInfo decoration2 = decoration1;
+                    IMEDecorationInfo decoration3 = styleMap.at(positionB);
+                    IMEDecorationInfo decoration4 = decoration3;
+                    decoration2.length = (decoration1.start + decoration1.length) - attribute.start;
+                    decoration1.length =  attribute.start - decoration1.start;
+                    decoration2.start  =  attribute.start;
+
+                    decoration4.start = (attribute.start+attribute.length);
+                    decoration3.length = (decoration3.start + decoration3.length) - decoration4.start;
+                    decoration3.length = decoration4.start - decoration3.start;
+                    if (decoration1.length > 0) {
+                        styleMap[positionA] = decoration1;
+                        if (decoration2.length > 0) {
+                            positionA += 1;
+                            styleMap.insert(positionA, decoration2);
+                        }
+                    } else {
+                        styleMap[positionA] = decoration2;
+                    }
+
+                    if (decoration3.length > 0) {
+                        styleMap[positionB] = decoration3;
+                        if (decoration4.length > 0) {
+                            styleMap.insert(positionB + 1, decoration4);
+                        }
+                    } else {
+                        styleMap[positionB] = decoration4;
+                    }
                 }
             }
 
-            if (positionA > -1 && positionA == positionB) {
-                IMEDecorationInfo decoration1 = styleMap.at(positionA);
-                IMEDecorationInfo decoration2 = decoration1;
-                IMEDecorationInfo decoration3 = decoration1;
-                decoration3.start = (attribute.start+attribute.length);
-                decoration3.length = (decoration1.start + decoration1.length) - decoration3.start;
-                decoration1.length = attribute.start - decoration1.start;
-                decoration2.start = attribute.start;
-                decoration2.length = attribute.length;
-                if (decoration1.length > 0) {
-                    styleMap[positionA] = decoration1;
-                    if (decoration2.length > 0) {
-                        positionA += 1;
-                        styleMap.insert(positionA, decoration2);
-                    }
-                } else {
-                    styleMap[positionA] = decoration2;
-                }
-                if (decoration3.length > 0) {
-                    styleMap.insert(positionA + 1, decoration3);
-                }
-            } else if (positionA > -1 && positionB > -1 && positionA != positionB) {
-                IMEDecorationInfo decoration1 = styleMap.at(positionA);
-                IMEDecorationInfo decoration2 = decoration1;
-                IMEDecorationInfo decoration3 = styleMap.at(positionB);
-                IMEDecorationInfo decoration4 = decoration3;
-                decoration2.length = (decoration1.start + decoration1.length) - attribute.start;
-                decoration1.length =  attribute.start - decoration1.start;
-                decoration2.start  =  attribute.start;
+            if (positionA > -1 && !styleMap.isEmpty()) {
 
-                decoration4.start = (attribute.start+attribute.length);
-                decoration3.length = (decoration3.start + decoration3.length) - decoration4.start;
-                decoration3.length = decoration4.start - decoration3.start;
-                if (decoration1.length > 0) {
-                    styleMap[positionA] = decoration1;
-                    if (decoration2.length > 0) {
-                        positionA += 1;
-                        styleMap.insert(positionA, decoration2);
-                    }
-                } else {
-                    styleMap[positionA] = decoration2;
-                }
-
-                if (decoration3.length > 0) {
-                    styleMap[positionB] = decoration3;
-                    if (decoration4.length > 0) {
-                        styleMap.insert(positionB + 1, decoration4);
-                    }
-                } else {
-                    styleMap[positionB] = decoration4;
-                }
-            }
-
-            if (positionA > -1) {
                 for(int i = positionA; i <= positionB; i++) {
                     IMEDecorationInfo decoration = styleMap.at(i);
                     if (form.hasProperty(QTextFormat::FontUnderline)) {
@@ -585,8 +592,14 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
                     if (form.hasProperty(QTextFormat::BackgroundBrush)) {
                         decoration.thick = form.background().isOpaque();
                     }
+                    if (decoration.decor == KoSvgText::DecorationNone) {
+                        // On windows, the underline style is set, but no underline
+                        // format is toggled, so we need to double check there's always one set.
+                        decoration.decor.setFlag(KoSvgText::DecorationUnderline, true);
+                    }
                     styleMap[i] = decoration;
                 }
+
             } else {
                 IMEDecorationInfo decoration;
                 decoration.start = attribute.start;
@@ -614,12 +627,11 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
                 }
                 styleMap.append(decoration);
             }
-        }
 
         // QInputMethodEvent::Language is about setting the locale on the given  preedit string, which is not possible yet.
         // QInputMethodEvent::Ruby is supossedly ruby info for the preedit string, but none of the platform integrations
         // actually implement this at time of writing, and it may have been something from a previous live of Qt's.
-        if (attribute.type == QInputMethodEvent::Cursor) {
+        } else if (attribute.type == QInputMethodEvent::Cursor) {
             if (d->preEditStart < 0) {
                 d->anchor = d->pos;
             } else {
@@ -631,6 +643,10 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
             // attribute value is the cursor color, and should be used to paint the cursor.
             // attribute length is about whether the cursor should be visible at all...
         }
+    }
+    for(int i = 0; i <= styleMap.size(); i++) {
+        IMEDecorationInfo deco = styleMap.value(i);
+        qDebug() << i << "deco" << deco.start << deco.length << deco.decor << deco.style << deco.thick;
     }
 
     blocker.unlock();

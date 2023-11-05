@@ -76,12 +76,13 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
 
     bool visualNavigation = true;
 
-    SvgTextInsertCommand *preEditCommand {nullptr};
-    int preEditStart = -1;
-    int preEditLength = -1;
-    QPainterPath IMEDecoration;
-    QVector<IMEDecorationInfo> styleMap;
-    QRectF oldIMEDecorationRect;
+    SvgTextInsertCommand *preEditCommand {nullptr}; ///< PreEdit string as an command provided by the input method.
+    int preEditStart = -1; ///< Start of the preEdit string as a cursor pos.
+    int preEditLength = -1; ///< Length of the preEditString.
+    QVector<IMEDecorationInfo> styleMap; ///< Decoration info (underlines) for the preEdit string to differentiate it from regular text.
+    QPainterPath IMEDecoration; ///< The decorations for the current preedit string.
+    QRectF oldIMEDecorationRect; ///< Update Rectangle of previous decoration.
+    bool blockQueryUpdates = false; ///< Block qApp->inputMethod->update(), enabled during the inputmethod event flow.
 };
 
 SvgTextCursor::SvgTextCursor(KoCanvasBase *canvas) :
@@ -92,7 +93,9 @@ SvgTextCursor::SvgTextCursor(KoCanvasBase *canvas) :
 
 SvgTextCursor::~SvgTextCursor()
 {
+    commitIMEPreEdit();
     d->cursorFlash.stop();
+    d->cursorFlashLimit.stop();
     d->shape = nullptr;
 }
 
@@ -306,7 +309,7 @@ void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
 
 QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-    //qDebug() << "receiving inputmethod query" << query;
+    qDebug() << "receiving inputmethod query" << query;
 
     switch(query) {
     case Qt::ImEnabled:
@@ -366,26 +369,38 @@ QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
         break;
     case Qt::ImSurroundingText:
         if (d->shape) {
-            return d->shape->plainText();
+            QString surroundingText = d->shape->plainText();
+            int preEditIndex = d->preEditCommand? d->shape->indexForPos(d->preEditStart): 0;
+            surroundingText.remove(preEditIndex, d->preEditLength);
+            return surroundingText;
         }
         break;
     case Qt::ImCurrentSelection:
         if (d->shape) {
+            QString surroundingText = d->shape->plainText();
+            int preEditIndex = d->preEditCommand? d->shape->indexForPos(d->preEditStart): 0;
+            surroundingText.remove(preEditIndex, d->preEditLength);
             int start = d->shape->indexForPos(qMin(d->anchor, d->pos));
             int length = d->shape->indexForPos(qMax(d->anchor, d->pos)) - start;
-            return d->shape->plainText().mid(start, length);
+            return surroundingText.mid(start, length);
         }
         break;
     case Qt::ImTextBeforeCursor:
         if (d->shape) {
             int start = d->shape->indexForPos(d->pos);
-            return d->shape->plainText().left(start);
+            QString surroundingText = d->shape->plainText();
+            int preEditIndex = d->preEditCommand? d->shape->indexForPos(d->preEditStart): 0;
+            surroundingText.remove(preEditIndex, d->preEditLength);
+            return surroundingText.left(start);
         }
         break;
     case Qt::ImTextAfterCursor:
         if (d->shape) {
             int start = d->shape->indexForPos(d->pos);
-            return d->shape->plainText().right(start);
+            QString surroundingText = d->shape->plainText();
+            int preEditIndex = d->preEditCommand? d->shape->indexForPos(d->preEditStart): 0;
+            surroundingText.remove(preEditIndex, d->preEditLength);
+            return surroundingText.right(start);
         }
         break;
     case Qt::ImMaximumTextLength:
@@ -421,6 +436,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     qDebug() << "Replacement:"<< event->replacementStart() << event->replacementLength();
 
     QRectF updateRect = d->shape? d->shape->boundingRect(): QRectF();
+    d->blockQueryUpdates = true;
     SvgTextShapeManagerBlocker blocker(d->canvas->shapeManager());
 
     bool isGettingInput = !event->commitString().isEmpty() || !event->preeditString().isEmpty()
@@ -646,7 +662,8 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     }
 
     blocker.unlock();
-
+    d->blockQueryUpdates = false;
+    qApp->inputMethod()->update(Qt::ImQueryInput);
     updateRect |= d->shape->boundingRect();
     d->shape->updateAbsolute(updateRect);
     //qDebug() << "update" << updateRect << d->canvas->shapeManager()->updatesBlocked();
@@ -944,7 +961,9 @@ void SvgTextCursor::updateCursor()
     d->cursorFlash.start();
     d->cursorFlashLimit.start();
     d->cursorVisible = false;
-    qApp->inputMethod()->update(Qt::ImQueryInput);
+    if (!d->blockQueryUpdates) {
+        qApp->inputMethod()->update(Qt::ImQueryInput);
+    }
     blinkCursor();
 }
 

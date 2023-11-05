@@ -486,7 +486,7 @@ namespace Private {
         bool m_skipIfDstIsGroup;
     };
 
-    struct RefreshHiddenAreas : public KUndo2Command {
+    struct RefreshHiddenAreas : public KisCommandUtils::AggregateCommand {
         struct refresh_entire_image_t {};
         static constexpr refresh_entire_image_t refresh_entire_image{};
 
@@ -496,7 +496,7 @@ namespace Private {
             m_nodes << node;
         }
 
-        void redo() override {
+        void populateChildCommands() override {
             KisImageAnimationInterface *interface = m_image->animationInterface();
             const QRect preparedRect = !interface->externalFrameActive() ?
                 m_image->bounds() : QRect();
@@ -1269,7 +1269,7 @@ namespace Private {
         AddNewFrame(MergeDownInfoBaseSP info, int frame) : m_frame(frame), m_sampledNodes(info->allSrcNodes()), m_mergeInfo(info) {}
 
         void populateChildCommands() override {
-            KUndo2Command *cmd = new KisCommandUtils::SkipFirstRedoWrapper();
+            KUndo2Command *cmd = new KUndo2Command;
             KisNodeSP node = m_node ? m_node : m_mergeInfo->dstNode;
             KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
             channel->addKeyframe(m_frame, cmd);

@@ -453,7 +453,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
 
     if (!d->shape || !isGettingInput) {
         blocker.unlock();
-        d->shape->updateAbsolute(updateRect);
+        d->canvas->shapeManager()->update(updateRect);
         event->ignore();
         return;
     }

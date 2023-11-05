@@ -185,7 +185,7 @@ struct KisAngleSelector::Private
     QMenu *menuFlip;
 
     KisAngleSelector::FlipOptionsMode flipOptionsMode;
-    int angleGaugeSize;
+    int commonWidgetsHeight;
 
     void on_angleGauge_angleChanged(qreal angle);
     void on_spinBox_valueChanged(double value);
@@ -194,7 +194,7 @@ struct KisAngleSelector::Private
     void on_actionFlipHorizontallyAndVertically_triggered();
     void on_actionResetAngle_triggered();
 
-    void resizeAngleGauge();
+    void resizeWidgets();
 };
 
 KisAngleSelector::KisAngleSelector(QWidget* parent)
@@ -303,7 +303,7 @@ KisAngleSelector::KisAngleSelector(QWidget* parent)
     setTabOrder(m_d->toolButtonFlipVertically, m_d->toolButtonFlipHorizontallyAndVertically);
 
     setFlipOptionsMode(FlipOptionsMode_Buttons);
-    setGaugeSize(0);
+    setWidgetsHeight(0);
     
     using namespace std::placeholders;
     connect(
@@ -385,9 +385,9 @@ KisAngleSelector::FlipOptionsMode KisAngleSelector::flipOptionsMode() const
     return m_d->flipOptionsMode;
 }
 
-int KisAngleSelector::gaugeSize() const
+int KisAngleSelector::widgetsHeight() const
 {
-    return m_d->angleGaugeSize;
+    return m_d->commonWidgetsHeight;
 }
 
 KisAngleGauge::IncreasingDirection KisAngleSelector::increasingDirection() const
@@ -474,13 +474,13 @@ void KisAngleSelector::setFlipOptionsMode(FlipOptionsMode newMode)
     m_d->actionFlipHorizontallyAndVertically->setVisible(showMenus);
 }
 
-void KisAngleSelector::setGaugeSize(int newGaugeSize)
+void KisAngleSelector::setWidgetsHeight(int newHeight)
 {
-    if (newGaugeSize < 0) {
+    if (newHeight < 0) {
         return;
     }
-    m_d->angleGaugeSize = newGaugeSize;
-    m_d->resizeAngleGauge();
+    m_d->commonWidgetsHeight = newHeight;
+    m_d->resizeWidgets();
 }
 
 void KisAngleSelector::setIncreasingDirection(KisAngleGauge::IncreasingDirection newIncreasingDirection)
@@ -593,7 +593,7 @@ bool KisAngleSelector::event(QEvent *e)
         // Temporarily reset the spin box style so that we can get its
         // height size hint
         m_d->spinBox->refreshStyle();
-        m_d->resizeAngleGauge();
+        m_d->resizeWidgets();
     }
     return QWidget::event(e);
 }
@@ -639,11 +639,14 @@ void KisAngleSelector::Private::on_actionFlipHorizontallyAndVertically_triggered
     q->flip(Qt::Horizontal | Qt::Vertical);
 }
 
-void KisAngleSelector::Private::resizeAngleGauge()
+void KisAngleSelector::Private::resizeWidgets()
 {
-    if (angleGaugeSize == 0) {
-        angleGauge->setFixedSize(spinBox->sizeHint().height(), spinBox->sizeHint().height());
-    } else {
-        angleGauge->setFixedSize(angleGaugeSize, angleGaugeSize);
-    }
+    const int h = (commonWidgetsHeight != 0) ? commonWidgetsHeight : spinBox->sizeHint().height();
+
+    angleGauge->setFixedSize(h, h);
+    spinBox->setFixedHeight(h);
+    toolButtonFlipOptions->setFixedHeight(h);
+    toolButtonFlipHorizontally->setFixedHeight(h);
+    toolButtonFlipVertically->setFixedHeight(h);
+    toolButtonFlipHorizontallyAndVertically->setFixedHeight(h);
 }

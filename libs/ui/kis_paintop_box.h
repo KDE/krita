@@ -130,6 +130,7 @@ private:
     void setWidgetState(int flags);
     void setSliderValue(const QString& sliderID, qreal value);
     void setMultiplierSliderValue(const QString& sliderID, qreal value);
+    void setAngleSliderValue(const QString& sliderID, qreal value);
     void sliderChanged(int n);
     void findDefaultPresets();
 

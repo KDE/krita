@@ -66,6 +66,7 @@
 #include "widgets/kis_workspace_chooser.h"
 #include "widgets/kis_paintop_list_widget.h"
 #include "kis_slider_spin_box.h"
+#include "KisAngleSelector.h"
 #include "kis_multipliers_double_slider_spinbox.h"
 #include "widgets/kis_cmb_composite.h"
 #include "widgets/kis_widget_chooser.h"
@@ -245,21 +246,27 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
         KisDoubleSliderSpinBox* slOpacity;
         KisDoubleSliderSpinBox* slFlow;
         KisDoubleSliderSpinBox* slSize;
+        KisAngleSelector* slRotation;
         KisMultipliersDoubleSliderSpinBox* slPatternSize;
+
         if (sliderLabels) {
             slOpacity     = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity");
             slFlow        = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow");
             slSize        = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size");
+            slRotation    = m_sliderChooser[i]->addWidget<KisAngleSelector>("rotation");
             slPatternSize = m_sliderChooser[i]->addWidget<KisMultipliersDoubleSliderSpinBox>("patternsize");
+
             slOpacity->setPrefix(QString("%1 ").arg(i18n("Opacity:")));
             slFlow->setPrefix(QString("%1 ").arg(i18n("Flow:")));
             slSize->setPrefix(QString("%1 ").arg(i18n("Size:")));
+            slRotation->setPrefix(QString("%1 ").arg(i18n("Rotation:")));
             slPatternSize->setPrefix(QString("%1 ").arg(i18n("Pattern Scale:")));
         }
         else {
-            slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
-            slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow", i18n("Flow:"));
-            slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size", i18n("Size:"));
+            slOpacity     = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
+            slFlow        = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow", i18n("Flow:"));
+            slSize        = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size", i18n("Size:"));
+            slRotation    = m_sliderChooser[i]->addWidget<KisAngleSelector>("rotation", i18n("Rotation:"));
             slPatternSize = m_sliderChooser[i]->addWidget<KisMultipliersDoubleSliderSpinBox>("patternsize", i18n("Pattern Scale:"));
         }
 
@@ -288,6 +295,11 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
         slSize->setMinimumWidth(qMax(sliderWidth, slSize->sizeHint().width()));
         slSize->setFixedHeight(buttonsize);
         slSize->setBlockUpdateSignalOnDrag(true);
+
+        slRotation->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
+        slRotation->setRange(-360.0, 360.0);
+        slRotation->setMinimumWidth(qMax(sliderWidth, slRotation->sizeHint().width()));
+        slRotation->setWidgetsHeight(buttonsize);
 
         slPatternSize->setRange(0.0, 2.0, 2);
         slPatternSize->setValue(1.0);
@@ -502,18 +514,22 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("opacity")               , SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("flow")                  , SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")                  , SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
+    connect(m_sliderChooser[0]->getWidget<KisAngleSelector>("rotation")                    , SIGNAL(angleChanged(qreal)), SLOT(slotSlider1Changed()));
     connect(m_sliderChooser[0]->getWidget<KisMultipliersDoubleSliderSpinBox>("patternsize"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
     connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("opacity")               , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
     connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("flow")                  , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
     connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("size")                  , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
+    connect(m_sliderChooser[1]->getWidget<KisAngleSelector>("rotation")                    , SIGNAL(angleChanged(qreal)), SLOT(slotSlider2Changed()));
     connect(m_sliderChooser[1]->getWidget<KisMultipliersDoubleSliderSpinBox>("patternsize"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
     connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("opacity")               , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
     connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("flow")                  , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
     connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("size")                  , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
+    connect(m_sliderChooser[2]->getWidget<KisAngleSelector>("rotation")                    , SIGNAL(angleChanged(qreal)), SLOT(slotSlider3Changed()));
     connect(m_sliderChooser[2]->getWidget<KisMultipliersDoubleSliderSpinBox>("patternsize"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
     connect(m_sliderChooser[3]->getWidget<KisDoubleSliderSpinBox>("opacity")               , SIGNAL(valueChanged(qreal)), SLOT(slotSlider4Changed()));
     connect(m_sliderChooser[3]->getWidget<KisDoubleSliderSpinBox>("flow")                  , SIGNAL(valueChanged(qreal)), SLOT(slotSlider4Changed()));
     connect(m_sliderChooser[3]->getWidget<KisDoubleSliderSpinBox>("size")                  , SIGNAL(valueChanged(qreal)), SLOT(slotSlider4Changed()));
+    connect(m_sliderChooser[3]->getWidget<KisAngleSelector>("rotation")                    , SIGNAL(angleChanged(qreal)), SLOT(slotSlider4Changed()));
     connect(m_sliderChooser[3]->getWidget<KisMultipliersDoubleSliderSpinBox>("patternsize"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider4Changed()));
 
     connect(m_resourceProvider, SIGNAL(sigFGColorUsed(KoColor)), m_favoriteResourceManager, SLOT(slotAddRecentColor(KoColor)));
@@ -873,6 +889,17 @@ void KisPaintopBox::setMultiplierSliderValue(const QString& sliderID, qreal valu
     }
 }
 
+void KisPaintopBox::setAngleSliderValue(const QString& sliderID, qreal value)
+{
+    for (int i = 0; i < 4; ++i) {
+        KisAngleSelector* slider = m_sliderChooser[i]->getWidget<KisAngleSelector>(sliderID);
+        if (!slider) continue;
+        KisSignalsBlocker b(slider);
+
+        slider->setAngle(value);
+    }
+}
+
 void KisPaintopBox::slotSetPaintop(const QString& paintOpId)
 {
     if (KisPaintOpRegistry::instance()->get(paintOpId) != 0) {
@@ -990,6 +1017,10 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
 
         if (key == KoCanvasResource::Size) {
             setSliderValue("size", m_resourceProvider->size());
+        }
+
+        if (key == KoCanvasResource::BrushRotation) {
+            setAngleSliderValue("rotation", m_resourceProvider->brushRotation());
         }
 
         if (key == KoCanvasResource::PatternSize) {
@@ -1146,15 +1177,17 @@ void KisPaintopBox::sliderChanged(int n)
 
     // flow and opacity are shown as 0-100% on the UI, but their data is actually 0-1. Convert those two values
     // back for further work
-    qreal opacity = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("opacity")->value()/100;
-    qreal flow    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("flow")->value()/100;
-    qreal size    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("size")->value();
+    qreal opacity     = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("opacity")->value()/100;
+    qreal flow        = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("flow")->value()/100;
+    qreal size        = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("size")->value();
+    qreal rotation    = m_sliderChooser[n]->getWidget<KisAngleSelector>("rotation")->angle();
     qreal patternsize = m_sliderChooser[n]->getWidget<KisMultipliersDoubleSliderSpinBox>("patternsize")->value();
 
 
     setSliderValue("opacity", opacity);
     setSliderValue("flow"   , flow);
     setSliderValue("size"   , size);
+    setAngleSliderValue("rotation", rotation);
     setMultiplierSliderValue("patternsize", patternsize);
 
     if (m_presetsEnabled) {
@@ -1163,6 +1196,7 @@ void KisPaintopBox::sliderChanged(int n)
         // TODO: why?!
 
         m_resourceProvider->setSize(size);
+        m_resourceProvider->setBrushRotation(rotation);
         m_resourceProvider->setPatternSize(patternsize);
         m_resourceProvider->setOpacity(opacity);
         m_resourceProvider->setFlow(flow);
@@ -1219,6 +1253,7 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas)
             m_blockUpdate = true;
 
             setSliderValue("size", m_resourceProvider->size());
+            setAngleSliderValue("rotation", m_resourceProvider->brushRotation());
 
             {
                 qreal opacity = m_resourceProvider->currentPreset()->settings()->paintOpOpacity();

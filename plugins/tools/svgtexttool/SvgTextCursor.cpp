@@ -48,6 +48,42 @@ struct IMEDecorationInfo {
             style = KoSvgText::Solid;
         }
     }
+
+    void setDecorationFromQTextCharFormat(QTextCharFormat format) {
+        if (format.hasProperty(QTextFormat::FontUnderline)) {
+            decor.setFlag(KoSvgText::DecorationUnderline, format.property(QTextFormat::FontUnderline).toBool());
+        }
+        if (format.hasProperty(QTextFormat::FontOverline)) {
+            decor.setFlag(KoSvgText::DecorationOverline, format.property(QTextFormat::FontOverline).toBool());
+        }
+        if (format.hasProperty(QTextFormat::FontStrikeOut)) {
+            decor.setFlag(KoSvgText::DecorationLineThrough, format.property(QTextFormat::FontStrikeOut).toBool());
+        }
+
+        if (format.hasProperty(QTextFormat::TextUnderlineStyle)) {
+            setDecorationFromQStyle(format.underlineStyle());
+        }
+        /**
+         * Because Qt doesn't have a concept of a thick or double underline at time of writing,
+         * most of Qt's QPA will set the background to a solid color instead. Sometimes the underline
+         * style is changed (as with IBus). We don't support setting the background right now, so instead
+         * we'll 'convert' it back to a thick solid underline.
+         */
+        if (format.hasProperty(QTextFormat::BackgroundBrush)) {
+            thick = format.background().isOpaque();
+#ifdef Q_OS_LINUX
+            if (style == KoSvgText::Dashed) {
+                style = KoSvgText::Solid;
+            }
+#endif
+
+        }
+        if (decor == KoSvgText::DecorationNone) {
+            // On windows, the underline style is set, but no underline
+            // format is toggled, so we need to double check there's always one set.
+            decor.setFlag(KoSvgText::DecorationUnderline, true);
+        }
+    }
 };
 
 struct Q_DECL_HIDDEN SvgTextCursor::Private {
@@ -328,7 +364,7 @@ QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
             QRectF rect = QRectF(caret1, caret2).normalized();
             if (!rect.isValid()) {
                 if (rect.height() < 1) {
-                    rect.adjust(0, 1, 0, 0);
+                    rect.adjust(0, -1, 0, 0);
                 }
                 if (rect.width() < 1) {
                     rect.adjust(0, 0, 1, 0);
@@ -351,7 +387,7 @@ QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
             QRectF rect = QRectF(caret1, caret2).normalized();
             if (rect.isEmpty()) {
                 if (rect.height() < 1) {
-                    rect.adjust(0, 1, 0, 0);
+                    rect.adjust(0, -1, 0, 0);
                 }
                 if (rect.width() < 1) {
                     rect = rect.adjusted(-1, 0, 0, 0).normalized();
@@ -592,27 +628,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
 
                 for(int i = positionA; i <= positionB; i++) {
                     IMEDecorationInfo decoration = styleMap.at(i);
-                    if (form.hasProperty(QTextFormat::FontUnderline)) {
-                        decoration.decor.setFlag(KoSvgText::DecorationUnderline, form.property(QTextFormat::FontUnderline).toBool());
-                    }
-                    if (form.hasProperty(QTextFormat::FontOverline)) {
-                        decoration.decor.setFlag(KoSvgText::DecorationOverline, form.property(QTextFormat::FontOverline).toBool());
-                    }
-                    if (form.hasProperty(QTextFormat::FontStrikeOut)) {
-                        decoration.decor.setFlag(KoSvgText::DecorationLineThrough, form.property(QTextFormat::FontStrikeOut).toBool());
-                    }
-
-                    if (form.hasProperty(QTextFormat::TextUnderlineStyle)) {
-                        decoration.setDecorationFromQStyle(form.underlineStyle());
-                    }
-                    if (form.hasProperty(QTextFormat::BackgroundBrush)) {
-                        decoration.thick = form.background().isOpaque();
-                    }
-                    if (decoration.decor == KoSvgText::DecorationNone) {
-                        // On windows, the underline style is set, but no underline
-                        // format is toggled, so we need to double check there's always one set.
-                        decoration.decor.setFlag(KoSvgText::DecorationUnderline, true);
-                    }
+                    decoration.setDecorationFromQTextCharFormat(form);
                     styleMap[i] = decoration;
                 }
 
@@ -620,27 +636,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
                 IMEDecorationInfo decoration;
                 decoration.start = attribute.start;
                 decoration.length = attribute.length;
-                if (form.hasProperty(QTextFormat::FontUnderline)) {
-                    decoration.decor.setFlag(KoSvgText::DecorationUnderline, form.property(QTextFormat::FontUnderline).toBool());
-                }
-                if (form.hasProperty(QTextFormat::FontOverline)) {
-                    decoration.decor.setFlag(KoSvgText::DecorationOverline, form.property(QTextFormat::FontOverline).toBool());
-                }
-                if (form.hasProperty(QTextFormat::FontStrikeOut)) {
-                    decoration.decor.setFlag(KoSvgText::DecorationLineThrough, form.property(QTextFormat::FontStrikeOut).toBool());
-                }
-
-                if (form.hasProperty(QTextFormat::TextUnderlineStyle)) {
-                    decoration.setDecorationFromQStyle(form.underlineStyle());
-                }
-                if (form.hasProperty(QTextFormat::BackgroundBrush)) {
-                    decoration.thick = form.background().isOpaque();
-                }
-                if (decoration.decor == KoSvgText::DecorationNone) {
-                    // On windows, the underline style is set, but no underline
-                    // format is toggled, so we need to double check there's always one set.
-                    decoration.decor.setFlag(KoSvgText::DecorationUnderline, true);
-                }
+                decoration.setDecorationFromQTextCharFormat(form);
                 styleMap.append(decoration);
             }
 
@@ -666,7 +662,6 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     qApp->inputMethod()->update(Qt::ImQueryInput);
     updateRect |= d->shape->boundingRect();
     d->shape->updateAbsolute(updateRect);
-    //qDebug() << "update" << updateRect << d->canvas->shapeManager()->updatesBlocked();
     d->styleMap = styleMap;
     updateIMEDecoration();
     updateSelection();

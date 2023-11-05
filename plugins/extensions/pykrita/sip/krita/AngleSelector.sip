@@ -20,7 +20,7 @@ protected Q_SLOTS:
     QString prefix() const;
     bool wrapping() const;
     QString flipOptionsMode() const;
-    int gaugeSize() const;
+    int widgetsHeight() const;
     QString increasingDirection() const;
     bool isUsingFlatSpinBox() const;
     void setSnapAngle(qreal newSnapAngle);
@@ -32,7 +32,7 @@ protected Q_SLOTS:
     void setPrefix (const QString &newPrefix);
     void setWrapping(bool newWrapping);
     void setFlipOptionsMode(QString newMode);
-    void setGaugeSize(int newGaugeSize);
+    void setWidgetsHeight(int newHeight);
     void setIncreasingDirection(QString newIncreasingDirection);
     void useFlatSpinBox(bool newUseFlatSpinBox);
     static qreal closestCoterminalAngleInRange(qreal angle, qreal minimum, qreal maximum, bool *ok = nullptr);

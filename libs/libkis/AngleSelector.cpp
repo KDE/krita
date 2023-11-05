@@ -96,7 +96,7 @@ QString AngleSelector::flipOptionsMode() const
     return FlipOptionsMode[mode];
 }
 
-int AngleSelector::gaugeSize() const
+int AngleSelector::widgetsHeight() const
 {
     return d->widget->widgetsHeight();
 }
@@ -171,9 +171,9 @@ void AngleSelector::setFlipOptionsMode(QString newMode)
     d->widget->setFlipOptionsMode((KisAngleSelector::FlipOptionsMode) index);
 }
 
-void AngleSelector::setGaugeSize(int newGaugeSize)
+void AngleSelector::setWidgetsHeight(int newHeight)
 {
-    d->widget->setWidgetsHeight(newGaugeSize);
+    d->widget->setWidgetsHeight(newHeight);
 }
 
 void AngleSelector::setIncreasingDirection(QString newIncreasingDirection)

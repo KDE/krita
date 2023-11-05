@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 PostInstallScripts:
-    krita-plugins: python3 build-tools/ci-scripts/build-plugins.py
+    krita-plugins: build-tools/ci-scripts/build-plugins.py
 
 Options:
     use-ccache: True

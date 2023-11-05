@@ -1303,7 +1303,18 @@ void KisViewManager::switchCanvasOnly(bool toggled)
             d->canvasOnlyOptions &&
             *d->canvasOnlyOptions == options) {
 
-            main->restoreState(d->canvasStateInCanvasOnlyMode);
+            /**
+             * Restore state uses the current layout state of the window,
+             * but removal of the menu will be backed into this state after
+             * receiving of some events in the event queue. Hence we cannot
+             * apply the application of the saved state directly. We need to
+             * postpone that via the events queue.
+             *
+             * See https://bugs.kde.org/show_bug.cgi?id=475973
+             */
+            QTimer::singleShot(0, this, [this] () {
+                this->mainWindow()->restoreState(d->canvasStateInCanvasOnlyMode);
+            });
         }
 
                // show a fading heads-up display about the shortcut to go back

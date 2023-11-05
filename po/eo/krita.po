@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-04 00:40+0000\n"
-"PO-Revision-Date: 2023-10-31 22:31+0100\n"
+"PO-Revision-Date: 2023-11-04 19:54+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -29394,56 +29394,40 @@ msgid "Remove Nodes"
 msgstr "Forigi Nodojn"
 
 #: libs/ui/kis_node_manager.cpp:1038
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
-msgstr "Spegulu Horizontale"
+msgstr "Speguli Maskon Horizontale"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Horizontally"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Speguli Tavolojn Horizontale"
-msgstr[1] "Speguli Tavolojn Horizontale"
+msgstr[1] "Speguli %1 Tavolojn Horizontale"
 
 #: libs/ui/kis_node_manager.cpp:1052
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
-msgstr "Spegulu Vertikale"
+msgstr "Speguli Maskon Vertikale"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Vertically"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
-msgstr[0] "Speguli Tavolojn Vertikale"
-msgstr[1] "Speguli Tavolojn Vertikale"
+msgstr[0] "Speguli Tavolon Vertikale"
+msgstr[1] "Speguli %1 Tavolojn Vertikale"
 
 #: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Speguli Ĉiujn Tavolojn Horizontale"
 
 #: libs/ui/kis_node_manager.cpp:1070
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
-msgstr "Spegulu Ĉiuj Tavoloj Vertikale"
+msgstr "Speguli Ĉiujn Tavolojn Vertikale"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -60786,34 +60770,3 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Mask X"
-#~ msgstr "Speguli Maskon X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layer X"
-#~ msgid_plural "Mirror %1 Layers X"
-#~ msgstr[0] "Speguli Tavolon X"
-#~ msgstr[1] "Speguli %1 Tavolojn X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Mask Y"
-#~ msgstr "Speguli Maskon Y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layer Y"
-#~ msgid_plural "Mirror %1 Layers Y"
-#~ msgstr[0] "Speguli Tavolon Y"
-#~ msgstr[1] "Speguli %1 Tavolojn Y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror All Layers X"
-#~ msgstr "Speguli Ĉiujn Tavolojn X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror All Layers Y"
-#~ msgstr "Speguli Ĉiujn Tavolojn Y"
-
-#~ msgid "WizardPage"
-#~ msgstr "SorĉistoPaĝo"

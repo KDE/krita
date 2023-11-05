@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-04 00:40+0000\n"
+"POT-Creation-Date: 2023-11-05 12:26+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -13283,7 +13283,7 @@ msgstr "Εισαγωγή εικόνας"
 msgid "Import"
 msgstr "Εισαγωγή εικόνας"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1242
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1250
 #, fuzzy, kde-format
 msgid "&Convert"
 msgstr "Αντ&ιστροφή"
@@ -13291,14 +13291,14 @@ msgstr "Αντ&ιστροφή"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1216
+#: plugins/dockers/layerdocker/LayerBox.cpp:1224
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Επιλογή"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1230
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -13320,7 +13320,7 @@ msgstr "Κόμβος μετασχηματισμού"
 msgid "S&plit"
 msgstr "Χρώμα σε άλφα"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1259
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "Χρώμα σε άλφα"
@@ -17194,7 +17194,7 @@ msgstr "Μέγεθος"
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
-#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:292
+#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:304
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:70
 #: libs/ui/widgets/kis_selection_options.cc:186
 #: libs/ui/widgets/kis_selection_options.cc:200
@@ -17216,18 +17216,18 @@ msgstr "Μέγεθος"
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:44
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:40
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:41
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:68
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:73
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:70
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:75
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:80
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:86
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:78
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:31
-#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:25
+#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:26
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:111
 #: plugins/paintops/experiment/KisExperimentOpOptionWidget.cpp:33
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:33
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:39
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:45
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:34
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:40
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:46
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:135
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:165
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:27
@@ -17270,8 +17270,6 @@ msgstr " px"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:19
 #: libs/image/kis_keyframe_channel.cpp:27 libs/image/kis_layer.cc:276
 #: libs/widgets/KoColorPopupAction.cpp:85
-#: plugins/dockers/layerdocker/LayerBox.cpp:207
-#: plugins/dockers/layerdocker/LayerBox.cpp:392
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
@@ -17835,7 +17833,7 @@ msgstr "άλφα κλειδωμένο"
 
 #: libs/image/kis_layer_properties_icons.cpp:25
 #: libs/image/kis_paint_layer.cc:212
-#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:30
+#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:31
 #, fuzzy, kde-format
 msgid "Onion Skins"
 msgstr "&Περιορισμός αναλογιών"
@@ -20175,7 +20173,7 @@ msgstr "Αρχεία πηγής:"
 #: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:748
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
-#: libs/ui/widgets/kis_custom_image_widget.cc:293
+#: libs/ui/widgets/kis_custom_image_widget.cc:296
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
@@ -22241,7 +22239,7 @@ msgstr "Προβολή"
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
-#: libs/ui/kis_paintop_box.cc:304
+#: libs/ui/kis_paintop_box.cc:321
 #: plugins/dockers/recorder/recorder_export.ui:467
 #, fuzzy, kde-format
 #| msgid "px"
@@ -22750,7 +22748,7 @@ msgstr "Έκδοση"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:284
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:623
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:830
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:36
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:38
 #: plugins/impex/webp/kis_wdg_options_webp.ui:424
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:441
 #, kde-format
@@ -23242,128 +23240,76 @@ msgstr "Εισαγωγή εικόνας"
 msgid "Source fps: %1"
 msgstr "Πηγή:"
 
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:78
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:79
 #, kde-format
 msgid "Layer Properties"
 msgstr "Ιδιότητες στρώματος"
 
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intChoke)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intRange)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intJitter)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, pixelGridDrawingThresholdBox)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, qualityLevel)
-#. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, quality)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, snsStrength)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, filterStrength)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, alphaQuality)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, partitionLimit)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, nearLossless)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, qMin)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, qMax)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, channelColorsGlobalPercent)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, channelColorsGroupPercent)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, modularMATreeLearningPercent)
-#. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
-#. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:595
-#: libs/ui/kis_node_model.cpp:598 libs/ui/kis_paintop_box.cc:274
-#: libs/ui/kis_paintop_box.cc:282 libs/ui/layerstyles/wdgInnerGlow.ui:220
-#: libs/ui/layerstyles/wdgInnerGlow.ui:322
-#: libs/ui/layerstyles/wdgInnerGlow.ui:351
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:93
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:100
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:162
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:165
-#: libs/ui/widgets/kis_custom_image_widget.cc:98
-#: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
-#: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
-#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
-#: plugins/dockers/layerdocker/LayerBox.cpp:210
-#: plugins/dockers/layerdocker/LayerBox.cpp:393
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:47
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:51
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:54
-#: plugins/generators/pattern/wdgpatternoptions.ui:90
-#: plugins/generators/pattern/wdgpatternoptions.ui:116
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:45
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:48
-#: plugins/impex/jpeg/kis_jpeg_export.cc:217
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:99
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:750
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:770
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:775
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:795
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:805
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:810
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:936
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:971
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:980
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:989
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1120
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1125
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1197
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1202
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1207
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1216
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1221
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1340
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1345
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1386
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1462
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1467
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1472
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1372
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1378
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1384
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1468 libs/ui/kis_paintop_box.cc:283
+#: libs/ui/kis_paintop_box.cc:293
+#: libs/ui/widgets/kis_custom_image_widget.cc:100
+#: libs/ui/widgets/KisAutoLevelsWidget.cpp:18
+#: libs/widgets/kis_color_input.cpp:150 libs/widgets/kis_color_input.cpp:195
+#: plugins/dockers/layerdocker/LayerBox.cpp:215
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:50
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:54
 #: plugins/impex/jpeg/kis_jpeg_export.cc:219
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:638
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:837
-#: plugins/impex/tiff/kis_wdg_options_tiff.ui:277
-#: plugins/impex/webp/kis_wdg_options_webp.ui:82
-#: plugins/impex/webp/kis_wdg_options_webp.ui:305
-#: plugins/impex/webp/kis_wdg_options_webp.ui:328
-#: plugins/impex/webp/kis_wdg_options_webp.ui:466
-#: plugins/impex/webp/kis_wdg_options_webp.ui:596
-#: plugins/impex/webp/kis_wdg_options_webp.ui:684
-#: plugins/impex/webp/kis_wdg_options_webp.ui:750
-#: plugins/impex/webp/kis_wdg_options_webp.ui:773
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:137
-#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:43
-#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:78
-#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:147
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:51
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:56
-#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:35
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:24
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:27
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:30
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:33
-#: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:121
-#: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:61
-#: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:78
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:20
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:22
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:23
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:24
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
-#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:48
-#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:49
-#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:50
-#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:29
-#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:32
-#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:176
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:60
-#: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
-#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:27
-#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:30
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:281
-#: plugins/tools/basictools/kis_tool_fill.cc:539
-#: plugins/tools/basictools/kis_tool_fill.cc:547
-#: plugins/tools/basictools/kis_tool_fill.cc:562
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
-#, no-c-format, kde-format
-msgid "%"
-msgstr "%"
+#: plugins/impex/jpeg/kis_jpeg_export.cc:223
+#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:45
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:53
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:60
+#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:37
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:26
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:31
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:36
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:41
+#, kde-format
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "{n}%"
+msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:128
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:131
 #, kde-format
 msgctxt "layer dimensions"
 msgid "(%1, %2), (%3, %4)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:164
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:165
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:166
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:167
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:168
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:169
 #, kde-format
 msgid "*varies*"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:207
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:210
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Layer Properties"
@@ -23420,38 +23366,6 @@ msgid ""
 msgstr ""
 "Ένα προφίλ με αυτό το όνομα υπάρχει ήδη!\n"
 " Επιθυμείτε την αντικατάστασή του;"
-
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:750
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:770
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:775
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:795
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:805
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:810
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:936
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:971
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:980
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:989
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1120
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1125
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1197
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1202
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1207
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1216
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1221
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1340
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1345
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1386
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1462
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1467
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1472
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1372
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1378
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1384
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1468
-#, kde-format
-msgctxt "{n} is the number value, % is the percent sign"
-msgid "{n}%"
-msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:918
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
@@ -25565,8 +25479,8 @@ msgstr "Χρώμα:"
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblSize)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
-#: libs/ui/forms/wdgdisplaysettings.ui:329 libs/ui/kis_paintop_box.cc:261
-#: libs/ui/kis_paintop_box.cc:267
+#: libs/ui/forms/wdgdisplaysettings.ui:329 libs/ui/kis_paintop_box.cc:267
+#: libs/ui/kis_paintop_box.cc:274
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2007
@@ -25615,6 +25529,79 @@ msgstr "Χρώμα:"
 #| msgid "Start recording macro"
 msgid "Start showing at:"
 msgstr "Έναρξη εγγραφής μακροεντολής"
+
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intChoke)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intRange)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intJitter)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, pixelGridDrawingThresholdBox)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, qualityLevel)
+#. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, quality)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, snsStrength)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, filterStrength)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, alphaQuality)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, partitionLimit)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, nearLossless)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, qMin)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, qMax)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, channelColorsGlobalPercent)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, channelColorsGroupPercent)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, modularMATreeLearningPercent)
+#. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
+#. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
+#: libs/ui/forms/wdgdisplaysettings.ui:402
+#: libs/ui/layerstyles/wdgInnerGlow.ui:220
+#: libs/ui/layerstyles/wdgInnerGlow.ui:322
+#: libs/ui/layerstyles/wdgInnerGlow.ui:351
+#: plugins/generators/pattern/wdgpatternoptions.ui:90
+#: plugins/generators/pattern/wdgpatternoptions.ui:116
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:638
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:837
+#: plugins/impex/tiff/kis_wdg_options_tiff.ui:277
+#: plugins/impex/webp/kis_wdg_options_webp.ui:82
+#: plugins/impex/webp/kis_wdg_options_webp.ui:305
+#: plugins/impex/webp/kis_wdg_options_webp.ui:328
+#: plugins/impex/webp/kis_wdg_options_webp.ui:466
+#: plugins/impex/webp/kis_wdg_options_webp.ui:596
+#: plugins/impex/webp/kis_wdg_options_webp.ui:684
+#: plugins/impex/webp/kis_wdg_options_webp.ui:750
+#: plugins/impex/webp/kis_wdg_options_webp.ui:773
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:137
+#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:78
+#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:147
+#: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:121
+#: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:61
+#: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:78
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:20
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:22
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:23
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:24
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
+#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:48
+#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:49
+#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:50
+#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:29
+#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:32
+#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:176
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:60
+#: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
+#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:27
+#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:30
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:281
+#: plugins/tools/basictools/kis_tool_fill.cc:539
+#: plugins/tools/basictools/kis_tool_fill.cc:547
+#: plugins/tools/basictools/kis_tool_fill.cc:562
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
+#, no-c-format, kde-format
+msgid "%"
+msgstr "%"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:415
@@ -27325,7 +27312,7 @@ msgid "path"
 msgstr "διαδρομή"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:454
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:471
 #, fuzzy, kde-format
 msgid "Brush Editor"
 msgstr "Άκρη πινέλου"
@@ -28525,13 +28512,13 @@ msgid "Resize Canvas"
 msgstr "Περιστροφή καμβά"
 
 #: libs/ui/imagesize/dlg_imagesize.cc:41
-#: libs/ui/widgets/kis_custom_image_widget.cc:56
+#: libs/ui/widgets/kis_custom_image_widget.cc:57
 #, fuzzy, kde-format
 msgid "Pixels/Inch"
 msgstr "εικονοστοιχεία/ίντσα"
 
 #: libs/ui/imagesize/dlg_imagesize.cc:47
-#: libs/ui/widgets/kis_custom_image_widget.cc:62
+#: libs/ui/widgets/kis_custom_image_widget.cc:63
 #, fuzzy, kde-format
 #| msgid "Centimeters (cm)"
 msgid "Pixels/Centimeter"
@@ -30322,22 +30309,35 @@ msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
 msgstr ""
 
-#: libs/ui/kis_paintop_box.cc:99
+#: libs/ui/kis_node_model.cpp:595
+#, fuzzy, kde-format
+#| msgid "%1%"
+msgctxt "%1 is the percent value, % is the percent sign"
+msgid "%1%"
+msgstr "%1%"
+
+#: libs/ui/kis_node_model.cpp:598
+#, kde-format
+msgctxt "%1 is the percent value, % is the percent sign"
+msgid "%1% %2"
+msgstr ""
+
+#: libs/ui/kis_paintop_box.cc:101
 #, kde-format
 msgid "Painter's Toolchest"
 msgstr "Εργαλεία ζωγραφικής"
 
-#: libs/ui/kis_paintop_box.cc:111
+#: libs/ui/kis_paintop_box.cc:113
 #, fuzzy, kde-format
 msgid "Tool Settings"
 msgstr "Ρυθμίσεις χρώματος"
 
-#: libs/ui/kis_paintop_box.cc:119
+#: libs/ui/kis_paintop_box.cc:121
 #, kde-format
 msgid "Edit brush settings"
 msgstr "Επεξεργασία ρυθμίσεων πινέλου"
 
-#: libs/ui/kis_paintop_box.cc:126
+#: libs/ui/kis_paintop_box.cc:128
 #, kde-format
 msgid "Choose brush preset"
 msgstr "Επιλογή προρύθμισης πινέλου"
@@ -30345,7 +30345,7 @@ msgstr "Επιλογή προρύθμισης πινέλου"
 #. i18n: ectx: property (text), widget (QLabel, opacityLbl)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, opacityLabel)
-#: libs/ui/kis_paintop_box.cc:259 libs/ui/kis_paintop_box.cc:265
+#: libs/ui/kis_paintop_box.cc:265 libs/ui/kis_paintop_box.cc:272
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
@@ -30355,29 +30355,44 @@ msgid "Opacity:"
 msgstr "Αδιαφάνεια:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
-#: libs/ui/kis_paintop_box.cc:260 libs/ui/kis_paintop_box.cc:266
+#: libs/ui/kis_paintop_box.cc:266 libs/ui/kis_paintop_box.cc:273
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1985
 #, kde-format
 msgid "Flow:"
 msgstr "Ροή:"
 
-#: libs/ui/kis_paintop_box.cc:262 libs/ui/kis_paintop_box.cc:268
+#. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
+#. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
+#. i18n: ectx: property (title), widget (QGroupBox, gbRotation)
+#: libs/ui/kis_paintop_box.cc:268 libs/ui/kis_paintop_box.cc:275
+#: plugins/filters/blur/wdg_lens_blur.ui:84
+#: plugins/generators/pattern/wdgpatternoptions.ui:212
+#: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:178
+#: plugins/tools/basictools/wdgmultihandtool.ui:129
+#, fuzzy, kde-format
+msgid "Rotation:"
+msgstr "Περιστροφή: "
+
+#: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
 #, fuzzy, kde-format
 msgid "Pattern Scale:"
 msgstr "Μοτίβο"
 
-#: libs/ui/kis_paintop_box.cc:321
+#: libs/ui/kis_paintop_box.cc:338
 #, kde-format
 msgid "Choose workspace"
 msgstr "Επιλογή χώρου εργασίας"
 
-#: libs/ui/kis_paintop_box.cc:364
+#: libs/ui/kis_paintop_box.cc:381
 #, fuzzy, kde-format
 msgid "Brush composite"
 msgstr "Μέγεθος πινέλου"
 
-#: libs/ui/kis_paintop_box.cc:1303 libs/ui/kis_paintop_box.cc:1325
-#: libs/ui/kis_paintop_box.cc:1339
+#: libs/ui/kis_paintop_box.cc:1343 libs/ui/kis_paintop_box.cc:1365
+#: libs/ui/kis_paintop_box.cc:1379
 #, fuzzy, kde-format
 msgid ""
 "%1\n"
@@ -33648,96 +33663,97 @@ msgstr "Επεξεργασία"
 msgid "unnamed"
 msgstr "Χωρίς όνομα"
 
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:39
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:40
 #, fuzzy, kde-format
 #| msgid "Foreground Color"
 msgctxt "Button to change the gradient stop type to foreground"
 msgid "Foreground color"
 msgstr "Χρώμα προσκηνίου"
 
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:54
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:55
 #, fuzzy, kde-format
 #| msgid "Background color"
 msgctxt "Button to change the gradient stop type to background"
 msgid "Background color"
 msgstr "Χρώμα φόντου"
 
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:69
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:70
 #, fuzzy, kde-format
 #| msgid "Stop color."
 msgctxt "Button to change the gradient stop type to custom color"
 msgid "Custom color"
 msgstr "Διακοπή χρωματισμού."
 
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:82
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:83
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:20
 #, kde-format
 msgid "Transparent"
 msgstr "Διαφανές"
 
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:92
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:50
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:38
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:41
-#: plugins/tools/basictools/kis_tool_fill.cc:546
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
-#, kde-format
-msgid "Opacity: "
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
+#: plugins/dockers/layerdocker/LayerBox.cpp:211
+#: plugins/dockers/layerdocker/LayerBox.cpp:400
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:55
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:59
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:44
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
+#, fuzzy, kde-format
+#| msgid "Opacity: "
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Opacity: {n}%"
 msgstr "Αδιαφάνεια: "
 
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:99
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:161
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:164
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:102
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:163
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:167
 #, fuzzy, kde-format
 #| msgid "Position:"
-msgid "Position: "
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Position: {n}%"
 msgstr "Θέση:"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:39
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:40
 #, fuzzy, kde-format
 msgctxt "Action to select previous handle in the segment gradient editor"
 msgid "Select previous handle"
 msgstr "Επιλογή"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:44
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:45
 #, fuzzy, kde-format
 msgctxt "Action to select next handle in the segment gradient editor"
 msgid "Select next handle"
 msgstr "Επιλέξτε μια ορθογώνια περιοχή"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:48
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:49
 #, fuzzy, kde-format
 #| msgid "Add Shape"
 msgctxt "Button to edit the selected handle in the segment gradient editor"
 msgid "Edit handle"
 msgstr "Προσθήκη σχήματος"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:53
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:54
 #, fuzzy, kde-format
 #| msgid "Duplicate Segment"
 msgctxt "Action to delete the selected segment in the segment gradient editor"
 msgid "Delete segment"
 msgstr "Αντίγραφο τμήματος"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:58
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:59
 #, fuzzy, kde-format
 #| msgid "Split Segment"
 msgctxt "Action to flip the selected segment in the segment gradient editor"
 msgid "Flip segment"
 msgstr "Διαίρεση τμήματος"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:63
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:64
 #, fuzzy, kde-format
 #| msgid "Split Segment"
 msgctxt "Action to split the selected segment in the segment gradient editor"
 msgid "Split segment"
 msgstr "Διαίρεση τμήματος"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:68
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:69
 #, fuzzy, kde-format
 #| msgid "Duplicate Segment"
 msgctxt ""
@@ -33745,7 +33761,7 @@ msgctxt ""
 msgid "Duplicate segment"
 msgstr "Αντίγραφο τμήματος"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:73
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:74
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Delete shape"
@@ -33754,34 +33770,34 @@ msgctxt "Action to delete the selected stop in the segment gradient editor"
 msgid "Delete stop"
 msgstr "Διαγραφή σχήματος"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:78
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:79
 #, fuzzy, kde-format
 msgctxt "Action to center the selected stop in the segment gradient editor"
 msgid "Center stop"
 msgstr "Κέντρο:"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:83
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:84
 #, fuzzy, kde-format
 msgctxt ""
 "Action to center the selected mid point in the segment gradient editor"
 msgid "Center middle point"
 msgstr "Καθαρά σημεία"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:88
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:89
 #, fuzzy, kde-format
 #| msgid "Edit Gradient"
 msgctxt "Button to flip the gradient in the segment gradient editor"
 msgid "Flip gradient"
 msgstr "Επεξεργασία διαβάθμισης"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:93
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:94
 #, fuzzy, kde-format
 msgctxt ""
 "Button to evenly distribute the segments in the segment gradient editor"
 msgid "Distribute segments evenly"
 msgstr "Καθρεπτισμός κατακόρυφα"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:159
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:160
 #, fuzzy, kde-format
 #| msgid "Paint color:"
 msgctxt ""
@@ -33790,7 +33806,7 @@ msgctxt ""
 msgid "Link colors"
 msgstr "Χρώμα ζωγραφικής:"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:224
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:227
 #, fuzzy, kde-format
 #| msgid "Segment Color"
 msgctxt ""
@@ -33798,7 +33814,7 @@ msgctxt ""
 msgid "Segment #%1"
 msgstr "Χρώμα τμήματος"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:255
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:258
 #, fuzzy, kde-format
 #| msgctxt "Tab follows the bullet or number"
 #| msgid "Tab Stop"
@@ -33806,21 +33822,21 @@ msgctxt "Text that indicates the selected stop in the segment gradient editor"
 msgid "Stop #%1"
 msgstr "Τέλος στηλοθέτη"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:299
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:302
 #, kde-format
 msgctxt ""
 "Text that indicates the selected mid point in the segment gradient editor"
 msgid "Mid-Point #%1"
 msgstr ""
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:308
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:311
 #, fuzzy, kde-format
 #| msgid "No action is selected."
 msgctxt "Text that indicates no handle is selected in the stop gradient editor"
 msgid "No handle selected"
 msgstr "Δεν επιλέχθηκε ενέργεια."
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:794
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:797
 #, fuzzy, kde-format
 #| msgid "Edit Mode"
 msgctxt "Title for the segment gradient handle editor"
@@ -34521,12 +34537,12 @@ msgstr "Ετικέτα"
 msgid "Select a Color Space"
 msgstr "Επιλογή αδιαφανούς"
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:116
+#: libs/ui/widgets/kis_custom_image_widget.cc:119
 #, fuzzy, kde-format
 msgid "&Create"
 msgstr "Δημιουργία"
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:294
+#: libs/ui/widgets/kis_custom_image_widget.cc:297
 #, kde-format
 msgid ""
 "Linear gamma RGB color spaces are not supposed to be used in 8-bit integer "
@@ -34537,7 +34553,7 @@ msgid ""
 "to return to the settings dialog."
 msgstr ""
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:535
+#: libs/ui/widgets/kis_custom_image_widget.cc:538
 #, kde-format
 msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
@@ -35500,12 +35516,12 @@ msgstr "Ορισμός δείκτη"
 msgid "Thickness:"
 msgstr "Πάχος:"
 
-#: libs/widgets/kis_color_input.cpp:51
+#: libs/widgets/kis_color_input.cpp:52
 #, kde-format
 msgid "%1:"
 msgstr "%1:"
 
-#: libs/widgets/kis_color_input.cpp:373
+#: libs/widgets/kis_color_input.cpp:378
 #: libs/widgets/KoEditColorSetDialog.cpp:159
 #, kde-format
 msgid "Color name:"
@@ -37685,6 +37701,15 @@ msgstr ""
 msgid "Save Assistant"
 msgstr "Βοηθός:"
 
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
+#: plugins/tools/basictools/kis_tool_fill.cc:546
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
+#, kde-format
+msgid "Opacity: "
+msgstr "Αδιαφάνεια: "
+
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
 #, fuzzy, kde-format
@@ -37812,7 +37837,7 @@ msgstr "Προοπτική"
 msgid "Perspective Ellipse assistant"
 msgstr "Βοηθός προοπτικής"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:637
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
 #, fuzzy, kde-format
 #| msgid "Perspective grid"
 msgid "Perspective Ellipse"
@@ -38557,13 +38582,13 @@ msgid "Animation Curves"
 msgstr "Στρώμα &ζωγραφικής"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:70
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:71
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:72
 #, fuzzy, kde-format
 msgid "Frame register"
 msgstr "Σπύρος Γεωργαράς, Τούσης Μανώλης"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:88
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:89
 #, fuzzy, kde-format
 #| msgid "Speed"
 msgctxt "preview playback speed percentage prefix"
@@ -38571,7 +38596,7 @@ msgid "Speed: "
 msgstr "Ταχύτητα"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:88
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:90
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:91
 #, kde-format
 msgid "Preview playback speed"
 msgstr ""
@@ -38583,7 +38608,7 @@ msgid "Val:"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:168
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:130
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:131
 #, fuzzy, kde-format
 msgid "Onion skins menu"
 msgstr "&Περιορισμός αναλογιών"
@@ -38595,26 +38620,26 @@ msgid "Audio menu"
 msgstr "Βολφραμίου ISO θαλάμου"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:184
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:182
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:184
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation settings menu"
 msgstr "Κινούμενο"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:196
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:194
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
 #, fuzzy, kde-format
 msgid "Clip Start: "
 msgstr "Αστέρι"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:200
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:198
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:200
 #, kde-format
 msgid "Clip End: "
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:205
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:203
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:205
 #, fuzzy, kde-format
 msgid "Frame Rate: "
 msgstr "Σπύρος Γεωργαράς, Τούσης Μανώλης"
@@ -38726,71 +38751,72 @@ msgid_plural "Adjust %1 Keyframes"
 msgstr[0] "Εισαγωγή ονόματος"
 msgstr[1] "Εισαγωγή ονόματος"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:58
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:296
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:59
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:298
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation Timeline"
 msgstr "Κινούμενο"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:138
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Αρχεία πηγής:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:140
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "<<Αφαίρεση"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:143
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:148
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:149
 #, fuzzy, kde-format
 #| msgid "Volume:"
-msgctxt "@item:inmenu Volume slider"
-msgid "Volume: "
+msgctxt ""
+"@item:inmenu Volume slider; {n} is the number value, % is the percent sign"
+msgid "Volume: {n}%"
 msgstr "Τόμος:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:168
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:170
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation audio menu"
 msgstr "Κινούμενο"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:213
 #, kde-format
 msgid "AutoKey Blank"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:213
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:215
 #, fuzzy, kde-format
 #| msgid "Duplicate"
 msgid "AutoKey Duplicate"
 msgstr "Αντιγραφή"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:526
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:532
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:534
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:533
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:535
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:534
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:536
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""
@@ -38964,17 +38990,19 @@ msgctxt "(qtundo-format)"
 msgid "Make clones Unique"
 msgstr "Καθαρά σημεία"
 
-#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:46
-#, kde-format
-msgid "Tint: "
-msgstr ""
+#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:48
+#, fuzzy, kde-format
+#| msgid "Opacity: "
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Tint: {n}%"
+msgstr "Αδιαφάνεια: "
 
-#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:49
+#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:51
 #, kde-format
 msgid "Tint color for past frames"
 msgstr ""
 
-#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:50
+#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:52
 #, kde-format
 msgid "Tint color for future frames"
 msgstr ""
@@ -39591,45 +39619,45 @@ msgstr "Ιστόγραμμα"
 msgid "Undo History"
 msgstr "Αναίρεση ιστορικού"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:160
+#: plugins/dockers/layerdocker/LayerBox.cpp:162
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
 #, kde-format
 msgid "Layers"
 msgstr "Στρώματα"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:250
+#: plugins/dockers/layerdocker/LayerBox.cpp:257
 #, fuzzy, kde-format
 msgid "&Show Global Selection Mask"
 msgstr "Μάσκα επιλογής..."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:253
+#: plugins/dockers/layerdocker/LayerBox.cpp:260
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:320
+#: plugins/dockers/layerdocker/LayerBox.cpp:327
 #, fuzzy, kde-format
 #| msgid "Thumbnail View"
 msgid "Thumbnail Size"
 msgstr "Προβολή εικόνων επισκόπησης"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:348
+#: plugins/dockers/layerdocker/LayerBox.cpp:355
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Προσανατολισμός"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:371
+#: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, fuzzy, kde-format
 #| msgid "Blending Mode"
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Λειτουργία ανάμειξης"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:373
+#: plugins/dockers/layerdocker/LayerBox.cpp:380
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39639,48 +39667,48 @@ msgid ""
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:378
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Κανένα"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:379
+#: plugins/dockers/layerdocker/LayerBox.cpp:386
 #, fuzzy, kde-format
 #| msgid "simple"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "απλό"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:380
+#: plugins/dockers/layerdocker/LayerBox.cpp:387
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Εύρος χρώματος"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:381
+#: plugins/dockers/layerdocker/LayerBox.cpp:388
 #, fuzzy, kde-format
 #| msgid "Details"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Λεπτομέρειες"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:394
+#: plugins/dockers/layerdocker/LayerBox.cpp:402
 #, fuzzy, kde-format
 #| msgid "Layer Opacity"
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Αδιαφάνεια στρώματος"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:412
+#: plugins/dockers/layerdocker/LayerBox.cpp:420
 #, fuzzy, kde-format
 #| msgid "Spline"
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "Spline"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:414
+#: plugins/dockers/layerdocker/LayerBox.cpp:422
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39688,38 +39716,38 @@ msgid ""
 "If disabled, show below layer names (when enough space)."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:426
+#: plugins/dockers/layerdocker/LayerBox.cpp:434
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Κλιμάκωση στρώματος"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:427
+#: plugins/dockers/layerdocker/LayerBox.cpp:435
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:994
+#: plugins/dockers/layerdocker/LayerBox.cpp:1002
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Μάσκα επιλογής..."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1016
+#: plugins/dockers/layerdocker/LayerBox.cpp:1024
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Μάσκα επιλογής..."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: plugins/dockers/layerdocker/LayerBox.cpp:1234
 #, fuzzy, kde-format
 #| msgid "Layer is invisible."
 msgid "&Toggle Locks && Visibility"
 msgstr "Το στρώμα είναι αόρατο."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1233
-#: plugins/dockers/layerdocker/LayerBox.cpp:1254
+#: plugins/dockers/layerdocker/LayerBox.cpp:1241
+#: plugins/dockers/layerdocker/LayerBox.cpp:1264
 #, kde-format
 msgid "&Add"
 msgstr ""
@@ -45086,20 +45114,6 @@ msgstr "Σχήμα:"
 msgid "Radius:"
 msgstr "Ακτίνα:"
 
-#. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
-#. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
-#. i18n: ectx: property (title), widget (QGroupBox, gbRotation)
-#: plugins/filters/blur/wdg_lens_blur.ui:84
-#: plugins/generators/pattern/wdgpatternoptions.ui:212
-#: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:178
-#: plugins/tools/basictools/wdgmultihandtool.ui:129
-#, fuzzy, kde-format
-msgid "Rotation:"
-msgstr "Περιστροφή: "
-
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #. i18n: ectx: property (text), widget (QLabel, rotationLbl)
 #. i18n: ectx: property (text), widget (QLabel, lblAngle)
@@ -46268,8 +46282,8 @@ msgid "&Oilpaint..."
 msgstr "&Ελαιογραφία..."
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:205
-#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:67
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:91
+#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:70
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:96
 #: plugins/paintops/particle/KisParticleOpOptionWidget.cpp:58
 #: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:52
 #, kde-format
@@ -47394,19 +47408,19 @@ msgstr "Περιστροφή: "
 msgid "Y-Rotation:"
 msgstr "Περιστροφή: "
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:54
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:62
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:72
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:84
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:61
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:69
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:91
 #, fuzzy, kde-format
 #| msgid "X:"
 msgid "X: "
 msgstr "X:"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:56
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:67
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:78
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:88
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:74
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:85
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:95
 #, fuzzy, kde-format
 #| msgid "Y:"
 msgid "Y: "
@@ -47415,7 +47429,7 @@ msgstr "Y:"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:96
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:103
 #, fuzzy, kde-format
 #| msgid "Sobel horizontally"
 msgctxt ""
@@ -47429,7 +47443,7 @@ msgstr[1] "Άκρα Sobel οριζόντια"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:102
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:109
 #, fuzzy, kde-format
 #| msgid "Sobel vertically"
 msgctxt ""
@@ -47440,25 +47454,25 @@ msgid_plural "Every {n} cells vertically"
 msgstr[0] "Άκρα Sobel κατακόρυφα"
 msgstr[1] "Άκρα Sobel κατακόρυφα"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:446
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:453
 #, fuzzy, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
 msgstr "εικονοστοιχεία/ίντσα"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:447
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:454
 #, fuzzy, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
 msgstr "εικονοστοιχεία/ίντσα"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:450
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:457
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
 msgstr ""
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:451
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:458
 #, fuzzy, kde-format
 #| msgid "Use outline"
 msgctxt "Screentone generator line units - lines/cm"
@@ -52476,13 +52490,13 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Bristle Brush (the lines will be thinner than on preview)"
 msgstr ""
 
-#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:55
+#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:58
 #, kde-format
 msgid "Bristle options"
 msgstr "Επιλογές τρίχας"
 
 #. i18n: ectx: attribute (title), widget (QWidget, inkTab)
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:51
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:60
 #: plugins/paintops/hairy/wdghairyeoptions.ui:263
 #, kde-format
 msgid "Ink depletion"
@@ -59199,13 +59213,6 @@ msgstr "Εικόνες αναφοράς"
 #| msgid "Reference Images"
 msgid "Reference Images Tool"
 msgstr "Εικόνες αναφοράς"
-
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
-#, fuzzy, kde-format
-#| msgid "Opacity: "
-msgctxt "{n} is the number value, % is the percent sign"
-msgid "Opacity: {n}%"
-msgstr "Αδιαφάνεια: "
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
 #, fuzzy, kde-format

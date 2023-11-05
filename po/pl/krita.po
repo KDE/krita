@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-04 00:40+0000\n"
+"POT-Creation-Date: 2023-11-05 12:26+0000\n"
 "PO-Revision-Date: 2023-11-04 12:43+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -100,8 +100,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 23.04.3\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10"
-" || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -12923,7 +12923,7 @@ msgstr "Za&importuj/Wyeksportuj"
 msgid "Import"
 msgstr "Zaimportuj"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1242
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1250
 #, kde-format
 msgid "&Convert"
 msgstr "&Przekształć"
@@ -12931,14 +12931,14 @@ msgstr "&Przekształć"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1216
+#: plugins/dockers/layerdocker/LayerBox.cpp:1224
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Zaznaczanie"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1230
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12959,7 +12959,7 @@ msgstr "Przekształć wszystkie w&arstwy"
 msgid "S&plit"
 msgstr "&Oddziel"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1259
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "&Oddziel alfę"
@@ -16789,7 +16789,7 @@ msgstr "Rozmiar"
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
-#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:292
+#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:304
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:70
 #: libs/ui/widgets/kis_selection_options.cc:186
 #: libs/ui/widgets/kis_selection_options.cc:200
@@ -16811,18 +16811,18 @@ msgstr "Rozmiar"
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:44
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:40
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:41
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:68
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:73
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:70
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:75
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:80
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:86
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:78
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:31
-#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:25
+#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:26
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:111
 #: plugins/paintops/experiment/KisExperimentOpOptionWidget.cpp:33
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:33
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:39
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:45
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:34
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:40
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:46
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:135
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:165
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:27
@@ -16865,8 +16865,6 @@ msgstr " piks."
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:19
 #: libs/image/kis_keyframe_channel.cpp:27 libs/image/kis_layer.cc:276
 #: libs/widgets/KoColorPopupAction.cpp:85
-#: plugins/dockers/layerdocker/LayerBox.cpp:207
-#: plugins/dockers/layerdocker/LayerBox.cpp:392
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
@@ -17398,7 +17396,7 @@ msgstr "Zablokuj alfę"
 
 #: libs/image/kis_layer_properties_icons.cpp:25
 #: libs/image/kis_paint_layer.cc:212
-#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:30
+#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:31
 #, kde-format
 msgid "Onion Skins"
 msgstr "Skórka cebuli"
@@ -19584,7 +19582,7 @@ msgstr "Miejscowe zasoby"
 #: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:748
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
-#: libs/ui/widgets/kis_custom_image_widget.cc:293
+#: libs/ui/widgets/kis_custom_image_widget.cc:296
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
@@ -21582,7 +21580,7 @@ msgstr "Wyświetlanie"
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
-#: libs/ui/kis_paintop_box.cc:304
+#: libs/ui/kis_paintop_box.cc:321
 #: plugins/dockers/recorder/recorder_export.ui:467
 #, kde-format
 msgid "x"
@@ -22075,7 +22073,7 @@ msgstr "Wersja FFmpeg:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:284
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:623
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:830
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:36
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:38
 #: plugins/impex/webp/kis_wdg_options_webp.ui:424
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:441
 #, kde-format
@@ -22606,128 +22604,76 @@ msgstr "Zaimportuj obrazy"
 msgid "Source fps: %1"
 msgstr "Kl/s źródła: %1"
 
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:78
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:79
 #, kde-format
 msgid "Layer Properties"
 msgstr "Właściwości warstwy"
 
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intChoke)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intRange)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intJitter)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, pixelGridDrawingThresholdBox)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, qualityLevel)
-#. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, quality)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, snsStrength)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, filterStrength)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, alphaQuality)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, partitionLimit)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, nearLossless)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, qMin)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, qMax)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, channelColorsGlobalPercent)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, channelColorsGroupPercent)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, modularMATreeLearningPercent)
-#. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
-#. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:595
-#: libs/ui/kis_node_model.cpp:598 libs/ui/kis_paintop_box.cc:274
-#: libs/ui/kis_paintop_box.cc:282 libs/ui/layerstyles/wdgInnerGlow.ui:220
-#: libs/ui/layerstyles/wdgInnerGlow.ui:322
-#: libs/ui/layerstyles/wdgInnerGlow.ui:351
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:93
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:100
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:162
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:165
-#: libs/ui/widgets/kis_custom_image_widget.cc:98
-#: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
-#: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
-#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
-#: plugins/dockers/layerdocker/LayerBox.cpp:210
-#: plugins/dockers/layerdocker/LayerBox.cpp:393
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:47
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:51
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:54
-#: plugins/generators/pattern/wdgpatternoptions.ui:90
-#: plugins/generators/pattern/wdgpatternoptions.ui:116
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:45
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:48
-#: plugins/impex/jpeg/kis_jpeg_export.cc:217
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:99
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:750
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:770
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:775
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:795
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:805
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:810
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:936
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:971
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:980
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:989
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1120
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1125
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1197
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1202
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1207
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1216
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1221
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1340
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1345
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1386
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1462
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1467
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1472
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1372
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1378
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1384
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1468 libs/ui/kis_paintop_box.cc:283
+#: libs/ui/kis_paintop_box.cc:293
+#: libs/ui/widgets/kis_custom_image_widget.cc:100
+#: libs/ui/widgets/KisAutoLevelsWidget.cpp:18
+#: libs/widgets/kis_color_input.cpp:150 libs/widgets/kis_color_input.cpp:195
+#: plugins/dockers/layerdocker/LayerBox.cpp:215
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:50
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:54
 #: plugins/impex/jpeg/kis_jpeg_export.cc:219
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:638
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:837
-#: plugins/impex/tiff/kis_wdg_options_tiff.ui:277
-#: plugins/impex/webp/kis_wdg_options_webp.ui:82
-#: plugins/impex/webp/kis_wdg_options_webp.ui:305
-#: plugins/impex/webp/kis_wdg_options_webp.ui:328
-#: plugins/impex/webp/kis_wdg_options_webp.ui:466
-#: plugins/impex/webp/kis_wdg_options_webp.ui:596
-#: plugins/impex/webp/kis_wdg_options_webp.ui:684
-#: plugins/impex/webp/kis_wdg_options_webp.ui:750
-#: plugins/impex/webp/kis_wdg_options_webp.ui:773
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:137
-#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:43
-#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:78
-#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:147
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:51
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:56
-#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:35
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:24
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:27
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:30
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:33
-#: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:121
-#: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:61
-#: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:78
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:20
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:22
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:23
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:24
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
-#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:48
-#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:49
-#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:50
-#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:29
-#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:32
-#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:176
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:60
-#: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
-#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:27
-#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:30
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:281
-#: plugins/tools/basictools/kis_tool_fill.cc:539
-#: plugins/tools/basictools/kis_tool_fill.cc:547
-#: plugins/tools/basictools/kis_tool_fill.cc:562
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
-#, no-c-format, kde-format
-msgid "%"
-msgstr "%"
+#: plugins/impex/jpeg/kis_jpeg_export.cc:223
+#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:45
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:53
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:60
+#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:37
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:26
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:31
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:36
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:41
+#, kde-format
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "{n}%"
+msgstr "{n}%"
 
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:128
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:131
 #, kde-format
 msgctxt "layer dimensions"
 msgid "(%1, %2), (%3, %4)"
 msgstr "(%1, %2), (%3, %4)"
 
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:164
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:165
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:166
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:167
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:168
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:169
 #, kde-format
 msgid "*varies*"
 msgstr "*różna*"
 
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:207
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:210
 msgctxt "(qtundo-format)"
 msgid "Change Layer Properties"
 msgstr "Zmień właściwości warstwy"
@@ -22781,38 +22727,6 @@ msgid ""
 msgstr ""
 "Biblioteka wyglądu warstwy o tej nazwie jest już wgrana. Czy chcesz ją "
 "zastąpić?"
-
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:750
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:770
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:775
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:795
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:805
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:810
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:936
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:971
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:980
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:989
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1120
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1125
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1197
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1202
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1207
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1216
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1221
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1340
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1345
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1386
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1462
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1467
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1472
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1372
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1378
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1384
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1468
-#, kde-format
-msgctxt "{n} is the number value, % is the percent sign"
-msgid "{n}%"
-msgstr "{n}%"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:918
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
@@ -24891,8 +24805,8 @@ msgstr "Barwa 2:"
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblSize)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
-#: libs/ui/forms/wdgdisplaysettings.ui:329 libs/ui/kis_paintop_box.cc:261
-#: libs/ui/kis_paintop_box.cc:267
+#: libs/ui/forms/wdgdisplaysettings.ui:329 libs/ui/kis_paintop_box.cc:267
+#: libs/ui/kis_paintop_box.cc:274
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2007
@@ -24938,6 +24852,79 @@ msgstr "Barwa:"
 #, kde-format
 msgid "Start showing at:"
 msgstr "Rozpocznij pokazywanie od:"
+
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intChoke)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intRange)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intJitter)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, pixelGridDrawingThresholdBox)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, qualityLevel)
+#. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, quality)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, snsStrength)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, filterStrength)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, alphaQuality)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, partitionLimit)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, nearLossless)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, qMin)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, qMax)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, channelColorsGlobalPercent)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, channelColorsGroupPercent)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, modularMATreeLearningPercent)
+#. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
+#. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
+#: libs/ui/forms/wdgdisplaysettings.ui:402
+#: libs/ui/layerstyles/wdgInnerGlow.ui:220
+#: libs/ui/layerstyles/wdgInnerGlow.ui:322
+#: libs/ui/layerstyles/wdgInnerGlow.ui:351
+#: plugins/generators/pattern/wdgpatternoptions.ui:90
+#: plugins/generators/pattern/wdgpatternoptions.ui:116
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:638
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:837
+#: plugins/impex/tiff/kis_wdg_options_tiff.ui:277
+#: plugins/impex/webp/kis_wdg_options_webp.ui:82
+#: plugins/impex/webp/kis_wdg_options_webp.ui:305
+#: plugins/impex/webp/kis_wdg_options_webp.ui:328
+#: plugins/impex/webp/kis_wdg_options_webp.ui:466
+#: plugins/impex/webp/kis_wdg_options_webp.ui:596
+#: plugins/impex/webp/kis_wdg_options_webp.ui:684
+#: plugins/impex/webp/kis_wdg_options_webp.ui:750
+#: plugins/impex/webp/kis_wdg_options_webp.ui:773
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:137
+#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:78
+#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:147
+#: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:121
+#: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:61
+#: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:78
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:20
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:22
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:23
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:24
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
+#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:48
+#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:49
+#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:50
+#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:29
+#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:32
+#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:176
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:60
+#: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
+#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:27
+#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:30
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:281
+#: plugins/tools/basictools/kis_tool_fill.cc:539
+#: plugins/tools/basictools/kis_tool_fill.cc:547
+#: plugins/tools/basictools/kis_tool_fill.cc:562
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
+#, no-c-format, kde-format
+msgid "%"
+msgstr "%"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:415
@@ -26670,7 +26657,7 @@ msgid "path"
 msgstr "ścieżka"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:454
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:471
 #, kde-format
 msgid "Brush Editor"
 msgstr "Edytor pędzla"
@@ -27892,13 +27879,13 @@ msgid "Resize Canvas"
 msgstr "Zmiana rozmiaru płótna"
 
 #: libs/ui/imagesize/dlg_imagesize.cc:41
-#: libs/ui/widgets/kis_custom_image_widget.cc:56
+#: libs/ui/widgets/kis_custom_image_widget.cc:57
 #, kde-format
 msgid "Pixels/Inch"
 msgstr "Piksele/cal"
 
 #: libs/ui/imagesize/dlg_imagesize.cc:47
-#: libs/ui/widgets/kis_custom_image_widget.cc:62
+#: libs/ui/widgets/kis_custom_image_widget.cc:63
 #, kde-format
 msgid "Pixels/Centimeter"
 msgstr "Piksele/centymetr"
@@ -29497,16 +29484,12 @@ msgid "Remove Nodes"
 msgstr "Usuń węzły"
 
 #: libs/ui/kis_node_manager.cpp:1038
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Odbij maskę lustrzanie w poziomie"
 
 #: libs/ui/kis_node_manager.cpp:1041
 #, kde-format
-#| msgctxt "(qtundo-format) action"
-#| msgid "Mirror Layer Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
@@ -29515,16 +29498,12 @@ msgstr[1] "Odbij %1 warstwy lustrzanie w poziomie"
 msgstr[2] "Odbij %1 warstw lustrzanie w poziomie"
 
 #: libs/ui/kis_node_manager.cpp:1052
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Odbij maskę lustrzanie w pionie"
 
 #: libs/ui/kis_node_manager.cpp:1055
 #, kde-format
-#| msgctxt "(qtundo-format) action"
-#| msgid "Mirror Layer Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
@@ -29533,15 +29512,11 @@ msgstr[1] "Odbij %1 warstwy lustrzanie w pionie"
 msgstr[2] "Odbij %1 warstw lustrzanie w pionie"
 
 #: libs/ui/kis_node_manager.cpp:1063
-#| msgctxt "action"
-#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Odbij wszystkie warstwy lustrzanie w poziomie"
 
 #: libs/ui/kis_node_manager.cpp:1070
-#| msgctxt "action"
-#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Odbij wszystkie warstwy lustrzanie w pionie"
@@ -29647,22 +29622,35 @@ msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
 msgstr "Wyłączone: powielanie grupach przejść nie jest obsługiwane!"
 
-#: libs/ui/kis_paintop_box.cc:99
+#: libs/ui/kis_node_model.cpp:595
+#, fuzzy, kde-format
+#| msgid "%1%"
+msgctxt "%1 is the percent value, % is the percent sign"
+msgid "%1%"
+msgstr "%1%"
+
+#: libs/ui/kis_node_model.cpp:598
+#, kde-format
+msgctxt "%1 is the percent value, % is the percent sign"
+msgid "%1% %2"
+msgstr ""
+
+#: libs/ui/kis_paintop_box.cc:101
 #, kde-format
 msgid "Painter's Toolchest"
 msgstr "Narzędzia do rysowania"
 
-#: libs/ui/kis_paintop_box.cc:111
+#: libs/ui/kis_paintop_box.cc:113
 #, kde-format
 msgid "Tool Settings"
 msgstr "Ustawienia narzędzia"
 
-#: libs/ui/kis_paintop_box.cc:119
+#: libs/ui/kis_paintop_box.cc:121
 #, kde-format
 msgid "Edit brush settings"
 msgstr "Ustawienia edycji pędzli"
 
-#: libs/ui/kis_paintop_box.cc:126
+#: libs/ui/kis_paintop_box.cc:128
 #, kde-format
 msgid "Choose brush preset"
 msgstr "Wybierz nastawę pędzla"
@@ -29670,7 +29658,7 @@ msgstr "Wybierz nastawę pędzla"
 #. i18n: ectx: property (text), widget (QLabel, opacityLbl)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, opacityLabel)
-#: libs/ui/kis_paintop_box.cc:259 libs/ui/kis_paintop_box.cc:265
+#: libs/ui/kis_paintop_box.cc:265 libs/ui/kis_paintop_box.cc:272
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
@@ -29680,29 +29668,44 @@ msgid "Opacity:"
 msgstr "Nieprzezroczystość:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
-#: libs/ui/kis_paintop_box.cc:260 libs/ui/kis_paintop_box.cc:266
+#: libs/ui/kis_paintop_box.cc:266 libs/ui/kis_paintop_box.cc:273
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1985
 #, kde-format
 msgid "Flow:"
 msgstr "Płynięcie:"
 
-#: libs/ui/kis_paintop_box.cc:262 libs/ui/kis_paintop_box.cc:268
+#. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
+#. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
+#. i18n: ectx: property (title), widget (QGroupBox, gbRotation)
+#: libs/ui/kis_paintop_box.cc:268 libs/ui/kis_paintop_box.cc:275
+#: plugins/filters/blur/wdg_lens_blur.ui:84
+#: plugins/generators/pattern/wdgpatternoptions.ui:212
+#: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:178
+#: plugins/tools/basictools/wdgmultihandtool.ui:129
+#, kde-format
+msgid "Rotation:"
+msgstr "Obrót:"
+
+#: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
 #, kde-format
 msgid "Pattern Scale:"
 msgstr "Podziałka wzoru:"
 
-#: libs/ui/kis_paintop_box.cc:321
+#: libs/ui/kis_paintop_box.cc:338
 #, kde-format
 msgid "Choose workspace"
 msgstr "Wybierz przestrzeń pracy"
 
-#: libs/ui/kis_paintop_box.cc:364
+#: libs/ui/kis_paintop_box.cc:381
 #, kde-format
 msgid "Brush composite"
 msgstr "Kompozyt pędzla"
 
-#: libs/ui/kis_paintop_box.cc:1303 libs/ui/kis_paintop_box.cc:1325
-#: libs/ui/kis_paintop_box.cc:1339
+#: libs/ui/kis_paintop_box.cc:1343 libs/ui/kis_paintop_box.cc:1365
+#: libs/ui/kis_paintop_box.cc:1379
 #, kde-format
 msgid ""
 "%1\n"
@@ -33011,127 +33014,128 @@ msgstr "Edytuj..."
 msgid "unnamed"
 msgstr "nienazwany"
 
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:39
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:40
 #, kde-format
 msgctxt "Button to change the gradient stop type to foreground"
 msgid "Foreground color"
 msgstr "Barwa pierwszoplanowa"
 
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:54
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:55
 #, kde-format
 msgctxt "Button to change the gradient stop type to background"
 msgid "Background color"
 msgstr "Barwa drugoplanowa"
 
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:69
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:70
 #, kde-format
 msgctxt "Button to change the gradient stop type to custom color"
 msgid "Custom color"
 msgstr "Własny kolor"
 
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:82
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:83
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:20
 #, kde-format
 msgid "Transparent"
 msgstr "Przezroczyste"
 
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:92
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:50
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:38
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:41
-#: plugins/tools/basictools/kis_tool_fill.cc:546
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
+#: plugins/dockers/layerdocker/LayerBox.cpp:211
+#: plugins/dockers/layerdocker/LayerBox.cpp:400
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:55
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:59
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:44
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
 #, kde-format
-msgid "Opacity: "
-msgstr "Nieprzezroczystość:"
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Opacity: {n}%"
+msgstr "Nieprzezroczystość: {n}%"
 
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:99
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:161
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:164
-#, kde-format
-msgid "Position: "
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:102
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:163
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:167
+#, fuzzy, kde-format
+#| msgid "Position: "
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Position: {n}%"
 msgstr "Pozycja:"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:39
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:40
 #, kde-format
 msgctxt "Action to select previous handle in the segment gradient editor"
 msgid "Select previous handle"
 msgstr "Zaznacz poprzedni uchwyt"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:44
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:45
 #, kde-format
 msgctxt "Action to select next handle in the segment gradient editor"
 msgid "Select next handle"
 msgstr "Zaznacz następny uchwyt"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:48
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:49
 #, kde-format
 msgctxt "Button to edit the selected handle in the segment gradient editor"
 msgid "Edit handle"
 msgstr "Edytuj uchwyt"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:53
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:54
 #, kde-format
 msgctxt "Action to delete the selected segment in the segment gradient editor"
 msgid "Delete segment"
 msgstr "Usuń odcinek"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:58
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:59
 #, kde-format
 msgctxt "Action to flip the selected segment in the segment gradient editor"
 msgid "Flip segment"
 msgstr "Odbij odcinek"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:63
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:64
 #, kde-format
 msgctxt "Action to split the selected segment in the segment gradient editor"
 msgid "Split segment"
 msgstr "Podziel odcinek"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:68
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:69
 #, kde-format
 msgctxt ""
 "Action to duplicate the selected segment in the segment gradient editor"
 msgid "Duplicate segment"
 msgstr "Powiel odcinek"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:73
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:74
 #, kde-format
 msgctxt "Action to delete the selected stop in the segment gradient editor"
 msgid "Delete stop"
 msgstr "Usuń przystanek"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:78
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:79
 #, kde-format
 msgctxt "Action to center the selected stop in the segment gradient editor"
 msgid "Center stop"
 msgstr "Wyśrodkuj przystanek"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:83
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:84
 #, kde-format
 msgctxt ""
 "Action to center the selected mid point in the segment gradient editor"
 msgid "Center middle point"
 msgstr "Punkt środkowy"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:88
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:89
 #, kde-format
 msgctxt "Button to flip the gradient in the segment gradient editor"
 msgid "Flip gradient"
 msgstr "Odbij gradient"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:93
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:94
 #, kde-format
 msgctxt ""
 "Button to evenly distribute the segments in the segment gradient editor"
 msgid "Distribute segments evenly"
 msgstr "Rozmieść odcinki po równo"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:159
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:160
 #, kde-format
 msgctxt ""
 "Button to link both end colors of a stop handle in the segment gradient "
@@ -33139,33 +33143,33 @@ msgctxt ""
 msgid "Link colors"
 msgstr "Dowiąż barwy"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:224
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:227
 #, kde-format
 msgctxt ""
 "Text that indicates the selected segment in the segment gradient editor"
 msgid "Segment #%1"
 msgstr "Odcinek #%1"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:255
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:258
 #, kde-format
 msgctxt "Text that indicates the selected stop in the segment gradient editor"
 msgid "Stop #%1"
 msgstr "Przystanek #%1"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:299
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:302
 #, kde-format
 msgctxt ""
 "Text that indicates the selected mid point in the segment gradient editor"
 msgid "Mid-Point #%1"
 msgstr "Punkt środkowy #%1"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:308
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:311
 #, kde-format
 msgctxt "Text that indicates no handle is selected in the stop gradient editor"
 msgid "No handle selected"
 msgstr "Nie zaznaczono żadnego uchwytu"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:794
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:797
 #, kde-format
 msgctxt "Title for the segment gradient handle editor"
 msgid "Edit Handle"
@@ -34074,12 +34078,12 @@ msgstr "Brak etykiety"
 msgid "Select a Color Space"
 msgstr "Wybierz przestrzeń barw"
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:116
+#: libs/ui/widgets/kis_custom_image_widget.cc:119
 #, kde-format
 msgid "&Create"
 msgstr "&Utwórz"
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:294
+#: libs/ui/widgets/kis_custom_image_widget.cc:297
 #, kde-format
 msgid ""
 "Linear gamma RGB color spaces are not supposed to be used in 8-bit integer "
@@ -34098,7 +34102,7 @@ msgstr ""
 "liczbach całkowitych lub\"Anuluj\", aby powrócić do okna dialogowego "
 "ustawień."
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:535
+#: libs/ui/widgets/kis_custom_image_widget.cc:538
 #, kde-format
 msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
@@ -35020,12 +35024,12 @@ msgstr "Znacznik końca"
 msgid "Thickness:"
 msgstr "Grubość:"
 
-#: libs/widgets/kis_color_input.cpp:51
+#: libs/widgets/kis_color_input.cpp:52
 #, kde-format
 msgid "%1:"
 msgstr "%1:"
 
-#: libs/widgets/kis_color_input.cpp:373
+#: libs/widgets/kis_color_input.cpp:378
 #: libs/widgets/KoEditColorSetDialog.cpp:159
 #, kde-format
 msgid "Color name:"
@@ -37253,6 +37257,15 @@ msgstr "Napotkano na błędy. Nie wszyscy pomocnicy zostali pomyślnie wczytani.
 msgid "Save Assistant"
 msgstr "Pomocnik zapisu"
 
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
+#: plugins/tools/basictools/kis_tool_fill.cc:546
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
+#, kde-format
+msgid "Opacity: "
+msgstr "Nieprzezroczystość:"
+
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
 #, kde-format
@@ -37376,7 +37389,7 @@ msgstr "Perspektywa"
 msgid "Perspective Ellipse assistant"
 msgstr "Pomocnik elipsy z perspektywy"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:637
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Elipsa z perspektywy"
@@ -38104,20 +38117,20 @@ msgid "Animation Curves"
 msgstr "Krzywe animacji"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:70
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:71
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:72
 #, kde-format
 msgid "Frame register"
 msgstr "Rejestr klatki"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:88
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:89
 #, kde-format
 msgctxt "preview playback speed percentage prefix"
 msgid "Speed: "
 msgstr "Szybkość: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:88
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:90
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:91
 #, kde-format
 msgid "Preview playback speed"
 msgstr "Szybkość odtwarzania na podglądzie"
@@ -38129,7 +38142,7 @@ msgid "Val:"
 msgstr "Wartość:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:168
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:130
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:131
 #, kde-format
 msgid "Onion skins menu"
 msgstr "Menu skórki cebuli"
@@ -38140,25 +38153,25 @@ msgid "Audio menu"
 msgstr "Menu dźwięku"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:184
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:182
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:184
 #, kde-format
 msgid "Animation settings menu"
 msgstr "Menu ustawień animacji"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:196
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:194
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
 #, kde-format
 msgid "Clip Start: "
 msgstr "Początek wycinka: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:200
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:198
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:200
 #, kde-format
 msgid "Clip End: "
 msgstr "Koniec wycinka: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:205
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:203
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:205
 #, kde-format
 msgid "Frame Rate: "
 msgstr "Klatek na sekundę: "
@@ -38259,67 +38272,70 @@ msgstr[0] "Dostosuj klatkę kluczową"
 msgstr[1] "Dostosuj %1 klatki kluczowe"
 msgstr[2] "Dostosuj %1 klatek kluczowych"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:58
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:296
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:59
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:298
 #, kde-format
 msgid "Animation Timeline"
 msgstr "Oś czasu animacji"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:138
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Zaimportuj dźwięk..."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:140
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Usuń dźwięk"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:143
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Wycisz"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:148
-#, kde-format
-msgctxt "@item:inmenu Volume slider"
-msgid "Volume: "
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:149
+#, fuzzy, kde-format
+#| msgctxt "@item:inmenu Volume slider"
+#| msgid "Volume: "
+msgctxt ""
+"@item:inmenu Volume slider; {n} is the number value, % is the percent sign"
+msgid "Volume: {n}%"
 msgstr "Głośność: "
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:168
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:170
 #, kde-format
 msgid "Animation audio menu"
 msgstr "Menu dźwięków animacji"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:213
 #, kde-format
 msgid "AutoKey Blank"
 msgstr "Pusty AutoKey"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:213
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:215
 #, kde-format
 msgid "AutoKey Duplicate"
 msgstr "Powiel AutoKey"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:526
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Włącz, aby zachować czasy odtwarzania."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:532
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:534
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Efektywny FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:533
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:535
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Rzeczywisty FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:534
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:536
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Upuszczonych klatek:\t%1%"
@@ -38490,17 +38506,19 @@ msgctxt "(qtundo-format)"
 msgid "Make clones Unique"
 msgstr "Uczyń powielenia niepowtarzalnymi"
 
-#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:46
-#, kde-format
-msgid "Tint: "
+#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:48
+#, fuzzy, kde-format
+#| msgid "Tint: "
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Tint: {n}%"
 msgstr "Zabarw: "
 
-#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:49
+#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:51
 #, kde-format
 msgid "Tint color for past frames"
 msgstr "Barwa zabarwienia dla minionych klatek"
 
-#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:50
+#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:52
 #, kde-format
 msgid "Tint color for future frames"
 msgstr "Barwa zabarwienia dla przyszłych klatek"
@@ -39084,18 +39102,18 @@ msgstr "Histogram"
 msgid "Undo History"
 msgstr "Historia cofnięć"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:160
+#: plugins/dockers/layerdocker/LayerBox.cpp:162
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
 #, kde-format
 msgid "Layers"
 msgstr "Warstwy"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:250
+#: plugins/dockers/layerdocker/LayerBox.cpp:257
 #, kde-format
 msgid "&Show Global Selection Mask"
 msgstr "Pokaż ma&skę globalnego zaznaczania"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:253
+#: plugins/dockers/layerdocker/LayerBox.cpp:260
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -39104,24 +39122,24 @@ msgstr ""
 "Pokazuje globalne zaznaczenie jako zwyczajną maskę zaznaczania w dokowaniu "
 "<b>Warstwy</b>"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:320
+#: plugins/dockers/layerdocker/LayerBox.cpp:327
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "Rozmiar miniatur"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:348
+#: plugins/dockers/layerdocker/LayerBox.cpp:355
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Wcięcia drzewa"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:371
+#: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Wygląd szczegółów o mieszaniu"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:373
+#: plugins/dockers/layerdocker/LayerBox.cpp:380
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39137,43 +39155,43 @@ msgstr ""
 "Szczegółowe: okaż zarówno nieprzezroczystości jak i tryby mieszania, nawet "
 "gdy żadne z nich nie uległo zmianie."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:378
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Żadne"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:379
+#: plugins/dockers/layerdocker/LayerBox.cpp:386
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Prosty"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:380
+#: plugins/dockers/layerdocker/LayerBox.cpp:387
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Zrównoważony"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:381
+#: plugins/dockers/layerdocker/LayerBox.cpp:388
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Szczegółowy"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:394
+#: plugins/dockers/layerdocker/LayerBox.cpp:402
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Nieprzezroczystość napisu o mieszaniu"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:412
+#: plugins/dockers/layerdocker/LayerBox.cpp:420
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "W wierszu"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:414
+#: plugins/dockers/layerdocker/LayerBox.cpp:422
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39184,35 +39202,35 @@ msgstr ""
 "Po wyłączeniu, pokaże szczegóły mieszania poniżej nazw warstw (gdy będzie na "
 "to miejsce)."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:426
+#: plugins/dockers/layerdocker/LayerBox.cpp:434
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Pole zaznaczane do zaznaczania warstw"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:427
+#: plugins/dockers/layerdocker/LayerBox.cpp:435
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "Pokaż pola zaznaczane do zaznaczania/odznaczania warstw."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:994
+#: plugins/dockers/layerdocker/LayerBox.cpp:1002
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Maska szybkiego zaznaczania"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1016
+#: plugins/dockers/layerdocker/LayerBox.cpp:1024
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Porzuć maskę szybkiego zaznaczania"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: plugins/dockers/layerdocker/LayerBox.cpp:1234
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "&Przełącz blokady i widoczność"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1233
-#: plugins/dockers/layerdocker/LayerBox.cpp:1254
+#: plugins/dockers/layerdocker/LayerBox.cpp:1241
+#: plugins/dockers/layerdocker/LayerBox.cpp:1264
 #, kde-format
 msgid "&Add"
 msgstr "Dod&aj"
@@ -44340,20 +44358,6 @@ msgstr "Kształt:"
 msgid "Radius:"
 msgstr "Promień:"
 
-#. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
-#. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
-#. i18n: ectx: property (title), widget (QGroupBox, gbRotation)
-#: plugins/filters/blur/wdg_lens_blur.ui:84
-#: plugins/generators/pattern/wdgpatternoptions.ui:212
-#: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:178
-#: plugins/tools/basictools/wdgmultihandtool.ui:129
-#, kde-format
-msgid "Rotation:"
-msgstr "Obrót:"
-
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #. i18n: ectx: property (text), widget (QLabel, rotationLbl)
 #. i18n: ectx: property (text), widget (QLabel, lblAngle)
@@ -45491,8 +45495,8 @@ msgid "&Oilpaint..."
 msgstr "Farba &olejna..."
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:205
-#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:67
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:91
+#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:70
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:96
 #: plugins/paintops/particle/KisParticleOpOptionWidget.cpp:58
 #: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:52
 #, kde-format
@@ -46574,18 +46578,18 @@ msgstr "Obrót-X:"
 msgid "Y-Rotation:"
 msgstr "Obrót-Y:"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:54
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:62
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:72
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:84
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:61
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:69
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:91
 #, kde-format
 msgid "X: "
 msgstr "X: "
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:56
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:67
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:78
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:88
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:74
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:85
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:95
 #, kde-format
 msgid "Y: "
 msgstr "Y: "
@@ -46593,7 +46597,7 @@ msgstr "Y: "
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:96
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:103
 #, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -46607,7 +46611,7 @@ msgstr[2] "Każde {n} komórek w poziomie"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:102
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:109
 #, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -46618,25 +46622,25 @@ msgstr[0] "Każda {n} komórka w pionie"
 msgstr[1] "Każde {n} komórek w pionie"
 msgstr[2] "Każde {n} komórek w pionie"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:446
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:453
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
 msgstr " piksele/cal"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:447
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:454
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
 msgstr " piksele/cm"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:450
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:457
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
 msgstr " linie/cal"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:451
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:458
 #, kde-format
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
@@ -51862,13 +51866,13 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Bristle Brush (the lines will be thinner than on preview)"
 msgstr "Pędzel włosia (linie będą cieńsze niż na podglądzie)"
 
-#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:55
+#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:58
 #, kde-format
 msgid "Bristle options"
 msgstr "Ustawienia włosia"
 
 #. i18n: ectx: attribute (title), widget (QWidget, inkTab)
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:51
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:60
 #: plugins/paintops/hairy/wdghairyeoptions.ui:263
 #, kde-format
 msgid "Ink depletion"
@@ -57485,7 +57489,6 @@ msgstr "Skopiuj przeniesienie"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:459
 #, kde-format
-#| msgid "Copy Translate"
 msgid "Copy Translate at Intervals"
 msgstr "Skopiuj przeniesienie w odstępach"
 
@@ -57494,8 +57497,8 @@ msgstr "Skopiuj przeniesienie w odstępach"
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
-"Narzędzie wielopędzla nie obsługuje więcej niż %1 pędzli; użyj większego"
-" odstępu."
+"Narzędzie wielopędzla nie obsługuje więcej niż %1 pędzli; użyj większego "
+"odstępu."
 
 #: plugins/tools/basictools/kis_tool_multihand.h:97
 #, kde-format
@@ -57886,14 +57889,12 @@ msgstr "Usuń wszystko"
 #. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:250
 #, kde-format
-#| msgid "Internal"
 msgid "Interval X:"
 msgstr "Odstęp X:"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:263
 #, kde-format
-#| msgid "Internal"
 msgid "Interval Y:"
 msgstr "Odstęp Y:"
 
@@ -58146,12 +58147,6 @@ msgstr "Działania obrazów wzorcowych"
 #, kde-format
 msgid "Reference Images Tool"
 msgstr "Narzędzie obrazów wzorcowych"
-
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
-#, kde-format
-msgctxt "{n} is the number value, % is the percent sign"
-msgid "Opacity: {n}%"
-msgstr "Nieprzezroczystość: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
 #, kde-format

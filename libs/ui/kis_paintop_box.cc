@@ -262,8 +262,12 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
             slRotation    = m_sliderChooser[i]->addWidget<KisAngleSelector>("rotation");
             slPatternSize = m_sliderChooser[i]->addWidget<KisMultipliersDoubleSliderSpinBox>("patternsize");
 
-            slOpacity->setPrefix(QString("%1 ").arg(i18n("Opacity:")));
-            slFlow->setPrefix(QString("%1 ").arg(i18n("Flow:")));
+            KisDoubleSpinBoxPluralHelper::install(slOpacity, [](double value) {
+                return i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%", value);
+            });
+            KisDoubleSpinBoxPluralHelper::install(slFlow, [](double value) {
+                return i18nc("{n} is the number value, % is the percent sign", "Flow: {n}%", value);
+            });
             slSize->setPrefix(QString("%1 ").arg(i18n("Size:")));
             slRotation->setPrefix(QString("%1 ").arg(i18n("Rotation:")));
             slPatternSize->setPrefix(QString("%1 ").arg(i18n("Pattern Scale:")));
@@ -274,14 +278,18 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
             slSize        = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size", i18n("Size:"));
             slRotation    = m_sliderChooser[i]->addWidget<KisAngleSelector>("rotation", i18n("Rotation:"));
             slPatternSize = m_sliderChooser[i]->addWidget<KisMultipliersDoubleSliderSpinBox>("patternsize", i18n("Pattern Scale:"));
+
+            KisDoubleSpinBoxPluralHelper::install(slOpacity, [](double value) {
+                return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+            });
+            KisDoubleSpinBoxPluralHelper::install(slFlow, [](double value) {
+                return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+            });
         }
 
         slOpacity->setRange(0, 100, 0);
         slOpacity->setValue(100);
         slOpacity->setSingleStep(5);
-        KisDoubleSpinBoxPluralHelper::install(slOpacity, [](double value) {
-            return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-        });
         slOpacity->setMinimumWidth(qMax(sliderWidth, slOpacity->sizeHint().width()));
         slOpacity->setFixedHeight(buttonsize);
         slOpacity->setBlockUpdateSignalOnDrag(true);
@@ -289,9 +297,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
         slFlow->setRange(0, 100, 0);
         slFlow->setValue(100);
         slFlow->setSingleStep(5);
-        KisDoubleSpinBoxPluralHelper::install(slFlow, [](double value) {
-            return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-        });
         slFlow->setMinimumWidth(qMax(sliderWidth, slFlow->sizeHint().width()));
         slFlow->setFixedHeight(buttonsize);
         slFlow->setBlockUpdateSignalOnDrag(true);

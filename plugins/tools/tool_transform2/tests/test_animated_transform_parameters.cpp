@@ -110,6 +110,9 @@ void KisAnimatedTransformParametersTest::testTransformKeyframing()
     firstFrameCommand.undo();
     QVERIFY(p.image->animationInterface()->currentTime() == 10);
     QCOMPARE(argsFromParams(mask->transformParams()).scaleX(), 1.0);
+
+    mask->forceUpdateTimedNode();
+    p.image->waitForDone();
 }
 
 

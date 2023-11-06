@@ -62,6 +62,43 @@ struct KisAnimatedTransformMaskParamsHolder::Private
     bool isInitialized {false};
 };
 
+namespace {
+QPointF centerOffsetCurvesToArgs(const ToolTransformArgs &args)
+{
+    KisTransformUtils::MatricesPack m(args);
+
+    QTransform t = m.TS * m.SC * m.S * m.projectedP;
+
+
+    const QPointF calculatedOffset = t.map(args.originalCenter() + args.rotationCenterOffset());
+
+    /**
+     * We add args.rotationCenterOffset() due to legacy reasons, since it was
+     * subtracted from the curves in the original implementation of transformation
+     * masks, so not it is baked in the file format
+     */
+
+    return (args.transformedCenter() + args.rotationCenterOffset()) - calculatedOffset;
+}
+
+QPointF centerOffsetArgsToCurves(const ToolTransformArgs &args)
+{
+    KisTransformUtils::MatricesPack m(args);
+
+    const QPointF expectedCurveOffset =
+        m.finalTransform().map(args.originalCenter() + args.rotationCenterOffset());
+
+    /**
+     * We subtract args.rotationCenterOffset() due to legacy reasons, because
+     * curves of the original implementation of the animated transform masks
+     * had this value subtracted (which is actually a bug, since it should be
+     * added instead).
+     */
+    return expectedCurveOffset - args.rotationCenterOffset();
+}
+
+} // namespace
+
 KisAnimatedTransformMaskParamsHolder::KisAnimatedTransformMaskParamsHolder(KisDefaultBoundsBaseSP defaultBounds)
     : m_d(new Private(defaultBounds))
 {
@@ -161,6 +198,8 @@ const QSharedPointer<ToolTransformArgs> KisAnimatedTransformMaskParamsHolder::tr
             args->setAZ(zRotation);
         }
     }
+
+    args->setTransformedCenter(centerOffsetCurvesToArgs(*args));
 
     return args;
 }
@@ -303,8 +342,10 @@ void KisAnimatedTransformMaskParamsHolder::setNewTransformArgs(const ToolTransfo
         }
     };
 
-    setKeyframe(KisKeyframeChannel::PositionX, currentTime, args.transformedCenter().x(), parentCommand);
-    setKeyframe(KisKeyframeChannel::PositionY, currentTime, args.transformedCenter().y(), parentCommand);
+    const QPointF curvesCenterOffset = centerOffsetArgsToCurves(args);
+
+    setKeyframe(KisKeyframeChannel::PositionX, currentTime, curvesCenterOffset.x(), parentCommand);
+    setKeyframe(KisKeyframeChannel::PositionY, currentTime, curvesCenterOffset.y(), parentCommand);
 
     setKeyframe(KisKeyframeChannel::ScaleX, currentTime, args.scaleX(), parentCommand);
     setKeyframe(KisKeyframeChannel::ScaleY, currentTime, args.scaleY(), parentCommand);

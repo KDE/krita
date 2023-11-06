@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:26+0000\n"
+"POT-Creation-Date: 2023-11-06 00:40+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -16803,7 +16803,7 @@ msgstr "आकार"
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
-#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:304
+#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:309
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:70
 #: libs/ui/widgets/kis_selection_options.cc:186
 #: libs/ui/widgets/kis_selection_options.cc:200
@@ -21574,7 +21574,7 @@ msgstr "प्रदर्शन"
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
-#: libs/ui/kis_paintop_box.cc:321
+#: libs/ui/kis_paintop_box.cc:326
 #: plugins/dockers/recorder/recorder_export.ui:467
 #, kde-format
 msgid "x"
@@ -22600,7 +22600,7 @@ msgstr "परत गुण"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1378
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1384
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1468 libs/ui/kis_paintop_box.cc:283
-#: libs/ui/kis_paintop_box.cc:293
+#: libs/ui/kis_paintop_box.cc:286
 #: libs/ui/widgets/kis_custom_image_widget.cc:100
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:18
 #: libs/widgets/kis_color_input.cpp:150 libs/widgets/kis_color_input.cpp:195
@@ -24681,8 +24681,8 @@ msgstr "रंगः"
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblSize)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
-#: libs/ui/forms/wdgdisplaysettings.ui:329 libs/ui/kis_paintop_box.cc:267
-#: libs/ui/kis_paintop_box.cc:274
+#: libs/ui/forms/wdgdisplaysettings.ui:329 libs/ui/kis_paintop_box.cc:271
+#: libs/ui/kis_paintop_box.cc:278
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2007
@@ -26486,7 +26486,7 @@ msgid "path"
 msgstr "पथ"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:471
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:476
 #, kde-format
 msgid "Brush Editor"
 msgstr "ब्रश संपादक"
@@ -29419,31 +29419,35 @@ msgstr "ब्रश सेटिंग्स संपादित करें
 msgid "Choose brush preset"
 msgstr "ब्रश नमूना चुनें"
 
-#. i18n: ectx: property (text), widget (QLabel, opacityLbl)
-#. i18n: ectx: property (text), widget (QLabel, textLabel2)
-#. i18n: ectx: property (text), widget (QLabel, opacityLabel)
-#: libs/ui/kis_paintop_box.cc:265 libs/ui/kis_paintop_box.cc:272
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:107
-#: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
-#: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
-#: plugins/paintops/mypaint/wdgmypaintoptions.ui:126
-#, kde-format
-msgid "Opacity:"
-msgstr "अपारदर्शिता :"
+#: libs/ui/kis_paintop_box.cc:266
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
+#: plugins/dockers/layerdocker/LayerBox.cpp:211
+#: plugins/dockers/layerdocker/LayerBox.cpp:400
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:55
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:59
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:44
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
+#, fuzzy, kde-format
+#| msgid "Opacity: "
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Opacity: {n}%"
+msgstr "अपार्दरशिता : "
 
-#. i18n: ectx: property (text), widget (QLabel, lblFlow)
-#: libs/ui/kis_paintop_box.cc:266 libs/ui/kis_paintop_box.cc:273
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1985
-#, kde-format
-msgid "Flow:"
-msgstr "फ़्लो :"
+#: libs/ui/kis_paintop_box.cc:269
+#, fuzzy, kde-format
+#| msgctxt "Brush Option Flow"
+#| msgid "Flow: %1%"
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Flow: {n}%"
+msgstr "फ़्लो : %1%"
 
 #. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
 #. i18n: ectx: property (title), widget (QGroupBox, gbRotation)
-#: libs/ui/kis_paintop_box.cc:268 libs/ui/kis_paintop_box.cc:275
+#: libs/ui/kis_paintop_box.cc:272 libs/ui/kis_paintop_box.cc:279
 #: plugins/filters/blur/wdg_lens_blur.ui:84
 #: plugins/generators/pattern/wdgpatternoptions.ui:212
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
@@ -29453,23 +29457,42 @@ msgstr "फ़्लो :"
 msgid "Rotation:"
 msgstr "परिक्रमण :"
 
-#: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
+#: libs/ui/kis_paintop_box.cc:273 libs/ui/kis_paintop_box.cc:280
 #, kde-format
 msgid "Pattern Scale:"
 msgstr "पैटर्न आकार :"
 
-#: libs/ui/kis_paintop_box.cc:338
+#. i18n: ectx: property (text), widget (QLabel, opacityLbl)
+#. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#. i18n: ectx: property (text), widget (QLabel, opacityLabel)
+#: libs/ui/kis_paintop_box.cc:276
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:107
+#: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
+#: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
+#: plugins/paintops/mypaint/wdgmypaintoptions.ui:126
+#, kde-format
+msgid "Opacity:"
+msgstr "अपारदर्शिता :"
+
+#. i18n: ectx: property (text), widget (QLabel, lblFlow)
+#: libs/ui/kis_paintop_box.cc:277
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1985
+#, kde-format
+msgid "Flow:"
+msgstr "फ़्लो :"
+
+#: libs/ui/kis_paintop_box.cc:343
 #, kde-format
 msgid "Choose workspace"
 msgstr "कार्यक्षेत्र चुनें"
 
-#: libs/ui/kis_paintop_box.cc:381
+#: libs/ui/kis_paintop_box.cc:386
 #, kde-format
 msgid "Brush composite"
 msgstr "ब्रश समग्र"
 
-#: libs/ui/kis_paintop_box.cc:1343 libs/ui/kis_paintop_box.cc:1365
-#: libs/ui/kis_paintop_box.cc:1379
+#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
+#: libs/ui/kis_paintop_box.cc:1384
 #, kde-format
 msgid ""
 "%1\n"
@@ -31225,20 +31248,20 @@ msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "वृद्धिशील बैकअप सहेजा नही जा सका"
 
-#: libs/ui/KisViewManager.cpp:1310
+#: libs/ui/KisViewManager.cpp:1321
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
 "Press %1 to go back."
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1352
+#: libs/ui/KisViewManager.cpp:1363
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "संसाधन फोल्डर खोलें"
 
-#: libs/ui/KisViewManager.cpp:1356
+#: libs/ui/KisViewManager.cpp:1367
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31253,19 +31276,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1371
+#: libs/ui/KisViewManager.cpp:1382
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1372
+#: libs/ui/KisViewManager.cpp:1383
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1485 libs/ui/KisViewManager.cpp:1503
+#: libs/ui/KisViewManager.cpp:1496 libs/ui/KisViewManager.cpp:1514
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -32719,20 +32742,6 @@ msgstr "तदनुकूल रंग"
 #, kde-format
 msgid "Transparent"
 msgstr "पारदर्शी"
-
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
-#: plugins/dockers/layerdocker/LayerBox.cpp:211
-#: plugins/dockers/layerdocker/LayerBox.cpp:400
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:55
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:59
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:44
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
-#, fuzzy, kde-format
-#| msgid "Opacity: "
-msgctxt "{n} is the number value, % is the percent sign"
-msgid "Opacity: {n}%"
-msgstr "अपार्दरशिता : "
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:102
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:163

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:26+0000\n"
-"PO-Revision-Date: 2023-10-30 10:11+0100\n"
+"POT-Creation-Date: 2023-11-06 00:40+0000\n"
+"PO-Revision-Date: 2023-11-05 16:52+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -10711,7 +10711,7 @@ msgid ""
 "If checked, layer becomes pinned to the timeline, making it visible even "
 "when inactive."
 msgstr ""
-"Si està marcada, la capa es fixa en la línia de temps, fent-la visible "
+"Si se selecciona, la capa es fixarà en la línia de temps, fent-la visible "
 "encara que estiga inactiva."
 
 #. i18n: context: text @ Action (insert_keyframe_left), Actions (Animation), ActionCollection (Krita)
@@ -16741,7 +16741,7 @@ msgstr "Mida"
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
-#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:304
+#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:309
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:70
 #: libs/ui/widgets/kis_selection_options.cc:186
 #: libs/ui/widgets/kis_selection_options.cc:200
@@ -21546,7 +21546,7 @@ msgstr "Pantalla"
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
-#: libs/ui/kis_paintop_box.cc:321
+#: libs/ui/kis_paintop_box.cc:326
 #: plugins/dockers/recorder/recorder_export.ui:467
 #, kde-format
 msgid "x"
@@ -22595,7 +22595,7 @@ msgstr "Propietats de la capa"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1378
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1384
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1468 libs/ui/kis_paintop_box.cc:283
-#: libs/ui/kis_paintop_box.cc:293
+#: libs/ui/kis_paintop_box.cc:286
 #: libs/ui/widgets/kis_custom_image_widget.cc:100
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:18
 #: libs/widgets/kis_color_input.cpp:150 libs/widgets/kis_color_input.cpp:195
@@ -22886,7 +22886,7 @@ msgstr ""
 "Encara que Krita es pot configurar per situar els recursos dins la ubicació "
 "AppData de l'usuari, Windows pot emmagatzemar realment els fitxers dins una "
 "ubicació privada d'aplicació.</p>\n"
-"<p>Cal que comproveu ambdues ubicacions per determinar a on s'ubiquen els "
+"<p>Cal que comproveu ambdues ubicacions per a determinar a on s'ubiquen els "
 "fitxers.</p>\n"
 "<p><b>AppData de l'usuari</b> (<a href=\"copyuser\">Copy</a>):<br/>\n"
 "%1</p>\n"
@@ -24766,8 +24766,8 @@ msgstr "Color 2:"
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblSize)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
-#: libs/ui/forms/wdgdisplaysettings.ui:329 libs/ui/kis_paintop_box.cc:267
-#: libs/ui/kis_paintop_box.cc:274
+#: libs/ui/forms/wdgdisplaysettings.ui:329 libs/ui/kis_paintop_box.cc:271
+#: libs/ui/kis_paintop_box.cc:278
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2007
@@ -24954,7 +24954,7 @@ msgstr "Activa la selecció de contorn antialiàsing"
 #, kde-format
 msgid "If checked, the checkers will move when scrolling the canvas."
 msgstr ""
-"Si està marcada, els quadros d'escacs es mouran quan es desplace el llenç."
+"Si se selecciona, els quadros d'escacs es mouran quan es desplace el llenç."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, chkMoving)
 #: libs/ui/forms/wdgdisplaysettings.ui:544
@@ -26624,7 +26624,7 @@ msgid "path"
 msgstr "camí"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:471
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:476
 #, kde-format
 msgid "Brush Editor"
 msgstr "Editor de pinzells"
@@ -29457,53 +29457,37 @@ msgid "Remove Nodes"
 msgstr "Elimina els nodes"
 
 #: libs/ui/kis_node_manager.cpp:1038
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
-msgstr "Emmiralla horitzontalment"
+msgstr "Emmiralla la màscara horitzontalment"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Horizontally"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
-msgstr[0] "Emmiralla les capes horitzontalment"
-msgstr[1] "Emmiralla les capes horitzontalment"
+msgstr[0] "Emmiralla la capa horitzontalment"
+msgstr[1] "Emmiralla %1 capes horitzontalment"
 
 #: libs/ui/kis_node_manager.cpp:1052
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
-msgstr "Emmiralla verticalment"
+msgstr "Emmiralla la màscara verticalment"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Vertically"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
-msgstr[0] "Emmiralla les capes verticalment"
-msgstr[1] "Emmiralla les capes verticalment"
+msgstr[0] "Emmiralla la capa verticalment"
+msgstr[1] "Emmiralla %1 capes verticalment"
 
 #: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Emmiralla totes les capes horitzontalment"
 
 #: libs/ui/kis_node_manager.cpp:1070
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Emmiralla totes les capes verticalment"
@@ -29610,8 +29594,7 @@ msgid "Disabled: cloning pass-through groups is not supported!"
 msgstr "Desactivat: no es permet clonar grups de pas a través!"
 
 #: libs/ui/kis_node_model.cpp:595
-#, fuzzy, kde-format
-#| msgid "%1%"
+#, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
 msgstr "%1%"
@@ -29620,7 +29603,7 @@ msgstr "%1%"
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
-msgstr ""
+msgstr "%1% %2"
 
 #: libs/ui/kis_paintop_box.cc:101
 #, kde-format
@@ -29642,31 +29625,34 @@ msgstr "Edita la configuració del pinzell"
 msgid "Choose brush preset"
 msgstr "Trieu el pinzell predefinit"
 
-#. i18n: ectx: property (text), widget (QLabel, opacityLbl)
-#. i18n: ectx: property (text), widget (QLabel, textLabel2)
-#. i18n: ectx: property (text), widget (QLabel, opacityLabel)
-#: libs/ui/kis_paintop_box.cc:265 libs/ui/kis_paintop_box.cc:272
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:107
-#: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
-#: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
-#: plugins/paintops/mypaint/wdgmypaintoptions.ui:126
+#: libs/ui/kis_paintop_box.cc:266
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
+#: plugins/dockers/layerdocker/LayerBox.cpp:211
+#: plugins/dockers/layerdocker/LayerBox.cpp:400
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:55
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:59
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:44
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
 #, kde-format
-msgid "Opacity:"
-msgstr "Opacitat:"
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Opacity: {n}%"
+msgstr "Opacitat: {n}%"
 
-#. i18n: ectx: property (text), widget (QLabel, lblFlow)
-#: libs/ui/kis_paintop_box.cc:266 libs/ui/kis_paintop_box.cc:273
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1985
-#, kde-format
-msgid "Flow:"
-msgstr "Flux:"
+#: libs/ui/kis_paintop_box.cc:269
+#, fuzzy, kde-format
+#| msgctxt "Brush Option Flow"
+#| msgid "Flow: %1%"
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Flow: {n}%"
+msgstr "Flux: %1%"
 
 #. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
 #. i18n: ectx: property (title), widget (QGroupBox, gbRotation)
-#: libs/ui/kis_paintop_box.cc:268 libs/ui/kis_paintop_box.cc:275
+#: libs/ui/kis_paintop_box.cc:272 libs/ui/kis_paintop_box.cc:279
 #: plugins/filters/blur/wdg_lens_blur.ui:84
 #: plugins/generators/pattern/wdgpatternoptions.ui:212
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
@@ -29676,23 +29662,42 @@ msgstr "Flux:"
 msgid "Rotation:"
 msgstr "Gir:"
 
-#: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
+#: libs/ui/kis_paintop_box.cc:273 libs/ui/kis_paintop_box.cc:280
 #, kde-format
 msgid "Pattern Scale:"
 msgstr "Escala del patró:"
 
-#: libs/ui/kis_paintop_box.cc:338
+#. i18n: ectx: property (text), widget (QLabel, opacityLbl)
+#. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#. i18n: ectx: property (text), widget (QLabel, opacityLabel)
+#: libs/ui/kis_paintop_box.cc:276
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:107
+#: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
+#: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
+#: plugins/paintops/mypaint/wdgmypaintoptions.ui:126
+#, kde-format
+msgid "Opacity:"
+msgstr "Opacitat:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblFlow)
+#: libs/ui/kis_paintop_box.cc:277
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1985
+#, kde-format
+msgid "Flow:"
+msgstr "Flux:"
+
+#: libs/ui/kis_paintop_box.cc:343
 #, kde-format
 msgid "Choose workspace"
 msgstr "Trieu l'espai de treball"
 
-#: libs/ui/kis_paintop_box.cc:381
+#: libs/ui/kis_paintop_box.cc:386
 #, kde-format
 msgid "Brush composite"
 msgstr "Composició del pinzell"
 
-#: libs/ui/kis_paintop_box.cc:1343 libs/ui/kis_paintop_box.cc:1365
-#: libs/ui/kis_paintop_box.cc:1379
+#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
+#: libs/ui/kis_paintop_box.cc:1384
 #, kde-format
 msgid ""
 "%1\n"
@@ -31499,7 +31504,7 @@ msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "No s'ha pogut guardar la còpia de seguretat incremental"
 
-#: libs/ui/KisViewManager.cpp:1310
+#: libs/ui/KisViewManager.cpp:1321
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31508,13 +31513,13 @@ msgstr ""
 "S'ha entrat en el mode només el llenç.\n"
 "Premeu «%1» per a tornar arrere."
 
-#: libs/ui/KisViewManager.cpp:1352
+#: libs/ui/KisViewManager.cpp:1363
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Obriu una carpeta del recurs"
 
-#: libs/ui/KisViewManager.cpp:1356
+#: libs/ui/KisViewManager.cpp:1367
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31532,26 +31537,26 @@ msgstr ""
 "Encara que Krita es pot configurar per situar els recursos dins la ubicació "
 "AppData de l'usuari, Windows pot emmagatzemar realment els fitxers dins una "
 "ubicació privada d'aplicació.</p>\n"
-"<p>Cal que comproveu ambdues ubicacions per determinar a on s'ubiquen els "
+"<p>Cal que comproveu ambdues ubicacions per a determinar a on s'ubiquen els "
 "fitxers.</p>\n"
 "<p><b>AppData de l'usuari</b>:<br/>\n"
 "%1</p>\n"
 "<p><b>Ubicació privada d'aplicació</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1371
+#: libs/ui/KisViewManager.cpp:1382
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Obri en AppData de l'&usuari"
 
-#: libs/ui/KisViewManager.cpp:1372
+#: libs/ui/KisViewManager.cpp:1383
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Obri en la ubicació &privada de l'aplicació"
 
-#: libs/ui/KisViewManager.cpp:1485 libs/ui/KisViewManager.cpp:1503
+#: libs/ui/KisViewManager.cpp:1496 libs/ui/KisViewManager.cpp:1514
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -33035,27 +33040,13 @@ msgstr "Color personalitzat"
 msgid "Transparent"
 msgstr "Transparent"
 
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
-#: plugins/dockers/layerdocker/LayerBox.cpp:211
-#: plugins/dockers/layerdocker/LayerBox.cpp:400
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:55
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:59
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:44
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
-#, kde-format
-msgctxt "{n} is the number value, % is the percent sign"
-msgid "Opacity: {n}%"
-msgstr "Opacitat: {n}%"
-
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:102
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:163
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:167
-#, fuzzy, kde-format
-#| msgid "Position: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Position: {n}%"
-msgstr "Posició: "
+msgstr "Posició: {n}%"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:40
 #, kde-format
@@ -38298,13 +38289,11 @@ msgid "Mute"
 msgstr "Silenci"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:149
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Volume slider"
-#| msgid "Volume: "
+#, kde-format
 msgctxt ""
 "@item:inmenu Volume slider; {n} is the number value, % is the percent sign"
 msgid "Volume: {n}%"
-msgstr "Volum: "
+msgstr "Volum: {n}%"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:170
 #, kde-format
@@ -38504,11 +38493,10 @@ msgid "Make clones Unique"
 msgstr "Fes únics els clons"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:48
-#, fuzzy, kde-format
-#| msgid "Tint: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Tint: {n}%"
-msgstr "Tint: "
+msgstr "Tint: {n}%"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:51
 #, kde-format
@@ -48135,7 +48123,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:37
 #, kde-format
 msgid "If this is not enabled, only the first frame will be saved."
-msgstr "Si açò no està activat, només es guardarà el primer fotograma."
+msgstr "Si no se selecciona, només es guardarà el primer fotograma."
 
 #. i18n: ectx: property (text), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
@@ -48155,7 +48143,7 @@ msgstr "Opcions de codificació"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
 #, kde-format
 msgid "If this is not enabled, the image will be saved losslessly."
-msgstr "Si açò no està activat, la imatge es guardarà sense pèrdua."
+msgstr "Si no se selecciona, la imatge es guardarà sense pèrdua."
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:59
@@ -48288,7 +48276,7 @@ msgid ""
 "setting.</p><p>It is advised to leave this option checked for web delivery "
 "and general compatibility with other applications.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Si no està activada, les capes es rasteritzaran i "
+"<html><head/><body><p>Si no se selecciona, les capes es rasteritzaran i "
 "guardaran. No obstant açò, les exportacions d'animacions sempre s'aplanen "
 "independentment d'este paràmetre.</p><p>Es recomana deixar esta opció "
 "marcada per al lliurament per web i per compatibilitat general amb altres "
@@ -49542,7 +49530,7 @@ msgid ""
 "files will be decoded in 8-bit color depth with a BT.709 gamma curve and a "
 "99th-percentile white point. This mode is faster than 16-bit decoding.</p>"
 msgstr ""
-"<p>Si està activada, tots els fitxers RAW es descodificaran amb una "
+"<p>Si se selecciona, tots els fitxers RAW es descodificaran amb una "
 "profunditat de color de 16 bits utilitzant una corba amb interval lineal. "
 "Per a evitar la renderització d'imatges fosques en l'editor, es recomana "
 "utilitzar la gestió del color en este mode.</p><p>Si està desactivada, tots "
@@ -50028,7 +50016,7 @@ msgid ""
 "accurately, without 'pink clouds' (and blue highlights under tungsten lamps)."
 "</p>"
 msgstr ""
-"<p>Si està activada, les imatges amb canals sobreexposats es processen amb "
+"<p>Si se selecciona, les imatges amb canals sobreexposats es processaran amb "
 "més precisió, sense «núvols roses» (i llums blaves intenses en làmpades de "
 "tungstè).</p>"
 
@@ -50806,8 +50794,8 @@ msgid ""
 "better.\n"
 "If Lossless is disabled: 0 = smallest size, 100 = largest size."
 msgstr ""
-"Si s'ha activat la compressió sense pèrdua: 0 = ràpida però fitxers grans, "
-"100 = més lenta però millor.\n"
+"Si s'ha seleccionat la compressió sense pèrdua: 0 = ràpida però fitxers "
+"grans, 100 = més lenta però millor.\n"
 "Si s'ha desactivat la compressió sense pèrdua: 0 = mida més xicoteta, 100 = "
 "mida més gran."
 
@@ -51035,8 +51023,8 @@ msgid ""
 "If enabled, export the compressed picture back. In-loop filtering is not "
 "applied."
 msgstr ""
-"Si s'ha activat, exporta la imatge comprimida cap arrere. No s'aplica el "
-"filtratge en bucle."
+"Si s'ha seleccionat, exporta la imatge comprimida cap arrere. No s'aplicarà "
+"el filtratge en bucle."
 
 #. i18n: ectx: property (text), widget (QLabel, lblShowCompressed)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:517
@@ -51110,7 +51098,7 @@ msgid ""
 "expected output size from JPEG compression. Generally, the output size will "
 "be similar but the degradation will be lower."
 msgstr ""
-"Si s'ha activat, els paràmetres de compressió es tornaran a mapar per a "
+"Si s'ha seleccionat, els paràmetres de compressió es tornaran a mapar per a "
 "coincidir millor amb la mida esperada d'eixida de la compressió JPEG. "
 "Generalment, la mida d'eixida serà similar, però la degradació serà més "
 "baixa."
@@ -51127,7 +51115,7 @@ msgstr "Emula la mida JPEG"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:641
 #, kde-format
 msgid "If enabled, try and use multithreaded encoding."
-msgstr "Si s'ha activat, intenta i utilitza la codificació multifil."
+msgstr "Si s'ha seleccionat, intenta i utilitza la codificació multifil."
 
 #. i18n: ectx: property (text), widget (QLabel, lblThreadLevel)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:634
@@ -51142,7 +51130,8 @@ msgstr "Codificació multifil"
 #, kde-format
 msgid "If enabled, reduce memory usage (but increase CPU use)."
 msgstr ""
-"Si s'ha activat, reduïx l'ús de la memòria (però augmenta l'ús de la CPU)."
+"Si s'ha seleccionat, reduïx l'ús de la memòria (però augmenta l'ús de la "
+"CPU)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowMemory)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:654
@@ -51176,9 +51165,9 @@ msgid ""
 "Otherwise, discard this invisible RGB information for better compression. "
 "The default is disabled."
 msgstr ""
-"Si s'ha activat, manté els valors RGB exactes davall les àrees transparents. "
-"Altrament, descarta esta informació RGB invisible per a una compressió "
-"millor. El valor predeterminat és desactivat."
+"Si s'ha seleccionat, manté els valors RGB exactes davall les àrees "
+"transparents. Altrament, es descartarà esta informació RGB invisible per a "
+"una compressió millor. El valor predeterminat és desactivat."
 
 #. i18n: ectx: property (text), widget (QLabel, lblExact)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:700
@@ -51193,7 +51182,8 @@ msgstr "Exacte"
 #, kde-format
 msgid "If enabled, allows use of the sharp (and slow) RGB to YUV conversion."
 msgstr ""
-"Si s'ha activat, permet l'ús de la conversió RGB a YUV definida (i lenta)."
+"Si s'ha seleccionat, permet l'ús de la conversió RGB a YUV definida (i "
+"lenta)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblUseSharpYUV)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:720
@@ -51592,7 +51582,7 @@ msgid ""
 "When checked, clone from all visible layers. Otherwise, clone from the "
 "active layer."
 msgstr ""
-"Quan està activada, clona des de totes les capes visibles. Altrament, clona "
+"Quan se selecciona, clona des de totes les capes visibles. Altrament, clona "
 "des de la capa activa."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCloneProjection)
@@ -52421,7 +52411,7 @@ msgid ""
 "color. The background of particle is rectangle of grid width and height and "
 "by default it is transparent."
 msgstr ""
-"Si està marcada, el pinzell de reixa emplena cada fons de partícula amb el "
+"Si se selecciona, el pinzell de reixa emplena cada fons de partícula amb el "
 "color de fons. El fons de partícula és el rectangle de l'amplària i alçària "
 "de la quadrícula, i que de manera predeterminada és transparent."
 
@@ -54910,9 +54900,8 @@ msgid ""
 "A PO file can contain translator's comments. If this is checked, the "
 "translations comments will be added as references into the ACBF file."
 msgstr ""
-"Un fitxer PO pot contindre comentaris del traductor. Si açò està activat, "
-"els comentaris de les traduccions s'afegiran com a referències en el fitxer "
-"ACBF."
+"Un fitxer PO pot contindre comentaris del traductor. Si se selecciona, els "
+"comentaris de les traduccions s'afegiran com a referències en el fitxer ACBF."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:299
 msgid "ACBF UID:"
@@ -56416,10 +56405,10 @@ msgid ""
 "list. If not, you will need to manually enable the script through the Krita-"
 "&gt;Settings menu entry. </p></body></html>"
 msgstr ""
-"<html><head/><body><p>Si açò està activat, l'script s'activarà "
-"automàticament a Krita. És a dir, es mostrarà en el menú Scripts o en la "
-"llista de l'acoblador. Si no, caldrà activar manualment l'script mitjançant "
-"l'entrada de menú «Configuració» de Krita. </p></body></html>"
+"<html><head/><body><p>Si se selecciona, l'script s'activarà automàticament a "
+"Krita. És a dir, es mostrarà en el menú Scripts o en la llista de "
+"l'acoblador. Si no, caldrà activar-lo manualment mitjançant l'entrada de "
+"menú «Configuració» de Krita. </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:155
@@ -61081,34 +61070,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Mask X"
-#~ msgstr "Emmiralla la màscara per l'eix X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layer X"
-#~ msgid_plural "Mirror %1 Layers X"
-#~ msgstr[0] "Emmiralla la capa per l'eix X"
-#~ msgstr[1] "Emmiralla %1 capes per l'eix X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Mask Y"
-#~ msgstr "Emmiralla la màscara per l'eix Y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layer Y"
-#~ msgid_plural "Mirror %1 Layers Y"
-#~ msgstr[0] "Emmiralla la capa per l'eix Y"
-#~ msgstr[1] "Emmiralla %1 capes per l'eix Y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror All Layers X"
-#~ msgstr "Emmiralla totes les capes per l'eix X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror All Layers Y"
-#~ msgstr "Emmiralla totes les capes per l'eix Y"
-
-#~ msgid "WizardPage"
-#~ msgstr "Pàgina de l'assistent"

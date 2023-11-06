@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-04 02:23+0000\n"
-"PO-Revision-Date: 2023-11-04 06:20+0100\n"
+"PO-Revision-Date: 2023-11-05 00:53+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -12117,7 +12117,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer Horizontally"
-msgstr ""
+msgstr "ფენის ჰორიზონტალური ანარეკლი"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3136
@@ -12134,7 +12134,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer Vertically"
-msgstr ""
+msgstr "ფენის ვერტიკალურ ანარეკლი"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3148
@@ -12253,7 +12253,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Horizontally"
-msgstr ""
+msgstr "ყველა ფენის ჰორიზონტალური ანარეკლი"
 
 #. i18n: context: text @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3232
@@ -12270,7 +12270,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Vertically"
-msgstr ""
+msgstr "ყველა ფენის ვერტიკალურ ანარეკლი"
 
 #. i18n: context: text @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3244
@@ -43133,7 +43133,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelIn)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "         Input:"
 msgstr "         შეყვანა:"
 

@@ -55,3 +55,4 @@
 %Include KisCubicCurve.sip
 
 %Include AngleSelector.sip
+%Include SliderSpinBox.sip

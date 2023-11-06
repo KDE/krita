@@ -39,6 +39,7 @@ set(kritalibkis_LIB_SRCS
     LibKisUtils.cpp
 
     AngleSelector.cpp
+    SliderSpinBox.cpp
 )
 
 kis_add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS})

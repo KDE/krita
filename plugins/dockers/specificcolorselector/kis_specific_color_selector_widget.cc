@@ -107,6 +107,7 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     m_ui->chkUsePercentage->setChecked(cfg.readEntry("SpecificColorSelector/UsePercentage", false));
 	m_ui->chkUsePercentage->setIcon(KisIconUtils::loadIcon("ratio"));
 	m_hsxModeComboBox->setCurrentIndex(cfg.readEntry("SpecificColorSelector/HsxMode", 0));
+    m_hsxButton->setChecked(cfg.readEntry("SpecificColorSelector/UseHsx", false));
 
     m_colorspaceSelector->showColorBrowserButton(false);
 
@@ -119,6 +120,7 @@ KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
     KConfigGroup cfg =  KSharedConfig::openConfig()->group(QString());
     cfg.writeEntry("SpecificColorSelector/UsePercentage", m_ui->chkUsePercentage->isChecked());
     cfg.writeEntry("SpecificColorSelector/HsxMode", m_hsxModeComboBox->currentIndex());
+    cfg.writeEntry("SpecificColorSelector/UseHsx", m_hsxButton->isChecked());
 }
 
 bool KisSpecificColorSelectorWidget::customColorSpaceUsed()

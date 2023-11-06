@@ -291,7 +291,7 @@ public:
         m_blockUpdateSignalOnDrag = newBlockUpdateSignalOnDrag;
     }
 
-    void setFastSliderStep(int newFastSliderStep)
+    void setFastSliderStep(ValueType newFastSliderStep)
     {
         m_fastSliderStep = newFastSliderStep;
     }

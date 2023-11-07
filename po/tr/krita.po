@@ -29504,8 +29504,7 @@ msgid "Disabled: cloning pass-through groups is not supported!"
 msgstr "Devre dışı: Geçirgen gruplarını kopyalamak desteklenmiyor!"
 
 #: libs/ui/kis_node_model.cpp:595
-#, fuzzy, kde-format
-#| msgid "%1%"
+#, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
 msgstr "%​%1"
@@ -29514,12 +29513,12 @@ msgstr "%​%1"
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
-msgstr ""
+msgstr "%​%1 %2"
 
 #: libs/ui/kis_paintop_box.cc:101
 #, kde-format
 msgid "Painter's Toolchest"
-msgstr "Boyama Araçları"
+msgstr "Ressamın Araç Çantası"
 
 #: libs/ui/kis_paintop_box.cc:113
 #, kde-format
@@ -29551,12 +29550,10 @@ msgid "Opacity: {n}%"
 msgstr "Matlık: %{n}"
 
 #: libs/ui/kis_paintop_box.cc:269
-#, fuzzy, kde-format
-#| msgctxt "Brush Option Flow"
-#| msgid "Flow: %1%"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Flow: {n}%"
-msgstr "Akış: %​%1"
+msgstr "Akış: %{n}"
 
 #. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
@@ -32934,11 +32931,10 @@ msgstr "Saydam"
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:102
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:163
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:167
-#, fuzzy, kde-format
-#| msgid "Position: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Position: {n}%"
-msgstr "Konum: "
+msgstr "Konum: %{n}"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:40
 #, kde-format
@@ -38144,13 +38140,11 @@ msgid "Mute"
 msgstr "Sessize Al"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:149
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Volume slider"
-#| msgid "Volume: "
+#, kde-format
 msgctxt ""
 "@item:inmenu Volume slider; {n} is the number value, % is the percent sign"
 msgid "Volume: {n}%"
-msgstr "Ses düzeyi: "
+msgstr "Ses düzeyi: %{n}"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:170
 #, kde-format
@@ -38348,11 +38342,10 @@ msgid "Make clones Unique"
 msgstr "Klonları Benzersiz Yap"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:48
-#, fuzzy, kde-format
-#| msgid "Tint: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Tint: {n}%"
-msgstr "Açık ton: "
+msgstr "Açık ton: %{n}"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:51
 #, kde-format
@@ -60786,74 +60779,3 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Mask X"
-#~ msgstr "X Maskesini Yansıt"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layer X"
-#~ msgid_plural "Mirror %1 Layers X"
-#~ msgstr[0] "X Katmanını Yansıt"
-#~ msgstr[1] "%1 X Katmanını Yansıt"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Mask Y"
-#~ msgstr "Y Maskesini Yansıt"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layer Y"
-#~ msgid_plural "Mirror %1 Layers Y"
-#~ msgstr[0] "Y Katmanını Yansıt"
-#~ msgstr[1] "%1 Y Katmanını Yansıt"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror All Layers X"
-#~ msgstr "Tüm X Katmanlarını Yansıt"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror All Layers Y"
-#~ msgstr "Tüm Y Katmanlarını Yansıt"
-
-#~ msgid "WizardPage"
-#~ msgstr "Sihirbaz Sayfası"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale Layers"
-#~ msgstr "Katmanları Ölçekle"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rotate Layers"
-#~ msgstr "Katmanları Döndür"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Layers"
-#~ msgstr "Katmanları Kırk"
-
-#~ msgid "Resize Layers"
-#~ msgstr "Katmanları Yeniden Boyutlandır"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layers X"
-#~ msgstr "X Katmanlarını Yansıt"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layers Y"
-#~ msgstr "Y Katmanlarını Yansıt"
-
-#~ msgctxt "@title:window"
-#~ msgid "Offset Layers"
-#~ msgstr "Katmanları Ofsetle"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Offset Layers"
-#~ msgstr "Katmanları Ofsetle"
-
-#~ msgid "Rotate Layers"
-#~ msgstr "Katmanları Döndür"
-
-#~ msgid "Shear Layers"
-#~ msgstr "Katmanları Kırk"
-
-#~ msgid "Saturation [*varies*]: "
-#~ msgstr "Doygunluk [*değişken*]: "

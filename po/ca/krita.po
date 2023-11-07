@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-06 00:40+0000\n"
-"PO-Revision-Date: 2023-11-05 16:52+0100\n"
+"PO-Revision-Date: 2023-11-06 09:07+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -29638,12 +29638,10 @@ msgid "Opacity: {n}%"
 msgstr "Opacitat: {n}%"
 
 #: libs/ui/kis_paintop_box.cc:269
-#, fuzzy, kde-format
-#| msgctxt "Brush Option Flow"
-#| msgid "Flow: %1%"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Flow: {n}%"
-msgstr "Flux: %1%"
+msgstr "Flux: {n}%"
 
 #. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
@@ -61066,34 +61064,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Mask X"
-#~ msgstr "Emmiralla la màscara per l'eix X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layer X"
-#~ msgid_plural "Mirror %1 Layers X"
-#~ msgstr[0] "Emmiralla la capa per l'eix X"
-#~ msgstr[1] "Emmiralla %1 capes per l'eix X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Mask Y"
-#~ msgstr "Emmiralla la màscara per l'eix Y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Layer Y"
-#~ msgid_plural "Mirror %1 Layers Y"
-#~ msgstr[0] "Emmiralla la capa per l'eix Y"
-#~ msgstr[1] "Emmiralla %1 capes per l'eix Y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror All Layers X"
-#~ msgstr "Emmiralla totes les capes per l'eix X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror All Layers Y"
-#~ msgstr "Emmiralla totes les capes per l'eix Y"
-
-#~ msgid "WizardPage"
-#~ msgstr "Pàgina de l'assistent"

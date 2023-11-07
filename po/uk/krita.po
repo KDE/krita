@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-06 00:40+0000\n"
-"PO-Revision-Date: 2023-11-05 16:45+0200\n"
+"PO-Revision-Date: 2023-11-06 08:59+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -29989,12 +29989,10 @@ msgid "Opacity: {n}%"
 msgstr "Непрозорість: {n}%"
 
 #: libs/ui/kis_paintop_box.cc:269
-#, fuzzy, kde-format
-#| msgctxt "Brush Option Flow"
-#| msgid "Flow: %1%"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Flow: {n}%"
-msgstr "Потік: %1%"
+msgstr "Потік: {n}%"
 
 #. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)

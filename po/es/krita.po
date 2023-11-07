@@ -66,7 +66,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-06 00:40+0000\n"
-"PO-Revision-Date: 2023-11-02 01:25+0100\n"
+"PO-Revision-Date: 2023-11-06 18:29+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -29630,8 +29630,7 @@ msgid "Disabled: cloning pass-through groups is not supported!"
 msgstr "Desactivado: no está permitido clonar grupos de traspaso."
 
 #: libs/ui/kis_node_model.cpp:595
-#, fuzzy, kde-format
-#| msgid "%1%"
+#, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
 msgstr "%1%"
@@ -29640,7 +29639,7 @@ msgstr "%1%"
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
-msgstr ""
+msgstr "%1% %2"
 
 #: libs/ui/kis_paintop_box.cc:101
 #, kde-format
@@ -29677,12 +29676,10 @@ msgid "Opacity: {n}%"
 msgstr "Opacidad: {n} %"
 
 #: libs/ui/kis_paintop_box.cc:269
-#, fuzzy, kde-format
-#| msgctxt "Brush Option Flow"
-#| msgid "Flow: %1%"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Flow: {n}%"
-msgstr "Flujo: %1%"
+msgstr "Flujo: {n}%"
 
 #. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
@@ -33085,11 +33082,10 @@ msgstr "Transparente"
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:102
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:163
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:167
-#, fuzzy, kde-format
-#| msgid "Position: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Position: {n}%"
-msgstr "Posición: "
+msgstr "Posición: {n}%"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:40
 #, kde-format
@@ -38348,13 +38344,11 @@ msgid "Mute"
 msgstr "Silenciar"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:149
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Volume slider"
-#| msgid "Volume: "
+#, kde-format
 msgctxt ""
 "@item:inmenu Volume slider; {n} is the number value, % is the percent sign"
 msgid "Volume: {n}%"
-msgstr "Volumen: "
+msgstr "Volumen: {n}%"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:170
 #, kde-format
@@ -38555,11 +38549,10 @@ msgid "Make clones Unique"
 msgstr "Hacer clones únicos"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:48
-#, fuzzy, kde-format
-#| msgid "Tint: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Tint: {n}%"
-msgstr "Tinte: "
+msgstr "Tinte: {n}%"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:51
 #, kde-format

@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-04 02:23+0000\n"
+"POT-Creation-Date: 2023-11-07 03:39+0000\n"
 "PO-Revision-Date: 2022-11-26 15:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -37215,7 +37215,7 @@ msgstr "Perspective"
 msgid "Perspective Ellipse assistant"
 msgstr "Perspective Ellipse assistant"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:637
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Perspective Ellipse"

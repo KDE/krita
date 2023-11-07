@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-04 02:23+0000\n"
+"POT-Creation-Date: 2023-11-07 03:39+0000\n"
 "PO-Revision-Date: 2004-05-25 15:34+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -36529,7 +36529,7 @@ msgstr "Ostilh treuzfurmiñ"
 msgid "Perspective Ellipse assistant"
 msgstr "Ostilh treuzfurmiñ"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:637
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
 #, fuzzy, kde-format
 msgid "Perspective Ellipse"
 msgstr "Ostilh treuzfurmiñ"

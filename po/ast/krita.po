@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-04 02:23+0000\n"
+"POT-Creation-Date: 2023-11-07 03:39+0000\n"
 "PO-Revision-Date: 2016-03-29 00:49+0100\n"
 "Last-Translator: enolp <enolp@softastur.org>\n"
 "Language-Team: Asturian <>\n"
@@ -36306,7 +36306,7 @@ msgstr ""
 msgid "Perspective Ellipse assistant"
 msgstr "&Seleicionar"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:637
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
 #, fuzzy, kde-format
 msgid "Perspective Ellipse"
 msgstr "&Seleicionar"

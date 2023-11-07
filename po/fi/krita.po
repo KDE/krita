@@ -88,8 +88,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-04 02:23+0000\n"
-"PO-Revision-Date: 2023-07-27 20:09+0300\n"
+"POT-Creation-Date: 2023-11-07 03:39+0000\n"
+"PO-Revision-Date: 2023-10-12 18:19+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -18139,6 +18139,9 @@ msgstr ""
 "kuvan tarkkuuden muuttaminen"
 
 #: libs/image/kis_image.cc:1034
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr ""
@@ -18160,6 +18163,9 @@ msgid "Rotate Mask"
 msgstr "Tuo maski eteen"
 
 #: libs/image/kis_image.cc:1167
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr ""
@@ -18175,6 +18181,9 @@ msgid "Shear Mask"
 msgstr "Katkaise muotoja"
 
 #: libs/image/kis_image.cc:1251
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "Viistoa taso"
@@ -20358,22 +20367,19 @@ msgid "Increase Luminosity"
 msgstr "Lisää kirkkautta"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:153
-#, fuzzy, kde-format
-#| msgid "Color HSI"
+#, kde-format
 msgctxt "Blending mode - Color HSI"
 msgid "Color HSI"
 msgstr "Väri (HSI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:154
-#, fuzzy, kde-format
-#| msgid "Hue HSI"
+#, kde-format
 msgctxt "Blending mode - Hue HSI"
 msgid "Hue HSI"
 msgstr "Sävy (HSI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:155
-#, fuzzy, kde-format
-#| msgid "Saturation HSI"
+#, kde-format
 msgctxt "Blending mode - Saturation HSI"
 msgid "Saturation HSI"
 msgstr "Kylläisyys (HSI)"
@@ -20385,50 +20391,43 @@ msgid "Intensity"
 msgstr "Intensiteetti"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:157
-#, fuzzy, kde-format
-#| msgid "Decrease Saturation HSI"
+#, kde-format
 msgctxt "Blending mode - Decrease Saturation HSI"
 msgid "Decrease Saturation HSI"
 msgstr "Vähennä kylläisyyttä (HSI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:158
-#, fuzzy, kde-format
-#| msgid "Increase Saturation HSI"
+#, kde-format
 msgctxt "Blending mode - Increase Saturation HSI"
 msgid "Increase Saturation HSI"
 msgstr "Lisää kylläisyyttä (HSI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:159
-#, fuzzy, kde-format
-#| msgid "Decrease Intensity"
+#, kde-format
 msgctxt "Blending mode - Decrease Intensity"
 msgid "Decrease Intensity"
 msgstr "Vähennä intensiteettiä"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:160
-#, fuzzy, kde-format
-#| msgid "Increase Intensity"
+#, kde-format
 msgctxt "Blending mode - Increase Intensity"
 msgid "Increase Intensity"
 msgstr "Lisää intensiteettiä"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:162
-#, fuzzy, kde-format
-#| msgid "Color HSL"
+#, kde-format
 msgctxt "Blending mode - Color HSL"
 msgid "Color HSL"
 msgstr "Väri (HSL)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:163
-#, fuzzy, kde-format
-#| msgid "Hue HSL"
+#, kde-format
 msgctxt "Blending mode - Hue HSL"
 msgid "Hue HSL"
 msgstr "Sävy (HSL)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:164
-#, fuzzy, kde-format
-#| msgid "Saturation HSL"
+#, kde-format
 msgctxt "Blending mode - Saturation HSL"
 msgid "Saturation HSL"
 msgstr "Kylläisyys (HSL)"
@@ -20440,50 +20439,43 @@ msgid "Lightness"
 msgstr "Valoisuus"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:166
-#, fuzzy, kde-format
-#| msgid "Decrease Saturation HSL"
+#, kde-format
 msgctxt "Blending mode - Decrease Saturation HSL"
 msgid "Decrease Saturation HSL"
 msgstr "Vähennä kylläisyyttä (HSL)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:167
-#, fuzzy, kde-format
-#| msgid "Increase Saturation HSL"
+#, kde-format
 msgctxt "Blending mode - Increase Saturation HSL"
 msgid "Increase Saturation HSL"
 msgstr "Lisää kylläisyyttä (HSL)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:168
-#, fuzzy, kde-format
-#| msgid "Decrease Lightness"
+#, kde-format
 msgctxt "Blending mode - Decrease Lightness"
 msgid "Decrease Lightness"
 msgstr "Vähennä valoisuutta"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:169
-#, fuzzy, kde-format
-#| msgid "Increase Lightness"
+#, kde-format
 msgctxt "Blending mode - Increase Lightness"
 msgid "Increase Lightness"
 msgstr "Lisää valoisuutta"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:171
-#, fuzzy, kde-format
-#| msgid "Color HSV"
+#, kde-format
 msgctxt "Blending mode - Color HSV"
 msgid "Color HSV"
 msgstr "Väri (HSV)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:172
-#, fuzzy, kde-format
-#| msgid "Hue HSV"
+#, kde-format
 msgctxt "Blending mode - Hue HSV"
 msgid "Hue HSV"
 msgstr "Sävy (HSV)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:173
-#, fuzzy, kde-format
-#| msgid "Saturation HSV"
+#, kde-format
 msgctxt "Blending mode - Saturation HSV"
 msgid "Saturation HSV"
 msgstr "Kylläisyys (HSV)"
@@ -20495,29 +20487,25 @@ msgid "Value"
 msgstr "Arvo"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:175
-#, fuzzy, kde-format
-#| msgid "Decrease Saturation HSV"
+#, kde-format
 msgctxt "Blending mode - Decrease Saturation HSV"
 msgid "Decrease Saturation HSV"
 msgstr "Vähennä kylläisyyttä (HSV)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:176
-#, fuzzy, kde-format
-#| msgid "Increase Saturation HSV"
+#, kde-format
 msgctxt "Blending mode - Increase Saturation HSV"
 msgid "Increase Saturation HSV"
 msgstr "Lisää kylläisyyttä (HSV)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:177
-#, fuzzy, kde-format
-#| msgid "Decrease Value"
+#, kde-format
 msgctxt "Blending mode - Decrease Value HSV"
 msgid "Decrease Value"
 msgstr "Pienennä arvoa"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:178
-#, fuzzy, kde-format
-#| msgid "Increase Value"
+#, kde-format
 msgctxt "Blending mode - Increase Value HSV"
 msgid "Increase Value"
 msgstr "Kasvata arvoa"
@@ -20535,17 +20523,16 @@ msgid "Glow"
 msgstr "Hohto"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:182
-#, fuzzy, kde-format
-#| msgid "Free"
+#, kde-format
 msgctxt "Blending mode - Freeze"
 msgid "Freeze"
-msgstr "Vapaa"
+msgstr "Pakastus"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:183
 #, kde-format
 msgctxt "Blending mode - Heat"
 msgid "Heat"
-msgstr ""
+msgstr "Kuumennus"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:184
 #, kde-format
@@ -20560,18 +20547,16 @@ msgid "Heat-Glow"
 msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:186
-#, fuzzy, kde-format
-#| msgid "Reflected"
+#, kde-format
 msgctxt "Blending mode - Reflect-Freeze"
 msgid "Reflect-Freeze"
-msgstr "Heijastus"
+msgstr "Heijastus-pakastus"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:187
-#, fuzzy, kde-format
-#| msgid "Reflect"
+#, kde-format
 msgctxt "Blending mode - Freeze-Reflect"
 msgid "Freeze-Reflect"
-msgstr "Peilaa"
+msgstr "Pakastus-heijastus"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:188
 #, kde-format
@@ -26841,9 +26826,9 @@ msgstr "Kova (Krita 4.1 ja edeltävät versiot)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:847
-#, fuzzy, kde-format
+#, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "Käynnistä Krita &uudelleen"
+msgstr "CMYK-sekoitustapa (vaatii uudelleenkäynnistyksen):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:855
@@ -27593,10 +27578,9 @@ msgstr "&Peittävyys:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCompositeOp)
 #: libs/ui/forms/wdglayerproperties.ui:80
-#, fuzzy, kde-format
-#| msgid "Blending Mode"
+#, kde-format
 msgid "Blending mode:"
-msgstr "Sekoitustila"
+msgstr "Sekoitustapa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorSpaceTitle)
 #: libs/ui/forms/wdglayerproperties.ui:109
@@ -29245,7 +29229,8 @@ msgid "Layer Size"
 msgstr "Tason koko"
 
 #: libs/ui/imagesize/imagesize.cc:119
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resize Layer"
 msgid "Resize Layer"
 msgstr "Muuta tason kokoa"
 
@@ -38782,7 +38767,7 @@ msgstr "Perspektiivi"
 msgid "Perspective Ellipse assistant"
 msgstr "Perspektiiviavustaja"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:637
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Perspective Grid"
@@ -44480,6 +44465,9 @@ msgid "Offset Image"
 msgstr "Kuvan siirtäminen"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgstr ""
@@ -44487,7 +44475,9 @@ msgstr ""
 "tason siirto"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Offset Layer"
 msgctxt "@title:window"
 msgid "Offset Layer"
 msgstr "Tason siirtäminen"
@@ -45379,7 +45369,8 @@ msgstr ""
 "kuvan peilaus vaakasuunnassa"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:144
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Rotate Layer"
 msgid "Rotate Layer"
 msgstr "Kierrä tasoa"
 
@@ -45522,7 +45513,8 @@ msgid "Shear Image"
 msgstr "Viistoa kuva"
 
 #: plugins/extensions/shearimage/shearimage.cc:72
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Shear Layer"
 msgid "Shear Layer"
 msgstr "Viistoa taso"
 
@@ -50428,6 +50420,10 @@ msgid ""
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
+"Tasolla ”%1” on sekoitustapa ”%2”, jonka toiminta CMYK-väreillä on muuttunut "
+"Krita 5.2:ssa. Tarkista tulos ja harkitse vanhan ”additiivisen” algoritmin "
+"käyttöönottoa: asetukset→Kritan asetukset→Perusasetukset→Työkalut→CMYK-"
+"sekoitustapa"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1105
 #, fuzzy, kde-format
@@ -50546,9 +50542,9 @@ msgid "The metadata backend failed to save the metadata for %1"
 msgstr "Metatietojen tallennus tasoon %1 epäonnistui."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:531
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not write for %1 metadata to the file."
-msgstr "Tason %1 metatietoja ei voitu ladata."
+msgstr "Metatietoa %1 ei voitu kirjoittaa tiedostoon."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:195
 #, fuzzy, kde-format
@@ -50567,13 +50563,13 @@ msgstr "Resurssia ei voitu kirjoittaa: %1"
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is empty: %1"
-msgstr ""
+msgstr "Kirjoitettu resurssi on tyhjä: %1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:228
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is incomplete: %1"
-msgstr ""
+msgstr "Kirjoitettu resurssi on epätäydellinen: %1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:245
 #: plugins/impex/libkra/kis_kra_saver.cpp:267
@@ -50913,7 +50909,7 @@ msgstr "Pieni tiedostokoko"
 #: plugins/impex/png/kis_wdg_options_png.ui:153
 #, kde-format
 msgid "Save as HDR image (Rec. 2020 PQ)"
-msgstr ""
+msgstr "Tallenna HDR-kuvaksi (Rec. 2020 PQ)"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/impex/png/kis_wdg_options_png.ui:167
@@ -50981,10 +50977,9 @@ msgstr "<html><head/><body><p>Toiminnon kuvaus</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuthor)
 #: plugins/impex/png/kis_wdg_options_png.ui:207
-#, fuzzy, kde-format
-#| msgid "Active Author Profile"
+#, kde-format
 msgid "Sign with author data"
-msgstr "Aktiivinen tekijäprofiili"
+msgstr "Allekirjoita tekijätiedoilla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDownsample)
 #: plugins/impex/png/kis_wdg_options_png.ui:214
@@ -51338,10 +51333,10 @@ msgstr ""
 "raakakuvanpurkaja on koostettu ilman laajennuksia.</para>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:422
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:slider"
 msgid "Pass:"
-msgstr "Massa:"
+msgstr "Vaihe:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:423
 #, kde-format
@@ -54541,16 +54536,16 @@ msgid "Set gray value to be considered neutral for lightness mode"
 msgstr ""
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Lightness Map blend mode for brush texture"
 msgid "Lightness Map"
-msgstr "Kirkkaus:"
+msgstr "Kirkkauskartta"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Gradient Map blend mode for brush texture"
 msgid "Gradient Map"
-msgstr "Liukuväri"
+msgstr "Liukuvärikartta"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:70
 #, kde-format
@@ -54565,18 +54560,16 @@ msgid "Linear Height"
 msgstr "Lineaarinen korkeus"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:72
-#, fuzzy, kde-format
-#| msgid "Soft Light (Photoshop)"
+#, kde-format
 msgctxt "Height (Photoshop) blend mode for brush texture"
 msgid "Height (Photoshop)"
-msgstr "Pehmeä valo (Photoshop)"
+msgstr "Korkeus (Photoshop)"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:73
-#, fuzzy, kde-format
-#| msgid "Soft Light (Photoshop)"
+#, kde-format
 msgctxt "Linear Height (Photoshop) blend mode for brush texture"
 msgid "Linear Height (Photoshop)"
-msgstr "Pehmeä valo (Photoshop)"
+msgstr "Lineaarinen korkeus (Photoshop)"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:82
 #, fuzzy, kde-format
@@ -54735,7 +54728,7 @@ msgstr " ms"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:70
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1 ms"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, fuzzy, kde-format
@@ -55163,7 +55156,7 @@ msgstr "X vähintään: "
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:40
 #, kde-format
 msgid "X max: "
-msgstr ""
+msgstr "Enimmäis-X: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
 #, fuzzy, kde-format
@@ -55538,10 +55531,9 @@ msgstr "Histogrammiasetukset"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLbl)
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:110
-#, fuzzy, kde-format
-#| msgid "Logarithmic"
+#, kde-format
 msgid "Radius Logarithmic:"
-msgstr "Logaritminen"
+msgstr "Logaritminen säde:"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:50
 #, kde-format
@@ -55670,9 +55662,9 @@ msgstr "Yksinkertainen tila"
 
 #. i18n: ectx: property (text), widget (QCheckBox, magnetifyCHBox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:131
-#, fuzzy, kde-format
+#, kde-format
 msgid "Magnetify"
-msgstr "Magentat"
+msgstr "Magnetisoi"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomRGBCHbox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:162
@@ -55743,11 +55735,9 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:83
-#, fuzzy, kde-format
-#| msgctxt "EXIF: postprocessing - light source"
-#| msgid "Standard light A"
+#, kde-format
 msgid "Standard deviation: "
-msgstr "Standardivalo A"
+msgstr "Keskihajonta:"
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:87
 #, kde-format
@@ -55758,9 +55748,9 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:91
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clustering amount: "
-msgstr "Määrä:"
+msgstr "Ryvästyksen määrä: "
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:95
 #, kde-format
@@ -55936,8 +55926,7 @@ msgstr "Tiheys"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxAngularDistribution)
 #: plugins/paintops/spray/wdgsprayoptions.ui:237
-#, fuzzy, kde-format
-#| msgid "Angular"
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the angular distribution of "
 "particles in the spray engine"
@@ -55948,11 +55937,10 @@ msgstr "Kulmikas"
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:262
 #: plugins/paintops/spray/wdgsprayoptions.ui:347
-#, fuzzy, kde-format
-#| msgid "Uniform random"
+#, kde-format
 msgctxt "Uniform distribution in spray engine"
 msgid "Uniform"
-msgstr "Sama satunnainen"
+msgstr "Tasainen"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, angularDistCombo)
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
@@ -56753,11 +56741,8 @@ msgid "Military"
 msgstr "Sotilaallinen"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
-#, fuzzy
-#| msgctxt "./krita/data/brushes/Real_oil_1.gbr"
-#| msgid "Real Oil 1"
 msgid "Real Life"
-msgstr "Aito Öljy 1"
+msgstr "Tosielämä"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
 msgid "Superhero"
@@ -58081,13 +58066,8 @@ msgid "Page: {0}/{1}"
 msgstr "Sivu: {0}/{1}"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:460
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change rectangle"
 msgid "Change Directory for Images"
-msgstr ""
-"Muuta suorakulmiota\n"
-"suorakulmion muuttaminen"
+msgstr "Vaihda kuvakansiota"
 
 #. i18n: ectx: property (text), widget (QPushButton, changePathButton)
 #: plugins/python/photobash_images/photobash_images_docker.py:469
@@ -58104,10 +58084,9 @@ msgstr "Suodata kuvia sanoilla…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, fitCanvasCheckBox)
 #: plugins/python/photobash_images/photobash_images_docker.ui:388
-#, fuzzy, kde-format
-#| msgid "Update Whole Canvas"
+#, kde-format
 msgid "Scale To Canvas"
-msgstr "Päivitä koko kangas"
+msgstr "Skaalaa kankaaseen"
 
 #: plugins/python/plugin_importer/plugin_downloader.py:70
 msgid "Could not determine download link from URL"
@@ -58772,10 +58751,9 @@ msgstr "Mittakaava: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:543
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:449
-#, fuzzy, kde-format
-#| msgid "Hatching options"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "Viivoituksen asetukset"
+msgstr "Mukauta sekoitusvalintoja"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:558
 #, kde-format
@@ -58784,28 +58762,24 @@ msgid "Threshold: "
 msgstr "Kynnys: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:561
-#, fuzzy, kde-format
-#| msgid "Sp&read"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in fill tool options"
 msgid "Spread: "
-msgstr "Le&vitä"
+msgstr "Levitä: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:567
-#, fuzzy, kde-format
-#| msgid "Border Selection"
+#, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in fill tool to use selection "
 "borders as boundary when filling"
 msgid "Use selection as boundary"
-msgstr "Rajavalinta"
+msgstr "Käytä valintaa rajana"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:575
-#, fuzzy, kde-format
-#| msgctxt "Grow as in deform brush engine"
-#| msgid "Grow"
+#, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in fill tool options"
 msgid "Grow: "
-msgstr "Kasvata"
+msgstr "Kasvata:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:586
 #, fuzzy, kde-format
@@ -58866,10 +58840,9 @@ msgstr "Valitse tason sekoitustapa."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:626
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "Aseta tason sekoitustapa"
+msgstr "Aseta täytölle mukautettu sekoitustapa"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:628
 #, kde-format
@@ -60063,11 +60036,9 @@ msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions of a specific color"
+#, kde-format
 msgid "Select all regions until a specific boundary color"
-msgstr "Tietynväriset alueet"
+msgstr "Valitse kaikki alueet tiettyyn reunaväriin asti"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:465

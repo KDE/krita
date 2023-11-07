@@ -8,6 +8,11 @@
 
 #include <functional>
 
+/**
+ * A simple wrapper that creates a value from a functor on construction.
+ * It is not a "lazy value" class in a classic form, because it requires
+ * to be wrapped into KisLazyStorage to support atomic/thread-safe access.
+ */
 template <typename T>
 struct KisLazyValueWrapper
 {

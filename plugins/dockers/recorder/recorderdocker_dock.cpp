@@ -384,6 +384,14 @@ RecorderDockerDock::RecorderDockerDock()
                 this, SLOT(slotScrollerStateChanged(QScroller::State)));
     }
 
+    // The system is not efficient enough for the RealTime Recording Feature
+    if (ThreadSystemValue::MaxRecordThreadCount <= 1)
+    {
+        d->ui->checkBoxRealTimeCaptureMode->setCheckState(Qt::Unchecked);
+        d->ui->checkBoxRealTimeCaptureMode->setDisabled(true);
+        d->ui->checkBoxRealTimeCaptureMode->setToolTip(
+            i18n("Your system is not efficient enough for this feature"));
+    }
 
     setWidget(page);
 }

@@ -10,12 +10,54 @@
 #include <KisOptimizedBrushOutline.h>
 #include <MyPaintStandardOptionData.h>
 
+#include <KisValueCache.h>
+
+
 struct KisMyPaintOpSettings::Private
 {
-    bool cachedProperties{false};
-    qreal paintOpSize{0.0};
-    qreal paintOpAngle{0.0};  // the original angle value as seen by KisPaintOpSettings interface
-    qreal offsetValue{0.0};
+    struct Cache
+    {
+        qreal paintOpSize{0.0};
+        qreal paintOpAngle{0.0};  // the original angle value as seen by KisPaintOpSettings interface
+        qreal offsetValue{0.0};
+    };
+
+    struct CacheInitializer {
+        CacheInitializer(KisMyPaintOpSettings *q) : m_q(q) {}
+
+        Cache initialize() {
+            Cache value;
+
+            {
+                MyPaintOffsetByRandomData data;
+                data.read(m_q);
+                value.offsetValue = data.strengthValue;
+            }
+
+            {
+                MyPaintRadiusLogarithmicData data;
+                data.read(m_q);
+                value.paintOpSize = 2 * exp(data.strengthValue);
+            }
+
+            {
+                MyPaintEllipticalDabAngleData data;
+                data.read(m_q);
+                value.paintOpAngle = data.strengthValue;
+            }
+
+            return value;
+        }
+
+        KisMyPaintOpSettings *m_q;
+    };
+
+    Private(KisMyPaintOpSettings *q)
+        : cache(q)
+    {
+    }
+
+    KisValueCache<CacheInitializer> cache;
 };
 
 
@@ -23,7 +65,7 @@ KisMyPaintOpSettings::KisMyPaintOpSettings(KisResourcesInterfaceSP resourcesInte
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
                                                      KisCurrentOutlineFetcher::ROTATION_OPTION,
                                                      resourcesInterface),
-    m_d(new Private)
+    m_d(new Private(this))
 {
 }
 
@@ -41,7 +83,7 @@ void KisMyPaintOpSettings::setPaintOpSize(qreal value)
 
 qreal KisMyPaintOpSettings::paintOpSize() const
 {
-    return 2 * exp(m_d->paintOpSize);
+    return m_d->cache.value().paintOpSize;
 }
 
 void KisMyPaintOpSettings::setPaintOpAngle(qreal value)
@@ -49,33 +91,11 @@ void KisMyPaintOpSettings::setPaintOpAngle(qreal value)
     MyPaintEllipticalDabAngleData data;
     data.read(this);
 
-    // Paintop angle is expressed in degrees.
     value = normalizeAngleDegrees(value);
 
-    // To keep the angle consistent across the KisPaintOpSettings interface, we keep track of the original value.
-    const qreal angleDifference = value - m_d->paintOpAngle;
-    m_d->paintOpAngle = value;
-
-    // We need to reverse the rotation (MyPaint is clockwise). To do this, we subtract the angle difference
-    // instead of adding it to the old value.
-    value = data.strengthValue - angleDifference;
-
-    // Shift the angle to zero, so that we can use fmod to wrap around
-    value -= data.strengthMinValue;
-
-    // Wrap the angle in [0, range]
-    const qreal range = data.strengthMaxValue - data.strengthMinValue;
-    if (value < 0)
-    {
-        value = range + std::fmod(value, range);
+    if (value > 180.0) {
+        value -= 180.0;
     }
-    else if (value > range)
-    {
-        value = std::fmod(value, range);
-    }
-
-    // Shift back to the correct min/max range
-    value += data.strengthMinValue;
 
     data.strengthValue = value;
     data.write(this);
@@ -83,7 +103,7 @@ void KisMyPaintOpSettings::setPaintOpAngle(qreal value)
 
 qreal KisMyPaintOpSettings::paintOpAngle() const
 {
-    return m_d->paintOpAngle;
+    return m_d->cache.value().paintOpAngle;
 }
 
 void KisMyPaintOpSettings::setPaintOpOpacity(qreal value)
@@ -115,7 +135,7 @@ void KisMyPaintOpSettings::resetSettings(const QStringList &preserveProperties)
 
 void KisMyPaintOpSettings::onPropertyChanged()
 {
-    m_d->cachedProperties = false;
+    m_d->cache.clear();
     KisOutlineGenerationPolicy::onPropertyChanged();
 }
 
@@ -125,23 +145,10 @@ KisOptimizedBrushOutline KisMyPaintOpSettings::brushOutline(const KisPaintInform
 
     if (mode.isVisible) {
         qreal finalScale = 1.0;
-        if (!m_d->cachedProperties) {
-            {
-                MyPaintOffsetByRandomData data;
-                data.read(this);
-                m_d->offsetValue = data.strengthValue;
-            }
-            {
-                MyPaintRadiusLogarithmicData data;
-                data.read(this);
-                m_d->paintOpSize = data.strengthValue;
-            }
-            m_d->cachedProperties = true;
-        }
 
-        const qreal offset = m_d->offsetValue;
+        const qreal offset = m_d->cache.value().offsetValue;
 
-        qreal radius = 0.5 * paintOpSize();
+        qreal radius = 0.5 * m_d->cache.value().paintOpSize;
         radius = radius + 2 * radius * offset;
         radius = qBound(3.5, radius, 500.0);
 

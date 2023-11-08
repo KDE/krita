@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-06 00:40+0000\n"
-"PO-Revision-Date: 2023-11-06 14:10+0100\n"
+"PO-Revision-Date: 2023-11-07 18:36+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -29789,8 +29789,7 @@ msgstr ""
 "Désactivé : le clonage des groupes de transfert n'est pas pris en charge !"
 
 #: libs/ui/kis_node_model.cpp:595
-#, fuzzy, kde-format
-#| msgid "%1%"
+#, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
 msgstr "%1 %"
@@ -29799,7 +29798,7 @@ msgstr "%1 %"
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
-msgstr ""
+msgstr "%1 % %2"
 
 #: libs/ui/kis_paintop_box.cc:101
 #, kde-format
@@ -29836,12 +29835,10 @@ msgid "Opacity: {n}%"
 msgstr "Opacité : {n} %"
 
 #: libs/ui/kis_paintop_box.cc:269
-#, fuzzy, kde-format
-#| msgctxt "Brush Option Flow"
-#| msgid "Flow: %1%"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Flow: {n}%"
-msgstr "Débit : %1 %"
+msgstr "Débit : {n} %"
 
 #. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
@@ -38606,13 +38603,11 @@ msgid "Mute"
 msgstr "Couper le son"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:149
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Volume slider"
-#| msgid "Volume: "
+#, kde-format
 msgctxt ""
 "@item:inmenu Volume slider; {n} is the number value, % is the percent sign"
 msgid "Volume: {n}%"
-msgstr "Volume :"
+msgstr "Volume : {n} %"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:170
 #, kde-format
@@ -38813,11 +38808,10 @@ msgid "Make clones Unique"
 msgstr "Rendre les clones uniques"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:48
-#, fuzzy, kde-format
-#| msgid "Tint: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Tint: {n}%"
-msgstr "Teinte :"
+msgstr "Teinte : {n} %"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:51
 #, kde-format

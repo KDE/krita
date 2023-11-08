@@ -47,4 +47,5 @@ if (MSVC AND "${CMAKE_CXX_FLAGS}" MATCHES "-EHsc")
 endif()
 
 install(TARGETS kritajpegexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-install( PROGRAMS  krita_jpeg.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+
+install(FILES krita_jpeg.desktop DESTINATION ${KDE_INSTALL_APPDIR})

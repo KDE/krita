@@ -39,4 +39,4 @@ target_link_libraries(kritapsdexport kritapsd_static kritaui kritapsd kritaimpex
 
 install(TARGETS kritapsdexport DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( PROGRAMS  krita_psd.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES krita_psd.desktop DESTINATION ${KDE_INSTALL_APPDIR})

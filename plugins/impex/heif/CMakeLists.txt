@@ -36,4 +36,4 @@ target_link_libraries(kritaheifexport kritaui kritalibkra kritaimpex HEIF::heif)
 
 install(TARGETS kritaheifexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( PROGRAMS  krita_heif.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES krita_heif.desktop DESTINATION ${KDE_INSTALL_APPDIR})

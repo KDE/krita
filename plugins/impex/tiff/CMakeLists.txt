@@ -69,5 +69,5 @@ target_link_libraries(kritatiffexport
     )
 
 install(TARGETS kritatiffexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-install( PROGRAMS  krita_tiff.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
+install(FILES krita_tiff.desktop DESTINATION ${KDE_INSTALL_APPDIR})

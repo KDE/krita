@@ -26,4 +26,4 @@ target_link_libraries(kritapngexport kritaui kritaimpex ${PNG_LIBRARIES})
 
 install(TARGETS kritapngexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( PROGRAMS  krita_png.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES krita_png.desktop DESTINATION ${KDE_INSTALL_APPDIR})

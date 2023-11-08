@@ -34,4 +34,4 @@ install( FILES
     exrchannels.schema
     DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)
 
-install( PROGRAMS  krita_exr.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES krita_exr.desktop DESTINATION ${KDE_INSTALL_APPDIR})

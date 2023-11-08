@@ -8,4 +8,4 @@ target_link_libraries(kritakrzexport kritaui kritalibkra kritaimpex)
 
 install(TARGETS kritakrzexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( PROGRAMS  krita_krz.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES krita_krz.desktop DESTINATION ${KDE_INSTALL_APPDIR})

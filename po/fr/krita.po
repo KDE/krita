@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-06 00:40+0000\n"
-"PO-Revision-Date: 2023-11-01 11:01+0100\n"
+"PO-Revision-Date: 2023-11-06 14:10+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -1065,28 +1065,28 @@ msgstr "d) Stylo à encre (mypaint)"
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/e)_Marker_Medium_(mypaint).myb"
 msgid "e) Marker Medium (mypaint)"
-msgstr "e) Marqueur moyen (Mypaint)"
+msgstr "e) Marqueur moyen (MyPaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/e)_Marker_Plain_(mypaint).myb"
 msgid "e) Marker Plain (mypaint)"
-msgstr "e) Marqueur plein (Mypaint)"
+msgstr "e) Marqueur plein (MyPaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/i)_Wet_Knife_Plus_(mypaint).myb"
 msgid "i) Wet Knife Plus (mypaint)"
-msgstr "i) Couteau humide Plus (Mypaint)"
+msgstr "i) Couteau humide Plus (MyPaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/i)_Wet_Paint_Plus_(mypaint).myb"
 msgid "i) Wet Paint Plus (mypaint)"
-msgstr "i) Peinture humide Plus (Mypaint)"
+msgstr "i) Peinture humide Plus (MyPaint)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2232,7 +2232,11 @@ msgid "FX overlay"
 msgstr "Superposition « FX »"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
+#| "FX_splat_starfield.kpp"
+#| msgid "FX splat starfield"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "FX_splat_starfield.kpp"
@@ -2469,7 +2473,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pencil_HB.kpp"
 msgid "Pencil HB"
-msgstr "Crayon HB"
+msgstr "Crayon « HB »"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2749,7 +2753,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Special_dyna_dots.kpp"
 msgid "Special dyna dots"
-msgstr "Points spéciaux dyna"
+msgstr "Points spéciaux dynamiques"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5870,7 +5874,7 @@ msgstr "Craig 02"
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:brushes/DA_RGBA bluegreen_small.png"
 msgid "DA RGBA bluegreen small"
-msgstr "DA RGBA petit et bleu-vert"
+msgstr "DA « RGBA » petit et bleu-vert"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8345,7 +8349,7 @@ msgstr "Afficher les informations système pour les rapports de bogues."
 #, kde-format
 msgctxt "action"
 msgid "Show Android log for bug reports."
-msgstr "Afficher les journaux d'Android pour les rapports de bogues."
+msgstr "Afficher les journaux de Android pour les rapports de bogues."
 
 #. i18n: context: text @ Action (crashlog), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (crashlog), Actions (General), ActionCollection (Krita)
@@ -13279,7 +13283,7 @@ msgstr "Effectuer un &rendu d'animation..."
 msgctxt "action"
 msgid "Render Animation to GIF, Image Sequence or Video"
 msgstr ""
-"Animation de rendu vers les formats « Gif » ou de séquence d'image ou de "
+"Animation de rendu vers les formats « GIF » ou de séquence d'image ou de "
 "vidéo."
 
 #. i18n: context: iconText @ Action (render_animation), Actions (File), ActionCollection (Menu)
@@ -15453,7 +15457,7 @@ msgstr "Lancer G'Mic-Qt"
 #, kde-format
 msgctxt "action"
 msgid "Re-apply the last G'MIC filter"
-msgstr "Réappliquer le dernier filtre G'MIC"
+msgstr "Réappliquer le dernier filtre « G'Mic »"
 
 #. i18n: context: toolTip @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
@@ -18305,7 +18309,7 @@ msgstr "Document au format « csv »"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
-msgstr "Image Radiance RGBE"
+msgstr "Image Radiance « RGBE »"
 
 #: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2108
 #: libs/ui/KisMainWindow.cpp:2191
@@ -21048,7 +21052,7 @@ msgstr "Métadonnées « HDR »…"
 #: libs/ui/animation/video_export_options_dialog.ui:249
 #, kde-format
 msgid "Bitrate (MBit/s):"
-msgstr "Débit binaire (MBits / s) :"
+msgstr "Débit binaire (Mb / s) :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
@@ -21121,21 +21125,21 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Le format GIF prend en charge jusqu'à 256 couleurs par "
 "trame / image. Cette option permet l'utilisation de la transparence au prix "
-"d'une couleur, donc seulement 255 couleurs seront utilisées pour les GIF "
-"avec cette option activée. La désactivation de cette option vous donne "
-"l'intégralité des 256 couleurs pour votre GIF pour une sortie de meilleure "
-"qualité.</p><p><span style=\" font-style:italic ;\">Remarque 1 : pour que la "
-"transparence fonctionne correctement, vous devez vous assurer que la "
-"séquence d'images est exportée avec la transparence activée et que la "
-"version de FFMpeg soit supérieure au moins à 4.2+. Si votre sortie GIF "
-"montre des signes de déchirement de l'écran, la version 4.4+ de FFMpeg est "
-"fortement recommandée.</span></p><p><span style=\" font-style:italic ;"
-"\">Remarque 2 : Le format GIF ne prend en charge que la transparence à 100 % "
-"ou la transparence à 0 %. La transparence partielle est </span><span style="
-"\" font-style:italic ; text-decoration : underline ;\">non</span><span style="
-"\" font-style:italic ;\"> prise en charge. Si vous avez besoin d'une "
-"transparence partielle, pensez à « APNG » ou « WEBP ».</span><br/></p></"
-"body></html>"
+"d'une couleur, donc seulement 255 couleurs seront utilisées pour les images "
+"« GIF » avec cette option activée. La désactivation de cette option vous "
+"donne l'intégralité des 256 couleurs pour votre fichier « GIF » pour une "
+"sortie de meilleure qualité.</p><p><span style=\" font-style:italic ;"
+"\">Remarque 1 : pour que la transparence fonctionne correctement, vous devez "
+"vous assurer que la séquence d'images est exportée avec la transparence "
+"activée et que la version de FFMpeg soit supérieure au moins à 4.2+. Si "
+"votre sortie « GIF » montre des signes de déchirement de l'écran, la version "
+"4.4+ de FFMpeg est fortement recommandée.</span></p><p><span style=\" font-"
+"style:italic ;\">Remarque 2 : Le format GIF ne prend en charge que la "
+"transparence à 100 % ou la transparence à 0 %. La transparence partielle est "
+"</span><span style=\" font-style:italic ; text-decoration : underline ;"
+"\">non</span><span style=\" font-style:italic ;\"> prise en charge. Si vous "
+"avez besoin d'une transparence partielle, pensez à « APNG » ou « WebP ».</"
+"span><br/></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifReserveTransparent)
 #: libs/ui/animation/video_export_options_dialog.ui:350
@@ -22160,7 +22164,7 @@ msgstr "Aucun"
 #: libs/ui/brushhud/kis_brush_hud.cpp:78
 #, kde-format
 msgid "Reload Original Preset"
-msgstr "Recharger le préreglage d'origine"
+msgstr "Recharger le préréglage d'origine"
 
 #: libs/ui/brushhud/kis_brush_hud.cpp:82
 #, kde-format
@@ -22547,7 +22551,7 @@ msgid ""
 "In addition to filtering the currently visible frame, \n"
 "filter all other keyframe selected in the Animation Timeline docker."
 msgstr ""
-"En plus de filter la trame actuellement visible, \n"
+"En plus de filtrer la trame actuellement visible, \n"
 "filtrer les autres trames clé, sélectionnées dans le tableau de bord pour la "
 "frise chronologique d'animation."
 
@@ -22572,8 +22576,8 @@ msgid ""
 "convert from scene linear to display linear.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Ceci est une image avec Gamma en logarithme hybride. "
-"Krita ne prend pas en charge l'envoi de HLG vers l'écran. Ainsi, pour une "
-"importation, il est recommandé de convertir à partir d'une linéarité de "
+"Krita ne prend pas en charge l'envoi de « HLG » vers l'écran. Ainsi, pour "
+"une importation, il est recommandé de convertir à partir d'une linéarité de "
 "scène vers une linéarité d'écran.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkApplyOOTF)
@@ -30059,7 +30063,7 @@ msgstr ""
 "style=\" text-decoration: underline; color:%1;\">Site Internet de Krita</"
 "span></a></p></td><td><p><span style=\" color:%1;\"><b>Codage de Krita</b></"
 "span></p><p><a href=\"https://krita-artists.org\"><span style=\" text-"
-"decoration: underline; color:%1;\">Communauté des utilisateurs / trices</"
+"decoration: underline; color:%1;\">Communauté des personnes utilisatrices</"
 "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
 "style=\" text-decoration: underline; color:%1;\">Code source</span></a></"
 "p><p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style="
@@ -33546,8 +33550,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "The Tone Response Curve of this color space is either sRGB, L* or rec709 TRC."
 msgstr ""
-"La courbe de réponse de tons de cet espace de couleurs est sRGB, L* ou "
-"rec709 TRC."
+"La courbe de réponse de tons de cet espace de couleurs est « sRGB », « L* » "
+"ou « rec709 TRC »."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:313
 #, kde-format
@@ -33741,7 +33745,17 @@ msgstr ""
 "les images à destination de l'Internet ou autrement pour de simples images."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:459
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "When the selected Bitdepth is 16"
+#| msgid ""
+#| "<b>16 bit integer</b>: Also known as 'deep color'. 16 bit is ideal for "
+#| "editing images with a linear TRC, large color space, or just when you "
+#| "need more precise color blending. This does take twice as much space on "
+#| "the RAM and hard-drive than any given 8 bit image of the same properties, "
+#| "and for some devices it takes much more processing power. We recommend "
+#| "watching the RAM usage of the file carefully, or otherwise use 8 bit if "
+#| "your computer slows down. Take care to disable conversion optimization "
+#| "when converting from 16 bit/channel to 8 bit/channel."
 msgctxt "When the selected Bitdepth is 16"
 msgid ""
 "<b>16 bit integer</b>: Also known as 'deep color'. 16 bit is ideal for "
@@ -34063,7 +34077,7 @@ msgid ""
 msgstr ""
 "<p>L'espace colorimétrique « Rec.2020 » est le remplaçant émergent pour "
 "l'espace « sRGB », totalement dépassé. En Juin 2015, très peu (si existant) "
-"de périphériques d'affichage (et probalement aucun périphérique d'affichage "
+"de périphériques d'affichage (et probablement aucun périphérique d'affichage "
 "abordable) pouvait afficher tout l'espace « Rec.2020 ». Cependant, les "
 "technologies d'affichage se sont rapprochées de « Rec.2020 ». Les films sont "
 "déjà réalisés avec « Rec.2020 » et de nombreuses caméras le prennent en "
@@ -34129,7 +34143,7 @@ msgstr ""
 "est utilisé comme nom de base pour ces profils.</p><p>« WideGamutRGB » a été "
 "conçu par Adobe pour être un espace colorimétrique à Gamut étendu, utilisant "
 "des couleurs spectrales comme primaires. Les valeurs primaires de Pascale "
-"produisent un profil correspondant aux anciens profils V2 « Widegamut » "
+"produisent un profil correspondant aux anciens profils V2 « WideGamut » "
 "fournis par Adobe et Canon. C'est un espace colorimétrique intéressant, "
 "mais, juste après leurs introductions, Adobe a reporté leur intérêt vers "
 "l'espace colorimétrique « ProPhotoRGB ».</p>"
@@ -37513,12 +37527,12 @@ msgstr "Ellipse"
 #: plugins/assistants/Assistants/FisheyePointAssistant.cc:28
 #, kde-format
 msgid "Fish Eye Point assistant"
-msgstr "Assistant de point « Fish Eye »"
+msgstr "Assistant de point « FishEye »"
 
 #: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
 #, kde-format
 msgid "Fish Eye Point"
-msgstr "Point « Fish eye »"
+msgstr "Point « FishEye »"
 
 #: plugins/assistants/Assistants/InfiniteRulerAssistant.cc:27
 #, kde-format
@@ -40846,7 +40860,7 @@ msgstr "Supprimer la scène du scénario"
 #: plugins/dockers/storyboarddocker/KisAddRemoveStoryboardCommand.cpp:101
 msgctxt "(qtundo-format)"
 msgid "Move Storyboard Scene"
-msgstr "Déplacer une scéne du scénario"
+msgstr "Déplacer une scène du scénario"
 
 #: plugins/dockers/storyboarddocker/KisAddRemoveStoryboardCommand.cpp:155
 msgctxt "(qtundo-format)"
@@ -43594,7 +43608,7 @@ msgstr "Filtre « G'MIC »"
 #: plugins/extensions/qmic/QMic.cpp:54
 #, kde-format
 msgid "The GMic plugin is not installed or could not be loaded."
-msgstr "Le module externe « GMic » n'est pas installé ou ne peut être chargé."
+msgstr "Le module externe « G'Mic » n'est pas installé ou ne peut être chargé."
 
 #: plugins/extensions/qmic/QMic.cpp:79
 #, kde-format
@@ -47764,7 +47778,7 @@ msgstr ""
 "conversion supplémentaire puisque Krita ne peut pas actuellement envoyer des "
 "données HLG directement vers l'écran. Cependant, la courbe opti-optique HLG "
 "est appliquée pour la conversion d'une linéarité d'affichage vers une "
-"linéarité de scéne.</p></body></html>"
+"linéarité de scène.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHLGOOTF)
 #. i18n: ectx: property (title), widget (QGroupBox, chkHLGOOTF)
@@ -55386,11 +55400,11 @@ msgstr "ACBF"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:395
 msgid "Export to EPUB"
-msgstr "Exporter comme EPUB"
+msgstr "Exporter au format « ePub »"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:400
 msgid "EPUB"
-msgstr "EPUB"
+msgstr "ePub"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:405
 msgid "Export to TIFF"
@@ -55508,7 +55522,7 @@ msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
 msgstr ""
-"Enregistrement au format de fichier « Comicbook »\n"
+"Enregistrement du fichier de bandes dessinées\n"
 "avec des informations de métadonnées"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:637
@@ -56995,7 +57009,7 @@ msgid ""
 msgstr ""
 "<p><strong>Saisissez l'« URL » de téléchargement</strong></p><p>Par exemple :"
 "<ul><li>Lien de téléchargement « Zip » (http://example.com/plugin.zip)</"
-"li><li>Dépôt « Github » (https://github.com/test/plugin)</li>"
+"li><li>Dépôt « GitHub » (https://github.com/test/plugin)</li>"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:102
 #: plugins/python/plugin_importer/plugin_importer_extension.py:116
@@ -57970,7 +57984,7 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_multihand.h:97
 #, kde-format
 msgid "Multibrush Tool"
-msgstr "Multibrosse"
+msgstr "Multi-brosse"
 
 #: plugins/tools/basictools/kis_tool_pan.cpp:79
 #, kde-format
@@ -61262,7 +61276,7 @@ msgstr "Rectangle"
 #, kde-format
 msgctxt "action"
 msgid "Multibrush Tool"
-msgstr "Multibrosse"
+msgstr "Multi-brosse"
 
 #. i18n: context: text @ Action (KritaShape/KisToolLazyBrush), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolLazyBrush), Actions (tool-shortcuts), ActionCollection (Tools)

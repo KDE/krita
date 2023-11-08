@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-07 03:39+0000\n"
+"POT-Creation-Date: 2023-11-08 02:06+0000\n"
 "PO-Revision-Date: 2022-07-21 20:17+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -9064,18 +9064,72 @@ msgctxt "action"
 msgid "Increase Brush Size"
 msgstr "Увеличаване размера на четка"
 
+#. i18n: context: text @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: text @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
+#: krita/krita.action:845 krita/krita.action:847 krita/krita.action:848
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Rotate object 90° clockwise"
+msgctxt "action"
+msgid "Rotate brush tip clockwise"
+msgstr "Завъртване на обект 90° по часовникова стрелка"
+
+#. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
+#: krita/krita.action:857 krita/krita.action:859 krita/krita.action:860
+#, kde-format
+msgctxt "action"
+msgid "Rotate brush tip clockwise (precise)"
+msgstr ""
+
+#. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
+#: krita/krita.action:869 krita/krita.action:871 krita/krita.action:872
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Rotate object 90° counterclockwise"
+msgctxt "action"
+msgid "Rotate brush tip counter-clockwise"
+msgstr "Завъртване на обект 90° обратно на часовникова стрелка"
+
+#. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
+#: krita/krita.action:881 krita/krita.action:883 krita/krita.action:884
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Rotate object 90° counterclockwise"
+msgctxt "action"
+msgid "Rotate brush tip counter-clockwise (precise)"
+msgstr "Завъртване на обект 90° обратно на часовникова стрелка"
+
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:845 krita/krita.action:848
+#: krita/krita.action:893 krita/krita.action:896
 #, kde-format
 msgctxt "action"
 msgid "Toggle Snap To Assistants"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:847
+#: krita/krita.action:895
 #, kde-format
 msgctxt "action"
 msgid "Toggle Snap to Assistants"
@@ -9087,7 +9141,7 @@ msgstr ""
 #. i18n: context: text @ Action (undo_polygon_selection), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (undo_polygon_selection), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (undo_polygon_selection), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:855 krita/krita.action:857 krita/krita.action:858
+#: krita/krita.action:903 krita/krita.action:905 krita/krita.action:906
 #, kde-format
 msgctxt "action"
 msgid "Undo Polygon Selection Points"
@@ -9105,7 +9159,7 @@ msgstr ""
 #. i18n: context: text @ Action (fill_selection_foreground_color_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (fill_selection_foreground_color_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (fill_selection_foreground_color_opacity), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:865 krita/krita.action:867 krita/krita.action:868
+#: krita/krita.action:913 krita/krita.action:915 krita/krita.action:916
 #: krita/kritamenu.action:498 krita/kritamenu.action:500
 #: krita/kritamenu.action:501
 #, kde-format
@@ -9125,7 +9179,7 @@ msgstr "Запълване с цвета на преден план (Непро�
 #. i18n: context: text @ Action (fill_selection_background_color_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (fill_selection_background_color_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (fill_selection_background_color_opacity), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:877 krita/krita.action:879 krita/krita.action:880
+#: krita/krita.action:925 krita/krita.action:927 krita/krita.action:928
 #: krita/kritamenu.action:510 krita/kritamenu.action:512
 #: krita/kritamenu.action:513
 #, kde-format
@@ -9145,7 +9199,7 @@ msgstr "Запълване с цвета на фона (Непрозрачнос
 #. i18n: context: text @ Action (fill_selection_pattern_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (fill_selection_pattern_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (fill_selection_pattern_opacity), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:889 krita/krita.action:891 krita/krita.action:892
+#: krita/krita.action:937 krita/krita.action:939 krita/krita.action:940
 #: krita/kritamenu.action:522 krita/kritamenu.action:524
 #: krita/kritamenu.action:525
 #, kde-format
@@ -9154,7 +9208,7 @@ msgid "Fill with Pattern (Opacity)"
 msgstr "Запълване с шаблон (Непрозрачност)"
 
 #. i18n: context: text @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:901
+#: krita/krita.action:949
 #, kde-format
 msgctxt "action"
 msgid "Convert &to Shape"
@@ -9164,21 +9218,21 @@ msgstr "Преобразуване във &фигура"
 #. i18n: context: iconText @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:903 krita/krita.action:904
+#: krita/krita.action:951 krita/krita.action:952
 #, kde-format
 msgctxt "action"
 msgid "Convert to Shape"
 msgstr "Преобразуване във фигура"
 
 #. i18n: context: text @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:913
+#: krita/krita.action:961
 #, kde-format
 msgctxt "action"
 msgid "&Show Global Selection Mask"
 msgstr "&Показване на глобална маска на селекция"
 
 #. i18n: context: toolTip @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:915
+#: krita/krita.action:963
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -9187,7 +9241,7 @@ msgid ""
 msgstr ""
 
 #. i18n: context: iconText @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:916
+#: krita/krita.action:964
 #, kde-format
 msgctxt "action"
 msgid "Show Global Selection Mask"
@@ -9213,7 +9267,7 @@ msgstr "Показване на глобална маска на селекци�
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:925 plugins/dockers/logdocker/LogDockerDock.cpp:148
+#: krita/krita.action:973 plugins/dockers/logdocker/LogDockerDock.cpp:148
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -9229,7 +9283,7 @@ msgid "Filters"
 msgstr "Филтри"
 
 #. i18n: context: text @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:928
+#: krita/krita.action:976
 #, kde-format
 msgctxt "action"
 msgid "&Color to Alpha..."
@@ -9239,14 +9293,14 @@ msgstr "&Цвят в алфа..."
 #. i18n: context: iconText @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:930 krita/krita.action:931
+#: krita/krita.action:978 krita/krita.action:979
 #, kde-format
 msgctxt "action"
 msgid "Color to Alpha"
 msgstr "Цвят в алфа"
 
 #. i18n: context: text @ Action (krita_filter_top edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:940
+#: krita/krita.action:988
 #, kde-format
 msgctxt "action"
 msgid "&Top Edge Detection"
@@ -9256,14 +9310,14 @@ msgstr "&Откриване на горен ръб"
 #. i18n: context: iconText @ Action (krita_filter_top edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_top edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_top edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:942 krita/krita.action:943
+#: krita/krita.action:990 krita/krita.action:991
 #, kde-format
 msgctxt "action"
 msgid "Top Edge Detection"
 msgstr "Откриване на горен ръб"
 
 #. i18n: context: text @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:952
+#: krita/krita.action:1000
 #, kde-format
 msgctxt "action"
 msgid "&Index Colors..."
@@ -9273,14 +9327,14 @@ msgstr "&Индексиране на цветове..."
 #. i18n: context: iconText @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:954 krita/krita.action:955
+#: krita/krita.action:1002 krita/krita.action:1003
 #, kde-format
 msgctxt "action"
 msgid "Index Colors"
 msgstr "Индексиране на цветове"
 
 #. i18n: context: text @ Action (krita_filter_emboss horizontal only), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:964
+#: krita/krita.action:1012
 #, kde-format
 msgctxt "action"
 msgid "Emboss Horizontal &Only"
@@ -9290,14 +9344,14 @@ msgstr "Само хоризонтално щамповане"
 #. i18n: context: iconText @ Action (krita_filter_emboss horizontal only), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_emboss horizontal only), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss horizontal only), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:966 krita/krita.action:967
+#: krita/krita.action:1014 krita/krita.action:1015
 #, kde-format
 msgctxt "action"
 msgid "Emboss Horizontal Only"
 msgstr "Само хоризонтално щамповане"
 
 #. i18n: context: text @ Action (krita_filter_dodge), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:976
+#: krita/krita.action:1024
 #, kde-format
 msgctxt "action"
 msgid "D&odge"
@@ -9307,14 +9361,14 @@ msgstr "О&светляване"
 #. i18n: context: iconText @ Action (krita_filter_dodge), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_dodge), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_dodge), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:978 krita/krita.action:979
+#: krita/krita.action:1026 krita/krita.action:1027
 #, kde-format
 msgctxt "action"
 msgid "Dodge"
 msgstr "Осветляване"
 
 #. i18n: context: text @ Action (krita_filter_sharpen), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:988
+#: krita/krita.action:1036
 #, kde-format
 msgctxt "action"
 msgid "&Sharpen"
@@ -9324,14 +9378,14 @@ msgstr "&Изостряне"
 #. i18n: context: iconText @ Action (krita_filter_sharpen), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_sharpen), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_sharpen), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:990 krita/krita.action:991
+#: krita/krita.action:1038 krita/krita.action:1039
 #, kde-format
 msgctxt "action"
 msgid "Sharpen"
 msgstr "Изостряне"
 
 #. i18n: context: text @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1000
+#: krita/krita.action:1048
 #, kde-format
 msgctxt "action"
 msgid "B&urn"
@@ -9341,14 +9395,14 @@ msgstr "Пот&ъмняване"
 #. i18n: context: iconText @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1002 krita/krita.action:1003
+#: krita/krita.action:1050 krita/krita.action:1051
 #, kde-format
 msgctxt "action"
 msgid "Burn"
 msgstr "Потъмняване"
 
 #. i18n: context: text @ Action (krita_filter_mean removal), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1012
+#: krita/krita.action:1060
 #, kde-format
 msgctxt "action"
 msgid "&Mean Removal"
@@ -9358,14 +9412,14 @@ msgstr "Премахване на &средната стойност"
 #. i18n: context: iconText @ Action (krita_filter_mean removal), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_mean removal), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_mean removal), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1014 krita/krita.action:1015
+#: krita/krita.action:1062 krita/krita.action:1063
 #, kde-format
 msgctxt "action"
 msgid "Mean Removal"
 msgstr "Основно премахване"
 
 #. i18n: context: text @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1024
+#: krita/krita.action:1072
 #, kde-format
 msgctxt "action"
 msgid "&Gaussian Blur..."
@@ -9375,14 +9429,14 @@ msgstr "&Гаусово замъгляване..."
 #. i18n: context: iconText @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1026 krita/krita.action:1027
+#: krita/krita.action:1074 krita/krita.action:1075
 #, kde-format
 msgctxt "action"
 msgid "Gaussian Blur"
 msgstr "Гаусово замъгляване"
 
 #. i18n: context: text @ Action (krita_filter_emboss all directions), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1036
+#: krita/krita.action:1084
 #, kde-format
 msgctxt "action"
 msgid "Emboss &in All Directions"
@@ -9392,14 +9446,14 @@ msgstr "Щамповане във всички посоки"
 #. i18n: context: iconText @ Action (krita_filter_emboss all directions), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_emboss all directions), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss all directions), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1038 krita/krita.action:1039
+#: krita/krita.action:1086 krita/krita.action:1087
 #, kde-format
 msgctxt "action"
 msgid "Emboss in All Directions"
 msgstr "Щамповане във всички посоки"
 
 #. i18n: context: text @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1048
+#: krita/krita.action:1096
 #, kde-format
 msgctxt "action"
 msgid "&Small Tiles..."
@@ -9409,14 +9463,14 @@ msgstr "Ма&лки плочки..."
 #. i18n: context: iconText @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1050 krita/krita.action:1051
+#: krita/krita.action:1098 krita/krita.action:1099
 #, kde-format
 msgctxt "action"
 msgid "Small Tiles"
 msgstr "Малки плочки"
 
 #. i18n: context: text @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1060
+#: krita/krita.action:1108
 #, kde-format
 msgctxt "action"
 msgid "&Levels..."
@@ -9426,14 +9480,14 @@ msgstr "&Нива..."
 #. i18n: context: iconText @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1062 krita/krita.action:1063
+#: krita/krita.action:1110 krita/krita.action:1111
 #, kde-format
 msgctxt "action"
 msgid "Levels"
 msgstr "Нива"
 
 #. i18n: context: text @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1072
+#: krita/krita.action:1120
 #, kde-format
 msgctxt "action"
 msgid "&Sobel..."
@@ -9443,14 +9497,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1074 krita/krita.action:1075
+#: krita/krita.action:1122 krita/krita.action:1123
 #, kde-format
 msgctxt "action"
 msgid "Sobel"
 msgstr "Sobel"
 
 #. i18n: context: text @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1084
+#: krita/krita.action:1132
 #, kde-format
 msgctxt "action"
 msgid "&Wave..."
@@ -9460,14 +9514,14 @@ msgstr "&Вълна..."
 #. i18n: context: iconText @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1086 krita/krita.action:1087
+#: krita/krita.action:1134 krita/krita.action:1135
 #, kde-format
 msgctxt "action"
 msgid "Wave"
 msgstr "Вълна"
 
 #. i18n: context: text @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1096
+#: krita/krita.action:1144
 #, kde-format
 msgctxt "action"
 msgid "&Motion Blur..."
@@ -9477,14 +9531,14 @@ msgstr "&Скоростно замъгляване..."
 #. i18n: context: iconText @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1098 krita/krita.action:1099
+#: krita/krita.action:1146 krita/krita.action:1147
 #, kde-format
 msgctxt "action"
 msgid "Motion Blur"
 msgstr "Скоростно замъгляване"
 
 #. i18n: context: text @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1108
+#: krita/krita.action:1156
 #, kde-format
 msgctxt "action"
 msgid "&Invert"
@@ -9494,14 +9548,14 @@ msgstr "&Негатив"
 #. i18n: context: iconText @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1110 krita/krita.action:1111
+#: krita/krita.action:1158 krita/krita.action:1159
 #, kde-format
 msgctxt "action"
 msgid "Invert"
 msgstr "Негатив"
 
 #. i18n: context: text @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1120
+#: krita/krita.action:1168
 #, kde-format
 msgctxt "action"
 msgid "&Color Adjustment curves..."
@@ -9511,14 +9565,14 @@ msgstr "&Криви за регулиране на цветовете..."
 #. i18n: context: iconText @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1122 krita/krita.action:1123
+#: krita/krita.action:1170 krita/krita.action:1171
 #, kde-format
 msgctxt "action"
 msgid "Color Adjustment curves"
 msgstr "Криви за регулиране на цветовете"
 
 #. i18n: context: text @ Action (krita_filter_pixelize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1132
+#: krita/krita.action:1180
 #, kde-format
 msgctxt "action"
 msgid "Pi&xelize..."
@@ -9528,14 +9582,14 @@ msgstr "Пикселизиране..."
 #. i18n: context: iconText @ Action (krita_filter_pixelize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_pixelize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_pixelize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1134 krita/krita.action:1135
+#: krita/krita.action:1182 krita/krita.action:1183
 #, kde-format
 msgctxt "action"
 msgid "Pixelize"
 msgstr "Пикселизиране"
 
 #. i18n: context: text @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1144
+#: krita/krita.action:1192
 #, kde-format
 msgctxt "action"
 msgid "Emboss (&Laplacian)"
@@ -9545,14 +9599,14 @@ msgstr "Щамповане (&Лаплас)"
 #. i18n: context: iconText @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1146 krita/krita.action:1147
+#: krita/krita.action:1194 krita/krita.action:1195
 #, kde-format
 msgctxt "action"
 msgid "Emboss (Laplacian)"
 msgstr "Щамповане (Лаплас)"
 
 #. i18n: context: text @ Action (krita_filter_left edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1156
+#: krita/krita.action:1204
 #, kde-format
 msgctxt "action"
 msgid "&Left Edge Detection"
@@ -9562,14 +9616,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (krita_filter_left edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_left edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_left edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1158 krita/krita.action:1159
+#: krita/krita.action:1206 krita/krita.action:1207
 #, kde-format
 msgctxt "action"
 msgid "Left Edge Detection"
 msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1168
+#: krita/krita.action:1216
 #, kde-format
 msgctxt "action"
 msgid "&Blur..."
@@ -9585,7 +9639,7 @@ msgstr "&Замъгляване..."
 #. i18n: context: iconText @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1170 krita/krita.action:1171 krita/kritamenu.action:1645
+#: krita/krita.action:1218 krita/krita.action:1219 krita/kritamenu.action:1645
 #: krita/kritamenu.action:1647 krita/kritamenu.action:1648
 #, kde-format
 msgctxt "action"
@@ -9593,7 +9647,7 @@ msgid "Blur"
 msgstr "Замъгляване"
 
 #. i18n: context: text @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1180
+#: krita/krita.action:1228
 #, kde-format
 msgctxt "action"
 msgid "&Raindrops..."
@@ -9603,14 +9657,14 @@ msgstr "&Дъждовни капки..."
 #. i18n: context: iconText @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1182 krita/krita.action:1183
+#: krita/krita.action:1230 krita/krita.action:1231
 #, kde-format
 msgctxt "action"
 msgid "Raindrops"
 msgstr "Дъждовни капки"
 
 #. i18n: context: text @ Action (krita_filter_bottom edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1192
+#: krita/krita.action:1240
 #, kde-format
 msgctxt "action"
 msgid "&Bottom Edge Detection"
@@ -9620,14 +9674,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (krita_filter_bottom edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_bottom edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_bottom edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1194 krita/krita.action:1195
+#: krita/krita.action:1242 krita/krita.action:1243
 #, kde-format
 msgctxt "action"
 msgid "Bottom Edge Detection"
 msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1204
+#: krita/krita.action:1252
 #, kde-format
 msgctxt "action"
 msgid "&Random Noise..."
@@ -9637,14 +9691,14 @@ msgstr "&Произволен шум..."
 #. i18n: context: iconText @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1206 krita/krita.action:1207
+#: krita/krita.action:1254 krita/krita.action:1255
 #, kde-format
 msgctxt "action"
 msgid "Random Noise"
 msgstr "Произволен шум"
 
 #. i18n: context: text @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1216
+#: krita/krita.action:1264
 #, kde-format
 msgctxt "action"
 msgid "Colo&r Balance..."
@@ -9654,14 +9708,14 @@ msgstr "Цветови баланс..."
 #. i18n: context: iconText @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1218 krita/krita.action:1219
+#: krita/krita.action:1266 krita/krita.action:1267
 #, kde-format
 msgctxt "action"
 msgid "Color Balance"
 msgstr "Цветови баланс"
 
 #. i18n: context: text @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1228
+#: krita/krita.action:1276
 #, kde-format
 msgctxt "action"
 msgid "&Phong Bumpmap..."
@@ -9671,14 +9725,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1230 krita/krita.action:1231
+#: krita/krita.action:1278 krita/krita.action:1279
 #, kde-format
 msgctxt "action"
 msgid "Phong Bumpmap"
 msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_desaturate), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1240
+#: krita/krita.action:1288
 #, kde-format
 msgctxt "action"
 msgid "&Desaturate"
@@ -9688,14 +9742,14 @@ msgstr "&Обезцветяване"
 #. i18n: context: iconText @ Action (krita_filter_desaturate), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_desaturate), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_desaturate), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1242 krita/krita.action:1243
+#: krita/krita.action:1290 krita/krita.action:1291
 #, kde-format
 msgctxt "action"
 msgid "Desaturate"
 msgstr "Обезцветяване"
 
 #. i18n: context: text @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1252
+#: krita/krita.action:1300
 #, kde-format
 msgctxt "action"
 msgid "Color &Transfer..."
@@ -9705,14 +9759,14 @@ msgstr "Цветово прехвърляне..."
 #. i18n: context: iconText @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1254 krita/krita.action:1255
+#: krita/krita.action:1302 krita/krita.action:1303
 #, kde-format
 msgctxt "action"
 msgid "Color Transfer"
 msgstr "Цветово прехвърляне"
 
 #. i18n: context: text @ Action (krita_filter_emboss vertical only), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1264
+#: krita/krita.action:1312
 #, kde-format
 msgctxt "action"
 msgid "Emboss &Vertical Only"
@@ -9722,14 +9776,14 @@ msgstr "Само вертикално щамповане"
 #. i18n: context: iconText @ Action (krita_filter_emboss vertical only), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_emboss vertical only), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss vertical only), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1266 krita/krita.action:1267
+#: krita/krita.action:1314 krita/krita.action:1315
 #, kde-format
 msgctxt "action"
 msgid "Emboss Vertical Only"
 msgstr "Само вертикално щамповане"
 
 #. i18n: context: text @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1276
+#: krita/krita.action:1324
 #, kde-format
 msgctxt "action"
 msgid "&Lens Blur..."
@@ -9739,14 +9793,14 @@ msgstr "&Замъгляване през леща..."
 #. i18n: context: iconText @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1278 krita/krita.action:1279
+#: krita/krita.action:1326 krita/krita.action:1327
 #, kde-format
 msgctxt "action"
 msgid "Lens Blur"
 msgstr "Замъгляване през леща"
 
 #. i18n: context: text @ Action (krita_filter_minimize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1288
+#: krita/krita.action:1336
 #, kde-format
 msgctxt "action"
 msgid "M&inimize Channel"
@@ -9756,14 +9810,14 @@ msgstr "Ми&нимизиране на канал"
 #. i18n: context: iconText @ Action (krita_filter_minimize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_minimize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_minimize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1290 krita/krita.action:1291
+#: krita/krita.action:1338 krita/krita.action:1339
 #, kde-format
 msgctxt "action"
 msgid "Minimize Channel"
 msgstr "Минимизиране на канал"
 
 #. i18n: context: text @ Action (krita_filter_maximize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1300
+#: krita/krita.action:1348
 #, kde-format
 msgctxt "action"
 msgid "M&aximize Channel"
@@ -9773,14 +9827,14 @@ msgstr "&Максимизиране на канал"
 #. i18n: context: iconText @ Action (krita_filter_maximize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_maximize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_maximize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1302 krita/krita.action:1303
+#: krita/krita.action:1350 krita/krita.action:1351
 #, kde-format
 msgctxt "action"
 msgid "Maximize Channel"
 msgstr "Максимизиране на канал"
 
 #. i18n: context: text @ Action (krita_filter_oilpaint), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1312
+#: krita/krita.action:1360
 #, kde-format
 msgctxt "action"
 msgid "&Oilpaint..."
@@ -9790,14 +9844,14 @@ msgstr "&Маслена боя..."
 #. i18n: context: iconText @ Action (krita_filter_oilpaint), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_oilpaint), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_oilpaint), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1314 krita/krita.action:1315
+#: krita/krita.action:1362 krita/krita.action:1363
 #, kde-format
 msgctxt "action"
 msgid "Oilpaint"
 msgstr "Маслена боя"
 
 #. i18n: context: text @ Action (krita_filter_right edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1324
+#: krita/krita.action:1372
 #, kde-format
 msgctxt "action"
 msgid "&Right Edge Detection"
@@ -9807,14 +9861,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (krita_filter_right edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_right edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_right edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1326 krita/krita.action:1327
+#: krita/krita.action:1374 krita/krita.action:1375
 #, kde-format
 msgctxt "action"
 msgid "Right Edge Detection"
 msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_autocontrast), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1336
+#: krita/krita.action:1384
 #, kde-format
 msgctxt "action"
 msgid "&Auto Contrast"
@@ -9824,14 +9878,14 @@ msgstr "&Автоконтраст"
 #. i18n: context: iconText @ Action (krita_filter_autocontrast), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_autocontrast), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_autocontrast), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1338 krita/krita.action:1339
+#: krita/krita.action:1386 krita/krita.action:1387
 #, kde-format
 msgctxt "action"
 msgid "Auto Contrast"
 msgstr "Автоконтраст"
 
 #. i18n: context: text @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1348
+#: krita/krita.action:1396
 #, kde-format
 msgctxt "action"
 msgid "&Round Corners..."
@@ -9841,14 +9895,14 @@ msgstr "&Заобляне на ъгли..."
 #. i18n: context: iconText @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1350 krita/krita.action:1351
+#: krita/krita.action:1398 krita/krita.action:1399
 #, kde-format
 msgctxt "action"
 msgid "Round Corners"
 msgstr "Заобляне на ъгли"
 
 #. i18n: context: text @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1360
+#: krita/krita.action:1408
 #, kde-format
 msgctxt "action"
 msgid "&Unsharp Mask..."
@@ -9858,14 +9912,14 @@ msgstr "&Маска за замъгляване..."
 #. i18n: context: iconText @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1362 krita/krita.action:1363
+#: krita/krita.action:1410 krita/krita.action:1411
 #, kde-format
 msgctxt "action"
 msgid "Unsharp Mask"
 msgstr "Маска за замъгляване"
 
 #. i18n: context: text @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1372
+#: krita/krita.action:1420
 #, kde-format
 msgctxt "action"
 msgid "&Emboss with Variable Depth..."
@@ -9875,14 +9929,14 @@ msgstr "&Щамповане с различна дълбочина..."
 #. i18n: context: iconText @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1374 krita/krita.action:1375
+#: krita/krita.action:1422 krita/krita.action:1423
 #, kde-format
 msgctxt "action"
 msgid "Emboss with Variable Depth"
 msgstr "Щамповане с различна дълбочина"
 
 #. i18n: context: text @ Action (krita_filter_emboss horizontal and vertical), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1384
+#: krita/krita.action:1432
 #, kde-format
 msgctxt "action"
 msgid "Emboss &Horizontal && Vertical"
@@ -9892,14 +9946,14 @@ msgstr "Вертикално и хоризонтално щамповане"
 #. i18n: context: iconText @ Action (krita_filter_emboss horizontal and vertical), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_emboss horizontal and vertical), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss horizontal and vertical), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1386 krita/krita.action:1387
+#: krita/krita.action:1434 krita/krita.action:1435
 #, kde-format
 msgctxt "action"
 msgid "Emboss Horizontal & Vertical"
 msgstr "Вертикално и хоризонтално щамповане"
 
 #. i18n: context: text @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1396
+#: krita/krita.action:1444
 #, kde-format
 msgctxt "action"
 msgid "Random &Pick..."
@@ -9909,14 +9963,14 @@ msgstr "Произволно из&биране..."
 #. i18n: context: iconText @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1398 krita/krita.action:1399
+#: krita/krita.action:1446 krita/krita.action:1447
 #, kde-format
 msgctxt "action"
 msgid "Random Pick"
 msgstr "Произволно избиране"
 
 #. i18n: context: text @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1408
+#: krita/krita.action:1456
 #, kde-format
 msgctxt "action"
 msgid "&Gaussian Noise Reduction..."
@@ -9926,14 +9980,14 @@ msgstr "&Гаусово намаляване на шума..."
 #. i18n: context: iconText @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1410 krita/krita.action:1411
+#: krita/krita.action:1458 krita/krita.action:1459
 #, kde-format
 msgctxt "action"
 msgid "Gaussian Noise Reduction"
 msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1420
+#: krita/krita.action:1468
 #, kde-format
 msgctxt "action"
 msgid "&Posterize..."
@@ -9943,14 +9997,14 @@ msgstr "&Плакат"
 #. i18n: context: iconText @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1422 krita/krita.action:1423
+#: krita/krita.action:1470 krita/krita.action:1471
 #, kde-format
 msgctxt "action"
 msgid "Posterize"
 msgstr "Плакат"
 
 #. i18n: context: text @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1432
+#: krita/krita.action:1480
 #, kde-format
 msgctxt "action"
 msgid "&Wavelet Noise Reducer..."
@@ -9960,14 +10014,14 @@ msgstr "&Wavelet намаляване на шума..."
 #. i18n: context: iconText @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1434 krita/krita.action:1435
+#: krita/krita.action:1482 krita/krita.action:1483
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Noise Reducer"
 msgstr "Wavelet намаляване на шума"
 
 #. i18n: context: text @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1444
+#: krita/krita.action:1492
 #, kde-format
 msgctxt "action"
 msgid "&HSV Adjustment..."
@@ -9977,14 +10031,14 @@ msgstr "&Регулиране на HSV..."
 #. i18n: context: iconText @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1446 krita/krita.action:1447
+#: krita/krita.action:1494 krita/krita.action:1495
 #, kde-format
 msgctxt "action"
 msgid "HSV Adjustment"
 msgstr ""
 
 #. i18n: context: text @ Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1456
+#: krita/krita.action:1504
 #, kde-format
 msgctxt "action"
 msgid "Blending Modes"
@@ -9996,7 +10050,7 @@ msgstr "Режими на смесване"
 #. i18n: context: text @ Action (Next Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Next Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Next Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1459 krita/krita.action:1461 krita/krita.action:1462
+#: krita/krita.action:1507 krita/krita.action:1509 krita/krita.action:1510
 #, kde-format
 msgctxt "action"
 msgid "Next Blending Mode"
@@ -10008,7 +10062,7 @@ msgstr "Следващ режим на смесване"
 #. i18n: context: text @ Action (Previous Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Previous Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Previous Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1469 krita/krita.action:1471 krita/krita.action:1472
+#: krita/krita.action:1517 krita/krita.action:1519 krita/krita.action:1520
 #, kde-format
 msgctxt "action"
 msgid "Previous Blending Mode"
@@ -10020,7 +10074,7 @@ msgstr "Предишен режим на смесване"
 #. i18n: context: text @ Action (Select Normal Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Normal Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Normal Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1479 krita/krita.action:1481 krita/krita.action:1482
+#: krita/krita.action:1527 krita/krita.action:1529 krita/krita.action:1530
 #, kde-format
 msgctxt "action"
 msgid "Select Normal Blending Mode"
@@ -10032,7 +10086,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Dissolve Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Dissolve Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Dissolve Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1491 krita/krita.action:1493 krita/krita.action:1494
+#: krita/krita.action:1539 krita/krita.action:1541 krita/krita.action:1542
 #, kde-format
 msgctxt "action"
 msgid "Select Dissolve Blending Mode"
@@ -10044,7 +10098,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1503 krita/krita.action:1505 krita/krita.action:1506
+#: krita/krita.action:1551 krita/krita.action:1553 krita/krita.action:1554
 #, kde-format
 msgctxt "action"
 msgid "Select Behind Blending Mode"
@@ -10056,7 +10110,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Clear Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Clear Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Clear Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1515 krita/krita.action:1517 krita/krita.action:1518
+#: krita/krita.action:1563 krita/krita.action:1565 krita/krita.action:1566
 #, kde-format
 msgctxt "action"
 msgid "Select Clear Blending Mode"
@@ -10068,7 +10122,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Darken Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Darken Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Darken Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1527 krita/krita.action:1529 krita/krita.action:1530
+#: krita/krita.action:1575 krita/krita.action:1577 krita/krita.action:1578
 #, kde-format
 msgctxt "action"
 msgid "Select Darken Blending Mode"
@@ -10080,7 +10134,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Multiply Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Multiply Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Multiply Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1539 krita/krita.action:1541 krita/krita.action:1542
+#: krita/krita.action:1587 krita/krita.action:1589 krita/krita.action:1590
 #, kde-format
 msgctxt "action"
 msgid "Select Multiply Blending Mode"
@@ -10092,7 +10146,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Color Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Color Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Color Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1551 krita/krita.action:1553 krita/krita.action:1554
+#: krita/krita.action:1599 krita/krita.action:1601 krita/krita.action:1602
 #, kde-format
 msgctxt "action"
 msgid "Select Color Burn Blending Mode"
@@ -10104,7 +10158,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Linear Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Linear Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1563 krita/krita.action:1565 krita/krita.action:1566
+#: krita/krita.action:1611 krita/krita.action:1613 krita/krita.action:1614
 #, kde-format
 msgctxt "action"
 msgid "Select Linear Burn Blending Mode"
@@ -10116,7 +10170,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Lighten Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Lighten Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Lighten Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1575 krita/krita.action:1577 krita/krita.action:1578
+#: krita/krita.action:1623 krita/krita.action:1625 krita/krita.action:1626
 #, kde-format
 msgctxt "action"
 msgid "Select Lighten Blending Mode"
@@ -10128,7 +10182,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Screen Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Screen Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Screen Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1587 krita/krita.action:1589 krita/krita.action:1590
+#: krita/krita.action:1635 krita/krita.action:1637 krita/krita.action:1638
 #, kde-format
 msgctxt "action"
 msgid "Select Screen Blending Mode"
@@ -10140,7 +10194,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Color Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Color Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Color Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1599 krita/krita.action:1601 krita/krita.action:1602
+#: krita/krita.action:1647 krita/krita.action:1649 krita/krita.action:1650
 #, kde-format
 msgctxt "action"
 msgid "Select Color Dodge Blending Mode"
@@ -10152,7 +10206,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1611 krita/krita.action:1613 krita/krita.action:1614
+#: krita/krita.action:1659 krita/krita.action:1661 krita/krita.action:1662
 #, kde-format
 msgctxt "action"
 msgid "Select Linear Dodge Blending Mode"
@@ -10164,7 +10218,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1623 krita/krita.action:1625 krita/krita.action:1626
+#: krita/krita.action:1671 krita/krita.action:1673 krita/krita.action:1674
 #, kde-format
 msgctxt "action"
 msgid "Select Overlay Blending Mode"
@@ -10176,7 +10230,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Hard Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hard Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Hard Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1635 krita/krita.action:1637 krita/krita.action:1638
+#: krita/krita.action:1683 krita/krita.action:1685 krita/krita.action:1686
 #, kde-format
 msgctxt "action"
 msgid "Select Hard Overlay Blending Mode"
@@ -10188,7 +10242,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Soft Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Soft Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Soft Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1647 krita/krita.action:1649 krita/krita.action:1650
+#: krita/krita.action:1695 krita/krita.action:1697 krita/krita.action:1698
 #, kde-format
 msgctxt "action"
 msgid "Select Soft Light Blending Mode"
@@ -10200,7 +10254,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Hard Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hard Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Hard Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1659 krita/krita.action:1661 krita/krita.action:1662
+#: krita/krita.action:1707 krita/krita.action:1709 krita/krita.action:1710
 #, kde-format
 msgctxt "action"
 msgid "Select Hard Light Blending Mode"
@@ -10212,7 +10266,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Vivid Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Vivid Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Vivid Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1671 krita/krita.action:1673 krita/krita.action:1674
+#: krita/krita.action:1719 krita/krita.action:1721 krita/krita.action:1722
 #, kde-format
 msgctxt "action"
 msgid "Select Vivid Light Blending Mode"
@@ -10224,7 +10278,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Linear Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Linear Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1683 krita/krita.action:1685 krita/krita.action:1686
+#: krita/krita.action:1731 krita/krita.action:1733 krita/krita.action:1734
 #, kde-format
 msgctxt "action"
 msgid "Select Linear Light Blending Mode"
@@ -10236,7 +10290,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Pin Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Pin Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Pin Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1695 krita/krita.action:1697 krita/krita.action:1698
+#: krita/krita.action:1743 krita/krita.action:1745 krita/krita.action:1746
 #, kde-format
 msgctxt "action"
 msgid "Select Pin Light Blending Mode"
@@ -10248,7 +10302,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Hard Mix Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hard Mix Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Hard Mix Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1707 krita/krita.action:1709 krita/krita.action:1710
+#: krita/krita.action:1755 krita/krita.action:1757 krita/krita.action:1758
 #, kde-format
 msgctxt "action"
 msgid "Select Hard Mix Blending Mode"
@@ -10260,7 +10314,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Difference Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Difference Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Difference Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1719 krita/krita.action:1721 krita/krita.action:1722
+#: krita/krita.action:1767 krita/krita.action:1769 krita/krita.action:1770
 #, kde-format
 msgctxt "action"
 msgid "Select Difference Blending Mode"
@@ -10272,7 +10326,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Exclusion Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Exclusion Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Exclusion Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1731 krita/krita.action:1733 krita/krita.action:1734
+#: krita/krita.action:1779 krita/krita.action:1781 krita/krita.action:1782
 #, kde-format
 msgctxt "action"
 msgid "Select Exclusion Blending Mode"
@@ -10284,7 +10338,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Hue Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hue Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Hue Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1743 krita/krita.action:1745 krita/krita.action:1746
+#: krita/krita.action:1791 krita/krita.action:1793 krita/krita.action:1794
 #, kde-format
 msgctxt "action"
 msgid "Select Hue Blending Mode"
@@ -10296,7 +10350,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Saturation Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Saturation Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Saturation Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1755 krita/krita.action:1757 krita/krita.action:1758
+#: krita/krita.action:1803 krita/krita.action:1805 krita/krita.action:1806
 #, kde-format
 msgctxt "action"
 msgid "Select Saturation Blending Mode"
@@ -10308,7 +10362,7 @@ msgstr ""
 #. i18n: context: text @ Action (Select Color Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Color Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Color Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1767 krita/krita.action:1769 krita/krita.action:1770
+#: krita/krita.action:1815 krita/krita.action:1817 krita/krita.action:1818
 #, kde-format
 msgctxt "action"
 msgid "Select Color Blending Mode"
@@ -10320,14 +10374,14 @@ msgstr ""
 #. i18n: context: text @ Action (Select Luminosity Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Luminosity Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Luminosity Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1779 krita/krita.action:1781 krita/krita.action:1782
+#: krita/krita.action:1827 krita/krita.action:1829 krita/krita.action:1830
 #, kde-format
 msgctxt "action"
 msgid "Select Luminosity Blending Mode"
 msgstr "Изберете режим на смесване за яркостта"
 
 #. i18n: context: text @ Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1791
+#: krita/krita.action:1839
 #, kde-format
 msgctxt "action"
 msgid "Animation"
@@ -10337,14 +10391,14 @@ msgstr "Анимация"
 #. i18n: context: iconText @ Action (previous_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (previous_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (previous_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1794 krita/krita.action:1797
+#: krita/krita.action:1842 krita/krita.action:1845
 #, kde-format
 msgctxt "action"
 msgid "Previous Frame"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (previous_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1796
+#: krita/krita.action:1844
 #, kde-format
 msgctxt "action"
 msgid "Change time to previous frame"
@@ -10354,14 +10408,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (next_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (next_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (next_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1806 krita/krita.action:1809
+#: krita/krita.action:1854 krita/krita.action:1857
 #, kde-format
 msgctxt "action"
 msgid "Next Frame"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (next_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1808
+#: krita/krita.action:1856
 #, kde-format
 msgctxt "action"
 msgid "Change time to next frame"
@@ -10371,14 +10425,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (previous_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (previous_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (previous_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1818 krita/krita.action:1821
+#: krita/krita.action:1866 krita/krita.action:1869
 #, kde-format
 msgctxt "action"
 msgid "Previous Keyframe"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (previous_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1820
+#: krita/krita.action:1868
 #, kde-format
 msgctxt "action"
 msgid "Change time to previous keyframe"
@@ -10388,14 +10442,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (next_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (next_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (next_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1830 krita/krita.action:1833
+#: krita/krita.action:1878 krita/krita.action:1881
 #, kde-format
 msgctxt "action"
 msgid "Next Keyframe"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (next_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1832
+#: krita/krita.action:1880
 #, kde-format
 msgctxt "action"
 msgid "Change time to next keyframe"
@@ -10405,14 +10459,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (previous_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (previous_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (previous_matching_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1842 krita/krita.action:1845
+#: krita/krita.action:1890 krita/krita.action:1893
 #, kde-format
 msgctxt "action"
 msgid "Previous Matching Keyframe"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (previous_matching_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1844
+#: krita/krita.action:1892
 #, kde-format
 msgctxt "action"
 msgid "Change time to previous keyframe of the same color"
@@ -10422,14 +10476,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (next_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (next_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (next_matching_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1854 krita/krita.action:1857
+#: krita/krita.action:1902 krita/krita.action:1905
 #, kde-format
 msgctxt "action"
 msgid "Next Matching Keyframe"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (next_matching_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1856
+#: krita/krita.action:1904
 #, kde-format
 msgctxt "action"
 msgid "Change time to next keyframe of the same color"
@@ -10439,14 +10493,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (previous_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (previous_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (previous_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1866 krita/krita.action:1869
+#: krita/krita.action:1914 krita/krita.action:1917
 #, kde-format
 msgctxt "action"
 msgid "Previous Unfiltered Keyframe"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (previous_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1868
+#: krita/krita.action:1916
 #, kde-format
 msgctxt "action"
 msgid "Change time to previous keyframe that has visible onion skin"
@@ -10456,14 +10510,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (next_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (next_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (next_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1878 krita/krita.action:1881
+#: krita/krita.action:1926 krita/krita.action:1929
 #, kde-format
 msgctxt "action"
 msgid "Next Unfiltered Keyframe"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (next_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1880
+#: krita/krita.action:1928
 #, kde-format
 msgctxt "action"
 msgid "Change time to next keyframe that has visible onion skin"
@@ -10475,7 +10529,7 @@ msgstr ""
 #. i18n: context: text @ Action (toggle_playback), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_playback), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_playback), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1890 krita/krita.action:1892 krita/krita.action:1893
+#: krita/krita.action:1938 krita/krita.action:1940 krita/krita.action:1941
 #, kde-format
 msgctxt "action"
 msgid "Play / pause animation"
@@ -10487,14 +10541,14 @@ msgstr ""
 #. i18n: context: text @ Action (stop_playback), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (stop_playback), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (stop_playback), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1902 krita/krita.action:1904 krita/krita.action:1905
+#: krita/krita.action:1950 krita/krita.action:1952 krita/krita.action:1953
 #, kde-format
 msgctxt "action"
 msgid "Stop animation"
 msgstr ""
 
 #. i18n: context: text @ Action (add_blank_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1914
+#: krita/krita.action:1962
 #, kde-format
 msgctxt "action"
 msgid "Create Blank Frame"
@@ -10504,14 +10558,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (add_blank_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (add_blank_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (add_blank_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1916 krita/krita.action:1917
+#: krita/krita.action:1964 krita/krita.action:1965
 #, kde-format
 msgctxt "action"
 msgid "Add blank frame"
 msgstr ""
 
 #. i18n: context: text @ Action (add_duplicate_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1926
+#: krita/krita.action:1974
 #, kde-format
 msgctxt "action"
 msgid "Create Duplicate Frame"
@@ -10521,7 +10575,7 @@ msgstr ""
 #. i18n: context: iconText @ Action (add_duplicate_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (add_duplicate_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (add_duplicate_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1928 krita/krita.action:1929
+#: krita/krita.action:1976 krita/krita.action:1977
 #, kde-format
 msgctxt "action"
 msgid "Add duplicate frame"
@@ -10533,56 +10587,56 @@ msgstr ""
 #. i18n: context: text @ Action (toggle_onion_skin), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_onion_skin), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_onion_skin), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1938 krita/krita.action:1940 krita/krita.action:1941
+#: krita/krita.action:1986 krita/krita.action:1988 krita/krita.action:1989
 #, kde-format
 msgctxt "action"
 msgid "Toggle onion skin"
 msgstr ""
 
 #. i18n: context: text @ Action (first_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1950
+#: krita/krita.action:1998
 #, kde-format
 msgctxt "action"
 msgid "First Frame"
 msgstr ""
 
 #. i18n: context: text @ Action (last_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1961
+#: krita/krita.action:2009
 #, kde-format
 msgctxt "action"
 msgid "Last Frame"
 msgstr ""
 
 #. i18n: context: text @ Action (auto_key), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1972
+#: krita/krita.action:2020
 #, kde-format
 msgctxt "action"
 msgid "Auto Frame Mode"
 msgstr ""
 
 #. i18n: context: text @ Action (drop_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1983
+#: krita/krita.action:2031
 #, kde-format
 msgctxt "action"
 msgid "Drop Frames"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (drop_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1985
+#: krita/krita.action:2033
 #, kde-format
 msgctxt "action"
 msgid "Drop Frames, enable to preserve playback timing."
 msgstr ""
 
 #. i18n: context: text @ Action (pin_to_timeline), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1994
+#: krita/krita.action:2042
 #, kde-format
 msgctxt "action"
 msgid "Pin to Timeline"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (pin_to_timeline), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1996
+#: krita/krita.action:2044
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -10591,14 +10645,14 @@ msgid ""
 msgstr ""
 
 #. i18n: context: text @ Action (insert_keyframe_left), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2005
+#: krita/krita.action:2053
 #, kde-format
 msgctxt "action"
 msgid "Insert Keyframe Left"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (insert_keyframe_left), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2007
+#: krita/krita.action:2055
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -10607,14 +10661,14 @@ msgid ""
 msgstr ""
 
 #. i18n: context: text @ Action (insert_keyframe_right), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2017
+#: krita/krita.action:2065
 #, kde-format
 msgctxt "action"
 msgid "Insert Keyframe Right"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (insert_keyframe_right), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2019
+#: krita/krita.action:2067
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -10623,56 +10677,56 @@ msgid ""
 msgstr ""
 
 #. i18n: context: text @ Action (insert_multiple_keyframes), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2029
+#: krita/krita.action:2077
 #, kde-format
 msgctxt "action"
 msgid "Insert Multiple Keyframes"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (insert_multiple_keyframes), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2031
+#: krita/krita.action:2079
 #, kde-format
 msgctxt "action"
 msgid "Insert several keyframes based on user parameters."
 msgstr ""
 
 #. i18n: context: text @ Action (remove_frames_and_pull), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2041
+#: krita/krita.action:2089
 #, kde-format
 msgctxt "action"
 msgid "Remove Frame and Pull"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (remove_frames_and_pull), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2043
+#: krita/krita.action:2091
 #, kde-format
 msgctxt "action"
 msgid "Remove keyframes moving the tail of animation to the left"
 msgstr ""
 
 #. i18n: context: text @ Action (remove_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2053
+#: krita/krita.action:2101
 #, kde-format
 msgctxt "action"
 msgid "Remove Keyframe"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (remove_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2055
+#: krita/krita.action:2103
 #, kde-format
 msgctxt "action"
 msgid "Remove keyframes without moving anything around"
 msgstr ""
 
 #. i18n: context: text @ Action (insert_column_left), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2065
+#: krita/krita.action:2113
 #, kde-format
 msgctxt "action"
 msgid "Insert Column Left"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (insert_column_left), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2067
+#: krita/krita.action:2115
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -10681,14 +10735,14 @@ msgid ""
 msgstr ""
 
 #. i18n: context: text @ Action (insert_column_right), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2077
+#: krita/krita.action:2125
 #, kde-format
 msgctxt "action"
 msgid "Insert Column Right"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (insert_column_right), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2079
+#: krita/krita.action:2127
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -10697,364 +10751,364 @@ msgid ""
 msgstr ""
 
 #. i18n: context: text @ Action (insert_multiple_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2089
+#: krita/krita.action:2137
 #, kde-format
 msgctxt "action"
 msgid "Insert Multiple Columns"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (insert_multiple_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2091
+#: krita/krita.action:2139
 #, kde-format
 msgctxt "action"
 msgid "Insert several columns based on user parameters."
 msgstr ""
 
 #. i18n: context: text @ Action (remove_columns_and_pull), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2101
+#: krita/krita.action:2149
 #, kde-format
 msgctxt "action"
 msgid "Remove Column and Pull"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (remove_columns_and_pull), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2103
+#: krita/krita.action:2151
 #, kde-format
 msgctxt "action"
 msgid "Remove columns moving the tail of animation to the left"
 msgstr ""
 
 #. i18n: context: text @ Action (remove_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2113
+#: krita/krita.action:2161
 #, kde-format
 msgctxt "action"
 msgid "Remove Column"
 msgstr "Премахване на колона"
 
 #. i18n: context: toolTip @ Action (remove_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2115
+#: krita/krita.action:2163
 #, kde-format
 msgctxt "action"
 msgid "Remove columns without moving anything around"
 msgstr ""
 
 #. i18n: context: text @ Action (insert_hold_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2125
+#: krita/krita.action:2173
 #, kde-format
 msgctxt "action"
 msgid "Insert Hold Frame"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (insert_hold_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2127
+#: krita/krita.action:2175
 #, kde-format
 msgctxt "action"
 msgid "Insert a hold frame after every keyframe"
 msgstr ""
 
 #. i18n: context: text @ Action (insert_multiple_hold_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2137
+#: krita/krita.action:2185
 #, kde-format
 msgctxt "action"
 msgid "Insert Multiple Hold Frames"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (insert_multiple_hold_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2139
+#: krita/krita.action:2187
 #, kde-format
 msgctxt "action"
 msgid "Insert N hold frames after every keyframe"
 msgstr ""
 
 #. i18n: context: text @ Action (remove_hold_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2149
+#: krita/krita.action:2197
 #, kde-format
 msgctxt "action"
 msgid "Remove Hold Frame"
 msgstr "Премахване на задържащата рамка"
 
 #. i18n: context: toolTip @ Action (remove_hold_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2151
+#: krita/krita.action:2199
 #, kde-format
 msgctxt "action"
 msgid "Remove a hold frame after every keyframe"
 msgstr ""
 
 #. i18n: context: text @ Action (remove_multiple_hold_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2161
+#: krita/krita.action:2209
 #, kde-format
 msgctxt "action"
 msgid "Remove Multiple Hold Frames"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (remove_multiple_hold_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2163
+#: krita/krita.action:2211
 #, kde-format
 msgctxt "action"
 msgid "Remove N hold frames after every keyframe"
 msgstr ""
 
 #. i18n: context: text @ Action (insert_hold_column), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2173
+#: krita/krita.action:2221
 #, kde-format
 msgctxt "action"
 msgid "Insert Hold Column"
 msgstr "Вмъкване на задържащата колона"
 
 #. i18n: context: toolTip @ Action (insert_hold_column), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2175
+#: krita/krita.action:2223
 #, kde-format
 msgctxt "action"
 msgid "Insert a hold column into the frame at the current position"
 msgstr ""
 
 #. i18n: context: text @ Action (insert_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2185
+#: krita/krita.action:2233
 #, kde-format
 msgctxt "action"
 msgid "Insert Multiple Hold Columns"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (insert_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2187
+#: krita/krita.action:2235
 #, kde-format
 msgctxt "action"
 msgid "Insert N hold columns into the frame at the current position"
 msgstr ""
 
 #. i18n: context: text @ Action (remove_hold_column), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2197
+#: krita/krita.action:2245
 #, kde-format
 msgctxt "action"
 msgid "Remove Hold Column"
 msgstr "Премахване на задържащата колона"
 
 #. i18n: context: toolTip @ Action (remove_hold_column), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2199
+#: krita/krita.action:2247
 #, kde-format
 msgctxt "action"
 msgid "Remove a hold column from the frame at the current position"
 msgstr ""
 
 #. i18n: context: text @ Action (remove_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2209
+#: krita/krita.action:2257
 #, kde-format
 msgctxt "action"
 msgid "Remove Multiple Hold Columns"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (remove_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2211
+#: krita/krita.action:2259
 #, kde-format
 msgctxt "action"
 msgid "Remove N hold columns from the frame at the current position"
 msgstr ""
 
 #. i18n: context: text @ Action (add_scalar_keyframes), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2221
+#: krita/krita.action:2269
 #, kde-format
 msgctxt "action"
 msgid "Add scalar keyframes"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (add_scalar_keyframes), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2223
+#: krita/krita.action:2271
 #, kde-format
 msgctxt "action"
 msgid "Adds keyframe to control scalar property"
 msgstr "Добавя ключова рамка за управление на скаларно свойство"
 
 #. i18n: context: text @ Action (remove_scalar_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2233
+#: krita/krita.action:2281
 #, kde-format
 msgctxt "action"
 msgid "Remove scalar keyframe"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (remove_scalar_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2235
+#: krita/krita.action:2283
 #, kde-format
 msgctxt "action"
 msgid "Removes the selected scalar keyframe"
 msgstr ""
 
 #. i18n: context: text @ Action (mirror_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2245
+#: krita/krita.action:2293
 #, kde-format
 msgctxt "action"
 msgid "Mirror Frames"
 msgstr "Огледално завъртване на кадрите"
 
 #. i18n: context: toolTip @ Action (mirror_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2247
+#: krita/krita.action:2295
 #, kde-format
 msgctxt "action"
 msgid "Mirror frames' position"
 msgstr "Огледално завъртване на позициите на кадрите"
 
 #. i18n: context: text @ Action (mirror_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2257
+#: krita/krita.action:2305
 #, kde-format
 msgctxt "action"
 msgid "Mirror Columns"
 msgstr "Огледално завъртане на колоните"
 
 #. i18n: context: toolTip @ Action (mirror_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2259
+#: krita/krita.action:2307
 #, kde-format
 msgctxt "action"
 msgid "Mirror columns' position"
 msgstr "Огледално завъртване на позициите на колоните"
 
 #. i18n: context: text @ Action (clear_animation_cache), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2269
+#: krita/krita.action:2317
 #, kde-format
 msgctxt "action"
 msgid "Clear Cache"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (clear_animation_cache), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2271
+#: krita/krita.action:2319
 #, kde-format
 msgctxt "action"
 msgid "Clear entire animation cache. Useful for debugging."
 msgstr ""
 
 #. i18n: context: text @ Action (copy_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2281
+#: krita/krita.action:2329
 #, kde-format
 msgctxt "action"
 msgid "Copy Keyframes"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (copy_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2283
+#: krita/krita.action:2331
 #, kde-format
 msgctxt "action"
 msgid "Copy frames to clipboard"
 msgstr ""
 
 #. i18n: context: text @ Action (copy_frames_as_clones), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2293
+#: krita/krita.action:2341
 #, kde-format
 msgctxt "action"
 msgid "Clone Keyframes"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (copy_frames_as_clones), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2295
+#: krita/krita.action:2343
 #, kde-format
 msgctxt "action"
 msgid "Clone frames to clipboard"
 msgstr ""
 
 #. i18n: context: text @ Action (make_clones_unique), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2305
+#: krita/krita.action:2353
 #, kde-format
 msgctxt "action"
 msgid "Make Unique"
 msgstr "Задаване като уникален"
 
 #. i18n: context: toolTip @ Action (make_clones_unique), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2307
+#: krita/krita.action:2355
 #, kde-format
 msgctxt "action"
 msgid "Convert clones to unique keyframe instances."
 msgstr ""
 
 #. i18n: context: text @ Action (cut_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2317
+#: krita/krita.action:2365
 #, kde-format
 msgctxt "action"
 msgid "Cut Keyframes"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (cut_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2319
+#: krita/krita.action:2367
 #, kde-format
 msgctxt "action"
 msgid "Cut frames to clipboard"
 msgstr ""
 
 #. i18n: context: text @ Action (paste_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2329
+#: krita/krita.action:2377
 #, kde-format
 msgctxt "action"
 msgid "Paste Keyframes"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (paste_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2331
+#: krita/krita.action:2379
 #, kde-format
 msgctxt "action"
 msgid "Paste frames from clipboard"
 msgstr "Поставяне на кадри от клипборда"
 
 #. i18n: context: text @ Action (copy_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2341
+#: krita/krita.action:2389
 #, kde-format
 msgctxt "action"
 msgid "Copy Columns"
 msgstr "Копиране на колони"
 
 #. i18n: context: toolTip @ Action (copy_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2343
+#: krita/krita.action:2391
 #, kde-format
 msgctxt "action"
 msgid "Copy columns to clipboard"
 msgstr "Копиране на колони в клипборда"
 
 #. i18n: context: text @ Action (cut_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2353
+#: krita/krita.action:2401
 #, kde-format
 msgctxt "action"
 msgid "Cut Columns"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (cut_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2355
+#: krita/krita.action:2403
 #, kde-format
 msgctxt "action"
 msgid "Cut columns to clipboard"
 msgstr ""
 
 #. i18n: context: text @ Action (paste_columns_from_clipboard), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2365
+#: krita/krita.action:2413
 #, kde-format
 msgctxt "action"
 msgid "Paste Columns"
 msgstr "Поставяне на колоните"
 
 #. i18n: context: toolTip @ Action (paste_columns_from_clipboard), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2367
+#: krita/krita.action:2415
 #, kde-format
 msgctxt "action"
 msgid "Paste columns from clipboard"
 msgstr "Поставяне на колоните от клипборда"
 
 #. i18n: context: text @ Action (set_start_time), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2377
+#: krita/krita.action:2425
 #, kde-format
 msgctxt "action"
 msgid "Set Start Time"
 msgstr "Начален час"
 
 #. i18n: context: text @ Action (set_end_time), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2389
+#: krita/krita.action:2437
 #, kde-format
 msgctxt "action"
 msgid "Set End Time"
 msgstr ""
 
 #. i18n: context: text @ Action (update_playback_range), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2401
+#: krita/krita.action:2449
 #, kde-format
 msgctxt "action"
 msgid "Update Playback Range"
 msgstr ""
 
 #. i18n: context: text @ Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2413
+#: krita/krita.action:2461
 #, kde-format
 msgctxt "action"
 msgid "Layers"
@@ -11066,14 +11120,14 @@ msgstr "Слоеве"
 #. i18n: context: text @ Action (activateNextLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (activateNextLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activateNextLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2416 krita/krita.action:2418 krita/krita.action:2419
+#: krita/krita.action:2464 krita/krita.action:2466 krita/krita.action:2467
 #, kde-format
 msgctxt "action"
 msgid "Activate next layer"
 msgstr ""
 
 #. i18n: context: text @ Action (activateNextSiblingLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2428
+#: krita/krita.action:2476
 #, kde-format
 msgctxt "action"
 msgid "Activate next sibling layer, skipping over groups."
@@ -11083,7 +11137,7 @@ msgstr "Активирайте следващия сроден слой, кат�
 #. i18n: context: iconText @ Action (activateNextSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (activateNextSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activateNextSiblingLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2430 krita/krita.action:2431
+#: krita/krita.action:2478 krita/krita.action:2479
 #, kde-format
 msgctxt "action"
 msgid "Activate next sibling layer"
@@ -11095,14 +11149,14 @@ msgstr ""
 #. i18n: context: text @ Action (activatePreviousLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (activatePreviousLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activatePreviousLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2440 krita/krita.action:2442 krita/krita.action:2443
+#: krita/krita.action:2488 krita/krita.action:2490 krita/krita.action:2491
 #, kde-format
 msgctxt "action"
 msgid "Activate previous layer"
 msgstr ""
 
 #. i18n: context: text @ Action (activatePreviousSiblingLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2452
+#: krita/krita.action:2500
 #, kde-format
 msgctxt "action"
 msgid "Activate previous sibling layer, skipping over groups."
@@ -11112,7 +11166,7 @@ msgstr "Активиране на предишния родствен слой, 
 #. i18n: context: iconText @ Action (activatePreviousSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (activatePreviousSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activatePreviousSiblingLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2454 krita/krita.action:2455
+#: krita/krita.action:2502 krita/krita.action:2503
 #, kde-format
 msgctxt "action"
 msgid "Activate previous sibling layer"
@@ -11124,245 +11178,245 @@ msgstr ""
 #. i18n: context: text @ Action (switchToPreviouslyActiveNode), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (switchToPreviouslyActiveNode), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (switchToPreviouslyActiveNode), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2464 krita/krita.action:2466 krita/krita.action:2467
+#: krita/krita.action:2512 krita/krita.action:2514 krita/krita.action:2515
 #, kde-format
 msgctxt "action"
 msgid "Activate previously selected layer"
 msgstr ""
 
 #. i18n: context: text @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2476
+#: krita/krita.action:2524
 #, kde-format
 msgctxt "action"
 msgid "Add &Group Layer"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2478
+#: krita/krita.action:2526
 #, kde-format
 msgctxt "action"
 msgid "Add a new Group Layer"
 msgstr ""
 
 #. i18n: context: iconText @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2479
+#: krita/krita.action:2527
 #, kde-format
 msgctxt "action"
 msgid "Group Layer"
 msgstr ""
 
 #. i18n: context: text @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2488
+#: krita/krita.action:2536
 #, kde-format
 msgctxt "action"
 msgid "Add &Clone Layer"
 msgstr "Добавяне на &клониран слой"
 
 #. i18n: context: toolTip @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2490
+#: krita/krita.action:2538
 #, kde-format
 msgctxt "action"
 msgid "Add a new Clone Layer"
 msgstr "Добавяне на нов клониран слой"
 
 #. i18n: context: iconText @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2491
+#: krita/krita.action:2539
 #, kde-format
 msgctxt "action"
 msgid "Clone Layer"
 msgstr "Клониран слой"
 
 #. i18n: context: text @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2500
+#: krita/krita.action:2548
 #, kde-format
 msgctxt "action"
 msgid "Add &Vector Layer"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2502
+#: krita/krita.action:2550
 #, kde-format
 msgctxt "action"
 msgid "Add a new Vector Layer"
 msgstr ""
 
 #. i18n: context: iconText @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2503
+#: krita/krita.action:2551
 #, kde-format
 msgctxt "action"
 msgid "Vector Layer"
 msgstr "Векторен слой"
 
 #. i18n: context: text @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2512
+#: krita/krita.action:2560
 #, kde-format
 msgctxt "action"
 msgid "Add &Filter Layer..."
 msgstr ""
 
 #. i18n: context: toolTip @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2514
+#: krita/krita.action:2562
 #, kde-format
 msgctxt "action"
 msgid "Add a new Filter Layer"
 msgstr ""
 
 #. i18n: context: iconText @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2515
+#: krita/krita.action:2563
 #, kde-format
 msgctxt "action"
 msgid "Filter Layer"
 msgstr ""
 
 #. i18n: context: text @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2524
+#: krita/krita.action:2572
 #, kde-format
 msgctxt "action"
 msgid "Add &Fill Layer..."
 msgstr ""
 
 #. i18n: context: toolTip @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2526
+#: krita/krita.action:2574
 #, kde-format
 msgctxt "action"
 msgid "Add a new Fill Layer"
 msgstr ""
 
 #. i18n: context: iconText @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2527
+#: krita/krita.action:2575
 #, kde-format
 msgctxt "action"
 msgid "Fill Layer"
 msgstr ""
 
 #. i18n: context: text @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2536
+#: krita/krita.action:2584
 #, kde-format
 msgctxt "action"
 msgid "Add &File Layer..."
 msgstr ""
 
 #. i18n: context: toolTip @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2538
+#: krita/krita.action:2586
 #, kde-format
 msgctxt "action"
 msgid "Add a new File Layer"
 msgstr ""
 
 #. i18n: context: iconText @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2539
+#: krita/krita.action:2587
 #, kde-format
 msgctxt "action"
 msgid "File Layer"
 msgstr ""
 
 #. i18n: context: text @ Action (add_new_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2548
+#: krita/krita.action:2596
 #, kde-format
 msgctxt "action"
 msgid "Add &Transparency Mask"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (add_new_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2550
+#: krita/krita.action:2598
 #, kde-format
 msgctxt "action"
 msgid "Add a new Transparency Mask"
 msgstr ""
 
 #. i18n: context: iconText @ Action (add_new_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2551
+#: krita/krita.action:2599
 #, kde-format
 msgctxt "action"
 msgid "Transparency Mask"
 msgstr "Маска за прозрачност"
 
 #. i18n: context: text @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2560
+#: krita/krita.action:2608
 #, kde-format
 msgctxt "action"
 msgid "Add &Filter Mask..."
 msgstr "Добавяне на &маска на филтър..."
 
 #. i18n: context: toolTip @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2562
+#: krita/krita.action:2610
 #, kde-format
 msgctxt "action"
 msgid "Add a new Filter Mask"
 msgstr "Добавяне на нова маска на филтър"
 
 #. i18n: context: iconText @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2563
+#: krita/krita.action:2611
 #, kde-format
 msgctxt "action"
 msgid "Filter Mask"
 msgstr "Маска на филтър"
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2572
+#: krita/krita.action:2620
 #, kde-format
 msgctxt "action"
 msgid "Add &Colorize Mask"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2574
+#: krita/krita.action:2622
 #, kde-format
 msgctxt "action"
 msgid "Add a new Colorize Mask"
 msgstr ""
 
 #. i18n: context: iconText @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2575
+#: krita/krita.action:2623
 #, kde-format
 msgctxt "action"
 msgid "Colorize Mask"
 msgstr ""
 
 #. i18n: context: text @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2584
+#: krita/krita.action:2632
 #, kde-format
 msgctxt "action"
 msgid "Add &Transform Mask"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2586
+#: krita/krita.action:2634
 #, kde-format
 msgctxt "action"
 msgid "Add a new Transform Mask"
 msgstr ""
 
 #. i18n: context: iconText @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2587
+#: krita/krita.action:2635
 #, kde-format
 msgctxt "action"
 msgid "Transform Mask"
 msgstr "Маска за трансформиране"
 
 #. i18n: context: text @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2596
+#: krita/krita.action:2644
 #, kde-format
 msgctxt "action"
 msgid "Add &Local Selection"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2598
+#: krita/krita.action:2646
 #, kde-format
 msgctxt "action"
 msgid "Add a new Local Selection"
 msgstr ""
 
 #. i18n: context: iconText @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2599
+#: krita/krita.action:2647
 #, kde-format
 msgctxt "action"
 msgid "Local Selection"
 msgstr ""
 
 #. i18n: context: text @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2608
+#: krita/krita.action:2656
 #, kde-format
 msgctxt "action"
 msgid "&Isolate Active Layer"
@@ -11372,14 +11426,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2610 krita/krita.action:2611
+#: krita/krita.action:2658 krita/krita.action:2659
 #, kde-format
 msgctxt "action"
 msgid "Isolate Active Layer"
 msgstr ""
 
 #. i18n: context: text @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2620
+#: krita/krita.action:2668
 #, kde-format
 msgctxt "action"
 msgid "&Isolate Active Group"
@@ -11389,14 +11443,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2622 krita/krita.action:2623
+#: krita/krita.action:2670 krita/krita.action:2671
 #, kde-format
 msgctxt "action"
 msgid "Isolate Active Group"
 msgstr ""
 
 #. i18n: context: text @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2632
+#: krita/krita.action:2680
 #, kde-format
 msgctxt "action"
 msgid "&Toggle layer lock"
@@ -11406,14 +11460,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2634 krita/krita.action:2635
+#: krita/krita.action:2682 krita/krita.action:2683
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer lock"
 msgstr ""
 
 #. i18n: context: text @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2644
+#: krita/krita.action:2692
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer &visibility"
@@ -11423,21 +11477,21 @@ msgstr ""
 #. i18n: context: iconText @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2646 krita/krita.action:2647
+#: krita/krita.action:2694 krita/krita.action:2695
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer visibility"
 msgstr ""
 
 #. i18n: context: text @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2656
+#: krita/krita.action:2704
 #, kde-format
 msgctxt "action"
 msgid "Toggle Layer Soloing"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2658
+#: krita/krita.action:2706
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -11446,14 +11500,14 @@ msgid ""
 msgstr ""
 
 #. i18n: context: iconText @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2659
+#: krita/krita.action:2707
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer soloing"
 msgstr ""
 
 #. i18n: context: text @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2668
+#: krita/krita.action:2716
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer &alpha"
@@ -11463,14 +11517,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2670 krita/krita.action:2671
+#: krita/krita.action:2718 krita/krita.action:2719
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer alpha"
 msgstr ""
 
 #. i18n: context: text @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2680
+#: krita/krita.action:2728
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer alpha &inheritance"
@@ -11480,35 +11534,35 @@ msgstr ""
 #. i18n: context: iconText @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2682 krita/krita.action:2683
+#: krita/krita.action:2730 krita/krita.action:2731
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer alpha inheritance"
 msgstr ""
 
 #. i18n: context: text @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2692
+#: krita/krita.action:2740
 #, kde-format
 msgctxt "action"
 msgid "Add &Paint Layer"
 msgstr "Добавяне на слой за &рисуване"
 
 #. i18n: context: toolTip @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2694
+#: krita/krita.action:2742
 #, kde-format
 msgctxt "action"
 msgid "Add a new Paint Layer"
 msgstr "Добавяне на нов слой за рисуване"
 
 #. i18n: context: iconText @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2695
+#: krita/krita.action:2743
 #, kde-format
 msgctxt "action"
 msgid "Paint Layer"
 msgstr "Слой за рисуване"
 
 #. i18n: context: text @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2704
+#: krita/krita.action:2752
 #, kde-format
 msgctxt "action"
 msgid "&New Layer From Visible"
@@ -11518,14 +11572,14 @@ msgstr "&Нов слой от видимия"
 #. i18n: context: iconText @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2706 krita/krita.action:2707
+#: krita/krita.action:2754 krita/krita.action:2755
 #, kde-format
 msgctxt "action"
 msgid "New layer from visible"
 msgstr "Нов слой от видимия"
 
 #. i18n: context: text @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2716
+#: krita/krita.action:2764
 #, kde-format
 msgctxt "action"
 msgid "&Duplicate Layer or Mask"
@@ -11535,14 +11589,14 @@ msgstr "&Дублиране на слой или маска"
 #. i18n: context: iconText @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2718 krita/krita.action:2719
+#: krita/krita.action:2766 krita/krita.action:2767
 #, kde-format
 msgctxt "action"
 msgid "Duplicate Layer or Mask"
 msgstr "Дублиране на слой или маска"
 
 #. i18n: context: text @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2728
+#: krita/krita.action:2776
 #, kde-format
 msgctxt "action"
 msgid "&Cut Selection to New Layer"
@@ -11552,14 +11606,14 @@ msgstr "&Изрязване на селекцията в нов слой"
 #. i18n: context: iconText @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2730 krita/krita.action:2731
+#: krita/krita.action:2778 krita/krita.action:2779
 #, kde-format
 msgctxt "action"
 msgid "Cut Selection to New Layer"
 msgstr "Изрязване на селекцията в нов слой"
 
 #. i18n: context: text @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2740
+#: krita/krita.action:2788
 #, kde-format
 msgctxt "action"
 msgid "Copy &Selection to New Layer"
@@ -11569,14 +11623,14 @@ msgstr "Копиране на селекцията в нов слой"
 #. i18n: context: iconText @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2742 krita/krita.action:2743
+#: krita/krita.action:2790 krita/krita.action:2791
 #, kde-format
 msgctxt "action"
 msgid "Copy Selection to New Layer"
 msgstr "Копиране на селекцията в нов слой"
 
 #. i18n: context: text @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2752
+#: krita/krita.action:2800
 #, kde-format
 msgctxt "action"
 msgid "Copy Layer"
@@ -11586,14 +11640,14 @@ msgstr "Копиране на слой"
 #. i18n: context: iconText @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2754 krita/krita.action:2755
+#: krita/krita.action:2802 krita/krita.action:2803
 #, kde-format
 msgctxt "action"
 msgid "Copy layer to clipboard"
 msgstr "Копиране на слой в клипборда"
 
 #. i18n: context: text @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2764
+#: krita/krita.action:2812
 #, kde-format
 msgctxt "action"
 msgid "Cut Layer"
@@ -11603,14 +11657,14 @@ msgstr "Изрязване на слой"
 #. i18n: context: iconText @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2766 krita/krita.action:2767
+#: krita/krita.action:2814 krita/krita.action:2815
 #, kde-format
 msgctxt "action"
 msgid "Cut layer to clipboard"
 msgstr "Изрязване на слой в клипборда"
 
 #. i18n: context: text @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2776
+#: krita/krita.action:2824
 #, kde-format
 msgctxt "action"
 msgid "Paste Layer"
@@ -11620,7 +11674,7 @@ msgstr "Поставяне на слой"
 #. i18n: context: iconText @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2778 krita/krita.action:2779
+#: krita/krita.action:2826 krita/krita.action:2827
 #, kde-format
 msgctxt "action"
 msgid "Paste layer from clipboard"
@@ -11630,14 +11684,14 @@ msgstr "Поставяне на слой от клипборда"
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2788 krita/krita.action:2791
+#: krita/krita.action:2836 krita/krita.action:2839
 #, kde-format
 msgctxt "action"
 msgid "Quick Group"
 msgstr "Бързо групиране"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2790
+#: krita/krita.action:2838
 #, kde-format
 msgctxt "action"
 msgid "Create a group layer containing selected layers"
@@ -11647,14 +11701,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2800 krita/krita.action:2803
+#: krita/krita.action:2848 krita/krita.action:2851
 #, kde-format
 msgctxt "action"
 msgid "Quick Ungroup"
 msgstr "Бързо разгрупиране"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2802
+#: krita/krita.action:2850
 #, kde-format
 msgctxt "action"
 msgid "Remove grouping of the layers or remove one layer out of the group"
@@ -11664,21 +11718,21 @@ msgstr ""
 #. i18n: context: iconText @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2812 krita/krita.action:2815
+#: krita/krita.action:2860 krita/krita.action:2863
 #, kde-format
 msgctxt "action"
 msgid "Quick Clipping Group"
 msgstr "Бързо създаване на закачени групи"
 
 #. i18n: context: toolTip @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2814
+#: krita/krita.action:2862
 #, kde-format
 msgctxt "action"
 msgid "Group selected layers and add a layer with clipped alpha channel"
 msgstr ""
 
 #. i18n: context: text @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2824
+#: krita/krita.action:2872
 #, kde-format
 msgctxt "action"
 msgid "All Layers"
@@ -11688,14 +11742,14 @@ msgstr "Всички слоеве"
 #. i18n: context: iconText @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2826 krita/krita.action:2827
+#: krita/krita.action:2874 krita/krita.action:2875
 #, kde-format
 msgctxt "action"
 msgid "Select all layers"
 msgstr "Избиране на всички слоеве"
 
 #. i18n: context: text @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2836
+#: krita/krita.action:2884
 #, kde-format
 msgctxt "action"
 msgid "Visible Layers"
@@ -11705,14 +11759,14 @@ msgstr "Видими слоеве"
 #. i18n: context: iconText @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2838 krita/krita.action:2839
+#: krita/krita.action:2886 krita/krita.action:2887
 #, kde-format
 msgctxt "action"
 msgid "Select all visible layers"
 msgstr "Избиране на всички видими слоеве"
 
 #. i18n: context: text @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2848
+#: krita/krita.action:2896
 #, kde-format
 msgctxt "action"
 msgid "Locked Layers"
@@ -11722,14 +11776,14 @@ msgstr "Заключени слоеве"
 #. i18n: context: iconText @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2850 krita/krita.action:2851
+#: krita/krita.action:2898 krita/krita.action:2899
 #, kde-format
 msgctxt "action"
 msgid "Select all locked layers"
 msgstr "Избиране на всички заключени слоеве"
 
 #. i18n: context: text @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2860
+#: krita/krita.action:2908
 #, kde-format
 msgctxt "action"
 msgid "Invisible Layers"
@@ -11739,14 +11793,14 @@ msgstr "Невидими слоеве"
 #. i18n: context: iconText @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2862 krita/krita.action:2863
+#: krita/krita.action:2910 krita/krita.action:2911
 #, kde-format
 msgctxt "action"
 msgid "Select all invisible layers"
 msgstr "Избиране на всички невидими слоеве"
 
 #. i18n: context: text @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2872
+#: krita/krita.action:2920
 #, kde-format
 msgctxt "action"
 msgid "Unlocked Layers"
@@ -11756,14 +11810,14 @@ msgstr "Отключени слоеве"
 #. i18n: context: iconText @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2874 krita/krita.action:2875
+#: krita/krita.action:2922 krita/krita.action:2923
 #, kde-format
 msgctxt "action"
 msgid "Select all unlocked layers"
 msgstr "Избиране на всички отключени слоеве"
 
 #. i18n: context: text @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2884
+#: krita/krita.action:2932
 #, kde-format
 msgctxt "action"
 msgid "&Save Layer/Mask..."
@@ -11773,14 +11827,14 @@ msgstr "&Запазване на слой/маска..."
 #. i18n: context: iconText @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2886 krita/krita.action:2887
+#: krita/krita.action:2934 krita/krita.action:2935
 #, kde-format
 msgctxt "action"
 msgid "Save Layer/Mask"
 msgstr "Запазване на слой/маска"
 
 #. i18n: context: text @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2896
+#: krita/krita.action:2944
 #, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG..."
@@ -11790,14 +11844,14 @@ msgstr "Запазване на векторен слой като SVG..."
 #. i18n: context: iconText @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2898 krita/krita.action:2899
+#: krita/krita.action:2946 krita/krita.action:2947
 #, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG"
 msgstr "Запазване на векторен слой като SVG"
 
 #. i18n: context: text @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2908
+#: krita/krita.action:2956
 #, kde-format
 msgctxt "action"
 msgid "Save &Group Layers..."
@@ -11807,14 +11861,14 @@ msgstr "Запазване на &група слоеве..."
 #. i18n: context: iconText @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2910 krita/krita.action:2911
+#: krita/krita.action:2958 krita/krita.action:2959
 #, kde-format
 msgctxt "action"
 msgid "Save Group Layers"
 msgstr "Запазване на &група слоеве"
 
 #. i18n: context: text @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2920
+#: krita/krita.action:2968
 #, kde-format
 msgctxt "action"
 msgid "Convert group to &animated layer"
@@ -11824,14 +11878,14 @@ msgstr "Преобразуване в група в слой с &анимаци�
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2922 krita/krita.action:2923
+#: krita/krita.action:2970 krita/krita.action:2971
 #, kde-format
 msgctxt "action"
 msgid "Convert child layers into animation frames"
 msgstr ""
 
 #. i18n: context: text @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2932
+#: krita/krita.action:2980
 #, kde-format
 msgctxt "action"
 msgid "Convert to &animated layer"
@@ -11841,35 +11895,35 @@ msgstr "Преобразуване в слой &анимация"
 #. i18n: context: iconText @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2934 krita/krita.action:2935
+#: krita/krita.action:2982 krita/krita.action:2983
 #, kde-format
 msgctxt "action"
 msgid "Convert layer into animation frames"
 msgstr "Преобразуване на слой в кадър на анимация"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2944
+#: krita/krita.action:2992
 #, kde-format
 msgctxt "action"
 msgid "to &File Layer..."
 msgstr "Преобразуване в слой на &файл"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2946
+#: krita/krita.action:2994
 #, kde-format
 msgctxt "action"
 msgid "Saves out the layers into a new image and then references that image."
 msgstr ""
 
 #. i18n: context: iconText @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2947
+#: krita/krita.action:2995
 #, kde-format
 msgctxt "action"
 msgid "Convert to File Layer"
 msgstr "Преобразуване в слой на файл"
 
 #. i18n: context: text @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2956
+#: krita/krita.action:3004
 #, kde-format
 msgctxt "action"
 msgid "I&mport Layer..."
@@ -11879,14 +11933,14 @@ msgstr "И&мпортиране на слой..."
 #. i18n: context: iconText @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2958 krita/krita.action:2959
+#: krita/krita.action:3006 krita/krita.action:3007
 #, kde-format
 msgctxt "action"
 msgid "Import Layer"
 msgstr "И&мпортиране на слой"
 
 #. i18n: context: text @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2968
+#: krita/krita.action:3016
 #, kde-format
 msgctxt "action"
 msgid "&as Paint Layer..."
@@ -11896,14 +11950,14 @@ msgstr "&като слой за рисуване..."
 #. i18n: context: iconText @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2970 krita/krita.action:2971
+#: krita/krita.action:3018 krita/krita.action:3019
 #, kde-format
 msgctxt "action"
 msgid "as Paint Layer"
 msgstr "като слой за рисуване"
 
 #. i18n: context: text @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2980
+#: krita/krita.action:3028
 #, kde-format
 msgctxt "action"
 msgid "as &Transparency Mask..."
@@ -11913,14 +11967,14 @@ msgstr "като &маска за прозрачност"
 #. i18n: context: iconText @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2982 krita/krita.action:2983
+#: krita/krita.action:3030 krita/krita.action:3031
 #, kde-format
 msgctxt "action"
 msgid "as Transparency Mask"
 msgstr "като маска за прозрачност"
 
 #. i18n: context: text @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2992
+#: krita/krita.action:3040
 #, kde-format
 msgctxt "action"
 msgid "as &Filter Mask..."
@@ -11930,14 +11984,14 @@ msgstr " &като маска на филтър..."
 #. i18n: context: iconText @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2994 krita/krita.action:2995
+#: krita/krita.action:3042 krita/krita.action:3043
 #, kde-format
 msgctxt "action"
 msgid "as Filter Mask"
 msgstr "като маска на филтър"
 
 #. i18n: context: text @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3004
+#: krita/krita.action:3052
 #, kde-format
 msgctxt "action"
 msgid "as &Selection Mask..."
@@ -11947,14 +12001,14 @@ msgstr "като маска на &селекция..."
 #. i18n: context: iconText @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3006 krita/krita.action:3007
+#: krita/krita.action:3054 krita/krita.action:3055
 #, kde-format
 msgctxt "action"
 msgid "as Selection Mask"
 msgstr "като маска на селекция"
 
 #. i18n: context: text @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3016
+#: krita/krita.action:3064
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Paint Layer"
@@ -11964,14 +12018,14 @@ msgstr "Преобразуване &в слой за рисуване"
 #. i18n: context: iconText @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3018 krita/krita.action:3019
+#: krita/krita.action:3066 krita/krita.action:3067
 #, kde-format
 msgctxt "action"
 msgid "to Paint Layer"
 msgstr "в слой за рисуване"
 
 #. i18n: context: text @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3028
+#: krita/krita.action:3076
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Transparency Mask"
@@ -11981,14 +12035,14 @@ msgstr "Преобразуване в &маска за прозрачност"
 #. i18n: context: iconText @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3030 krita/krita.action:3031
+#: krita/krita.action:3078 krita/krita.action:3079
 #, kde-format
 msgctxt "action"
 msgid "to Transparency Mask"
 msgstr ""
 
 #. i18n: context: text @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3040
+#: krita/krita.action:3088
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Filter Mask..."
@@ -11998,14 +12052,14 @@ msgstr "Преобразуване в &маска на филтър"
 #. i18n: context: iconText @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3042 krita/krita.action:3043
+#: krita/krita.action:3090 krita/krita.action:3091
 #, kde-format
 msgctxt "action"
 msgid "to Filter Mask"
 msgstr "в маска на филтър"
 
 #. i18n: context: text @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3052
+#: krita/krita.action:3100
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Selection Mask"
@@ -12015,14 +12069,14 @@ msgstr "Преобразуване в маска на селекция"
 #. i18n: context: iconText @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3054 krita/krita.action:3055
+#: krita/krita.action:3102 krita/krita.action:3103
 #, kde-format
 msgctxt "action"
 msgid "to Selection Mask"
 msgstr ""
 
 #. i18n: context: text @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3064
+#: krita/krita.action:3112
 #, kde-format
 msgctxt "action"
 msgid "&Alpha into Mask"
@@ -12032,14 +12086,14 @@ msgstr "&Алфа в маска"
 #. i18n: context: iconText @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3066 krita/krita.action:3067
+#: krita/krita.action:3114 krita/krita.action:3115
 #, kde-format
 msgctxt "action"
 msgid "Alpha into Mask"
 msgstr "Алфа в маска"
 
 #. i18n: context: text @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3076
+#: krita/krita.action:3124
 #, kde-format
 msgctxt "action"
 msgid "&Write as Alpha"
@@ -12049,14 +12103,14 @@ msgstr "&Записване като Алфа"
 #. i18n: context: iconText @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3078 krita/krita.action:3079
+#: krita/krita.action:3126 krita/krita.action:3127
 #, kde-format
 msgctxt "action"
 msgid "Write as Alpha"
 msgstr "Записване като Алфа"
 
 #. i18n: context: text @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3088
+#: krita/krita.action:3136
 #, kde-format
 msgctxt "action"
 msgid "&Save Merged..."
@@ -12066,14 +12120,14 @@ msgstr "&Запазване на слетите..."
 #. i18n: context: iconText @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3090 krita/krita.action:3091
+#: krita/krita.action:3138 krita/krita.action:3139
 #, kde-format
 msgctxt "action"
 msgid "Save Merged"
 msgstr "Запазване на слетите"
 
 #. i18n: context: text @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3100
+#: krita/krita.action:3148
 #, kde-format
 msgctxt "action"
 msgid "Split Layer..."
@@ -12083,14 +12137,14 @@ msgstr "Разделяне на слой..."
 #. i18n: context: iconText @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3102 krita/krita.action:3103
+#: krita/krita.action:3150 krita/krita.action:3151
 #, kde-format
 msgctxt "action"
 msgid "Split Layer"
 msgstr "Разделяне на слой"
 
 #. i18n: context: text @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3112
+#: krita/krita.action:3160
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose ..."
@@ -12100,14 +12154,14 @@ msgstr "Wavelet разлагане ..."
 #. i18n: context: iconText @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3114 krita/krita.action:3115
+#: krita/krita.action:3162 krita/krita.action:3163
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose"
 msgstr "Wavelet разлагане"
 
 #. i18n: context: text @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3124
+#: krita/krita.action:3172
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer Hori&zontally"
@@ -12117,14 +12171,14 @@ msgstr "Огледално завъртане на слой по &хоризон
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3126 krita/krita.action:3127
+#: krita/krita.action:3174 krita/krita.action:3175
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer Horizontally"
 msgstr "Огледално завъртане на слой по хоризонтала"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3136
+#: krita/krita.action:3184
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer &Vertically"
@@ -12134,14 +12188,14 @@ msgstr "Огледално завъртане на слой по &вертика
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3138 krita/krita.action:3139
+#: krita/krita.action:3186 krita/krita.action:3187
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer Vertically"
 msgstr "Огледално завъртане на слой по вертикала"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3148
+#: krita/krita.action:3196
 #, kde-format
 msgctxt "action"
 msgid "&Rotate Layer..."
@@ -12151,14 +12205,14 @@ msgstr "&Завъртване на слой..."
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3150 krita/krita.action:3151
+#: krita/krita.action:3198 krita/krita.action:3199
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer"
 msgstr "Завъртване на слой"
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3160
+#: krita/krita.action:3208
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Layer 90° to the Right"
@@ -12168,14 +12222,14 @@ msgstr "Завъртване на &слой 90° надясно"
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3162 krita/krita.action:3163
+#: krita/krita.action:3210 krita/krita.action:3211
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer 90° to the Right"
 msgstr "Завъртване на слой 90° надясно"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3172
+#: krita/krita.action:3220
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer &90° to the Left"
@@ -12185,14 +12239,14 @@ msgstr "Завъртване на слой &90° наляво"
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3174 krita/krita.action:3175
+#: krita/krita.action:3222 krita/krita.action:3223
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer 90° to the Left"
 msgstr "Завъртване на слой 90° наляво"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3184
+#: krita/krita.action:3232
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer &180°"
@@ -12202,14 +12256,14 @@ msgstr "Завъртване на слой &180°"
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3186 krita/krita.action:3187
+#: krita/krita.action:3234 krita/krita.action:3235
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer 180°"
 msgstr "Завъртване на слой 180°"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3196
+#: krita/krita.action:3244
 #, kde-format
 msgctxt "action"
 msgid "Scale &Layer to new Size..."
@@ -12219,14 +12273,14 @@ msgstr "Преоразмеряване на &слой..."
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3198 krita/krita.action:3199
+#: krita/krita.action:3246 krita/krita.action:3247
 #, kde-format
 msgctxt "action"
 msgid "Scale Layer to new Size"
 msgstr "Преоразмеряване на слой"
 
 #. i18n: context: text @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3208
+#: krita/krita.action:3256
 #, kde-format
 msgctxt "action"
 msgid "&Shear Layer..."
@@ -12236,14 +12290,14 @@ msgstr "&Наклоняване на слой..."
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3210 krita/krita.action:3211
+#: krita/krita.action:3258 krita/krita.action:3259
 #, kde-format
 msgctxt "action"
 msgid "Shear Layer"
 msgstr "Наклоняване на слой"
 
 #. i18n: context: text @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3220
+#: krita/krita.action:3268
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Hori&zontally"
@@ -12253,14 +12307,14 @@ msgstr "Огледално завъртане на всички слоеве п�
 #. i18n: context: iconText @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3222 krita/krita.action:3223
+#: krita/krita.action:3270 krita/krita.action:3271
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Horizontally"
 msgstr "Огледално завъртане на всички слоеве по хоризонтала"
 
 #. i18n: context: text @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3232
+#: krita/krita.action:3280
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers &Vertically"
@@ -12270,14 +12324,14 @@ msgstr "Огледално завъртане на всички слоеве п�
 #. i18n: context: iconText @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3234 krita/krita.action:3235
+#: krita/krita.action:3282 krita/krita.action:3283
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Vertically"
 msgstr "Огледално завъртане на всички слоеве по вертикала"
 
 #. i18n: context: text @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3244
+#: krita/krita.action:3292
 #, kde-format
 msgctxt "action"
 msgid "&Rotate All Layers..."
@@ -12287,14 +12341,14 @@ msgstr "&Завъртване на всички слоеве..."
 #. i18n: context: iconText @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3246 krita/krita.action:3247
+#: krita/krita.action:3294 krita/krita.action:3295
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers"
 msgstr "Завъртване на всички слоеве"
 
 #. i18n: context: text @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3256
+#: krita/krita.action:3304
 #, kde-format
 msgctxt "action"
 msgid "Rotate All &Layers 90° to the Right"
@@ -12304,14 +12358,14 @@ msgstr "Завъртване на вси&чки слоеве 90° надясно
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3258 krita/krita.action:3259
+#: krita/krita.action:3306 krita/krita.action:3307
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Right"
 msgstr "Завъртване на вси&чки слоеве 90° надясно"
 
 #. i18n: context: text @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3268
+#: krita/krita.action:3316
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &90° to the Left"
@@ -12321,14 +12375,14 @@ msgstr "Завъртване на всички слоеве &90° наляво"
 #. i18n: context: iconText @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3270 krita/krita.action:3271
+#: krita/krita.action:3318 krita/krita.action:3319
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Left"
 msgstr "Завъртване на всички слоеве 90° наляво"
 
 #. i18n: context: text @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3280
+#: krita/krita.action:3328
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &180°"
@@ -12338,14 +12392,14 @@ msgstr "Завъртване на всички слоеве &180°"
 #. i18n: context: iconText @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3282 krita/krita.action:3283
+#: krita/krita.action:3330 krita/krita.action:3331
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 180°"
 msgstr "Завъртване на всички слоеве 180°"
 
 #. i18n: context: text @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3292
+#: krita/krita.action:3340
 #, kde-format
 msgctxt "action"
 msgid "Scale All &Layers to new Size..."
@@ -12355,14 +12409,14 @@ msgstr "Преоразмеряване на &всички слоеве..."
 #. i18n: context: iconText @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3294 krita/krita.action:3295
+#: krita/krita.action:3342 krita/krita.action:3343
 #, kde-format
 msgctxt "action"
 msgid "Scale All Layers to new Size"
 msgstr "Преоразмеряване на всички слоеве"
 
 #. i18n: context: text @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3304
+#: krita/krita.action:3352
 #, kde-format
 msgctxt "action"
 msgid "&Shear All Layers..."
@@ -12372,14 +12426,14 @@ msgstr "&Наклоняване на всички слоеве..."
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3306 krita/krita.action:3307
+#: krita/krita.action:3354 krita/krita.action:3355
 #, kde-format
 msgctxt "action"
 msgid "Shear All Layers"
 msgstr "Наклоняване на всички слоеве"
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3316
+#: krita/krita.action:3364
 #, kde-format
 msgctxt "action"
 msgid "&Offset Layer..."
@@ -12389,14 +12443,14 @@ msgstr "&Отместване на слой..."
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3318 krita/krita.action:3319
+#: krita/krita.action:3366 krita/krita.action:3367
 #, kde-format
 msgctxt "action"
 msgid "Offset Layer"
 msgstr "Отместване на слой"
 
 #. i18n: context: text @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3328
+#: krita/krita.action:3376
 #, kde-format
 msgctxt "action"
 msgid "Clones &Array..."
@@ -12406,14 +12460,14 @@ msgstr "&Масив от клонове..."
 #. i18n: context: iconText @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3330 krita/krita.action:3331
+#: krita/krita.action:3378 krita/krita.action:3379
 #, kde-format
 msgctxt "action"
 msgid "Clones Array"
 msgstr "Масив от клонове"
 
 #. i18n: context: text @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3340
+#: krita/krita.action:3388
 #, kde-format
 msgctxt "action"
 msgid "&Edit metadata..."
@@ -12423,14 +12477,14 @@ msgstr "&Редактиране на метаданни..."
 #. i18n: context: iconText @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3342 krita/krita.action:3343
+#: krita/krita.action:3390 krita/krita.action:3391
 #, kde-format
 msgctxt "action"
 msgid "Edit metadata"
 msgstr "Редактиране на метаданни"
 
 #. i18n: context: text @ Action (histogram), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3352
+#: krita/krita.action:3400
 #, kde-format
 msgctxt "action"
 msgid "&Histogram..."
@@ -12440,14 +12494,14 @@ msgstr "&Хистограма..."
 #. i18n: context: iconText @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (histogram), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3354 krita/krita.action:3355
+#: krita/krita.action:3402 krita/krita.action:3403
 #, kde-format
 msgctxt "action"
 msgid "Histogram"
 msgstr "Хистограма"
 
 #. i18n: context: text @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3364
+#: krita/krita.action:3412
 #, kde-format
 msgctxt "action"
 msgid "&Convert Layer Color Space..."
@@ -12457,14 +12511,14 @@ msgstr "&Преобразуване на цветовото пространст
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3366 krita/krita.action:3367
+#: krita/krita.action:3414 krita/krita.action:3415
 #, kde-format
 msgctxt "action"
 msgid "Convert Layer Color Space"
 msgstr "Преобразуване на цветовото пространство на слой"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3376
+#: krita/krita.action:3424
 #, kde-format
 msgctxt "action"
 msgid "&Merge with Layer Below"
@@ -12474,14 +12528,14 @@ msgstr "&Сливане с долния слой"
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3378 krita/krita.action:3379
+#: krita/krita.action:3426 krita/krita.action:3427
 #, kde-format
 msgctxt "action"
 msgid "Merge with Layer Below"
 msgstr "Сливане с долния слой"
 
 #. i18n: context: text @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3388
+#: krita/krita.action:3436
 #, kde-format
 msgctxt "action"
 msgid "&Flatten Layer"
@@ -12491,14 +12545,14 @@ msgstr "&Обединяване на слой"
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3390 krita/krita.action:3391
+#: krita/krita.action:3438 krita/krita.action:3439
 #, kde-format
 msgctxt "action"
 msgid "Flatten Layer"
 msgstr "Обединяване на слой"
 
 #. i18n: context: text @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3400
+#: krita/krita.action:3448
 #, kde-format
 msgctxt "action"
 msgid "Flatten ima&ge"
@@ -12508,14 +12562,14 @@ msgstr "Обединяване на изоб&ражение"
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3402 krita/krita.action:3403
+#: krita/krita.action:3450 krita/krita.action:3451
 #, kde-format
 msgctxt "action"
 msgid "Flatten image"
 msgstr "Обединяване на изоб&ражение"
 
 #. i18n: context: text @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3412
+#: krita/krita.action:3460
 #, kde-format
 msgctxt "action"
 msgid "La&yer Style..."
@@ -12525,7 +12579,7 @@ msgstr "Стил на сл&ой..."
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3414 krita/krita.action:3415
+#: krita/krita.action:3462 krita/krita.action:3463
 #, kde-format
 msgctxt "action"
 msgid "Layer Style"
@@ -12537,7 +12591,7 @@ msgstr "Стил на слой"
 #. i18n: context: text @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3424 krita/krita.action:3426 krita/krita.action:3427
+#: krita/krita.action:3472 krita/krita.action:3474 krita/krita.action:3475
 #, kde-format
 msgctxt "action"
 msgid "Move into previous group"
@@ -12549,7 +12603,7 @@ msgstr ""
 #. i18n: context: text @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3436 krita/krita.action:3438 krita/krita.action:3439
+#: krita/krita.action:3484 krita/krita.action:3486 krita/krita.action:3487
 #, kde-format
 msgctxt "action"
 msgid "Move into next group"
@@ -12561,14 +12615,14 @@ msgstr ""
 #. i18n: context: text @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3448 krita/krita.action:3450 krita/krita.action:3451
+#: krita/krita.action:3496 krita/krita.action:3498 krita/krita.action:3499
 #, kde-format
 msgctxt "action"
 msgid "Rename current layer"
 msgstr ""
 
 #. i18n: context: text @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3460
+#: krita/krita.action:3508
 #, kde-format
 msgctxt "action"
 msgid "&Remove Layer"
@@ -12578,7 +12632,7 @@ msgstr "&Премахване на слой"
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3462 krita/krita.action:3463
+#: krita/krita.action:3510 krita/krita.action:3511
 #, kde-format
 msgctxt "action"
 msgid "Remove Layer"
@@ -12588,7 +12642,7 @@ msgstr "Премахване на слой"
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3472 krita/krita.action:3474
+#: krita/krita.action:3520 krita/krita.action:3522
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Up"
@@ -12598,14 +12652,14 @@ msgstr "Преместване на слоя или маската нагоре"
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3482 krita/krita.action:3484
+#: krita/krita.action:3530 krita/krita.action:3532
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Down"
 msgstr "Преместване на слоя или маската надолу"
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3492
+#: krita/krita.action:3540
 #, kde-format
 msgctxt "action"
 msgid "&Properties..."
@@ -12615,28 +12669,28 @@ msgstr "&Свойства..."
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3494 krita/krita.action:3495
+#: krita/krita.action:3542 krita/krita.action:3543
 #, kde-format
 msgctxt "Layer Properties"
 msgid "Properties"
 msgstr "Настройки"
 
 #. i18n: context: text @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3504
+#: krita/krita.action:3552
 #, kde-format
 msgctxt "action"
 msgid "Set Copy F&rom..."
 msgstr ""
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3506
+#: krita/krita.action:3554
 #, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layer(s)."
 msgstr "Задайте източника за избраните клонирани слоеве."
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3507
+#: krita/krita.action:3555
 #, kde-format
 msgctxt "action"
 msgid "Set Copy From"
@@ -16595,7 +16649,7 @@ msgstr "Размер"
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
-#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:287
+#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:294
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:70
 #: libs/ui/widgets/kis_selection_options.cc:186
 #: libs/ui/widgets/kis_selection_options.cc:200
@@ -16621,7 +16675,7 @@ msgstr "Размер"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:68
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:73
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:68
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:78
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:31
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:25
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:111
@@ -16693,9 +16747,9 @@ msgstr ""
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:21
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:112
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:50
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:164
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:174
 #: plugins/paintops/hatching/KisHatchingStandardOptionData.h:16
-#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:221
+#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:224
 #, kde-format
 msgid "Angle"
 msgstr "Ъгъл"
@@ -16703,10 +16757,10 @@ msgstr "Ъгъл"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:22
 #: plugins/dockers/arrangedocker/arrange_docker_widget.ui:322
-#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:274
+#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:276
 #: plugins/paintops/libpaintop/KisSpacingOptionData.h:35
-#: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:116
-#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:94
+#: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:126
+#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:104
 #, kde-format
 msgid "Spacing"
 msgstr "Разстояние"
@@ -21317,7 +21371,7 @@ msgstr "Показване"
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
-#: libs/ui/kis_paintop_box.cc:299
+#: libs/ui/kis_paintop_box.cc:311
 #: plugins/dockers/recorder/recorder_export.ui:467
 #, kde-format
 msgid "x"
@@ -22338,8 +22392,8 @@ msgstr "Настройки на слой"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
 #: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:595
-#: libs/ui/kis_node_model.cpp:598 libs/ui/kis_paintop_box.cc:269
-#: libs/ui/kis_paintop_box.cc:277 libs/ui/layerstyles/wdgInnerGlow.ui:220
+#: libs/ui/kis_node_model.cpp:598 libs/ui/kis_paintop_box.cc:276
+#: libs/ui/kis_paintop_box.cc:284 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:93
@@ -22376,7 +22430,7 @@ msgstr "Настройки на слой"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:684
 #: plugins/impex/webp/kis_wdg_options_webp.ui:750
 #: plugins/impex/webp/kis_wdg_options_webp.ui:773
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:127
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:137
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:43
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:78
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:147
@@ -22402,7 +22456,7 @@ msgstr "Настройки на слой"
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:50
 #: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:29
 #: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:32
-#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:166
+#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:176
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:60
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:27
@@ -24574,8 +24628,8 @@ msgstr "Цвят:"
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblSize)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
-#: libs/ui/forms/wdgdisplaysettings.ui:329 libs/ui/kis_paintop_box.cc:256
-#: libs/ui/kis_paintop_box.cc:262
+#: libs/ui/forms/wdgdisplaysettings.ui:329 libs/ui/kis_paintop_box.cc:261
+#: libs/ui/kis_paintop_box.cc:268
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2007
@@ -26328,7 +26382,7 @@ msgid "path"
 msgstr "път"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:449
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:461
 #, kde-format
 msgid "Brush Editor"
 msgstr ""
@@ -29149,22 +29203,22 @@ msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
 msgstr ""
 
-#: libs/ui/kis_paintop_box.cc:99
+#: libs/ui/kis_paintop_box.cc:100
 #, kde-format
 msgid "Painter's Toolchest"
 msgstr "Инструменти за рисуване"
 
-#: libs/ui/kis_paintop_box.cc:111
+#: libs/ui/kis_paintop_box.cc:112
 #, kde-format
 msgid "Tool Settings"
 msgstr ""
 
-#: libs/ui/kis_paintop_box.cc:119
+#: libs/ui/kis_paintop_box.cc:120
 #, kde-format
 msgid "Edit brush settings"
 msgstr "Редактиране настройките на четка"
 
-#: libs/ui/kis_paintop_box.cc:126
+#: libs/ui/kis_paintop_box.cc:127
 #, kde-format
 msgid "Choose brush preset"
 msgstr "Избиране на настройки на четка"
@@ -29172,7 +29226,7 @@ msgstr "Избиране на настройки на четка"
 #. i18n: ectx: property (text), widget (QLabel, opacityLbl)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, opacityLabel)
-#: libs/ui/kis_paintop_box.cc:254 libs/ui/kis_paintop_box.cc:260
+#: libs/ui/kis_paintop_box.cc:259 libs/ui/kis_paintop_box.cc:266
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
@@ -29182,29 +29236,44 @@ msgid "Opacity:"
 msgstr "Непрозрачност:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
-#: libs/ui/kis_paintop_box.cc:255 libs/ui/kis_paintop_box.cc:261
+#: libs/ui/kis_paintop_box.cc:260 libs/ui/kis_paintop_box.cc:267
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1985
 #, kde-format
 msgid "Flow:"
 msgstr ""
 
-#: libs/ui/kis_paintop_box.cc:257 libs/ui/kis_paintop_box.cc:263
+#. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
+#. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
+#. i18n: ectx: property (title), widget (QGroupBox, gbRotation)
+#: libs/ui/kis_paintop_box.cc:262 libs/ui/kis_paintop_box.cc:269
+#: plugins/filters/blur/wdg_lens_blur.ui:84
+#: plugins/generators/pattern/wdgpatternoptions.ui:212
+#: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:178
+#: plugins/tools/basictools/wdgmultihandtool.ui:129
+#, kde-format
+msgid "Rotation:"
+msgstr "Завъртване:"
+
+#: libs/ui/kis_paintop_box.cc:263 libs/ui/kis_paintop_box.cc:270
 #, kde-format
 msgid "Pattern Scale:"
 msgstr ""
 
-#: libs/ui/kis_paintop_box.cc:316
+#: libs/ui/kis_paintop_box.cc:328
 #, kde-format
 msgid "Choose workspace"
 msgstr "Избиране на работна среда"
 
-#: libs/ui/kis_paintop_box.cc:359
+#: libs/ui/kis_paintop_box.cc:371
 #, kde-format
 msgid "Brush composite"
 msgstr ""
 
-#: libs/ui/kis_paintop_box.cc:1272 libs/ui/kis_paintop_box.cc:1294
-#: libs/ui/kis_paintop_box.cc:1308
+#: libs/ui/kis_paintop_box.cc:1307 libs/ui/kis_paintop_box.cc:1329
+#: libs/ui/kis_paintop_box.cc:1343
 #, kde-format
 msgid ""
 "%1\n"
@@ -30913,49 +30982,49 @@ msgstr "Но проверка на цветово предаване е все �
 msgid "Gamut Warnings turned off."
 msgstr "Предупреждения при излизане извън е изключено."
 
-#: libs/ui/KisViewManager.cpp:789
+#: libs/ui/KisViewManager.cpp:790
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Активен профил на автора"
 
-#: libs/ui/KisViewManager.cpp:919
+#: libs/ui/KisViewManager.cpp:920
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (Копиране)"
 
-#: libs/ui/KisViewManager.cpp:1062 libs/ui/KisViewManager.cpp:1138
+#: libs/ui/KisViewManager.cpp:1063 libs/ui/KisViewManager.cpp:1139
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Алтернативните имена са изчерпани, опитайте да запазите ръчно с по-голям "
 "номер"
 
-#: libs/ui/KisViewManager.cpp:1062
+#: libs/ui/KisViewManager.cpp:1063
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Неуспешно запазване на версията"
 
-#: libs/ui/KisViewManager.cpp:1138
+#: libs/ui/KisViewManager.cpp:1139
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Неуспешно запазване на резервното копие"
 
-#: libs/ui/KisViewManager.cpp:1317
+#: libs/ui/KisViewManager.cpp:1318
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
 "Press %1 to go back."
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1357
+#: libs/ui/KisViewManager.cpp:1358
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Отваряне на папка с ресурси"
 
-#: libs/ui/KisViewManager.cpp:1361
+#: libs/ui/KisViewManager.cpp:1362
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -30970,19 +31039,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1376
+#: libs/ui/KisViewManager.cpp:1377
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1377
+#: libs/ui/KisViewManager.cpp:1378
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1490 libs/ui/KisViewManager.cpp:1508
+#: libs/ui/KisViewManager.cpp:1491 libs/ui/KisViewManager.cpp:1509
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -32112,7 +32181,7 @@ msgstr ""
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_paint.cc:581
+#: libs/ui/tool/kis_tool_paint.cc:591
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr ""
@@ -32167,6 +32236,32 @@ msgstr "Увеличаване размера на четка"
 #, kde-format
 msgid "Decrease Brush Size"
 msgstr "Намаляване размера на четка"
+
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Rotate object 90° clockwise"
+msgid "Rotate brush tip clockwise"
+msgstr "Завъртване на обект 90° по часовникова стрелка"
+
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
+#, kde-format
+msgid "Rotate brush tip clockwise (precise)"
+msgstr ""
+
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Rotate object 90° counterclockwise"
+msgid "Rotate brush tip counter-clockwise"
+msgstr "Завъртване на обект 90° обратно на часовникова стрелка"
+
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Rotate object 90° counterclockwise"
+msgid "Rotate brush tip counter-clockwise (precise)"
+msgstr "Завъртване на обект 90° обратно на часовникова стрелка"
 
 #: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, kde-format
@@ -43378,20 +43473,6 @@ msgstr "Фигура:"
 msgid "Radius:"
 msgstr "Радиус:"
 
-#. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
-#. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
-#. i18n: ectx: property (title), widget (QGroupBox, gbRotation)
-#: plugins/filters/blur/wdg_lens_blur.ui:84
-#: plugins/generators/pattern/wdgpatternoptions.ui:212
-#: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:178
-#: plugins/tools/basictools/wdgmultihandtool.ui:129
-#, kde-format
-msgid "Rotation:"
-msgstr "Завъртване:"
-
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #. i18n: ectx: property (text), widget (QLabel, rotationLbl)
 #. i18n: ectx: property (text), widget (QLabel, lblAngle)
@@ -50008,22 +50089,22 @@ msgstr ""
 msgid "Smudge Radius"
 msgstr ""
 
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:62
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:72
 #, kde-format
 msgid "Line Width"
 msgstr "Ширина на линия"
 
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:91
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:101
 #, kde-format
 msgid "History Size"
 msgstr "Размер на историята"
 
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:120
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:130
 #, kde-format
 msgid "Line Opacity"
 msgstr ""
 
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:150
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:160
 #, kde-format
 msgid "Connection Line"
 msgstr ""
@@ -50191,20 +50272,20 @@ msgstr ""
 msgid "Deform"
 msgstr ""
 
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:98
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:108
 #, kde-format
 msgid "Amount"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, deformLabel)
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:126
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:136
 #: plugins/paintops/deform/wdgdeformoptions.ui:39
 #, kde-format
 msgid "Deform Mode"
 msgstr "Режим на деформация"
 
 #. i18n: ectx: property (text), widget (QRadioButton, growBtn)
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:129
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:139
 #: plugins/paintops/deform/wdgdeformoptions.ui:48
 #, kde-format
 msgctxt "Grow as in deform brush engine"
@@ -50212,7 +50293,7 @@ msgid "Grow"
 msgstr "Увеличаване"
 
 #. i18n: ectx: property (text), widget (QRadioButton, shrinkBtn)
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:130
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:140
 #: plugins/paintops/deform/wdgdeformoptions.ui:55
 #, kde-format
 msgctxt "Shrink as in deform brush engine"
@@ -50220,14 +50301,14 @@ msgid "Shrink"
 msgstr "Свиване"
 
 #. i18n: ectx: property (text), widget (QRadioButton, swirlCWBtn)
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:131
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:141
 #: plugins/paintops/deform/wdgdeformoptions.ui:69
 #, kde-format
 msgid "Swirl CW"
 msgstr "Завъртване по час. стрелка"
 
 #. i18n: ectx: property (text), widget (QRadioButton, swirlCCWBtn)
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:132
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:142
 #: plugins/paintops/deform/wdgdeformoptions.ui:62
 #, kde-format
 msgid "Swirl CCW"
@@ -50236,7 +50317,7 @@ msgstr "Завъртване обратно на час. стрелка"
 #. i18n: ectx: property (text), widget (QRadioButton, moveBtn)
 #. i18n: ectx: property (text), widget (QPushButton, moveOriginButton)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyMove)
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:133
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:143
 #: plugins/paintops/deform/wdgdeformoptions.ui:79
 #: plugins/tools/basictools/wdgmultihandtool.ui:173
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1814
@@ -50244,17 +50325,17 @@ msgstr "Завъртване обратно на час. стрелка"
 msgid "Move"
 msgstr "Преместване"
 
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:134
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:144
 #, kde-format
 msgid "Lens Zoom In"
 msgstr "Увеличаваща леща"
 
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:135
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:145
 #, kde-format
 msgid "Lens Zoom Out"
 msgstr "Намаляваща леща"
 
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:136
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:146
 #, kde-format
 msgctxt "Rearrange the positions of the pixels under the cursor"
 msgid "Color Deformation"
@@ -50406,7 +50487,7 @@ msgctxt "type of a brush engine, shown in the list of brush engines"
 msgid "Grid"
 msgstr "Мрежа"
 
-#: plugins/paintops/gridbrush/kis_grid_paintop_settings.cpp:201
+#: plugins/paintops/gridbrush/kis_grid_paintop_settings.cpp:211
 #, kde-format
 msgid "Division Level"
 msgstr ""
@@ -51333,8 +51414,8 @@ msgstr "Случайно отместване"
 msgid "Vertical Offset:"
 msgstr "Вертикално отместване:"
 
-#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:249
-#: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:91
+#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
+#: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
 #, kde-format
 msgid "Auto Spacing"
 msgstr ""
@@ -52538,7 +52619,7 @@ msgid "Offset scale"
 msgstr ""
 
 #: plugins/paintops/sketch/KisSketchStandardOptionData.h:31
-#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:158
+#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:168
 #, kde-format
 msgid "Density"
 msgstr "Плътност"
@@ -52585,7 +52666,7 @@ msgstr ""
 msgid "Distance opacity"
 msgstr ""
 
-#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:123
+#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:133
 #, kde-format
 msgid "Particle Count"
 msgstr ""

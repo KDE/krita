@@ -12,6 +12,7 @@
 
 #include "KoViewConverter.h"
 #include "kis_coordinates_converter.h"
+#include "KoCanvasController.h"
 
 #include "kundo2command.h"
 #include <QTimer>
@@ -125,6 +126,7 @@ SvgTextCursor::SvgTextCursor(KoCanvasBase *canvas) :
     d(new Private)
 {
     d->canvas = canvas;
+    connect(d->canvas->canvasController()->proxyObject, SIGNAL(sizeChanged(QSize)), this, SLOT(updateInputMethodItemTransform()));
 }
 
 SvgTextCursor::~SvgTextCursor()
@@ -144,6 +146,7 @@ void SvgTextCursor::setShape(KoSvgTextShape *textShape)
     d->shape = textShape;
     if (d->shape) {
         d->shape->addShapeChangeListener(this);
+        updateInputMethodItemTransform();
     }
     d->pos = 0;
     d->anchor = 0;
@@ -347,6 +350,8 @@ QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     qDebug() << "receiving inputmethod query" << query;
 
+    // Because we set the input item transform to be shape->document->view->widget->window,
+    // the coordinates here should be in shape coordinates.
     switch(query) {
     case Qt::ImEnabled:
         return d->shape? true: false;
@@ -354,13 +359,10 @@ QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
     case Qt::ImCursorRectangle:
         // The platform integration will always define the cursor as the 'left side' handle.
         if (d->shape) {
-            QPointF caret1(d->shape->shapeToDocument(d->cursorCaret.p1()));
-            QPointF caret2(d->shape->shapeToDocument(d->cursorCaret.p2()));
+            QPointF caret1(d->cursorCaret.p1());
+            QPointF caret2(d->cursorCaret.p2());
 
-            caret1 = d->canvas->viewConverter()->documentToView().map(caret1);
-            caret2 = d->canvas->viewConverter()->documentToView().map(caret2);
-            caret1 = d->canvas->viewConverter()->viewToWidget().map(caret1);
-            caret2 = d->canvas->viewConverter()->viewToWidget().map(caret2);
+
             QRectF rect = QRectF(caret1, caret2).normalized();
             if (!rect.isValid()) {
                 if (rect.height() < 1) {
@@ -377,13 +379,8 @@ QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
     case Qt::ImAnchorRectangle:
         // The platform integration will always define the anchor as the 'right side' handle.
         if (d->shape) {
-            QPointF caret1(d->shape->shapeToDocument(d->anchorCaret.p1()));
-            QPointF caret2(d->shape->shapeToDocument(d->anchorCaret.p2()));
-
-            caret1 = d->canvas->viewConverter()->documentToView().map(caret1);
-            caret2 = d->canvas->viewConverter()->documentToView().map(caret2);
-            caret1 = d->canvas->viewConverter()->viewToWidget().map(caret1);
-            caret2 = d->canvas->viewConverter()->viewToWidget().map(caret2);
+            QPointF caret1(d->anchorCaret.p1());
+            QPointF caret2(d->anchorCaret.p2());
             QRectF rect = QRectF(caret1, caret2).normalized();
             if (rect.isEmpty()) {
                 if (rect.height() < 1) {
@@ -687,6 +684,26 @@ void SvgTextCursor::stopBlinkCursor()
     }
 }
 
+void SvgTextCursor::updateInputMethodItemTransform()
+{
+    QPoint pos = d->canvas->canvasWidget()->mapTo(d->canvas->canvasWidget()->window(), QPoint());
+    QTransform widgetToWindow = QTransform::fromTranslate(pos.x(), pos.y());
+    QTransform inputItemTransform = widgetToWindow;
+    QRectF inputRect = d->canvas->canvasWidget()->geometry();
+    if (d->shape) {
+        inputRect = d->shape->outlineRect().normalized();
+        QTransform shapeTransform = d->shape->absoluteTransformation();
+        QTransform docToView = d->canvas->viewConverter()->documentToView();
+        QTransform viewToWidget = d->canvas->viewConverter()->viewToWidget();
+        inputItemTransform = shapeTransform * docToView * viewToWidget * widgetToWindow;
+    }
+    qApp->inputMethod()->setInputItemTransform(inputItemTransform);
+    qApp->inputMethod()->setInputItemRectangle(inputRect);
+    if (!d->blockQueryUpdates) {
+        qApp->inputMethod()->update(Qt::ImQueryInput);
+    }
+}
+
 bool SvgTextCursor::hasSelection()
 {
     return d->pos != d->anchor;
@@ -704,6 +721,7 @@ void SvgTextCursor::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
     }
     updateCursor();
     updateSelection();
+    updateInputMethodItemTransform();
 }
 
 void SvgTextCursor::notifyCursorPosChanged(int pos, int anchor)

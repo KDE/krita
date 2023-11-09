@@ -166,6 +166,8 @@ private Q_SLOTS:
     void blinkCursor();
     void stopBlinkCursor();
 
+    void updateInputMethodItemTransform();
+
 private:
 
     /**

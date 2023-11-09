@@ -34,6 +34,8 @@ struct IMEDecorationInfo {
     bool thick = false; ///< Whether the decoration needs to be doubled in size.
 
     void setDecorationFromQStyle(QTextCharFormat::UnderlineStyle s) {
+        // whenever qt sets an underlinestyle it always sets the underline.
+        decor.setFlag(KoSvgText::DecorationUnderline, s != QTextCharFormat::NoUnderline);
         if (s == QTextCharFormat::DotLine) {
             style = KoSvgText::Dotted;
         } else if (s == QTextCharFormat::DashUnderline) {
@@ -80,8 +82,7 @@ struct IMEDecorationInfo {
 
         }
         if (decor == KoSvgText::DecorationNone) {
-            // On windows, the underline style is set, but no underline
-            // format is toggled, so we need to double check there's always one set.
+            // Ensure a underline is always set.
             decor.setFlag(KoSvgText::DecorationUnderline, true);
         }
     }

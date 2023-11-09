@@ -81,7 +81,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-06 00:40+0000\n"
-"PO-Revision-Date: 2023-11-07 17:18+0300\n"
+"PO-Revision-Date: 2023-11-08 17:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -8779,10 +8779,10 @@ msgstr "Режим ластика"
 #. i18n: context: toolTip @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:536 krita/krita.action:538 krita/krita.action:539
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Toggle eraser preset"
-msgstr "Переключить ластик"
+msgstr "Переключить профиль ластика"
 
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -8792,7 +8792,7 @@ msgstr "Переключить ластик"
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select eraser preset"
-msgstr "Переключить ластик"
+msgstr "Переключить профиль ластика"
 
 #. i18n: context: toolTip @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:550
@@ -9349,7 +9349,7 @@ msgstr "Преобразовать в форму"
 #, kde-format
 msgctxt "action"
 msgid "&Show Global Selection Mask"
-msgstr "&Показать глобальную маску выделения"
+msgstr "&Показать маску глобального выделения"
 
 #. i18n: context: toolTip @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:997
@@ -9367,7 +9367,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Global Selection Mask"
-msgstr "Показать глобальную маску выделения"
+msgstr "Показать маску глобального выделения"
 
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
@@ -12865,9 +12865,9 @@ msgid "&View"
 msgstr "&Вид"
 
 #: krita/krita5.xmlgui:89
-#, fuzzy, kde-format
+#, kde-format
 msgid "Wrap Around Mode Direction"
-msgstr "Замостить"
+msgstr "Направление мощения"
 
 #: krita/krita5.xmlgui:99
 #, kde-format
@@ -12877,7 +12877,7 @@ msgstr "&Масштабирование, поворот и отражение"
 #: krita/krita5.xmlgui:131
 #, kde-format
 msgid "&Snap To"
-msgstr "&Прилипание к"
+msgstr "&Прилипание"
 
 #: krita/krita5.xmlgui:154
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.xmlgui:4
@@ -12999,9 +12999,9 @@ msgid "File"
 msgstr "Файл"
 
 #: krita/krita5.xmlgui:417
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit"
-msgstr "&Правка"
+msgstr "Правка"
 
 #: krita/krita5.xmlgui:422
 #, kde-format
@@ -13941,10 +13941,10 @@ msgstr "Замостить"
 #. i18n: context: iconText @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:664 krita/kritamenu.action:666
 #: krita/kritamenu.action:667
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Both Directions"
-msgstr "Замостить"
+msgstr "Замостить в обоих направлениях"
 
 #. i18n: context: text @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
@@ -13954,10 +13954,10 @@ msgstr "Замостить"
 #. i18n: context: iconText @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:676 krita/kritamenu.action:678
 #: krita/kritamenu.action:679
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Horizontally"
-msgstr "Отразить по горизонтали"
+msgstr "Замостить по горизонтали"
 
 #. i18n: context: text @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
@@ -13967,10 +13967,10 @@ msgstr "Отразить по горизонтали"
 #. i18n: context: iconText @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:688 krita/kritamenu.action:690
 #: krita/kritamenu.action:691
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Vertically"
-msgstr "Отразить по вертикали"
+msgstr "Замостить по вертикали"
 
 #. i18n: context: text @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:700
@@ -14116,10 +14116,10 @@ msgstr "Уменьшить масштаб"
 #. i18n: context: text @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:798 krita/kritamenu.action:801
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Fit to View"
-msgstr "По размеру страницы"
+msgstr "Подогнать по размеру области просмотра"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:800
@@ -14133,10 +14133,10 @@ msgstr "Изменение размера холста"
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:808 krita/kritamenu.action:811
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
-msgstr "По ширине"
+msgstr "Подогнать по ширине области просмотра"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
@@ -14150,10 +14150,10 @@ msgstr "По ширине"
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:818 krita/kritamenu.action:821
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Height"
-msgstr "Вместить по высоте"
+msgstr "Подогнать по высоте области просмотра"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:820
@@ -14170,10 +14170,10 @@ msgstr "Вместить по высоте"
 #. i18n: context: iconText @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:828 krita/kritamenu.action:830
 #: krita/kritamenu.action:831
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Toggle Fit to View"
-msgstr "Переключить подгонку по размеру страницы"
+msgstr "Переключить подгонку по размеру области просмотра"
 
 #. i18n: context: text @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:838
@@ -14257,6 +14257,8 @@ msgstr "Печатный размер"
 msgctxt "action"
 msgid "Map the canvas display to print size, based on the image resolution."
 msgstr ""
+"Отобразить холст на размер носителя для печати на основе разрешения "
+"изображения."
 
 #. i18n: context: text @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:894
@@ -14355,7 +14357,7 @@ msgstr "Заблокировать или разблокировать напр�
 #, kde-format
 msgctxt "action"
 msgid "Snap to Guides"
-msgstr "Привязать к направляющим"
+msgstr "Прилипать к направляющим"
 
 #. i18n: context: toolTip @ Action (view_snap_to_guides), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:944
@@ -17334,7 +17336,7 @@ msgstr "Маска выделения"
 
 #: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Фон"
@@ -17809,6 +17811,8 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
 msgstr ""
+"Увеличение выделения до самого тёмного пиксела\n"
+"увеличение выделения до самого тёмного пиксела"
 
 #: libs/image/kis_switch_time_stroke_strategy.cpp:32
 msgctxt "(qtundo-format)"
@@ -18167,6 +18171,9 @@ msgid ""
 "millisecond</b>. The format cannot represent this, and the frame duration "
 "will be rounded to the nearest millisecond."
 msgstr ""
+"Изображение анимировано с длительностью кадра в <b>долях миллисекунды</b>. "
+"Это не поддерживается форматом, поэтому длительность кадра будет округлена "
+"до ближайшей миллисекунды."
 
 #: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:652
 #, kde-format
@@ -19329,13 +19336,13 @@ msgstr "Перекрытие"
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Linear)"
 msgid "Lambert Lighting (Linear)"
-msgstr ""
+msgstr "Ламбертово освещение (линейное)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:114
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Gamma 2.2)"
 msgid "Lambert Lighting (Gamma 2.2)"
-msgstr ""
+msgstr "Ламбертово освещение (гамма 2,2)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:115
 #, kde-format
@@ -20045,15 +20052,15 @@ msgstr "Теги"
 
 #: libs/resources/KisResourceModel.cpp:150
 #: libs/resources/KisTagResourceModel.cpp:652
-#, fuzzy, kde-format
+#, kde-format
 msgid "Large Thumbnail"
-msgstr "Очистить миниатюры"
+msgstr "Большая миниатюра"
 
 #: libs/resources/KisResourceModel.cpp:152
 #: libs/resources/KisTagResourceModel.cpp:654
 #, kde-format
 msgid "Dirty"
-msgstr ""
+msgstr "Изменено"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
@@ -20860,17 +20867,17 @@ msgstr "Не найден корректный исполняемый файл F
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
+"FFmpeg должен иметь версию как минимум 4.2+ для работы прозрачности GIF"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:481
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
 "Animated GIF images cannot have a framerate higher than 50. The framerate "
 "will be reduced to 50 frames per second"
 msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Внимание:</span> "
-"анимированные изображения в формате gif не могут иметь частоту кадров выше "
-"50. Частота кадров будет снижена до 50 кадров в секунду.</p></body></html>"
+"Анимированные изображения в формате GIF не могут иметь частоту кадров выше "
+"50. Частота кадров будет снижена до 50 кадров в секунду."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:488
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1824
@@ -20883,16 +20890,16 @@ msgstr "Предупреждения:"
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
-msgstr ""
+msgstr "Похоже, что указанный FFmpeg сжат. Сначала извлеките FFmpeg из архива."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
-"Неверно указан путь к FFmpeg. Выберите корректный путь к исполняемому файлу "
-"FFmpeg в вашей системе."
+"Похоже, что указано неверное расположение FFmpeg. Выберите корректный путь к "
+"исполняемому файлу FFmpeg в вашей системе."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:733
 #, kde-format
@@ -20908,7 +20915,7 @@ msgstr "Импорт анимации видео"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #, kde-format
 msgid "FFMpeg not found! Please add a path to FFMpeg in the \"Advanced\" tab"
-msgstr "FFMpeg не найден! Добавьте путь к FFMpeg на вкладке «Дополнительно»."
+msgstr "FFmpeg не найден! Добавьте путь к FFmpeg на вкладке «Дополнительно»."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:81
 #, kde-format
@@ -21110,22 +21117,22 @@ msgstr "Некорректный FFProbe!"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
 #, kde-format
 msgid "Open FFMpeg"
-msgstr "Открыть FFMpeg"
+msgstr "Открыть FFmpeg"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
 #, kde-format
 msgid "FFMpeg is invalid!"
-msgstr "Некорректный FFMpeg!"
+msgstr "Некорректный FFmpeg!"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
 #, kde-format
 msgid "No FFMpeg found!"
-msgstr "Не удалось найти FFMpeg!"
+msgstr "Не удалось найти FFmpeg!"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:658
 #, kde-format
 msgid "Your FFMpeg version does not support this format"
-msgstr "Your FFMpeg version does not support this format"
+msgstr "Ваша версия FFmpeg не поддерживает этот формат"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
 #, kde-format
@@ -21140,7 +21147,7 @@ msgstr "Не удалось загрузить данные видео"
 #: libs/ui/animation/KisFFMpegWrapper.cpp:354
 #, kde-format
 msgid "FFMpeg Crashed"
-msgstr "Сбой FFMpeg"
+msgstr "Сбой FFmpeg"
 
 #: libs/ui/animation/KisFFMpegWrapper.cpp:666
 #, kde-format
@@ -21324,8 +21331,8 @@ msgstr ""
 "лучшим качеством.</p><p><span style=\" font-style:italic;\">Примечание 1: "
 "Чтобы прозрачность работала должным образом, следует экспортировать "
 "последовательность изображений с включённой прозрачностью и использовать "
-"FFMpeg по крайней мере версии 4.2. Если в полученном GIF заметны разрывы "
-"кадров, настоятельно рекомендуется использовать FFMpeg версии не ниже 4.4.</"
+"FFmpeg по крайней мере версии 4.2. Если в полученном GIF заметны разрывы "
+"кадров, настоятельно рекомендуется использовать FFmpeg версии не ниже 4.4.</"
 "span></p><p><span style=\" font-style:italic;\">Примечание 2: Формат GIF "
 "поддерживает только 100% или 0% прозрачность. Частичная прозрачность </"
 "span><span style=\" font-style:italic; text-decoration: underline;\">не</"
@@ -21365,13 +21372,13 @@ msgstr "Особые параметры:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:466
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
 "destination streams of the FFmpeg instance"
 msgstr ""
-"Добавьте сюда любые фильтры ffmpeg. Они будут расположены между исходным и "
-"конечным потоком ffmpeg"
+"Добавьте сюда любые фильтры FFmpeg. Они будут расположены между исходным и "
+"конечным потоком экземпляра FFmpeg."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -22189,15 +22196,15 @@ msgstr "Фильтр:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
 #: libs/ui/animation/VideoImportDialog.ui:601
-#, fuzzy, kde-format
+#, kde-format
 msgid "FFmpeg"
-msgstr "FFmpeg:"
+msgstr "FFmpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:607
-#, fuzzy, kde-format
+#, kde-format
 msgid "FFmpeg path:"
-msgstr "Путь к FFMpeg:"
+msgstr "Путь к FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:634
@@ -22297,9 +22304,9 @@ msgstr "Кодировать в:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
 #: libs/ui/animation/wdg_animationrenderer.ui:210
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select the FFmpeg render options."
-msgstr "Выбор параметров обработки ffmpeg."
+msgstr "Выбор параметров обработки FFmpeg."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, labelExportTo)
@@ -22317,15 +22324,15 @@ msgstr "Включить аудио"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
-#, fuzzy, kde-format
+#, kde-format
 msgid "FFmpeg location:"
-msgstr "Расположение изображений:"
+msgstr "Расположение FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
-#, fuzzy, kde-format
+#, kde-format
 msgid "FFmpeg version:"
-msgstr "Версия FFMpeg: Нет"
+msgstr "Версия FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -22516,7 +22523,7 @@ msgstr "X: %1 пикс."
 #: libs/ui/canvas/kis_guides_manager.cpp:775
 #, kde-format
 msgid "Snap to:"
-msgstr "Прилипание к:"
+msgstr "Прилипание:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
@@ -22546,7 +22553,7 @@ msgstr "Пиксел"
 #: libs/ui/canvas/kis_guides_manager.cpp:779
 #, kde-format
 msgid "Orthogonal"
-msgstr "Ортогональная"
+msgstr "Ортогональное"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:781
 #, kde-format
@@ -22571,12 +22578,12 @@ msgstr "Ограничительная рамка"
 #: libs/ui/canvas/kis_guides_manager.cpp:786
 #, kde-format
 msgid "Image Bounds"
-msgstr "По краю изображения"
+msgstr "Края изображения"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:787
 #, kde-format
 msgid "Image Center"
-msgstr "По центру"
+msgstr "Центр изображения"
 
 #: libs/ui/dialogs/kis_about_application.cpp:33
 #, kde-format
@@ -23166,6 +23173,8 @@ msgstr "Примечание: для применения изменений т�
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
+"Сохранение в расположении, выбранном в средстве выбора файлов, может "
+"замедлить запуск!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:471
 #, kde-format
@@ -23613,6 +23622,8 @@ msgid ""
 "If two strokes have short time interval (delay) between each other, then "
 "they will be considered as belonging to the same group and merged"
 msgstr ""
+"Если между двумя мазками короткий временной интервал (задержка), они будут "
+"считаться входящими в одну и ту же группу и будут объединены"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
@@ -23627,6 +23638,9 @@ msgid ""
 "to be longer than this limit in the result of the merge, this merge will not "
 "happen."
 msgstr ""
+"Максимальная допустимая длительность группы после объединения. Если в "
+"результате объединения длительность группы превысит это значение, то такое "
+"объединение не будет выполнено."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
 #, kde-format
@@ -25075,9 +25089,9 @@ msgstr "Прозрачная шахматная доска:"
 # BUGME: need to split strings. It's an adjective in layersplit.cpp and a noun in the majority of other places. --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:295
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color 1:"
-msgstr "Цвет %1"
+msgstr "Цвет 1:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/forms/wdgdisplaysettings.ui:322
@@ -25343,9 +25357,9 @@ msgstr "Адаптировать к разрешению изображения 
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Scaling Filter:"
-msgstr "в фильтрах"
+msgstr "&Фильтр масштабирования:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -25750,7 +25764,7 @@ msgstr "Использовать инструмент «Преобразован
 #: libs/ui/forms/wdggeneralsettings.ui:724
 #, kde-format
 msgid "Zoom steps between powers of 2"
-msgstr ""
+msgstr "Шаги масштабирования между степенями 2"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:741
@@ -26154,9 +26168,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1453
-#, fuzzy, kde-format
+#, kde-format
 msgid "Automatic layer suffixes"
-msgstr "Автоматическая настройка цветовых осей"
+msgstr "Автоматические суффиксы слоёв"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1459
@@ -28342,7 +28356,7 @@ msgstr "Отдельно указать размер для печати"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #: libs/ui/imagesize/wdg_layersize.ui:119
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "Filter:"
 msgstr "Фильтр:"
@@ -28469,14 +28483,14 @@ msgstr "Входной профиль"
 #: libs/ui/input/config/kis_input_configuration_page.ui:83
 #, kde-format
 msgid "Manage canvas input profiles"
-msgstr ""
+msgstr "Профили входных данных холста"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, warningConflictButton)
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:27
 #: libs/ui/input/config/kis_input_configuration_page_item.ui:111
 #, kde-format
 msgid "Conflict found for a Shortcut in this Action."
-msgstr ""
+msgstr "Обнаружен конфликт комбинаций клавиш для этого действия."
 
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:52
 #, kde-format
@@ -28814,37 +28828,37 @@ msgid "Select layers under the cursor position"
 msgstr "Выбрать слой под указателем мыши"
 
 #: libs/ui/input/kis_select_layer_action.cpp:120
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select Top Layer (Replace Selection)"
-msgstr "Выделить &непрозрачную область (заменить)"
+msgstr "Выбрать верхний слой (заменить выделение)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:122
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select All Layers (Replace Selection)"
-msgstr "Выделить &непрозрачную область (заменить)"
+msgstr "Выбрать все слои (заменить выделение)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select from Menu (Replace Selection)"
-msgstr "Режим выделения: Заменить"
+msgstr "Выбрать в меню (заменить выделение)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
 msgid "Select Top Layer (Add to Selection)"
-msgstr ""
+msgstr "Выбрать верхний слой (добавить к выделению)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:128
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select All Layers (Add to Selection)"
-msgstr "Изменить размер всех слоёв"
+msgstr "Выбрать все слои (добавить к выделению)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:130
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select from Menu (Add to Selection)"
-msgstr "&Вычесть из текущего выделения"
+msgstr "Выбрать в меню (добавить к выделению)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:247
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"
 msgstr "Выбрать все слои"
@@ -29200,19 +29214,19 @@ msgid "Zoom to 100%"
 msgstr "Масштаб 100%"
 
 #: libs/ui/input/kis_zoom_action.cpp:118
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fit to View"
-msgstr "По размеру страницы"
+msgstr "Подогнать по размеру области просмотра"
 
 #: libs/ui/input/kis_zoom_action.cpp:119
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fit to View Width"
-msgstr "По ширине"
+msgstr "Подогнать по ширине области просмотра"
 
 #: libs/ui/input/kis_zoom_action.cpp:120
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fit to View Height"
-msgstr "Вместить по высоте"
+msgstr "Подогнать по высоте области просмотра"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:37
 #, kde-format
@@ -29273,7 +29287,7 @@ msgstr "Основной дисплей:"
 #: libs/ui/input/KisTouchGestureAction.cpp:26
 #, fuzzy, kde-format
 msgid "Toggle Previous Brush Preset"
-msgstr "Переключить ластик"
+msgstr "Переключить профиль ластика"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: libs/ui/input/KisTouchGestureAction.cpp:27
@@ -29957,7 +29971,7 @@ msgstr "Маскирующий слой"
 #: libs/ui/kis_node_manager.cpp:1603
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
-msgstr ""
+msgstr "Не удалось переместить слой «%1» в новый родительский слой «%2»"
 
 #: libs/ui/kis_node_manager.cpp:1606
 #, fuzzy, kde-format
@@ -30827,7 +30841,7 @@ msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
 "document, %1 is the file path"
 msgid "%1 has been saved but is incomplete."
-msgstr ""
+msgstr "Сохранение %1 выполнено, но данные являются неполными."
 
 #: libs/ui/KisDocument.cpp:1005
 #, fuzzy, kde-format
@@ -31293,12 +31307,14 @@ msgid ""
 "The image has a profile attached that Krita cannot edit images in (\"%1\"), "
 "please select a space to convert to for editing: \n"
 msgstr ""
+"К изображению присоединён профиль, в котором Krita не может редактировать "
+"изображения (\"%1\"). Выберите пространство для преобразования, чтобы "
+"выполнить редактирование: \n"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "Скрыть всплывающие миниатюры слоёв"
+msgstr "Обновить миниатюры слоёв"
 
 #: libs/ui/KisMainWindow.cpp:185
 #, kde-format
@@ -31665,6 +31681,9 @@ msgid ""
 "Do you want to download the image from %1?\n"
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
+"Загрузить изображение c %1?\n"
+"Нажмите «Показать подробности», чтобы увидеть ссылку на изображение "
+"полностью."
 
 #: libs/ui/KisRemoteFileFetcher.cpp:63
 #, kde-format
@@ -34758,16 +34777,16 @@ msgid "Smooths the edges of the selection"
 msgstr "Сглаживает края выделения"
 
 #: libs/ui/widgets/kis_selection_options.cc:235
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grow or shrink the selection by the set amount"
-msgstr "Размыть выделение на указанную величину"
+msgstr "Увеличить или уменьшить выделение на указанную величину"
 
 #: libs/ui/widgets/kis_selection_options.cc:237
 #: plugins/tools/basictools/kis_tool_fill.cc:637
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
-msgstr ""
+msgstr "Остановить увеличение на самых тёмных и/или непрозрачных пикселах"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
 #, kde-format
@@ -39604,7 +39623,7 @@ msgstr "Слои"
 #: plugins/dockers/layerdocker/LayerBox.cpp:257
 #, kde-format
 msgid "&Show Global Selection Mask"
-msgstr "&Показать глобальную маску выделения"
+msgstr "&Показать маску глобального выделения"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:260
 #, kde-format
@@ -39627,10 +39646,10 @@ msgid "Tree Indentation"
 msgstr "Отступы в иерархии"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:378
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
-msgstr "Режим наложения"
+msgstr "Стиль информации о наложении"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:380
 #, kde-format
@@ -39641,42 +39660,49 @@ msgid ""
 "Balanced: Show both opacity and blending mode if either are changed.\n"
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
+"Нет: ничего не показывать.\n"
+"Простой: показывать изменённые значения непрозрачности или режима "
+"наложения.\n"
+"Сбалансированный: показывать значения как непрозрачности, так и режима "
+"наложения, если изменено одно из них.\n"
+"Подробный: показывать значения как непрозрачности, так и режима наложения "
+"даже в том случае, если они не менялись."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:385
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Нет"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:386
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
-msgstr "Простое"
+msgstr "Простой"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:387
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
-msgstr "Цветовой баланс"
+msgstr "Сбалансированный"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:388
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
-msgstr "Подробности"
+msgstr "Подробный"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:402
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "Открытие следующей страницы"
+msgstr "Непрозрачность текста информации о наложении"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:420
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
-msgstr "сплайн"
+msgstr "В строке"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:422
 #, kde-format
@@ -39685,18 +39711,22 @@ msgid ""
 "If enabled, show blending info beside layer names.\n"
 "If disabled, show below layer names (when enough space)."
 msgstr ""
+"Если параметр включён, показывать информацию о наложении рядом с названиями "
+"слоёв.\n"
+"Если параметр отключён, показывать под названиями слоёв (если достаточно "
+"места)."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:434
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "Свести выбранные слои"
+msgstr "Флажок для выбора слоёв"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:435
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
-msgstr ""
+msgstr "Показывать флажок для выбора/отмены выбора слоёв."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:1002
 msgctxt "(qtundo-format)"
@@ -40199,7 +40229,7 @@ msgstr "Журнал поведения:"
 #: plugins/dockers/presethistory/presethistory_dock.cpp:316
 #, kde-format
 msgid "Configure Number of Brushes Shown..."
-msgstr ""
+msgstr "Настроить количество показанных кистей…"
 
 #. i18n: context: text @ Actions (Recorder), ActionCollection (Recorder)
 #: plugins/dockers/recorder/recorder.action:4
@@ -40563,7 +40593,7 @@ msgstr "Вставить переменную:"
 #: plugins/dockers/recorder/recorder_profile_settings.ui:167
 #, kde-format
 msgid "FFMpeg arguments:"
-msgstr "Параметры команды FFMpeg:"
+msgstr "Параметры команды FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelProfileName)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:194
@@ -40894,6 +40924,8 @@ msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time. Try increasing the capture interval."
 msgstr ""
+"Предупреждение о низкой производительности. Средству записи не удаётся "
+"вовремя записать все кадры. Попробуйте увеличить интервал захвата."
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
 #, kde-format
@@ -41359,9 +41391,9 @@ msgstr "Сенсорная боковая панель"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Model"
-msgstr "Цветовой режим"
+msgstr "Цветовая модель"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:42
@@ -41436,7 +41468,7 @@ msgstr ""
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
 #, kde-format
 msgid "Pop-ups"
-msgstr ""
+msgstr "Всплывающие окна"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:202
@@ -41690,6 +41722,8 @@ msgid ""
 "Increase value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
+"Увеличить значение, светлоту, интенсивность или освещённость выбранного "
+"цвета в соответствии с выбранной цветовой моделью"
 
 #. i18n: context: text @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
@@ -41710,6 +41744,8 @@ msgid ""
 "Decreases value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
+"Уменьшить значение, светлоту, интенсивность или освещённость выбранного "
+"цвета в соответствии с выбранной цветовой моделью"
 
 #. i18n: context: text @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
@@ -41727,7 +41763,7 @@ msgstr "Увеличить насыщенность"
 #, kde-format
 msgctxt "action"
 msgid "Increase saturation of the selected color"
-msgstr ""
+msgstr "Увеличить насыщенность выбранного цвета"
 
 #. i18n: context: text @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
@@ -41745,7 +41781,7 @@ msgstr "Уменьшить насыщенность"
 #, kde-format
 msgctxt "action"
 msgid "Decrease saturation of the selected color"
-msgstr ""
+msgstr "Уменьшить насыщенность выбранного цвета"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
@@ -42166,7 +42202,7 @@ msgstr "Версия Krita"
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
 #, kde-format
 msgid "Schema upgrades"
-msgstr ""
+msgstr "Обновления схемы"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
@@ -48361,6 +48397,8 @@ msgctxt "JPEG-XL errors"
 msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
+"Обнаружено изображение JPEG-XL с каналами плашечных цветов, выполняется "
+"импорт сведённого изображения."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:640
 #: plugins/impex/jxl/JPEGXLImport.cpp:650
@@ -48378,12 +48416,14 @@ msgid ""
 "Detected multi layer JPEG-XL image with unsupported blending mode, importing "
 "flattened image."
 msgstr ""
+"Обнаружено многослойное изображение JPEG-XL с неподдерживаемым режимом "
+"наложения, выполняется импорт сведённого изображения."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:833
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
-msgstr ""
+msgstr "Неверная длина названия слоя JPEG-XL"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:892
 #, kde-format
@@ -48701,6 +48741,8 @@ msgid ""
 "Set the lossy quality of JPEG-XL export.\n"
 "Default: 90 (visually lossless)."
 msgstr ""
+"Установить качество с потерями при экспорте в JPEG-XL.\n"
+"По умолчанию: 90 (визуально без потерь)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:107
@@ -48718,6 +48760,10 @@ msgid ""
 "(e.g. for non-photographic images).\n"
 "Default: disabled."
 msgstr ""
+"Использовать модульное кодирование вместо стандартного VarDCT для сжатия с "
+"потерями\n"
+"(например, для изображений, не являющихся фотографиями).\n"
+"По умолчанию: отключено."
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceModular)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:121
@@ -49382,6 +49428,8 @@ msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
 "\"%2\" is deactivated"
 msgstr ""
+"Найдены две активные маски глобального выделения. «%1» оставлена активной, "
+"«%2» отключена"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:900
 #, kde-format
@@ -57716,7 +57764,7 @@ msgstr "Порог: "
 #, kde-format
 msgctxt "The 'spread' spinbox prefix in fill tool options"
 msgid "Spread: "
-msgstr "Рассеивание: "
+msgstr "Размах: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:567
 #, kde-format
@@ -57776,6 +57824,8 @@ msgstr "Установить вращение текстуры"
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
+"Установить нестандартные параметры смешивания вместо использования "
+"параметров кисти"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
@@ -57812,6 +57862,8 @@ msgid ""
 "Set the color similarity tolerance of the fill. Increasing threshold "
 "increases the range of similar colors to be filled."
 msgstr ""
+"Установить допуск подобия цветов заливки. Повышение порогового значения "
+"увеличивает диапазон схожих цветов для заливки."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:632
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
@@ -57820,16 +57872,18 @@ msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
 "decreases opacity of fill areas depending on color similarity."
 msgstr ""
+"Установить объём непрозрачной части заливки. Уменьшение размаха уменьшает "
+"непрозрачность областей заливки в зависимости от схожести цветов."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:633
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when filling the region"
 msgstr ""
-"Укажите, следует ли считать контур текущего выделения границей при получении "
-"области"
+"Укажите, следует ли считать контур активного выделения границей при "
+"заполнении области"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
@@ -57839,15 +57893,15 @@ msgstr "Сглаживает края заливки"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:636
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grow or shrink the fill by the set amount"
-msgstr "Размыть область на указанную величину"
+msgstr "Увеличить или уменьшить заливку на указанную величину"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:638
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
-#, fuzzy, kde-format
+#, kde-format
 msgid "Blur the fill by the set amount"
-msgstr "Размыть область на указанную величину"
+msgstr "Размыть заливку на указанную величину"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:640
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
@@ -57922,7 +57976,7 @@ msgstr "Коррекция"
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
-msgstr ""
+msgstr "Режим заливки перетаскиванием"
 
 #: plugins/tools/basictools/kis_tool_fill.h:234
 #, kde-format
@@ -59021,7 +59075,7 @@ msgstr "Порог: "
 #, kde-format
 msgctxt "The 'spread' spinbox prefix in contiguous selection tool options"
 msgid "Spread: "
-msgstr "Рассеивание: "
+msgstr "Размах: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:380
 #, kde-format
@@ -59049,6 +59103,8 @@ msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
+"Установить допуск подобия цветов выделения. Повышение порогового значения "
+"увеличивает диапазон схожих цветов для выделения."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:394
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
@@ -59057,6 +59113,8 @@ msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
+"Установить объём непрозрачной части выделения. Уменьшение размаха уменьшает "
+"непрозрачность областей выделения в зависимости от схожести цветов."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
 #, fuzzy, kde-format
@@ -59187,7 +59245,7 @@ msgstr "Порог: "
 #, fuzzy, kde-format
 msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
 msgid "Spread: "
-msgstr "Рассеивание: "
+msgstr "Размах: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, kde-format
@@ -60388,7 +60446,7 @@ msgstr "Порог: "
 #, kde-format
 msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
 msgid "Spread: "
-msgstr "Рассеивание: "
+msgstr "Размах: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
 #, kde-format
@@ -60435,15 +60493,15 @@ msgstr "Лассо"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:511
 #, kde-format
 msgid "Enable to fill opposite regions instead"
-msgstr ""
+msgstr "Включите, чтобы заполнить противоположные области"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:512
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
-"Включите этот параметр, чтобы также заполнить формы, которые касаются "
-"контура области охвата"
+"Включите, чтобы также заполнить формы, которые касаются контура области "
+"охвата"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:544
 #, kde-format
@@ -61960,7 +62018,7 @@ msgstr "Эталонные изображения"
 
 #, fuzzy
 #~ msgid "FFMpeg Version: None"
-#~ msgstr "Версия FFMpeg: Нет"
+#~ msgstr "Версия FFmpeg:"
 
 #~ msgid ""
 #~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
@@ -62249,7 +62307,7 @@ msgstr "Эталонные изображения"
 #, fuzzy
 #~ msgctxt "action"
 #~ msgid "Zoom Fit to Height"
-#~ msgstr "Вместить по высоте"
+#~ msgstr "Подогнать по высоте области просмотра"
 
 #, fuzzy
 #~ msgctxt "action"

@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-08 02:06+0000\n"
-"PO-Revision-Date: 2023-09-18 09:43-0300\n"
+"PO-Revision-Date: 2023-11-08 14:58-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -58968,7 +58968,7 @@ msgstr "Conversão falhou"
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:602
 #, kde-format
 msgid "Find Text"
-msgstr "Localizar Texto"
+msgstr "Localizar texto"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:605
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:648

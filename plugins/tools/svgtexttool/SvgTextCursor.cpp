@@ -351,6 +351,8 @@ QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     qDebug() << "receiving inputmethod query" << query;
 
+    bool isHorizontal = d->shape? d->shape->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt() == 0: true;
+
     // Because we set the input item transform to be shape->document->view->widget->window,
     // the coordinates here should be in shape coordinates.
     switch(query) {
@@ -360,7 +362,12 @@ QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
     case Qt::ImCursorRectangle:
         // The platform integration will always define the cursor as the 'left side' handle.
         if (d->shape) {
-            QPointF caret1(d->cursorCaret.p1());
+
+            // We set the cursorRectangle to the the 'topside' of the caret when in vertical, to avoid
+            // the suggestion menu from hovering directly over the edited segment. It may still partially overlap,
+            // but that may be acceptable for now.
+            //TODO: Test on android whether this won't give funny results, if so, ifdef.
+            QPointF caret1 = isHorizontal? d->cursorCaret.p1() : d->cursorCaret.p2();
             QPointF caret2(d->cursorCaret.p2());
 
 

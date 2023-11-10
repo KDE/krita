@@ -494,16 +494,20 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                 } else {
                     hb_font_extents_t fontExtends;
                     hb_font_get_extents_for_direction (font.data(), HB_DIRECTION_TTB, &fontExtends);
-                    qreal height = fontExtends.ascender - fontExtends.descender;
                     if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &ascender)) {
-                        ascender = height*0.5;
+                        ascender = fontExtends.ascender;
                     }
                     if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &descender)) {
-                        descender = -(height*0.5);
+                        descender = fontExtends.descender;
                     }
                     if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_LINE_GAP, &lineGap)) {
                         lineGap = 0;
                     }
+                    // Default microsoft CJK fonts have the vertical ascent and descent be the same as the horizontal
+                    // ascent and descent, so we 'normalize' the ascender and descender to be half the total height.
+                    qreal height = ascender - fontExtends.descender;
+                    ascender = height*0.5;
+                    descender = -(height*0.5);
                 }
 
                 for (int j=start; j<start+length; j++) {

@@ -1423,8 +1423,8 @@ void KisKraLoader::loadGrid(const QDomElement& elem)
     QDomElement domElement = dom.firstChildElement();
 
     KisGridConfig config;
-    config.loadDynamicDataFromXml(domElement);
     config.loadStaticData();
+    config.loadDynamicDataFromXml(domElement);
     m_d->document->setGridConfig(config);
 }
 

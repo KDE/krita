@@ -2266,6 +2266,10 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
         d->gridConfig = config;
         d->syncDecorationsWrapperLayerState();
         emit sigGridConfigChanged(config);
+
+        // Store last assigned value as future default...
+        KisConfig cfg(false);
+        cfg.setDefaultGridSpacing(config.spacing());
     }
 }
 

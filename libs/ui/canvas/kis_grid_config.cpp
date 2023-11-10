@@ -59,6 +59,8 @@ void KisGridConfig::loadStaticData()
 
     m_colorMain = cfg.getGridMainColor();
     m_colorSubdivision = cfg.getGridSubdivisionColor();
+
+    m_spacing = cfg.getDefaultGridSpacing();
 }
 
 void KisGridConfig::saveStaticData() const

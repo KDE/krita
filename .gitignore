@@ -41,3 +41,4 @@ cmake-build-release/
 cmake-build-release-mingw/
 cmake-build-release-mingw64/
 
+.vscode/

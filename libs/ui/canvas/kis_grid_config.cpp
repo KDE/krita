@@ -31,8 +31,6 @@ void KisGridConfig::transform(const QTransform &transform)
 
     KisAlgebra2D::DecomposedMatrix m(transform);
 
-
-
     if (m_gridType == GRID_RECTANGULAR) {
         QTransform t = m.scaleTransform();
 

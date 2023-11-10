@@ -530,6 +530,9 @@ public:
     bool useEraserBrushOpacity(bool defaultValue = false) const;
     void setUseEraserBrushOpacity(bool value);
 
+    QPoint getDefaultGridSpacing(bool defaultValue = false) const;
+    void setDefaultGridSpacing(QPoint gridSpacing);
+
     QString getMDIBackgroundColor(bool defaultValue = false) const;
     void setMDIBackgroundColor(const QString & v) const;
 

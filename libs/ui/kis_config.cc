@@ -516,6 +516,15 @@ void KisConfig::setUseEraserBrushOpacity(bool value)
     KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
+QPoint KisConfig::getDefaultGridSpacing(bool defaultValue) const
+{
+    return (defaultValue ? QPoint(16, 16) : m_cfg.readEntry("defaultGridSpacing", QPoint(16, 16)));
+}
+
+void KisConfig::setDefaultGridSpacing(QPoint gridSpacing)
+{
+    m_cfg.writeEntry("defaultGridSpacing", gridSpacing);
+}
 
 QString KisConfig::getMDIBackgroundColor(bool defaultValue) const
 {

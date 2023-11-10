@@ -9,22 +9,19 @@
 
 #include <QString>
 #include <QList>
+#include "recorder_export_settings.h"
+
 
 class KisConfig;
 class QSize;
-
-struct RecorderProfile
-{
-    QString name;
-    QString extension;
-    QString arguments;
-};
 
 class RecorderExportConfig
 {
 public:
     RecorderExportConfig(bool readOnly);
     ~RecorderExportConfig();
+
+    void loadConfiguration(RecorderExportSettings *settings) const;
 
     int inputFps() const;
     void setInputFps(int value);

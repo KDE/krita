@@ -12,7 +12,9 @@
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 
+
 class KisMainWindow;
+struct RecorderExportSettings;
 
 class RecorderDockerDock : public QDockWidget, public KoCanvasObserverBase
 {
@@ -54,6 +56,7 @@ private Q_SLOTS:
 private:
     Q_DISABLE_COPY(RecorderDockerDock)
     class Private;
+    RecorderExportSettings *const exportSettings;
     Private *const d;
 };
 

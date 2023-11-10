@@ -11,6 +11,8 @@
 #include "ui_recorderdocker.h"
 #include "recorder_snapshots_manager.h"
 #include "recorder_export.h"
+#include "recorder_export_settings.h"
+#include "recorder_export_config.h"
 
 #include <klocalizedstring.h>
 #include <kis_action_registry.h>
@@ -66,9 +68,10 @@ public:
 
     QMap<QString, bool> enabledIds;
 
-    Private(RecorderDockerDock *q_ptr)
+    Private(const RecorderExportSettings &es, RecorderDockerDock *q_ptr)
         : q(q_ptr)
         , ui(new Ui::RecorderDocker())
+        , writer(es)
         , statusBarLabel(new QLabel())
         , statusBarWarningLabel(new QLabel())
     {
@@ -96,6 +99,11 @@ public:
         updateUiFormat();
     }
 
+    void loadRelevantExportSettings()
+    {
+        RecorderExportConfig config(true);
+        q->exportSettings->fps = config.fps();
+    }
 
     void updateUiFormat() {
         int index = 0;
@@ -226,7 +234,8 @@ public:
 
 RecorderDockerDock::RecorderDockerDock()
     : QDockWidget(i18nc("Title of the docker", "Recorder"))
-    , d(new Private(this))
+    , exportSettings(new RecorderExportSettings())
+    , d(new Private(*exportSettings, this))
 {
     QWidget* page = new QWidget(this);
     d->ui->setupUi(page);
@@ -237,6 +246,7 @@ RecorderDockerDock::RecorderDockerDock()
     d->ui->buttonExport->setIcon(KisIconUtils::loadIcon("document-export-16"));
 
     d->loadSettings();
+    d->loadRelevantExportSettings();
 
     d->ui->editDirectory->setText(d->snapshotDirectory);
     d->ui->spinRate->setValue(d->captureInterval);
@@ -290,6 +300,7 @@ RecorderDockerDock::RecorderDockerDock()
 RecorderDockerDock::~RecorderDockerDock()
 {
     delete d;
+    delete exportSettings;
 }
 
 void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
@@ -380,12 +391,13 @@ void RecorderDockerDock::onExportButtonClicked()
 
     KisDocument *document = d->canvas->imageView()->document();
 
-    RecorderExport exportDialog(this);
-    exportDialog.setup({
-        QFileInfo(document->caption().trimmed()).completeBaseName(),
-        d->outputDirectory,
-        d->format
-    });
+    exportSettings->videoFileName = QFileInfo(document->caption().trimmed()).completeBaseName();
+    exportSettings->inputDirectory = d->outputDirectory;
+    exportSettings->format = d->format;
+    exportSettings->realTimeCaptureMode = d->realTimeCaptureMode;
+
+    RecorderExport exportDialog(exportSettings, this);
+    exportDialog.setup();
     exportDialog.exec();
 }
 

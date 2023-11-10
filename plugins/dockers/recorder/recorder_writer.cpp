@@ -6,6 +6,7 @@
 
 #include "recorder_writer.h"
 #include "recorder_const.h"
+#include "recorder_export_settings.h"
 
 #include <kis_canvas2.h>
 #include <kis_image.h>
@@ -229,8 +230,9 @@ public:
 
 };
 
-RecorderWriter::RecorderWriter()
+RecorderWriter::RecorderWriter(const RecorderExportSettings &es)
     : d(new Private())
+    , exporterSettings(es)
 {
     moveToThread(this);
 }
@@ -379,7 +381,12 @@ void RecorderWriter::run()
     d->imageModified = false;
     emit pausedChanged(d->paused);
 
-    d->interval = static_cast<int>(qMax(d->settings.captureInterval, .1) * 1000.);
+    if (d->settings.realTimeCaptureMode) {
+        d->interval = static_cast<int>(1000./static_cast<double>(exporterSettings.fps));
+    } else {
+        d->interval = static_cast<int>(qMax(d->settings.captureInterval, .1) * 1000.);
+    }
+
     const int timerId = startTimer(d->interval);
 
     QThread::run();

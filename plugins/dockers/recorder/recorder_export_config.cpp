@@ -224,6 +224,23 @@ RecorderExportConfig::~RecorderExportConfig()
     delete config;
 }
 
+void RecorderExportConfig::loadConfiguration(RecorderExportSettings *settings) const
+{
+    settings->inputFps = inputFps();
+    settings->fps = fps();
+    settings->resultPreview = resultPreview();
+    settings->firstFrameSec = firstFrameSec();
+    settings->extendResult = extendResult();
+    settings->lastFrameSec = lastFrameSec();
+    settings->resize = resize();
+    settings->size = size();
+    settings->lockRatio = lockRatio();
+    settings->ffmpegPath = ffmpegPath();
+    settings->profiles = profiles();
+    settings->defaultProfiles = defaultProfiles();
+    settings->profileIndex = profileIndex();
+    settings->videoDirectory = videoDirectory();
+}
 
 int RecorderExportConfig::inputFps() const
 {

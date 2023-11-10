@@ -12,6 +12,7 @@
 #include <QThread>
 #include <QPointer>
 
+struct RecorderExportSettings;
 class RecorderConfig;
 class KisCanvas2;
 
@@ -31,7 +32,7 @@ class RecorderWriter: public QThread
 {
     Q_OBJECT
 public:
-    RecorderWriter();
+    RecorderWriter(const RecorderExportSettings &es);
     ~RecorderWriter();
 
     void setCanvas(QPointer<KisCanvas2> canvas);
@@ -59,6 +60,7 @@ private:
     Q_DISABLE_COPY(RecorderWriter)
     class Private;
     Private *const d;
+    const RecorderExportSettings &exporterSettings;
 };
 
 #endif // RECORDER_WRITER_H

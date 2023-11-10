@@ -11,22 +11,17 @@
 
 #include <QDialog>
 
-struct RecorderExportSettings
-{
-    QString name;
-    QString inputDirectory;
-    RecorderFormat format;
-};
+struct RecorderExportSettings;
 
 class RecorderExport : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit RecorderExport(QWidget *parent = nullptr);
+    explicit RecorderExport(RecorderExportSettings *s, QWidget *parent = nullptr);
     ~RecorderExport();
 
-    void setup(const RecorderExportSettings &settings);
+    void setup();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -72,6 +67,7 @@ private:
 private:
     Q_DISABLE_COPY(RecorderExport)
     class Private;
+    RecorderExportSettings *settings;
     QScopedPointer<Private> d;
 };
 

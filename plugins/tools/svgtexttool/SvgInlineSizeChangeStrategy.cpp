@@ -12,7 +12,7 @@
 #include "KoSvgText.h"
 #include "KoSvgTextProperties.h"
 #include "KoSvgTextShape.h"
-#include "KoSvgTextShapeMarkupConverter.h"
+#include "KoSnapGuide.h"
 
 #include "KoCanvasBase.h"
 #include "KoToolBase.h"
@@ -33,13 +33,16 @@ SvgInlineSizeChangeStrategy::SvgInlineSizeChangeStrategy(KoToolBase *tool,
     , m_anchorOffset(m_shape->absoluteTransformation().map(QPointF()))
     , m_startHandle(start)
 {
-
+    this->tool()->canvas()->snapGuide()->setIgnoredShapes(KoShape::linearizeSubtree({shape}));
     m_originalAnchor =
         KoSvgText::TextAnchor(shape->textProperties().propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt());
     if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape)) {
         m_initialInlineSize = m_finalInlineSize = info->inlineSize;
         m_anchor = info->anchor;
         m_handleSide = m_startHandle? info->nonEditLineSide(): info->editLineSide();
+        QPointF handleLocation = m_startHandle? info->nonEditLine().p1(): info->editLine().p1();
+        QTransform invTransform = (info->editorTransform * info->shapeTransform).inverted();
+        m_snapDelta = invTransform.inverted().map(QPointF(invTransform.map(handleLocation).x(), invTransform.map(m_dragStart).y())) - m_dragStart;
     } else {
         // We cannot bail out, so just pretend to be doing something :(
         m_initialInlineSize = m_finalInlineSize = SvgInlineSizeHelper::getInlineSizePt(shape);
@@ -48,7 +51,7 @@ SvgInlineSizeChangeStrategy::SvgInlineSizeChangeStrategy(KoToolBase *tool,
     }
 }
 
-void SvgInlineSizeChangeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers /*modifiers*/)
+void SvgInlineSizeChangeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {
     QTransform invTransform{};
     if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(m_shape)) {
@@ -56,7 +59,8 @@ void SvgInlineSizeChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
     }
 
     double newInlineSize = 0.0;
-    const double mouseDelta = invTransform.map(QLineF(m_dragStart, mouseLocation)).dx();
+    QPointF snappedLocation = tool()->canvas()->snapGuide()->snap(mouseLocation + m_snapDelta, modifiers) - m_snapDelta;
+    const double mouseDelta = invTransform.map(QLineF(m_dragStart, snappedLocation)).dx();
     QPointF newPosition = m_shape->absolutePosition(KoFlake::TopLeft);
 
     QPointF anchorPos = m_shape->absoluteTransformation().map(QPointF());
@@ -121,6 +125,7 @@ void SvgInlineSizeChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
 
 KUndo2Command *SvgInlineSizeChangeStrategy::createCommand()
 {
+    tool()->canvas()->snapGuide()->reset();
     if (qFuzzyCompare(m_initialInlineSize, m_finalInlineSize)
             && m_initialPosition == m_finalPos
             && m_originalAnchor == m_finalAnchor) {

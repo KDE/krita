@@ -586,9 +586,15 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
     if (shape) {
             m_textCursor.paintDecorations(gc, qApp->palette().color(QPalette::Highlight));
     }
+    if (m_interactionStrategy) {
+        gc.save();
+        canvas()->snapGuide()->paint(gc, converter);
+        gc.restore();
+    }
 
     // Paint debug outline
     if (debugEnabled() && shape) {
+        gc.save();
         using Element = KoSvgTextShape::DebugElement;
         KoSvgTextShape::DebugElements el{};
         if (optionUi.chkDbgCharBbox->isChecked()) {
@@ -600,6 +606,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
 
         gc.setTransform(shape->absoluteTransformation(), true);
         shape->paintDebug(gc, el);
+        gc.restore();
     }
 }
 

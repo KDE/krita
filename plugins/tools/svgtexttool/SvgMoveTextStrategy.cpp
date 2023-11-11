@@ -23,6 +23,7 @@ SvgMoveTextStrategy::SvgMoveTextStrategy(KoToolBase *tool, KoSvgTextShape *shape
     , m_finalPosition(m_initialPosition)
     , m_anchorOffset(m_shape->absoluteTransformation().map(QPointF()) - m_initialPosition)
 {
+    this->tool()->canvas()->snapGuide()->setIgnoredShapes(KoShape::linearizeSubtree({shape}));
 }
 
 void SvgMoveTextStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
@@ -42,6 +43,7 @@ void SvgMoveTextStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Keyb
 
 KUndo2Command *SvgMoveTextStrategy::createCommand()
 {
+    tool()->canvas()->snapGuide()->reset();
     if (KisAlgebra2D::fuzzyPointCompare(m_initialPosition, m_finalPosition)) {
         return nullptr;
     }

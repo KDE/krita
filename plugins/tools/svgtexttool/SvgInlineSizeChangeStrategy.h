@@ -38,10 +38,10 @@ private:
     QPointF m_dragStart;
     int m_originalAnchor;
     int m_finalAnchor;
-    int m_flakeAnchor;
     QPointF m_initialPosition;
     QPointF m_finalPos;
     QPointF m_anchorOffset;
+    QPointF m_snapDelta;
     SvgInlineSizeHelper::VisualAnchor m_anchor;
     SvgInlineSizeHelper::Side m_handleSide;
     bool m_startHandle;

@@ -39,6 +39,8 @@ set(kritalibkis_LIB_SRCS
     LibKisUtils.cpp
 
     AngleSelector.cpp
+    IntParseSpinBox.cpp
+    DoubleParseSpinBox.cpp
     SliderSpinBox.cpp
 )
 

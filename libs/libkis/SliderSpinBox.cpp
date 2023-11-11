@@ -15,7 +15,7 @@ struct SliderSpinBox::Private {
 };
 
 SliderSpinBox::SliderSpinBox()
-    : QObject()
+    : IntParseSpinBox()
     , d(new Private)
 {
     d->widget = new KisSliderSpinBox();
@@ -114,7 +114,7 @@ struct DoubleSliderSpinBox::Private {
 };
 
 DoubleSliderSpinBox::DoubleSliderSpinBox()
-    : QObject()
+    : DoubleParseSpinBox()
     , d(new Private)
 {
     d->widget = new KisDoubleSliderSpinBox();

@@ -9,6 +9,8 @@
 #define LIBKIS_SLIDERSPINBOX_H
 
 #include "kis_slider_spin_box.h"
+#include "IntParseSpinBox.h"
+#include "DoubleParseSpinBox.h"
 
 #include "kritalibkis_export.h"
 #include "libkis.h"
@@ -44,7 +46,7 @@ class KisSliderSpinBoxPrivate;
  * The "soft range" is considered valid if the "soft maximum" is greater than
  * the "soft minimum".
  */
-class KRITALIBKIS_EXPORT SliderSpinBox : public QObject
+class KRITALIBKIS_EXPORT SliderSpinBox : public IntParseSpinBox
 {
     Q_OBJECT
     Q_DISABLE_COPY(SliderSpinBox)
@@ -201,7 +203,7 @@ private:
  * 
  * @see KisSliderSpinBox
  */
-class KRITALIBKIS_EXPORT DoubleSliderSpinBox : public QObject
+class KRITALIBKIS_EXPORT DoubleSliderSpinBox : public DoubleParseSpinBox
 {
     Q_OBJECT
     Q_DISABLE_COPY(DoubleSliderSpinBox)

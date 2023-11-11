@@ -465,7 +465,7 @@ void KisPaletteEditor::updatePalette()
     PaletteInfo &modified = m_d->modifiedPaletteInfo;
 
     if (m_d->isColumnCountModified) {
-        palette->setColumnCount(modified.columnCount);
+        m_d->model->setColumnCount(modified.columnCount);
     }
     if (m_d->isNameModified) {
         KisResourceUserOperations::renameResourceWithUserInput(m_d->view->mainWindowAsQWidget(), palette, m_d->modifiedPaletteInfo.name);

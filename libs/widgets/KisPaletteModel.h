@@ -103,6 +103,8 @@ public:
 
     void setRowCountForGroup(const QString &groupName, int rowCount);
 
+    void setColumnCount(int colCount);
+
     void clear();
 
     void clear(int defaultColumnsCount);

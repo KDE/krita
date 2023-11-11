@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-06 00:40+0000\n"
+"POT-Creation-Date: 2023-11-11 00:40+0000\n"
 "PO-Revision-Date: 2023-11-01 06:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -17104,7 +17104,7 @@ msgstr "İçe Aktarılmış Görsel"
 msgid "Selection Mask"
 msgstr "Seçim Maskesi"
 
-#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2591
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -30396,13 +30396,13 @@ msgstr "%1 açılırken sorunlarla karşılaşıldı."
 msgid "Not Saved"
 msgstr "Kaydedilmemiş"
 
-#: libs/ui/KisDocument.cpp:2594
+#: libs/ui/KisDocument.cpp:2598
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Arka Plan Dolgusu"
 
-#: libs/ui/KisDocument.cpp:2646
+#: libs/ui/KisDocument.cpp:2650
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

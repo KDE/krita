@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-06 00:40+0000\n"
+"POT-Creation-Date: 2023-11-11 00:40+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -17414,7 +17414,7 @@ msgstr "Ofbylding ymportearje"
 msgid "Selection Mask"
 msgstr "Seleksjemasker..."
 
-#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2591
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -30641,13 +30641,13 @@ msgstr ""
 msgid "Not Saved"
 msgstr "Gjin"
 
-#: libs/ui/KisDocument.cpp:2594
+#: libs/ui/KisDocument.cpp:2598
 #, fuzzy, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "eftergrûn"
 
-#: libs/ui/KisDocument.cpp:2646
+#: libs/ui/KisDocument.cpp:2650
 #, fuzzy, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-06 00:40+0000\n"
+"POT-Creation-Date: 2023-11-11 00:40+0000\n"
 "PO-Revision-Date: 2023-07-24 21:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -18027,7 +18027,7 @@ msgstr "가져온 이미지"
 msgid "Selection Mask"
 msgstr "선택 마스크"
 
-#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2591
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -31542,13 +31542,13 @@ msgstr "%1을(를) 여는 중 문제가 발생했습니다."
 msgid "Not Saved"
 msgstr "저장되지 않음"
 
-#: libs/ui/KisDocument.cpp:2594
+#: libs/ui/KisDocument.cpp:2598
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "배경 채우기"
 
-#: libs/ui/KisDocument.cpp:2646
+#: libs/ui/KisDocument.cpp:2650
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

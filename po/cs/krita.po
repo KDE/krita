@@ -1,6 +1,6 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
+# SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2023 Vít Pelčák <vit@pelcak.org>
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012, 2013, 2014.
 # Vit Pelcak <vit@pelcak.org>, 2021, 2022, 2023.
 #
@@ -48,8 +48,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-06 00:40+0000\n"
-"PO-Revision-Date: 2023-06-28 14:15+0200\n"
+"POT-Creation-Date: 2023-11-11 00:40+0000\n"
+"PO-Revision-Date: 2023-11-10 16:10+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -57,7 +57,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.08.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -17085,7 +17085,7 @@ msgstr "Importovaný obrázek"
 msgid "Selection Mask"
 msgstr "Maska Výběru"
 
-#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2591
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -17310,7 +17310,7 @@ msgstr "Aktivní"
 #: libs/image/kis_layer_properties_icons.cpp:28
 #, kde-format
 msgid "Color Label"
-msgstr "Barevný štítek"
+msgstr "Barevný popisek"
 
 #: libs/image/kis_layer_properties_icons.cpp:29
 #, kde-format
@@ -25736,7 +25736,7 @@ msgstr "Poznámky"
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:207
 #, kde-format
 msgid "TextLabel"
-msgstr "Textový štítek"
+msgstr "Textový popisek"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAddImages)
 #: libs/ui/forms/wdgimportimagesequence.ui:37
@@ -25870,7 +25870,7 @@ msgstr "Profil:"
 #: libs/ui/forms/wdglayerproperties.ui:167
 #, kde-format
 msgid "Color label:"
-msgstr "Barevný štítek:"
+msgstr "Barevný popisek:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDimensionsTitle)
 #: libs/ui/forms/wdglayerproperties.ui:196
@@ -28965,58 +28965,42 @@ msgid "Remove Nodes"
 msgstr ""
 
 #: libs/ui/kis_node_manager.cpp:1038
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
-msgstr "Zrcadlit vodorovně"
+msgstr ""
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Image Horizontally"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
-msgstr[0] "Zrcadlit obrázek vodorovně"
-msgstr[1] "Zrcadlit obrázek vodorovně"
-msgstr[2] "Zrcadlit obrázek vodorovně"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: libs/ui/kis_node_manager.cpp:1052
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
-msgstr "Zrcadlit svisle"
+msgstr ""
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Image Vertically"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
-msgstr[0] "Zrcadlit obrázek svisle"
-msgstr[1] "Zrcadlit obrázek svisle"
-msgstr[2] "Zrcadlit obrázek svisle"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Image Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
-msgstr "Zrcadlit obrázek vodorovně"
+msgstr ""
 
 #: libs/ui/kis_node_manager.cpp:1070
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Image Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
-msgstr "Zrcadlit obrázek svisle"
+msgstr ""
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -29118,11 +29102,10 @@ msgid "Disabled: cloning pass-through groups is not supported!"
 msgstr ""
 
 #: libs/ui/kis_node_model.cpp:595
-#, fuzzy, kde-format
-#| msgid "%1%"
+#, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
-msgstr "%1%"
+msgstr ""
 
 #: libs/ui/kis_node_model.cpp:598
 #, kde-format
@@ -29165,11 +29148,10 @@ msgid "Opacity: {n}%"
 msgstr ""
 
 #: libs/ui/kis_paintop_box.cc:269
-#, fuzzy, kde-format
-#| msgid "Flow:"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Flow: {n}%"
-msgstr "Proud:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
@@ -29929,13 +29911,13 @@ msgstr "Při otevírání došlo k problémům %1."
 msgid "Not Saved"
 msgstr "Neuloženo"
 
-#: libs/ui/KisDocument.cpp:2594
+#: libs/ui/KisDocument.cpp:2598
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2646
+#: libs/ui/KisDocument.cpp:2650
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -32378,11 +32360,10 @@ msgstr "Průhledné"
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:102
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:163
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:167
-#, fuzzy, kde-format
-#| msgid "Position: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Position: {n}%"
-msgstr "Pozice: "
+msgstr ""
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:40
 #, kde-format
@@ -35292,7 +35273,7 @@ msgstr ""
 "<html>Software je možno neustále vylepšovat a tým KDE je k tomu připraven. "
 "Avšak vy, uživatel, nám musíte sdělit, když něco nefunguje tak, jak by se "
 "očekávalo nebo by mělo být uděláno lépe.<br /><br />KDE má systém sledování "
-"chyb. Přejete-li si tedy nahlásit chybu, navštivte <A HREF=\"%1\">%1</A> "
+"chyb. Přejete-li si tedy nahlásit chybu, navštivte <a href=\"%1\">>%1</a> "
 "nebo použijte dialog \"Nahlásit chybu...\".<br /><br />Máte-li náměty na "
 "vylepšení, budeme rádi, pošlete-li nám svoje přání. Ujistěte se však, že "
 "jste označili chybové hlášení jako \"Přání\".</html>"
@@ -37529,11 +37510,10 @@ msgid "Make clones Unique"
 msgstr ""
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:48
-#, fuzzy, kde-format
-#| msgid "Tint: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Tint: {n}%"
-msgstr "Tónování: "
+msgstr ""
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:51
 #, kde-format
@@ -59205,14 +59185,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Mask X"
-#~ msgstr "Zrcadlení masky podle X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Mirror Mask Y"
-#~ msgstr "Zrcadlení masky podle Y"
-
-#~ msgid "WizardPage"
-#~ msgstr "Stránka průvodce"

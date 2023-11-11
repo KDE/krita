@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-06 00:40+0000\n"
-"PO-Revision-Date: 2023-10-22 20:46+0200\n"
+"POT-Creation-Date: 2023-11-11 00:40+0000\n"
+"PO-Revision-Date: 2023-11-08 22:20+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Lokalize 23.08.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -9161,12 +9161,10 @@ msgstr "Aumenta la dimensione del pennello"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:879 krita/krita.action:881 krita/krita.action:882
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise"
-msgstr "Ruota l'oggetto di 90° in senso orario"
+msgstr "Ruota la punta del pennello in senso orario"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9175,11 +9173,10 @@ msgstr "Ruota l'oggetto di 90° in senso orario"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:891 krita/krita.action:893 krita/krita.action:894
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "Ruota la selezione di 90 gradi in senso orario"
+msgstr "Ruota la punta del pennello in senso orario (preciso)"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
@@ -9188,12 +9185,10 @@ msgstr "Ruota la selezione di 90 gradi in senso orario"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:903 krita/krita.action:905 krita/krita.action:906
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Ruota l'oggetto di 90° in senso antiorario"
+msgstr "Ruota la punta del pennello in senso antiorario"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9202,11 +9197,10 @@ msgstr "Ruota l'oggetto di 90° in senso antiorario"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:915 krita/krita.action:917 krita/krita.action:918
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Ruota la selezione di 90 gradi in senso antiorario"
+msgstr "Ruota la punta del pennello in senso antiorario (preciso)"
 
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
@@ -17164,7 +17158,7 @@ msgstr "Immagine importata"
 msgid "Selection Mask"
 msgstr "Maschera di selezione"
 
-#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2591
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -17202,14 +17196,12 @@ msgid "Change Image Resolution"
 msgstr "Cambia risoluzione dell'immagine"
 
 #: libs/image/kis_image.cc:1034
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Scale Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
-msgstr[0] "Ridimensiona il livello"
-msgstr[1] "Ridimensiona il livello"
+msgstr[0] "Scala livello"
+msgstr[1] "Scala %1 livelli"
 
 #: libs/image/kis_image.cc:1175
 msgctxt "(qtundo-format)"
@@ -17222,14 +17214,12 @@ msgid "Rotate Mask"
 msgstr "Ruota la maschera"
 
 #: libs/image/kis_image.cc:1188
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
-msgstr[0] "Ruota il livello"
-msgstr[1] "Ruota il livello"
+msgstr[0] "Ruota livello"
+msgstr[1] "Ruota %1 livelli"
 
 #: libs/image/kis_image.cc:1288
 msgctxt "(qtundo-format)"
@@ -17237,14 +17227,12 @@ msgid "Shear Mask"
 msgstr "Deforma la maschera"
 
 #: libs/image/kis_image.cc:1292
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Shear Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
-msgstr[0] "Deforma il livello"
-msgstr[1] "Deforma il livello"
+msgstr[0] "Deforma livello"
+msgstr[1] "Deforma %1 livelli"
 
 #: libs/image/kis_image.cc:1299
 msgctxt "(qtundo-format)"
@@ -27914,12 +27902,11 @@ msgid "Layer Size"
 msgstr "Dimensioni del livello"
 
 #: libs/ui/imagesize/imagesize.cc:126
-#, fuzzy, kde-format
-#| msgid "Resize Layer"
+#, kde-format
 msgid "Resize Layer"
 msgid_plural "Resize %1 Layers"
 msgstr[0] "Ridimensiona livello"
-msgstr[1] "Ridimensiona livello"
+msgstr[1] "Ridimensiona %1 livelli"
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, kde-format
@@ -29496,53 +29483,37 @@ msgid "Remove Nodes"
 msgstr "Rimuovi nodi"
 
 #: libs/ui/kis_node_manager.cpp:1038
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
-msgstr "Rispecchia orizzontalmente"
+msgstr "Rispecchia la maschera orizzontalmente"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Horizontally"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Rispecchia il livello orizzontalmente"
-msgstr[1] "Rispecchia il livello orizzontalmente"
+msgstr[1] "Rispecchia %1 livelli orizzontalmente"
 
 #: libs/ui/kis_node_manager.cpp:1052
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
-msgstr "Rispecchia verticalmente"
+msgstr "Rispecchia la maschera verticalmente"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Vertically"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Rispecchia il livello verticalmente"
-msgstr[1] "Rispecchia il livello verticalmente"
+msgstr[1] "Rispecchia %1 livelli verticalmente"
 
 #: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Rispecchia orizzontalmente tutti i livelli"
 
 #: libs/ui/kis_node_manager.cpp:1070
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Rispecchia il verticalmente tutti i livelli"
@@ -29651,8 +29622,7 @@ msgid "Disabled: cloning pass-through groups is not supported!"
 msgstr "Disabilitato: la clonazione dei gruppi «attraverso» non è supportata."
 
 #: libs/ui/kis_node_model.cpp:595
-#, fuzzy, kde-format
-#| msgid "%1%"
+#, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
 msgstr "%1%"
@@ -29661,7 +29631,7 @@ msgstr "%1%"
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
-msgstr ""
+msgstr "%1% %2"
 
 #: libs/ui/kis_paintop_box.cc:101
 #, kde-format
@@ -29698,12 +29668,10 @@ msgid "Opacity: {n}%"
 msgstr "Opacità: {n}%"
 
 #: libs/ui/kis_paintop_box.cc:269
-#, fuzzy, kde-format
-#| msgctxt "Brush Option Flow"
-#| msgid "Flow: %1%"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Flow: {n}%"
-msgstr "Flusso: %1%"
+msgstr "Flusso: {n}%"
 
 #. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
@@ -30547,13 +30515,13 @@ msgstr "Si sono verificati problemi durante l'apertura di %1."
 msgid "Not Saved"
 msgstr "Non salvato"
 
-#: libs/ui/KisDocument.cpp:2594
+#: libs/ui/KisDocument.cpp:2598
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Riempimento dello sfondo"
 
-#: libs/ui/KisDocument.cpp:2646
+#: libs/ui/KisDocument.cpp:2650
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -32817,30 +32785,24 @@ msgid "Decrease Brush Size"
 msgstr "Riduci la dimensione del pennello"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgid "Rotate brush tip clockwise"
-msgstr "Ruota l'oggetto di 90° in senso orario"
+msgstr "Ruota la punta del pennello in senso orario"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "Ruota la selezione di 90 gradi in senso orario"
+msgstr "Ruota la punta del pennello in senso orario (preciso)"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Ruota l'oggetto di 90° in senso antiorario"
+msgstr "Ruota la punta del pennello in senso antiorario"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Ruota la selezione di 90 gradi in senso antiorario"
+msgstr "Ruota la punta del pennello in senso antiorario (preciso)"
 
 #: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, kde-format
@@ -33107,11 +33069,10 @@ msgstr "Trasparente"
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:102
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:163
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:167
-#, fuzzy, kde-format
-#| msgid "Position: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Position: {n}%"
-msgstr "Posizione: "
+msgstr "Posizione: {n}%"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:40
 #, kde-format
@@ -37195,47 +37156,39 @@ msgstr "Colore personalizzato"
 
 #. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
-#, fuzzy, kde-format
-#| msgid "Editor text color"
+#, kde-format
 msgid "Editor Widget Control:"
-msgstr "Colore testo dell'editor"
+msgstr "Controllo oggetto dell'editor:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
-#, fuzzy, kde-format
-#| msgid "Sh&adow Mode:"
+#, kde-format
 msgid "Show Move"
-msgstr "Metodo ombr&a:"
+msgstr "Mostra Sposta"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Snap Options Popup"
+#, kde-format
 msgid "Show Snapping"
-msgstr "Mostra la finestra a comparsa delle opzioni di aggancio"
+msgstr "Mostra Aggancia"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgid "Show Lock"
-msgstr "Mostra le aree di aggancio"
+msgstr "Mostra Blocca"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
-#, fuzzy, kde-format
-#| msgid "Duplicate"
+#, kde-format
 msgid "Show Duplicate"
-msgstr "Duplica"
+msgstr "Mostra Duplica"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgid "Show Delete"
-msgstr "Elimina"
+msgstr "Mostra Elimina"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
@@ -37260,16 +37213,14 @@ msgid "Concentric Ellipse"
 msgstr "Ellisse concentrica"
 
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:28
-#, fuzzy, kde-format
-#| msgid "Perspective assistant"
+#, kde-format
 msgid "Curvilinear Perspective assistant"
-msgstr "Assistente della prospettiva"
+msgstr "Assistente prospettiva curvilineare"
 
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
-#, fuzzy, kde-format
-#| msgid "Clear Perspective Grid"
+#, kde-format
 msgid "Curvilinear Perspective"
-msgstr "Pulisci reticolo prospettico"
+msgstr "Prospettiva curvilineare"
 
 #: plugins/assistants/Assistants/EditAssistantsCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -38315,9 +38266,6 @@ msgid "Zoom view to fit curve."
 msgstr "Adatta la vista alla curva"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Add scalar keyframes"
 msgctxt "(qtundo-format)"
 msgid "Add Scalar Keyframes"
 msgstr "Aggiungi fotogrammi chiave scalari"
@@ -38382,13 +38330,11 @@ msgid "Mute"
 msgstr "Silenzia"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:149
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Volume slider"
-#| msgid "Volume: "
+#, kde-format
 msgctxt ""
 "@item:inmenu Volume slider; {n} is the number value, % is the percent sign"
 msgid "Volume: {n}%"
-msgstr "Volume: "
+msgstr "Volume: {n}%"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:170
 #, kde-format
@@ -38589,11 +38535,10 @@ msgid "Make clones Unique"
 msgstr "Rendi univoci i cloni"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:48
-#, fuzzy, kde-format
-#| msgid "Tint: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Tint: {n}%"
-msgstr "Tinta: "
+msgstr "Tinta: {n}%"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:51
 #, kde-format
@@ -42943,24 +42888,20 @@ msgid "Offset Image"
 msgstr "Scosta immagine"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Offset Layer"
 msgid_plural "Offset %1 Layers"
 msgstr[0] "Scosta livello"
-msgstr[1] "Scosta livello"
+msgstr[1] "Scosta %1 livelli"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgid_plural "Offset %1 Layers"
 msgstr[0] "Scosta livello"
-msgstr[1] "Scosta livello"
+msgstr[1] "Scosta %1 livelli"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -43924,12 +43865,11 @@ msgid "Mirror Image Horizontally"
 msgstr "Rispecchia l'immagine orizzontalmente"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, fuzzy, kde-format
-#| msgid "Rotate Layer"
+#, kde-format
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
 msgstr[0] "Ruota livello"
-msgstr[1] "Ruota livello"
+msgstr[1] "Ruota %1 livelli"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -44070,12 +44010,11 @@ msgid "Shear Image"
 msgstr "Deforma immagine"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
-#, fuzzy, kde-format
-#| msgid "Shear Layer"
+#, kde-format
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
 msgstr[0] "Deforma livello"
-msgstr[1] "Deforma livello"
+msgstr[1] "Deforma %1 livelli"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -45929,10 +45868,9 @@ msgstr "Dimensione della finestra:"
 
 #: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgid "Reset Transparent"
-msgstr "Trasparente"
+msgstr "Azzera trasparente"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -57675,16 +57613,17 @@ msgid "Copy Translate"
 msgstr "Trasla copia"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:459
-#, fuzzy, kde-format
-#| msgid "Copy Translate"
+#, kde-format
 msgid "Copy Translate at Intervals"
-msgstr "Trasla copia"
+msgstr "Trasla copia a intervalli"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:570
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
+"Lo strumento Multipennello non supporta più di %1 pennelli; usa un "
+"intervallo più ampio."
 
 #: plugins/tools/basictools/kis_tool_multihand.h:97
 #, kde-format
@@ -58076,17 +58015,15 @@ msgstr "Rimuovi tutto"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:250
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval X:"
-msgstr "Interno"
+msgstr "Intervallo X:"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:263
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval Y:"
-msgstr "Interno"
+msgstr "Intervallo Y:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:744
 #, kde-format
@@ -59092,19 +59029,14 @@ msgid "Letter Spacing"
 msgstr "Spaziatura dei caratteri"
 
 #: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
-#, fuzzy
-#| msgid "Inverted Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Text"
-msgstr "Testo invertito"
+msgstr "Inserisci testo"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:26
-#, fuzzy
-#| msgctxt "@title:window"
-#| msgid "Remove Template"
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
-msgstr "Rimuovi modello"
+msgstr "Rimuovi testo"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4

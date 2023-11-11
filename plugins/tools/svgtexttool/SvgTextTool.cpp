@@ -639,7 +639,8 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
     bool crossLayerPossible = !hoverPath.isEmpty() && shapeType == KoSvgTextShape_SHAPEID;
 
     if (!selectedShape && !hoveredShape && !crossLayerPossible) {
-        m_interactionStrategy.reset(new SvgCreateTextStrategy(this, event->point, event->pressure()));
+        QPointF point = canvas()->snapGuide()->snap(event->point, event->modifiers());
+        m_interactionStrategy.reset(new SvgCreateTextStrategy(this, point, event->pressure()));
         m_dragging = DragMode::Create;
         event->accept();
     } else if (hoveredShape) {

@@ -20,6 +20,7 @@
 #include "KoShapeRegistry.h"
 #include "KoToolBase.h"
 #include "KoViewConverter.h"
+#include "KoSnapGuide.h"
 #include "commands/KoKeepShapesSelectedCommand.h"
 #include "kis_global.h"
 #include "kundo2command.h"
@@ -45,7 +46,7 @@ void SvgCreateTextStrategy::paint(QPainter &painter, const KoViewConverter &conv
 
 void SvgCreateTextStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {
-    m_dragEnd = mouseLocation;
+    m_dragEnd = this->tool()->canvas()->snapGuide()->snap(mouseLocation, modifiers);
     m_modifiers = modifiers;
     const QRectF updateRect = QRectF(m_dragStart, m_dragEnd).normalized();
     tool()->canvas()->updateCanvas(kisGrowRect(updateRect, 100));
@@ -126,12 +127,14 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
     parentCommand->setText(cmd->text());
 
     new KoKeepShapesSelectedCommand({}, {textShape}, tool->canvas()->selectedShapesProxy(), true, parentCommand);
+    tool->canvas()->snapGuide()->reset();
 
     return parentCommand;
 }
 
 void SvgCreateTextStrategy::cancelInteraction()
 {
+    tool()->canvas()->snapGuide()->reset();
     const QRectF updateRect = QRectF(m_dragStart, m_dragEnd).normalized();
     tool()->canvas()->updateCanvas(updateRect);
 }

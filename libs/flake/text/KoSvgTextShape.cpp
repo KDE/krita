@@ -1077,6 +1077,7 @@ KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocume
     QString defs = params->stringProperty("defs" , "<defs/>");
     QRectF shapeRect = QRectF(0, 0, 200, 60);
     QVariant rect = params->property("shapeRect");
+    QVariant origin = params->property("origin");
 
     if (rect.type()==QVariant::RectF) {
         shapeRect = rect.toRectF();
@@ -1087,8 +1088,11 @@ KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocume
                              defs,
                              shapeRect,
                              documentResources->documentResolution());
-
-    shape->setPosition(shapeRect.topLeft());
+    if (origin.type() == QVariant::PointF) {
+        shape->setPosition(origin.toPointF());
+    } else {
+        shape->setPosition(shapeRect.topLeft());
+    }
 
     return shape;
 }

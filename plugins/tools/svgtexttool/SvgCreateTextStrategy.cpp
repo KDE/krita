@@ -85,39 +85,35 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
     KoProperties *params = new KoProperties();//Fill these with "svgText", "defs" and "shapeRect"
     params->setProperty("defs", QVariant(tool->generateDefs(extraProperties)));
 
+    QPointF origin = rectangle.topLeft();
+
     {
         const Qt::Alignment halign = tool->horizontalAlign();
         const bool isRtl = tool->isRtl();
 
         if (writingMode == KoSvgText::HorizontalTB) {
-            rectangle.setTop(rectangle.top() + ascender);
+            origin.setY(rectangle.top() + ascender);
             if (halign & Qt::AlignCenter) {
-                rectangle.setLeft(rectangle.center().x());
+                origin.setX(rectangle.center().x());
             } else if ((halign & Qt::AlignRight && !isRtl) || (halign & Qt::AlignLeft && isRtl)) {
-                qreal right = rectangle.right();
-                rectangle.setRight(right+10);
-                rectangle.setLeft(right);
+                origin.setX(rectangle.right());
             }
         } else {
             if (writingMode == KoSvgText::VerticalRL) {
-                qreal right = rectangle.right() - (lineHeight*0.5);
-                rectangle.setRight(right+10);
-                rectangle.setLeft(right);
-
+                origin.setX(rectangle.right() - (lineHeight*0.5));
             } else {
-                rectangle.setLeft(rectangle.left() + (lineHeight*0.5));
+                origin.setX(rectangle.left() + (lineHeight*0.5));
             }
 
             if (halign & Qt::AlignCenter) {
-                rectangle.setTop(rectangle.center().y());
+                origin.setY(rectangle.center().y());
             } else if (halign & Qt::AlignRight) {
-                qreal bottom = rectangle.bottom();
-                rectangle.setBottom(bottom+10);
-                rectangle.setTop(bottom);
+                origin.setY(rectangle.bottom());
             }
         }
 
         params->setProperty("shapeRect", QVariant(rectangle));
+        params->setProperty("origin", QVariant(origin));
     }
 
     KoShape *textShape = factory->createShape( params, tool->canvas()->shapeController()->resourceManager());

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-08 02:06+0000\n"
-"PO-Revision-Date: 2023-10-21 13:57\n"
+"PO-Revision-Date: 2023-11-11 07:24\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -9066,12 +9066,10 @@ msgstr "增大笔刷尺寸"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:845 krita/krita.action:847 krita/krita.action:848
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise"
-msgstr "将对象顺时针旋转 90°"
+msgstr "旋转笔尖图像 (顺时针)"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9080,11 +9078,10 @@ msgstr "将对象顺时针旋转 90°"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:857 krita/krita.action:859 krita/krita.action:860
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "顺时针 90 度旋转对象"
+msgstr "旋转笔尖图像 (顺时针-精确)"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
@@ -9093,12 +9090,10 @@ msgstr "顺时针 90 度旋转对象"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:869 krita/krita.action:871 krita/krita.action:872
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise"
-msgstr "将对象逆时针旋转 90°"
+msgstr "旋转笔尖图像 (逆时针)"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9107,11 +9102,10 @@ msgstr "将对象逆时针旋转 90°"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:881 krita/krita.action:883 krita/krita.action:884
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "逆时针 90 度旋转对象"
+msgstr "旋转笔尖图像 (逆时针-精确)"
 
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
@@ -12297,7 +12291,7 @@ msgstr "斜切图层"
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Hori&zontally"
-msgstr "水平翻转所有图层(&Z)"
+msgstr "翻转所有图层 (水平)(&Z)"
 
 #. i18n: context: toolTip @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
@@ -12307,14 +12301,14 @@ msgstr "水平翻转所有图层(&Z)"
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Horizontally"
-msgstr "水平翻转所有图层"
+msgstr "翻转所有图层 (水平)"
 
 #. i18n: context: text @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3280
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers &Vertically"
-msgstr "垂直翻转所有图层(&V)"
+msgstr "翻转所有图层 (垂直)(&V)"
 
 #. i18n: context: toolTip @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
@@ -12324,7 +12318,7 @@ msgstr "垂直翻转所有图层(&V)"
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Vertically"
-msgstr "垂直翻转所有图层"
+msgstr "翻转所有图层 (垂直)"
 
 #. i18n: context: text @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3292
@@ -12348,7 +12342,7 @@ msgstr "旋转所有图层"
 #, kde-format
 msgctxt "action"
 msgid "Rotate All &Layers 90° to the Right"
-msgstr "向右旋转所有图层 90°(&L)"
+msgstr "旋转所有图层 (向右 90°)(&L)"
 
 #. i18n: context: toolTip @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
@@ -12358,14 +12352,14 @@ msgstr "向右旋转所有图层 90°(&L)"
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Right"
-msgstr "向右旋转所有图层 90°"
+msgstr "旋转所有图层 (向右 90°)"
 
 #. i18n: context: text @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3316
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &90° to the Left"
-msgstr "向左旋转所有图层 &90°"
+msgstr "旋转所有图层 (向左 &90°)"
 
 #. i18n: context: toolTip @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
@@ -12375,14 +12369,14 @@ msgstr "向左旋转所有图层 &90°"
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Left"
-msgstr "向左旋转所有图层 90°"
+msgstr "旋转所有图层 (向左 90°)"
 
 #. i18n: context: text @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3328
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &180°"
-msgstr "旋转所有图层 &180°"
+msgstr "旋转所有图层 (&180°)"
 
 #. i18n: context: toolTip @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
@@ -12392,7 +12386,7 @@ msgstr "旋转所有图层 &180°"
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 180°"
-msgstr "旋转所有图层 180°"
+msgstr "旋转所有图层 (180°)"
 
 #. i18n: context: text @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3340
@@ -12854,9 +12848,7 @@ msgid "File"
 msgstr "文件"
 
 #: krita/krita5.xmlgui:416
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "编辑"
 
@@ -14033,7 +14025,7 @@ msgstr "打开/关闭缩放到视图"
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Canvas Right"
-msgstr "向右旋转画布(&C)"
+msgstr "旋转画布 (向右)(&C)"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
@@ -14043,14 +14035,14 @@ msgstr "向右旋转画布(&C)"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas Right"
-msgstr "向右旋转画布"
+msgstr "旋转画布 (向右)"
 
 #. i18n: context: text @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:850
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas &Left"
-msgstr "向左旋转画布(&L)"
+msgstr "旋转画布 (向左)(&L)"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
@@ -14060,7 +14052,7 @@ msgstr "向左旋转画布(&L)"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas Left"
-msgstr "向左旋转画布"
+msgstr "旋转画布 (向左)"
 
 #. i18n: context: text @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
@@ -14578,7 +14570,7 @@ msgstr "旋转图像"
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Image 90° to the Right"
-msgstr "向右旋转图像 90°(&I)"
+msgstr "旋转图像 (向右 90°)(&I)"
 
 #. i18n: context: toolTip @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
@@ -14588,14 +14580,14 @@ msgstr "向右旋转图像 90°(&I)"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Right"
-msgstr "向右旋转图像 90°"
+msgstr "旋转图像 (向右 90°)"
 
 #. i18n: context: text @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1245
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &90° to the Left"
-msgstr "向左旋转图像 &90°"
+msgstr "旋转图像 (向左 &90°)"
 
 #. i18n: context: toolTip @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
@@ -14605,14 +14597,14 @@ msgstr "向左旋转图像 &90°"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Left"
-msgstr "向左旋转图像 90°"
+msgstr "旋转图像 (向左 90°)"
 
 #. i18n: context: text @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1257
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &180°"
-msgstr "旋转图像 &180°"
+msgstr "旋转图像 (&180°)"
 
 #. i18n: context: toolTip @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
@@ -14622,7 +14614,7 @@ msgstr "旋转图像 &180°"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 180°"
-msgstr "旋转图像 180°"
+msgstr "旋转图像 (180°)"
 
 #. i18n: context: text @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1269
@@ -23664,7 +23656,7 @@ msgstr ""
 "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita 是一款由社区驱动、自"
 "由开源的绘画软件，让每一位画师都能自由且有尊严地进行创作。<br />您可以作为<a "
 "href=\"https://docs.krita.org/en/contributors_manual.html\">代码贡献者、志愿"
-"者</a>贡献力量，也可以作为<a href=\"https://fund.krita.org/\">开发基金会员、"
+"者</a>贡献力量，也可以作为<a href=\"https://fund.krita.org/\">发展基金会员、"
 "赞助商</a>为项目提供资金支持。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
@@ -28123,17 +28115,17 @@ msgstr "进入跳跃式旋转模式"
 #: libs/ui/input/kis_rotate_canvas_action.cpp:47
 #, kde-format
 msgid "Rotate Left"
-msgstr "向左旋转"
+msgstr "旋转画布 (向左)"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:48
 #, kde-format
 msgid "Rotate Right"
-msgstr "向右旋转"
+msgstr "旋转画布 (向右)"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Reset Rotation"
-msgstr "重置旋转"
+msgstr "重置画布旋转"
 
 #: libs/ui/input/kis_select_layer_action.cpp:116
 #, kde-format
@@ -28935,7 +28927,7 @@ msgctxt ""
 msgid ""
 "Non-animated layer is merged into the current frame. To merge it into the "
 "whole clip, create at least one frame"
-msgstr ""
+msgstr "非动画图层已被合并到当前帧。要将它合并到整个剪辑，请至少创建一个帧。"
 
 #: libs/ui/kis_layer_manager.cc:930
 #, kde-format
@@ -29080,12 +29072,12 @@ msgstr "沿 Y 轴翻转蒙版"
 #: libs/ui/kis_node_manager.cpp:1061
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers X"
-msgstr "沿 X 轴翻转所有图层"
+msgstr "翻转所有图层 (沿 X 轴)"
 
 #: libs/ui/kis_node_manager.cpp:1068
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Y"
-msgstr "沿 Y 轴翻转所有图层"
+msgstr "翻转所有图层 (沿 Y 轴)"
 
 #: libs/ui/kis_node_manager.cpp:1189
 #, kde-format
@@ -29164,13 +29156,12 @@ msgstr "蒙版图层"
 #: libs/ui/kis_node_manager.cpp:1590
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
-msgstr ""
+msgstr "无法将图层“%1“移动到新的上级图层“%2“之下"
 
 #: libs/ui/kis_node_manager.cpp:1593
-#, fuzzy, kde-format
-#| msgid "Put every layer in its own, separate group layer"
+#, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
-msgstr "将每个新图层放进各自独立的图层组"
+msgstr "无法将图层“%1“移动到根图层之下"
 
 #: libs/ui/kis_node_manager.cpp:1601
 msgctxt "(qtundo-format)"
@@ -32258,30 +32249,24 @@ msgid "Decrease Brush Size"
 msgstr "减小笔刷尺寸"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgid "Rotate brush tip clockwise"
-msgstr "将对象顺时针旋转 90°"
+msgstr "旋转笔尖图像 (顺时针)"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "顺时针 90 度旋转对象"
+msgstr "旋转笔尖图像 (顺时针-精确)"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise"
-msgstr "将对象逆时针旋转 90°"
+msgstr "旋转笔尖图像 (逆时针)"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "逆时针 90 度旋转对象"
+msgstr "旋转笔尖图像 (逆时针-精确)"
 
 #: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, kde-format
@@ -44933,10 +44918,9 @@ msgstr "窗口大小："
 
 #: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgid "Reset Transparent"
-msgstr "透明"
+msgstr "重置透明度"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -56324,7 +56308,7 @@ msgstr "雪花"
 #: plugins/tools/basictools/kis_tool_multihand.cpp:423
 #, kde-format
 msgid "Copy Translate"
-msgstr "指定相对位置平行"
+msgstr "平行 (指定相对位置)"
 
 #: plugins/tools/basictools/kis_tool_multihand.h:91
 #, kde-format

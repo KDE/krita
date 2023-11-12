@@ -159,7 +159,7 @@ int KoSvgTextShape::lineStart(int pos)
         return pos;
     }
     CursorPos p = d->cursorPos.at(pos);
-    if (d->result.at(p.cluster).anchored_chunk &&  p.offset == 0) {
+    if (d->result.at(p.cluster).anchored_chunk && p.offset == 0) {
         return pos;
     }
     int candidate = 0;
@@ -177,13 +177,14 @@ int KoSvgTextShape::lineEnd(int pos)
     if (pos < 0 || d->cursorPos.isEmpty() || d->result.isEmpty()) {
         return pos;
     }
-    if (pos > d->cursorPos.size()-1) {
+    if (pos > d->cursorPos.size() - 1) {
         return d->cursorPos.size() - 1;
     }
     int candidate = 0;
+    int posCluster = d->cursorPos.at(pos).cluster;
     for (int i = pos; i < d->cursorPos.size(); i++) {
         CursorPos p = d->cursorPos.at(i);
-        if (d->result.at(p.cluster).anchored_chunk && i != pos && p.offset == 0) {
+        if (d->result.at(p.cluster).anchored_chunk && i > pos && posCluster != p.cluster) {
             break;
         }
         candidate = i;
@@ -520,7 +521,7 @@ QPainterPath KoSvgTextShape::selectionBoxes(int pos, int anchor)
     return p;
 }
 
-int KoSvgTextShape::posForPoint(QPointF point, int start, int end)
+int KoSvgTextShape::posForPoint(QPointF point, int start, int end, bool *overlaps)
 {
     int a = 0;
     int b = d->cursorPos.size();
@@ -540,9 +541,55 @@ int KoSvgTextShape::posForPoint(QPointF point, int start, int end)
             candidate = i;
             closest = distance;
         }
-
+        if (res.finalTransform().map(res.boundingBox).containsPoint(point, Qt::WindingFill) && overlaps) {
+            *overlaps = true;
+        }
     }
     return candidate;
+}
+
+int KoSvgTextShape::posForPointLineSensitive(QPointF point)
+{
+    bool overlaps = false;
+    int initialPos = posForPoint(point, -1, -1, &overlaps);
+
+    if (overlaps) {
+        return initialPos;
+    }
+
+    KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+
+    int candidateLineStart = -1;
+    double closest = std::numeric_limits<double>::max();
+    for (int i = 0; i < d->cursorPos.size(); i++) {
+        CursorPos pos = d->cursorPos.at(i);
+        CharacterResult res = d->result.at(pos.cluster);
+        if (res.anchored_chunk) {
+            QLineF caret = res.cursorInfo.caret;
+            caret.translate(res.finalPosition);
+            QPointF cursorStart = res.finalPosition;
+            cursorStart += res.cursorInfo.offsets.value(pos.offset, res.advance);
+            double distance = kisDistance(cursorStart, point);
+            if (mode == KoSvgText::HorizontalTB) {
+                if (caret.p1().y() > point.y() && caret.p2().y() <= point.y() && closest > distance) {
+                    candidateLineStart = i;
+                    closest = distance;
+                }
+            } else {
+                if (caret.p2().x() > point.x() && caret.p1().x() <= point.x() && closest > distance) {
+                    candidateLineStart = i;
+                    closest = distance;
+                }
+            }
+        }
+    }
+
+    if (candidateLineStart > -1) {
+        int end = lineEnd(candidateLineStart);
+        initialPos = posForPoint(point, candidateLineStart, qMin(end + 1, d->cursorPos.size()));
+    }
+
+    return initialPos;
 }
 
 int KoSvgTextShape::posForIndex(int index, bool firstIndex, bool skipSynthetic)

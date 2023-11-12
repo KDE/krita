@@ -237,9 +237,26 @@ public:
      * @param point
      * @param start -- optional start position;
      * @param end -- optional end position;
+     * @param overlaps -- optional bool that is set if the point overlaps any glyph box.
      * @return the closest cursor position.
      */
-    int posForPoint(QPointF point, int start = -1, int end = -1);
+    int posForPoint(QPointF point, int start = -1, int end = -1, bool *overlaps = nullptr);
+
+    /**
+     * @brief posForPointLineSensitive
+     * When clicking on an empty space in a wrapped text, it is preferrable to have the
+     * caret be at the end of the line visually associated with that empty space than
+     * the positions above or below that might be closer.
+     *
+     * Because SVG has several situations where there's no real lines, we first test
+     * for the closest cursorpos and also whether there's an actual overlap with a glyph.
+     * If there's no such overlap, we test against whether there's an anchored chunk in
+     * the inline direction, and if so search the line resulting from that. If not, we return
+     * the closest pos.
+     * @param point the point in shape coordinates.
+     * @return the closest pos, taking into account any line starts or ends.
+     */
+    int posForPointLineSensitive(QPointF point);
     /**
      * @brief posForIndex
      * Get the cursor position for a given index in a string.

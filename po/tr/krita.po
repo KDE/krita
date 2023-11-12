@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-11 00:40+0000\n"
-"PO-Revision-Date: 2023-11-01 06:23+0300\n"
+"PO-Revision-Date: 2023-11-12 01:19+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Lokalize 23.11.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -20365,7 +20365,7 @@ msgstr "Birleştirileni Kopyala"
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
-msgstr "Seçim zaten vektör biçimde "
+msgstr "Seçim halihazırda vektör biçimde "
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:493
 #: libs/ui/actions/kis_selection_action_factories.cpp:513
@@ -20377,13 +20377,13 @@ msgstr "Vektör Seçime Dönüştür"
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
-msgstr "Seçim zaten raster biçimde "
+msgstr "Seçim halihazırda raster biçimde "
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:554
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
-msgstr "Şekil zaten bir seçime ait"
+msgstr "Şekil halihazırda bir seçime ait"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:560
 msgctxt "(qtundo-format)"
@@ -33677,13 +33677,14 @@ msgid ""
 "in the digital darkroom Rec.2020 is much more suitable as a general RGB "
 "working space than the exceedingly small sRGB color space.</p>"
 msgstr ""
-"<p>Rec.2020, tamamen eskimiş sRGB renk alanı için yeni ve yenilenen bir "
-"yedektir. Haziran 2015'ten itibaren, çok az sayıda (varsa) ekran aygıtı (ve "
-"kesinlikle fiyatı uygun bir ekran aygıtı yok) Rec. 2020'nin tümünü "
-"görüntüleyebilir. Bununla birlikte, ekran teknolojisi Rec.2020'de kapanıyor, "
-"filmler zaten Rec.2020 için yapılmış ve çeşitli kameralar Rec.2020 için "
-"destek sunuyor. Ve sayısal karanlık oda Rec.2020, son derece küçük sRGB renk "
-"alanına kıyasla genel bir RGB çalışma alanı olarak çok daha uygundur.</p>"
+"<p>Rec.2020, tümüyle modası geçmiş sRGB renk alanının gelecek vaat eden "
+"alternatifidir. Haziran 2015 itibarıyla, çok az sayıda görüntüleme aygıtı "
+"(varsa) (ve kesinlikle uygun fiyatlı görüntüleme aygıtlarının hiçbiri), "
+"Rec.2020'nin tamamını görüntüleyebilir. Ancak görüntü teknolojisi "
+"Rec.2020'ye ayak uyduruyor, Rec.2020 için filmler yapılıyor ve çeşitli "
+"kameralar Rec.2020 için destek sunuyor. Ve sayısal karanlık odada Rec.2020 "
+"genel RGB çalışma alanı olarak son derece küçük olan sRGB renk alanından çok "
+"daha uygundur.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:613
 #, kde-format
@@ -56302,7 +56303,7 @@ msgstr "Eklenti Üzerine Yaz"
 #: plugins/python/plugin_importer/plugin_importer_extension.py:45
 #, python-format
 msgid "The plugin \"%s\" already exists. Overwrite it?"
-msgstr "\"%s\" eklentisi zaten var. Üzerine yazılsın mı?"
+msgstr "\"%s\" eklentisi halihazırda var. Üzerine yazılsın mı?"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:53
 msgid "The following plugins were imported:"

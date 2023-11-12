@@ -13,6 +13,8 @@
 
 class QPoint;
 class KoColor;
+class KoCanvasBase;
+class QPainterPath;
 
 namespace KisToolUtils {
 
@@ -57,6 +59,31 @@ KisNodeSP KRITAUI_EXPORT findNode(KisNodeSP node, const QPoint &point, bool whol
 
 KisNodeList KRITAUI_EXPORT findNodes(KisNodeSP node, const QPoint &point, bool wholeGroup,
                                      bool includeGroups = true, bool editableOnly = true);
+
+/**
+ * @brief shapeHoverInfoCrossLayer
+ * get hover info of shapes on all layers.
+ *
+ * @param canvas -- current canvas.
+ * @param point -- the point in document coordinates.
+ * @param shapeType -- the shapeID of the found shape.
+ * @param isHorizontal -- when this is a textShape, sets whether the writing mode is horizontal.
+ * @return
+ */
+QPainterPath KRITAUI_EXPORT shapeHoverInfoCrossLayer(KoCanvasBase *canvas, const QPointF &point,
+                                                     QString &shapeType, bool *isHorizontal = nullptr, bool skipCurrentShapes = true);
+/**
+ * @brief selectShapeCrossLayer
+ * Tries to select a shape under the cursor regardless of which layer it is on,
+ * to do so, it will always select the layer first and then the shape.
+ * @param canvas -- the current canvas.
+ * @param point -- the point in document coordinates.
+ * @param shapeType -- the required shapeId, if empty, selects any koshape.
+ * @return whether a shape was succesfully selected.
+ */
+bool KRITAUI_EXPORT selectShapeCrossLayer(KoCanvasBase *canvas, const QPointF &point,
+                                          const QString &shapeType = QString(), bool skipCurrentShapes = true);
+
 
 /**
  * return true if success

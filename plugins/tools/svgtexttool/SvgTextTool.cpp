@@ -588,7 +588,7 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
         } else if (m_dragging == DragMode::Select && this->selectedShape()) {
             KoSvgTextShape *const selectedShape = this->selectedShape();
             // Todo: replace with something a little less hacky.
-            if (selectedShape->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt() == 0) {
+            if (selectedShape->writingMode() == KoSvgText::HorizontalTB) {
                 useCursor(m_ibeam_horizontal);
             } else {
                 useCursor(m_ibeam_vertical);

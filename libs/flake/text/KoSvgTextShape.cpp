@@ -90,7 +90,7 @@ void KoSvgTextShape::setResolution(qreal xRes, qreal yRes)
 
 int KoSvgTextShape::posLeft(int pos, bool visual)
 {
-    KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::WritingMode mode = writingMode();
     KoSvgText::Direction direction = KoSvgText::Direction(this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
     if (mode == KoSvgText::VerticalRL) {
         return nextLine(pos);
@@ -107,7 +107,7 @@ int KoSvgTextShape::posLeft(int pos, bool visual)
 
 int KoSvgTextShape::posRight(int pos, bool visual)
 {
-    KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::WritingMode mode = writingMode();
     KoSvgText::Direction direction = KoSvgText::Direction(this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
 
     if (mode == KoSvgText::VerticalRL) {
@@ -125,7 +125,7 @@ int KoSvgTextShape::posRight(int pos, bool visual)
 
 int KoSvgTextShape::posUp(int pos, bool visual)
 {
-    KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::WritingMode mode = writingMode();
     KoSvgText::Direction direction = KoSvgText::Direction(this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
     if (mode == KoSvgText::VerticalRL || mode == KoSvgText::VerticalLR) {
         if (direction == KoSvgText::DirectionRightToLeft) {
@@ -140,7 +140,7 @@ int KoSvgTextShape::posUp(int pos, bool visual)
 
 int KoSvgTextShape::posDown(int pos, bool visual)
 {
-    KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::WritingMode mode = writingMode();
     KoSvgText::Direction direction = KoSvgText::Direction(this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
     if (mode == KoSvgText::VerticalRL || mode == KoSvgText::VerticalLR) {
         if (direction == KoSvgText::DirectionRightToLeft) {
@@ -440,7 +440,7 @@ int KoSvgTextShape::wordStart(int pos)
 
 QPainterPath KoSvgTextShape::defaultCursorShape()
 {
-    KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::WritingMode mode = writingMode();
     double fontSize = this->textProperties().propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
     QPainterPath p;
     if (mode == KoSvgText::HorizontalTB) {
@@ -557,7 +557,7 @@ int KoSvgTextShape::posForPointLineSensitive(QPointF point)
         return initialPos;
     }
 
-    KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::WritingMode mode = writingMode();
 
     int candidateLineStart = -1;
     double closest = std::numeric_limits<double>::max();
@@ -709,6 +709,11 @@ bool KoSvgTextShape::removeText(int pos, int length)
 QString KoSvgTextShape::plainText()
 {
     return d->plainText;
+}
+
+KoSvgText::WritingMode KoSvgTextShape::writingMode()
+{
+    return KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
 }
 
 void KoSvgTextShape::notifyCursorPosChanged(int pos, int anchor)

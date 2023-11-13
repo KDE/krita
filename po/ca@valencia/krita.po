@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-08 02:06+0000\n"
-"PO-Revision-Date: 2023-11-08 09:44+0100\n"
+"PO-Revision-Date: 2023-11-11 14:25+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -21945,7 +21945,7 @@ msgstr "Ubicació de FFmpeg:"
 #: libs/ui/animation/wdg_animationrenderer.ui:249
 #, kde-format
 msgid "FFmpeg version:"
-msgstr "Versió de FFmpeg: "
+msgstr "Versió de FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -36556,7 +36556,7 @@ msgstr[1] ""
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:542
 #, kde-format
 msgid "Reassign"
-msgstr "Reassigna"
+msgstr "Torna a assignar"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:195
 #, kde-format

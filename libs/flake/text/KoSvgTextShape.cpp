@@ -245,13 +245,20 @@ int KoSvgTextShape::previousCluster(int pos)
     }
     int currentCluster = d->cursorPos.at(pos).cluster;
     int currentOffset = d->cursorPos.at(pos).offset;
+    bool skipFirst = d->cursorPos.at(pos).synthetic;
 
     for (int i = pos; i >= 0; i--) {
         int cluster = d->cursorPos.at(i).cluster;
         int offset = d->cursorPos.at(i).offset;
         if ((cluster < currentCluster)
                 || (cluster == currentCluster && offset < currentOffset)) {
-            return i;
+            if (!skipFirst) {
+                return i;
+            } else {
+                currentCluster = cluster;
+                currentOffset = offset;
+                skipFirst = false;
+            }
         }
     }
     return pos;

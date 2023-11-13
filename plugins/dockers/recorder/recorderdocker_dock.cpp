@@ -32,11 +32,26 @@
 #include <QPointer>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QTimer>
 
 namespace
 {
 const QString keyActionRecordToggle = "recorder_record_toggle";
 const QString keyActionExport = "recorder_export";
+
+const QString activeColorGreen(" color='#5cab25'");
+const QString inactiveColorGreen(" color='#b4e196'");
+const QString activeColorOrange(" color='#ca8f14'");
+const QString inactiveColorOrange(" color='#ffe5af'");
+const QString activeColorRed(" color='#da4453'");
+const QString inactiveColorRed(" color='#f2c4c9'");
+const QString inactiveColorGray(" color='#3e3e3e'");
+
+const QColor textColorOrange(0xff, 0xe5, 0xaf);
+const QColor buttonColorOrange(0xca, 0x8f, 0x14);
+const QColor textColorRed(0xf2, 0xc4, 0xc9);
+const QColor buttonColorRed(0xda, 0x44, 0x53);
+
 }
 
 
@@ -64,10 +79,12 @@ public:
     bool realTimeCaptureMode = false;
     bool recordIsolateLayerMode = false;
     bool recordAutomatically = false;
+    bool paused = true;
+    QTimer pausedTimer;
+    QTimer warningTimer;
 
     QLabel* statusBarLabel;
     QLabel* statusBarWarningLabel;
-    QTimer warningTimer;
 
     QMap<QString, bool> enabledIds;
 
@@ -78,12 +95,14 @@ public:
         , statusBarLabel(new QLabel())
         , statusBarWarningLabel(new QLabel())
     {
-        updateRecIndicator(false);
+        updateRecIndicator();
         statusBarWarningLabel->setPixmap(KisIconUtils::loadIcon("warning").pixmap(16, 16));
         statusBarWarningLabel->hide();
         warningTimer.setInterval(10000);
         warningTimer.setSingleShot(true);
+        pausedTimer.setSingleShot(true);
         connect(&warningTimer, SIGNAL(timeout()), q, SLOT(onWarningTimeout()));
+        connect(&pausedTimer, SIGNAL(timeout()), q, SLOT(onPausedTimeout()));
     }
 
     void loadSettings()
@@ -252,20 +271,46 @@ public:
 
         KisStatusBar *statusBar = canvas->viewManager()->statusBar();
         if (isRecording) {
-            statusBar->addExtraWidget(statusBarLabel);
             statusBar->addExtraWidget(statusBarWarningLabel);
+            statusBar->addExtraWidget(statusBarLabel);
+            updateRecIndicator();
         } else {
-            statusBar->removeExtraWidget(statusBarLabel);
             statusBar->removeExtraWidget(statusBarWarningLabel);
+            statusBar->removeExtraWidget(statusBarLabel);
         }
     }
 
-    void updateRecIndicator(bool paused)
+    void updateRecIndicator()
     {
+        auto threads = writer.recorderThreads.get();
+        auto threadsInUse = writer.recorderThreads.getUsed();
+        QString label("<font style='letter-spacing:-4px'>");
+        QString activeColor;
+        QString inactiveColor;
+        for (unsigned int threadNr = 1; threadNr <= ThreadSystemValue::MaxThreadCount ; threadNr++)
+        {
+            if (threadNr > threads) {
+                activeColor = inactiveColorGray;
+                inactiveColor = inactiveColorGray;
+            } else if (threadNr > ThreadSystemValue::MaxRecordThreadCount) {
+                activeColor = activeColorRed;
+                inactiveColor = inactiveColorRed;
+            } else if (threadNr > ThreadSystemValue::IdealRecordThreadCount) {
+                activeColor = activeColorOrange;
+                inactiveColor = inactiveColorOrange;
+            } else {
+                activeColor = activeColorGreen;
+                inactiveColor = inactiveColorGreen;
+            }
+            label.append(QString("<font%1>▍</font>")
+                             .arg(threadNr <= threadsInUse ? activeColor : inactiveColor));
+        }
         // don't remove empty <font></font> tag else label will jump a few pixels around
-        statusBarLabel->setText(QString("<font%1>●</font><font> %2</font>")
-                                .arg(paused ? "" : " color='#da4453'").arg(i18nc("Recording symbol", "REC")));
-        statusBarLabel->setToolTip(paused ? i18n("Recorder is paused") : i18n("Recorder is active"));
+        label.append(QString("</font><font> %1 </font><font%2>●</font>")
+                         .arg(i18nc("Recording symbol", "REC"))
+                         .arg(paused ? "" : activeColorRed));
+        statusBarLabel->setText(label);
+        statusBarLabel->setToolTip(paused ? i18n("Recorder is paused") : QString(i18n("Active recording with %1 of %2 available threads")).arg(threadsInUse).arg(threads));
     }
 
     void showWarning(const QString &hint) {
@@ -284,8 +329,8 @@ public:
             // Number of threads exceeds ideal thread count
             // -> switch color of threads slider and spin wheel to red
             QPalette pal;
-            pal.setColor(QPalette::Text, QColor(0xc4, 0x7b, 0x69));
-            pal.setColor(QPalette::Button, QColor(0x89, 0x27, 0x0f));
+            pal.setColor(QPalette::Text, textColorRed);
+            pal.setColor(QPalette::Button, buttonColorRed);
             ui->spinThreads->setPalette(pal);
             ui->sliderThreads->setPalette(pal);
             toolTipText = QString(
@@ -295,8 +340,8 @@ public:
             // Number of threads exceeds ideal recorder thread count
             // -> switch color of threads slider and spin wheel to orange
             QPalette pal;
-            pal.setColor(QPalette::Text, QColor(0xea, 0xbd, 0x76));
-            pal.setColor(QPalette::Button, QColor(0xa5, 0x65, 0x00));
+            pal.setColor(QPalette::Text, textColorOrange);
+            pal.setColor(QPalette::Button, buttonColorOrange);
             ui->spinThreads->setPalette(pal);
             ui->sliderThreads->setPalette(pal);
             toolTipText = QString(
@@ -371,10 +416,10 @@ RecorderDockerDock::RecorderDockerDock()
     connect(d->ui->buttonRecordToggle, SIGNAL(toggled(bool)), this, SLOT(onRecordButtonToggled(bool)));
     connect(d->ui->buttonExport, SIGNAL(clicked()), this, SLOT(onExportButtonClicked()));
 
-    connect(&d->writer.recorderThreads, SIGNAL(valueChanged(int)), this, SLOT(onThreadsChanged(int)));
+    connect(&d->writer.recorderThreads, SIGNAL(notifyInUseChange(bool)), this, SLOT(onActiveRecording(bool)));
+    connect(&d->writer.recorderThreads, SIGNAL(notifyInUseChange(bool)), this, SLOT(onUpdateRecIndicator()));
     connect(&d->writer, SIGNAL(started()), this, SLOT(onWriterStarted()));
     connect(&d->writer, SIGNAL(stopped()), this, SLOT(onWriterStopped()));
-    connect(&d->writer, SIGNAL(pausedChanged(bool)), this, SLOT(onWriterPausedChanged(bool)));
     connect(&d->writer, SIGNAL(frameWriteFailed()), this, SLOT(onWriterFrameWriteFailed()));
     connect(&d->writer, SIGNAL(recorderStopWarning()), this, SLOT(onRecorderStopWarning()));
     connect(&d->writer, SIGNAL(lowPerformanceWarning()), this, SLOT(onLowPerformanceWarning()));
@@ -481,9 +526,24 @@ void RecorderDockerDock::onRecordButtonToggled(bool checked)
         d->updateWriterSettings();
         d->updateUiFormat();
         d->writer.start();
+
+        // Calculate Rec symbol activity timeout depending on the capture interval
+        // The pausedTimer interval is set to a slightly greater value than the capture interval
+        // to avoid flickering for ongoing painting. This is also the reason for the min and max
+        // values 305 and 2005 (instead of 300 and 2000, respectively).
+        if (d->realTimeCaptureMode) {
+            d->pausedTimer.setInterval(qBound(305, static_cast<int>(1000.0/static_cast<double>(exportSettings->fps)) + 5,2005));
+        } else {
+            d->pausedTimer.setInterval(qBound(305, static_cast<int>(qMax(d->captureInterval, .1) * 1000.0) + 5, 2005));
+        }
     } else {
         d->writer.stop();
+        d->warningTimer.stop();
+        d->pausedTimer.stop();
+        d->statusBarWarningLabel->hide();
+        d->paused = true;
     }
+
 }
 
 void RecorderDockerDock::onExportButtonClicked()
@@ -617,9 +677,24 @@ void RecorderDockerDock::onWriterStopped()
     d->updateRecordStatus(false);
 }
 
-void RecorderDockerDock::onWriterPausedChanged(bool paused)
+void RecorderDockerDock::onUpdateRecIndicator()
 {
-    d->updateRecIndicator(paused);
+    d->updateRecIndicator();
+}
+
+void RecorderDockerDock::onActiveRecording(bool valueWasIncreased)
+{
+    if (!valueWasIncreased)
+        return;
+
+    d->paused = false;
+    d->pausedTimer.start();
+}
+
+void RecorderDockerDock::onPausedTimeout()
+{
+    d->paused = true;
+    d->updateRecIndicator();
 }
 
 void RecorderDockerDock::onWriterFrameWriteFailed()

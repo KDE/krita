@@ -119,7 +119,6 @@ public:
 Q_SIGNALS:
     void started();
     void stopped();
-    void pausedChanged(bool paused);
     void frameWriteFailed();
     void lowPerformanceWarning();
     void recorderStopWarning();

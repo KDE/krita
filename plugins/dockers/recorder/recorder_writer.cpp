@@ -341,14 +341,13 @@ using WriterPool = QVector<WriterPoolEl>;
 class RecorderWriterManager::Private
 {
 public:
-    Private(RecorderWriterManager* q_ptr, const ThreadCounter& rt)
+    Private(RecorderWriterManager* q_ptr, ThreadCounter& rt)
         : q(q_ptr)
         , recorderThreads(rt)
     {}
 
     RecorderWriterManager* const q;
-    const ThreadCounter& recorderThreads;
-    bool paused = false;
+    ThreadCounter& recorderThreads;
     volatile std::atomic_bool enabled = false;                  // enable recording only for active documents
     volatile std::atomic_bool imageModified = false;
     volatile std::atomic_bool skipCapturing = false;            // set true on move or transform enabled to prevent tool deactivation
@@ -514,9 +513,7 @@ void RecorderWriterManager::start()
         return;
 
     d->enabled = true;
-    d->paused = true;
     d->imageModified = false;
-    emit pausedChanged(d->paused);
 
     connect(&d->timer, SIGNAL (timeout()), this, SLOT (onTimer()));
     if (d->settings.realTimeCaptureMode) {
@@ -558,16 +555,7 @@ void RecorderWriterManager::onTimer()
 
     if ((!d->settings.recordIsolateLayerMode) &&
         (d->canvas->image()->isIsolatingLayer() || d->canvas->image()->isIsolatingGroup())) {
-        if (!d->paused) {
-            d->paused = true;
-            emit pausedChanged(d->paused);
-        }
         return;
-    }
-
-    if (d->imageModified == d->paused) {
-        d->paused = !d->imageModified;
-        emit pausedChanged(d->paused);
     }
 
     if (!d->imageModified)
@@ -588,6 +576,7 @@ void RecorderWriterManager::onTimer()
 
     d->writerPool[d->freeWriterId].inUse = true;
     d->writerPool[d->freeWriterId].thread->setPriority(QThread::HighPriority);
+    recorderThreads.incUsedAndNotify();
     emit startCapturing(d->freeWriterId, ++d->partIndex);
 }
 
@@ -597,6 +586,7 @@ void RecorderWriterManager::onCapturingDone(int workerId, bool success)
         return;
     d->writerPool[workerId].inUse = false;
     d->writerPool[workerId].thread->setPriority(QThread::IdlePriority);
+    recorderThreads.decUsedAndNotify();
     if (!success) {
         stop();
         emit frameWriteFailed();
@@ -612,8 +602,6 @@ void RecorderWriterManager::onImageModified()
             (d->canvas->image()->isIsolatingLayer() || d->canvas->image()->isIsolatingGroup()))
         return;
 
-    if (!d->imageModified)
-        emit pausedChanged(false);
     d->imageModified = true;
 }
 

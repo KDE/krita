@@ -48,7 +48,9 @@ private Q_SLOTS:
 
     void onWriterStarted();
     void onWriterStopped();
-    void onWriterPausedChanged(bool paused);
+    void onUpdateRecIndicator();
+    void onActiveRecording(bool valueWasIncreased);
+    void onPausedTimeout();
     void onWriterFrameWriteFailed();
     void onRecorderStopWarning();
     void onLowPerformanceWarning();

@@ -354,7 +354,7 @@ namespace KisToolUtils {
                 KoSvgTextShape *t = dynamic_cast<KoSvgTextShape *>(shape);
                 if (t && isHorizontal) {
                     p.addRect(t->boundingRect());
-                    *isHorizontal = t->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt() == 0;
+                    *isHorizontal = t->writingMode() == 0;
                     if (!t->shapesInside().isEmpty()) {
                         QPainterPath paths;
                         Q_FOREACH(KoShape *s, t->shapesInside()) {

@@ -638,8 +638,15 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
 
         QString shapeType;
         bool isHorizontal = true;
+        const KoSvgTextShape *hoveredShape = dynamic_cast<KoSvgTextShape *>(canvas()->shapeManager()->shapeAt(event->point));
         QPainterPath hoverPath = KisToolUtils::shapeHoverInfoCrossLayer(canvas(), event->point, shapeType, &isHorizontal);
-        if (!hoverPath.isEmpty() && shapeType == KoSvgTextShape_SHAPEID && m_highlightItem == HighlightItem::None) {
+        if (selectedShape && selectedShape == hoveredShape && m_highlightItem == HighlightItem::None) {
+            if (selectedShape->writingMode() == KoSvgText::HorizontalTB) {
+                cursor = m_ibeam_horizontal;
+            } else {
+                cursor = m_ibeam_vertical;
+            }
+        } else if (!hoverPath.isEmpty() && shapeType == KoSvgTextShape_SHAPEID && m_highlightItem == HighlightItem::None) {
             m_hoveredShapeHighlightRect = hoverPath;
             if (isHorizontal) {
                 cursor = m_ibeam_horizontal;

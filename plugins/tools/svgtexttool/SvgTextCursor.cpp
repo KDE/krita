@@ -196,10 +196,9 @@ void SvgTextCursor::setPosToPoint(QPointF point, bool moveAnchor)
             int end = start + d->preEditLength;
             int posIndex = d->shape->indexForPos(pos);
             if (posIndex > start && posIndex <= end) {
-                qDebug() << "Clicked on preedit string";
                 qApp->inputMethod()->invokeAction(QInputMethod::Click, posIndex - start);
                 return;
-            } else {qDebug() << "clicked outside preedit string";
+            } else {
                 commitIMEPreEdit();
             }
         }
@@ -349,9 +348,7 @@ void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
 
 QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-    qDebug() << "receiving inputmethod query" << query;
-
-    bool isHorizontal = d->shape? d->shape->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt() == 0: true;
+    dbgTools << "receiving inputmethod query" << query;
 
     // Because we set the input item transform to be shape->document->view->widget->window,
     // the coordinates here should be in shape coordinates.
@@ -362,12 +359,7 @@ QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
     case Qt::ImCursorRectangle:
         // The platform integration will always define the cursor as the 'left side' handle.
         if (d->shape) {
-
-            // We set the cursorRectangle to the the 'topside' of the caret when in vertical, to avoid
-            // the suggestion menu from hovering directly over the edited segment. It may still partially overlap,
-            // but that may be acceptable for now.
-            //TODO: Test on android whether this won't give funny results, if so, ifdef.
-            QPointF caret1 = isHorizontal? d->cursorCaret.p1() : d->cursorCaret.p2();
+            QPointF caret1(d->cursorCaret.p1());
             QPointF caret2(d->cursorCaret.p2());
 
 
@@ -473,8 +465,8 @@ QVariant SvgTextCursor::inputMethodQuery(Qt::InputMethodQuery query) const
 
 void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
 {
-    qDebug() << "Commit:"<< event->commitString() << "predit:"<< event->preeditString();
-    qDebug() << "Replacement:"<< event->replacementStart() << event->replacementLength();
+    dbgTools << "Commit:"<< event->commitString() << "predit:"<< event->preeditString();
+    dbgTools << "Replacement:"<< event->replacementStart() << event->replacementLength();
 
     QRectF updateRect = d->shape? d->shape->boundingRect(): QRectF();
     d->blockQueryUpdates = true;
@@ -545,7 +537,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     // Apply the cursor offset for the preedit.
     QVector<IMEDecorationInfo> styleMap;
     Q_FOREACH(const QInputMethodEvent::Attribute attribute, event->attributes()) {
-        qDebug() << "attribute: "<< attribute.type << "start: " << attribute.start
+        dbgTools << "attribute: "<< attribute.type << "start: " << attribute.start
                  << "length: " << attribute.length << "val: " << attribute.value;
         // Text Format is about setting the look of the preedit string, and there can be multiple per event
         // we primarily interpret the underline. When a background color is set, we increase the underline

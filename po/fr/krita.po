@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-11 00:40+0000\n"
-"PO-Revision-Date: 2023-11-07 18:36+0100\n"
+"POT-Creation-Date: 2023-11-13 00:40+0000\n"
+"PO-Revision-Date: 2023-11-11 20:43+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -16465,25 +16465,25 @@ msgstr ""
 "enregistrez le document, l'objet de texte sera converti au format de Krita 5 "
 "et ne sera plus compatible avec Krita 4.x."
 
-#: libs/flake/text/KoSvgTextShape.cpp:863
+#: libs/flake/text/KoSvgTextShape.cpp:910
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texte"
 
-#: libs/flake/text/KoSvgTextShape.cpp:865
-#: libs/flake/text/KoSvgTextShape.cpp:873
+#: libs/flake/text/KoSvgTextShape.cpp:912
+#: libs/flake/text/KoSvgTextShape.cpp:920
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Objet textuel SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:871
+#: libs/flake/text/KoSvgTextShape.cpp:918
 #, kde-format
 msgid "SVG Text"
 msgstr "Texte SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:885
-#: libs/flake/text/KoSvgTextShape.cpp:900
+#: libs/flake/text/KoSvgTextShape.cpp:932
+#: libs/flake/text/KoSvgTextShape.cpp:947
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -33273,11 +33273,10 @@ msgstr "Transparent"
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:102
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:163
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:167
-#, fuzzy, kde-format
-#| msgid "Position: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Position: {n}%"
-msgstr "Position : "
+msgstr "Position : {n}%"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:40
 #, kde-format
@@ -37431,11 +37430,9 @@ msgstr "Afficher le déplacement"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Snap Options Popup"
+#, kde-format
 msgid "Show Snapping"
-msgstr "Afficher les paramètres contextuels d'aimantation"
+msgstr "Afficher l'aimantation"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:277

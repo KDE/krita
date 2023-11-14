@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>277</width>
+    <width>324</width>
     <height>369</height>
    </rect>
   </property>
@@ -49,7 +49,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>277</width>
+        <width>324</width>
         <height>369</height>
        </rect>
       </property>
@@ -296,6 +296,46 @@
               </item>
              </widget>
             </item>
+            <item row="5" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayoutThreads">
+              <item>
+               <widget class="QSlider" name="sliderThreads">
+                <property name="toolTip">
+                 <string>Number of threads, which should be used for recording</string>
+                </property>
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="pageStep">
+                 <number>1</number>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinThreads">
+                <property name="minimumSize">
+                 <size>
+                  <width>40</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Number of threads, which should be used for recording</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="labelThreads">
+              <property name="text">
+               <string>Threads:</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>
@@ -409,6 +449,8 @@ Depending on timelapse speed, this may cause flickering in the resulting video.<
   <tabstop>comboFormat</tabstop>
   <tabstop>spinQuality</tabstop>
   <tabstop>comboResolution</tabstop>
+  <tabstop>sliderThreads</tabstop>
+  <tabstop>spinThreads</tabstop>
   <tabstop>checkBoxRealTimeCaptureMode</tabstop>
   <tabstop>checkBoxRecordIsolateMode</tabstop>
   <tabstop>checkBoxAutoRecord</tabstop>
@@ -416,5 +458,38 @@ Depending on timelapse speed, this may cause flickering in the resulting video.<
   <tabstop>buttonExport</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>sliderThreads</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinThreads</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>231</x>
+     <y>220</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>319</x>
+     <y>219</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinThreads</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>sliderThreads</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>319</x>
+     <y>219</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>252</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

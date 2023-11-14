@@ -45,6 +45,8 @@ class RecorderDockerDock::Private
 public:
     RecorderDockerDock *const q;
     QScopedPointer<Ui::RecorderDocker> ui;
+    QPalette threadsSliderPalette;
+    QPalette threadsSpinPalette;
     QPointer<KisCanvas2> canvas;
     RecorderWriter writer;
 
@@ -93,6 +95,7 @@ public:
         quality = config.quality();
         compression = config.compression();
         resolution = config.resolution();
+        writer.recorderThreads.set(config.threads());
         realTimeCaptureMode = config.realTimeCaptureMode();
         if (realTimeCaptureMode) {
             q->exportSettings->lockFps = true;
@@ -272,6 +275,41 @@ public:
             warningTimer.start();
         }
     }
+
+    void updateThreadUi()
+    {
+        QString toolTipText;
+        auto threads = writer.recorderThreads.get();
+        if (threads > ThreadSystemValue::MaxRecordThreadCount) {
+            // Number of threads exceeds ideal thread count
+            // -> switch color of threads slider and spin wheel to red
+            QPalette pal;
+            pal.setColor(QPalette::Text, QColor(0xc4, 0x7b, 0x69));
+            pal.setColor(QPalette::Button, QColor(0x89, 0x27, 0x0f));
+            ui->spinThreads->setPalette(pal);
+            ui->sliderThreads->setPalette(pal);
+            toolTipText = QString(
+                i18n("Set the number of recording threads.\nThe number of threads exceeds the ideal max number of your hardware setup.\nPlease be aware, that a number greater than %1 probably won't give you any performance boost.")
+                    .arg(ThreadSystemValue::MaxRecordThreadCount));
+        } else if (threads > ThreadSystemValue::IdealRecordThreadCount) {
+            // Number of threads exceeds ideal recorder thread count
+            // -> switch color of threads slider and spin wheel to orange
+            QPalette pal;
+            pal.setColor(QPalette::Text, QColor(0xea, 0xbd, 0x76));
+            pal.setColor(QPalette::Button, QColor(0xa5, 0x65, 0x00));
+            ui->spinThreads->setPalette(pal);
+            ui->sliderThreads->setPalette(pal);
+            toolTipText = QString(
+                i18n("Set the number of recording threads.\nAccordingly to your hardware setup you should record with no more than %1 threads.\nYou can play around with one ore two more threads, but keep an eye on your overall system performance.")
+                    .arg(ThreadSystemValue::IdealRecordThreadCount));
+        } else {
+            ui->spinThreads->setPalette(threadsSpinPalette);
+            ui->sliderThreads->setPalette(threadsSliderPalette);
+            toolTipText = i18n("Set the number of threads using during record.");
+        }
+        ui->spinThreads->setToolTip(toolTipText);
+        ui->sliderThreads->setToolTip(toolTipText);
+    }
 };
 
 RecorderDockerDock::RecorderDockerDock()
@@ -286,12 +324,21 @@ RecorderDockerDock::RecorderDockerDock()
     d->ui->buttonBrowse->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon("media-record"));
     d->ui->buttonExport->setIcon(KisIconUtils::loadIcon("document-export-16"));
+    d->ui->sliderThreads->setTickPosition(QSlider::TickPosition::TicksBelow);
+    d->ui->sliderThreads->setMinimum(1);
+    d->ui->sliderThreads->setMaximum(ThreadSystemValue::MaxThreadCount);
+    d->ui->spinThreads->setMinimum(1);
+    d->ui->spinThreads->setMaximum(ThreadSystemValue::MaxThreadCount);
+    d->threadsSpinPalette = d->ui->spinThreads->palette();
+    d->threadsSliderPalette = d->ui->sliderThreads->palette();
 
     d->loadSettings();
     d->loadRelevantExportSettings();
+    d->updateThreadUi();
 
     d->ui->editDirectory->setText(d->snapshotDirectory);
     d->ui->spinQuality->setValue(d->quality);
+    d->ui->spinThreads->setValue(d->writer.recorderThreads.get());
     d->ui->comboResolution->setCurrentIndex(d->resolution);
     d->ui->checkBoxRealTimeCaptureMode->setChecked(d->realTimeCaptureMode);
     d->ui->checkBoxRecordIsolateMode->setChecked(d->recordIsolateLayerMode);
@@ -316,6 +363,7 @@ RecorderDockerDock::RecorderDockerDock()
     connect(d->ui->buttonBrowse, SIGNAL(clicked()), this, SLOT(onSelectRecordFolderButtonClicked()));
     connect(d->ui->comboFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(onFormatChanged(int)));
     connect(d->ui->spinQuality, SIGNAL(valueChanged(int)), this, SLOT(onQualityChanged(int)));
+    connect(d->ui->spinThreads, SIGNAL(valueChanged(int)), this, SLOT(onThreadsChanged(int)));
     connect(d->ui->comboResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(onResolutionChanged(int)));
     connect(d->ui->checkBoxRealTimeCaptureMode, SIGNAL(toggled(bool)), this, SLOT(onRealTimeCaptureModeToggled(bool)));
     connect(d->ui->checkBoxRecordIsolateMode, SIGNAL(toggled(bool)), this, SLOT(onRecordIsolateLayerModeToggled(bool)));
@@ -539,6 +587,14 @@ void RecorderDockerDock::onResolutionChanged(int resolution)
     d->resolution = resolution;
     RecorderConfig(false).setResolution(resolution);
     d->loadSettings();
+}
+
+void RecorderDockerDock::onThreadsChanged(int threads)
+{
+    d->writer.recorderThreads.set(threads);
+    RecorderConfig(false).setThreads(threads);
+    d->loadSettings();
+    d->updateThreadUi();
 }
 
 void RecorderDockerDock::onWriterStarted()

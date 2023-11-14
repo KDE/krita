@@ -39,6 +39,9 @@ public:
     int resolution() const;
     void setResolution(int value);
 
+    int threads() const;
+    void setThreads(int value);
+
     bool realTimeCaptureMode() const;
     void setRealTimeCaptureMode(bool value);
 

@@ -19,6 +19,7 @@ const QString keyFormat = "recorder/format";
 const QString keyQuality = "recorder/quality";
 const QString keyCompression = "recorder/compression";
 const QString keyResolution = "recorder/resolution";
+const QString keyThreads = "recorder/threads";
 const QString keyRealTimeCaptureMode = "recorder/realtimecapturemode";
 const QString keyRecordIsolateLayerMode = "recorder/recordisolatelayermode";
 const QString keyRecordAutomatically = "recorder/recordautomatically";
@@ -99,6 +100,16 @@ int RecorderConfig::resolution() const
 void RecorderConfig::setResolution(int value)
 {
     config->writeEntry(keyResolution, value);
+}
+
+int RecorderConfig::threads() const
+{
+    return config->readEntry(keyThreads, 1);
+}
+
+void RecorderConfig::setThreads(int value)
+{
+    config->writeEntry(keyThreads, value);
 }
 
 bool RecorderConfig::realTimeCaptureMode() const

@@ -20,12 +20,84 @@
 #include <QImage>
 #include <QRegularExpression>
 #include <QApplication>
+#include <QMutexLocker>
 
 namespace
 {
 const QStringList blacklistedTools = { "KritaTransform/KisToolMove", "KisToolTransform", "KritaShape/KisToolLine" };
 const double lowPerformanceWarningThreshold = 1.25;
 const int lowPerformanceWarningMax = 3;
+}
+
+bool ThreadCounter::set(int value)
+{
+    auto oldValue = threads;
+    threads = static_cast<unsigned int>(
+        qBound(1, value, static_cast<int>(ThreadSystemValue::MaxThreadCount))
+    );
+    return oldValue != threads;
+}
+
+void ThreadCounter::setAndNotify(int value)
+{
+    auto oldValue = get();
+    if (set(value)) {
+        // Emit signal to GUI that the value has been changed
+        emit notifyValueChange(oldValue < get());
+    }
+}
+
+unsigned int ThreadCounter::get() const
+{
+    return threads;
+}
+
+bool ThreadCounter::setUsed(int value)
+{
+    QMutexLocker lock(&inUseMutex);
+    return setUsedImpl(value);
+}
+
+void ThreadCounter::setUsedAndNotify(int value)
+{
+    QMutexLocker lock(&inUseMutex);
+    auto oldValue = getUsed();
+    if (setUsedImpl(value)) {
+        // Emit signal to GUI that the value has been changed
+        emit notifyInUseChange(oldValue < getUsed());
+    }
+}
+
+void ThreadCounter::incUsedAndNotify()
+{
+   QMutexLocker lock(&inUseMutex);
+   auto oldValue = getUsed();
+   if (setUsedImpl(inUse + 1)) {
+        // Emit signal to GUI that the value has been changed
+        emit notifyInUseChange(oldValue < getUsed());
+    }
+}
+void ThreadCounter::decUsedAndNotify()
+{
+    QMutexLocker lock(&inUseMutex);
+    if (setUsedImpl(inUse - 1)) {
+        // Emit signal to GUI that the value has been changed
+        emit notifyInUseChange(false);
+    }
+}
+
+unsigned int ThreadCounter::getUsed() const
+{
+    return inUse;
+}
+
+bool ThreadCounter::setUsedImpl(int value)
+{
+    auto oldValue = inUse;
+    inUse = static_cast<unsigned int>(
+        qBound(0, value, static_cast<int>(threads))
+    );
+    return oldValue != inUse;
 }
 
 class RecorderWriter::Private

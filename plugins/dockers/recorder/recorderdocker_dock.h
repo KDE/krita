@@ -40,6 +40,7 @@ private Q_SLOTS:
     void onQualityChanged(int value);
     void onFormatChanged(int format);
     void onResolutionChanged(int resolution);
+    void onThreadsChanged(int threads);
     void onManageRecordingsButtonClicked();
     void onSelectRecordFolderButtonClicked();
     void onRecordButtonToggled(bool checked);

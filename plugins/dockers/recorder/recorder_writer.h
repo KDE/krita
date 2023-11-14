@@ -11,10 +11,50 @@
 
 #include <QThread>
 #include <QPointer>
+#include <QMutex>
 
 struct RecorderExportSettings;
 class RecorderConfig;
 class KisCanvas2;
+
+// This class is used to provide a thread safe mechanism for syncing the
+// number of used recording threads between the GUI and the
+// RecorderWriterManager
+class ThreadCounter : public QObject
+{
+    Q_OBJECT
+public:
+    ThreadCounter() = default;
+    ThreadCounter(const ThreadCounter&) = delete;
+    ThreadCounter(ThreadCounter&&) = delete;
+    ThreadCounter& operator=(const ThreadCounter&) = delete;
+    ThreadCounter& operator=(ThreadCounter&&) = delete;
+
+    //static ThreadCounter& instance();
+
+    bool set(int value);
+    void setAndNotify(int value);
+    unsigned int get() const;
+
+    bool setUsed(int value);
+    void setUsedAndNotify(int value);
+    void incUsedAndNotify();
+    void decUsedAndNotify();
+    unsigned int getUsed() const;
+
+Q_SIGNALS:
+    void notifyValueChange(bool valueWasIncreased);
+    void notifyInUseChange(bool valueWasIncreased);
+
+private:
+    bool setUsedImpl(int value);
+
+private:
+    unsigned int threads;
+    unsigned int inUse;
+    QMutex inUseMutex;
+};
+
 
 struct RecorderWriterSettings
 {
@@ -55,6 +95,9 @@ protected:
 private Q_SLOTS:
     void onImageModified();
     void onToolChanged(const QString &toolId);
+
+public:
+    ThreadCounter recorderThreads{};
 
 private:
     Q_DISABLE_COPY(RecorderWriter)

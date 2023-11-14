@@ -8,6 +8,7 @@
 #include "recorderdocker_dock.h"
 #include "recorder_config.h"
 #include "recorder_writer.h"
+#include "recorder_const.h"
 #include "ui_recorderdocker.h"
 #include "recorder_snapshots_manager.h"
 #include "recorder_export.h"

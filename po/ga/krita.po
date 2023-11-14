@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-13 00:40+0000\n"
+"POT-Creation-Date: 2023-11-14 00:40+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -16646,27 +16646,27 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:910
+#: libs/flake/text/KoSvgTextShape.cpp:922
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Téacs"
 
-#: libs/flake/text/KoSvgTextShape.cpp:912
-#: libs/flake/text/KoSvgTextShape.cpp:920
+#: libs/flake/text/KoSvgTextShape.cpp:924
+#: libs/flake/text/KoSvgTextShape.cpp:932
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "Giuirléid Téacs"
 
-#: libs/flake/text/KoSvgTextShape.cpp:918
+#: libs/flake/text/KoSvgTextShape.cpp:930
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "Téacs"
 
-#: libs/flake/text/KoSvgTextShape.cpp:932
-#: libs/flake/text/KoSvgTextShape.cpp:947
+#: libs/flake/text/KoSvgTextShape.cpp:944
+#: libs/flake/text/KoSvgTextShape.cpp:959
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"

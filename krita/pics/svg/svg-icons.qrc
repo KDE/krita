@@ -419,5 +419,17 @@
         <file>light_region-filling-boundary-fill.svg</file>
         <file>dark_stop-at-boundary.svg</file>
         <file>light_stop-at-boundary.svg</file>
+        <file>dark_paint-order-fill-stroke-marker.svg</file>
+        <file>light_paint-order-fill-stroke-marker.svg</file>
+        <file>dark_paint-order-fill-marker-stroke.svg</file>
+        <file>light_paint-order-fill-marker-stroke.svg</file>
+        <file>dark_paint-order-stroke-fill-marker.svg</file>
+        <file>light_paint-order-stroke-fill-marker.svg</file>
+        <file>dark_paint-order-stroke-marker-fill.svg</file>
+        <file>light_paint-order-stroke-marker-fill.svg</file>
+        <file>dark_paint-order-marker-fill-stroke.svg</file>
+        <file>light_paint-order-marker-fill-stroke.svg</file>
+        <file>dark_paint-order-marker-stroke-fill.svg</file>
+        <file>light_paint-order-marker-stroke-fill.svg</file>
     </qresource>
 </RCC>

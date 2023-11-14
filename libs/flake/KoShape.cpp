@@ -76,6 +76,8 @@ KoShape::SharedData::SharedData()
     , textRunAroundDistanceBottom(0.0)
     , textRunAroundThreshold(0.0)
     , textRunAroundContour(KoShape::ContourFull)
+    , paintOrder(QVector<PaintOrder>({Fill, Stroke, Markers}))
+    , inheritPaintOrder(true)
 { }
 
 KoShape::SharedData::SharedData(const SharedData &rhs)
@@ -114,6 +116,9 @@ KoShape::SharedData::SharedData(const SharedData &rhs)
     , textRunAroundDistanceBottom(rhs.textRunAroundDistanceBottom)
     , textRunAroundThreshold(rhs.textRunAroundThreshold)
     , textRunAroundContour(rhs.textRunAroundContour)
+
+    , paintOrder(rhs.paintOrder)
+    , inheritPaintOrder(rhs.inheritPaintOrder)
 {
 }
 
@@ -204,6 +209,13 @@ void KoShape::paintStroke(QPainter &painter) const
 {
     if (stroke()) {
         stroke()->paint(this, painter);
+    }
+}
+
+void KoShape::paintMarkers(QPainter &painter) const
+{
+    if (stroke()) {
+        stroke()->paintMarkers(this, painter);
     }
 }
 
@@ -717,6 +729,50 @@ KoInsets KoShape::strokeInsets() const
     if (s->stroke)
         s->stroke->strokeInsets(this, answer);
     return answer;
+}
+
+void KoShape::setPaintOrder(KoShape::PaintOrder first, KoShape::PaintOrder second)
+{
+    QVector<PaintOrder> order = {Fill, Stroke, Markers};
+
+    if (first != Fill) {
+        if (order.at(1) == first) {
+            order[1] = order[0];
+            order[0] = first;
+        } else if (order.at(2) == first) {
+            order[2] = order[0];
+            order[0] = first;
+        }
+    }
+    if (second != first && second != Stroke) {
+        if (order.at(2) == second) {
+            order[2] = order[1];
+            order[1] = second;
+        }
+    }
+    s->inheritPaintOrder = false;
+    s->paintOrder = order;
+}
+
+QVector<KoShape::PaintOrder> KoShape::paintOrder() const
+{
+    QVector<PaintOrder> order = {Fill, Stroke, Markers};
+    if (!s->inheritPaintOrder) {
+        order = s->paintOrder;
+    } else if (parent()) {
+        order = parent()->paintOrder();
+    }
+    return order;
+}
+
+void KoShape::setInheritPaintOrder(bool value)
+{
+    s->inheritPaintOrder = value;
+}
+
+bool KoShape::inheritPaintOrder() const
+{
+    return s->inheritPaintOrder;
 }
 
 qreal KoShape::rotation() const

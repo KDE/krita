@@ -142,6 +142,12 @@ public:
         Foreground
     };
 
+    enum PaintOrder {
+        Fill,
+        Stroke,
+        Markers
+    };
+
     /**
      * @brief Constructor
      */
@@ -173,6 +179,13 @@ public:
      * @see applyConversion()
      */
     virtual void paintStroke(QPainter &painter) const;
+
+    /**
+     * @brief paintStroke paints the shape's markers
+     * @param painter used for painting the shape
+     * @see applyConversion()
+     */
+    virtual void paintMarkers(QPainter &painter) const;
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
@@ -711,6 +724,35 @@ public:
      * Convenience method for KoShapeStrokeModel::strokeInsets()
      */
     KoInsets strokeInsets() const;
+
+    /**
+     * @brief setPaintOrder
+     * set the paint order. As there's only three entries in any given paintorder,
+     * you only need to have the first
+     * and second entry to set it.
+     * @param first first thing to paint
+     * @param second second thing to paint.
+     */
+    void setPaintOrder(PaintOrder first, PaintOrder second);
+
+    /**
+     * @brief paintOrder
+     * @return vector of paint orders, will always be 3 big and contain a fill, stroke and marker entry.
+     */
+    QVector<PaintOrder> paintOrder() const;
+
+    /**
+     * @brief setInheritPaintOrder
+     * set inherit paint order.
+     * @param value
+     */
+    void setInheritPaintOrder(bool value);
+
+    /**
+     * @brief inheritPaintOrder
+     * @return whether the paint order is inherited. By default it is.
+     */
+    bool inheritPaintOrder() const;
 
     /// Sets the new shadow, removing the old one
     void setShadow(KoShapeShadow *shadow);

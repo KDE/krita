@@ -36,25 +36,36 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
     QColor textDecorationColor = chunkShape->textProperties().propertyOrDefault(KoSvgTextProperties::TextDecorationColorId).value<QColor>();
 
     if (textDecorations.contains(KoSvgText::DecorationUnderline)) {
-        if (chunkShape->background() && !textDecorationColor.isValid() && textDecorationColor != Qt::transparent) {
-            chunkShape->background()->paint(painter, textDecorations.value(KoSvgText::DecorationUnderline));
-        } else if (textDecorationColor.isValid()) {
-            painter.fillPath(textDecorations.value(KoSvgText::DecorationUnderline), textDecorationColor);
+        Q_FOREACH(const KoShape::PaintOrder p, chunkShape->paintOrder()) {
+            if (p == KoShape::Fill) {
+                if (chunkShape->background() && !textDecorationColor.isValid() && textDecorationColor != Qt::transparent) {
+                    chunkShape->background()->paint(painter, textDecorations.value(KoSvgText::DecorationUnderline));
+                } else if (textDecorationColor.isValid()) {
+                    painter.fillPath(textDecorations.value(KoSvgText::DecorationUnderline), textDecorationColor);
+                }
+            } else if (p == KoShape::Stroke) {
+                if (chunkShape->stroke()) {
+                    QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationUnderline)));
+                    chunkShape->stroke()->paint(shape.data(), painter);
+                }
+            }
         }
-        if (chunkShape->stroke()) {
-            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationUnderline)));
-            chunkShape->stroke()->paint(shape.data(), painter);
-        }
+
     }
     if (textDecorations.contains(KoSvgText::DecorationOverline)) {
-        if (chunkShape->background() && !textDecorationColor.isValid()) {
-            chunkShape->background()->paint(painter, textDecorations.value(KoSvgText::DecorationOverline));
-        } else if (textDecorationColor.isValid()) {
-            painter.fillPath(textDecorations.value(KoSvgText::DecorationOverline), textDecorationColor);
-        }
-        if (chunkShape->stroke()) {
-            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationOverline)));
-            chunkShape->stroke()->paint(shape.data(), painter);
+        Q_FOREACH(const KoShape::PaintOrder p, chunkShape->paintOrder()) {
+            if (p == KoShape::Fill) {
+                if (chunkShape->background() && !textDecorationColor.isValid() && textDecorationColor != Qt::transparent) {
+                    chunkShape->background()->paint(painter, textDecorations.value(KoSvgText::DecorationOverline));
+                } else if (textDecorationColor.isValid()) {
+                    painter.fillPath(textDecorations.value(KoSvgText::DecorationOverline), textDecorationColor);
+                }
+            } else if (p == KoShape::Stroke) {
+                if (chunkShape->stroke()) {
+                    QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationOverline)));
+                    chunkShape->stroke()->paint(shape.data(), painter);
+                }
+            }
         }
     }
 
@@ -136,49 +147,53 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                     }
                 }
             }
-            if (chunkShape->background()) {
-                chunk.setFillRule(Qt::WindingFill);
-                fillPainter.maskPainter()->fillPath(chunk, Qt::white);
-            }
-            if (!textDecorationsRest.isEmpty()) {
-                fillPainter.maskPainter()->fillPath(textDecorationsRest.simplified(), Qt::white);
-            }
-            fillPainter.renderOnGlobalPainter();
+            Q_FOREACH(const KoShape::PaintOrder p, chunkShape->paintOrder()) {
+                if (p == KoShape::Fill) {
+                    if (chunkShape->background()) {
+                        chunk.setFillRule(Qt::WindingFill);
+                        fillPainter.maskPainter()->fillPath(chunk, Qt::white);
+                    }
+                    if (!textDecorationsRest.isEmpty()) {
+                        fillPainter.maskPainter()->fillPath(textDecorationsRest.simplified(), Qt::white);
+                    }
+                    fillPainter.renderOnGlobalPainter();
+                } else if (p == KoShape::Stroke) {
+                    KoShapeStrokeSP maskStroke;
+                    if (chunkShape->stroke()) {
+                        KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(chunkShape->stroke());
 
-            KoShapeStrokeSP maskStroke;
-            if (chunkShape->stroke()) {
-                KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(chunkShape->stroke());
-
-                if (stroke) {
-                    if (stroke->lineBrush().gradient()) {
-                        KoClipMaskPainter strokePainter(&painter, shapeGlobalClipRect);
-                        strokePainter.shapePainter()->fillRect(rootOutline.boundingRect(), stroke->lineBrush());
-                        maskStroke = KoShapeStrokeSP(new KoShapeStroke(*stroke.data()));
-                        maskStroke->setColor(Qt::white);
-                        maskStroke->setLineBrush(Qt::white);
-                        strokePainter.maskPainter()->fillPath(rootOutline, Qt::black);
-                        if (textRendering != OptimizeSpeed) {
-                            strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, true);
-                        } else {
-                            strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, false);
-                        }
-                        {
-                            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(chunk));
-                            maskStroke->paint(shape.data(), *strokePainter.maskPainter());
-                        }
-                        if (!textDecorationsRest.isEmpty()) {
-                            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorationsRest));
-                            maskStroke->paint(shape.data(), *strokePainter.maskPainter());
-                        }
-                        strokePainter.renderOnGlobalPainter();
-                    } else {
-                        {
-                            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(chunk));
-                            stroke->paint(shape.data(), painter);
-                        }
-                        if (!textDecorationsRest.isEmpty()) {
-                            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorationsRest));
-                            stroke->paint(shape.data(), painter);
+                        if (stroke) {
+                            if (stroke->lineBrush().gradient()) {
+                                KoClipMaskPainter strokePainter(&painter, shapeGlobalClipRect);
+                                strokePainter.shapePainter()->fillRect(rootOutline.boundingRect(), stroke->lineBrush());
+                                maskStroke = KoShapeStrokeSP(new KoShapeStroke(*stroke.data()));
+                                maskStroke->setColor(Qt::white);
+                                maskStroke->setLineBrush(Qt::white);
+                                strokePainter.maskPainter()->fillPath(rootOutline, Qt::black);
+                                if (textRendering != OptimizeSpeed) {
+                                    strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, true);
+                                } else {
+                                    strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, false);
+                                }
+                                {
+                                    QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(chunk));
+                                    maskStroke->paint(shape.data(), *strokePainter.maskPainter());
+                                }
+                                if (!textDecorationsRest.isEmpty()) {
+                                    QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorationsRest));
+                                    maskStroke->paint(shape.data(), *strokePainter.maskPainter());
+                                }
+                                strokePainter.renderOnGlobalPainter();
+                            } else {
+                                {
+                                    QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(chunk));
+                                    stroke->paint(shape.data(), painter);
+                                }
+                                if (!textDecorationsRest.isEmpty()) {
+                                    QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorationsRest));
+                                    stroke->paint(shape.data(), painter);
+                                }
+                            }
                         }
                     }
                 }
@@ -196,14 +211,19 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
         }
     }
     if (textDecorations.contains(KoSvgText::DecorationLineThrough)) {
-        if (chunkShape->background() && !textDecorationColor.isValid() && textDecorationColor != Qt::transparent) {
-            chunkShape->background()->paint(painter, textDecorations.value(KoSvgText::DecorationLineThrough));
-        } else if (textDecorationColor.isValid()) {
-            painter.fillPath(textDecorations.value(KoSvgText::DecorationLineThrough), textDecorationColor);
-        }
-        if (chunkShape->stroke()) {
-            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationLineThrough)));
-            chunkShape->stroke()->paint(shape.data(), painter);
+        Q_FOREACH(const KoShape::PaintOrder p, chunkShape->paintOrder()) {
+            if (p == KoShape::Fill) {
+                if (chunkShape->background() && !textDecorationColor.isValid() && textDecorationColor != Qt::transparent) {
+                    chunkShape->background()->paint(painter, textDecorations.value(KoSvgText::DecorationLineThrough));
+                } else if (textDecorationColor.isValid()) {
+                    painter.fillPath(textDecorations.value(KoSvgText::DecorationLineThrough), textDecorationColor);
+                }
+            } else if (p == KoShape::Stroke) {
+                if (chunkShape->stroke()) {
+                    QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationLineThrough)));
+                    chunkShape->stroke()->paint(shape.data(), painter);
+                }
+            }
         }
     }
 }
@@ -225,12 +245,16 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
         decorationColor = QSharedPointer<KoColorBackground>(new KoColorBackground(textDecorationColor));
     }
 
+    PaintOrder first = chunkShape->paintOrder().at(0);
+    PaintOrder second = chunkShape->paintOrder().at(1);
+
     if (textDecorations.contains(KoSvgText::DecorationUnderline)) {
         KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationUnderline));
         shape->setBackground(decorationColor);
         shape->setStroke(chunkShape->stroke());
         shape->setZIndex(chunkShape->zIndex());
         shape->setFillRule(Qt::WindingFill);
+        shape->setPaintOrder(first, second);
         shapes.append(shape);
     }
     if (textDecorations.contains(KoSvgText::DecorationOverline)) {
@@ -239,6 +263,7 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
         shape->setStroke(chunkShape->stroke());
         shape->setZIndex(chunkShape->zIndex());
         shape->setFillRule(Qt::WindingFill);
+        shape->setPaintOrder(first, second);
         shapes.append(shape);
     }
 
@@ -264,6 +289,7 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
                         shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(color.color())));
                         shape->setZIndex(chunkShape->zIndex());
                         shape->setFillRule(Qt::WindingFill);
+                        shape->setPaintOrder(first, second);
                         shapes.append(shape);
                     }
                 } else if (const auto *outlineGlyph = std::get_if<Glyph::Outline>(&result.at(i).glyph)) {
@@ -276,6 +302,7 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
         shape->setStroke(chunkShape->stroke());
         shape->setZIndex(chunkShape->zIndex());
         shape->setFillRule(Qt::WindingFill);
+        shape->setPaintOrder(first, second);
         shapes.append(shape);
         currentIndex = j;
 
@@ -290,6 +317,7 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
         shape->setStroke(chunkShape->stroke());
         shape->setZIndex(chunkShape->zIndex());
         shape->setFillRule(Qt::WindingFill);
+        shape->setPaintOrder(first, second);
         shapes.append(shape);
     }
     return shapes;

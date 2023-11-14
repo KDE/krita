@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 22 22"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="paint_order_marker_stroke_fill.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview8"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="true"
+     inkscape:zoom="40.369369"
+     inkscape:cx="10.837425"
+     inkscape:cy="10.837425"
+     inkscape:window-width="1920"
+     inkscape:window-height="1014"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6">
+    <inkscape:grid
+       type="xygrid"
+       id="grid1203" />
+  </sodipodi:namedview>
+  <path
+     id="marker"
+     style="fill:#d2d2d2;fill-opacity:0.33;stroke:none;"
+     inkscape:label="marker"
+     d="M 9,4 A 5,5 0 0 0 4,9 5,5 0 0 0 5,11.978516 V 11.585938 L 11.585938,5 h 0.412109 A 5,5 0 0 0 9,4 Z" />
+  <path
+     id="stroke"
+     style="fill:#d2d2d2;fill-opacity:0.66;stroke:none;"
+     inkscape:label="stroke"
+     d="m 12,6 -2,2 h 9 V 6 Z m -4,4 -2,2 v 7 h 2 z" />
+  <rect
+     style="fill:#d2d2d2;fill-opacity:1;stroke:none;"
+     id="fill"
+     width="10"
+     height="10"
+     x="9"
+     y="9"
+     inkscape:label="fill" />
+</svg>

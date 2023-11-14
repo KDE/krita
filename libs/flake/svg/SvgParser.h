@@ -196,6 +196,8 @@ protected:
     void applyMaskClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates);
     void applyMarkers(KoPathShape *shape);
 
+    void applyPaintOrder(KoShape *shape);
+
     /// Applies id to specified shape
     void applyId(const QString &id, KoShape *shape);
 

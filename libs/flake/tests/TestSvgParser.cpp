@@ -3879,6 +3879,54 @@ void TestSvgParser::testMarkersFillAsShape()
     t.test_standard_30px_72ppi("markers_scaled_fill_as_shape", false);
 }
 
+void TestSvgParser::testRenderPaintOrderProperty()
+{
+    QMap<QString, QString> tests;
+
+    const QString dataBefore = "<svg width=\"30px\" height=\"30px\""
+                               "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+                               "<marker id=\"SimpleRectMarker\""
+                               "    orient=\"auto\" refY=\"12.5\" refX=\"12.5\" >"
+
+                               "    <rect id=\"markerRect\" x=\"10\" y=\"10\" width=\"5\" height=\"5\""
+                               "        fill=\"red\" stroke=\"none\"/>"
+                               "    <rect id=\"markerRect\" x=\"14\" y=\"12\" width=\"1\" height=\"1\""
+                               "        fill=\"yellow\" stroke=\"none\"/>"
+                               "    <rect id=\"markerRect\" x=\"12\" y=\"12\" width=\"1\" height=\"1\""
+                               "        fill=\"white\" stroke=\"none\"/>"
+                               "</marker>"
+
+                               "<path id=\"testRect\"";
+    const QString dataAfter = "    style=\"fill:#ffffff;stroke:#000000;stroke-width:2px;marker-start:url(#SimpleRectMarker);marker-end:url(#SimpleRectMarker);marker-mid:url(#SimpleRectMarker)\""
+                              "    d=\"M5,15 C5,5 25,5 25,15 L15,25\"/>"
+
+                              "</svg>";
+
+    QString data = dataBefore + dataAfter;
+    tests.insert("fill-stroke-markers", data);
+
+    data = dataBefore + " paint-order=\"stroke\"" + dataAfter;
+    tests.insert("stroke-fill-markers", data);
+
+    data = dataBefore + " paint-order=\"stroke markers\"" + dataAfter;
+    tests.insert("stroke-markers-fill", data);
+
+    data = dataBefore + " paint-order=\"fill markers\"" + dataAfter;
+    tests.insert("fill-markers-stroke", data);
+
+    data = dataBefore + " paint-order=\"markers\"" + dataAfter;
+    tests.insert("markers-fill-stroke", data);
+
+    data = dataBefore + " paint-order=\"markers stroke\"" + dataAfter;
+    tests.insert("markers-stroke-fill", data);
+
+    Q_FOREACH(const QString key, tests.keys()) {
+        SvgRenderTester t (tests.value(key));
+        t.test_standard_30px_72ppi(key, false);
+    }
+}
+
 void TestSvgParser::testMarkersOnClosedPath()
 {
     const QString data =

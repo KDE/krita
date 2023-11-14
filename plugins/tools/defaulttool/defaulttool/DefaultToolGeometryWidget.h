@@ -51,6 +51,9 @@ private Q_SLOTS:
     void slotOpacitySliderChanged(qreal newOpacity);
     void slotUpdateOpacitySlider();
 
+    void slotPaintOrderChanged();
+    void slotUpdatePaintOrder();
+
 private:
     KoInteractionTool *m_tool;
     QScopedPointer<KisAspectRatioLocker> m_sizeAspectLocker;

@@ -83,7 +83,7 @@ public:
         styleAttributes << "fill" << "fill-rule" << "fill-opacity";
         styleAttributes << "stroke" << "stroke-width" << "stroke-linejoin" << "stroke-linecap";
         styleAttributes << "stroke-dasharray" << "stroke-dashoffset" << "stroke-opacity" << "stroke-miterlimit";
-        styleAttributes << "opacity" << "filter" << "clip-path" << "clip-rule" << "mask";
+        styleAttributes << "opacity" << "paint-order" << "filter" << "clip-path" << "clip-rule" << "mask";
         styleAttributes << "shape-inside" << "shape-subtract" << "shape-padding" << "shape-margin";
         styleAttributes << "marker" << "marker-start" << "marker-mid" << "marker-end" << "krita:marker-fill-method";
     }
@@ -232,6 +232,8 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         fillcolor.setAlphaF(opacity);
     } else if (command == "opacity") {
         gc->opacity = SvgUtil::fromPercentage(params);
+    } else if (command == "paint-order") {
+        gc->paintOrder = params;
     } else if (command == "font-family") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-size") {

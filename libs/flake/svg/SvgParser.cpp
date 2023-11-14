@@ -977,6 +977,8 @@ void SvgParser::applyCurrentBasicStyle(KoShape *shape)
         shape->setVisible(false);
     }
     shape->setTransparency(1.0 - gc->opacity);
+
+    applyPaintOrder(shape);
 }
 
 
@@ -1013,6 +1015,7 @@ void SvgParser::applyStyle(KoShape *obj, const SvgStyles &styles, const QPointF 
         obj->setVisible(false);
     }
     obj->setTransparency(1.0 - gc->opacity);
+    applyPaintOrder(obj);
 }
 
 QGradient* prepareGradientForShape(const SvgGradientHelper *gradient,
@@ -1405,6 +1408,41 @@ void SvgParser::applyMarkers(KoPathShape *shape)
     }
 
     shape->setAutoFillMarkers(gc->autoFillMarkers);
+}
+
+void SvgParser::applyPaintOrder(KoShape *shape)
+{
+    SvgGraphicsContext *gc = m_context.currentGC();
+    if (!gc)
+        return;
+
+    if (!gc->paintOrder.isEmpty() && gc->paintOrder != "inherit") {
+        QStringList paintOrder = gc->paintOrder.split(" ");
+        QVector<KoShape::PaintOrder> order;
+        Q_FOREACH(const QString p, paintOrder) {
+            if (p == "fill") {
+                order.append(KoShape::Fill);
+            } else if (p == "stroke") {
+                order.append(KoShape::Stroke);
+            } else if (p == "markers") {
+                order.append(KoShape::Markers);
+            }
+        }
+        if (paintOrder.size() == 1 && order.isEmpty()) { // Normal
+            order = {KoShape::Fill, KoShape::Stroke, KoShape::Markers};
+        }
+        if (order.size() == 1) {
+            if (order.first() == KoShape::Fill) {
+                shape->setPaintOrder(KoShape::Fill, KoShape::Stroke);
+            } else if (order.first() == KoShape::Stroke) {
+                shape->setPaintOrder(KoShape::Stroke, KoShape::Fill);
+            } else if (order.first() == KoShape::Markers) {
+                shape->setPaintOrder(KoShape::Markers, KoShape::Fill);
+            }
+        } else if (order.size() > 1) {
+            shape->setPaintOrder(order.at(0), order.at(1));
+        }
+    }
 }
 
 void SvgParser::applyClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates)

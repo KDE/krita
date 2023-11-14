@@ -175,6 +175,8 @@ private Q_SLOTS:
     void testSodipodiChordShape();
 
     void testMarkersFillAsShape();
+
+    void testRenderPaintOrderProperty();
 private:
 
 };

@@ -226,8 +226,15 @@ void renderShapes(typename KisForest<KoShape*>::child_iterator beginIt,
 
         renderShapes(childBegin(it), childEnd(it), *shapePainter);
 
-        shape->paint(*shapePainter);
-        shape->paintStroke(*shapePainter);
+        Q_FOREACH(const KoShape::PaintOrder p, shape->paintOrder()) {
+            if (p == KoShape::Fill) {
+                shape->paint(*shapePainter);
+            } else if (p == KoShape::Stroke) {
+                shape->paintStroke(*shapePainter);
+            } else if (p == KoShape::Markers)  {
+                shape->paintMarkers(*shapePainter);
+            }
+        }
 
         KIS_SAFE_ASSERT_RECOVER(shapePainter->transform() == sanityCheckTransformSaved) {
             shapePainter->setTransform(sanityCheckTransformSaved);

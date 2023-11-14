@@ -95,6 +95,7 @@ SvgGraphicsContext *SvgLoadingContext::pushGraphicsContext(const QDomElement &el
     gc->clipMaskId.clear(); // clip masks are not inherited
     gc->display = true; // display is not inherited
     gc->opacity = 1.0; // opacity is not inherited
+    gc->paintOrder = QString(); //paint order is inherited by default
 
     if (!element.isNull()) {
         if (element.hasAttribute("transform")) {

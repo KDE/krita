@@ -61,6 +61,8 @@
 #include <kis_shape_controller.h>
 #include <kis_image_animation_interface.h>
 #include <kis_canvas_resource_provider.h>
+#include <KisSpinBoxPluralHelper.h>
+#include <KisDoubleSpinBoxPluralHelper.h>
 
 #include "kis_icon_utils.h"
 
@@ -535,16 +537,18 @@ QWidget* KisToolFill::createOptionWidget()
     m_sliderPatternScale = new KisDoubleSliderSpinBox;
     m_sliderPatternScale->setRange(0, 10000, 2);
     m_sliderPatternScale->setSoftMaximum(500);
-    m_sliderPatternScale->setPrefix(i18nc("The pattern 'scale' spinbox prefix in fill tool options", "Scale: "));
-    m_sliderPatternScale->setSuffix(i18n("%"));
+    KisDoubleSpinBoxPluralHelper::install(m_sliderPatternScale, [](double value) {
+        return i18nc("{n} is the number value, % is the percent sign", "Scale: {n}%", value);
+    });
     m_angleSelectorPatternRotation = new KisAngleSelector;
     m_angleSelectorPatternRotation->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
     m_angleSelectorPatternRotation->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
     m_checkBoxCustomBlendingOptions = new QCheckBox(i18n("Use custom blending options"));
     m_sliderCustomOpacity = new KisSliderSpinBox;
     m_sliderCustomOpacity->setRange(0, 100);
-    m_sliderCustomOpacity->setPrefix(i18n("Opacity: "));
-    m_sliderCustomOpacity->setSuffix(i18n("%"));
+    KisSpinBoxPluralHelper::install(m_sliderCustomOpacity, [](int value) {
+        return i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%", value);
+    });
     m_comboBoxCustomCompositeOp = new KisCompositeOpComboBox;
 
     KisOptionButtonStrip *optionButtonStripContiguousFillMode = new KisOptionButtonStrip;
@@ -558,9 +562,10 @@ QWidget* KisToolFill::createOptionWidget()
     m_sliderThreshold->setPrefix(i18nc("The 'threshold' spinbox prefix in fill tool options", "Threshold: "));
     m_sliderThreshold->setRange(1, 100);
     m_sliderSpread = new KisSliderSpinBox;
-    m_sliderSpread->setPrefix(i18nc("The 'spread' spinbox prefix in fill tool options", "Spread: "));
-    m_sliderSpread->setSuffix(i18n("%"));
     m_sliderSpread->setRange(0, 100);
+    KisSpinBoxPluralHelper::install(m_sliderSpread, [](int value) {
+        return i18nc("{n} is the number value, % is the percent sign", "Spread: {n}%", value);
+    });
     m_checkBoxSelectionAsBoundary =
         new QCheckBox(
             i18nc("The 'use selection as boundary' checkbox in fill tool to use selection borders as boundary when filling",

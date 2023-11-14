@@ -9,6 +9,7 @@
 #include "ui_wdgsketchoptions.h"
 
 #include "KisSketchOpOptionModel.h"
+#include <KisDoubleSpinBoxPluralHelper.h>
 #include <kis_paintop_lod_limitations.h>
 
 namespace {
@@ -26,10 +27,14 @@ public:
         lineWidthSPBox->setExponentRatio(1.5);
 
         offsetSPBox->setRange(0.0, 200.0, 0);
-        offsetSPBox->setSuffix(i18n("%"));
+        KisDoubleSpinBoxPluralHelper::install(offsetSPBox, [](double value) {
+            return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+        });
 
         densitySPBox->setRange(0.0, 100.0, 0);
-        densitySPBox->setSuffix(i18n("%"));
+        KisDoubleSpinBoxPluralHelper::install(densitySPBox, [](double value) {
+            return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+        });
     }
 };
 

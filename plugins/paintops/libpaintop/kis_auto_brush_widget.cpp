@@ -25,6 +25,7 @@
 #include "kis_signal_compressor.h"
 #include "kis_aspect_ratio_locker.h"
 #include <KisAngleSelector.h>
+#include <KisDoubleSpinBoxPluralHelper.h>
 #include <KisWidgetConnectionUtils.h>
 #include <kis_cubic_curve.h>
 #include <kis_auto_brush_factory.h>
@@ -118,7 +119,9 @@ KisAutoBrushWidget::KisAutoBrushWidget(int maxBrushSize,
     density->setRange(0, 100, 0);
     density->setSingleStep(1);
     density->setValue(100);
-    density->setSuffix(i18n("%"));
+    KisDoubleSpinBoxPluralHelper::install(density, [](double value) {
+        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+    });
     density->setBlockUpdateSignalOnDrag(true);
     connectControl(density, m_d->model, "density");
 

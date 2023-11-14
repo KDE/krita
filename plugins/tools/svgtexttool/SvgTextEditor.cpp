@@ -54,6 +54,7 @@
 #include <KoColorPopupAction.h>
 #include <svg/SvgUtil.h>
 
+#include <KisDoubleSpinBoxPluralHelper.h>
 #include <KisScreenColorSampler.h>
 #include <kis_icon.h>
 #include <kis_config.h>
@@ -1575,7 +1576,9 @@ void SvgTextEditor::createActions()
     spnLineHeight->setToolTip(i18n("Line height"));
     spnLineHeight->setRange(-1.0, 1000.0);
     spnLineHeight->setSingleStep(10.0);
-    spnLineHeight->setSuffix(i18n("%"));
+    KisDoubleSpinBoxPluralHelper::install(spnLineHeight, [](double value) {
+        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+    });
     spnLineHeight->setSpecialValueText(i18nc("Default line height for text", "Normal"));
     connect(spnLineHeight, SIGNAL(valueChanged(double)), SLOT(setLineHeight(double)));
     lineHeightLayout->addWidget(spnLineHeight);

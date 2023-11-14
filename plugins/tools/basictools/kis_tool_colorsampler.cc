@@ -14,6 +14,7 @@
 #include <KoCanvasBase.h>
 #include <KoResourceServerProvider.h>
 #include <kis_canvas_resource_provider.h>
+#include <KisSpinBoxPluralHelper.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceTypes.h>
 #include <KisViewManager.h>
@@ -278,7 +279,9 @@ QWidget* KisToolColorSampler::createOptionWidget()
 
     // Initialize blend KisSliderSpinBox
     m_optionsWidget->blend->setRange(0,100);
-    m_optionsWidget->blend->setSuffix(i18n("%"));
+    KisSpinBoxPluralHelper::install(m_optionsWidget->blend, [](int value) {
+        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+    });
 
     updateOptionWidget();
 

@@ -12,6 +12,7 @@
 #include "ui_wdgtangenttiltoption.h"
 
 #include "KisTangentTiltOptionModel.h"
+#include <KisDoubleSpinBoxPluralHelper.h>
 
 namespace {
 
@@ -24,10 +25,14 @@ public:
         setupUi(this);
 
         sliderElevationSensitivity->setRange(0, 100, 0);
-        sliderElevationSensitivity->setSuffix(i18n("%"));
+        KisDoubleSpinBoxPluralHelper::install(sliderElevationSensitivity, [](double value) {
+            return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+        });
 
         sliderMixValue->setRange(0, 100, 0);
-        sliderMixValue->setSuffix(i18n("%"));
+        KisDoubleSpinBoxPluralHelper::install(sliderMixValue, [](double value) {
+            return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+        });
 
         sliderMixValue->setVisible(false);
     }

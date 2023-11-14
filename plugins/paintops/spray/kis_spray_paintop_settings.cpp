@@ -173,8 +173,7 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties(Ki
             prop->setSingleStep(0.01);
             prop->setDecimals(2);
             prop->setExponentRatio(3);
-            prop->setSuffix(i18n("%"));
-
+            prop->setSuffix("%");
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
                     KisSprayOpOptionData option;

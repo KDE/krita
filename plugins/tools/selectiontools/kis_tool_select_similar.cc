@@ -18,6 +18,7 @@
 
 #include <KoColorSpace.h>
 #include <KisCursorOverrideLock.h>
+#include <KisSpinBoxPluralHelper.h>
 
 #include "kis_canvas2.h"
 #include "kis_command_utils.h"
@@ -238,11 +239,10 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
              "Increasing threshold increases the range of similar colors to be selected."));
 
     KisSliderSpinBox *sliderSpread = new KisSliderSpinBox;
-    sliderSpread->setPrefix(i18nc(
-        "The 'spread' spinbox prefix in similar color selection tool options",
-        "Spread: "));
-    sliderSpread->setSuffix(i18n("%"));
     sliderSpread->setRange(0, 100);
+    KisSpinBoxPluralHelper::install(sliderSpread, [](int value) {
+        return i18nc("{n} is the number value, % is the percent sign", "Spread: {n}%", value);
+    });
 
     // Set the tooltips
     sliderThreshold->setToolTip(

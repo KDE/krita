@@ -14,6 +14,7 @@
 #include "ui_wdgsprayoptions.h"
 
 #include "KisSprayOpOptionModel.h"
+#include <KisDoubleSpinBoxPluralHelper.h>
 #include "kis_curve_widget.h"
 #include <KisCurveWidgetConnectionHelper.h>
 
@@ -57,7 +58,9 @@ public:
 		coverageSpin->setRange(0.001, 0.02, 3);
 		coverageSpin->setSingleStep(0.001);
 		coverageSpin->setValue(0.003);
-		coverageSpin->setSuffix(i18n("%"));
+		KisDoubleSpinBoxPluralHelper::install(coverageSpin, [](double value) {
+		    return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
+		});
 		coverageSpin->setVisible(false);
 		
 		angularDistCombo->setToolTip(i18n("Select how the particles are distributed as a function of the angle to the center of the spray area."));

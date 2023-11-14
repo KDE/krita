@@ -47,9 +47,10 @@ private Q_SLOTS:
     void onExportButtonClicked();
 
     void onWriterStarted();
-    void onWriterFinished();
+    void onWriterStopped();
     void onWriterPausedChanged(bool paused);
     void onWriterFrameWriteFailed();
+    void onRecorderStopWarning();
     void onLowPerformanceWarning();
     void onWarningTimeout();
 

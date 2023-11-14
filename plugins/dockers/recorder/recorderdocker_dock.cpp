@@ -48,7 +48,7 @@ public:
     QPalette threadsSliderPalette;
     QPalette threadsSpinPalette;
     QPointer<KisCanvas2> canvas;
-    RecorderWriter writer;
+    RecorderWriterManager writer;
 
     QAction *recordToggleAction = nullptr;
     QAction *exportAction = nullptr;
@@ -371,10 +371,12 @@ RecorderDockerDock::RecorderDockerDock()
     connect(d->ui->buttonRecordToggle, SIGNAL(toggled(bool)), this, SLOT(onRecordButtonToggled(bool)));
     connect(d->ui->buttonExport, SIGNAL(clicked()), this, SLOT(onExportButtonClicked()));
 
+    connect(&d->writer.recorderThreads, SIGNAL(valueChanged(int)), this, SLOT(onThreadsChanged(int)));
     connect(&d->writer, SIGNAL(started()), this, SLOT(onWriterStarted()));
-    connect(&d->writer, SIGNAL(finished()), this, SLOT(onWriterFinished()));
+    connect(&d->writer, SIGNAL(stopped()), this, SLOT(onWriterStopped()));
     connect(&d->writer, SIGNAL(pausedChanged(bool)), this, SLOT(onWriterPausedChanged(bool)));
     connect(&d->writer, SIGNAL(frameWriteFailed()), this, SLOT(onWriterFrameWriteFailed()));
+    connect(&d->writer, SIGNAL(recorderStopWarning()), this, SLOT(onRecorderStopWarning()));
     connect(&d->writer, SIGNAL(lowPerformanceWarning()), this, SLOT(onLowPerformanceWarning()));
 
 
@@ -610,7 +612,7 @@ void RecorderDockerDock::onWriterStarted()
     d->updateRecordStatus(true);
 }
 
-void RecorderDockerDock::onWriterFinished()
+void RecorderDockerDock::onWriterStopped()
 {
     d->updateRecordStatus(false);
 }
@@ -626,6 +628,11 @@ void RecorderDockerDock::onWriterFrameWriteFailed()
                          i18n("The recorder has been stopped due to failure while writing a frame. Please check free disk space and start the recorder again."));
 }
 
+void RecorderDockerDock::onRecorderStopWarning()
+{
+    QMessageBox::warning(this, i18nc("@title:window", "Recorder"),
+                         i18n("Krita was unable to stop the recorder probably. Please try to restart Krita."));
+}
 void RecorderDockerDock::onLowPerformanceWarning()
 {
     if (d->realTimeCaptureMode) {

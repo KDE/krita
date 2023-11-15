@@ -33,6 +33,7 @@ struct KisPaintingAssistantsDecoration::Private {
         , outlineVisible(false)
         , snapOnlyOneAssistant(true)
         , snapEraser(false)
+        , useCache(false)
         , firstAssistant(0)
         , aFirstStroke(false)
         , m_handleSize(14)

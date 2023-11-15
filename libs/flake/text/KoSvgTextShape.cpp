@@ -466,7 +466,7 @@ QPainterPath KoSvgTextShape::defaultCursorShape()
     return p;
 }
 
-QPainterPath KoSvgTextShape::cursorForPos(int pos, double bidiFlagSize)
+QPainterPath KoSvgTextShape::cursorForPos(int pos, QLineF &caret, double bidiFlagSize)
 {
     if (d->result.isEmpty() || d->cursorPos.isEmpty() || pos < 0 || pos >= d->cursorPos.size()) {
         return defaultCursorShape();
@@ -478,12 +478,12 @@ QPainterPath KoSvgTextShape::cursorForPos(int pos, double bidiFlagSize)
     CharacterResult res = d->result.at(cursorPos.cluster);
 
     const QTransform tf = res.finalTransform();
-    QLineF caret = res.cursorInfo.caret;
+    caret = res.cursorInfo.caret;
     caret.translate(res.cursorInfo.offsets.value(cursorPos.offset, QPointF()));
 
     p.moveTo(tf.map(caret.p1()));
     p.lineTo(tf.map(caret.p2()));
-    if (d->isBidi) {
+    if (d->isBidi && bidiFlagSize > 0) {
         int sign = res.cursorInfo.rtl ? -1 : 1;
         double bidiFlagHalf = bidiFlagSize * 0.5;
         // TODO: handle top-to-bottom once text-orientation is tackled.
@@ -492,6 +492,7 @@ QPainterPath KoSvgTextShape::cursorForPos(int pos, double bidiFlagSize)
         p.lineTo(tf.map(point3));
         p.lineTo(tf.map(point4));
     }
+    caret = tf.map(caret);
 
     return p;
 }
@@ -526,6 +527,92 @@ QPainterPath KoSvgTextShape::selectionBoxes(int pos, int anchor)
     }
 
     return p;
+}
+
+QPainterPath KoSvgTextShape::underlines(int pos, int anchor, KoSvgText::TextDecorations decor, KoSvgText::TextDecorationStyle style, qreal minimum, bool thick)
+{
+    int start = qMin(pos, anchor);
+    int end = qMax(pos, anchor);
+
+    if (start == end || start < 0 || end >= d->cursorPos.size()) {
+        return QPainterPath();
+    }
+
+    QPainterPathStroker stroker;
+    qreal width = qMax(minimum, this->layoutInterface()->getTextDecorationWidth(KoSvgText::DecorationUnderline));
+    if (thick) {
+        width *= 2;
+    }
+    stroker.setWidth(width);
+    KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    stroker.setCapStyle(Qt::FlatCap);
+    if (style == KoSvgText::Solid) {
+        stroker.setDashPattern(Qt::SolidLine);
+    } else if (style == KoSvgText::Dashed) {
+        stroker.setDashPattern(Qt::DashLine);
+    } else if (style == KoSvgText::Dotted) {
+        stroker.setDashPattern(Qt::DotLine);
+    } else {
+        stroker.setDashPattern(Qt::SolidLine);
+    }
+
+    QPainterPath underPath;
+    QPainterPath overPath;
+    QPainterPath middlePath;
+    QPointF inset = mode == KoSvgText::HorizontalTB? QPointF(width*0.5, 0): QPointF(0, width*0.5);
+    for (int i = start+1; i <= end; i++) {
+        CursorPos pos = d->cursorPos.at(i);
+        CharacterResult res = d->result.at(pos.cluster);
+        const QTransform tf = res.finalTransform();
+        QPointF first = res.cursorInfo.caret.p1();
+        QPointF last = first;
+        if (res.cursorInfo.rtl) {
+            last  += res.cursorInfo.offsets.value(pos.offset-1,  res.advance);
+            first += res.cursorInfo.offsets.value(pos.offset, QPointF());
+            if (i == start+1) {
+                first -= inset;
+            }
+            if (i == end) {
+                last += inset;
+            }
+        } else {
+            first += res.cursorInfo.offsets.value(pos.offset-1,  QPointF());
+            last  += res.cursorInfo.offsets.value(pos.offset, res.advance);
+            if (i == start+1) {
+                first += inset;
+            }
+            if (i == end) {
+                last -= inset;
+            }
+        }
+
+        if (decor.testFlag(KoSvgText::DecorationUnderline)){
+            underPath.moveTo(tf.map(first));
+            underPath.lineTo(tf.map(last));
+        }
+        QPointF diff = res.cursorInfo.caret.p2() - res.cursorInfo.caret.p1();
+        if (decor.testFlag(KoSvgText::DecorationOverline)){
+            overPath.moveTo(tf.map(first+diff));
+            overPath.lineTo(tf.map(last+diff));
+        }
+        if (decor.testFlag(KoSvgText::DecorationLineThrough)){
+            middlePath.moveTo(tf.map(first+(diff*0.5)));
+            middlePath.lineTo(tf.map(last+(diff*0.5)));
+        }
+    }
+
+    QPainterPath final;
+    if (decor.testFlag(KoSvgText::DecorationUnderline)){
+        final.addPath(stroker.createStroke(underPath));
+    }
+    if (decor.testFlag(KoSvgText::DecorationOverline)){
+        final.addPath(stroker.createStroke(overPath));
+    }
+    if (decor.testFlag(KoSvgText::DecorationLineThrough)){
+        final.addPath(stroker.createStroke(middlePath));
+    }
+
+    return final;
 }
 
 int KoSvgTextShape::posForPoint(QPointF point, int start, int end, bool *overlaps)

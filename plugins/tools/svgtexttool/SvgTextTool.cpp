@@ -160,6 +160,20 @@ KisPopupWidgetInterface *SvgTextTool::popupWidget()
     return nullptr;
 }
 
+QVariant SvgTextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const
+{
+    if (canvas()) {
+        return m_textCursor.inputMethodQuery(query);
+    } else {
+        return KoToolBase::inputMethodQuery(query, converter);
+    }
+}
+
+void SvgTextTool::inputMethodEvent(QInputMethodEvent *event)
+{
+    m_textCursor.inputMethodEvent(event);
+}
+
 QWidget *SvgTextTool::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();

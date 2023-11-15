@@ -18,6 +18,7 @@ class SvgTextInsertCommand;
 class SvgTextRemoveCommand;
 class KUndo2Command;
 class QKeyEvent;
+class QInputMethodEvent;
 
 /**
  * @brief The SvgTextCursor class
@@ -138,6 +139,9 @@ public:
 
     void paintDecorations(QPainter &gc, QColor selectionColor);
 
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    void inputMethodEvent(QInputMethodEvent *event);
+
     // Reimplemented.
     bool hasSelection() override;
 
@@ -162,6 +166,8 @@ private Q_SLOTS:
     void blinkCursor();
     void stopBlinkCursor();
 
+    void updateInputMethodItemTransform();
+
 private:
 
     /**
@@ -175,10 +181,13 @@ private:
 
     void updateCursor();
     void updateSelection();
+    void updateIMEDecoration();
     void addCommandToUndoAdapter(KUndo2Command *cmd);
 
     int moveModeResult(MoveMode &mode, int &pos, bool visual = false) const;
     bool acceptableInput(const QKeyEvent *event) const;
+
+    void commitIMEPreEdit();
 
     struct Private;
     const QScopedPointer<Private> d;

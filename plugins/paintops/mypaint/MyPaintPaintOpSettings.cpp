@@ -43,7 +43,7 @@ struct KisMyPaintOpSettings::Private
             {
                 MyPaintEllipticalDabAngleData data;
                 data.read(m_q);
-                value.paintOpAngle = data.strengthValue;
+                value.paintOpAngle = 180.0 - data.strengthValue;
             }
 
             return value;
@@ -96,6 +96,12 @@ void KisMyPaintOpSettings::setPaintOpAngle(qreal value)
     if (value > 180.0) {
         value -= 180.0;
     }
+
+    /**
+     * All brushes are rotated in Krita counterclockwise,
+     * so we should invert the value for MyPaint
+     */
+    value = 180.0 - value;
 
     data.strengthValue = value;
     data.write(this);

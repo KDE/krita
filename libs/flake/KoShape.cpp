@@ -733,6 +733,7 @@ KoInsets KoShape::strokeInsets() const
 
 void KoShape::setPaintOrder(KoShape::PaintOrder first, KoShape::PaintOrder second)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(first != second);
     QVector<PaintOrder> order = {Fill, Stroke, Markers};
 
     if (first != Fill) {

@@ -161,22 +161,22 @@
           </item>
           <item row="4" column="1">
            <widget class="QComboBox" name="cmbAssistantsDrawMode">
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Can be used to troubleshoot performance or artifacting problems with drawing assistants.
-              &lt;/p&gt;&lt;p&gt;Changing the pixmap cache size requires a restart.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Can be used to troubleshoot performance or artifacting problems with drawing assistants.
+              &lt;/p&gt;&lt;p&gt;Changing the pixmap cache size requires a restart.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="currentIndex">
              <number>0</number>
             </property>
             <item>
              <property name="text">
-              <string>Default (Recommended)</string>
+              <string>Direct (Recommended)</string>
              </property>
             </item>
             <item>

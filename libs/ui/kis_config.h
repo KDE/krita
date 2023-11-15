@@ -685,7 +685,7 @@ public:
     void setUseLayerSelectionCheckbox(bool value);
 
     enum AssistantsDrawMode {
-        ASSISTANTS_DRAW_MODE_DEFAULT = 0,             // no caching, draw directly on canvas
+        ASSISTANTS_DRAW_MODE_DIRECT = 0,             // no caching, draw directly on canvas
         ASSISTANTS_DRAW_MODE_PIXMAP_CACHE = 1,
         ASSISTANTS_DRAW_MODE_LARGE_PIXMAP_CACHE = 2,
     };

@@ -2510,11 +2510,11 @@ void KisConfig::setUseLayerSelectionCheckbox(bool value)
 KisConfig::AssistantsDrawMode KisConfig::assistantsDrawMode(bool defaultValue) const
 {
     if (defaultValue) {
-        return ASSISTANTS_DRAW_MODE_DEFAULT;
+        return ASSISTANTS_DRAW_MODE_DIRECT;
     }
 
     return static_cast<AssistantsDrawMode>(
-                m_cfg.readEntry("assistantsDrawMode", static_cast<int>(ASSISTANTS_DRAW_MODE_DEFAULT)));
+                m_cfg.readEntry("assistantsDrawMode", static_cast<int>(ASSISTANTS_DRAW_MODE_DIRECT)));
 }
 
 void  KisConfig::setAssistantsDrawMode(AssistantsDrawMode value)

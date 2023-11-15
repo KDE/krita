@@ -1664,7 +1664,7 @@ KisConfig::AssistantsDrawMode indexToAssistantDrawMode(int value)
 {
     return value == 1 ? KisConfig::ASSISTANTS_DRAW_MODE_PIXMAP_CACHE :
            value == 2 ? KisConfig::ASSISTANTS_DRAW_MODE_LARGE_PIXMAP_CACHE :
-           KisConfig::ASSISTANTS_DRAW_MODE_DEFAULT;
+           KisConfig::ASSISTANTS_DRAW_MODE_DIRECT;
 }
 
 } // anonymous namespace

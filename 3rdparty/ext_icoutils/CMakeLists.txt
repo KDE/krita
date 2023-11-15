@@ -2,10 +2,15 @@ SET(PREFIX_ext_icoutils "${EXTPREFIX}")
 
 if (MINGW)
 
+    #
+    # WARNING: please don't use links to http://savannah.nongnu.org, since it is
+    #          very unstable
+    #
+
     ExternalProject_Add(
         ext_icoutils
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://savannah.nongnu.org/download/icoutils/icoutils-0.32.3.tar.bz2
+        URL https://files.kde.org/krita/build/dependencies/icoutils-0.32.3.tar.bz2
         URL_HASH SHA256=17abe02d043a253b68b47e3af69c9fc755b895db68fdc8811786125df564c6e0
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Really-do-not-include-libintl.h.patch

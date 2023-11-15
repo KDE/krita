@@ -310,30 +310,17 @@ namespace KisToolUtils {
 
     // get all shape layers with shapes at point. This is a bit coarser than 'FindNodes',
     // note that point is in Document coordinates instead of image coordinates.
-    QList<KisShapeLayerSP> findShapeLayers(KisNodeSP node, const QPointF &point, bool editableOnly) {
+    QList<KisShapeLayerSP> findShapeLayers(KisNodeSP root, const QPointF &point, bool editableOnly) {
         QList<KisShapeLayerSP> foundNodes;
-        while (node) {
-            KisLayerSP layer = qobject_cast<KisLayer*>(node.data());
+        KisLayerUtils::recursiveApplyNodes(root, [&] (KisNodeSP node) {
+            if ((node->isEditable(true) && editableOnly) || !editableOnly) {
 
-            if (!layer || !layer->isEditable()) {
-                node = node->nextSibling();
-                continue;
-            }
-
-            KisGroupLayerSP group = dynamic_cast<KisGroupLayer*>(layer.data());
-            KisShapeLayerSP shapeLayer = dynamic_cast<KisShapeLayer*>(layer.data());
-
-            if (group) {
-                    foundNodes << findShapeLayers(node->firstChild(), point, editableOnly);
-            } else if (shapeLayer) {
-                if (shapeLayer->shapeManager()->shapeAt(point)) {
-                    foundNodes << shapeLayer;
+                KisShapeLayerSP shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
+                if (shapeLayer && shapeLayer->isEditable() && shapeLayer->shapeManager()->shapeAt(point)) {
+                    foundNodes.append(shapeLayer);
                 }
             }
-
-            node = node->nextSibling();
-        }
-
+        });
         return foundNodes;
     }
 
@@ -354,7 +341,7 @@ namespace KisToolUtils {
                 KoSvgTextShape *t = dynamic_cast<KoSvgTextShape *>(shape);
                 if (t && isHorizontal) {
                     p.addRect(t->boundingRect());
-                    *isHorizontal = t->writingMode() == 0;
+                    *isHorizontal = t->writingMode() == KoSvgText::HorizontalTB;
                     if (!t->shapesInside().isEmpty()) {
                         QPainterPath paths;
                         Q_FOREACH(KoShape *s, t->shapesInside()) {

@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-08 02:06+0000\n"
-"PO-Revision-Date: 2023-11-08 14:58-0300\n"
+"PO-Revision-Date: 2023-11-14 11:43-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -20620,7 +20620,7 @@ msgstr "Spline"
 #, kde-format
 msgid "Failed to create a work directory, make sure you have write permission"
 msgstr ""
-"Falha ao criar um diretório de trabalho, certifique-se de ter permissão de "
+"Falha ao criar uma pasta de trabalho, certifique-se de ter permissão de "
 "gravação"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:183
@@ -23307,7 +23307,7 @@ msgid ""
 "Files: %2"
 msgstr ""
 "Quadros com o mesmo esquema de nomes existem na pasta de destino. Eles serão "
-"deletados, continuar?\n"
+"excluídos, continuar?\n"
 "\n"
 "Pasta: %1\n"
 "Arquivos: %2"
@@ -23315,7 +23315,7 @@ msgstr ""
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:121
 #, kde-format
 msgid "Failed to delete"
-msgstr "Falha ao deletar"
+msgstr "Falha ao excluir"
 
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
 #, kde-format
@@ -23326,7 +23326,7 @@ msgid ""
 "\n"
 "Rendering cancelled."
 msgstr ""
-"Falha ao deletar um quadro antigo do arquivo:\n"
+"Falha ao excluir um quadro antigo do arquivo:\n"
 "\n"
 "%1\n"
 "\n"
@@ -38946,7 +38946,7 @@ msgstr "Deseja salvá-lo?"
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:563
 #, kde-format
 msgid "Are you sure you want to delete mask <b>'%1'</b>?"
-msgstr "Tem certeza que quer deletar a máscara <b>'%1'</b>?"
+msgstr "Tem certeza que quer excluir a máscara <b>'%1'</b>?"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)
@@ -40505,12 +40505,12 @@ msgstr "Insira um nome de arquivo para exportar."
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
 #, kde-format
 msgid "Please enter a directory to export to."
-msgstr "Insira um diretório para exportar."
+msgstr "Insira uma pasta para exportar."
 
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
 #, kde-format
 msgid "Please enter an existing directory."
-msgstr "Por favor, insira um diretório existente."
+msgstr "Por favor, insira uma pasta existente."
 
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:197
 #, kde-format

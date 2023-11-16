@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-08 02:06+0000\n"
+"POT-Creation-Date: 2023-11-16 02:37+0000\n"
 "PO-Revision-Date: 2023-11-08 22:20+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -16706,7 +16706,7 @@ msgstr "Dimensione"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1351
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1415
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1455
-#: libs/ui/forms/wdgdisplaysettings.ui:336
+#: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
@@ -16882,7 +16882,7 @@ msgid "Node Rename"
 msgstr "Rinomina nodo"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:853
+#: libs/image/kis_image.cc:852
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Ridimensiona immagine"
@@ -17106,110 +17106,110 @@ msgstr "Attraverso"
 msgid "Imported Image"
 msgstr "Immagine importata"
 
-#: libs/image/kis_image.cc:689 libs/image/kis_layer_utils.cpp:1921
+#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1921
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
 msgstr "Maschera di selezione"
 
-#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Sfondo"
 
-#: libs/image/kis_image.cc:753 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:752 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "Livello Disegno"
 
-#: libs/image/kis_image.cc:852
+#: libs/image/kis_image.cc:851
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Ritaglia immagine"
 
-#: libs/image/kis_image.cc:948
+#: libs/image/kis_image.cc:947
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Ritaglia livello"
 
-#: libs/image/kis_image.cc:949
+#: libs/image/kis_image.cc:948
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Ritaglia maschera"
 
-#: libs/image/kis_image.cc:986
+#: libs/image/kis_image.cc:985
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Scala l'immagine"
 
-#: libs/image/kis_image.cc:987
+#: libs/image/kis_image.cc:986
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Cambia risoluzione dell'immagine"
 
-#: libs/image/kis_image.cc:1034
+#: libs/image/kis_image.cc:1033
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "Scala il livello"
 
-#: libs/image/kis_image.cc:1159
+#: libs/image/kis_image.cc:1158
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Ruota l'immagine"
 
-#: libs/image/kis_image.cc:1165
+#: libs/image/kis_image.cc:1164
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Ruota la maschera"
 
-#: libs/image/kis_image.cc:1167
+#: libs/image/kis_image.cc:1166
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "Ruota il livello"
 
-#: libs/image/kis_image.cc:1248
+#: libs/image/kis_image.cc:1247
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Deforma la maschera"
 
-#: libs/image/kis_image.cc:1251
+#: libs/image/kis_image.cc:1250
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "Deforma il livello"
 
-#: libs/image/kis_image.cc:1258
+#: libs/image/kis_image.cc:1257
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Deforma immagine"
 
-#: libs/image/kis_image.cc:1276
+#: libs/image/kis_image.cc:1275
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Converti lo spazio dei colori del livello"
 
-#: libs/image/kis_image.cc:1327
+#: libs/image/kis_image.cc:1326
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Converti lo spazio dei colori dell'immagine"
 
-#: libs/image/kis_image.cc:1328
+#: libs/image/kis_image.cc:1327
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Converti lo spazio dei colori della proiezione"
 
-#: libs/image/kis_image.cc:1386
+#: libs/image/kis_image.cc:1385
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Assegna profilo a un livello"
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1426
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Assegna profilo"
 
-#: libs/image/kis_image.cc:2487
+#: libs/image/kis_image.cc:2486
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Ritaglia le selezioni"
@@ -19729,9 +19729,9 @@ msgstr "Metadati"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1787
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1791
-#: libs/ui/forms/wdgdisplaysettings.ui:165 libs/ui/KoDocumentInfo.cpp:37
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1804
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1808
+#: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:326
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:853
@@ -20517,7 +20517,7 @@ msgstr ""
 "secondo"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:488
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1815
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1832
 #, kde-format
 msgid "Warning(s):"
 msgstr "Avvisi:"
@@ -21486,8 +21486,8 @@ msgstr "Vista master:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2083
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2085
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2099
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2101
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -21587,8 +21587,8 @@ msgstr "Importazione dell'animazione video"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2053
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2069
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2071
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22537,7 +22537,7 @@ msgstr "Proprietà del livello"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:595
+#: libs/ui/forms/wdgdisplaysettings.ui:434 libs/ui/kis_node_model.cpp:595
 #: libs/ui/kis_node_model.cpp:598 libs/ui/kis_paintop_box.cc:276
 #: libs/ui/kis_paintop_box.cc:284 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
@@ -23023,176 +23023,176 @@ msgstr " sec"
 msgid " fps"
 msgstr " fps"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1659
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1677
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1660
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1678
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "Resa software (molto lento)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1662
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1680
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 tramite ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1664
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1682
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1671
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1689
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Sconosciuta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1691
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1709
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Auto (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1773
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1790
 #, kde-format
 msgid "Display Id: %1"
 msgstr "Id schermo: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1774
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1791
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Nome schermo: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1775
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1792
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "Luminanza min.: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1776
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1793
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "Luminanza max.: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1777
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1794
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "Luminanza fotogramma intero max.: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1778
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1795
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Rosso primario: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1779
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1796
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Verde primario: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1780
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1797
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Blu primario: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1781
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1798
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Punto di bianco: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1961
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1977
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>Attenzione</b>: lo schermo attuale non supporta la resa HDR"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2046
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2062
 #, kde-format
 msgid "Configure Krita"
 msgstr "Configura Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2063
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2079
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Tasti scorciatoia"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2065
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2081
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Scorciatoie"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2075
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2091
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Impostazioni dell'inserimento su tela"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2076
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2092
 #, kde-format
 msgid "Canvas Input"
 msgstr "Inserimento su tela"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2093
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2109
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
 msgstr "Gestione dei colori"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2095
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2111
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Colore"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2103
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2105
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2119
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2121
 #, kde-format
 msgid "Performance"
 msgstr "Prestazioni"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2113
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2129
 #, kde-format
 msgid "Tablet settings"
 msgstr "Impostazioni delle tavolette grafiche"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2115
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2131
 #, kde-format
 msgid "Tablet"
 msgstr "Tavoletta grafica"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2123
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2139
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Impostazioni con solo tela"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2125
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2141
 #, kde-format
 msgid "Canvas-only"
 msgstr "Solo tela"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2133
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2135
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2149
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2151
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Tavolozza a comparsa"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2143
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2159
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autore"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2145
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2161
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Autore"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2152
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2168
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -24716,90 +24716,111 @@ msgstr "Filtraggio di alta qualità"
 msgid "Scaling Mode:"
 msgstr "Modalità di scala:"
 
-#. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
+#. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
+#, fuzzy, kde-format
+#| msgid "Assistant:"
+msgid "Assistants Mode:"
+msgstr "Assistente:"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:172
+#, kde-format
+msgid ""
+"<html><head/><body><p>Can be used to troubleshoot performance or artifacting "
+"problems with drawing assistants.\n"
+"              </p><p>Changing the pixmap cache size requires a restart.</p></"
+"body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:179
+#, kde-format
+msgid "Direct (Recommended)"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:184
+#, fuzzy, kde-format
+#| msgid "Animation Cache"
+msgid "Pixmap Cache"
+msgstr "Cache animazione"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
+#: libs/ui/forms/wdgdisplaysettings.ui:189
+#, fuzzy, kde-format
+#| msgid "Use large pixmap cache"
+msgid "Large Pixmap Cache"
+msgstr "Usa cache delle immagini grande"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
+#: libs/ui/forms/wdgdisplaysettings.ui:203
 #, kde-format
 msgid "Preferred Renderer (needs restart):"
 msgstr "Resa preferita (richiede il riavvio):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/ui/forms/wdgdisplaysettings.ui:172
+#: libs/ui/forms/wdgdisplaysettings.ui:220
 #, kde-format
 msgid "Current Renderer:"
 msgstr "Resa attuale:"
 
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkLargePixmapCache)
-#: libs/ui/forms/wdgdisplaysettings.ui:201
-#, kde-format
-msgid ""
-"<html><head/><body><p>This should be enabled if you see any artifacts while "
-"using assistants.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Deve essere abilitata se noti artefatti durante l'uso "
-"degli assistenti.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkLargePixmapCache)
-#: libs/ui/forms/wdgdisplaysettings.ui:204
-#, kde-format
-msgid "Use large pixmap cache"
-msgstr "Usa cache delle immagini grande"
-
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
-#: libs/ui/forms/wdgdisplaysettings.ui:218
+#: libs/ui/forms/wdgdisplaysettings.ui:250
 #, kde-format
 msgid "HDR Settings"
 msgstr "Impostazioni HDR"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentDisplayFormat)
-#: libs/ui/forms/wdgdisplaysettings.ui:224
+#: libs/ui/forms/wdgdisplaysettings.ui:256
 #, kde-format
 msgid "Current Display Format"
 msgstr "Formato di visualizzazione attuale"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/forms/wdgdisplaysettings.ui:231
+#: libs/ui/forms/wdgdisplaysettings.ui:263
 #, kde-format
 msgid "Display Format:"
 msgstr "Formato di visualizzazione:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRootSurfaceFormat)
-#: libs/ui/forms/wdgdisplaysettings.ui:238
+#: libs/ui/forms/wdgdisplaysettings.ui:270
 #, kde-format
 msgid "Current Surface Value"
 msgstr "Valore della superficie attuale"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/ui/forms/wdgdisplaysettings.ui:245
+#: libs/ui/forms/wdgdisplaysettings.ui:277
 #, kde-format
 msgid "Current Output Format:"
 msgstr "Formato di output attuale:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdgdisplaysettings.ui:255
+#: libs/ui/forms/wdgdisplaysettings.ui:287
 #, kde-format
 msgid "Preferred Output Format:"
 msgstr "Formato di output preferito:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: libs/ui/forms/wdgdisplaysettings.ui:283
+#: libs/ui/forms/wdgdisplaysettings.ui:315
 #, kde-format
 msgid "Canvas Decorations"
 msgstr "Decorazioni della tela"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: libs/ui/forms/wdgdisplaysettings.ui:289
+#: libs/ui/forms/wdgdisplaysettings.ui:321
 #, kde-format
 msgid "Transparency Checkerboard:"
 msgstr "Scacchiera di trasparenza:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/forms/wdgdisplaysettings.ui:295
+#: libs/ui/forms/wdgdisplaysettings.ui:327
 #, kde-format
 msgid "Color 1:"
 msgstr "Colore 1:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/forms/wdgdisplaysettings.ui:322
+#: libs/ui/forms/wdgdisplaysettings.ui:354
 #, kde-format
 msgid "Color 2:"
 msgstr "Colore 2:"
@@ -24808,7 +24829,7 @@ msgstr "Colore 2:"
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblSize)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
-#: libs/ui/forms/wdgdisplaysettings.ui:329 libs/ui/kis_paintop_box.cc:261
+#: libs/ui/forms/wdgdisplaysettings.ui:361 libs/ui/kis_paintop_box.cc:261
 #: libs/ui/kis_paintop_box.cc:268
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
@@ -24818,13 +24839,13 @@ msgid "Size:"
 msgstr "Dimensione:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCanvasBorderColor)
-#: libs/ui/forms/wdgdisplaysettings.ui:352
+#: libs/ui/forms/wdgdisplaysettings.ui:384
 #, kde-format
 msgid "Canvas Border Color:"
 msgstr "Colore bordo della tela:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: libs/ui/forms/wdgdisplaysettings.ui:372
+#: libs/ui/forms/wdgdisplaysettings.ui:404
 #, kde-format
 msgid "Pixel Grid:"
 msgstr "Griglia dei pixel:"
@@ -24838,7 +24859,7 @@ msgstr "Griglia dei pixel:"
 #. i18n: ectx: property (text), widget (QLabel, colorLabel3)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #. i18n: ectx: property (text), widget (QLabel, label_20)
-#: libs/ui/forms/wdgdisplaysettings.ui:378 libs/ui/layerstyles/WdgStroke.ui:163
+#: libs/ui/forms/wdgdisplaysettings.ui:410 libs/ui/layerstyles/WdgStroke.ui:163
 #: libs/ui/widgets/KoFillConfigWidget.ui:176
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:220
 #: plugins/filters/colors/wdgcolortoalphabase.ui:44
@@ -24851,81 +24872,81 @@ msgid "Color:"
 msgstr "Colore:"
 
 #. i18n: ectx: property (text), widget (QLabel, gridThresholdLabel)
-#: libs/ui/forms/wdgdisplaysettings.ui:395
+#: libs/ui/forms/wdgdisplaysettings.ui:427
 #, kde-format
 msgid "Start showing at:"
 msgstr "Inizia a mostrare da:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: libs/ui/forms/wdgdisplaysettings.ui:415
+#: libs/ui/forms/wdgdisplaysettings.ui:447
 #, kde-format
 msgid "Selection Overlay:"
 msgstr "Sovrapposizione della selezione:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/forms/wdgdisplaysettings.ui:427
+#: libs/ui/forms/wdgdisplaysettings.ui:459
 #, kde-format
 msgid "Outline opacity:"
 msgstr "Opacità contorno:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: libs/ui/forms/wdgdisplaysettings.ui:440
+#: libs/ui/forms/wdgdisplaysettings.ui:472
 #, kde-format
 msgid "Overlay color:"
 msgstr "Colore di sovrapposizione:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/forms/wdgdisplaysettings.ui:460
+#: libs/ui/forms/wdgdisplaysettings.ui:492
 #, kde-format
 msgid "Overlay opacity:"
 msgstr "Opacità di sovrapposizione:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: libs/ui/forms/wdgdisplaysettings.ui:481
+#: libs/ui/forms/wdgdisplaysettings.ui:513
 #: libs/ui/forms/wdggeneralsettings.ui:1102
 #, kde-format
 msgid "Miscellaneous"
 msgstr "Varie"
 
 #. i18n: ectx: property (text), widget (QCheckBox, hideScrollbars)
-#: libs/ui/forms/wdgdisplaysettings.ui:500
+#: libs/ui/forms/wdgdisplaysettings.ui:532
 #, kde-format
 msgid "Hide Canvas Scrollbars"
 msgstr "Nascondi barre di scorrimento della tela"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCurveAntialiasing)
-#: libs/ui/forms/wdgdisplaysettings.ui:510
+#: libs/ui/forms/wdgdisplaysettings.ui:542
 #, kde-format
 msgid "Enable curve anti-aliasing"
 msgstr "Abilita anti-aliasing delle curve"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHidePopups)
-#: libs/ui/forms/wdgdisplaysettings.ui:517
+#: libs/ui/forms/wdgdisplaysettings.ui:549
 #, kde-format
 msgid "Hide layer thumbnail popup"
 msgstr "Nascondi la finestra a comparsa delle miniature livello"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannelsAsColor)
-#: libs/ui/forms/wdgdisplaysettings.ui:524
+#: libs/ui/forms/wdgdisplaysettings.ui:556
 #, kde-format
 msgid "Color channels in color"
 msgstr "Canali di colore nel colore"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSelectionOutlineAntialiasing)
-#: libs/ui/forms/wdgdisplaysettings.ui:534
+#: libs/ui/forms/wdgdisplaysettings.ui:566
 #, kde-format
 msgid "Enable selection outline anti-aliasing"
 msgstr "Abilita anti-aliasing della selezione del contorno"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:541
+#: libs/ui/forms/wdgdisplaysettings.ui:573
 #, kde-format
 msgid "If checked, the checkers will move when scrolling the canvas."
 msgstr "Se segnato, la scacchiera si sposterà quando si farà scorrere la tela."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:544
+#: libs/ui/forms/wdgdisplaysettings.ui:576
 #, kde-format
 msgid ""
 "Determines whether the checks will stay put or whether they will scroll "
@@ -24935,7 +24956,7 @@ msgstr ""
 "alla tela"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:547
+#: libs/ui/forms/wdgdisplaysettings.ui:579
 #, kde-format
 msgid "&Move checkers when scrolling"
 msgstr "Sposta le caselle durante lo scorri&mento"
@@ -32458,7 +32479,7 @@ msgstr "Profon&dità:"
 msgid "Li&nk with Layer"
 msgstr "Collega co&n livello"
 
-#: libs/ui/opengl/kis_opengl.cpp:153
+#: libs/ui/opengl/kis_opengl.cpp:152
 #, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
@@ -32467,12 +32488,12 @@ msgstr ""
 "I buffer delle trame sono volontariamente disabilitati nel motore di resa "
 "ANGLE a causa di problemi di prestazione."
 
-#: libs/ui/opengl/kis_opengl.cpp:659
+#: libs/ui/opengl/kis_opengl.cpp:648
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "Il driver grafico Intel in uso è noto per avere problemi con OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:661
+#: libs/ui/opengl/kis_opengl.cpp:650
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32483,7 +32504,7 @@ msgstr ""
 "usato ANGLE come impostazione predefinita. Puoi passare manualmente a OpenGL "
 "ma non si garantisce che funzioni correttamente."
 
-#: libs/ui/opengl/kis_opengl.cpp:1075
+#: libs/ui/opengl/kis_opengl.cpp:1064
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32492,7 +32513,7 @@ msgstr ""
 "La resa preferita non supporta il formato di superficie richiesto. È stata "
 "selezionata un'altra resa."
 
-#: libs/ui/opengl/kis_opengl.cpp:1077
+#: libs/ui/opengl/kis_opengl.cpp:1066
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "Le rese disponibili non supportano il formato di output preferito"
@@ -60746,6 +60767,13 @@ msgstr "Strumento Ingrandimento"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Strumento Immagini di riferimento"
+
+#~ msgid ""
+#~ "<html><head/><body><p>This should be enabled if you see any artifacts "
+#~ "while using assistants.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Deve essere abilitata se noti artefatti durante "
+#~ "l'uso degli assistenti.</p></body></html>"
 
 #~ msgctxt "action"
 #~ msgid "Lock Toolbars"
@@ -101357,12 +101385,6 @@ msgstr "Strumento Immagini di riferimento"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Scalable Distance"
 #~ msgstr "Distanza scalabile"
-
-#, fuzzy
-#~| msgid "Assistant:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Assistant:"
-#~ msgstr "Assistente:"
 
 #, fuzzy
 #~| msgid "You need to add Ruler Assistants before this tool will work."

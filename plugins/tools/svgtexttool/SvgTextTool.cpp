@@ -555,14 +555,13 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
             if (m_highlightItem == HighlightItem::InlineSizeStartHandle) {
                 handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
             }
-            handlePainter.drawConnectionLine(info->nonEditLineLocal());
+            handlePainter.drawHandleLine(info->nonEditLineLocal());
 
             handlePainter.setHandleStyle(KisHandleStyle::secondarySelection());
             if (m_highlightItem == HighlightItem::InlineSizeEndHandle) {
                 handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
             }
-            handlePainter.drawConnectionLine(info->editLineLocal());
-            handlePainter.drawGradientHandle(info->editLineLocal().p1(), KoToolBase::handleRadius() * 0.75);
+            handlePainter.drawHandleLine(info->editLineLocal());
         }
 
         if (m_highlightItem == HighlightItem::MoveBorder) {
@@ -570,7 +569,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
         } else {
             handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
         }
-        handlePainter.drawHandleCircle(QPointF(), KoToolBase::handleRadius());
+        handlePainter.drawHandleCircle(QPointF(), KoToolBase::handleRadius() * 0.75);
     }
 
     gc.setTransform(converter.documentToView(), true);

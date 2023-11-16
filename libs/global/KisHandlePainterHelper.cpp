@@ -120,6 +120,26 @@ void KisHandlePainterHelper::drawHandleSmallCircle(const QPointF &center)
     drawHandleCircle(center, 0.7 * m_handleRadius);
 }
 
+void KisHandlePainterHelper::drawHandleLine(const QLineF &line, qreal width)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_painter);
+
+    QPainterPath p;
+    p.moveTo(m_painterTransform.map(line.p1()));
+    p.lineTo(m_painterTransform.map(line.p2()));
+    QPainterPathStroker s;
+    s.setWidth(width);
+    s.setCapStyle(Qt::RoundCap);
+    s.setJoinStyle(Qt::RoundJoin);
+    p = s.createStroke(p);
+
+    Q_FOREACH (KisHandleStyle::IterationStyle it, m_handleStyle.handleIterations) {
+        PenBrushSaver saver(it.isValid ? m_painter : 0, it.stylePair, PenBrushSaver::allow_noop);
+        m_painter->strokePath(p, m_painter->pen());
+        m_painter->fillPath(p, m_painter->brush());
+    }
+}
+
 void KisHandlePainterHelper::drawHandleRect(const QPointF &center) {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_painter);
     QPolygonF paintingPolygon = m_handlePolygon.translated(m_painterTransform.map(center));

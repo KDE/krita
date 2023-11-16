@@ -96,6 +96,11 @@ public:
     void drawHandleSmallCircle(const QPointF &center);
 
     /**
+     * Draws a line in the style of a handle with \p width indicating the thickness.
+     */
+    void drawHandleLine(const QLineF &line, qreal width = 1.0);
+
+    /**
      * Draw a rotated handle representing the gradient handle
      */
     void drawGradientHandle(const QPointF &center, qreal radius);

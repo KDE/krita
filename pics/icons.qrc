@@ -319,5 +319,7 @@
         <file>22_dark_format-text-direction-vertical-lr.svg</file>
         <file>22_dark_format-text-direction-vertical-rl.svg</file>
         <file>22_dark_format-text-direction-horizontal-tb.svg</file>
+        <file>22_dark_format-text-direction-ltr.svg</file>
+        <file>22_light_format-text-direction-ltr.svg</file>
     </qresource>
 </RCC>

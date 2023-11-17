@@ -30,11 +30,12 @@ SvgInlineSizeChangeStrategy::SvgInlineSizeChangeStrategy(KoToolBase *tool,
     , m_shape(shape)
     , m_dragStart(clicked)
     , m_initialPosition(shape->absolutePosition(KoFlake::TopLeft))
+    , m_finalPos(m_initialPosition)
     , m_anchorOffset(m_shape->absoluteTransformation().map(QPointF()))
     , m_startHandle(start)
 {
     this->tool()->canvas()->snapGuide()->setIgnoredShapes(KoShape::linearizeSubtree({shape}));
-    m_originalAnchor =
+    m_originalAnchor = m_finalAnchor =
         KoSvgText::TextAnchor(shape->textProperties().propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt());
     if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape)) {
         m_initialInlineSize = m_finalInlineSize = info->inlineSize;

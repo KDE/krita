@@ -43,7 +43,7 @@ SvgInlineSizeChangeStrategy::SvgInlineSizeChangeStrategy(KoToolBase *tool,
         m_handleSide = m_startHandle? info->startLineSide(): info->endLineSide();
         QPointF handleLocation = m_startHandle? info->startLine().p1(): info->endLine().p1();
         QTransform invTransform = (info->editorTransform * info->shapeTransform).inverted();
-        m_snapDelta = invTransform.inverted().map(QPointF(invTransform.map(handleLocation).x(), invTransform.map(m_dragStart).y())) - m_dragStart;
+        m_snapDelta = invTransform.inverted().map(QPointF(invTransform.map(handleLocation).x(), 0)) - m_dragStart;
     } else {
         // We cannot bail out, so just pretend to be doing something :(
         m_initialInlineSize = m_finalInlineSize = SvgInlineSizeHelper::getInlineSizePt(shape);
@@ -60,7 +60,9 @@ void SvgInlineSizeChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
     }
 
     double newInlineSize = 0.0;
-    QPointF snappedLocation = tool()->canvas()->snapGuide()->snap(mouseLocation + m_snapDelta, modifiers) - m_snapDelta;
+
+    QPointF snapDelta = invTransform.inverted().map(QPointF(invTransform.map(mouseLocation + m_snapDelta).x(), 0)) - mouseLocation;
+    QPointF snappedLocation = tool()->canvas()->snapGuide()->snap(mouseLocation + snapDelta, modifiers) - snapDelta;
     const double mouseDelta = invTransform.map(QLineF(m_dragStart, snappedLocation)).dx();
     QPointF newPosition = m_shape->absolutePosition(KoFlake::TopLeft);
 

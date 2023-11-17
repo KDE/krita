@@ -553,7 +553,8 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
             handlePainter.drawConnectionLine(info->baselineLineLocal());
 
             if (m_highlightItem == HighlightItem::InlineSizeStartHandle) {
-                handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
+                handlePainter.setHandleStyle(m_dragging == DragMode::InlineSizeHandle? KisHandleStyle::partiallyHighlightedPrimaryHandles()
+                                                                                     : KisHandleStyle::highlightedPrimaryHandles());
             }
             qreal pxlToPt = canvas()->viewConverter()->viewToDocumentX(1.0);
             handlePainter.drawHandleLine(info->startLineLocal());
@@ -563,7 +564,8 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
 
             handlePainter.setHandleStyle(KisHandleStyle::secondarySelection());
             if (m_highlightItem == HighlightItem::InlineSizeEndHandle) {
-                handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
+                handlePainter.setHandleStyle(m_dragging == DragMode::InlineSizeHandle? KisHandleStyle::partiallyHighlightedPrimaryHandles()
+                                                                                     : KisHandleStyle::highlightedPrimaryHandles());
             }
             handlePainter.drawHandleLine(info->endLineLocal());
             Q_FOREACH(const QLineF dash, info->endLineDashes(pxlToPt)) {

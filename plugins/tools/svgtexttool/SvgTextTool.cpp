@@ -555,13 +555,20 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
             if (m_highlightItem == HighlightItem::InlineSizeStartHandle) {
                 handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
             }
+            qreal pxlToPt = canvas()->viewConverter()->viewToDocumentX(1.0);
             handlePainter.drawHandleLine(info->nonEditLineLocal());
+            Q_FOREACH(const QLineF dash, info->nonEditLineDashes(pxlToPt)) {
+                handlePainter.drawHandleLine(dash);
+            }
 
             handlePainter.setHandleStyle(KisHandleStyle::secondarySelection());
             if (m_highlightItem == HighlightItem::InlineSizeEndHandle) {
                 handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
             }
             handlePainter.drawHandleLine(info->editLineLocal());
+            Q_FOREACH(const QLineF dash, info->editLineDashes(pxlToPt)) {
+                handlePainter.drawHandleLine(dash);
+            }
         }
 
         if (m_highlightItem == HighlightItem::MoveBorder) {

@@ -116,7 +116,10 @@ struct Q_DECL_HIDDEN InlineSizeInfo {
 
         // We piggyback on the shape transformation that we already need to
         // deal with to also handle the different orientations of writing-mode.
-        const QRectF outline = shape->outlineRect();
+        // We default to the "default caret size"  when the textShape (and thus outline) is empty.
+        QLineF caret;
+        shape->cursorForPos(0, caret);
+        const QRectF outline = shape->outlineRect().isEmpty()? QRectF(caret.p2(), caret.p1()): shape->outlineRect();
         QTransform editorTransform;
         switch (writingMode) {
         case KoSvgText::WritingMode::HorizontalTB:
@@ -136,7 +139,6 @@ struct Q_DECL_HIDDEN InlineSizeInfo {
             bottom = outline.right();
             break;
         }
-        bottom += 4.0;
         InlineSizeInfo ret{inlineSize,
                            baseline,
                            left,
@@ -163,6 +165,27 @@ private:
     [[nodiscard]] inline QRectF boundingRectRaw() const
     {
         return {QPointF(left, top), QPointF(right, bottom)};
+    }
+
+    [[nodiscard]] inline QVector<QLineF> generateLineDashes(const QLineF line, qreal toPtMultiplier = 1.0, qreal dashLengthPixels = 4.0) const
+    {
+        QVector <QLineF> dashes;
+
+        qreal dashL = dashLengthPixels * toPtMultiplier;
+        int pattern = 3;
+        int totalDashes = 3 * pattern;
+
+        QPointF start = line.p2();
+        for (int i = 0; i <= totalDashes; i++) {
+            QLineF dash = line;
+            dash.setLength(line.length() + dashL * i);
+            dash.setP1(start);
+            if (i % pattern == 0) {
+                dashes.append(dash);
+            }
+            start = dash.p2();
+        }
+        return dashes;
     }
 
 public:
@@ -211,6 +234,17 @@ public:
         }
     }
 
+    [[nodiscard]] inline QVector<QLineF> editLineDashes(qreal pixelToPt) const
+    {
+        switch (editLineSide()) {
+        case Side::LeftOrTop:
+            return generateLineDashes(editorTransform.map(leftLineRaw()), pixelToPt);
+        case Side::RightOrBottom:
+        default:
+            return generateLineDashes(editorTransform.map(rightLineRaw()), pixelToPt);
+        }
+    }
+
     [[nodiscard]] inline QLineF editLine() const
     {
         return shapeTransform.map(editLineLocal());
@@ -236,6 +270,17 @@ public:
         case Side::RightOrBottom:
         default:
             return editorTransform.map(leftLineRaw());
+        }
+    }
+
+    [[nodiscard]] inline QVector<QLineF> nonEditLineDashes(qreal pixelToPt) const
+    {
+        switch (editLineSide()) {
+        case Side::LeftOrTop:
+            return generateLineDashes(editorTransform.map(rightLineRaw()), pixelToPt);
+        case Side::RightOrBottom:
+        default:
+            return generateLineDashes(editorTransform.map(leftLineRaw()), pixelToPt);
         }
     }
 

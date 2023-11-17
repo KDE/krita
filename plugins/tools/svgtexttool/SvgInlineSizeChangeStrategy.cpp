@@ -40,8 +40,8 @@ SvgInlineSizeChangeStrategy::SvgInlineSizeChangeStrategy(KoToolBase *tool,
     if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape)) {
         m_initialInlineSize = m_finalInlineSize = info->inlineSize;
         m_anchor = info->anchor;
-        m_handleSide = m_startHandle? info->nonEditLineSide(): info->editLineSide();
-        QPointF handleLocation = m_startHandle? info->nonEditLine().p1(): info->editLine().p1();
+        m_handleSide = m_startHandle? info->startLineSide(): info->endLineSide();
+        QPointF handleLocation = m_startHandle? info->startLine().p1(): info->endLine().p1();
         QTransform invTransform = (info->editorTransform * info->shapeTransform).inverted();
         m_snapDelta = invTransform.inverted().map(QPointF(invTransform.map(handleLocation).x(), invTransform.map(m_dragStart).y())) - m_dragStart;
     } else {

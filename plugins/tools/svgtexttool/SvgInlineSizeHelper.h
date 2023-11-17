@@ -211,7 +211,7 @@ public:
         return shapeTransform.map(baselineLineLocal());
     }
 
-    [[nodiscard]] inline Side editLineSide() const
+    [[nodiscard]] inline Side endLineSide() const
     {
         switch (anchor) {
         case VisualAnchor::LeftOrTop:
@@ -223,9 +223,9 @@ public:
         }
     }
 
-    [[nodiscard]] inline QLineF editLineLocal() const
+    [[nodiscard]] inline QLineF endLineLocal() const
     {
-        switch (editLineSide()) {
+        switch (endLineSide()) {
         case Side::LeftOrTop:
             return editorTransform.map(leftLineRaw());
         case Side::RightOrBottom:
@@ -234,9 +234,9 @@ public:
         }
     }
 
-    [[nodiscard]] inline QVector<QLineF> editLineDashes(qreal pixelToPt) const
+    [[nodiscard]] inline QVector<QLineF> endLineDashes(qreal pixelToPt) const
     {
-        switch (editLineSide()) {
+        switch (endLineSide()) {
         case Side::LeftOrTop:
             return generateLineDashes(editorTransform.map(leftLineRaw()), pixelToPt);
         case Side::RightOrBottom:
@@ -245,12 +245,12 @@ public:
         }
     }
 
-    [[nodiscard]] inline QLineF editLine() const
+    [[nodiscard]] inline QLineF endLine() const
     {
-        return shapeTransform.map(editLineLocal());
+        return shapeTransform.map(endLineLocal());
     }
 
-    [[nodiscard]] inline Side nonEditLineSide() const
+    [[nodiscard]] inline Side startLineSide() const
     {
         switch (anchor) {
         case VisualAnchor::LeftOrTop:
@@ -262,9 +262,9 @@ public:
         }
     }
 
-    [[nodiscard]] inline QLineF nonEditLineLocal() const
+    [[nodiscard]] inline QLineF startLineLocal() const
     {
-        switch (editLineSide()) {
+        switch (endLineSide()) {
         case Side::LeftOrTop:
             return editorTransform.map(rightLineRaw());
         case Side::RightOrBottom:
@@ -273,9 +273,9 @@ public:
         }
     }
 
-    [[nodiscard]] inline QVector<QLineF> nonEditLineDashes(qreal pixelToPt) const
+    [[nodiscard]] inline QVector<QLineF> startLineDashes(qreal pixelToPt) const
     {
-        switch (editLineSide()) {
+        switch (endLineSide()) {
         case Side::LeftOrTop:
             return generateLineDashes(editorTransform.map(rightLineRaw()), pixelToPt);
         case Side::RightOrBottom:
@@ -284,24 +284,24 @@ public:
         }
     }
 
-    [[nodiscard]] inline QLineF nonEditLine() const
+    [[nodiscard]] inline QLineF startLine() const
     {
-        return shapeTransform.map(nonEditLineLocal());
+        return shapeTransform.map(startLineLocal());
     }
 
-    [[nodiscard]] inline QPolygonF editLineGrabRect(double grabThreshold) const
+    [[nodiscard]] inline QPolygonF endLineGrabRect(double grabThreshold) const
     {
-        QLineF editLine;
-        switch (editLineSide()) {
+        QLineF endLine;
+        switch (endLineSide()) {
         case Side::LeftOrTop:
-            editLine = leftLineRaw();
+            endLine = leftLineRaw();
             break;
         case Side::RightOrBottom:
         default:
-            editLine = rightLineRaw();
+            endLine = rightLineRaw();
             break;
         }
-        const QRectF rect{editLine.x1() - grabThreshold,
+        const QRectF rect{endLine.x1() - grabThreshold,
                           top - grabThreshold,
                           grabThreshold * 2,
                           bottom - top + grabThreshold * 2};
@@ -309,19 +309,19 @@ public:
         return shapeTransform.map(editorTransform.map(poly));
     }
 
-    [[nodiscard]] inline QPolygonF nonEditLineGrabRect(double grabThreshold) const
+    [[nodiscard]] inline QPolygonF startLineGrabRect(double grabThreshold) const
     {
-        QLineF nonEditLine;
-        switch (editLineSide()) {
+        QLineF startLine;
+        switch (endLineSide()) {
         case Side::LeftOrTop:
-            nonEditLine = rightLineRaw();
+            startLine = rightLineRaw();
             break;
         case Side::RightOrBottom:
         default:
-            nonEditLine = leftLineRaw();
+            startLine = leftLineRaw();
             break;
         }
-        const QRectF rect{nonEditLine.x1() - grabThreshold,
+        const QRectF rect{startLine.x1() - grabThreshold,
                           top - grabThreshold,
                           grabThreshold * 2,
                           bottom - top + grabThreshold * 2};

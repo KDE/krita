@@ -556,8 +556,8 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
                 handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
             }
             qreal pxlToPt = canvas()->viewConverter()->viewToDocumentX(1.0);
-            handlePainter.drawHandleLine(info->nonEditLineLocal());
-            Q_FOREACH(const QLineF dash, info->nonEditLineDashes(pxlToPt)) {
+            handlePainter.drawHandleLine(info->startLineLocal());
+            Q_FOREACH(const QLineF dash, info->startLineDashes(pxlToPt)) {
                 handlePainter.drawHandleLine(dash);
             }
 
@@ -565,8 +565,8 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
             if (m_highlightItem == HighlightItem::InlineSizeEndHandle) {
                 handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
             }
-            handlePainter.drawHandleLine(info->editLineLocal());
-            Q_FOREACH(const QLineF dash, info->editLineDashes(pxlToPt)) {
+            handlePainter.drawHandleLine(info->endLineLocal());
+            Q_FOREACH(const QLineF dash, info->endLineDashes(pxlToPt)) {
                 handlePainter.drawHandleLine(dash);
             }
         }
@@ -727,8 +727,8 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
             const qreal sensitivity = grabSensitivityInPt();
 
             if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(selectedShape)) {
-                const QPolygonF zone = info->editLineGrabRect(sensitivity);
-                const QPolygonF startZone = info->nonEditLineGrabRect(sensitivity);
+                const QPolygonF zone = info->endLineGrabRect(sensitivity);
+                const QPolygonF startZone = info->startLineGrabRect(sensitivity);
                 if (zone.containsPoint(event->point, Qt::OddEvenFill)) {
                     m_highlightItem = HighlightItem::InlineSizeEndHandle;
                     cursor = lineToCursor(info->baselineLine(), canvas());

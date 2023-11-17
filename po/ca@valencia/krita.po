@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-16 02:37+0000\n"
-"PO-Revision-Date: 2023-11-11 14:25+0100\n"
+"POT-Creation-Date: 2023-11-17 02:26+0000\n"
+"PO-Revision-Date: 2023-11-16 12:50+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -24691,10 +24691,9 @@ msgstr "Mode de l'escalat:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
-#, fuzzy, kde-format
-#| msgid "Assistant Tool"
+#, kde-format
 msgid "Assistants Mode:"
-msgstr "Eina de l'assistent"
+msgstr "Mode dels assistents:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:172
@@ -24705,26 +24704,28 @@ msgid ""
 "              </p><p>Changing the pixmap cache size requires a restart.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Es pot utilitzar per resoldre problemes de rendiment o "
+"de defectes gràfics amb els assistents de dibuix.\n"
+"              </p><p>Canviar la mida de la memòria cau per als mapes de "
+"píxels requerix reiniciar.</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:179
 #, kde-format
 msgid "Direct (Recommended)"
-msgstr ""
+msgstr "Directe (recomanat)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:184
-#, fuzzy, kde-format
-#| msgid "Animation Cache"
+#, kde-format
 msgid "Pixmap Cache"
-msgstr "Memòria cau de l'animació"
+msgstr "Memòria cau per als mapes de píxels"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:189
-#, fuzzy, kde-format
-#| msgid "Use large pixmap cache"
+#, kde-format
 msgid "Large Pixmap Cache"
-msgstr "Utilitza una memòria cau gran per als mapes de píxels"
+msgstr "Memòria cau gran per als mapes de píxels"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:203
@@ -27028,7 +27029,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:427
 #, kde-format
 msgid "Animation Cache"
-msgstr "Memòria cau de l'animació"
+msgstr "Memòria cau per a l'animació"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: libs/ui/forms/wdgperformancesettings.ui:433
@@ -27160,9 +27161,9 @@ msgid ""
 "<html><head/><body><p>Automatically prerender animation cache in background "
 "when the user is idle</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Automàticament fa una renderització prèvia de la "
-"memòria cau de l'animació en segon pla quan l'usuari estiga lliure</p></"
-"body></html>"
+"<html><head/><body><p>Automàticament fa una renderització prèvia en segon "
+"pla de la memòria cau de l'animació quan l'usuari estiga lliure</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBackgroundCacheGeneration)
 #: libs/ui/forms/wdgperformancesettings.ui:517
@@ -35069,7 +35070,7 @@ msgstr "Importa una paleta nova des d'un fitxer"
 msgid "Export current palette to file"
 msgstr "Exporta la paleta actual a un fitxer"
 
-#: libs/widgets/KisPaletteModel.cpp:358
+#: libs/widgets/KisPaletteModel.cpp:365
 #, kde-format
 msgid "Empty slot"
 msgstr "Ranura buida"
@@ -39431,7 +39432,7 @@ msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
 msgstr "La paleta s'ha exportat correctament"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:400
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:401
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -39440,7 +39441,7 @@ msgstr ""
 "Guarda la paleta explícitament, també succeirà automàticament en eixir de "
 "Krita."
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:403
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:404
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."
@@ -60690,10 +60691,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid ""
-#~ "<html><head/><body><p>This should be enabled if you see any artifacts "
-#~ "while using assistants.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Açò s'ha d'habilitar si veeu algun defecte mentre "
-#~ "utilitzeu assistents.</p></body></html>"

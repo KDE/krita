@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-16 02:37+0000\n"
+"POT-Creation-Date: 2023-11-17 02:26+0000\n"
 "PO-Revision-Date: 2002-11-07 11:41+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -34283,7 +34283,7 @@ msgstr "Laag Eienskappe..."
 msgid "Export current palette to file"
 msgstr "Voer uit Beeld..."
 
-#: libs/widgets/KisPaletteModel.cpp:358
+#: libs/widgets/KisPaletteModel.cpp:365
 #, kde-format
 msgid "Empty slot"
 msgstr ""
@@ -38533,14 +38533,14 @@ msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
 msgstr "Kleur Modus"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:400
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:401
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Save palette explicitly, will also happen automatically on exiting Krita."
 msgstr ""
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:403
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:404
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."

@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-16 02:37+0000\n"
+"POT-Creation-Date: 2023-11-17 02:26+0000\n"
 "PO-Revision-Date: 2021-07-04 00:31+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -36360,7 +36360,7 @@ msgstr "Importar uma nova paleta a partir de um ficheiro"
 msgid "Export current palette to file"
 msgstr "Exportar a paleta actual para um ficheiro"
 
-#: libs/widgets/KisPaletteModel.cpp:358
+#: libs/widgets/KisPaletteModel.cpp:365
 #, kde-format
 msgid "Empty slot"
 msgstr "Posição vazia"
@@ -40754,7 +40754,7 @@ msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
 msgstr "Exportação com Sucesso"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:400
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:401
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -40763,7 +40763,7 @@ msgstr ""
 "Gravar a paleta de forma explícita, o que irá também ocorrer automaticamente "
 "ao sair do Krita."
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:403
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:404
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."

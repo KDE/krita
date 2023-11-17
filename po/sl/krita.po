@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-16 02:37+0000\n"
+"POT-Creation-Date: 2023-11-17 02:26+0000\n"
 "PO-Revision-Date: 2023-11-08 09:38+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -34983,7 +34983,7 @@ msgstr "Uvozi novo paleto iz datoteke"
 msgid "Export current palette to file"
 msgstr "Izvozi trenutno paleto v datoteko"
 
-#: libs/widgets/KisPaletteModel.cpp:358
+#: libs/widgets/KisPaletteModel.cpp:365
 #, kde-format
 msgid "Empty slot"
 msgstr "Prazna reža"
@@ -39351,7 +39351,7 @@ msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
 msgstr "Izvoz palete je uspel"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:400
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:401
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -39359,7 +39359,7 @@ msgid ""
 msgstr ""
 "Shranite paleto izrecno, to se bo zgodilo tudi samodejno ob izhodu iz Krite."
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:403
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:404
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."

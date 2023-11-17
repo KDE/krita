@@ -18,7 +18,7 @@ class KoSvgTextShape;
 class SvgCreateTextStrategy : public KoInteractionStrategy
 {
 public:
-    SvgCreateTextStrategy(SvgTextTool *tool, const QPointF &clicked, double pressure = 0.0);
+    SvgCreateTextStrategy(SvgTextTool *tool, const QPointF &clicked);
     ~SvgCreateTextStrategy() override = default;
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
@@ -30,7 +30,6 @@ public:
 private:
     QPointF m_dragStart;
     QPointF m_dragEnd;
-    double m_pressure;
     Qt::KeyboardModifiers m_modifiers;
 };
 

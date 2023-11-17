@@ -25,11 +25,10 @@
 #include "kis_global.h"
 #include "kundo2command.h"
 
-SvgCreateTextStrategy::SvgCreateTextStrategy(SvgTextTool *tool, const QPointF &clicked, double pressure)
+SvgCreateTextStrategy::SvgCreateTextStrategy(SvgTextTool *tool, const QPointF &clicked)
     : KoInteractionStrategy(tool)
     , m_dragStart(clicked)
     , m_dragEnd(clicked)
-    , m_pressure(pressure)
 {
 }
 
@@ -68,11 +67,6 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
     bool unwrappedText = m_modifiers.testFlag(Qt::ControlModifier);
     if (rectangle.width() < lineHeight && rectangle.height() < lineHeight) {
         unwrappedText = true;
-        // The pressure check might need to be configured somehow.
-        if (rectangle.width() < 1 && rectangle.height() < 1 && m_pressure < 0.02) {
-            tool->canvas()->updateCanvas(rectangle);
-            return nullptr;
-        }
     }
     QString extraProperties;
     if (!unwrappedText) {
@@ -88,7 +82,7 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
 
     QPointF origin = rectangle.topLeft();
 
-    {
+    if (!unwrappedText) {
         const Qt::Alignment halign = tool->horizontalAlign();
         const bool isRtl = tool->isRtl();
 
@@ -112,10 +106,9 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
                 origin.setY(rectangle.bottom());
             }
         }
-
-        params->setProperty("shapeRect", QVariant(rectangle));
-        params->setProperty("origin", QVariant(origin));
     }
+    params->setProperty("shapeRect", QVariant(rectangle));
+    params->setProperty("origin", QVariant(origin));
 
     KoShape *textShape = factory->createShape( params, tool->canvas()->shapeController()->resourceManager());
 

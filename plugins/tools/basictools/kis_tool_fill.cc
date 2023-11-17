@@ -61,7 +61,7 @@
 #include <kis_shape_controller.h>
 #include <kis_image_animation_interface.h>
 #include <kis_canvas_resource_provider.h>
-#include <KisSpinBoxPluralHelper.h>
+#include <KisSpinBoxI18nHelper.h>
 #include <KisDoubleSpinBoxPluralHelper.h>
 
 #include "kis_icon_utils.h"
@@ -546,9 +546,8 @@ QWidget* KisToolFill::createOptionWidget()
     m_checkBoxCustomBlendingOptions = new QCheckBox(i18n("Use custom blending options"));
     m_sliderCustomOpacity = new KisSliderSpinBox;
     m_sliderCustomOpacity->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(m_sliderCustomOpacity, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(m_sliderCustomOpacity,
+                                  i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
     m_comboBoxCustomCompositeOp = new KisCompositeOpComboBox;
 
     KisOptionButtonStrip *optionButtonStripContiguousFillMode = new KisOptionButtonStrip;
@@ -563,9 +562,8 @@ QWidget* KisToolFill::createOptionWidget()
     m_sliderThreshold->setRange(1, 100);
     m_sliderSpread = new KisSliderSpinBox;
     m_sliderSpread->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(m_sliderSpread, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "Spread: {n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(m_sliderSpread,
+                                  i18nc("{n} is the number value, % is the percent sign", "Spread: {n}%"));
     m_checkBoxSelectionAsBoundary =
         new QCheckBox(
             i18nc("The 'use selection as boundary' checkbox in fill tool to use selection borders as boundary when filling",

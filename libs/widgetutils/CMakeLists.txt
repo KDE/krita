@@ -46,7 +46,7 @@ set(kritawidgetutils_LIB_SRCS
     KisOptionButtonStrip.cpp
     KisRepaintDebugger.cpp
     KisMenuStyleDontCloseOnAlt.cpp
-    KisSpinBoxPluralHelper.cpp
+    KisSpinBoxI18nHelper.cpp
     KisDoubleSpinBoxPluralHelper.cpp
     KisScreenMigrationTracker.cpp
 

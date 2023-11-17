@@ -47,7 +47,7 @@
 #include <kis_group_layer.h>
 #include <kis_layer_utils.h>
 
-#include <KisSpinBoxPluralHelper.h>
+#include <KisSpinBoxI18nHelper.h>
 #include <KisDoubleSpinBoxPluralHelper.h>
 #include <KisPart.h>
 #include <KisDocument.h>
@@ -452,18 +452,16 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     m_checkBoxCustomBlendingOptions = new QCheckBox(i18n("Use custom blending options"));
     m_sliderCustomOpacity = new KisSliderSpinBox;
     m_sliderCustomOpacity->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(m_sliderCustomOpacity, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(m_sliderCustomOpacity,
+                                  i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
     m_comboBoxCustomCompositeOp = new KisCompositeOpComboBox;
 
     m_sliderFillThreshold = new KisSliderSpinBox;
     m_sliderFillThreshold->setPrefix(i18nc("The 'threshold' spinbox prefix in enclose and fill tool options", "Threshold: "));
     m_sliderFillThreshold->setRange(1, 100);
     m_sliderFillOpacitySpread = new KisSliderSpinBox;
-    KisSpinBoxPluralHelper::install(m_sliderFillOpacitySpread, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "Spread: {n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(m_sliderFillOpacitySpread,
+                                  i18nc("{n} is the number value, % is the percent sign", "Spread: {n}%"));
     m_sliderFillOpacitySpread->setRange(0, 100);
     m_checkBoxSelectionAsBoundary =
         new QCheckBox(

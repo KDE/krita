@@ -1,20 +1,22 @@
 /*
- * SPDX-FileCopyrightText: 2021 Alvin Wong <alvin@alvinhc.com>
+ * SPDX-FileCopyrightText: 2021-2023 Alvin Wong <alvin@alvinhc.com>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef KIS_SPIN_BOX_PLURAL_HELPER_H
-#define KIS_SPIN_BOX_PLURAL_HELPER_H
+#ifndef KIS_SPIN_BOX_I18N_HELPER_H
+#define KIS_SPIN_BOX_I18N_HELPER_H
 
 #include <functional>
+
+#include <QStringView>
 
 #include "kritawidgetutils_export.h"
 
 class QSpinBox;
 class QString;
 
-namespace KisSpinBoxPluralHelper
+namespace KisSpinBoxI18nHelper
 {
     /**
      * Handles pluralization of prefix/suffix of `QSpinBox`-like widgets using
@@ -22,7 +24,7 @@ namespace KisSpinBoxPluralHelper
      * `valueChanged` signal to automatically update the text.
      *
      * In case the `valueChanged` signal wouldn't be emitted (i.e. signals
-     * are blocked), call `KisSpinBoxPluralHelper::update` to update the text.
+     * are blocked), call `KisSpinBoxI18nHelper::update` to update the text.
      *
      * @param spinBox The QSpinBox to handle.
      * @param messageFn A function (usually a lambda expression) that receives
@@ -41,6 +43,17 @@ namespace KisSpinBoxPluralHelper
      */
     KRITAWIDGETUTILS_EXPORT bool update(QSpinBox *spinBox);
 
-} /* namespace KisSpinBoxPluralHelper */
+    /**
+     * Set the prefix/suffix of a `QSpinbox`-like widget using an i18n string
+     * in the form of `prefix {n} suffix`. This is only done once immediately.
+     * If plural handling is required, use `install` instead.
+     *
+     * @param spinbox The `QSpinBox` to set prefix/suffix on.
+     * @param textTemplate The text in the form of `prefix{n}suffix`, usually
+     *                     passed through `i18n` or `i18nc`.
+     */
+    KRITAWIDGETUTILS_EXPORT void setText(QSpinBox *spinBox, QStringView textTemplate);
 
-#endif /* KIS_SPIN_BOX_PLURAL_HELPER_H */
+} /* namespace KisSpinBoxI18nHelper */
+
+#endif /* KIS_SPIN_BOX_I18N_HELPER_H */

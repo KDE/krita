@@ -13,7 +13,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_config_widget.h>
 #include <kis_signals_blocker.h>
-#include <KisSpinBoxPluralHelper.h>
+#include <KisSpinBoxI18nHelper.h>
 #include <KisDoubleSpinBoxPluralHelper.h>
 
 #include <QStringList>
@@ -51,13 +51,11 @@ KisHalftoneConfigPageWidget::KisHalftoneConfigPageWidget(QWidget *parent, const 
     });
 
     ui()->sliderForegroundOpacity->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui()->sliderForegroundOpacity, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui()->sliderForegroundOpacity,
+                                  i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
     ui()->sliderBackgroundOpacity->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui()->sliderBackgroundOpacity, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui()->sliderBackgroundOpacity,
+                                  i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
 
     connect(ui()->comboBoxGenerator, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxGenerator_currentIndexChanged(int)));
     connect(ui()->sliderHardness, SIGNAL(valueChanged(qreal)), this, SIGNAL(signal_configurationUpdated()));

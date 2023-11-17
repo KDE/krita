@@ -77,7 +77,7 @@
 #include "kis_signals_blocker.h"
 #include "kis_color_filter_combo.h"
 #include "kis_node_filter_proxy_model.h"
-#include <KisSpinBoxPluralHelper.h>
+#include <KisSpinBoxI18nHelper.h>
 #include <KisDoubleSpinBoxPluralHelper.h>
 
 #include "kis_selection.h"
@@ -396,9 +396,8 @@ LayerBox::LayerBox()
 
     // info-text opacity slider
     infoTextOpacitySlider = new KisSliderSpinBox(this);
-    KisSpinBoxPluralHelper::install(infoTextOpacitySlider, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(infoTextOpacitySlider,
+                                  i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
     infoTextOpacitySlider->setToolTip(i18nc("@item:tooltip", "Blending info text opacity"));
     // 55% is the opacity of nonvisible layer text
     infoTextOpacitySlider->setRange(55, 100);

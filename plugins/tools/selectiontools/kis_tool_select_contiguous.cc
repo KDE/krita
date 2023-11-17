@@ -21,7 +21,7 @@
 #include <KisOptionButtonStrip.h>
 #include <KisOptionCollectionWidget.h>
 #include <KoGroupButton.h>
-#include <KisSpinBoxPluralHelper.h>
+#include <KisSpinBoxI18nHelper.h>
 #include <kis_color_button.h>
 
 #include <kis_debug.h>
@@ -371,9 +371,8 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     sliderThreshold->setRange(1, 100);
     KisSliderSpinBox *sliderSpread = new KisSliderSpinBox;
     sliderSpread->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(sliderSpread, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "Spread: {n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(sliderSpread,
+                                  i18nc("{n} is the number value, % is the percent sign", "Spread: {n}%"));
     QCheckBox *checkBoxSelectionAsBoundary = new QCheckBox(i18nc(
         "The 'use selection as boundary' checkbox in contiguous selection tool "
         "to use selection borders as boundary when filling",

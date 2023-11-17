@@ -13,7 +13,7 @@
 #include <kis_generator_registry.h>
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
-#include <KisSpinBoxPluralHelper.h>
+#include <KisSpinBoxI18nHelper.h>
 #include <KisDoubleSpinBoxPluralHelper.h>
 #include <KoUnit.h>
 
@@ -36,13 +36,11 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     m_ui.buttonEqualizationTemplateBased->setGroupPosition(KoGroupButton::GroupRight);
 
     m_ui.sliderForegroundOpacity->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(m_ui.sliderForegroundOpacity, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(m_ui.sliderForegroundOpacity,
+                                  i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
     m_ui.sliderBackgroundOpacity->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(m_ui.sliderBackgroundOpacity, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(m_ui.sliderBackgroundOpacity,
+                                  i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
     m_ui.sliderBrightness->setRange(0.0, 100.0, 2);
     m_ui.sliderBrightness->setSingleStep(1.0);
     KisDoubleSpinBoxPluralHelper::install(m_ui.sliderBrightness, [](double value) {
@@ -96,13 +94,13 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     m_ui.sliderShearY->setSingleStep(0.1);
     m_ui.sliderAlignToPixelGridX->setRange(1, 20);
     m_ui.sliderAlignToPixelGridY->setRange(1, 20);
-    KisSpinBoxPluralHelper::install(m_ui.sliderAlignToPixelGridX, [](int value) {
+    KisSpinBoxI18nHelper::install(m_ui.sliderAlignToPixelGridX, [](int value) {
         // i18n: This is meant to be used in a spinbox so keep the {n} in the text
         //       and it will be substituted by the number. The text before will be
         //       used as the prefix and the text after as the suffix
         return i18ncp("Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone generator", "Every {n} cell horizontally", "Every {n} cells horizontally", value);
     });
-    KisSpinBoxPluralHelper::install(m_ui.sliderAlignToPixelGridY, [](int value) {
+    KisSpinBoxI18nHelper::install(m_ui.sliderAlignToPixelGridY, [](int value) {
         // i18n: This is meant to be used in a spinbox so keep the {n} in the text
         //       and it will be substituted by the number. The text before will be
         //       used as the prefix and the text after as the suffix
@@ -218,8 +216,8 @@ void KisScreentoneConfigWidget::setConfiguration(const KisPropertiesConfiguratio
         m_ui.checkBoxAlignToPixelGrid->setChecked(generatorConfig->alignToPixelGrid());
         m_ui.sliderAlignToPixelGridX->setValue(generatorConfig->alignToPixelGridX());
         m_ui.sliderAlignToPixelGridY->setValue(generatorConfig->alignToPixelGridY());
-        KisSpinBoxPluralHelper::update(m_ui.sliderAlignToPixelGridX);
-        KisSpinBoxPluralHelper::update(m_ui.sliderAlignToPixelGridY);
+        KisSpinBoxI18nHelper::update(m_ui.sliderAlignToPixelGridX);
+        KisSpinBoxI18nHelper::update(m_ui.sliderAlignToPixelGridY);
 
         if (generatorConfig->sizeMode() == KisScreentoneSizeMode_PixelBased) {
             m_ui.buttonSizeModePixelBased->setChecked(true);

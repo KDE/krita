@@ -18,7 +18,7 @@
 
 #include <KoColorSpace.h>
 #include <KisCursorOverrideLock.h>
-#include <KisSpinBoxPluralHelper.h>
+#include <KisSpinBoxI18nHelper.h>
 
 #include "kis_canvas2.h"
 #include "kis_command_utils.h"
@@ -240,9 +240,8 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
 
     KisSliderSpinBox *sliderSpread = new KisSliderSpinBox;
     sliderSpread->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(sliderSpread, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "Spread: {n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(sliderSpread,
+                                  i18nc("{n} is the number value, % is the percent sign", "Spread: {n}%"));
 
     // Set the tooltips
     sliderThreshold->setToolTip(

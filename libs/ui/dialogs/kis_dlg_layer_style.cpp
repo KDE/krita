@@ -35,7 +35,7 @@
 #include "kis_psd_layer_style.h"
 #include <KisAslStorage.h>
 #include <KisResourceLocator.h>
-#include <KisSpinBoxPluralHelper.h>
+#include <KisSpinBoxI18nHelper.h>
 #include <KisStorageModel.h>
 #include <KisResourceUserOperations.h>
 
@@ -746,9 +746,7 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
 
     // Structure
     ui.intDepth->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intDepth, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intDepth, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intSize->setRange(0, 250);
     ui.intSize->setSuffix(i18n(" px"));
@@ -766,14 +764,10 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
 
     // Shading
     ui.intOpacity->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intOpacity, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intOpacity2->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intOpacity2, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intOpacity2, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.angleSelector->enableGlobalLight(true);
     connect(ui.angleSelector, SIGNAL(globalAngleChanged(int)), SIGNAL(globalAngleChanged(int)));
@@ -791,9 +785,8 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
 
     // Contour
     m_contour->ui.intRange->setRange(1, 100);
-    KisSpinBoxPluralHelper::install(m_contour->ui.intRange, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(m_contour->ui.intRange,
+                                  i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     connect(m_contour->ui.cmbContour, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(m_contour->ui.chkAntiAliased, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
@@ -801,14 +794,12 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
 
     // Texture
     m_texture->ui.intScale->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(m_texture->ui.intScale, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(m_texture->ui.intScale,
+                                  i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     m_texture->ui.intDepth->setRange(-1000, 1000);
-    KisSpinBoxPluralHelper::install(m_texture->ui.intDepth, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(m_texture->ui.intDepth,
+                                  i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     connect(m_texture->ui.patternChooser, SIGNAL(resourceSelected(KoResourceSP )), SIGNAL(configChanged()));
     connect(m_texture->ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -932,9 +923,7 @@ ColorOverlay::ColorOverlay(QWidget *parent)
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intOpacity, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -967,27 +956,21 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intOpacity, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intDistance->setRange(0, 500);
     ui.intDistance->setSuffix(i18n(" px"));
     ui.intDistance->setExponentRatio(3.0);
 
     ui.intSpread->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intSpread, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intSpread, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intSize->setRange(0, 250);
     ui.intSize->setSuffix(i18n(" px"));
     ui.intSize->setExponentRatio(2.0);
 
     ui.intNoise->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intNoise, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intNoise, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.angleSelector->enableGlobalLight(true);
     connect(ui.angleSelector, SIGNAL(globalAngleChanged(int)), SIGNAL(globalAngleChanged(int)));
@@ -1116,14 +1099,10 @@ GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QW
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intOpacity, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intScale->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intScale, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intScale, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.angleSelector->angleSelector()->setResetAngle(90.0);
 
@@ -1193,33 +1172,23 @@ InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWi
     }
 
     ui.intOpacity->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intOpacity, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intNoise->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intNoise, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intNoise, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intChoke->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intChoke, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intChoke, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intSize->setRange(0, 250);
     ui.intSize->setSuffix(i18n(" px"));
     ui.intSize->setExponentRatio(2.0);
 
     ui.intRange->setRange(1, 100);
-    KisSpinBoxPluralHelper::install(ui.intRange, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intRange, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intJitter->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intJitter, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intJitter, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.cmbGradient->setCanvasResourcesInterface(resourceProvider->resourceManager()->canvasResourcesInterface());
 
@@ -1336,14 +1305,10 @@ PatternOverlay::PatternOverlay(QWidget *parent)
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intOpacity, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intScale->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intScale, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intScale, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -1382,9 +1347,7 @@ Satin::Satin(QWidget *parent)
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intOpacity, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intDistance->setRange(0, 250);
     ui.intDistance->setSuffix(i18n(" px"));
@@ -1458,19 +1421,13 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     ui.intSize->setExponentRatio(2.0);
 
     ui.intOpacity->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intOpacity, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intScale->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intScale, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intScale, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intScale_2->setRange(0, 100);
-    KisSpinBoxPluralHelper::install(ui.intScale_2, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui.intScale_2, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.cmbGradient->setCanvasResourcesInterface(resourceProvider->resourceManager()->canvasResourcesInterface());
 

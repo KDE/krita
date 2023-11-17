@@ -1,19 +1,19 @@
 /*
- * SPDX-FileCopyrightText: 2021 Alvin Wong <alvin@alvinhc.com>
+ * SPDX-FileCopyrightText: 2021-2023 Alvin Wong <alvin@alvinhc.com>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "KisSpinBoxPluralHelper.h"
+#include "KisSpinBoxI18nHelper.h"
 
 #include <QDebug>
 #include <QSpinBox>
 
-namespace KisSpinBoxPluralHelper
+namespace KisSpinBoxI18nHelper
 {
     namespace
     {
-        const char *const HANDLER_PROPERTY_NAME = "_kis_KisSpinBoxPluralHelper_handler";
+        const char *const HANDLER_PROPERTY_NAME = "_kis_KisSpinBoxI18nHelper_handler";
 
         struct HandlerWrapper
         {
@@ -28,25 +28,16 @@ namespace KisSpinBoxPluralHelper
 
     } /* namespace */
 
-} /* namespace KisSpinBoxPluralHelper */
+} /* namespace KisSpinBoxI18nHelper */
 
-Q_DECLARE_METATYPE(KisSpinBoxPluralHelper::HandlerWrapper)
+Q_DECLARE_METATYPE(KisSpinBoxI18nHelper::HandlerWrapper)
 
-namespace KisSpinBoxPluralHelper
+namespace KisSpinBoxI18nHelper
 {
     void install(QSpinBox *spinBox, std::function<QString(int)> messageFn)
     {
         const auto changeHandler = [messageFn, spinBox](int value) {
-            const QString text = messageFn(value);
-            const QString placeholder = QStringLiteral("{n}");
-            const int idx = text.indexOf(placeholder);
-            if (idx >= 0) {
-                spinBox->setPrefix(text.left(idx));
-                spinBox->setSuffix(text.mid(idx + placeholder.size()));
-            } else {
-                spinBox->setPrefix(QString());
-                spinBox->setSuffix(text);
-            }
+            setText(spinBox, messageFn(value));
         };
         // Apply prefix/suffix with existing value immediately.
         changeHandler(spinBox->value());
@@ -58,12 +49,12 @@ namespace KisSpinBoxPluralHelper
     {
         const QVariant handlerVariant = spinBox->property(HANDLER_PROPERTY_NAME);
         if (!handlerVariant.isValid()) {
-            qWarning() << "KisSpinBoxPluralHelper::update called with" << spinBox
+            qWarning() << "KisSpinBoxI18nHelper::update called with" << spinBox
                        << "but it does not have the property" << HANDLER_PROPERTY_NAME;
             return false;
         }
         if (!handlerVariant.canConvert<HandlerWrapper>()) {
-            qWarning() << "KisSpinBoxPluralHelper::update called with" << spinBox
+            qWarning() << "KisSpinBoxI18nHelper::update called with" << spinBox
                        << "but its property" << HANDLER_PROPERTY_NAME << "is invalid";
             return false;
         }
@@ -71,4 +62,18 @@ namespace KisSpinBoxPluralHelper
         handler.m_handler(spinBox->value());
         return true;
     }
-} /* namespace KisSpinBoxPluralHelper */
+
+    void setText(QSpinBox *spinBox, const QStringView textTemplate)
+    {
+        const QLatin1String placeholder{"{n}"};
+        const qsizetype idx = textTemplate.indexOf(placeholder);
+        if (idx >= 0) {
+            spinBox->setPrefix(textTemplate.left(idx).toString());
+            spinBox->setSuffix(textTemplate.mid(idx + placeholder.size()).toString());
+        } else {
+            spinBox->setPrefix(QString());
+            spinBox->setSuffix(textTemplate.toString());
+        }
+    }
+
+} /* namespace KisSpinBoxI18nHelper */

@@ -43,7 +43,7 @@
 #include <KisDocument.h>
 #include <kis_icon.h>
 #include <KisPart.h>
-#include <KisSpinBoxPluralHelper.h>
+#include <KisSpinBoxI18nHelper.h>
 #include <KisDoubleSpinBoxPluralHelper.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
@@ -1312,7 +1312,7 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
 
     m_page->intMaxAllowedBrushSpeed->setRange(1, 100);
     m_page->intMaxAllowedBrushSpeed->setValue(cfg.readEntry("maxAllowedSpeedValue", 30));
-    KisSpinBoxPluralHelper::install(m_page->intMaxAllowedBrushSpeed, [](int value) {
+    KisSpinBoxI18nHelper::install(m_page->intMaxAllowedBrushSpeed, [](int value) {
         // i18n: This is meant to be used in a spinbox so keep the {n} in the text
         //       and it will be substituted by the number. The text before will be
         //       used as the prefix and the text after as the suffix
@@ -1321,7 +1321,7 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
 
     m_page->intBrushSpeedSmoothing->setRange(3, 100);
     m_page->intBrushSpeedSmoothing->setValue(cfg.readEntry("speedValueSmoothing", 3));
-    KisSpinBoxPluralHelper::install(m_page->intBrushSpeedSmoothing, [](int value) {
+    KisSpinBoxI18nHelper::install(m_page->intBrushSpeedSmoothing, [](int value) {
         // i18n: This is meant to be used in a spinbox so keep the {n} in the text
         //       and it will be substituted by the number. The text before will be
         //       used as the prefix and the text after as the suffix
@@ -1464,9 +1464,8 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     intCachedFramesSizeLimit->setPageStep(1000);
 
     intRegionOfInterestMargin->setRange(1, 100);
-    KisSpinBoxPluralHelper::install(intRegionOfInterestMargin, [](int value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(intRegionOfInterestMargin,
+                                  i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     intRegionOfInterestMargin->setSingleStep(1);
     intRegionOfInterestMargin->setPageStep(10);
 

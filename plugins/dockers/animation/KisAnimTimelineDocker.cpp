@@ -52,7 +52,7 @@
 #include "KisAnimationPlaybackControlsModel.h"
 #include "KisWidgetConnectionUtils.h"
 #include "KisImageConfigNotifier.h"
-#include <KisSpinBoxPluralHelper.h>
+#include <KisSpinBoxI18nHelper.h>
 
 
 KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
@@ -145,9 +145,9 @@ KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
 
             volumeSlider = new KisSliderSpinBox(audioMenu);
             volumeSlider->setRange(0, 100);
-            KisSpinBoxPluralHelper::install(volumeSlider, [](int value) {
-                return i18nc("@item:inmenu Volume slider; {n} is the number value, % is the percent sign", "Volume: {n}%", value);
-            });
+            KisSpinBoxI18nHelper::setText(
+                volumeSlider,
+                i18nc("@item:inmenu Volume slider; {n} is the number value, % is the percent sign", "Volume: {n}%"));
             volumeSlider->setSingleStep(1);
             volumeSlider->setPageStep(10);
             volumeSlider->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);

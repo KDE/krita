@@ -98,17 +98,20 @@ void SvgInlineSizeChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
         newPosition += diff;
     }
 
+    bool flip = newInlineSize < -1.0;
+    if (newInlineSize >= -1.0 && newInlineSize < 1.0) {
+        newInlineSize = 1.0;
+    }
+    newInlineSize = qRound(newInlineSize * 100.0) / 100.0;
+
     KoSvgText::TextAnchor newAnchor = KoSvgText::TextAnchor(m_originalAnchor);
-    if (newInlineSize < 1.0) {
-        newInlineSize = qRound(newInlineSize * 100.0) / 100.0;
+    if (flip) {
         newInlineSize = fabs(newInlineSize);
         if (newAnchor == KoSvgText::AnchorStart) {
             newAnchor = KoSvgText::AnchorEnd;
         } else if (newAnchor == KoSvgText::AnchorEnd) {
             newAnchor = KoSvgText::AnchorStart;
         }
-    } else {
-        newInlineSize = qRound(newInlineSize * 100.0) / 100.0;
     }
     if (qFuzzyCompare(m_finalInlineSize, newInlineSize)
             && m_initialPosition == newPosition

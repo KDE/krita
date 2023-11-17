@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-16 00:41+0000\n"
-"PO-Revision-Date: 2023-11-11 20:43+0100\n"
+"POT-Creation-Date: 2023-11-17 00:40+0000\n"
+"PO-Revision-Date: 2023-11-15 20:28+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -439,7 +439,7 @@ msgstr "Grille 05"
 #, kde-format
 msgctxt "./krita/data/patterns/hexacolBW__2.pat"
 msgid "Hexacol BW By Tarkan"
-msgstr "Hexacol NB par Tarkan"
+msgstr "Hexacol N&B par Tarkan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2232,16 +2232,12 @@ msgid "FX overlay"
 msgstr "Superposition « FX »"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "FX_splat_starfield.kpp"
-#| msgid "FX splat starfield"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "FX_splat_starfield.kpp"
 msgid "FX splat starfield"
-msgstr "Effet de champ d'étoiles à splat"
+msgstr "Effet de champ d'étoiles à plat"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7631,7 +7627,7 @@ msgstr "Espaces verticaux égaux entre les objets"
 #, kde-format
 msgctxt "action"
 msgid "Rotate 90° CW"
-msgstr "Rotation 90° horaire"
+msgstr "Rotation 90° en sens horaire"
 
 #. i18n: context: toolTip @ Action (object_transform_rotate_90_cw), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:202
@@ -7645,7 +7641,7 @@ msgstr "Tourner l'objet de 90° vers la droite"
 #, kde-format
 msgctxt "action"
 msgid "Rotate 90° CCW"
-msgstr "Rotation 90° antihoraire"
+msgstr "Rotation 90° en sens antihoraire"
 
 #. i18n: context: toolTip @ Action (object_transform_rotate_90_ccw), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:212
@@ -8863,7 +8859,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Reload Original Preset"
-msgstr "Recharger le pré-réglage d'origine"
+msgstr "Recharger le pré réglage d'origine"
 
 #. i18n: context: text @ Action (preserve_alpha), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (preserve_alpha), Actions (Painting), ActionCollection (Krita)
@@ -9234,12 +9230,10 @@ msgstr "Augmenter la taille de la brosse"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:879 krita/krita.action:881 krita/krita.action:882
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise"
-msgstr "Tourner l'objet de 90° vers la droite"
+msgstr "Faire pivoter l'extrémité de la brosse dans le sens horaire"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9248,11 +9242,10 @@ msgstr "Tourner l'objet de 90° vers la droite"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:891 krita/krita.action:893 krita/krita.action:894
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "Tourner la sélection de 90° vers la droite"
+msgstr "Faire pivoter l'extrémité de la brosse dans le sens horaire (Précis)"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
@@ -9261,12 +9254,10 @@ msgstr "Tourner la sélection de 90° vers la droite"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:903 krita/krita.action:905 krita/krita.action:906
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Tourner l'objet de 90° vers la gauche"
+msgstr "Faire pivoter l'extrémité de la brosse dans le sens antihoraire"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9275,11 +9266,11 @@ msgstr "Tourner l'objet de 90° vers la gauche"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:915 krita/krita.action:917 krita/krita.action:918
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Tourner la sélection de 90° vers la gauche"
+msgstr ""
+"Faire pivoter l'extrémité de la brosse dans le sens antihoraire (Précis)"
 
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
@@ -17184,7 +17175,7 @@ msgstr ""
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
-msgstr "Bi-linéaire"
+msgstr "Bilinéaire"
 
 #: libs/image/kis_filter_strategy.h:114
 #, kde-format
@@ -17282,14 +17273,12 @@ msgid "Change Image Resolution"
 msgstr "Modifier la résolution de l'image"
 
 #: libs/image/kis_image.cc:1034
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Scale Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
-msgstr[0] "Redimensionner le calque"
-msgstr[1] "Redimensionner le calque"
+msgstr[0] "Re-dimensionner un calque"
+msgstr[1] "Re-dimensionner %1 calques"
 
 #: libs/image/kis_image.cc:1175
 msgctxt "(qtundo-format)"
@@ -17302,14 +17291,12 @@ msgid "Rotate Mask"
 msgstr "Rotation masque"
 
 #: libs/image/kis_image.cc:1188
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
-msgstr[0] "Rotation calque"
-msgstr[1] "Rotation calque"
+msgstr[0] "Faire pivoter un calque"
+msgstr[1] "Faire pivoter %1 calques"
 
 #: libs/image/kis_image.cc:1288
 msgctxt "(qtundo-format)"
@@ -17317,14 +17304,12 @@ msgid "Shear Mask"
 msgstr "Cisailler le masque"
 
 #: libs/image/kis_image.cc:1292
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Shear Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
-msgstr[0] "Cisailler le calque"
-msgstr[1] "Cisailler le calque"
+msgstr[0] "Déchirer un calque"
+msgstr[1] "Cisailler %1 calques"
 
 #: libs/image/kis_image.cc:1299
 msgctxt "(qtundo-format)"
@@ -18155,7 +18140,7 @@ msgstr "HeightMap R8"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Spriter SCML"
-msgstr "Spriter SCML"
+msgstr "Spriter « SCML »"
 
 #: libs/koplugin/KisMimeDatabase.cpp:219
 #, kde-format
@@ -23781,7 +23766,7 @@ msgstr "Début"
 #: libs/ui/forms/KisWelcomePage.ui:213 libs/ui/KisWelcomePageWidget.cpp:642
 #, kde-format
 msgid "DEV BUILD"
-msgstr "COMPILATION DEV"
+msgstr "VERSION COMPILÉE DE DÉVELOPPEMENT"
 
 #. i18n: ectx: property (text), widget (QToolButton, newFileLink)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
@@ -27178,7 +27163,7 @@ msgstr ""
 "<html><head/><body><p>Krita essayera de limiter le nombre de mise à jour "
 "d'écran par seconde, à la valeur fournie. Une valeur faible diminuera la "
 "réactivité virtuelle mais augmentera la précision du stylet pour certains "
-"système comme MacOS.<p></body></html>"
+"système comme macOS.<p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
 #: libs/ui/forms/wdgperformancesettings.ui:346
@@ -27778,13 +27763,13 @@ msgstr "RVB"
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:385
 #, kde-format
 msgid "HSV CW"
-msgstr "HSV CW"
+msgstr "HSV en sens horaire"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, segmentColorInterpolationTypeComboBox)
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:390
 #, kde-format
 msgid "HSV CCW"
-msgstr "HSV CCW"
+msgstr "HSV en sens antihoraire"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
 #: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:355
@@ -28060,12 +28045,11 @@ msgid "Layer Size"
 msgstr "Taille du calque"
 
 #: libs/ui/imagesize/imagesize.cc:126
-#, fuzzy, kde-format
-#| msgid "Resize Layer"
+#, kde-format
 msgid "Resize Layer"
 msgid_plural "Resize %1 Layers"
-msgstr[0] "Redimensionner le calque"
-msgstr[1] "Redimensionner le calque"
+msgstr[0] "Re-dimensionner un calque"
+msgstr[1] "Re-dimensionner %1 calques"
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, kde-format
@@ -29654,56 +29638,40 @@ msgid "Remove Nodes"
 msgstr "Supprimer les nœuds"
 
 #: libs/ui/kis_node_manager.cpp:1038
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
-msgstr "Miroir horizontal"
+msgstr "Réaliser un miroir du masque horizontalement"
 
 #: libs/ui/kis_node_manager.cpp:1041
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Horizontally"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
-msgstr[0] "Faire un miroir du calque horizontalement"
-msgstr[1] "Faire un miroir du calque horizontalement"
+msgstr[0] "Réaliser un miroir du calque horizontalement"
+msgstr[1] "Réaliser un miroir des %1 calques horizontalement"
 
 #: libs/ui/kis_node_manager.cpp:1052
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
-msgstr "Miroir vertical"
+msgstr "Effectuer un effet de miroir vertical"
 
 #: libs/ui/kis_node_manager.cpp:1055
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Vertically"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
-msgstr[0] "Faire un miroir du calque verticalement"
-msgstr[1] "Faire un miroir du calque verticalement"
+msgstr[0] "Réaliser un miroir du calque verticalement"
+msgstr[1] "Réaliser un miroir des %1 calques verticalement"
 
 #: libs/ui/kis_node_manager.cpp:1063
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Horizontally"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
-msgstr "Refléter tous les calques horizontalement"
+msgstr "Réaliser un miroir de tous les masques horizontalement"
 
 #: libs/ui/kis_node_manager.cpp:1070
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Mirror All Layers Vertically"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
-msgstr "Refléter tous les calques verticalement"
+msgstr "Réaliser un miroir de tous les masque verticalement"
 
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
@@ -33008,30 +32976,24 @@ msgid "Decrease Brush Size"
 msgstr "Diminuer la taille de la brosse"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgid "Rotate brush tip clockwise"
-msgstr "Tourner l'objet de 90° vers la droite"
+msgstr "Faire pivoter l'extrémité de la brosse dans le sens horaire"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "Tourner la sélection de 90° vers la droite"
+msgstr "Faire pivoter l'extrémité de la brosse dans le sens horaire (Précis)"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Tourner l'objet de 90° vers la gauche"
+msgstr "Faire pivoter l'extrémité de la brosse dans le sens antihoraire"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Tourner la sélection de 90° vers la gauche"
+msgstr "Faire pivoter l'extrémité de la brosse dans le sens horaire (Précis)"
 
 #: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, kde-format
@@ -33298,7 +33260,7 @@ msgstr "Transparent"
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Position: {n}%"
-msgstr "Position : {n}%"
+msgstr "Position : {n} %"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:40
 #, kde-format
@@ -33763,17 +33725,7 @@ msgstr ""
 "les images à destination de l'Internet ou autrement pour de simples images."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:459
-#, fuzzy, kde-format
-#| msgctxt "When the selected Bitdepth is 16"
-#| msgid ""
-#| "<b>16 bit integer</b>: Also known as 'deep color'. 16 bit is ideal for "
-#| "editing images with a linear TRC, large color space, or just when you "
-#| "need more precise color blending. This does take twice as much space on "
-#| "the RAM and hard-drive than any given 8 bit image of the same properties, "
-#| "and for some devices it takes much more processing power. We recommend "
-#| "watching the RAM usage of the file carefully, or otherwise use 8 bit if "
-#| "your computer slows down. Take care to disable conversion optimization "
-#| "when converting from 16 bit/channel to 8 bit/channel."
+#, kde-format
 msgctxt "When the selected Bitdepth is 16"
 msgid ""
 "<b>16 bit integer</b>: Also known as 'deep color'. 16 bit is ideal for "
@@ -33785,23 +33737,17 @@ msgid ""
 "slows down. Take care to disable conversion optimization when converting "
 "from 16 bit/channel to 8 bit/channel."
 msgstr ""
-"<b>En entier sur 16 bits</b> : aussi connu comme « Couleur profonde ». 16 "
-"bits sont idéals pour la modifications d'images avec un « TRC » linéaire, un "
-"espace colorimétrique important ou juste quand vous avez besoin d'un mélange "
-"plus précis de couleurs. Ceci prend le double d'espace en mémoire « RAM » et "
-"en disque dur que n'importe quelle image fournie en 8 bits avec les mêmes "
-"propriétés. Pour certains périphériques, cela prend bien plus de puissance "
-"de traitement. Il est recommandé de surveiller attentivement l'utilisation "
-"de la mémoire ou, sinon, d'utiliser 8 bits, si votre ordinateur ralentit. "
-"Prenez soin de désactiver l'optimisation de conversion durant la conversion "
-"de 16 bits par canal vers 8 bits par canal. is ideal for editing images with "
-"a linear TRC, large color space, or just when you need more precise color "
-"blending. This does take twice as much space on the RAM and hard-drive than "
-"any given 8 bit image of the same properties, and for some devices it takes "
-"much more processing power. We recommend watching the RAM usage of the file "
-"carefully, or otherwise use 8 bit if your computer slows down. Take care to "
-"disable conversion optimization when converting from 16 bit/channel to 8 bit/"
-"channel."
+"<b>Entier sur 16 bits</b> : aussi connu comme « Couleur profonde ». Un "
+"codage sur 16 bits est idéal pour la modifications d'images avec un « TRC » "
+"linéaire, un espace colorimétrique important ou juste quand vous avez besoin "
+"d'un mélange plus précis de couleurs. Ceci prend le double d'espace en "
+"mémoire « RAM » et en disque dur que n'importe quelle image fournie en 8 "
+"bits avec les mêmes propriétés. Pour certains périphériques, cela prend bien "
+"plus de puissance de traitement. Il est recommandé de surveiller "
+"attentivement l'utilisation de la mémoire ou, sinon, d'utiliser 8 bits, si "
+"votre ordinateur ralentit. Veuillez prendre soin de désactiver "
+"l'optimisation de conversion durant la conversion de 16 bits par canal vers "
+"8 bits par canal."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:468
 #, kde-format
@@ -35502,7 +35448,7 @@ msgstr "Importer une nouvelle palette à partir d'un fichier"
 msgid "Export current palette to file"
 msgstr "Exporter la palette en cours vers un fichier"
 
-#: libs/widgets/KisPaletteModel.cpp:358
+#: libs/widgets/KisPaletteModel.cpp:365
 #, kde-format
 msgid "Empty slot"
 msgstr "Emplacement vide"
@@ -37439,10 +37385,9 @@ msgstr "Couleur personnalisée"
 
 #. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
-#, fuzzy, kde-format
-#| msgid "Editor text color"
+#, kde-format
 msgid "Editor Widget Control:"
-msgstr "Éditeur de la couleur du texte"
+msgstr "Contrôle du composant graphique d'édition :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
@@ -37497,16 +37442,14 @@ msgid "Concentric Ellipse"
 msgstr "Ellipse concentrique"
 
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:28
-#, fuzzy, kde-format
-#| msgid "Perspective assistant"
+#, kde-format
 msgid "Curvilinear Perspective assistant"
-msgstr "Assistant de perspective"
+msgstr "Assistant de perspective curviligne"
 
 #: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
-#, fuzzy, kde-format
-#| msgid "Clear Perspective Grid"
+#, kde-format
 msgid "Curvilinear Perspective"
-msgstr "Nettoyer la grille de perspective"
+msgstr "Perspective curviligne"
 
 #: plugins/assistants/Assistants/EditAssistantsCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -38553,12 +38496,9 @@ msgid "Zoom view to fit curve."
 msgstr "Faire un zoom de l'affichage pour s'adapter à la courbe."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Add scalar keyframes"
 msgctxt "(qtundo-format)"
 msgid "Add Scalar Keyframes"
-msgstr "Ajouter des images clés scalaires"
+msgstr "Ajouter des trames clés scalaires"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
@@ -39469,7 +39409,7 @@ msgid ""
 "Balanced: Show both opacity and blending mode if either are changed.\n"
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
-"Aucun : rien n'est affiché.Simple : affiche les opacités ou les modes de "
+"Aucun : rien n'est affiché. Simple : affiche les opacités ou les modes de "
 "mélange modifiés. Équilibré : affiche à la fois l'opacité et le mode de "
 "mélange si l'un ou l'autre a été modifié.\n"
 "Détaillé : affiche à la fois l'opacité et le mode de mélange, même s'ils "
@@ -44323,12 +44263,11 @@ msgid "Shear Image"
 msgstr "Cisailler l'image"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
-#, fuzzy, kde-format
-#| msgid "Shear Layer"
+#, kde-format
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
-msgstr[0] "Cisailler le calque"
-msgstr[1] "Cisailler le calque"
+msgstr[0] "Déchirer un calque"
+msgstr[1] "Cisailler %1 calques"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -47787,9 +47726,9 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Le Gamma en logarithme hybride a besoin d'une étape de "
 "conversion supplémentaire puisque Krita ne peut pas actuellement envoyer des "
-"données HLG directement vers l'écran. Cependant, la courbe opti-optique HLG "
-"est appliquée pour la conversion d'une linéarité d'affichage vers une "
-"linéarité de scène.</p></body></html>"
+"données « HLG » directement vers l'écran. Cependant, la courbe opto-optique "
+"« HLG » est appliquée pour la conversion d'une linéarité d'affichage vers "
+"une linéarité de scène.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHLGOOTF)
 #. i18n: ectx: property (title), widget (QGroupBox, chkHLGOOTF)
@@ -48368,7 +48307,7 @@ msgstr "1024"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Zero"
-msgstr "Zero"
+msgstr "Zéro"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:110
 #, kde-format
@@ -49976,7 +49915,7 @@ msgstr "Qualité :"
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "Bilinear"
-msgstr "Bi-linéaire"
+msgstr "Bilinéaire"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:324
 #, kde-format
@@ -50117,7 +50056,7 @@ msgstr ""
 "strong='true'>LMMSE</emphasis> : démosaïquage grâce à une interpolation avec "
 "estimation directionnelle linéaire avec erreur moyenne quadratique à partir "
 "de « PerfectRaw ».</li> <li><emphasis strong='true'>AMaZE</emphasis> : "
-"interpolation « Aliasing Minimization » et « Zipper Elimination » pour "
+"interpolation « Aliasing Minimization and Zipper Elimination » pour "
 "appliquer la suppression des aberrations de couleurs à partir du projet "
 "« RawTherapee ».</li></ul></p><p>Remarque : certaine de ces méthodes peuvent "
 "être non disponibles si le décodeur « RAW » a été compilé sans les paquets "
@@ -50520,7 +50459,7 @@ msgstr "FBDD"
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "CFA Line Denoise"
-msgstr "Réduction du bruit de ligne CFA"
+msgstr "Réduction du bruit de ligne « CFA »"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:636
 #, kde-format
@@ -50552,10 +50491,10 @@ msgstr ""
 "strong='true'>FBDD (« Fake Before Demosaicing Denoising »)</emphasis> : "
 "réduction de bruit après simulation de la suppression de bruit du "
 "démosaïquage. Elle est appliquée avant l'interpolation.</li><li><emphasis "
-"strong='true'>Dé-bruitage de ligne « CFA » Line Denoise</emphasis> : "
-"suppression de bruit par encerclement. Elle est appliquée après "
-"l'interpolation.</li><li><emphasis strong='true'>Dé-bruitage par impulsions</"
-"emphasis> : suppression de bruit par impulsions. Elle est appliquée après "
+"strong='true'>Dé-bruitage de ligne « CFA » </emphasis> : suppression de "
+"bruit par encerclement. Elle est appliquée après l'interpolation.</"
+"li><li><emphasis strong='true'>Dé-bruitage par impulsions</emphasis> : "
+"suppression de bruit par impulsions. Elle est appliquée après "
 "l'interpolation.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:664
@@ -52032,14 +51971,14 @@ msgstr "Rétrécir"
 #: plugins/paintops/deform/wdgdeformoptions.ui:69
 #, kde-format
 msgid "Swirl CW"
-msgstr "Tourbillon CW"
+msgstr "Tourbillon en sens horaire"
 
 #. i18n: ectx: property (text), widget (QRadioButton, swirlCCWBtn)
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:142
 #: plugins/paintops/deform/wdgdeformoptions.ui:62
 #, kde-format
 msgid "Swirl CCW"
-msgstr "Tourbillon CCW"
+msgstr "Tourbillon en sens antihoraire"
 
 #. i18n: ectx: property (text), widget (QRadioButton, moveBtn)
 #. i18n: ectx: property (text), widget (QPushButton, moveOriginButton)
@@ -53839,12 +53778,12 @@ msgstr "+180°"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:87
 #, kde-format
 msgid "CCW hue"
-msgstr "Teinte CCW"
+msgstr "Teinte en sens antihoraire"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:98
 #, kde-format
 msgid "CW hue"
-msgstr "Teinte CW"
+msgstr "Teinte en sens horaire"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:104
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
@@ -57807,7 +57746,7 @@ msgid ""
 "(useful for filling line-art)"
 msgstr ""
 "Un glisser ne remplira uniquement les régions de couleur similaire à la "
-"région initiale (utile pour le remplissage de line-art)"
+"région initiale (utile pour le remplissage de LineArt)"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:652
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:540
@@ -57987,10 +57926,9 @@ msgid "Copy Translate"
 msgstr "Copier la traduction"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:459
-#, fuzzy, kde-format
-#| msgid "Copy Translate"
+#, kde-format
 msgid "Copy Translate at Intervals"
-msgstr "Copier la traduction"
+msgstr "Copier une traduction sur des intervalles"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:570
 #, kde-format
@@ -58439,12 +58377,12 @@ msgstr ""
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1313
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
-msgstr "Rotation 90° horaire"
+msgstr "Rotation 90° en sens horaire"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1317
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
-msgstr "Rotation 90° antihoraire"
+msgstr "Rotation 90° en sens antihoraire"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1321
 msgctxt "(qtundo-format)"

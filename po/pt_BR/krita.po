@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-16 00:41+0000\n"
+"POT-Creation-Date: 2023-11-17 00:40+0000\n"
 "PO-Revision-Date: 2023-11-14 11:43-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -35471,7 +35471,7 @@ msgstr "Importar uma nova paleta do arquivo"
 msgid "Export current palette to file"
 msgstr "Exportar paleta atual para arquivo"
 
-#: libs/widgets/KisPaletteModel.cpp:358
+#: libs/widgets/KisPaletteModel.cpp:365
 #, kde-format
 msgid "Empty slot"
 msgstr "Slot vazio"

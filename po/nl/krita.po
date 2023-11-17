@@ -62,15 +62,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-16 00:41+0000\n"
-"PO-Revision-Date: 2023-11-06 10:42+0100\n"
+"POT-Creation-Date: 2023-11-17 00:40+0000\n"
+"PO-Revision-Date: 2023-11-16 18:54+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Lokalize 23.08.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -16285,12 +16285,9 @@ msgid "Move shapes"
 msgstr "Vormen verplaatsen"
 
 #: libs/flake/commands/KoShapePaintOrderCommand.cpp:44
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set point type"
 msgctxt "(qtundo-format)"
 msgid "Set paint order"
-msgstr "Punttype instellen"
+msgstr "Schilder volgorde instellen"
 
 #: libs/flake/commands/KoShapeRenameCommand.cpp:28
 msgctxt "(qtundo-format)"
@@ -24752,11 +24749,9 @@ msgstr "Verschalingsmodus:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Assistant:"
+#, kde-format
 msgid "Assistants Mode:"
-msgstr "Assistent:"
+msgstr "Assistentmodus:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:172
@@ -24767,26 +24762,28 @@ msgid ""
 "              </p><p>Changing the pixmap cache size requires a restart.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Kan gebruikt worden om problemen met prestatie of "
+"vormen van artifact te onderzoeken met tekenassistenten.\n"
+"              </p><p>Wijziging van de cachegrootte van de pixmap vereist een "
+"herstart.</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:179
 #, kde-format
 msgid "Direct (Recommended)"
-msgstr ""
+msgstr "Direct (aanbevolen)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:184
-#, fuzzy, kde-format
-#| msgid "Animation Cache"
+#, kde-format
 msgid "Pixmap Cache"
-msgstr "Animatiecache"
+msgstr "Afbeeldingenbuffer"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:189
-#, fuzzy, kde-format
-#| msgid "Use large pixmap cache"
+#, kde-format
 msgid "Large Pixmap Cache"
-msgstr "Grote afbeeldingenbuffer gebruiken"
+msgstr "Grote afbeeldingenbuffer"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:203
@@ -35291,7 +35288,7 @@ msgstr "Een nieuw palet importeren uit een bestand"
 msgid "Export current palette to file"
 msgstr "Huidig palet exporteren naar bestand"
 
-#: libs/widgets/KisPaletteModel.cpp:358
+#: libs/widgets/KisPaletteModel.cpp:365
 #, kde-format
 msgid "Empty slot"
 msgstr "Leeg slot"
@@ -57246,12 +57243,10 @@ msgstr "Vloedvulling"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:541
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:447
-#, fuzzy, kde-format
-#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
-#| msgid "Scale: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Schalen: "
+msgstr "Schaal: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
@@ -57269,12 +57264,10 @@ msgstr "Drempel: "
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:465
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Spreiding: "
+msgstr "Spreiding: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:572
 #, kde-format
@@ -58146,32 +58139,32 @@ msgstr "Vormhulpmiddel selecteren"
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:109
 #, kde-format
 msgid "Fill, Stroke, Markers"
-msgstr ""
+msgstr "Vulling, streek, markeringen"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #, kde-format
 msgid "Fill, Markers, Stroke"
-msgstr ""
+msgstr "Vulling, markeringen, streek"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:111
 #, kde-format
 msgid "Stroke, Fill, Markers"
-msgstr ""
+msgstr "Streek, vulling, markeringen"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:112
 #, kde-format
 msgid "Stroke, Markers, Fill"
-msgstr ""
+msgstr "Streek, markeringen, vulling"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:113
 #, kde-format
 msgid "Markers, Fill, Stroke"
-msgstr ""
+msgstr "Markeringen, vulling, streek"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:114
 #, kde-format
 msgid "Markers, Stroke, Fill"
-msgstr ""
+msgstr "Markeringen, streek, vulling"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:121
 #, kde-format

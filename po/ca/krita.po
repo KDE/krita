@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-16 00:41+0000\n"
-"PO-Revision-Date: 2023-11-06 09:07+0100\n"
+"POT-Creation-Date: 2023-11-17 00:40+0000\n"
+"PO-Revision-Date: 2023-11-16 12:58+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -16230,12 +16230,9 @@ msgid "Move shapes"
 msgstr "Mou les formes"
 
 #: libs/flake/commands/KoShapePaintOrderCommand.cpp:44
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set point type"
 msgctxt "(qtundo-format)"
 msgid "Set paint order"
-msgstr "Estableix el tipus de punt"
+msgstr "Estableix l'ordre de pintura"
 
 #: libs/flake/commands/KoShapeRenameCommand.cpp:28
 msgctxt "(qtundo-format)"
@@ -24689,10 +24686,9 @@ msgstr "Mode de l'escalat:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
-#, fuzzy, kde-format
-#| msgid "Assistant Tool"
+#, kde-format
 msgid "Assistants Mode:"
-msgstr "Eina de l'assistent"
+msgstr "Mode dels assistents:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:172
@@ -24703,26 +24699,28 @@ msgid ""
 "              </p><p>Changing the pixmap cache size requires a restart.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Es pot utilitzar per resoldre problemes de rendiment o "
+"de defectes gràfics amb els assistents de dibuix.\n"
+"              </p><p>Canviar la mida de la memòria cau dels mapes de píxels "
+"requereix reiniciar.</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:179
 #, kde-format
 msgid "Direct (Recommended)"
-msgstr ""
+msgstr "Directe (recomanat)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:184
-#, fuzzy, kde-format
-#| msgid "Animation Cache"
+#, kde-format
 msgid "Pixmap Cache"
-msgstr "Memòria cau de l'animació"
+msgstr "Memòria cau dels mapes de píxels"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:189
-#, fuzzy, kde-format
-#| msgid "Use large pixmap cache"
+#, kde-format
 msgid "Large Pixmap Cache"
-msgstr "Usa una memòria cau gran de mapes de píxels"
+msgstr "Memòria cau gran dels mapes de píxels"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:203
@@ -35211,7 +35209,7 @@ msgstr "Importa una paleta nova des d'un fitxer"
 msgid "Export current palette to file"
 msgstr "Exporta la paleta actual a un fitxer"
 
-#: libs/widgets/KisPaletteModel.cpp:358
+#: libs/widgets/KisPaletteModel.cpp:365
 #, kde-format
 msgid "Empty slot"
 msgstr "Ranura buida"
@@ -57200,12 +57198,10 @@ msgstr "Emplenat per flux"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:541
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:447
-#, fuzzy, kde-format
-#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
-#| msgid "Scale: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Escala: "
+msgstr "Escala: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
@@ -57223,12 +57219,10 @@ msgstr "Llindar: "
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:465
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Extensió: "
+msgstr "Extensió: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:572
 #, kde-format
@@ -58095,32 +58089,32 @@ msgstr "Eina de selecció de formes"
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:109
 #, kde-format
 msgid "Fill, Stroke, Markers"
-msgstr ""
+msgstr "Emplenat, Traç, Marcadors"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #, kde-format
 msgid "Fill, Markers, Stroke"
-msgstr ""
+msgstr "Emplenat, Marcadors, Traç"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:111
 #, kde-format
 msgid "Stroke, Fill, Markers"
-msgstr ""
+msgstr "Traç, Emplenat, Marcadors"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:112
 #, kde-format
 msgid "Stroke, Markers, Fill"
-msgstr ""
+msgstr "Traç, Marcadors, Emplenat"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:113
 #, kde-format
 msgid "Markers, Fill, Stroke"
-msgstr ""
+msgstr "Marcadors, Emplenat, Traç"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:114
 #, kde-format
 msgid "Markers, Stroke, Fill"
-msgstr ""
+msgstr "Marcadors, Traç, Emplenat"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:121
 #, kde-format
@@ -61098,28 +61092,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid ""
-#~ "<html><head/><body><p>This should be enabled if you see any artifacts "
-#~ "while using assistants.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Això s'ha d'habilitar si veieu algun defecte mentre "
-#~ "utilitzeu assistents.</p></body></html>"
-
-#~ msgctxt "The 'spread' spinbox prefix in contiguous selection tool options"
-#~ msgid "Spread: "
-#~ msgstr "Extensió: "
-
-#~ msgctxt ""
-#~ "The 'spread' spinbox prefix in similar color selection tool options"
-#~ msgid "Spread: "
-#~ msgstr "Extensió: "
-
-#~ msgctxt ""
-#~ "The pattern 'scale' spinbox prefix in enclose and fill tool options"
-#~ msgid "Scale: "
-#~ msgstr "Escala: "
-
-#~ msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
-#~ msgid "Spread: "
-#~ msgstr "Extensió: "

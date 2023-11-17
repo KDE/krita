@@ -42,8 +42,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-16 00:41+0000\n"
-"PO-Revision-Date: 2023-11-07 22:18+0100\n"
+"POT-Creation-Date: 2023-11-17 00:40+0000\n"
+"PO-Revision-Date: 2023-11-16 20:19+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -16218,12 +16218,9 @@ msgid "Move shapes"
 msgstr "Movi formojn"
 
 #: libs/flake/commands/KoShapePaintOrderCommand.cpp:44
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set point type"
 msgctxt "(qtundo-format)"
 msgid "Set paint order"
-msgstr "Fikspunkta tipo"
+msgstr "Fiksi pentran ordon"
 
 #: libs/flake/commands/KoShapeRenameCommand.cpp:28
 msgctxt "(qtundo-format)"
@@ -24652,10 +24649,9 @@ msgstr "Skala Reĝimo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
-#, fuzzy, kde-format
-#| msgid "Assistant Tool"
+#, kde-format
 msgid "Assistants Mode:"
-msgstr "Asistanto Ilo"
+msgstr "Reĝimo de Asistantoj:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:172
@@ -24666,26 +24662,28 @@ msgid ""
 "              </p><p>Changing the pixmap cache size requires a restart.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Povas esti uzata por solvi problemojn pri rendimento "
+"aŭ artefaktado kun desegnaj helpantoj.\n"
+"              </p><p>Ŝanĝiĝo de la pixmap-kaŝmemorgrandeco postulas "
+"restartigon.</p></"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:179
 #, kde-format
 msgid "Direct (Recommended)"
-msgstr ""
+msgstr "Rekta (Rekomendita)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:184
-#, fuzzy, kde-format
-#| msgid "Animation Cache"
+#, kde-format
 msgid "Pixmap Cache"
-msgstr "Animacia Kaŝmemoro"
+msgstr "Bildmapa Kaŝmemoro"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:189
-#, fuzzy, kde-format
-#| msgid "Use large pixmap cache"
+#, kde-format
 msgid "Large Pixmap Cache"
-msgstr "Uzi grandan bildmapkaŝmemoron"
+msgstr "Granda Bildmap-Kaŝmemoro"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:203
@@ -35092,7 +35090,7 @@ msgstr "Importi novan paletron el dosiero"
 msgid "Export current palette to file"
 msgstr "Eksporti nunan paletron al dosiero"
 
-#: libs/widgets/KisPaletteModel.cpp:358
+#: libs/widgets/KisPaletteModel.cpp:365
 #, kde-format
 msgid "Empty slot"
 msgstr "Malplena fendo"
@@ -56941,12 +56939,10 @@ msgstr "Inunda Plenigo"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:541
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:447
-#, fuzzy, kde-format
-#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
-#| msgid "Scale: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Skalo: "
+msgstr "Skalo: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
@@ -56964,12 +56960,10 @@ msgstr "Pentrosojlo: "
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:465
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Disvastigo: "
+msgstr "Disvastigo: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:572
 #, kde-format
@@ -57826,32 +57820,32 @@ msgstr "Elekti Ilon por Formoj"
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:109
 #, kde-format
 msgid "Fill, Stroke, Markers"
-msgstr ""
+msgstr "Plenigo, Streko, Markiloj"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #, kde-format
 msgid "Fill, Markers, Stroke"
-msgstr ""
+msgstr "Plenigo, Markiloj, Streko"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:111
 #, kde-format
 msgid "Stroke, Fill, Markers"
-msgstr ""
+msgstr "Streko, Plenigo, Markiloj"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:112
 #, kde-format
 msgid "Stroke, Markers, Fill"
-msgstr ""
+msgstr "Streko, Markiloj, Plenigo"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:113
 #, kde-format
 msgid "Markers, Fill, Stroke"
-msgstr ""
+msgstr "Markiloj, Plenigo, Streko"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:114
 #, kde-format
 msgid "Markers, Stroke, Fill"
-msgstr ""
+msgstr "Markiloj, Streko, Plenigo"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:121
 #, kde-format
@@ -60816,28 +60810,3 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
-
-#~ msgid ""
-#~ "<html><head/><body><p>This should be enabled if you see any artifacts "
-#~ "while using assistants.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Ĉi tio devus esti ebligita se vi vidas iujn "
-#~ "artefaktojn dum vi uzas asistantojn.</p></body></html>"
-
-#~ msgctxt "The 'spread' spinbox prefix in contiguous selection tool options"
-#~ msgid "Spread: "
-#~ msgstr "Disvastigi:"
-
-#~ msgctxt ""
-#~ "The 'spread' spinbox prefix in similar color selection tool options"
-#~ msgid "Spread: "
-#~ msgstr "Disvastigo: "
-
-#~ msgctxt ""
-#~ "The pattern 'scale' spinbox prefix in enclose and fill tool options"
-#~ msgid "Scale: "
-#~ msgstr "Skalo:"
-
-#~ msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
-#~ msgid "Spread: "
-#~ msgstr "Disvastigo:"

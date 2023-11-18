@@ -371,8 +371,11 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     sliderThreshold->setRange(1, 100);
     KisSliderSpinBox *sliderSpread = new KisSliderSpinBox;
     sliderSpread->setRange(0, 100);
-    KisSpinBoxI18nHelper::setText(sliderSpread,
-                                  i18nc("{n} is the number value, % is the percent sign", "Spread: {n}%"));
+    KisSpinBoxI18nHelper::setText(
+        sliderSpread,
+        i18nc(
+            "The 'spread' spinbox in contiguous selection tool options; {n} is the number value, % is the percent sign",
+            "Spread: {n}%"));
     QCheckBox *checkBoxSelectionAsBoundary = new QCheckBox(i18nc(
         "The 'use selection as boundary' checkbox in contiguous selection tool "
         "to use selection borders as boundary when filling",

@@ -241,7 +241,9 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     KisSliderSpinBox *sliderSpread = new KisSliderSpinBox;
     sliderSpread->setRange(0, 100);
     KisSpinBoxI18nHelper::setText(sliderSpread,
-                                  i18nc("{n} is the number value, % is the percent sign", "Spread: {n}%"));
+                                  i18nc("The 'spread' spinbox in similar color selection tool options; {n} is the "
+                                        "number value, % is the percent sign",
+                                        "Spread: {n}%"));
 
     // Set the tooltips
     sliderThreshold->setToolTip(

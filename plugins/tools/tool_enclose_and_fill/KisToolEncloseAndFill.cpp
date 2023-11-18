@@ -443,7 +443,9 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     m_sliderPatternScale->setRange(0, 10000, 2);
     m_sliderPatternScale->setSoftMaximum(500);
     KisSpinBoxI18nHelper::setText(m_sliderPatternScale,
-                                  i18nc("{n} is the number value, % is the percent sign", "Scale: {n}%"));
+                                  i18nc("The pattern 'scale' spinbox in enclose and fill tool options; {n} is the "
+                                        "number value, % is the percent sign",
+                                        "Scale: {n}%"));
     m_angleSelectorPatternRotation = new KisAngleSelector;
     m_angleSelectorPatternRotation->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
     m_angleSelectorPatternRotation->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
@@ -458,8 +460,10 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     m_sliderFillThreshold->setPrefix(i18nc("The 'threshold' spinbox prefix in enclose and fill tool options", "Threshold: "));
     m_sliderFillThreshold->setRange(1, 100);
     m_sliderFillOpacitySpread = new KisSliderSpinBox;
-    KisSpinBoxI18nHelper::setText(m_sliderFillOpacitySpread,
-                                  i18nc("{n} is the number value, % is the percent sign", "Spread: {n}%"));
+    KisSpinBoxI18nHelper::setText(
+        m_sliderFillOpacitySpread,
+        i18nc("The 'spread' spinbox in enclose and fill tool options; {n} is the number value, % is the percent sign",
+              "Spread: {n}%"));
     m_sliderFillOpacitySpread->setRange(0, 100);
     m_checkBoxSelectionAsBoundary =
         new QCheckBox(

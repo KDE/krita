@@ -74,6 +74,7 @@ void SvgInlineSizeChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
     QPointF anchorDiff = anchorPos - m_anchorOffset;
     QPointF diff = (invTransform.inverted().map(QPointF(mouseDelta, 0)) - anchorPos) - anchorDiff;
 
+
     switch (m_anchor) {
     case VisualAnchor::LeftOrTop:
         if (m_handleSide == Side::RightOrBottom) {
@@ -83,12 +84,21 @@ void SvgInlineSizeChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
         }
         break;
     case VisualAnchor::Mid:
-        if (m_handleSide == Side::RightOrBottom) {
-            newInlineSize = m_initialInlineSize + mouseDelta;
-            newPosition += ((invTransform.inverted().map(QPointF(0.5 * mouseDelta, 0)) - anchorPos)) - anchorDiff;
+        if (modifiers.testFlag(Qt::ControlModifier)) {
+            if (m_handleSide == Side::RightOrBottom) {
+                newInlineSize = m_initialInlineSize + 2.0 * mouseDelta;
+            } else {
+                newInlineSize = m_initialInlineSize - 2.0 * mouseDelta;
+                diff = QPointF();
+            }
         } else {
-            newInlineSize = m_initialInlineSize - mouseDelta;
-            diff = ((invTransform.inverted().map(QPointF(0.5 * mouseDelta, 0)) - anchorPos)) - anchorDiff;
+            if (m_handleSide == Side::RightOrBottom) {
+                newInlineSize = m_initialInlineSize + mouseDelta;
+                newPosition += ((invTransform.inverted().map(QPointF(0.5 * mouseDelta, 0)) - anchorPos)) - anchorDiff;
+            } else {
+                newInlineSize = m_initialInlineSize - mouseDelta;
+                diff = ((invTransform.inverted().map(QPointF(0.5 * mouseDelta, 0)) - anchorPos)) - anchorDiff;
+            }
         }
         break;
     case VisualAnchor::RightOrBottom:

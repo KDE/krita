@@ -36,6 +36,7 @@ private Q_SLOTS:
     void onAutoRecordToggled(bool checked);
     void onRealTimeCaptureModeToggled(bool checked);
     void onCaptureIntervalChanged(double interval);
+    void onVideoFPSChanged(double interval);
     void onQualityChanged(int value);
     void onFormatChanged(int format);
     void onResolutionChanged(int resolution);

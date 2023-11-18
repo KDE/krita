@@ -144,6 +144,43 @@ public:
         ui->spinQuality->setSuffix(suffix);
     }
 
+    void updateUiForRealTimeMode() {
+        QString title;
+        double minValue = 0;
+        double maxValue = 0;
+        double value = 0;
+        int decimals = 0;
+        QString suffix;
+        QSignalBlocker blocker(ui->spinRate);
+
+        if (realTimeCaptureMode) {
+                title = i18nc("Title for label. Video frames per second", "Video FPS:");
+                minValue = 1;
+                maxValue = 60;
+                decimals = 0;
+                value = q->exportSettings->fps;
+                suffix = "";
+                disconnect(ui->spinRate, SIGNAL(valueChanged(double)), q, SLOT(onCaptureIntervalChanged(double)));
+                connect(ui->spinRate, SIGNAL(valueChanged(double)), q, SLOT(onVideoFPSChanged(double)));
+        } else {
+                title = i18nc("Title for label. Capture rate", "Capture interval:");
+                minValue = 0.10;
+                maxValue = 100.0;
+                decimals = 1;
+                value = captureInterval;
+                suffix = " sec.";
+                disconnect(ui->spinRate, SIGNAL(valueChanged(double)), q, SLOT(onVideoFPSChanged(double)));
+                connect(ui->spinRate, SIGNAL(valueChanged(double)), q, SLOT(onCaptureIntervalChanged(double)));
+        }
+
+        ui->labelRate->setText(title);
+        ui->spinRate->setDecimals(decimals);
+        ui->spinRate->setMinimum(minValue);
+        ui->spinRate->setMaximum(maxValue);
+        ui->spinRate->setSuffix(suffix);
+        ui->spinRate->setValue(value);
+    }
+
     void updateWriterSettings()
     {
         outputDirectory = snapshotDirectory % QDir::separator() % prefix % QDir::separator();
@@ -249,7 +286,6 @@ RecorderDockerDock::RecorderDockerDock()
     d->loadRelevantExportSettings();
 
     d->ui->editDirectory->setText(d->snapshotDirectory);
-    d->ui->spinRate->setValue(d->captureInterval);
     d->ui->spinQuality->setValue(d->quality);
     d->ui->comboResolution->setCurrentIndex(d->resolution);
     d->ui->checkBoxRealTimeCaptureMode->setChecked(d->realTimeCaptureMode);
@@ -270,7 +306,6 @@ RecorderDockerDock::RecorderDockerDock()
 
     connect(d->ui->buttonManageRecordings, SIGNAL(clicked()), this, SLOT(onManageRecordingsButtonClicked()));
     connect(d->ui->buttonBrowse, SIGNAL(clicked()), this, SLOT(onSelectRecordFolderButtonClicked()));
-    connect(d->ui->spinRate, SIGNAL(valueChanged(double)), this, SLOT(onCaptureIntervalChanged(double)));
     connect(d->ui->comboFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(onFormatChanged(int)));
     connect(d->ui->spinQuality, SIGNAL(valueChanged(int)), this, SLOT(onQualityChanged(int)));
     connect(d->ui->comboResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(onResolutionChanged(int)));
@@ -325,6 +360,7 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
     d->prefix = d->getPrefix();
     d->updateWriterSettings();
     d->updateUiFormat();
+    d->updateUiForRealTimeMode();
 
     bool enabled = d->enabledIds.value(document->linkedResourcesStorageId(), false);
     d->writer.setEnabled(enabled);
@@ -399,6 +435,9 @@ void RecorderDockerDock::onExportButtonClicked()
     RecorderExport exportDialog(exportSettings, this);
     exportDialog.setup();
     exportDialog.exec();
+
+    if (d->realTimeCaptureMode)
+        d->ui->spinRate->setValue(exportSettings->fps);
 }
 
 void RecorderDockerDock::onManageRecordingsButtonClicked()
@@ -442,6 +481,7 @@ void RecorderDockerDock::onRealTimeCaptureModeToggled(bool checked)
     d->realTimeCaptureMode = checked;
     RecorderConfig(false).setRealTimeCaptureMode(checked);
     d->loadSettings();
+    d->updateUiForRealTimeMode();
 }
 
 void RecorderDockerDock::onCaptureIntervalChanged(double interval)
@@ -449,6 +489,12 @@ void RecorderDockerDock::onCaptureIntervalChanged(double interval)
     d->captureInterval = interval;
     RecorderConfig(false).setCaptureInterval(interval);
     d->loadSettings();
+}
+void RecorderDockerDock::onVideoFPSChanged(double fps)
+{
+    exportSettings->fps = fps;
+    RecorderExportConfig(false).setFps(fps);
+    d->loadRelevantExportSettings();
 }
 
 void RecorderDockerDock::onQualityChanged(int value)

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
+#include <KisSpinBoxI18nHelper.h>
 #include <kis_signal_compressor.h>
 
 #include "KisSelectionPropertySlider.h"
@@ -13,8 +14,8 @@ template class KisSelectionPropertySlider<KoShape *>;
 struct KisSelectionPropertySliderBase::Private
 {
     KisSignalCompressor *signalCompressor {nullptr};
-    QString normalPrefix;
-    QString mixedPrefix;
+    QString normalTemplate;
+    QString mixedTemplate;
 
     explicit Private(KisSelectionPropertySliderBase *q)
         : signalCompressor(new KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE, q))
@@ -31,11 +32,11 @@ KisSelectionPropertySliderBase::KisSelectionPropertySliderBase(QWidget *parent)
 KisSelectionPropertySliderBase::~KisSelectionPropertySliderBase()
 {}
 
-void KisSelectionPropertySliderBase::setPrefixes(const QString &normalPrefix, const QString &mixedPrefix)
+void KisSelectionPropertySliderBase::setTextTemplates(const QString &normalTemplate, const QString &mixedTemplate)
 {
-    m_d->normalPrefix = normalPrefix;
-    m_d->mixedPrefix = mixedPrefix;
-    setPrefix(normalPrefix);
+    m_d->normalTemplate = normalTemplate;
+    m_d->mixedTemplate = mixedTemplate;
+    KisSpinBoxI18nHelper::setText(static_cast<QDoubleSpinBox *>(this), normalTemplate);
 }
 
 void KisSelectionPropertySliderBase::setInternalValue(qreal _value, bool blockUpdateSignal)
@@ -66,10 +67,10 @@ void KisSelectionPropertySliderBase::setSelectionValue(qreal commonValue, bool m
 {
     if (mixed) {
         setInternalValue(0.0, true); // BUG:409131
-        setPrefix(m_d->mixedPrefix);
+        KisSpinBoxI18nHelper::setText(static_cast<QDoubleSpinBox *>(this), m_d->mixedTemplate);
     } else {
         setValue(commonValue);
-        setPrefix(m_d->normalPrefix);
+        KisSpinBoxI18nHelper::setText(static_cast<QDoubleSpinBox *>(this), m_d->normalTemplate);
     }
 }
 

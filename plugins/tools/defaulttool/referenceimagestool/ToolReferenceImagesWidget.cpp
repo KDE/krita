@@ -42,15 +42,17 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->setupUi(this);
 
     d->ui->opacitySlider->setRange(0, 100);
-    KisSpinBoxI18nHelper::setText(d->ui->opacitySlider,
-                                  i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
+    d->ui->opacitySlider->setTextTemplates(
+        i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"),
+        i18nc("{n} is the number value, % is the percent sign", "Opacity [*varies*]: {n}%"));
     d->ui->opacitySlider->setValueGetter(
         [](KoShape *s){ return 100.0 * (1.0 - s->transparency()); }
     );
 
     d->ui->saturationSlider->setRange(0, 100);
-    KisSpinBoxI18nHelper::setText(d->ui->saturationSlider,
-                                  i18nc("{n} is the number value, % is the percent sign", "Saturation: {n}%"));
+    d->ui->saturationSlider->setTextTemplates(
+        i18nc("{n} is the number value, % is the percent sign", "Saturation: {n}%"),
+        i18nc("{n} is the number value, % is the percent sign", "Saturation [*varies*]: {n}%"));
     d->ui->saturationSlider->setValueGetter(
         [](KoShape *s){
             auto *r = dynamic_cast<KisReferenceImage*>(s);

@@ -17,6 +17,8 @@ class QDoubleSpinBox;
 class QSpinBox;
 class QString;
 
+class KisSelectionPropertySliderBase;
+
 namespace KisSpinBoxI18nHelper
 {
     /**
@@ -65,6 +67,14 @@ namespace KisSpinBoxI18nHelper
      *                     passed through `i18n` or `i18nc`.
      */
     KRITAWIDGETUTILS_EXPORT void setText(QDoubleSpinBox *spinBox, QStringView textTemplate);
+
+    /**
+    * **Deleted overload** - KisSelectionPropertySlider contains special handling
+    * to switch its prefix/suffix internally. Do not use `KisSpinBoxI18nHelper::setText`
+    * to directly set the prefix/suffix. Use `KisSelectionPropertySliderBase::setTextTemplates`
+    * instead.
+    */
+    void setText(KisSelectionPropertySliderBase *spinBox, const QStringView textTemplate) = delete;
 
 } /* namespace KisSpinBoxI18nHelper */
 

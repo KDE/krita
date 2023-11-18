@@ -21,7 +21,7 @@ SvgMoveTextStrategy::SvgMoveTextStrategy(KoToolBase *tool, KoSvgTextShape *shape
     , m_dragStart(clicked)
     , m_initialPosition(shape->absolutePosition())
     , m_finalPosition(m_initialPosition)
-    , m_anchorOffset(m_shape->absoluteTransformation().map(QPointF()) - m_initialPosition)
+    , m_anchorOffset(m_shape->absoluteTransformation().map(m_shape->initialTextPosition()) - m_initialPosition)
 {
     this->tool()->canvas()->snapGuide()->setIgnoredShapes(KoShape::linearizeSubtree({shape}));
 }

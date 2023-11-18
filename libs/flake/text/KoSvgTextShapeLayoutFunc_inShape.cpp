@@ -453,7 +453,8 @@ textAnchorForTextAlign(KoSvgText::TextAlign align, KoSvgText::TextAlign alignLas
 QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                                   const QMap<int, int> &logicalToVisual,
                                   QVector<CharacterResult> &result,
-                                  QList<QPainterPath> shapes)
+                                  QList<QPainterPath> shapes,
+                                  QPointF &startPos)
 {
     QVector<LineBox> lineBoxes;
     KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(properties.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
@@ -484,6 +485,13 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
     QListIterator<QPainterPath> shapesIt(shapes);
     if (shapes.isEmpty()) {
         return lineBoxes;
+    }
+    {
+        // Calculate the default pos.
+        qreal fontSize = properties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
+        QRectF wordBox = isHorizontal? QRectF(0, fontSize * -0.8, SHAPE_PRECISION, fontSize)
+                                     : QRectF(fontSize * -0.5, 0, fontSize, SHAPE_PRECISION);
+        getFirstPosition(startPos, shapes.first(), wordBox, currentPos, writingMode, ltr);
     }
     QPainterPath currentShape;
     while (it.hasNext()) {

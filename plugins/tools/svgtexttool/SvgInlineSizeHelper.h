@@ -91,8 +91,8 @@ struct Q_DECL_HIDDEN InlineSizeInfo {
             }
             break;
         }
-        const double xPos = 0;
-        const double yPos = 0;
+        const double xPos = shape->initialTextPosition().x();
+        const double yPos = shape->initialTextPosition().y();
 
         const double baseline = yPos;
         double left{};

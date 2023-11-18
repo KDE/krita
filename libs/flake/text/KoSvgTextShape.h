@@ -278,6 +278,14 @@ public:
     int indexForPos(int pos);
 
     /**
+     * @brief initialTextPosition
+     * Returns the initial text position as per SVG algorithm.
+     * The eventual result of this can include transforms or repositioning due to text shapes.
+     * @return the initial text position in shape coordinates.
+     */
+    QPointF initialTextPosition() const;
+
+    /**
      * @brief insertText
      * Insert a text somewhere in the KoTextShape.
      * @param pos the cursor position.

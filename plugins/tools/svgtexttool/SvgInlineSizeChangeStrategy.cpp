@@ -66,6 +66,7 @@ void SvgInlineSizeChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
     const double mouseDelta = invTransform.map(QLineF(m_dragStart, snappedLocation)).dx();
     QPointF newPosition = m_shape->absolutePosition(KoFlake::TopLeft);
 
+    // The anchor pos is mostly to determine the transformed origin so that moving the position stays consistent.
     QPointF anchorPos = m_shape->absoluteTransformation().map(QPointF());
     QPointF anchorDiff = anchorPos - m_anchorOffset;
     QPointF diff = (invTransform.inverted().map(QPointF(mouseDelta, 0)) - anchorPos) - anchorDiff;

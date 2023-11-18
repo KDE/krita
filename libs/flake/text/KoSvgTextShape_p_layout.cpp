@@ -105,6 +105,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     QString lang = q->textProperties().property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
 
     const bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
+    this->initialTextPosition = QPointF();
 
     FT_Int32 loadFlags = 0;
     if (this->textRendering == GeometricPrecision || this->textRendering == Auto) {
@@ -240,6 +241,10 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
     globalIndex = 0;
     bool wrapped = !(inlineSize.isAuto && q->shapesInside().isEmpty());
+    if (!resolvedTransforms.isEmpty()) {
+        resolvedTransforms[0].xPos = 0;
+        resolvedTransforms[0].yPos = 0;
+    }
     this->resolveTransforms(q, text, result, globalIndex, isHorizontal, wrapped, false, resolvedTransforms, collapseChars);
 
     QMap<int, KoSvgText::TabSizeInfo> tabSizeInfo;
@@ -713,7 +718,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     QPointF startPos = resolvedTransforms[0].absolutePos();
     if (!this->shapesInside.isEmpty()) {
         QList<QPainterPath> shapes = getShapes(this->shapesInside, this->shapesSubtract, q->textProperties());
-        this->lineBoxes = flowTextInShapes(q->textProperties(), logicalToVisual, result, shapes);
+        this->lineBoxes = flowTextInShapes(q->textProperties(), logicalToVisual, result, shapes, startPos);
     } else {
         this->lineBoxes = breakLines(q->textProperties(), logicalToVisual, result, startPos);
     }
@@ -811,7 +816,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         // 8. Position on path
 
         debugFlake << "8. Position on path";
-        this->applyTextPath(q, result, isHorizontal);
+        this->applyTextPath(q, result, isHorizontal, startPos);
     } else {
         globalIndex = 0;
         debugFlake << "Computing text-decorationsfor inline-size";
@@ -900,6 +905,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
             }
         }
     }
+    this->initialTextPosition = startPos;
     this->plainText = plainText;
     this->result = result;
     this->cursorPos = cursorPos;
@@ -929,79 +935,74 @@ void KoSvgTextShape::Private::resolveTransforms(const KoShape *rootShape, QStrin
 
     QVector<KoSvgText::CharTransformation> local = chunkShape->layoutInterface()->localCharTransformations();
 
-    if (wrapped) {
-        // Apparantly when there's bidi controls in the text, they participate in line-wrapping,
-        // so we only set the addressability.
-        for (int i = 0; i < text.size(); i++) {
-            result[i].addressable = !collapsedChars[i];
-        }
+    int i = 0;
+
+    int index = currentIndex;
+    int j = index + chunkShape->layoutInterface()->numChars(true);
+
+    if (chunkShape->layoutInterface()->textPath()) {
+        textInPath = true;
     } else {
+        for (int k = index; k < j; k++ ) {
+            bool bidi = (text.at(k).unicode() >= 8234 && text.at(k).unicode() <= 8238)
+                    || (text.at(k).unicode() >= 8294 && text.at(k).unicode() <= 8297);
+            bool softHyphen = text.at(k) == QChar::SoftHyphen;
 
-        int i = 0;
+            // Apparantly when there's bidi controls in the text, they participate in line-wrapping,
+            // so we don't check for it when wrapping.
+            if (collapsedChars[k] || (bidi && !wrapped) || softHyphen) {
+                result[k].addressable = false;
+                continue;
+            }
 
-        int index = currentIndex;
-        int j = index + chunkShape->layoutInterface()->numChars(true);
-
-        if (chunkShape->layoutInterface()->textPath()) {
-            textInPath = true;
-        } else {
-            for (int k = index; k < j; k++ ) {
-                bool bidi = (text.at(k).unicode() >= 8234 && text.at(k).unicode() <= 8238)
-                        || (text.at(k).unicode() >= 8294 && text.at(k).unicode() <= 8297);
-                bool softHyphen = text.at(k) == QChar::SoftHyphen;
-                if (collapsedChars[k] || bidi || softHyphen) {
-                    result[k].addressable = false;
-                    continue;
-                }
-
-                if (i < local.size()) {
-                    KoSvgText::CharTransformation newTransform = local.at(i);
-                    newTransform.mergeInParentTransformation(resolved[k]);
-                    resolved[k] = newTransform;
-                    i += 1;
-                } else if (k > 0) {
-                    if (resolved[k - 1].rotate) {
-                        resolved[k].rotate = resolved[k - 1].rotate;
-                    }
+            if (i < local.size()) {
+                KoSvgText::CharTransformation newTransform = local.at(i);
+                newTransform.mergeInParentTransformation(resolved[k]);
+                resolved[k] = newTransform;
+                i += 1;
+            } else if (k > 0) {
+                if (resolved[k - 1].rotate) {
+                    resolved[k].rotate = resolved[k - 1].rotate;
                 }
             }
         }
-
-        Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-            resolveTransforms(child, text, result, currentIndex, isHorizontal, false, textInPath, resolved, collapsedChars);
-
-        }
-
-        if (chunkShape->layoutInterface()->textPath()) {
-            bool first = true;
-            for (int k = index; k < j; k++ ) {
-
-                if (!result[k].addressable) {
-                    continue;
-                }
-
-                //  Also unset the first transform on a textPath to avoid breakage with rtl text.
-                if (first) {
-                    if (isHorizontal) {
-                        resolved[k].xPos = 0.0;
-                    } else {
-                        resolved[k].yPos = 0.0;
-                    }
-                    first = false;
-                }
-                // x and y attributes are officially 'ignored' for text on path, though the algorithm
-                // suggests this is only if a child of a path... In reality, not resetting this will
-                // break text-on-path with rtl.
-                if (isHorizontal) {
-                    resolved[k].yPos.reset();
-                } else {
-                    resolved[k].xPos.reset();
-                }
-            }
-        }
-
-        currentIndex = j;
     }
+
+    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+        resolveTransforms(child, text, result, currentIndex, isHorizontal, false, textInPath, resolved, collapsedChars);
+
+    }
+
+    if (chunkShape->layoutInterface()->textPath()) {
+        bool first = true;
+        for (int k = index; k < j; k++ ) {
+
+            if (!result[k].addressable) {
+                continue;
+            }
+
+            //  Also unset the first transform on a textPath to avoid breakage with rtl text.
+            if (first) {
+                if (isHorizontal) {
+                    resolved[k].xPos = 0.0;
+                } else {
+                    resolved[k].yPos = 0.0;
+                }
+                first = false;
+            }
+            // x and y attributes are officially 'ignored' for text on path, though the algorithm
+            // suggests this is only if a child of a path... In reality, not resetting this will
+            // break text-on-path with rtl.
+            if (isHorizontal) {
+                resolved[k].yPos.reset();
+            } else {
+                resolved[k].xPos.reset();
+            }
+        }
+    }
+
+    currentIndex = j;
+
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
@@ -1869,7 +1870,8 @@ QPainterPath KoSvgTextShape::Private::stretchGlyphOnPath(const QPainterPath &gly
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
                                             QVector<CharacterResult> &result,
-                                            bool isHorizontal)
+                                            bool isHorizontal,
+                                            QPointF &startPos)
 {
     // Unlike all the other applying functions, this one only iterrates over the
     // top-level. SVG is not designed to have nested textPaths. Source:
@@ -1902,6 +1904,11 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
                 offset = textPathChunk->layoutInterface()->textOnPathInfo().startOffset;
             }
             bool stretch = textPathChunk->layoutInterface()->textOnPathInfo().method == KoSvgText::TextPathStretch;
+
+            if (child == chunkShape->shapes().first()) {
+                const qreal percent = path.percentAtLength(offset);
+                startPos = path.pointAtPercent(percent);
+            }
 
             for (int i = currentIndex; i < endIndex; i++) {
                 CharacterResult cr = result[i];

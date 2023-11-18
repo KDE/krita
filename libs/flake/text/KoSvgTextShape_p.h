@@ -313,6 +313,7 @@ public:
 
     QString plainText;
     bool isBidi = false;
+    QPointF initialTextPosition = QPointF();
 
     void relayout(const KoSvgTextShape *q);
 
@@ -343,7 +344,7 @@ public:
                                            bool isHorizontal,
                                            qreal offset,
                                            bool isClosed);
-    static void applyTextPath(const KoShape *rootShape, QVector<CharacterResult> &result, bool isHorizontal);
+    static void applyTextPath(const KoShape *rootShape, QVector<CharacterResult> &result, bool isHorizontal, QPointF &startPos);
     void computeFontMetrics(const KoShape *rootShape,
                             const QMap<int, int> &parentBaselineTable,
                             qreal parentFontSize,

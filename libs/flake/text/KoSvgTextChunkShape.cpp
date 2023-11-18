@@ -899,13 +899,6 @@ bool KoSvgTextChunkShape::loadSvg(const QDomElement &e, SvgLoadingContext &conte
             s->localTransformations[i].rotate = rotate[i];
         }
     }
-    if (isRootTextNode() && !s->localTransformations.isEmpty()) {
-        // The first x and y pos are supossed to be the shape position.
-        QPointF firstPos = s->localTransformations.first().absolutePos();
-        s->localTransformations[0].xPos = 0;
-        s->localTransformations[0].yPos = 0;
-        this->setPosition(firstPos);
-    }
 
     if (e.tagName() == "textPath") {
         // we'll read the value 'path' later.

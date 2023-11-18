@@ -43,7 +43,7 @@ getShapes(QList<KoShape *> shapesInside, QList<KoShape *> shapesSubtract, const 
 QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                                   const QMap<int, int> &logicalToVisual,
                                   QVector<CharacterResult> &result,
-                                  QList<QPainterPath> shapes);
+                                  QList<QPainterPath> shapes, QPointF &startPos);
 
 } // namespace KoSvgTextShapeLayoutFunc
 

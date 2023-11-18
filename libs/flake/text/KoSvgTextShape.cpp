@@ -442,11 +442,7 @@ QPainterPath KoSvgTextShape::defaultCursorShape()
         p.moveTo(-fontSize * 0.5, 0);
         p.lineTo(fontSize, 0);
     }
-    QVector<KoSvgText::CharTransformation> transforms = this->layoutInterface()->localCharTransformations();
-    if (transforms.size()>0) {
-        p.translate(transforms.first().absolutePos());
-    }
-    //TODO: We should handle the case for positioning on path or in shape.
+    p.translate(d->initialTextPosition);
 
     return p;
 }
@@ -710,6 +706,11 @@ int KoSvgTextShape::indexForPos(int pos)
     }
 
     return d->cursorPos.at(qMin(d->cursorPos.size()-1, pos)).index;
+}
+
+QPointF KoSvgTextShape::initialTextPosition() const
+{
+    return d->initialTextPosition;
 }
 
 KoSvgTextChunkShape *findTextChunkForIndex(KoShape *rootShape, int &currentIndex, int sought, bool skipZeroWidth = false)

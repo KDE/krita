@@ -13,6 +13,7 @@
 
 #include "kritawidgetutils_export.h"
 
+class QDoubleSpinBox;
 class QSpinBox;
 class QString;
 
@@ -53,6 +54,17 @@ namespace KisSpinBoxI18nHelper
      *                     passed through `i18n` or `i18nc`.
      */
     KRITAWIDGETUTILS_EXPORT void setText(QSpinBox *spinBox, QStringView textTemplate);
+
+    /**
+     * Set the prefix/suffix of a `QDoubleSpinbox`-like widget using an i18n
+     * string in the form of `prefix {n} suffix`. This is only done once
+     * immediately.
+     *
+     * @param spinbox The `QDoubleSpinBox` to set prefix/suffix on.
+     * @param textTemplate The text in the form of `prefix{n}suffix`, usually
+     *                     passed through `i18n` or `i18nc`.
+     */
+    KRITAWIDGETUTILS_EXPORT void setText(QDoubleSpinBox *spinBox, QStringView textTemplate);
 
 } /* namespace KisSpinBoxI18nHelper */
 

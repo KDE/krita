@@ -37,7 +37,7 @@
 
 #include <KoResource.h>
 #include <KisDirtyStateSaver.h>
-#include <KisDoubleSpinBoxPluralHelper.h>
+#include <KisSpinBoxI18nHelper.h>
 
 #include <kis_paint_device.h>
 #include <brushengine/kis_paintop_registry.h>
@@ -262,12 +262,10 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
             slRotation    = m_sliderChooser[i]->addWidget<KisAngleSelector>("rotation");
             slPatternSize = m_sliderChooser[i]->addWidget<KisMultipliersDoubleSliderSpinBox>("patternsize");
 
-            KisDoubleSpinBoxPluralHelper::install(slOpacity, [](double value) {
-                return i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%", value);
-            });
-            KisDoubleSpinBoxPluralHelper::install(slFlow, [](double value) {
-                return i18nc("{n} is the number value, % is the percent sign", "Flow: {n}%", value);
-            });
+            KisSpinBoxI18nHelper::setText(slOpacity,
+                                          i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
+            KisSpinBoxI18nHelper::setText(slFlow,
+                                          i18nc("{n} is the number value, % is the percent sign", "Flow: {n}%"));
             slSize->setPrefix(QString("%1 ").arg(i18n("Size:")));
             slRotation->setPrefix(QString("%1 ").arg(i18n("Rotation:")));
             slPatternSize->setPrefix(QString("%1 ").arg(i18n("Pattern Scale:")));
@@ -279,12 +277,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
             slRotation    = m_sliderChooser[i]->addWidget<KisAngleSelector>("rotation", i18n("Rotation:"));
             slPatternSize = m_sliderChooser[i]->addWidget<KisMultipliersDoubleSliderSpinBox>("patternsize", i18n("Pattern Scale:"));
 
-            KisDoubleSpinBoxPluralHelper::install(slOpacity, [](double value) {
-                return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-            });
-            KisDoubleSpinBoxPluralHelper::install(slFlow, [](double value) {
-                return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-            });
+            KisSpinBoxI18nHelper::setText(slOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
+            KisSpinBoxI18nHelper::setText(slFlow, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
         }
 
         slOpacity->setRange(0, 100, 0);

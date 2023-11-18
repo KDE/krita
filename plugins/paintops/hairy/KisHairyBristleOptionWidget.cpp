@@ -10,7 +10,7 @@
 
 #include "KisHairyBristleOptionModel.h"
 
-#include <KisDoubleSpinBoxPluralHelper.h>
+#include <KisSpinBoxI18nHelper.h>
 #include <kis_paintop_lod_limitations.h>
 
 namespace {
@@ -33,9 +33,7 @@ public:
         shearBox->setSingleStep(0.01);
 
         densityBox->setRange(0.0, 100.0, 0);
-        KisDoubleSpinBoxPluralHelper::install(densityBox, [](double value) {
-            return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-        });
+        KisSpinBoxI18nHelper::setText(densityBox, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     }
 };
 

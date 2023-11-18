@@ -62,7 +62,6 @@
 #include <kis_image_animation_interface.h>
 #include <kis_canvas_resource_provider.h>
 #include <KisSpinBoxI18nHelper.h>
-#include <KisDoubleSpinBoxPluralHelper.h>
 
 #include "kis_icon_utils.h"
 
@@ -537,9 +536,8 @@ QWidget* KisToolFill::createOptionWidget()
     m_sliderPatternScale = new KisDoubleSliderSpinBox;
     m_sliderPatternScale->setRange(0, 10000, 2);
     m_sliderPatternScale->setSoftMaximum(500);
-    KisDoubleSpinBoxPluralHelper::install(m_sliderPatternScale, [](double value) {
-        return i18nc("{n} is the number value, % is the percent sign", "Scale: {n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(m_sliderPatternScale,
+                                  i18nc("{n} is the number value, % is the percent sign", "Scale: {n}%"));
     m_angleSelectorPatternRotation = new KisAngleSelector;
     m_angleSelectorPatternRotation->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
     m_angleSelectorPatternRotation->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);

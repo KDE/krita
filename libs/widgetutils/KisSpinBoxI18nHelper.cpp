@@ -63,7 +63,8 @@ namespace KisSpinBoxI18nHelper
         return true;
     }
 
-    void setText(QSpinBox *spinBox, const QStringView textTemplate)
+    template<typename TSpinBox>
+    static void setTextGeneric(TSpinBox *spinBox, const QStringView textTemplate)
     {
         const QLatin1String placeholder{"{n}"};
         const qsizetype idx = textTemplate.indexOf(placeholder);
@@ -74,6 +75,16 @@ namespace KisSpinBoxI18nHelper
             spinBox->setPrefix(QString());
             spinBox->setSuffix(textTemplate.toString());
         }
+    }
+
+    void setText(QSpinBox *spinBox, const QStringView textTemplate)
+    {
+        setTextGeneric(spinBox, textTemplate);
+    }
+
+    void setText(QDoubleSpinBox *spinBox, const QStringView textTemplate)
+    {
+        setTextGeneric(spinBox, textTemplate);
     }
 
 } /* namespace KisSpinBoxI18nHelper */

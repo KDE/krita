@@ -14,7 +14,6 @@
 #include <kis_config_widget.h>
 #include <kis_signals_blocker.h>
 #include <KisSpinBoxI18nHelper.h>
-#include <KisDoubleSpinBoxPluralHelper.h>
 
 #include <QStringList>
 #include <QScrollBar>
@@ -46,9 +45,8 @@ KisHalftoneConfigPageWidget::KisHalftoneConfigPageWidget(QWidget *parent, const 
 
     ui()->sliderHardness->setRange(0.0, 100.0, 2);
     ui()->sliderHardness->setSingleStep(1.0);
-    KisDoubleSpinBoxPluralHelper::install(ui()->sliderHardness, [](double value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(ui()->sliderHardness,
+                                  i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui()->sliderForegroundOpacity->setRange(0, 100);
     KisSpinBoxI18nHelper::setText(ui()->sliderForegroundOpacity,

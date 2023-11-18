@@ -13,7 +13,7 @@
 #include <lager/constant.hpp>
 #include "ui_wdggridoptions.h"
 
-#include <KisDoubleSpinBoxPluralHelper.h>
+#include <KisSpinBoxI18nHelper.h>
 #include "KisGridOpOptionModel.h"
 
 namespace {
@@ -49,17 +49,13 @@ public:
 
 		horizontalOffsetSPBox->setRange(-50, 50, 2);
 		horizontalOffsetSPBox->setValue(0);
-		KisDoubleSpinBoxPluralHelper::install(horizontalOffsetSPBox, [](double value) {
-		    return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-		});
-
+        KisSpinBoxI18nHelper::setText(horizontalOffsetSPBox,
+                                      i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
 		verticalOffsetSPBox->setRange(-50, 50, 2);
 		verticalOffsetSPBox->setValue(0);
-		KisDoubleSpinBoxPluralHelper::install(verticalOffsetSPBox, [](double value) {
-		    return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-		});
-
+        KisSpinBoxI18nHelper::setText(verticalOffsetSPBox,
+                                      i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
 		divisionLevelSPBox->setRange(0, 25, 0);
 		divisionLevelSPBox->setValue(2);

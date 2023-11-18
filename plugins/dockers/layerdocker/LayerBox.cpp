@@ -78,7 +78,6 @@
 #include "kis_color_filter_combo.h"
 #include "kis_node_filter_proxy_model.h"
 #include <KisSpinBoxI18nHelper.h>
-#include <KisDoubleSpinBoxPluralHelper.h>
 
 #include "kis_selection.h"
 #include "kis_processing_applicator.h"
@@ -207,13 +206,11 @@ LayerBox::LayerBox()
     m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
     if (cfg.sliderLabels()) {
         m_wdgLayerBox->opacityLabel->hide();
-        KisDoubleSpinBoxPluralHelper::install(m_wdgLayerBox->doubleOpacity, [](double value) {
-            return i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%", value);
-        });
+        KisSpinBoxI18nHelper::setText(m_wdgLayerBox->doubleOpacity,
+                                      i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
     } else {
-        KisDoubleSpinBoxPluralHelper::install(m_wdgLayerBox->doubleOpacity, [](double value) {
-            return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-        });
+        KisSpinBoxI18nHelper::setText(m_wdgLayerBox->doubleOpacity,
+                                      i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     }
 
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));

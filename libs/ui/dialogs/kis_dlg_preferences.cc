@@ -44,7 +44,6 @@
 #include <kis_icon.h>
 #include <KisPart.h>
 #include <KisSpinBoxI18nHelper.h>
-#include <KisDoubleSpinBoxPluralHelper.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceEngine.h>
@@ -1368,21 +1367,15 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     const double totalRAM = cfg.totalRAM();
     lblTotalMemory->setText(KFormat().formatByteSize(totalRAM * 1024 * 1024, 0, KFormat::IECBinaryDialect, KFormat::UnitMegaByte));
 
-    KisDoubleSpinBoxPluralHelper::install(sliderMemoryLimit, [](double value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(sliderMemoryLimit, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     sliderMemoryLimit->setRange(1, 100, 2);
     sliderMemoryLimit->setSingleStep(0.01);
 
-    KisDoubleSpinBoxPluralHelper::install(sliderPoolLimit, [](double value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(sliderPoolLimit, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     sliderPoolLimit->setRange(0, 20, 2);
     sliderPoolLimit->setSingleStep(0.01);
 
-    KisDoubleSpinBoxPluralHelper::install(sliderUndoLimit, [](double value) {
-        return i18nc("{n} is the number value, % is the percent sign", "{n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(sliderUndoLimit, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     sliderUndoLimit->setRange(0, 50, 2);
     sliderUndoLimit->setSingleStep(0.01);
 

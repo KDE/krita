@@ -11,7 +11,7 @@
 #include <kis_slider_spin_box.h>
 #include <kis_color_button.h>
 #include <kis_icon_utils.h>
-#include <KisDoubleSpinBoxPluralHelper.h>
+#include <KisSpinBoxI18nHelper.h>
 
 #include "KisGradientColorEditor.h"
 
@@ -90,17 +90,15 @@ KisGradientColorEditor::KisGradientColorEditor(QWidget *parent)
 
     m_d->opacitySlider = new KisDoubleSliderSpinBox;
     m_d->opacitySlider->setRange(0, 100, 2);
-    KisDoubleSpinBoxPluralHelper::install(m_d->opacitySlider, [](double value) {
-        return i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(m_d->opacitySlider,
+                                  i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
     m_d->opacitySlider->setVisible(false);
     connect(m_d->opacitySlider, SIGNAL(valueChanged(double)), this, SIGNAL(opacityChanged(qreal)));
 
     m_d->positionSlider = new KisDoubleSliderSpinBox;
     m_d->positionSlider->setRange(0, 100, 2);
-    KisDoubleSpinBoxPluralHelper::install(m_d->positionSlider, [](double value) {
-        return i18nc("{n} is the number value, % is the percent sign", "Position: {n}%", value);
-    });
+    KisSpinBoxI18nHelper::setText(m_d->positionSlider,
+                                  i18nc("{n} is the number value, % is the percent sign", "Position: {n}%"));
     connect(m_d->positionSlider, SIGNAL(valueChanged(double)), this, SIGNAL(positionChanged(qreal)));
 
     QHBoxLayout *colorTypeButtonsLayout = new QHBoxLayout;

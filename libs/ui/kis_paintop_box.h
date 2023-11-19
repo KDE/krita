@@ -149,6 +149,7 @@ private Q_SLOTS:
     void slotSlider2Changed();
     void slotSlider3Changed();
     void slotSlider4Changed();
+    void slotSlider5Changed();
     void slotToolChanged(KoCanvasController* canvas);
     void slotPreviousFavoritePreset();
     void slotNextFavoritePreset();
@@ -199,7 +200,7 @@ private:
     KisPaintOpPresetsChooserPopup*      m_presetsChooserPopup {0};
     KisViewManager*                     m_viewManager {0};
     KisPopupButton*                     m_workspaceWidget {0};
-    KisWidgetChooser*                   m_sliderChooser[4];
+    KisWidgetChooser*                   m_sliderChooser[5];
     QMap<KoID, KisPaintOpConfigWidget*> m_paintopOptionWidgets;
     KisFavoriteResourceManager*         m_favoriteResourceManager {0};
     QToolButton*                        m_reloadButton {0};

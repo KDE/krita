@@ -2026,6 +2026,16 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+	<Action name="brushslider5">
+      <icon></icon>
+      <text>Brush option slider 5</text>
+      <whatsThis></whatsThis>
+      <toolTip>Brush option slider 5</toolTip>
+      <iconText>Brush option slider 5</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="mirror_actions">
       <icon></icon>
       <text>Mirror</text>

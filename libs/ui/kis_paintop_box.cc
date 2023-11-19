@@ -246,7 +246,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
         sliderWidth = 120 * logicalDpiX() / 96;
     }
 
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 5; ++i) {
         m_sliderChooser[i] = new KisWidgetChooser(i + 1);
 
         KisDoubleSliderSpinBox* slOpacity;
@@ -415,6 +415,13 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_sliderChooser[3], SLOT(updateThemedIcons()));
 
     action = new QWidgetAction(this);
+    KisActionRegistry::instance()->propertizeAction("brushslider5", action);
+    viewManager->actionCollection()->addAction("brushslider5", action);
+    action->setDefaultWidget(m_sliderChooser[4]);
+    connect(action, SIGNAL(triggered()), m_sliderChooser[4], SLOT(showPopupWidget()));
+    connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_sliderChooser[4], SLOT(updateThemedIcons()));
+
+    action = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("next_favorite_preset", action);
     viewManager->actionCollection()->addAction("next_favorite_preset", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotNextFavoritePreset()));
@@ -550,6 +557,11 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     connect(m_sliderChooser[3]->getWidget<KisDoubleSliderSpinBox>("size")                  , SIGNAL(valueChanged(qreal)), SLOT(slotSlider4Changed()));
     connect(m_sliderChooser[3]->getWidget<KisAngleSelector>("rotation")                    , SIGNAL(angleChanged(qreal)), SLOT(slotSlider4Changed()));
     connect(m_sliderChooser[3]->getWidget<KisMultipliersDoubleSliderSpinBox>("patternsize"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider4Changed()));
+    connect(m_sliderChooser[4]->getWidget<KisDoubleSliderSpinBox>("opacity")               , SIGNAL(valueChanged(qreal)), SLOT(slotSlider5Changed()));
+    connect(m_sliderChooser[4]->getWidget<KisDoubleSliderSpinBox>("flow")                  , SIGNAL(valueChanged(qreal)), SLOT(slotSlider5Changed()));
+    connect(m_sliderChooser[4]->getWidget<KisDoubleSliderSpinBox>("size")                  , SIGNAL(valueChanged(qreal)), SLOT(slotSlider5Changed()));
+    connect(m_sliderChooser[4]->getWidget<KisAngleSelector>("rotation")                    , SIGNAL(angleChanged(qreal)), SLOT(slotSlider5Changed()));
+    connect(m_sliderChooser[4]->getWidget<KisMultipliersDoubleSliderSpinBox>("patternsize"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider5Changed()));
 
     connect(m_resourceProvider, SIGNAL(sigFGColorUsed(KoColor)), m_favoriteResourceManager, SLOT(slotAddRecentColor(KoColor)));
 
@@ -589,7 +601,7 @@ KisPaintopBox::~KisPaintopBox()
     delete toolbarMenuXMirror;
     delete toolbarMenuYMirror;
 
-    for (int i = 0; i < 3; ++i)
+    for (int i = 0; i < 5; ++i)
     {
         delete m_sliderChooser[i];
     }
@@ -874,7 +886,7 @@ void KisPaintopBox::setWidgetState(int flags)
 
 void KisPaintopBox::setSliderValue(const QString& sliderID, qreal value)
 {
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 5; ++i) {
         KisDoubleSliderSpinBox* slider = m_sliderChooser[i]->getWidget<KisDoubleSliderSpinBox>(sliderID);
         KisSignalsBlocker b(slider);
 
@@ -890,7 +902,7 @@ void KisPaintopBox::setSliderValue(const QString& sliderID, qreal value)
 
 void KisPaintopBox::setMultiplierSliderValue(const QString& sliderID, qreal value)
 {
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 5; ++i) {
         KisMultipliersDoubleSliderSpinBox* slider = m_sliderChooser[i]->getWidget<KisMultipliersDoubleSliderSpinBox>(sliderID);
         if (!slider) continue;
         KisSignalsBlocker b(slider);
@@ -901,7 +913,7 @@ void KisPaintopBox::setMultiplierSliderValue(const QString& sliderID, qreal valu
 
 void KisPaintopBox::setAngleSliderValue(const QString& sliderID, qreal value)
 {
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 5; ++i) {
         KisAngleSelector* slider = m_sliderChooser[i]->getWidget<KisAngleSelector>(sliderID);
         if (!slider) continue;
         KisSignalsBlocker b(slider);
@@ -1273,6 +1285,11 @@ void KisPaintopBox::slotSlider3Changed()
 void KisPaintopBox::slotSlider4Changed()
 {
     sliderChanged(3);
+}
+
+void KisPaintopBox::slotSlider5Changed()
+{
+    sliderChanged(4);
 }
 
 void KisPaintopBox::slotToolChanged(KoCanvasController* canvas)

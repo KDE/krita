@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-17 02:26+0000\n"
-"PO-Revision-Date: 2023-11-11 07:24\n"
+"PO-Revision-Date: 2023-11-19 03:43\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -7524,70 +7524,70 @@ msgstr "使对象之间的垂直距离相等"
 #, kde-format
 msgctxt "action"
 msgid "Rotate 90° CW"
-msgstr "顺时针旋转 90°"
+msgstr "旋转 (顺时针 90°)"
 
 #. i18n: context: toolTip @ Action (object_transform_rotate_90_cw), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:202
 #, kde-format
 msgctxt "action"
 msgid "Rotate object 90° clockwise"
-msgstr "将对象顺时针旋转 90°"
+msgstr "旋转对象 (顺时针 90°)"
 
 #. i18n: context: text @ Action (object_transform_rotate_90_ccw), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:211
 #, kde-format
 msgctxt "action"
 msgid "Rotate 90° CCW"
-msgstr "逆时针旋转 90°"
+msgstr "旋转 (逆时针 90°)"
 
 #. i18n: context: toolTip @ Action (object_transform_rotate_90_ccw), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:212
 #, kde-format
 msgctxt "action"
 msgid "Rotate object 90° counterclockwise"
-msgstr "将对象逆时针旋转 90°"
+msgstr "旋转对象 (逆时针 90°)"
 
 #. i18n: context: text @ Action (object_transform_rotate_180), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:221
 #, kde-format
 msgctxt "action"
 msgid "Rotate 180°"
-msgstr "旋转 180°"
+msgstr "旋转 (180°)"
 
 #. i18n: context: toolTip @ Action (object_transform_rotate_180), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:222
 #, kde-format
 msgctxt "action"
 msgid "Rotate object 180°"
-msgstr "将对象旋转 180°"
+msgstr "旋转对象 (180°)"
 
 #. i18n: context: text @ Action (object_transform_mirror_horizontally), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:231
 #, kde-format
 msgctxt "action"
 msgid "Mirror Horizontally"
-msgstr "水平翻转"
+msgstr "翻转 (水平)"
 
 #. i18n: context: toolTip @ Action (object_transform_mirror_horizontally), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:232
 #, kde-format
 msgctxt "action"
 msgid "Mirror object horizontally"
-msgstr "水平翻转对象"
+msgstr "翻转对象 (水平)"
 
 #. i18n: context: text @ Action (object_transform_mirror_vertically), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:241
 #, kde-format
 msgctxt "action"
 msgid "Mirror Vertically"
-msgstr "垂直翻转"
+msgstr "翻转 (垂直)"
 
 #. i18n: context: toolTip @ Action (object_transform_mirror_vertically), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:242
 #, kde-format
 msgctxt "action"
 msgid "Mirror object vertically"
-msgstr "垂直翻转对象"
+msgstr "翻转对象 (垂直)"
 
 #. i18n: context: text @ Action (object_transform_reset), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:251
@@ -8467,7 +8467,7 @@ msgstr "降低笔刷颜色饱和度"
 #, kde-format
 msgctxt "action"
 msgid "Shift brush color hue clockwise"
-msgstr "笔刷颜色顺时针旋转色相"
+msgstr "笔刷颜色旋转色相 (顺时针)"
 
 #. i18n: context: text @ Action (shift_brush_color_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shift_brush_color_counter_clockwise), Actions (Painting), ActionCollection (Krita)
@@ -8479,7 +8479,7 @@ msgstr "笔刷颜色顺时针旋转色相"
 #, kde-format
 msgctxt "action"
 msgid "Shift brush color hue counter-clockwise"
-msgstr "笔刷颜色逆时针旋转色相"
+msgstr "笔刷颜色旋转色相 (逆时针)"
 
 #. i18n: context: text @ Action (make_brush_color_redder), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (make_brush_color_redder), Actions (Painting), ActionCollection (Krita)
@@ -8735,7 +8735,7 @@ msgstr "使用笔压感应"
 #, kde-format
 msgctxt "action"
 msgid "Horizontal Mirror Tool"
-msgstr "水平镜像绘画模式"
+msgstr "水平对称绘画模式"
 
 #. i18n: context: text @ Action (vmirror_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (vmirror_action), Actions (Painting), ActionCollection (Krita)
@@ -8747,7 +8747,7 @@ msgstr "水平镜像绘画模式"
 #, kde-format
 msgctxt "action"
 msgid "Vertical Mirror Tool"
-msgstr "垂直镜像绘画模式"
+msgstr "垂直对称绘画模式"
 
 #. i18n: context: text @ Action (mirrorX-hideDecorations), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorX-hideDecorations), Actions (Painting), ActionCollection (Krita)
@@ -8759,7 +8759,7 @@ msgstr "垂直镜像绘画模式"
 #, kde-format
 msgctxt "action"
 msgid "Hide Mirror X Line"
-msgstr "隐藏 X 轴显示"
+msgstr "隐藏 X 对称轴"
 
 #. i18n: context: text @ Action (mirrorY-hideDecorations), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorY-hideDecorations), Actions (Painting), ActionCollection (Krita)
@@ -8771,7 +8771,7 @@ msgstr "隐藏 X 轴显示"
 #, kde-format
 msgctxt "action"
 msgid "Hide Mirror Y Line"
-msgstr "隐藏 Y 轴显示"
+msgstr "隐藏 Y 对称轴"
 
 #. i18n: context: text @ Action (mirrorX-lock), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorX-lock), Actions (Painting), ActionCollection (Krita)
@@ -8783,7 +8783,7 @@ msgstr "隐藏 Y 轴显示"
 #, kde-format
 msgctxt "action"
 msgid "Lock X Line"
-msgstr "锁定 X 轴"
+msgstr "锁定 X 对称轴"
 
 #. i18n: context: text @ Action (mirrorY-lock), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorY-lock), Actions (Painting), ActionCollection (Krita)
@@ -8795,7 +8795,7 @@ msgstr "锁定 X 轴"
 #, kde-format
 msgctxt "action"
 msgid "Lock Y Line"
-msgstr "锁定 Y 轴"
+msgstr "锁定 Y 对称轴"
 
 #. i18n: context: text @ Action (mirrorX-moveToCenter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorX-moveToCenter), Actions (Painting), ActionCollection (Krita)
@@ -8807,7 +8807,7 @@ msgstr "锁定 Y 轴"
 #, kde-format
 msgctxt "action"
 msgid "Move to Canvas Center X"
-msgstr "移动 X 轴至画布中心"
+msgstr "移动 X 对称轴至画布中线"
 
 #. i18n: context: text @ Action (mirrorY-moveToCenter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorY-moveToCenter), Actions (Painting), ActionCollection (Krita)
@@ -8819,7 +8819,7 @@ msgstr "移动 X 轴至画布中心"
 #, kde-format
 msgctxt "action"
 msgid "Move to Canvas Center Y"
-msgstr "移动 Y 轴至画布中心"
+msgstr "移动 Y 对称轴至画布中线"
 
 #. i18n: context: text @ Action (toggle-selection-overlay-mode), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:659
@@ -10941,14 +10941,14 @@ msgstr "翻转帧位置"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Columns"
-msgstr "镜像多列帧"
+msgstr "翻转多列帧"
 
 #. i18n: context: toolTip @ Action (mirror_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2307
 #, kde-format
 msgctxt "action"
 msgid "Mirror columns' position"
-msgstr "镜像多列帧位置"
+msgstr "翻转多列帧位置"
 
 #. i18n: context: text @ Action (clear_animation_cache), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2317
@@ -12155,7 +12155,7 @@ msgstr "小波分解"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer Hori&zontally"
-msgstr "水平翻转图层(&Z)"
+msgstr "翻转图层 (水平)(&Z)"
 
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
@@ -12165,14 +12165,14 @@ msgstr "水平翻转图层(&Z)"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer Horizontally"
-msgstr "水平翻转图层"
+msgstr "翻转图层 (水平)"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3184
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer &Vertically"
-msgstr "垂直翻转图层(&V)"
+msgstr "翻转图层 (垂直)(&V)"
 
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
@@ -12182,7 +12182,7 @@ msgstr "垂直翻转图层(&V)"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer Vertically"
-msgstr "垂直翻转图层"
+msgstr "翻转图层 (垂直)"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3196
@@ -12206,7 +12206,7 @@ msgstr "旋转图层"
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Layer 90° to the Right"
-msgstr "向右旋转图层 90°(&L)"
+msgstr "旋转图层 (向右 90°)(&L)"
 
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
@@ -12216,14 +12216,14 @@ msgstr "向右旋转图层 90°(&L)"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer 90° to the Right"
-msgstr "向右旋转图层 90°"
+msgstr "旋转图层 (向右 90°)"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3220
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer &90° to the Left"
-msgstr "向左旋转图层 &90°"
+msgstr "旋转图层 (向左 &90°)"
 
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
@@ -12233,14 +12233,14 @@ msgstr "向左旋转图层 &90°"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer 90° to the Left"
-msgstr "向左旋转图层 90°"
+msgstr "旋转图层 (向左 90°)"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3232
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer &180°"
-msgstr "旋转图层 &180°"
+msgstr "旋转图层 (&180°)"
 
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
@@ -12250,7 +12250,7 @@ msgstr "旋转图层 &180°"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer 180°"
-msgstr "旋转图层 180°"
+msgstr "旋转图层 (180°)"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3244
@@ -13909,7 +13909,7 @@ msgstr "镜像显示 - 以光标位置为轴"
 #, kde-format
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr "镜像显示 - 以画布中心为轴"
+msgstr "镜像显示 - 以画布中线为轴"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
@@ -14638,7 +14638,7 @@ msgstr "斜切图像"
 #, kde-format
 msgctxt "action"
 msgid "&Mirror Image Horizontally"
-msgstr "水平翻转图像(&M)"
+msgstr "翻转图像 (水平)(&M)"
 
 #. i18n: context: toolTip @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
@@ -14648,14 +14648,14 @@ msgstr "水平翻转图像(&M)"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Horizontally"
-msgstr "水平镜像图像"
+msgstr "翻转图像 (水平)"
 
 #. i18n: context: text @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1293
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image &Vertically"
-msgstr "垂直翻转图像(&V)"
+msgstr "翻转图像 (垂直)(&V)"
 
 #. i18n: context: toolTip @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
@@ -14665,7 +14665,7 @@ msgstr "垂直翻转图像(&V)"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Vertically"
-msgstr "垂直镜像图像"
+msgstr "翻转图像 (垂直)"
 
 #. i18n: context: text @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1305
@@ -16036,7 +16036,7 @@ msgstr "将线段更改为直线"
 #: libs/flake/commands/KoPathShapeMarkerCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Set marker"
-msgstr "设定记号"
+msgstr "设定标记"
 
 #: libs/flake/commands/KoShapeAlignCommand.cpp:71
 msgctxt "(qtundo-format)"
@@ -24502,10 +24502,9 @@ msgstr "视图缩放算法："
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
-#, fuzzy, kde-format
-#| msgid "Assistant Tool"
+#, kde-format
 msgid "Assistants Mode:"
-msgstr "辅助尺工具：建立笔刷吸附所用的形状和透视等辅助尺"
+msgstr "辅助尺模式："
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:172
@@ -24516,26 +24515,27 @@ msgid ""
 "              </p><p>Changing the pixmap cache size requires a restart.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>用于排除辅助尺相关的性能和绘制错误。\n"
+"              </p><p>更改像素映射缓存大小后需要重新启动才能生效。</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:179
 #, kde-format
 msgid "Direct (Recommended)"
-msgstr ""
+msgstr "直接绘制 (推荐)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:184
-#, fuzzy, kde-format
-#| msgid "Animation Cache"
+#, kde-format
 msgid "Pixmap Cache"
-msgstr "动画缓存"
+msgstr "像素映射缓存"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:189
-#, fuzzy, kde-format
-#| msgid "Use large pixmap cache"
+#, kde-format
 msgid "Large Pixmap Cache"
-msgstr "使用大像素映射缓存"
+msgstr "大像素映射缓存"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:203
@@ -29073,22 +29073,22 @@ msgstr "删除图层节点"
 #: libs/ui/kis_node_manager.cpp:1038
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
-msgstr "沿 X 轴翻转图层"
+msgstr "翻转图层 (沿 X 轴)"
 
 #: libs/ui/kis_node_manager.cpp:1040
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask X"
-msgstr "沿 X 轴翻转蒙版"
+msgstr "翻转蒙版 (沿 X 轴)"
 
 #: libs/ui/kis_node_manager.cpp:1051
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
-msgstr "沿 Y 轴翻转图层"
+msgstr "翻转图层 (沿 Y 轴)"
 
 #: libs/ui/kis_node_manager.cpp:1053
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Y"
-msgstr "沿 Y 轴翻转蒙版"
+msgstr "翻转蒙版 (沿 Y 轴)"
 
 #: libs/ui/kis_node_manager.cpp:1061
 msgctxt "(qtundo-format)"
@@ -34511,19 +34511,19 @@ msgstr "˚"
 #, kde-format
 msgctxt "Flips the angle horizontally, around the vertical axis"
 msgid "Flip the angle horizontally"
-msgstr "水平翻转角度"
+msgstr "翻转角度 (水平)"
 
 #: libs/widgets/KisAngleSelector.cpp:229
 #, kde-format
 msgctxt "Flips the angle vertically, around the horizontal axis"
 msgid "Flip the angle vertically"
-msgstr "垂直翻转角度"
+msgstr "翻转角度 (垂直)"
 
 #: libs/widgets/KisAngleSelector.cpp:236
 #, kde-format
 msgctxt "Flips the angle horizontally and vertically"
 msgid "Flip the angle horizontally and vertically"
-msgstr "水平和垂直翻转角度"
+msgstr "翻转角度 (水平和垂直)"
 
 #: libs/widgets/KisAngleSelector.cpp:245
 #, kde-format
@@ -42953,12 +42953,12 @@ msgstr "SeExpr 脚本"
 #: plugins/extensions/rotateimage/rotateimage.cc:120
 msgctxt "(qtundo-format)"
 msgid "Mirror Image Vertically"
-msgstr "垂直翻转图像"
+msgstr "翻转图像 (垂直)"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:129
 msgctxt "(qtundo-format)"
 msgid "Mirror Image Horizontally"
-msgstr "水平翻转图像"
+msgstr "翻转图像 (水平)"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:144
 #, kde-format
@@ -43182,14 +43182,14 @@ msgstr "S-Pen 手势右划"
 #, kde-format
 msgctxt "action"
 msgid "S-Pen Gesture Circle Clockwise"
-msgstr "S-Pen 手势顺时针画圈"
+msgstr "S-Pen 手势画圈 (顺时针)"
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
 #, kde-format
 msgctxt "action"
 msgid "S-Pen Gesture Circle Counter-Clockwise"
-msgstr "S-Pen 手势逆时针画圈"
+msgstr "S-Pen 手势画圈 (逆时针)"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:112
@@ -43258,13 +43258,13 @@ msgstr "左划"
 #: plugins/extensions/spensettings/wdg_spensettings.ui:120
 #, kde-format
 msgid "Circle Clockwise"
-msgstr "顺时针旋转"
+msgstr "画圈 (顺时针)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:127
 #, kde-format
 msgid "Circle Counterclockwise"
-msgstr "逆时针旋转"
+msgstr "画圈 (逆时针)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:154
@@ -56743,27 +56743,27 @@ msgstr "此工具只适用于矢量图层。要移动颜料图层，请使用移
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1292
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
-msgstr "顺时针旋转对象90°"
+msgstr "旋转对象 (顺时针 90°)"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1296
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
-msgstr "逆时针旋转对象90°"
+msgstr "旋转对象 (逆时针 90°)"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
-msgstr "旋转对象180°"
+msgstr "旋转对象 (180°)"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1304
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
-msgstr "水平翻转对象"
+msgstr "翻转对象 (水平)"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1308
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
-msgstr "垂直翻转对象"
+msgstr "翻转对象 (垂直)"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1312
 msgctxt "(qtundo-format)"
@@ -56883,7 +56883,7 @@ msgstr "按住 Ctrl 以从中心调整大小。"
 #: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:44
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
-msgstr "按下 Alt 以 45 度为单位旋转。"
+msgstr "按下 Alt 以每步 45 度旋转。"
 
 #: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
 msgctxt "(qtundo-format)"
@@ -58871,22 +58871,22 @@ msgstr "透视变形"
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:132
 #, kde-format
 msgid "Mirror Horizontal"
-msgstr "水平翻转"
+msgstr "翻转 (水平)"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:133
 #, kde-format
 msgid "Mirror Vertical"
-msgstr "垂直翻转"
+msgstr "翻转 (垂直)"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
 #, kde-format
 msgid "Rotate 90 degrees Clockwise"
-msgstr "顺时针旋转 90 度"
+msgstr "旋转 (顺时针 90 度)"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:135
 #, kde-format
 msgid "Rotate 90 degrees CounterClockwise"
-msgstr "逆时针旋转 90 度"
+msgstr "旋转 (逆时针 90 度)"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:137
 #, kde-format
@@ -59201,7 +59201,7 @@ msgstr "画布之外"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:782
 #, kde-format
 msgid "Rotate around X-Axis"
-msgstr "围绕 X 轴旋转"
+msgstr "旋转 (围绕 X 轴)"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateY)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aYBox)
@@ -59209,7 +59209,7 @@ msgstr "围绕 X 轴旋转"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:817
 #, kde-format
 msgid "Rotate around Y-Axis"
-msgstr "围绕 Y 轴旋转"
+msgstr "旋转 (围绕 Y 轴)"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateZ)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aZBox)
@@ -59217,7 +59217,7 @@ msgstr "围绕 Y 轴旋转"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:861
 #, kde-format
 msgid "Rotate around Z-Axis"
-msgstr "围绕 Z 轴旋转"
+msgstr "旋转 (围绕 Z 轴)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_rotateZ)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:842
@@ -59297,25 +59297,25 @@ msgstr "垂直斜切"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1268
 #, kde-format
 msgid "Flip selection horizontally"
-msgstr "水平翻转对象"
+msgstr "翻转对象 (水平)"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipYButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1293
 #, kde-format
 msgid "Flip selection vertically"
-msgstr "垂直翻转对象"
+msgstr "翻转对象 (垂直)"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, rotateCCWButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1334
 #, kde-format
 msgid "Rotate selection counter-clockwise 90 degrees"
-msgstr "逆时针 90 度旋转对象"
+msgstr "旋转所选对象 (逆时针 90 度)"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, rotateCWButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1359
 #, kde-format
 msgid "Rotate the selection clockwise 90 degrees"
-msgstr "顺时针 90 度旋转对象"
+msgstr "旋转所选对象 (顺时针 90 度)"
 
 #. i18n: ectx: property (text), widget (QLabel, flexibilityLabel)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1438
@@ -59684,10 +59684,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgid ""
-#~ "<html><head/><body><p>This should be enabled if you see any artifacts "
-#~ "while using assistants.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>如果在使用辅助尺时出现显示错误，请启用此选项。</p></"
-#~ "body></html>"

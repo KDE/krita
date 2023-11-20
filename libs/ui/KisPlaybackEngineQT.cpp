@@ -61,6 +61,7 @@ PlaybackDriver::PlaybackDriver(QObject *parent)
     , m_fps(24)
     , m_dropFrames(true)
 {
+    m_playbackLoop.setTimerType(Qt::PreciseTimer);
     connect( &m_playbackLoop, SIGNAL(timeout()), this, SIGNAL(throttledShowFrame()) );
 }
 

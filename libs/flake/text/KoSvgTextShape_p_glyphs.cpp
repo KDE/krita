@@ -497,56 +497,57 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         hb_font_t_up font(hb_ft_font_create_referenced(currentGlyph.ftface));
         CursorInfo cursorInfo = charResult.cursorInfo;
         qreal lineHeight = (charResult.fontAscent-charResult.fontDescent) * bitmapScale;
-            if (isHorizontal) {
-                hb_position_t run = 0;
-                hb_position_t rise = 1;
-                hb_position_t offset = 0;
-                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_CARET_RUN, &run);
-                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_CARET_RISE, &rise);
-                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_CARET_OFFSET, &offset);
-                qreal slope = 0;
-                if (run != 0 && rise !=0) {
-                    slope = double(run)/double(rise);
-                    if (offset == 0) {
-                        offset = (charResult.fontDescent * bitmapScale) * slope;
-                    }
+        qreal descender = charResult.fontDescent * bitmapScale;
+        if (isHorizontal) {
+            hb_position_t run = 0;
+            hb_position_t rise = 1;
+            hb_position_t offset = 0;
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_CARET_RUN, &run);
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_CARET_RISE, &rise);
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_CARET_OFFSET, &offset);
+            qreal slope = 0;
+            if (run != 0 && rise !=0) {
+                slope = double(run)/double(rise);
+                if (offset == 0) {
+                    offset = descender * slope;
                 }
-                QLineF caret(QPointF(), QPointF(lineHeight*slope, lineHeight));
-                caret.translate(-QPointF(-offset, -charResult.fontDescent* bitmapScale));
-                cursorInfo.caret = ftTF.map(glyphObliqueTf.map(caret));
-
-                QVector<QPointF> positions;
-                // Ligature caret list only uses direction to determine whether horizontal or vertical.
-                hb_direction_t dir = HB_DIRECTION_LTR;
-
-                uint numCarets = hb_ot_layout_get_ligature_carets(font.data(), dir, currentGlyph.index, 0, nullptr, nullptr);
-                for (uint i=0; i<numCarets; i++) {
-                    hb_position_t caretPos = 0;
-                    uint caretCount = 1;
-                    hb_ot_layout_get_ligature_carets(font.data(), dir, currentGlyph.index, 0, &caretCount, &caretPos);
-                    QPointF pos(caretPos, 0);
-                    positions.append(ftTF.map(pos));
-                }
-
-                cursorInfo.offsets = positions;
-            } else {
-                hb_position_t run = 1;
-                hb_position_t rise = 0;
-                hb_position_t offset = 0;
-                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_CARET_RUN, &run);
-                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_CARET_RISE, &rise);
-                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_CARET_OFFSET, &offset);
-                qreal slope = 0;
-                if (run != 0 && rise !=0) {
-                    slope = double(rise)/double(run);
-                    if (offset == 0) {
-                        offset = (charResult.fontDescent * bitmapScale) * slope;
-                    }
-                }
-                QLineF caret(QPointF(), QPointF(lineHeight, lineHeight*slope));
-                caret.translate(-QPointF(-charResult.fontDescent* bitmapScale, -offset));
-                cursorInfo.caret = ftTF.map(glyphObliqueTf.map(caret));
             }
+            QLineF caret(QPointF(), QPointF(lineHeight*slope, lineHeight));
+            caret.translate(-QPointF(-offset, -descender));
+            cursorInfo.caret = ftTF.map(glyphObliqueTf.map(caret));
+
+            QVector<QPointF> positions;
+            // Ligature caret list only uses direction to determine whether horizontal or vertical.
+            hb_direction_t dir = HB_DIRECTION_LTR;
+
+            uint numCarets = hb_ot_layout_get_ligature_carets(font.data(), dir, currentGlyph.index, 0, nullptr, nullptr);
+            for (uint i=0; i<numCarets; i++) {
+                hb_position_t caretPos = 0;
+                uint caretCount = 1;
+                hb_ot_layout_get_ligature_carets(font.data(), dir, currentGlyph.index, 0, &caretCount, &caretPos);
+                QPointF pos(caretPos, 0);
+                positions.append(ftTF.map(pos));
+            }
+
+            cursorInfo.offsets = positions;
+        } else {
+            hb_position_t run = 1;
+            hb_position_t rise = 0;
+            hb_position_t offset = 0;
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_CARET_RUN, &run);
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_CARET_RISE, &rise);
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_CARET_OFFSET, &offset);
+            qreal slope = 0;
+            if (run != 0 && rise !=0) {
+                slope = double(rise)/double(run);
+                if (offset == 0) {
+                    offset = descender * slope;
+                }
+            }
+            QLineF caret(QPointF(), QPointF(lineHeight, lineHeight*slope));
+            caret.translate(-QPointF(-descender, -offset));
+            cursorInfo.caret = ftTF.map(glyphObliqueTf.map(caret));
+        }
 
         charResult.cursorInfo = cursorInfo;
     }

@@ -515,7 +515,17 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                     // ascent and descent, so we 'normalize' the ascender and descender to be half the total height.
                     qreal height = ascender - fontExtends.descender;
                     ascender = height*0.5;
-                    descender = -(height*0.5);
+                    descender = -ascender;
+                }
+                if (ascender == 0 && descender == 0) {
+                    ascender = face->size->metrics.ascender;
+                    descender = face->size->metrics.descender;
+                    qreal height = ascender - descender;
+                    lineGap = face->size->metrics.height - height;
+                    if (!isHorizontal) {
+                        ascender = height * 0.5;
+                        descender = -ascender;
+                    }
                 }
 
                 for (int j=start; j<start+length; j++) {

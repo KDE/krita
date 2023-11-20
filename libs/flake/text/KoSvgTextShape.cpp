@@ -487,9 +487,17 @@ QPainterPath KoSvgTextShape::cursorForPos(int pos, QLineF &caret, QColor &color,
     if (d->isBidi && bidiFlagSize > 0) {
         int sign = res.cursorInfo.rtl ? -1 : 1;
         double bidiFlagHalf = bidiFlagSize * 0.5;
-        // TODO: handle top-to-bottom once text-orientation is tackled.
-        QPointF point3 = QPointF(caret.p2().x() + (sign * bidiFlagHalf), caret.p2().y() + bidiFlagHalf);
-        QPointF point4 = QPointF(point3.x() - (sign * bidiFlagHalf),point3.y() + bidiFlagHalf);
+        QPointF point3;
+        QPointF point4;
+        if (writingMode() == KoSvgText::HorizontalTB) {
+            qreal slope = bidiFlagHalf * (caret.dx()/ caret.dy());
+            point3 = QPointF(caret.p2().x() + slope + (sign * bidiFlagHalf), caret.p2().y() + bidiFlagHalf);
+            point4 = QPointF(point3.x() + slope - (sign * bidiFlagHalf),point3.y() + bidiFlagHalf);
+        } else {
+            qreal slope = bidiFlagHalf * (caret.dy()/ caret.dx());
+            point3 = QPointF(caret.p2().x() - bidiFlagHalf, caret.p2().y() - slope + (sign * bidiFlagHalf));
+            point4 = QPointF(point3.x() - bidiFlagHalf, point3.y() - slope - (sign * bidiFlagHalf));
+        }
         p.lineTo(tf.map(point3));
         p.lineTo(tf.map(point4));
     }

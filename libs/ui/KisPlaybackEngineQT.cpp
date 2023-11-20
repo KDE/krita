@@ -152,7 +152,7 @@ struct FrameMeasure {
 
 struct KisPlaybackEngineQT::Private {
 public:
-    Private(KisPlaybackEngineQT* p_self)
+    Private()
         : driver(new PlaybackDriver())
     {
     }
@@ -162,14 +162,11 @@ public:
 
     QScopedPointer<PlaybackDriver> driver;
     FrameMeasure measure;
-
-private:
-    KisPlaybackEngineQT* self;
 };
 
 KisPlaybackEngineQT::KisPlaybackEngineQT(QObject *parent)
     : KisPlaybackEngine(parent)
-    , m_d(new Private(this))
+    , m_d(new Private())
 {
 }
 

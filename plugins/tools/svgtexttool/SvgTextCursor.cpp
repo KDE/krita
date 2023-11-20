@@ -1012,6 +1012,10 @@ void SvgTextCursor::updateCursor()
     if (!d->blockQueryUpdates) {
         qApp->inputMethod()->update(Qt::ImQueryInput);
     }
+    if (d->shape) {
+        QRectF rect = d->shape->shapeToDocument(d->cursorShape.boundingRect());
+        d->canvas->canvasController()->ensureVisible(d->canvas->viewConverter()->documentToView(rect).adjusted(-1, -1, 1, 1));
+    }
     blinkCursor();
 }
 

@@ -466,7 +466,7 @@ QPainterPath KoSvgTextShape::defaultCursorShape()
     return p;
 }
 
-QPainterPath KoSvgTextShape::cursorForPos(int pos, QLineF &caret, double bidiFlagSize)
+QPainterPath KoSvgTextShape::cursorForPos(int pos, QLineF &caret, QColor &color, double bidiFlagSize)
 {
     if (d->result.isEmpty() || d->cursorPos.isEmpty() || pos < 0 || pos >= d->cursorPos.size()) {
         return defaultCursorShape();
@@ -478,6 +478,7 @@ QPainterPath KoSvgTextShape::cursorForPos(int pos, QLineF &caret, double bidiFla
     CharacterResult res = d->result.at(cursorPos.cluster);
 
     const QTransform tf = res.finalTransform();
+    color = res.cursorInfo.color;
     caret = res.cursorInfo.caret;
     caret.translate(res.cursorInfo.offsets.value(cursorPos.offset, QPointF()));
 

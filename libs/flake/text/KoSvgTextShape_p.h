@@ -51,6 +51,7 @@ struct CursorInfo {
     QVector<QPointF> offsets; ///< The advance offsets for each grapheme index.
     bool rtl = false; ///< Whether the current glyph is right-to-left, as opposed to the markup.
     bool isWordBoundary = false;
+    QColor color; ///< Which color the current position has.
 };
 
 struct CursorPos {

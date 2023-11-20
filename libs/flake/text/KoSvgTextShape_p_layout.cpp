@@ -14,6 +14,7 @@
 #include "KoFontRegistry.h"
 #include "KoSvgTextChunkShapeLayoutInterface.h"
 #include "KoSvgTextProperties.h"
+#include "KoColorBackground.h"
 
 #include <FlakeDebug.h>
 #include <KoPathShape.h>
@@ -279,6 +280,12 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
             KoSvgText::LineHeightInfo lineHeight = properties.propertyOrDefault(KoSvgTextProperties::LineHeightId).value<KoSvgText::LineHeightInfo>();
             bool overflowWrap = KoSvgText::OverflowWrap(properties.propertyOrDefault(KoSvgTextProperties::OverflowWrapId).toInt()) != KoSvgText::OverflowWrapNormal;
 
+            KoColorBackground *b = dynamic_cast<KoColorBackground *>(chunk.format.associatedShapeWrapper().shape()->background().data());
+            QColor fillColor;
+            if (b)
+            {
+                fillColor = b->color();
+            }
             if (!letterSpacing.isAuto) {
                 tabInfo.extraSpacing += letterSpacing.customValue;
             }
@@ -356,6 +363,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
                 }
 
                 cr.cursorInfo.isWordBoundary = (wordBreaks[start + i] == WORDBREAK_BREAK);
+                cr.cursorInfo.color = fillColor;
 
                 if (text.at(start + i) == QChar::Tabulation) {
                     tabSizeInfo.insert(start + i, tabInfo);

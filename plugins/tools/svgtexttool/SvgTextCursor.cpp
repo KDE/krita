@@ -100,6 +100,7 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     bool cursorVisible = false;
 
     QPainterPath cursorShape;
+    QColor cursorColor;
     QRectF oldCursorRect;
     QLineF cursorCaret;
     QLineF anchorCaret;
@@ -313,6 +314,34 @@ void SvgTextCursor::deselectText()
     setPos(d->pos, d->pos);
 }
 
+
+// To determine the best contrast color for the given caret
+// we do a simplified linearization and calculate the luma.
+// Krita has the ability to precisely calculate this value,
+// but that seems overkill when all we want to know is whether
+// it passes the 80% gray threshold.
+static QMap<qreal, qreal> sRgbTRCToLinear {
+    {0.0, 0.0},
+    {0.1, 0.01002},
+    {0.2, 0.0331},
+    {0.3, 0.07324},
+    {0.4, 0.13287},
+    {0.5, 0.21404},
+    {0.6, 0.31855},
+    {0.7, 0.44799},
+    {0.8, 0.60383},
+    {0.9, 0.78741},
+    {1.0, 1.0}
+};
+
+static QColor bgColorForCaret(QColor c) {
+    qreal r = c.redF() >= 1? 1.0: sRgbTRCToLinear.upperBound(c.redF()).value();
+    qreal g = c.greenF() >= 1? 1.0: sRgbTRCToLinear.upperBound(c.greenF()).value();
+    qreal b = c.blueF() >= 1? 1.0: sRgbTRCToLinear.upperBound(c.redF()).value();
+    qreal lumi = (r * .2126) + (g * .7152) + (b * .0722);
+    return lumi > 0.60383? QColor(0, 0, 0, 64) : QColor(255, 255, 255, 64);
+}
+
 void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
 {
     if (d->shape) {
@@ -328,7 +357,12 @@ void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
             if (d->cursorVisible) {
                 QPen pen;
                 pen.setCosmetic(true);
-                pen.setColor(Qt::black);
+                QColor c = d->cursorColor.isValid()? d->cursorColor: Qt::black;
+                pen.setColor(bgColorForCaret(c));
+                pen.setWidth(d->cursorWidth + 2);
+                gc.setPen(pen);
+                gc.drawPath(d->cursorShape);
+                pen.setColor(c);
                 pen.setWidth(d->cursorWidth);
                 gc.setPen(pen);
                 gc.drawPath(d->cursorShape);
@@ -970,7 +1004,8 @@ void SvgTextCursor::updateCursor()
         d->posIndex = d->shape->indexForPos(d->pos);
         d->anchorIndex = d->shape->indexForPos(d->anchor);
     }
-    d->cursorShape = d->shape? d->shape->cursorForPos(d->pos, d->cursorCaret): QPainterPath();
+    d->cursorColor = QColor();
+    d->cursorShape = d->shape? d->shape->cursorForPos(d->pos, d->cursorCaret, d->cursorColor): QPainterPath();
     d->cursorFlash.start();
     d->cursorFlashLimit.start();
     d->cursorVisible = false;
@@ -984,7 +1019,7 @@ void SvgTextCursor::updateSelection()
 {
     if (d->shape) {
         d->oldSelectionRect = d->shape->shapeToDocument(d->selection.boundingRect());
-        d->shape->cursorForPos(d->anchor, d->anchorCaret);
+        d->shape->cursorForPos(d->anchor, d->anchorCaret, d->cursorColor);
         d->selection = d->shape->selectionBoxes(d->pos, d->anchor);
         emit updateCursorDecoration(d->shape->shapeToDocument(d->selection.boundingRect()) | d->oldSelectionRect);
     }

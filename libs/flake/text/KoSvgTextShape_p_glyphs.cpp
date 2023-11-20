@@ -507,6 +507,9 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                 qreal slope = 0;
                 if (run != 0 && rise !=0) {
                     slope = double(run)/double(rise);
+                    if (offset == 0) {
+                        offset = (charResult.fontDescent * bitmapScale) * slope;
+                    }
                 }
                 QLineF caret(QPointF(), QPointF(lineHeight*slope, lineHeight));
                 caret.translate(-QPointF(-offset, -charResult.fontDescent* bitmapScale));
@@ -536,6 +539,9 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                 qreal slope = 0;
                 if (run != 0 && rise !=0) {
                     slope = double(rise)/double(run);
+                    if (offset == 0) {
+                        offset = (charResult.fontDescent * bitmapScale) * slope;
+                    }
                 }
                 QLineF caret(QPointF(), QPointF(lineHeight, lineHeight*slope));
                 caret.translate(-QPointF(-charResult.fontDescent* bitmapScale, -offset));

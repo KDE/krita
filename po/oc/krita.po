@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-17 00:40+0000\n"
+"POT-Creation-Date: 2023-11-20 00:40+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -15922,28 +15922,41 @@ msgctxt "action"
 msgid "Brush option slider 4"
 msgstr "Opcions"
 
-#. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: text @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: toolTip @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: text @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: toolTip @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2031 krita/kritamenu.action:2033
 #: krita/kritamenu.action:2034
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Brush option slider 5"
+msgstr "Opcions"
+
+#. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
+#: krita/kritamenu.action:2041 krita/kritamenu.action:2043
+#: krita/kritamenu.action:2044
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Mirror"
 msgstr "Vertical :"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2041
+#: krita/kritamenu.action:2051
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Layouts"
 msgstr "Filtre"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2043
+#: krita/kritamenu.action:2053
 #, fuzzy, kde-format
 #| msgid "Select Font"
 msgctxt "action"
@@ -15956,8 +15969,8 @@ msgstr "Seleccionar una poliça"
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2050 krita/kritamenu.action:2052
-#: krita/kritamenu.action:2053
+#: krita/kritamenu.action:2060 krita/kritamenu.action:2062
+#: krita/kritamenu.action:2063
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Workspaces"
@@ -26581,7 +26594,7 @@ msgid "path"
 msgstr "Camin"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:476
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:483
 #, fuzzy, kde-format
 msgid "Brush Editor"
 msgstr "Paramètres"
@@ -29586,8 +29599,8 @@ msgstr "Filtre"
 msgid "Brush composite"
 msgstr "Paramètres"
 
-#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
-#: libs/ui/kis_paintop_box.cc:1384
+#: libs/ui/kis_paintop_box.cc:1365 libs/ui/kis_paintop_box.cc:1387
+#: libs/ui/kis_paintop_box.cc:1401
 #, fuzzy, kde-format
 msgid ""
 "%1\n"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-17 00:40+0000\n"
+"POT-Creation-Date: 2023-11-20 00:40+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -16973,14 +16973,28 @@ msgctxt "action"
 msgid "Brush option slider 4"
 msgstr "ਸ਼ਕਲ"
 
-#. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: text @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: toolTip @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: text @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: toolTip @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2031 krita/kritamenu.action:2033
 #: krita/kritamenu.action:2034
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgctxt "action"
+msgid "Brush option slider 5"
+msgstr "ਸ਼ਕਲ"
+
+#. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
+#: krita/kritamenu.action:2041 krita/kritamenu.action:2043
+#: krita/kritamenu.action:2044
 #, fuzzy, kde-format
 #| msgid "Minimal View"
 msgctxt "action"
@@ -16988,7 +17002,7 @@ msgid "Mirror"
 msgstr "ਘੱਟੋ-ਘੱਟ ਝਲਕ"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2041
+#: krita/kritamenu.action:2051
 #, fuzzy, kde-format
 #| msgid "Page Layout..."
 msgctxt "action"
@@ -16996,7 +17010,7 @@ msgid "Layouts"
 msgstr "ਸਫ਼ਾ ਲੇਆਉਟ..."
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2043
+#: krita/kritamenu.action:2053
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgctxt "action"
@@ -17009,8 +17023,8 @@ msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2050 krita/kritamenu.action:2052
-#: krita/kritamenu.action:2053
+#: krita/kritamenu.action:2060 krita/kritamenu.action:2062
+#: krita/kritamenu.action:2063
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgctxt "action"
@@ -28507,7 +28521,7 @@ msgid "path"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:476
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:483
 #, fuzzy, kde-format
 #| msgid "Show master shapes"
 msgid "Brush Editor"
@@ -31825,8 +31839,8 @@ msgstr "ਰੇਖਾ ਰੰਗ"
 msgid "Brush composite"
 msgstr "ਸ਼ਕਲ"
 
-#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
-#: libs/ui/kis_paintop_box.cc:1384
+#: libs/ui/kis_paintop_box.cc:1365 libs/ui/kis_paintop_box.cc:1387
+#: libs/ui/kis_paintop_box.cc:1401
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid ""

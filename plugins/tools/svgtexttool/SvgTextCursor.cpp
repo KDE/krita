@@ -754,12 +754,8 @@ void SvgTextCursor::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
 {
     Q_UNUSED(type);
     Q_UNUSED(shape);
-    if (d->shape->indexForPos(d->pos) != d->posIndex) {
-        d->pos = d->shape->posForIndex(d->posIndex);
-    }
-    if (d->shape->indexForPos(d->anchor) != d->anchorIndex) {
-        d->anchor = d->shape->posForIndex(d->anchorIndex);
-    }
+    d->pos = d->shape->posForIndex(d->posIndex);
+    d->anchor = d->shape->posForIndex(d->anchorIndex);
     updateCursor();
     updateSelection();
     updateInputMethodItemTransform();

@@ -321,6 +321,16 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
     processInputMethodEvent(event);
 }
 
+void KisOpenGLCanvas2::focusInEvent(QFocusEvent *event)
+{
+    processFocusInEvent(event);
+}
+
+void KisOpenGLCanvas2::focusOutEvent(QFocusEvent *event)
+{
+    processFocusOutEvent(event);
+}
+
 void KisOpenGLCanvas2::hideEvent(QHideEvent *e)
 {
     QOpenGLWidget::hideEvent(e);

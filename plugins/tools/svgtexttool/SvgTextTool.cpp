@@ -744,6 +744,18 @@ void SvgTextTool::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
+void SvgTextTool::focusInEvent(QFocusEvent *event)
+{
+    m_textCursor.focusIn();
+    event->accept();
+}
+
+void SvgTextTool::focusOutEvent(QFocusEvent *event)
+{
+    m_textCursor.focusOut();
+    event->accept();
+}
+
 void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     if (canvas()->shapeManager()->shapeAt(event->point) != selectedShape()) {

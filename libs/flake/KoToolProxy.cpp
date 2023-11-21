@@ -344,6 +344,16 @@ void KoToolProxy::inputMethodEvent(QInputMethodEvent *event)
     if (d->activeTool) d->activeTool->inputMethodEvent(event);
 }
 
+void KoToolProxy::focusInEvent(QFocusEvent *event)
+{
+    if (d->activeTool) d->activeTool->focusInEvent(event);
+}
+
+void KoToolProxy::focusOutEvent(QFocusEvent *event)
+{
+    if (d->activeTool) d->activeTool->focusOutEvent(event);
+}
+
 QMenu *KoToolProxy::popupActionsMenu()
 {
     return d->activeTool ? d->activeTool->popupActionsMenu() : 0;

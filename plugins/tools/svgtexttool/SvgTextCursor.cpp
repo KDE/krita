@@ -997,6 +997,19 @@ bool SvgTextCursor::isAddingCommand() const
     return d->isAddingCommand;
 }
 
+void SvgTextCursor::focusIn()
+{
+    d->cursorFlash.start();
+    d->cursorFlashLimit.start();
+    d->cursorVisible = false;
+    blinkCursor();
+}
+
+void SvgTextCursor::focusOut()
+{
+    stopBlinkCursor();
+}
+
 void SvgTextCursor::updateCursor()
 {
     if (d->shape) {
@@ -1006,9 +1019,7 @@ void SvgTextCursor::updateCursor()
     }
     d->cursorColor = QColor();
     d->cursorShape = d->shape? d->shape->cursorForPos(d->pos, d->cursorCaret, d->cursorColor): QPainterPath();
-    d->cursorFlash.start();
-    d->cursorFlashLimit.start();
-    d->cursorVisible = false;
+
     if (!d->blockQueryUpdates) {
         qApp->inputMethod()->update(Qt::ImQueryInput);
     }
@@ -1016,7 +1027,12 @@ void SvgTextCursor::updateCursor()
         QRectF rect = d->shape->shapeToDocument(d->cursorShape.boundingRect());
         d->canvas->canvasController()->ensureVisible(d->canvas->viewConverter()->documentToView(rect).adjusted(-1, -1, 1, 1));
     }
-    blinkCursor();
+    if (d->canvas->canvasWidget()->hasFocus()) {
+        d->cursorFlash.start();
+        d->cursorFlashLimit.start();
+        d->cursorVisible = false;
+        blinkCursor();
+    }
 }
 
 void SvgTextCursor::updateSelection()

@@ -238,3 +238,13 @@ void KisCanvasWidgetBase::processInputMethodEvent(QInputMethodEvent *event)
 {
     m_d->toolProxy->inputMethodEvent(event);
 }
+
+void KisCanvasWidgetBase::processFocusInEvent(QFocusEvent *event)
+{
+    m_d->toolProxy->focusInEvent(event);
+}
+
+void KisCanvasWidgetBase::processFocusOutEvent(QFocusEvent *event)
+{
+    m_d->toolProxy->focusOutEvent(event);
+}

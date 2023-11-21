@@ -159,6 +159,12 @@ public:
     /// the cursor is currently adding a command
     bool isAddingCommand() const;
 
+    /// Turns on blinking cursor.
+    void focusIn();
+
+    /// Stops blinking cursor.
+    void focusOut();
+
 Q_SIGNALS:
 
     void updateCursorDecoration(QRectF updateRect);

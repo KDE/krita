@@ -151,6 +151,16 @@ void KoToolBase::inputMethodEvent(QInputMethodEvent * event)
     event->accept();
 }
 
+void KoToolBase::focusInEvent(QFocusEvent *event)
+{
+    event->ignore();
+}
+
+void KoToolBase::focusOutEvent(QFocusEvent *event)
+{
+    event->ignore();
+}
+
 void KoToolBase::customPressEvent(KoPointerEvent * event)
 {
     event->ignore();

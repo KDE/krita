@@ -59,6 +59,9 @@ public:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
+    void focusInEvent(QFocusEvent *event) override;
+    void focusOutEvent(QFocusEvent *event) override;
+
     /// reimplemented from KoToolBase
     void activate(const QSet<KoShape *> &shapes) override;
     /// reimplemented from KoToolBase

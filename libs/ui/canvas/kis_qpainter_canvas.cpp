@@ -150,6 +150,16 @@ void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)
     processInputMethodEvent(event);
 }
 
+void KisQPainterCanvas::focusInEvent(QFocusEvent *event)
+{
+    processFocusInEvent(event);
+}
+
+void KisQPainterCanvas::focusOutEvent(QFocusEvent *event)
+{
+    processFocusOutEvent(event);
+}
+
 void KisQPainterCanvas::hideEvent(QHideEvent *e)
 {
     QWidget::hideEvent(e);

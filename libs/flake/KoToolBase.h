@@ -39,6 +39,7 @@ class QDragMoveEvent;
 class QDragLeaveEvent;
 class QDropEvent;
 class QTouchEvent;
+class QFocusEvent;
 class QMenu;
 
 /**
@@ -185,6 +186,18 @@ public:
      * @param event the input method event.
      */
     virtual void inputMethodEvent(QInputMethodEvent *event);
+
+    /**
+     * This passes on the focusInEven from the canvas widget, which can be used to activate
+     * animating decorations (like a cursor blink effect in the text tool).
+     */
+    virtual void focusInEvent(QFocusEvent *event);
+
+    /**
+     * This passes on the focusInEven from the canvas widget, which can be used to deactivate
+     * animating decorations (like a cursor blink effect in the text tool).
+     */
+    virtual void focusOutEvent(QFocusEvent *event);
 
     /**
      * Called when (one of) a custom device buttons is pressed.

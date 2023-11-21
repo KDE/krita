@@ -15,6 +15,7 @@
 class QColor;
 class QImage;
 class QInputMethodEvent;
+class QFocusEvent;
 class QVariant;
 
 class KisCoordinatesConverter;
@@ -78,6 +79,8 @@ protected:
      */
     QVariant processInputMethodQuery(Qt::InputMethodQuery query) const;
     void processInputMethodEvent(QInputMethodEvent *event);
+    void processFocusInEvent(QFocusEvent *event);
+    void processFocusOutEvent(QFocusEvent *event);
     void notifyConfigChanged();
 
     /// To be implemented by the derived canvas

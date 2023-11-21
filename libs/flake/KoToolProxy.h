@@ -29,6 +29,7 @@ class QDragMoveEvent;
 class QDragLeaveEvent;
 class QDropEvent;
 class QTouchEvent;
+class QFocusEvent;
 class QPainter;
 class QPointF;
 class QMenu;
@@ -95,6 +96,12 @@ public:
 
     /// Forwarded to the current KoToolBase
     void inputMethodEvent(QInputMethodEvent *event);
+
+    /// Forwarded to the current KoToolBase
+    void focusInEvent(QFocusEvent *event);
+
+    /// Forwarded to the current KoToolBase
+    void focusOutEvent(QFocusEvent *event);
 
     /// Forwarded to the current KoToolBase
     QMenu* popupActionsMenu();

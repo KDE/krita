@@ -47,6 +47,9 @@ public: // QWidget overrides
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
     void inputMethodEvent(QInputMethodEvent *event) override;
 
+    void focusInEvent(QFocusEvent *event) override;
+    void focusOutEvent(QFocusEvent *event) override;
+
     void hideEvent(QHideEvent *event) override;
     void showEvent(QShowEvent *event) override;
 

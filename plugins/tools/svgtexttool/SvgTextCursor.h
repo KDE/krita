@@ -185,7 +185,8 @@ private:
     SvgTextRemoveCommand *removeSelectionImpl(KUndo2Command *parent = 0);
 
 
-    void updateCursor();
+    /// update the cursor shape. First update will block ensuring the canvas is visible so setShape won't cause this.
+    void updateCursor(bool firstUpdate = false);
     void updateSelection();
     void updateIMEDecoration();
     void addCommandToUndoAdapter(KUndo2Command *cmd);

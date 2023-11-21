@@ -155,7 +155,7 @@ void SvgTextCursor::setShape(KoSvgTextShape *textShape)
     }
     d->pos = 0;
     d->anchor = 0;
-    updateCursor();
+    updateCursor(true);
     updateSelection();
 }
 
@@ -1013,7 +1013,7 @@ void SvgTextCursor::focusOut()
     stopBlinkCursor();
 }
 
-void SvgTextCursor::updateCursor()
+void SvgTextCursor::updateCursor(bool firstUpdate)
 {
     if (d->shape) {
         d->oldCursorRect = d->shape->shapeToDocument(d->cursorShape.boundingRect());
@@ -1030,7 +1030,7 @@ void SvgTextCursor::updateCursor()
         // Mockcanvas in the tests has neither.
         return;
     }
-    if (d->shape) {
+    if (d->shape && !firstUpdate) {
         QRectF rect = d->shape->shapeToDocument(d->cursorShape.boundingRect());
         d->canvas->canvasController()->ensureVisible(d->canvas->viewConverter()->documentToView(rect).adjusted(-1, -1, 1, 1));
     }

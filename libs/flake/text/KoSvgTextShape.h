@@ -163,24 +163,22 @@ public:
     int wordRight(int pos, bool visual = false);
 
     /**
-     * @brief nextCluster
+     * @brief nextIndex
      * Return the first cursor position with a
-     * higher cluster or same cluster and higher offset.
+     * higher string index.
      * @param pos the cursor position.
      * @return the first pos with a higher cluster
      * or same cluster and higher offset.
      */
-    int nextCluster(int pos);
+    int nextIndex(int pos);
 
     /**
-     * @brief previousCluster
-     * Return the first pos which has a lower cluster
-     * or same cluster and lower offset.
+     * @brief previousIndex
+     * Return the first pos which has a lower string index.
      * @param pos the cursor position.
-     * @return the first cursor position with a lower cluster
-     * or same cluster and lower offset..
+     * @return the first cursor position with a lower index.
      */
-    int previousCluster(int pos);
+    int previousIndex(int pos);
 
     /**
      * @brief nextLine

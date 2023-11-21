@@ -219,46 +219,31 @@ int KoSvgTextShape::wordRight(int pos, bool visual)
     return wordEnd(pos);
 }
 
-int KoSvgTextShape::nextCluster(int pos)
+int KoSvgTextShape::nextIndex(int pos)
 {
     if (d->cursorPos.isEmpty()) {
         return pos;
     }
-    int currentCluster = d->cursorPos.at(pos).cluster;
-    int currentOffset = d->cursorPos.at(pos).offset;
+    int currentIndex = d->cursorPos.at(pos).index;
 
     for (int i = pos; i < d->cursorPos.size(); i++) {
-        int cluster = d->cursorPos.at(i).cluster;
-        int offset = d->cursorPos.at(i).offset;
-        if ((cluster > currentCluster)
-                || (cluster == currentCluster && offset > currentOffset)) {
+        if (d->cursorPos.at(i).index > currentIndex) {
             return i;
         }
     }
     return pos;
 }
 
-int KoSvgTextShape::previousCluster(int pos)
+int KoSvgTextShape::previousIndex(int pos)
 {
     if (d->cursorPos.isEmpty()) {
         return pos;
     }
-    int currentCluster = d->cursorPos.at(pos).cluster;
-    int currentOffset = d->cursorPos.at(pos).offset;
-    bool skipFirst = d->cursorPos.at(pos).synthetic;
+    int currentIndex = d->cursorPos.at(pos).index;
 
     for (int i = pos; i >= 0; i--) {
-        int cluster = d->cursorPos.at(i).cluster;
-        int offset = d->cursorPos.at(i).offset;
-        if ((cluster < currentCluster)
-                || (cluster == currentCluster && offset < currentOffset)) {
-            if (!skipFirst) {
-                return i;
-            } else {
-                currentCluster = cluster;
-                currentOffset = offset;
-                skipFirst = false;
-            }
+        if (d->cursorPos.at(i).index < currentIndex) {
+            return i;
         }
     }
     return pos;

@@ -71,7 +71,7 @@ void SvgTextCursorTest::test_ltr()
     QVERIFY(cursor.getPos() == 0);
     cursor.setPos(5, 5);
 
-    cursor.moveCursor(mode, result);
+    cursor.moveCursor(mode);
     QCOMPARE(cursor.getPos(), result);
 }
 
@@ -122,7 +122,7 @@ void SvgTextCursorTest::test_rtl()
     QVERIFY(cursor.getPos() == 0);
     cursor.setPos(10, 10);
 
-    cursor.moveCursor(mode, result);
+    cursor.moveCursor(mode);
     QCOMPARE(cursor.getPos(), result);
 }
 void SvgTextCursorTest::test_ttb_rl_data()
@@ -172,7 +172,7 @@ void SvgTextCursorTest::test_ttb_rl()
     QVERIFY(cursor.getPos() == 0);
     cursor.setPos(5, 5);
 
-    cursor.moveCursor(mode, result);
+    cursor.moveCursor(mode);
     QCOMPARE(cursor.getPos(), result);
 }
 void SvgTextCursorTest::test_ttb_lr_data()
@@ -222,7 +222,7 @@ void SvgTextCursorTest::test_ttb_lr()
     QVERIFY(cursor.getPos() == 0);
     cursor.setPos(5, 5);
 
-    cursor.moveCursor(mode, result);
+    cursor.moveCursor(mode);
     QCOMPARE(cursor.getPos(), result);
 }
 
@@ -264,6 +264,49 @@ void SvgTextCursorTest::test_text_remove_command()
 
     cmd->undo();
     QCOMPARE(test2, textShape->plainText());
+}
+
+void SvgTextCursorTest::test_text_remove_dedicated_data()
+{
+    QTest::addColumn<int>("pos");
+    QTest::addColumn<SvgTextCursor::MoveMode>("mode1");
+    QTest::addColumn<SvgTextCursor::MoveMode>("mode2");
+    QTest::addColumn<int>("length");
+
+    QTest::addRow("backspace") << 11 << SvgTextCursor::MovePreviousChar << SvgTextCursor::MoveNone << 1;
+    QTest::addRow("delete") << 10 << SvgTextCursor::MoveNone << SvgTextCursor::MoveNextChar << 1;
+    QTest::addRow("start-of-word") << 5 << SvgTextCursor::MoveWordStart << SvgTextCursor::MoveNone << 1;
+    QTest::addRow("end-of-word") << 5 << SvgTextCursor::MoveNone << SvgTextCursor::MoveWordEnd << 4;
+    QTest::addRow("end-of-line") << 5 << SvgTextCursor::MoveNone << SvgTextCursor::MoveLineEnd << 5;
+    QTest::addRow("delete-line") << 5 << SvgTextCursor::MoveLineStart << SvgTextCursor::MoveLineEnd << 10;
+}
+
+void SvgTextCursorTest::test_text_remove_dedicated()
+{
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    QString ref ("<text style=\"inline-size:50.0; font-size:10.0;font-family:Deja Vu Sans\">The quick brown fox jumps over the lazy dog.</text>");
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    QFETCH(int, pos);
+    QFETCH(SvgTextCursor::MoveMode, mode1);
+    QFETCH(SvgTextCursor::MoveMode, mode2);
+    QFETCH(int, length);
+
+    MockCanvas canvas;
+    SvgTextCursor cursor(&canvas);
+    cursor.setShape(textShape);
+    cursor.setPos(pos, pos);
+    cursor.moveCursor(mode1);
+    int posA = textShape->indexForPos(cursor.getPos());
+    cursor.setPos(pos, pos);
+    cursor.moveCursor(mode2);
+    int posB = textShape->indexForPos(cursor.getPos());
+    int posStart = qMin(posA, posB);
+    int posEnd = qMax(posA, posB);
+
+    QCOMPARE(posEnd - posStart, length);
+
 }
 
 SIMPLE_TEST_MAIN(SvgTextCursorTest)

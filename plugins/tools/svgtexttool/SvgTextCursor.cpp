@@ -128,7 +128,10 @@ SvgTextCursor::SvgTextCursor(KoCanvasBase *canvas) :
     d(new Private)
 {
     d->canvas = canvas;
-    connect(d->canvas->canvasController()->proxyObject, SIGNAL(sizeChanged(QSize)), this, SLOT(updateInputMethodItemTransform()));
+    if (d->canvas->canvasController()) {
+        // Mockcanvas in the tests has no canvas controller.
+        connect(d->canvas->canvasController()->proxyObject, SIGNAL(sizeChanged(QSize)), this, SLOT(updateInputMethodItemTransform()));
+    }
 }
 
 SvgTextCursor::~SvgTextCursor()
@@ -720,6 +723,10 @@ void SvgTextCursor::stopBlinkCursor()
 
 void SvgTextCursor::updateInputMethodItemTransform()
 {
+    // Mockcanvas in the tests has no window.
+    if (!d->canvas->canvasWidget()) {
+        return;
+    }
     QPoint pos = d->canvas->canvasWidget()->mapTo(d->canvas->canvasWidget()->window(), QPoint());
     QTransform widgetToWindow = QTransform::fromTranslate(pos.x(), pos.y());
     QTransform inputItemTransform = widgetToWindow;
@@ -1023,6 +1030,10 @@ void SvgTextCursor::updateCursor()
     if (!d->blockQueryUpdates) {
         qApp->inputMethod()->update(Qt::ImQueryInput);
     }
+    if (!(d->canvas->canvasWidget() && d->canvas->canvasController())) {
+        // Mockcanvas in the tests has neither.
+        return;
+    }
     if (d->shape) {
         QRectF rect = d->shape->shapeToDocument(d->cursorShape.boundingRect());
         d->canvas->canvasController()->ensureVisible(d->canvas->viewConverter()->documentToView(rect).adjusted(-1, -1, 1, 1));
@@ -1102,10 +1113,10 @@ int SvgTextCursor::moveModeResult(SvgTextCursor::MoveMode &mode, int &pos, bool 
         newPos = d->shape->posDown(pos, visual);
         break;
     case MovePreviousChar:
-        newPos = d->shape->previousCluster(pos);
+        newPos = d->shape->previousIndex(pos);
         break;
     case MoveNextChar:
-        newPos = d->shape->nextCluster(pos);
+        newPos = d->shape->nextIndex(pos);
         break;
     case MovePreviousLine:
         newPos = d->shape->previousLine(pos);
@@ -1130,14 +1141,14 @@ int SvgTextCursor::moveModeResult(SvgTextCursor::MoveMode &mode, int &pos, bool 
     case MoveWordStart:
         newPos = d->shape->wordStart(pos);
         if (newPos == pos) {
-            newPos = d->shape->previousCluster(pos);
+            newPos = d->shape->previousIndex(pos);
             newPos = d->shape->wordStart(newPos);
         }
         break;
     case MoveWordEnd:
         newPos = d->shape->wordEnd(pos);
         if (newPos == pos) {
-            newPos = d->shape->nextCluster(pos);
+            newPos = d->shape->nextIndex(pos);
             newPos = d->shape->wordEnd(newPos);
         }
         break;

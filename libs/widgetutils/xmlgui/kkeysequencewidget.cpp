@@ -25,6 +25,16 @@
 
 #include <kis_icon_utils.h>
 
+#ifdef Q_OS_WIN
+#include <config-request-possible-keys.h>
+
+#ifdef HAVE_REQUEST_POSSIBLE_KEYS
+#include <QtPlatformHeaders/QWindowsWindowFunctions>
+#endif
+
+#endif /* Q_OS_WIN */
+
+
 uint qHash(const QKeySequence &seq)
 {
     return qHash(seq.toString());
@@ -686,6 +696,25 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
 
         // We now have a valid key press.
         if (keyQt) {
+#if defined Q_OS_WIN && defined HAVE_REQUEST_POSSIBLE_KEYS
+            if (d->modifierKeys == (Qt::CTRL | Qt::ALT)) {
+                /**
+                 * We are falling down into AltGr trap on Widnows. Qt has incomprehensible
+                 * rules on translating AltGr-related key sequences into shortcuts, so
+                 * let's just ask Qt itself what it expects to receive as a shortcut :)
+                 */
+
+                const QList<int> vec = QWindowsWindowFunctions::requestPossibleKeys(e);
+                if (!vec.isEmpty()) {
+                    /**
+                     * Take the first element, which is usually the shortcut form the latin
+                     * layout of the keyboard
+                     */
+                    keyQt = vec.first();
+                }
+            } else
+#endif /* defined Q_OS_WIN && defined HAVE_REQUEST_POSSIBLE_KEYS */
+
             if ((keyQt == Qt::Key_Backtab) && (d->modifierKeys & Qt::SHIFT)) {
                 keyQt = Qt::Key_Tab | d->modifierKeys;
             } else if (KKeyServer::isShiftAsModifierAllowed(keyQt)) {

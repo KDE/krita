@@ -457,7 +457,13 @@ void KoToolProxy::processEvent(QEvent *e) const
             && d->activeTool
             && d->activeTool->isInTextMode()
             && (static_cast<QKeyEvent*>(e)->modifiers()==Qt::NoModifier ||
-                static_cast<QKeyEvent*>(e)->modifiers()==Qt::ShiftModifier)) {
+                static_cast<QKeyEvent*>(e)->modifiers()==Qt::ShiftModifier
+#ifdef Q_OS_WIN
+            // we should disallow AltGr shortcuts if a text box is in focus
+            || (static_cast<QKeyEvent*>(e)->modifiers()==(Qt::AltModifier | Qt::ControlModifier) &&
+                static_cast<QKeyEvent*>(e)->key() < Qt::Key_Escape)
+#endif
+            )) {
         e->accept();
     }
 }

@@ -89,8 +89,9 @@ void SvgInlineSizeChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
                 newInlineSize = m_initialInlineSize + 2.0 * mouseDelta;
             } else {
                 newInlineSize = m_initialInlineSize - 2.0 * mouseDelta;
-                diff = QPointF();
             }
+            diff = QPointF();
+            newPosition -= anchorDiff;
         } else {
             if (m_handleSide == Side::RightOrBottom) {
                 newInlineSize = m_initialInlineSize + mouseDelta;

@@ -237,12 +237,14 @@ parts:
         - libx11-6
         - zlib1g
         - colord
+        - colord-data
         - qml-module-org-kde-qqc2desktopstyle
         - libmlt7
         - libsdl2-2.0-0
         - libmlt++7
         - libtiff5
         - libimath-3-1-29
+        - python3-pyqt5
         stage-snaps:
         - ffmpeg-2204
         prime:

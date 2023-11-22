@@ -25,14 +25,7 @@
 
 #include <kis_icon_utils.h>
 
-#ifdef Q_OS_WIN
-#include <config-request-possible-keys.h>
-
-#ifdef HAVE_REQUEST_POSSIBLE_KEYS
-#include <QtPlatformHeaders/QWindowsWindowFunctions>
-#endif
-
-#endif /* Q_OS_WIN */
+#include <QtGui/private/qkeymapper_p.h>
 
 
 uint qHash(const QKeySequence &seq)
@@ -696,26 +689,27 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
 
         // We now have a valid key press.
         if (keyQt) {
-#if defined Q_OS_WIN && defined HAVE_REQUEST_POSSIBLE_KEYS
-            if (d->modifierKeys == (Qt::CTRL | Qt::ALT)) {
+            /**
+             * Here is the trap, which is different on every OS. On Widnows Qt
+             * has incomprehensible rules on translating AltGr-related key
+             * sequences into shortcuts. On macOS symbols may confuse Qt when
+             * using Cmd+Shift-based shortcuts. * So we should just ask Qt
+             * itself what it expects to receive as a shortcut :)
+             *
+             * That is exactly what Qt's QKeySequenceEdit does internally.
+             *
+             * TODO: in the future replace the whole widget with QKeySequenceEdit,
+             *       it uses QKeyMapper directly.
+             */
+            const QList<int> vec = QKeyMapper::possibleKeys(e);
+
+            if (!vec.isEmpty() && e->modifiers() != Qt::NoModifier) {
                 /**
-                 * We are falling down into AltGr trap on Widnows. Qt has incomprehensible
-                 * rules on translating AltGr-related key sequences into shortcuts, so
-                 * let's just ask Qt itself what it expects to receive as a shortcut :)
+                 * Take the first element, which is usually the shortcut form the latin
+                 * layout of the keyboard
                  */
-
-                const QList<int> vec = QWindowsWindowFunctions::requestPossibleKeys(e);
-                if (!vec.isEmpty()) {
-                    /**
-                     * Take the first element, which is usually the shortcut form the latin
-                     * layout of the keyboard
-                     */
-                    keyQt = vec.first();
-                }
-            } else
-#endif /* defined Q_OS_WIN && defined HAVE_REQUEST_POSSIBLE_KEYS */
-
-            if ((keyQt == Qt::Key_Backtab) && (d->modifierKeys & Qt::SHIFT)) {
+                keyQt = vec.first();
+            } else if ((keyQt == Qt::Key_Backtab) && (d->modifierKeys & Qt::SHIFT)) {
                 keyQt = Qt::Key_Tab | d->modifierKeys;
             } else if (KKeyServer::isShiftAsModifierAllowed(keyQt)) {
                 keyQt |= d->modifierKeys;

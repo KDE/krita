@@ -49,13 +49,15 @@ struct Q_DECL_HIDDEN InlineSizeInfo {
     double top;
     /// Bottom coord along the block-flow direction (left for h-rl, right for h-lr)
     double bottom;
+    /// Length of the dashes at the end.
+    double dashesLength;
     VisualAnchor anchor;
     /// Transformation from inline-size editor (writing-mode transformation) to shape
     QTransform editorTransform;
     /// Transformation from shape local to document
     QTransform shapeTransform;
 
-    [[nodiscard]] static inline std::optional<InlineSizeInfo> fromShape(KoSvgTextShape *const shape)
+    [[nodiscard]] static inline std::optional<InlineSizeInfo> fromShape(KoSvgTextShape *const shape, qreal dashesLength = 36.0)
     {
         const double inlineSize = getInlineSizePt(shape);
         if (inlineSize <= 0) {
@@ -139,12 +141,18 @@ struct Q_DECL_HIDDEN InlineSizeInfo {
             bottom = outline.right();
             break;
         }
+
+        QLineF scale = editorTransform.map(QLineF(0, 0, 0, 1.0));
+        scale = shape->absoluteTransformation().inverted().map(scale);
+        scale = editorTransform.inverted().map(scale);
+
         InlineSizeInfo ret{inlineSize,
                            baseline,
                            left,
                            right,
                            top,
                            bottom,
+                           dashesLength * scale.length(),
                            anchor,
                            editorTransform,
                            shape->absoluteTransformation()};
@@ -164,28 +172,17 @@ private:
 
     [[nodiscard]] inline QRectF boundingRectRaw() const
     {
-        return {QPointF(left, top), QPointF(right, bottom)};
+        return {QPointF(left, top), QPointF(right, bottom + dashesLength)};
     }
 
-    [[nodiscard]] inline QVector<QLineF> generateLineDashes(const QLineF line, qreal toPtMultiplier = 1.0, qreal dashLengthPixels = 4.0) const
+    [[nodiscard]] inline QLineF generateDashLine(const QLineF line, const qreal toPtMultiplier = 1.0, const qreal dashLengthPixels = 4.0) const
     {
-        QVector <QLineF> dashes;
-
         qreal dashL = dashLengthPixels * toPtMultiplier;
-        int pattern = 3;
-        int totalDashes = 3 * pattern;
-
         QPointF start = line.p2();
-        for (int i = 0; i <= totalDashes; i++) {
-            QLineF dash = line;
-            dash.setLength(line.length() + dashL * i);
-            dash.setP1(start);
-            if (i % pattern == 0) {
-                dashes.append(dash);
-            }
-            start = dash.p2();
-        }
-        return dashes;
+        QLineF dash = line;
+        dash.setLength(line.length() + dashL);
+        dash.setP1(start);
+        return dash;
     }
 
 public:
@@ -234,14 +231,14 @@ public:
         }
     }
 
-    [[nodiscard]] inline QVector<QLineF> endLineDashes(qreal pixelToPt) const
+    [[nodiscard]] inline QLineF endLineDashes(qreal pixelToPt) const
     {
         switch (endLineSide()) {
         case Side::LeftOrTop:
-            return generateLineDashes(editorTransform.map(leftLineRaw()), pixelToPt);
+            return generateDashLine(editorTransform.map(leftLineRaw()), pixelToPt, dashesLength);
         case Side::RightOrBottom:
         default:
-            return generateLineDashes(editorTransform.map(rightLineRaw()), pixelToPt);
+            return generateDashLine(editorTransform.map(rightLineRaw()), pixelToPt, dashesLength);
         }
     }
 
@@ -273,14 +270,14 @@ public:
         }
     }
 
-    [[nodiscard]] inline QVector<QLineF> startLineDashes(qreal pixelToPt) const
+    [[nodiscard]] inline QLineF startLineDashes(qreal pixelToPt) const
     {
         switch (endLineSide()) {
         case Side::LeftOrTop:
-            return generateLineDashes(editorTransform.map(rightLineRaw()), pixelToPt);
+            return generateDashLine(editorTransform.map(rightLineRaw()), pixelToPt, dashesLength);
         case Side::RightOrBottom:
         default:
-            return generateLineDashes(editorTransform.map(leftLineRaw()), pixelToPt);
+            return generateDashLine(editorTransform.map(leftLineRaw()), pixelToPt, dashesLength);
         }
     }
 

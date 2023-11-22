@@ -521,6 +521,10 @@ QRectF SvgTextTool::decorationsRect() const
         if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape)) {
             rect |= kisGrowRect(info->boundingRect(), handleRadius() * 2);
         }
+
+        if (canvas()->snapGuide()->isSnapping()) {
+            rect |= canvas()->snapGuide()->boundingRect();
+        }
     }
 
     rect |= m_hoveredShapeHighlightRect.boundingRect();
@@ -557,10 +561,9 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
                                                                                      : KisHandleStyle::highlightedPrimaryHandles());
             }
             qreal pxlToPt = canvas()->viewConverter()->viewToDocumentX(1.0);
+            QVector<qreal> dashPattern = {4, 8};
             handlePainter.drawHandleLine(info->startLineLocal());
-            Q_FOREACH(const QLineF dash, info->startLineDashes(pxlToPt)) {
-                handlePainter.drawHandleLine(dash);
-            }
+            handlePainter.drawHandleLine(info->startLineDashes(pxlToPt), 1.0, dashPattern);
 
             handlePainter.setHandleStyle(KisHandleStyle::secondarySelection());
             if (m_highlightItem == HighlightItem::InlineSizeEndHandle) {
@@ -568,9 +571,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
                                                                                      : KisHandleStyle::highlightedPrimaryHandles());
             }
             handlePainter.drawHandleLine(info->endLineLocal());
-            Q_FOREACH(const QLineF dash, info->endLineDashes(pxlToPt)) {
-                handlePainter.drawHandleLine(dash);
-            }
+            handlePainter.drawHandleLine(info->endLineDashes(pxlToPt), 1.0, dashPattern);
         }
 
         if (m_highlightItem == HighlightItem::MoveBorder) {

@@ -98,7 +98,7 @@ public:
     /**
      * Draws a line in the style of a handle with \p width indicating the thickness.
      */
-    void drawHandleLine(const QLineF &line, qreal width = 1.0);
+    void drawHandleLine(const QLineF &line, qreal width = 1.0, QVector<qreal> dashPattern = QVector<qreal>());
 
     /**
      * Draw a rotated handle representing the gradient handle

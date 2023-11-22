@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-20 00:40+0000\n"
+"POT-Creation-Date: 2023-11-22 00:40+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -13084,7 +13084,7 @@ msgstr "Ofbylding ymportearje"
 msgid "Import"
 msgstr "Ofbylding ymportearje"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1250
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1246
 #, fuzzy, kde-format
 msgid "&Convert"
 msgstr "&Ynvertearje"
@@ -13092,14 +13092,14 @@ msgstr "&Ynvertearje"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1224
+#: plugins/dockers/layerdocker/LayerBox.cpp:1220
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Selektearje"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1230
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1226
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -13121,7 +13121,7 @@ msgstr "Transformearje"
 msgid "S&plit"
 msgstr "Kleur nei alfa"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1259
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1255
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "Kleur nei alfa"
@@ -17003,21 +17003,21 @@ msgstr "Grutte"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:40
 #: libs/ui/animation/wdg_animationrenderer.ui:150
 #: libs/ui/animation/wdg_animationrenderer.ui:164
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:754
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:758
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:975
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:984
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1211
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1390
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1393
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1457
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1462
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:752
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:756
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:962
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:969
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1184
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1353
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1356
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1455
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
-#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:309
+#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:303
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:70
 #: libs/ui/widgets/kis_selection_options.cc:186
 #: libs/ui/widgets/kis_selection_options.cc:200
@@ -17039,10 +17039,10 @@ msgstr "Grutte"
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:44
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:40
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:41
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:70
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:75
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:64
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:69
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:74
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:80
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:86
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:78
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:31
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:26
@@ -17315,7 +17315,7 @@ msgid "<%1> (embedded)"
 msgstr ""
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:468
+#: libs/ui/dialogs/kis_dlg_preferences.cc:467
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -19883,7 +19883,7 @@ msgstr "Boarnetriemmen:"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
-#: libs/ui/dialogs/kis_dlg_preferences.cc:906
+#: libs/ui/dialogs/kis_dlg_preferences.cc:905
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
@@ -19908,7 +19908,7 @@ msgstr "Boarnetriemmen:"
 #: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:748
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
-#: libs/ui/widgets/kis_custom_image_widget.cc:296
+#: libs/ui/widgets/kis_custom_image_widget.cc:294
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
@@ -20151,8 +20151,8 @@ msgstr "M&etagegevens bewurkje..."
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1813
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1817
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1805
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1809
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:326
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -20939,7 +20939,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:488
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1841
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1833
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Warning(s):"
@@ -21904,8 +21904,8 @@ msgstr "Werjefte"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2108
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2110
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2100
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2102
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -21915,7 +21915,7 @@ msgstr "Werjefte"
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
-#: libs/ui/kis_paintop_box.cc:326
+#: libs/ui/kis_paintop_box.cc:320
 #: plugins/dockers/recorder/recorder_export.ui:467
 #, fuzzy, kde-format
 #| msgid "Fax:"
@@ -22008,8 +22008,8 @@ msgstr "Laach wiskje"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2078
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2080
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2070
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2072
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22417,7 +22417,7 @@ msgstr "Ferzje"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:284
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:623
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:830
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:38
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:37
 #: plugins/impex/webp/kis_wdg_options_webp.ui:424
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:441
 #, kde-format
@@ -22899,79 +22899,78 @@ msgstr "Boarne:"
 msgid "Layer Properties"
 msgstr "Laacheigenskippen"
 
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:99
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:750
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:98
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:749
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:767
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:770
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:775
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:795
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:805
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:810
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:936
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:971
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:980
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:989
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1120
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1125
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1197
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1202
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1207
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1216
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1221
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1340
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1345
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1386
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1462
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1467
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1472
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1372
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:789
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:798
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:802
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:926
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:959
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:966
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:973
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1102
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1105
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1175
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1178
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1181
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1188
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1191
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1308
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1311
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1350
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1427
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1430
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1370
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1374
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1378
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1384
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1468 libs/ui/kis_paintop_box.cc:283
-#: libs/ui/kis_paintop_box.cc:286
-#: libs/ui/widgets/kis_custom_image_widget.cc:100
-#: libs/ui/widgets/KisAutoLevelsWidget.cpp:18
-#: libs/widgets/kis_color_input.cpp:150 libs/widgets/kis_color_input.cpp:195
-#: plugins/dockers/layerdocker/LayerBox.cpp:215
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:50
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1461 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
+#: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
+#: libs/widgets/kis_color_input.cpp:149 libs/widgets/kis_color_input.cpp:190
+#: plugins/dockers/layerdocker/LayerBox.cpp:213
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:49
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:46
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:54
-#: plugins/impex/jpeg/kis_jpeg_export.cc:219
-#: plugins/impex/jpeg/kis_jpeg_export.cc:223
-#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:45
+#: plugins/impex/jpeg/kis_jpeg_export.cc:218
+#: plugins/impex/jpeg/kis_jpeg_export.cc:220
+#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:44
 #: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:53
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:60
-#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:37
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:26
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:31
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:36
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:41
-#: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:123
-#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:31
-#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:36
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:62
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:58
+#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:36
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:25
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:29
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:33
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:37
+#: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:122
+#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:30
+#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:33
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:61
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
-#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:34
+#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:283
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:131
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:129
 #, kde-format
 msgctxt "layer dimensions"
 msgid "(%1, %2), (%3, %4)"
 msgstr ""
 
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:165
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:166
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:167
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:168
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:169
 #, kde-format
 msgid "*varies*"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:210
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:208
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Layer Properties"
@@ -23029,32 +23028,32 @@ msgstr ""
 "In dokumint mei dizze namme bestiet al.\n"
 "Wolle jo it oerskriuwe?"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:918
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:909
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
 #, fuzzy, kde-format
 msgid "Not Implemented Yet"
 msgstr "Gjin"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1013
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:996
 #: libs/ui/layerstyles/wdglayerstyles.ui:52
 #, fuzzy, kde-format
 msgid "Inner Shadow"
 msgstr "Slachskaad"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1014
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:997
 #, kde-format
 msgid "Choke:"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1192
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1171
 #: libs/ui/layerstyles/wdglayerstyles.ui:60
 #, fuzzy, kde-format
 msgid "Outer Glow"
 msgstr "&Seenivo:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1248
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1217
 #, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
@@ -23073,17 +23072,17 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "Laach of masker duplisearje"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:209
+#: libs/ui/dialogs/kis_dlg_preferences.cc:208
 #, fuzzy, kde-format
 msgid "No Cursor"
 msgstr "Kursor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:210
+#: libs/ui/dialogs/kis_dlg_preferences.cc:209
 #, kde-format
 msgid "Tool Icon"
 msgstr "Ark-piktogram"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:210
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
@@ -23092,130 +23091,130 @@ msgstr "Ark-piktogram"
 msgid "Arrow"
 msgstr "Pylk"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:212
+#: libs/ui/dialogs/kis_dlg_preferences.cc:211
 #, fuzzy, kde-format
 msgid "Small Circle"
 msgstr "Lytse tegels"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:213
+#: libs/ui/dialogs/kis_dlg_preferences.cc:212
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, kde-format
 msgid "Crosshair"
 msgstr "Triedkrús"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:214
+#: libs/ui/dialogs/kis_dlg_preferences.cc:213
 #, fuzzy, kde-format
 #| msgid "Brush Outline"
 msgid "Triangle Righthanded"
 msgstr "Pinsielomtrek"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:214
 #, fuzzy, kde-format
 #| msgid "Brush Outline"
 msgid "Triangle Lefthanded"
 msgstr "Pinsielomtrek"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:215
 #, fuzzy, kde-format
 msgid "Black Pixel"
 msgstr "Kristal"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:216
 #, fuzzy, kde-format
 msgid "White Pixel"
 msgstr "Opsjes"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:220
+#: libs/ui/dialogs/kis_dlg_preferences.cc:219
 #, fuzzy, kde-format
 #| msgid "No Outline"
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "Gjin omlining"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:221
+#: libs/ui/dialogs/kis_dlg_preferences.cc:220
 #, fuzzy, kde-format
 msgid "Circle Outline"
 msgstr "Pinsielomtrek"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:222
+#: libs/ui/dialogs/kis_dlg_preferences.cc:221
 #, fuzzy, kde-format
 msgid "Preview Outline"
 msgstr "Foarbyld: "
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:223
+#: libs/ui/dialogs/kis_dlg_preferences.cc:222
 #, fuzzy, kde-format
 msgid "Tilt Outline"
 msgstr "Pinsielomtrek"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:247
+#: libs/ui/dialogs/kis_dlg_preferences.cc:246
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, fuzzy, kde-format
 msgid "Eraser"
 msgstr "Pikselgom"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:324
+#: libs/ui/dialogs/kis_dlg_preferences.cc:323
 #, fuzzy, kde-format
 msgid "On Touch Drag"
 msgstr "Linialen sjen litte"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:325
+#: libs/ui/dialogs/kis_dlg_preferences.cc:324
 #, fuzzy, kde-format
 msgid "On Click Drag"
 msgstr "Linialen sjen litte"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:326
+#: libs/ui/dialogs/kis_dlg_preferences.cc:325
 #, fuzzy, kde-format
 msgid "On Middle-Click Drag"
 msgstr "Linialen sjen litte"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:363
+#: libs/ui/dialogs/kis_dlg_preferences.cc:362
 #, kde-format
 msgid "Open default window"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:364
+#: libs/ui/dialogs/kis_dlg_preferences.cc:363
 #, fuzzy, kde-format
 msgid "Load previous session"
 msgstr "Laach of masker omheech ferpleatse"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:365
+#: libs/ui/dialogs/kis_dlg_preferences.cc:364
 #, fuzzy, kde-format
 #| msgid "Preview: "
 msgid "Show session manager"
 msgstr "Foarbyld: "
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:433
+#: libs/ui/dialogs/kis_dlg_preferences.cc:432
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:439
+#: libs/ui/dialogs/kis_dlg_preferences.cc:438
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:471
+#: libs/ui/dialogs/kis_dlg_preferences.cc:470
 #, fuzzy, kde-format
 msgid "Internal Storage"
 msgstr "Yntegraalstap:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:473
+#: libs/ui/dialogs/kis_dlg_preferences.cc:472
 #, kde-format
 msgid "SD-Card"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:511
+#: libs/ui/dialogs/kis_dlg_preferences.cc:510
 #, fuzzy, kde-format
 #| msgid "Manual"
 msgid "Choose Manually"
 msgstr "Mei de hân"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:576
+#: libs/ui/dialogs/kis_dlg_preferences.cc:575
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -23230,26 +23229,26 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:894
+#: libs/ui/dialogs/kis_dlg_preferences.cc:893
 #, fuzzy, kde-format
 msgid "Select a Background Image"
 msgstr "eftergrûn"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:906
+#: libs/ui/dialogs/kis_dlg_preferences.cc:905
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, fuzzy, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "Laachgrutte"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:926
+#: libs/ui/dialogs/kis_dlg_preferences.cc:925
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1028
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1137
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1027
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1136
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1217
 #, fuzzy, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -23257,21 +23256,21 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "&Skermgrutte"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1097
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1096
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, fuzzy, kde-format
 msgid "Install Color Profiles"
 msgstr "Profyl tapasse"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1307
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1306
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1309
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1308
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr ""
@@ -23279,7 +23278,7 @@ msgstr ""
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1319
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1318
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Maximum brush speed: {n} px/ms"
@@ -23290,7 +23289,7 @@ msgstr[1] "Pinsielgrutte"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1328
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1327
 #, fuzzy, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
@@ -23298,13 +23297,13 @@ msgstr[0] "Pinseel ynstellings"
 msgstr[1] "Pinseel ynstellings"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1431
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1424
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1452
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1445
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -23313,186 +23312,186 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1456
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1449
 #, kde-format
 msgid " fps"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1686
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1678
 #, fuzzy, kde-format
 #| msgid "OpenGL"
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1687
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1679
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1689
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1681
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1691
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1683
 #, fuzzy, kde-format
 #| msgid "OpenGL"
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1698
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1690
 #, fuzzy, kde-format
 #| msgid "Unknown"
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Unbekend"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1718
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1710
 #, fuzzy, kde-format
 #| msgid "Auto"
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Auto"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1799
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1791
 #, fuzzy, kde-format
 msgid "Display Id: %1"
 msgstr "Werjefte"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1800
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1792
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1801
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1793
 #, fuzzy, kde-format
 msgid "Min Luminance: %1"
 msgstr "Ferbetterje"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1802
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1794
 #, fuzzy, kde-format
 msgid "Max Luminance: %1"
 msgstr "Ferbetterje"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1803
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1795
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1804
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1796
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1805
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1797
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1806
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1798
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1807
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1799
 #, fuzzy, kde-format
 msgid "White Point: %1, %2"
 msgstr "Opsjes"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1986
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1978
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2071
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2063
 #, fuzzy, kde-format
 msgid "Configure Krita"
 msgstr "Ynstelle..."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2088
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2080
 #, fuzzy, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Dokumint eksportearje nei"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2090
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2082
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, fuzzy, kde-format
 msgid "Shortcuts"
 msgstr "Magnetyske fjilden"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2100
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2092
 #, fuzzy, kde-format
 msgid "Canvas Input Settings"
 msgstr "Kleurynstellings"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2101
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2093
 #, fuzzy, kde-format
 msgid "Canvas Input"
 msgstr "&Kanvas"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2118
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2110
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
 msgstr "Kleurbehear"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2120
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2112
 #, fuzzy, kde-format
 #| msgid "Color"
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Kleur"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2128
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2130
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2120
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2122
 #, kde-format
 msgid "Performance"
 msgstr "Prestaasje"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2138
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2130
 #, fuzzy, kde-format
 msgid "Tablet settings"
 msgstr "Kleurynstellings"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2140
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2132
 #, kde-format
 msgid "Tablet"
 msgstr "Tablet"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2148
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2140
 #, fuzzy, kde-format
 msgid "Canvas-only settings"
 msgstr "Kleurynstellings"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2150
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2142
 #, fuzzy, kde-format
 msgid "Canvas-only"
 msgstr "Kanvaskleur:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2158
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2160
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2150
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2152
 #, fuzzy, kde-format
 msgid "Pop-up Palette"
 msgstr "Palet kieze"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2168
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2160
 #, fuzzy, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Skriuwer"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2170
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2162
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Skriuwer"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2177
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2169
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -25120,8 +25119,8 @@ msgstr "Kleur:"
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblSize)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
-#: libs/ui/forms/wdgdisplaysettings.ui:361 libs/ui/kis_paintop_box.cc:271
-#: libs/ui/kis_paintop_box.cc:278
+#: libs/ui/forms/wdgdisplaysettings.ui:361 libs/ui/kis_paintop_box.cc:269
+#: libs/ui/kis_paintop_box.cc:276
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2007
@@ -26915,7 +26914,7 @@ msgid "path"
 msgstr "Paad"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:483
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:477
 #, fuzzy, kde-format
 msgid "Brush Editor"
 msgstr "Pinsielgrutte"
@@ -29879,12 +29878,12 @@ msgstr "Pinseel ynstellings bewurkje"
 
 #: libs/ui/kis_paintop_box.cc:266
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
-#: plugins/dockers/layerdocker/LayerBox.cpp:211
-#: plugins/dockers/layerdocker/LayerBox.cpp:400
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:55
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:59
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:44
+#: plugins/dockers/layerdocker/LayerBox.cpp:210
+#: plugins/dockers/layerdocker/LayerBox.cpp:397
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
 #: plugins/tools/basictools/kis_tool_fill.cc:550
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:456
@@ -29894,7 +29893,7 @@ msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
 msgstr "Dekking:"
 
-#: libs/ui/kis_paintop_box.cc:269
+#: libs/ui/kis_paintop_box.cc:268
 #, fuzzy, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Flow: {n}%"
@@ -29905,7 +29904,7 @@ msgstr "&Sjen litte"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
 #. i18n: ectx: property (title), widget (QGroupBox, gbRotation)
-#: libs/ui/kis_paintop_box.cc:272 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/kis_paintop_box.cc:270 libs/ui/kis_paintop_box.cc:277
 #: plugins/filters/blur/wdg_lens_blur.ui:84
 #: plugins/generators/pattern/wdgpatternoptions.ui:212
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
@@ -29915,7 +29914,7 @@ msgstr "&Sjen litte"
 msgid "Rotation:"
 msgstr "Rotaasje"
 
-#: libs/ui/kis_paintop_box.cc:273 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/kis_paintop_box.cc:271 libs/ui/kis_paintop_box.cc:278
 #, fuzzy, kde-format
 msgid "Pattern Scale:"
 msgstr "Patroan"
@@ -29923,7 +29922,7 @@ msgstr "Patroan"
 #. i18n: ectx: property (text), widget (QLabel, opacityLbl)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, opacityLabel)
-#: libs/ui/kis_paintop_box.cc:276
+#: libs/ui/kis_paintop_box.cc:274
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
@@ -29933,24 +29932,24 @@ msgid "Opacity:"
 msgstr "Dekking:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
-#: libs/ui/kis_paintop_box.cc:277
+#: libs/ui/kis_paintop_box.cc:275
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1985
 #, fuzzy, kde-format
 msgid "Flow:"
 msgstr "&Sjen litte"
 
-#: libs/ui/kis_paintop_box.cc:343
+#: libs/ui/kis_paintop_box.cc:337
 #, fuzzy, kde-format
 msgid "Choose workspace"
 msgstr "Kleurromte"
 
-#: libs/ui/kis_paintop_box.cc:386
+#: libs/ui/kis_paintop_box.cc:380
 #, fuzzy, kde-format
 msgid "Brush composite"
 msgstr "Pinsielgrutte"
 
-#: libs/ui/kis_paintop_box.cc:1365 libs/ui/kis_paintop_box.cc:1387
-#: libs/ui/kis_paintop_box.cc:1401
+#: libs/ui/kis_paintop_box.cc:1359 libs/ui/kis_paintop_box.cc:1381
+#: libs/ui/kis_paintop_box.cc:1395
 #, fuzzy, kde-format
 msgid ""
 "%1\n"
@@ -33182,9 +33181,9 @@ msgstr "Stopkleur:"
 msgid "Transparent"
 msgstr "Trochskinend"
 
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:102
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:101
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:163
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:167
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:166
 #, fuzzy, kde-format
 #| msgid "Position:"
 msgctxt "{n} is the number value, % is the percent sign"
@@ -33279,7 +33278,7 @@ msgctxt ""
 msgid "Link colors"
 msgstr "Kanvaskleur:"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:227
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:225
 #, fuzzy, kde-format
 #| msgid "Segment Color"
 msgctxt ""
@@ -33287,26 +33286,26 @@ msgctxt ""
 msgid "Segment #%1"
 msgstr "Segmintkleur"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:258
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:256
 #, fuzzy, kde-format
 msgctxt "Text that indicates the selected stop in the segment gradient editor"
 msgid "Stop #%1"
 msgstr "Foarm:"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:302
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:300
 #, kde-format
 msgctxt ""
 "Text that indicates the selected mid point in the segment gradient editor"
 msgid "Mid-Point #%1"
 msgstr ""
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:311
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:309
 #, fuzzy, kde-format
 msgctxt "Text that indicates no handle is selected in the stop gradient editor"
 msgid "No handle selected"
 msgstr "Seleksje skealje"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:797
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:795
 #, fuzzy, kde-format
 msgctxt "Title for the segment gradient handle editor"
 msgid "Edit Handle"
@@ -33993,12 +33992,12 @@ msgstr "TextLabel1:"
 msgid "Select a Color Space"
 msgstr "Seleksjemodus:"
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:119
+#: libs/ui/widgets/kis_custom_image_widget.cc:117
 #, fuzzy, kde-format
 msgid "&Create"
 msgstr "Oanmeitsje"
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:297
+#: libs/ui/widgets/kis_custom_image_widget.cc:295
 #, kde-format
 msgid ""
 "Linear gamma RGB color spaces are not supposed to be used in 8-bit integer "
@@ -34009,7 +34008,7 @@ msgid ""
 "to return to the settings dialog."
 msgstr ""
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:538
+#: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, kde-format
 msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
@@ -34958,7 +34957,7 @@ msgstr "Skerpte:"
 msgid "%1:"
 msgstr "%1:"
 
-#: libs/widgets/kis_color_input.cpp:378
+#: libs/widgets/kis_color_input.cpp:373
 #: libs/widgets/KoEditColorSetDialog.cpp:159
 #, fuzzy, kde-format
 msgid "Color name:"
@@ -37117,7 +37116,6 @@ msgstr "Assistint:"
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:121
 #, kde-format
 msgid "Opacity: "
 msgstr "Dekking:"
@@ -38159,7 +38157,7 @@ msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:149
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:150
 #, fuzzy, kde-format
 #| msgid "Value"
 msgctxt ""
@@ -38381,12 +38379,12 @@ msgctxt "{n} is the number value, % is the percent sign"
 msgid "Tint: {n}%"
 msgstr "Dekking:"
 
-#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:51
+#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:50
 #, kde-format
 msgid "Tint color for past frames"
 msgstr ""
 
-#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:52
+#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:51
 #, kde-format
 msgid "Tint color for future frames"
 msgstr ""
@@ -38986,44 +38984,44 @@ msgstr "Histogram"
 msgid "Undo History"
 msgstr "Lytse kleurkiezer"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:162
+#: plugins/dockers/layerdocker/LayerBox.cpp:161
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
 #, kde-format
 msgid "Layers"
 msgstr "Lagen"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:257
+#: plugins/dockers/layerdocker/LayerBox.cpp:254
 #, fuzzy, kde-format
 msgid "&Show Global Selection Mask"
 msgstr "Seleksjemasker..."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:260
+#: plugins/dockers/layerdocker/LayerBox.cpp:257
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:327
+#: plugins/dockers/layerdocker/LayerBox.cpp:324
 #, fuzzy, kde-format
 #| msgid "Import Image"
 msgid "Thumbnail Size"
 msgstr "Ofbylding ymportearje"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:355
+#: plugins/dockers/layerdocker/LayerBox.cpp:352
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Oriïntaasje"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:378
+#: plugins/dockers/layerdocker/LayerBox.cpp:375
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Fermingmodus"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:380
+#: plugins/dockers/layerdocker/LayerBox.cpp:377
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39033,46 +39031,46 @@ msgid ""
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:385
+#: plugins/dockers/layerdocker/LayerBox.cpp:382
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Gjin"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:386
+#: plugins/dockers/layerdocker/LayerBox.cpp:383
 #, fuzzy, kde-format
 #| msgid "simple"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "ienfâldich"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:387
+#: plugins/dockers/layerdocker/LayerBox.cpp:384
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Kleurberik"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:388
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Detaillearre werjefte"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:402
+#: plugins/dockers/layerdocker/LayerBox.cpp:398
 #, fuzzy, kde-format
 #| msgid "Layer Opacity"
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Dekking"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:420
+#: plugins/dockers/layerdocker/LayerBox.cpp:416
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "B-spline"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:422
+#: plugins/dockers/layerdocker/LayerBox.cpp:418
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39080,38 +39078,38 @@ msgid ""
 "If disabled, show below layer names (when enough space)."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:434
+#: plugins/dockers/layerdocker/LayerBox.cpp:430
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Laach skealje"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:435
+#: plugins/dockers/layerdocker/LayerBox.cpp:431
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1002
+#: plugins/dockers/layerdocker/LayerBox.cpp:998
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Seleksjemasker..."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1024
+#: plugins/dockers/layerdocker/LayerBox.cpp:1020
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Seleksjemasker..."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1234
+#: plugins/dockers/layerdocker/LayerBox.cpp:1230
 #, fuzzy, kde-format
 #| msgid "&Miscibility:"
 msgid "&Toggle Locks && Visibility"
 msgstr "&Mingberheid:"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1241
-#: plugins/dockers/layerdocker/LayerBox.cpp:1264
+#: plugins/dockers/layerdocker/LayerBox.cpp:1237
+#: plugins/dockers/layerdocker/LayerBox.cpp:1260
 #, kde-format
 msgid "&Add"
 msgstr ""
@@ -45515,10 +45513,10 @@ msgid "&Oilpaint..."
 msgstr "&Oaljefarve..."
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:205
-#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:70
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:96
+#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:67
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:92
 #: plugins/paintops/particle/KisParticleOpOptionWidget.cpp:58
-#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:57
+#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:53
 #, kde-format
 msgid "Brush size"
 msgstr "Pinsielgrutte"
@@ -46627,19 +46625,19 @@ msgstr "Rotaasje"
 msgid "Y-Rotation:"
 msgstr "Rotaasje"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:61
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:69
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:91
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:55
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:73
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:85
 #, fuzzy, kde-format
 #| msgid "X:"
 msgid "X: "
 msgstr "X:"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:74
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:85
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:95
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:57
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:68
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:89
 #, fuzzy, kde-format
 #| msgid "Y:"
 msgid "Y: "
@@ -46648,7 +46646,7 @@ msgstr "Y:"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:103
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:97
 #, fuzzy, kde-format
 #| msgid "Sobel horizontally"
 msgctxt ""
@@ -46662,7 +46660,7 @@ msgstr[1] "Sobel horizontaal"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:109
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:103
 #, fuzzy, kde-format
 #| msgid "Sobel vertically"
 msgctxt ""
@@ -46673,25 +46671,25 @@ msgid_plural "Every {n} cells vertically"
 msgstr[0] "Sobel fertikaal"
 msgstr[1] "Sobel fertikaal"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:453
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:447
 #, fuzzy, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
 msgstr "piksels"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:454
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:448
 #, fuzzy, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
 msgstr "piksels"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:457
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:451
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
 msgstr ""
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:458
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:452
 #, fuzzy, kde-format
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
@@ -51587,13 +51585,13 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Bristle Brush (the lines will be thinner than on preview)"
 msgstr ""
 
-#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:58
+#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:56
 #, fuzzy, kde-format
 msgid "Bristle options"
 msgstr "Helderheid"
 
 #. i18n: ectx: attribute (title), widget (QWidget, inkTab)
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:60
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:55
 #: plugins/paintops/hairy/wdghairyeoptions.ui:263
 #, fuzzy, kde-format
 msgid "Ink depletion"
@@ -53702,14 +53700,14 @@ msgstr "Ofstân: "
 msgid "Particle Count"
 msgstr "Diel"
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:66
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:64
 #, kde-format
 msgid ""
 "Select how the particles are distributed as a function of the angle to the "
 "center of the spray area."
 msgstr ""
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:69
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:67
 #, kde-format
 msgid ""
 "Set a custom distribution of the particles.\n"
@@ -53720,48 +53718,48 @@ msgid ""
 "angle."
 msgstr ""
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:74
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:110
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:72
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:108
 #, fuzzy, kde-format
 #| msgid "Repeat:"
 msgid "Repeat: "
 msgstr "Werhelling:"
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:75
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:111
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:73
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:109
 #, fuzzy, kde-format
 #| msgid "Fax:"
 msgctxt "Times symbol, like in 10x"
 msgid "x"
 msgstr "Faks:"
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:78
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:76
 #, kde-format
 msgid ""
 "Set how many times should the curve repeat from 0 degrees to 360 degrees."
 msgstr ""
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:81
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:79
 #, kde-format
 msgid ""
 "Select how the particles are distributed as a function of the distance from "
 "the center of the spray area."
 msgstr ""
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:84
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:82
 #, kde-format
 msgid ""
 "Activates the old behavior where the particles are more accumulated towards "
 "the center of the spray area."
 msgstr ""
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:86
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:84
 #, fuzzy, kde-format
 #| msgid "Standard light A"
 msgid "Standard deviation: "
 msgstr "Standert beljochting a"
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:90
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:88
 #, kde-format
 msgid ""
 "Set the standard deviation for the gaussian distribution.\n"
@@ -53769,12 +53767,12 @@ msgid ""
 "spray area."
 msgstr ""
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:94
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:92
 #, fuzzy, kde-format
 msgid "Clustering amount: "
 msgstr "Hoeveelheid:"
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:98
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:96
 #, kde-format
 msgid ""
 "Set how the particles should spread in the spray area.\n"
@@ -53785,7 +53783,7 @@ msgid ""
 "Values near 0 will make the particles spread more uniformly."
 msgstr ""
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:105
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:103
 #, kde-format
 msgid ""
 "Set a custom distribution of the particles.\n"
@@ -53797,14 +53795,14 @@ msgid ""
 "that distance."
 msgstr ""
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:114
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:112
 #, kde-format
 msgid ""
 "Set how many times should the curve repeat from the center to the border of "
 "the spray area."
 msgstr ""
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:179
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:177
 #, fuzzy, kde-format
 #| msgid "Smeary Brush"
 msgid "Spray Area"
@@ -54036,7 +54034,7 @@ msgstr "Fochtich tekstuer"
 msgid "Tangent Normal"
 msgstr "Gewoan"
 
-#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:57
+#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:54
 #, fuzzy, kde-format
 msgid "Tangent Tilt"
 msgstr "Filter wizigje"
@@ -57086,23 +57084,24 @@ msgstr "Tekenje in ellips"
 msgid "Ellipse Tool"
 msgstr "Ellips"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:140
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:179
+#: plugins/tools/basictools/kis_tool_fill.cc:139
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:178
 #, kde-format
 msgid "You cannot use this tool with the selected layer type"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:251
+#: plugins/tools/basictools/kis_tool_fill.cc:250
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flood Fill"
 msgstr "Opfolje"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:541
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:447
+#: plugins/tools/basictools/kis_tool_fill.cc:542
 #, fuzzy, kde-format
 #| msgid "&Scale"
-msgctxt "{n} is the number value, % is the percent sign"
+msgctxt ""
+"The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
+"is the percent sign"
 msgid "Scale: {n}%"
 msgstr "&Skealje"
 
@@ -57112,20 +57111,19 @@ msgstr "&Skealje"
 msgid "Use custom blending options"
 msgstr "Smudge-pinsiel"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:562
+#: plugins/tools/basictools/kis_tool_fill.cc:561
 #, fuzzy, kde-format
 #| msgid "Threshold: "
 msgctxt "The 'threshold' spinbox prefix in fill tool options"
 msgid "Threshold: "
 msgstr "Drompel: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:567
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:465
+#: plugins/tools/basictools/kis_tool_fill.cc:568
 #, fuzzy, kde-format
 #| msgid "Opacity: "
-msgctxt "{n} is the number value, % is the percent sign"
+msgctxt ""
+"The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
+"percent sign"
 msgid "Spread: {n}%"
 msgstr "Dekking:"
 
@@ -57214,7 +57212,7 @@ msgid "Fill all regions until a specific boundary color"
 msgstr "Mei eftergrûnkleur opfolje"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
 #, fuzzy, kde-format
 msgid "Boundary color"
 msgstr "Eftergrûnkleur:"
@@ -58015,7 +58013,15 @@ msgstr ""
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:121
 #, fuzzy, kde-format
 #| msgid "Opacity: "
-msgid "Opacity [*varies*]: "
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Opacity: {n}"
+msgstr "Dekking:"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:122
+#, fuzzy, kde-format
+#| msgid "Opacity: "
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Opacity [*varies*]: {n}"
 msgstr "Dekking:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
@@ -58149,11 +58155,24 @@ msgstr "Referinsje-ôfbylding:"
 msgid "Reference Images Tool"
 msgstr "Referinsje-ôfbylding:"
 
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
+#, fuzzy, kde-format
+#| msgid "Opacity: "
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Opacity [*varies*]: {n}%"
+msgstr "Dekking:"
+
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
 #, fuzzy, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation: {n}%"
 msgstr "Sêding:"
+
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:55
+#, fuzzy, kde-format
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Saturation [*varies*]: {n}%"
+msgstr "Sêding"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, fuzzy, kde-format
@@ -58417,7 +58436,16 @@ msgctxt "The 'threshold' spinbox prefix in contiguous selection tool options"
 msgid "Threshold: "
 msgstr "Drompel: "
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:380
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
+#, fuzzy, kde-format
+#| msgid "Opacity: "
+msgctxt ""
+"The 'spread' spinbox in contiguous selection tool options; {n} is the number "
+"value, % is the percent sign"
+msgid "Spread: {n}%"
+msgstr "Dekking:"
+
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:382
 #, fuzzy, kde-format
 #| msgid "Border selection by"
 msgctxt ""
@@ -58426,41 +58454,41 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Seleksje omkaderje mei"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
 #, fuzzy, kde-format
 msgid "Select all regions until a specific boundary color"
 msgstr "Mei eftergrûnkleur opfolje"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:238
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:249
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:250
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:394
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:253
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
 #, fuzzy, kde-format
 #| msgid "Rendering Intent"
 msgctxt ""
@@ -58572,7 +58600,16 @@ msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "Drompel: "
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:246
+#, fuzzy, kde-format
+#| msgid "Opacity: "
+msgctxt ""
+"The 'spread' spinbox in similar color selection tool options; {n} is the "
+"number value, % is the percent sign"
+msgid "Spread: {n}%"
+msgstr "Dekking:"
+
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:261
 #, fuzzy, kde-format
 #| msgid "Rendering Intent"
 msgctxt ""
@@ -58888,15 +58925,15 @@ msgstr "Seleksjemodus:"
 msgid "Line height"
 msgstr "Selhichte"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1582
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1591
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1589
 #, fuzzy, kde-format
 #| msgid "Normal"
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Gewoan"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1595
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1593
 #, fuzzy, kde-format
 #| msgid "100%"
 msgctxt "line height for text"
@@ -58904,7 +58941,7 @@ msgid "100%"
 msgstr "100%"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1609
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
 #, fuzzy, kde-format
 #| msgid "Line Spacing"
@@ -59748,31 +59785,49 @@ msgctxt "action"
 msgid "Enclose and Fill Tool"
 msgstr "Aktive laach"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:269
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:268
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Enclose and Fill"
 msgstr "Opfolje"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:426
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:425
 #, fuzzy, kde-format
 #| msgid "Invert"
 msgctxt "The 'invert' checkbox in enclose and fill tool"
 msgid "Invert"
 msgstr "Ynvertearje"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:431
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:430
 #, fuzzy, kde-format
 msgctxt "The 'include contour regions' checkbox in enclose and fill tool"
 msgid "Include contour regions"
 msgstr "Laachnamme:"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:448
+#, fuzzy, kde-format
+#| msgid "&Scale"
+msgctxt ""
+"The pattern 'scale' spinbox in enclose and fill tool options; {n} is the "
+"number value, % is the percent sign"
+msgid "Scale: {n}%"
+msgstr "&Skealje"
+
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
 #, fuzzy, kde-format
 #| msgid "Threshold: "
 msgctxt "The 'threshold' spinbox prefix in enclose and fill tool options"
 msgid "Threshold: "
 msgstr "Drompel: "
+
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
+#, fuzzy, kde-format
+#| msgid "Opacity: "
+msgctxt ""
+"The 'spread' spinbox in enclose and fill tool options; {n} is the number "
+"value, % is the percent sign"
+msgid "Spread: {n}%"
+msgstr "Dekking:"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
 #, fuzzy, kde-format
@@ -59985,7 +60040,7 @@ msgctxt "{n} is the number value, % is the percent sign"
 msgid "Clean up: {n}%"
 msgstr "Koarnblomblau"
 
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:129
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:128
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -61126,10 +61181,6 @@ msgstr "Referinsje-ôfbylding:"
 #~| msgid "Shear Layer"
 #~ msgid "Shear Layers"
 #~ msgstr "Laach skeanlûke"
-
-#, fuzzy
-#~ msgid "Saturation [*varies*]: "
-#~ msgstr "Sêding"
 
 #, fuzzy
 #~ msgid "Embed tags..."

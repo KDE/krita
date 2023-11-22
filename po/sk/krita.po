@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-20 00:40+0000\n"
+"POT-Creation-Date: 2023-11-22 00:40+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -12903,7 +12903,7 @@ msgstr "&Import/Export"
 msgid "Import"
 msgstr "Importovať"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1250
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1246
 #, kde-format
 msgid "&Convert"
 msgstr "Previesť"
@@ -12911,14 +12911,14 @@ msgstr "Previesť"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1224
+#: plugins/dockers/layerdocker/LayerBox.cpp:1220
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Vybrať"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1230
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1226
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12939,7 +12939,7 @@ msgstr "Transformovať všetky vrstvy"
 msgid "S&plit"
 msgstr "Rozdeliť"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1259
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1255
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Rozdeliť alfu"
@@ -16791,21 +16791,21 @@ msgstr "Veľkosť"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:40
 #: libs/ui/animation/wdg_animationrenderer.ui:150
 #: libs/ui/animation/wdg_animationrenderer.ui:164
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:754
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:758
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:975
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:984
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1211
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1390
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1393
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1457
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1462
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:752
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:756
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:962
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:969
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1184
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1353
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1356
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1455
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
-#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:309
+#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:303
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:70
 #: libs/ui/widgets/kis_selection_options.cc:186
 #: libs/ui/widgets/kis_selection_options.cc:200
@@ -16827,10 +16827,10 @@ msgstr "Veľkosť"
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:44
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:40
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:41
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:70
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:75
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:64
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:69
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:74
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:80
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:86
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:78
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:31
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:26
@@ -17078,7 +17078,7 @@ msgid "<%1> (embedded)"
 msgstr "<%1> (zabudované)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:468
+#: libs/ui/dialogs/kis_dlg_preferences.cc:467
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -19583,7 +19583,7 @@ msgstr "Lokálne zdroje"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
-#: libs/ui/dialogs/kis_dlg_preferences.cc:906
+#: libs/ui/dialogs/kis_dlg_preferences.cc:905
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
@@ -19608,7 +19608,7 @@ msgstr "Lokálne zdroje"
 #: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:748
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
-#: libs/ui/widgets/kis_custom_image_widget.cc:296
+#: libs/ui/widgets/kis_custom_image_widget.cc:294
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
@@ -19846,8 +19846,8 @@ msgstr "Metadáta"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1813
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1817
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1805
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1809
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:326
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -20643,7 +20643,7 @@ msgstr ""
 "frekvencia sa zníži na 50 snímok za sekundu.</p></body></html>"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:488
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1841
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1833
 #, kde-format
 msgid "Warning(s):"
 msgstr "Upozornenie(a):"
@@ -21650,8 +21650,8 @@ msgstr "Hlavný displej:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2108
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2110
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2100
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2102
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -21661,7 +21661,7 @@ msgstr "Displej"
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
-#: libs/ui/kis_paintop_box.cc:326
+#: libs/ui/kis_paintop_box.cc:320
 #: plugins/dockers/recorder/recorder_export.ui:467
 #, kde-format
 msgid "x"
@@ -21751,8 +21751,8 @@ msgstr "Import video animácie"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2078
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2080
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2070
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2072
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22162,7 +22162,7 @@ msgstr "Verzia FFMpeg: Žiadna"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:284
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:623
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:830
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:38
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:37
 #: plugins/impex/webp/kis_wdg_options_webp.ui:424
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:441
 #, kde-format
@@ -22687,79 +22687,78 @@ msgstr "fps zdroja: %1"
 msgid "Layer Properties"
 msgstr "Vlastnosti vrstvy"
 
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:99
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:750
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:98
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:749
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:767
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:770
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:775
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:795
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:805
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:810
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:936
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:971
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:980
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:989
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1120
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1125
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1197
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1202
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1207
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1216
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1221
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1340
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1345
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1386
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1462
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1467
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1472
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1372
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:789
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:798
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:802
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:926
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:959
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:966
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:973
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1102
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1105
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1175
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1178
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1181
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1188
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1191
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1308
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1311
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1350
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1427
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1430
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1370
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1374
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1378
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1384
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1468 libs/ui/kis_paintop_box.cc:283
-#: libs/ui/kis_paintop_box.cc:286
-#: libs/ui/widgets/kis_custom_image_widget.cc:100
-#: libs/ui/widgets/KisAutoLevelsWidget.cpp:18
-#: libs/widgets/kis_color_input.cpp:150 libs/widgets/kis_color_input.cpp:195
-#: plugins/dockers/layerdocker/LayerBox.cpp:215
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:50
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1461 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
+#: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
+#: libs/widgets/kis_color_input.cpp:149 libs/widgets/kis_color_input.cpp:190
+#: plugins/dockers/layerdocker/LayerBox.cpp:213
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:49
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:46
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:54
-#: plugins/impex/jpeg/kis_jpeg_export.cc:219
-#: plugins/impex/jpeg/kis_jpeg_export.cc:223
-#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:45
+#: plugins/impex/jpeg/kis_jpeg_export.cc:218
+#: plugins/impex/jpeg/kis_jpeg_export.cc:220
+#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:44
 #: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:53
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:60
-#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:37
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:26
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:31
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:36
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:41
-#: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:123
-#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:31
-#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:36
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:62
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:58
+#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:36
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:25
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:29
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:33
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:37
+#: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:122
+#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:30
+#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:33
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:61
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
-#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:34
+#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:283
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:131
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:129
 #, kde-format
 msgctxt "layer dimensions"
 msgid "(%1, %2), (%3, %4)"
 msgstr "(%1, %2), (%3, %4)"
 
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:165
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:166
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:167
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:168
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:169
 #, kde-format
 msgid "*varies*"
 msgstr "*kolíše*"
 
-#: libs/ui/dialogs/kis_dlg_layer_properties.cc:210
+#: libs/ui/dialogs/kis_dlg_layer_properties.cc:208
 msgctxt "(qtundo-format)"
 msgid "Change Layer Properties"
 msgstr "Zmeniť vlastnosti vrstvy"
@@ -22814,32 +22813,32 @@ msgstr ""
 "Knižnica štýlov vrstiev s týmto názvom je už nainštalovaná. Chcete ju "
 "prepísať?"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:918
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:909
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
 #, kde-format
 msgid "Not Implemented Yet"
 msgstr "Ešte neimplemetované"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1013
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:996
 #: libs/ui/layerstyles/wdglayerstyles.ui:52
 #, kde-format
 msgid "Inner Shadow"
 msgstr "Vnútorný tieň"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1014
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:997
 #, kde-format
 msgid "Choke:"
 msgstr "Sýtič:"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1192
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1171
 #: libs/ui/layerstyles/wdglayerstyles.ui:60
 #, kde-format
 msgid "Outer Glow"
 msgstr "Vonkajšia žiara"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1248
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1217
 #, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
@@ -22857,17 +22856,17 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "Zistené viaceré zdroje vloženia"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:209
+#: libs/ui/dialogs/kis_dlg_preferences.cc:208
 #, kde-format
 msgid "No Cursor"
 msgstr "Žiadny kurzor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:210
+#: libs/ui/dialogs/kis_dlg_preferences.cc:209
 #, kde-format
 msgid "Tool Icon"
 msgstr "Ikona nástroja"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:210
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
@@ -22876,128 +22875,128 @@ msgstr "Ikona nástroja"
 msgid "Arrow"
 msgstr "Šípka"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:212
+#: libs/ui/dialogs/kis_dlg_preferences.cc:211
 #, kde-format
 msgid "Small Circle"
 msgstr "Malá kružnica"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:213
+#: libs/ui/dialogs/kis_dlg_preferences.cc:212
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, kde-format
 msgid "Crosshair"
 msgstr "Zameriavací kríž"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:214
+#: libs/ui/dialogs/kis_dlg_preferences.cc:213
 #, kde-format
 msgid "Triangle Righthanded"
 msgstr "Pravý trojuholník"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:214
 #, kde-format
 msgid "Triangle Lefthanded"
 msgstr "Ľavý trojuholník"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:215
 #, kde-format
 msgid "Black Pixel"
 msgstr "Čierny pixel"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:216
 #, kde-format
 msgid "White Pixel"
 msgstr "Biely pixel"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:220
+#: libs/ui/dialogs/kis_dlg_preferences.cc:219
 #, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "Bez obrysu"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:221
+#: libs/ui/dialogs/kis_dlg_preferences.cc:220
 #, kde-format
 msgid "Circle Outline"
 msgstr "Obrys kružnice"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:222
+#: libs/ui/dialogs/kis_dlg_preferences.cc:221
 #, kde-format
 msgid "Preview Outline"
 msgstr "Náhľad obrysu"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:223
+#: libs/ui/dialogs/kis_dlg_preferences.cc:222
 #, kde-format
 msgid "Tilt Outline"
 msgstr "Obrys sklonu"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:247
+#: libs/ui/dialogs/kis_dlg_preferences.cc:246
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, kde-format
 msgid "Eraser"
 msgstr "Guma"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:324
+#: libs/ui/dialogs/kis_dlg_preferences.cc:323
 #, kde-format
 msgid "On Touch Drag"
 msgstr "Ťahanie počas dotyku"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:325
+#: libs/ui/dialogs/kis_dlg_preferences.cc:324
 #, kde-format
 msgid "On Click Drag"
 msgstr "Ťahanie počas kliknutia"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:326
+#: libs/ui/dialogs/kis_dlg_preferences.cc:325
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr "Ťahanie počas kliknutia stredného tlačidla"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:363
+#: libs/ui/dialogs/kis_dlg_preferences.cc:362
 #, kde-format
 msgid "Open default window"
 msgstr "Otvoriť predvolené okno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:364
+#: libs/ui/dialogs/kis_dlg_preferences.cc:363
 #, kde-format
 msgid "Load previous session"
 msgstr "Načítať prechádzajúce sedenie"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:365
+#: libs/ui/dialogs/kis_dlg_preferences.cc:364
 #, kde-format
 msgid "Show session manager"
 msgstr "Zobraziť správcu sedení"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:433
+#: libs/ui/dialogs/kis_dlg_preferences.cc:432
 #, fuzzy, kde-format
 #| msgid "Note: Krita will need to be restarted for changes to take effect"
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr "Poznámka: Bude potrebné reštartovať Krita, aby sa zmeny prejavili."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:439
+#: libs/ui/dialogs/kis_dlg_preferences.cc:438
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:471
+#: libs/ui/dialogs/kis_dlg_preferences.cc:470
 #, fuzzy, kde-format
 #| msgid "Internal error"
 msgid "Internal Storage"
 msgstr "Interná chyba"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:473
+#: libs/ui/dialogs/kis_dlg_preferences.cc:472
 #, kde-format
 msgid "SD-Card"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:511
+#: libs/ui/dialogs/kis_dlg_preferences.cc:510
 #, fuzzy, kde-format
 #| msgid "User Manual"
 msgid "Choose Manually"
 msgstr "Používateľská príručka"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:576
+#: libs/ui/dialogs/kis_dlg_preferences.cc:575
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -23023,27 +23022,27 @@ msgstr ""
 "a>):<br/>\n"
 "%2</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:894
+#: libs/ui/dialogs/kis_dlg_preferences.cc:893
 #, kde-format
 msgid "Select a Background Image"
 msgstr "Vyberte obrázok pozadia"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:906
+#: libs/ui/dialogs/kis_dlg_preferences.cc:905
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 nie je platný súbor obrázka!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:926
+#: libs/ui/dialogs/kis_dlg_preferences.cc:925
 #, fuzzy, kde-format
 #| msgid "Warning: this location is not writable."
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "Varovanie: do tohto umiestnenia nie je možné zapisovať."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1028
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1137
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1027
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1136
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1217
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -23051,14 +23050,14 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "Obrazovka %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1097
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1096
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "Nainštalovať farebné profily"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1307
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1306
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -23067,7 +23066,7 @@ msgstr ""
 "Použiť časové značky ovládača tabletu pre rýchlosť štetca (môže spôsobiť "
 "vážne artefakty pri použití WinTab tablet API)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1309
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1308
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "Použiť časové značky ovládača tabletu pre rýchlosť štetca"
@@ -23075,7 +23074,7 @@ msgstr "Použiť časové značky ovládača tabletu pre rýchlosť štetca"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1319
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1318
 #, fuzzy, kde-format
 #| msgid "Maximum brush size:"
 msgid "Maximum brush speed: {n} px/ms"
@@ -23087,7 +23086,7 @@ msgstr[2] "Maximálna veľkosť štetca:"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1328
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1327
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Brush Smoothing: Disabled"
@@ -23098,13 +23097,13 @@ msgstr[1] "Vyhladzovanie štetca: Zakázané"
 msgstr[2] "Vyhladzovanie štetca: Zakázané"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1431
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1424
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1452
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1445
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -23113,182 +23112,182 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " sek"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1456
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1449
 #, kde-format
 msgid " fps"
 msgstr " fps"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1686
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1678
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1687
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1679
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "Softvérové vykresľovanie (veľmi pomalé)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1689
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1681
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 cez ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1691
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1683
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1698
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1690
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Neznáme"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1718
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1710
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Automaticky (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1799
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1791
 #, kde-format
 msgid "Display Id: %1"
 msgstr "Id displeja: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1800
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1792
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Názov displeja: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1801
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1793
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "Min jas: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1802
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1794
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "Max jas: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1803
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1795
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "Max jas celej snímky: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1804
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1796
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Červená základná: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1805
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1797
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Zelená základná: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1806
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1798
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Modrá základná: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1807
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1799
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Biely bod: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1986
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1978
 #, fuzzy, kde-format
 #| msgid "WARNING: current display doesn't support HDR rendering"
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "UPOZORNENIE: aktuálny displej nepodporuje HDR vykresľovanie"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2071
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2063
 #, kde-format
 msgid "Configure Krita"
 msgstr "Konfigurovať Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2088
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2080
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Klávesové skratky"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2090
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2082
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Skratky"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2100
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2092
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Nastavenia plátna vstupu"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2101
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2093
 #, kde-format
 msgid "Canvas Input"
 msgstr "Plátno vstup"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2118
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2110
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
 msgstr "Správa farieb"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2120
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2112
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Farba"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2128
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2130
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2120
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2122
 #, kde-format
 msgid "Performance"
 msgstr "Výkon"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2138
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2130
 #, kde-format
 msgid "Tablet settings"
 msgstr "Nastavenia tabletu"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2140
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2132
 #, kde-format
 msgid "Tablet"
 msgstr "Tablet"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2148
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2140
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Nastavenia iba plátna"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2150
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2142
 #, kde-format
 msgid "Canvas-only"
 msgstr "Iba plátno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2158
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2160
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2150
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2152
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Vyskakovacia paleta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2168
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2160
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2170
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2162
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Autor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2177
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2169
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -24908,8 +24907,8 @@ msgstr "Farba:"
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblSize)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
-#: libs/ui/forms/wdgdisplaysettings.ui:361 libs/ui/kis_paintop_box.cc:271
-#: libs/ui/kis_paintop_box.cc:278
+#: libs/ui/forms/wdgdisplaysettings.ui:361 libs/ui/kis_paintop_box.cc:269
+#: libs/ui/kis_paintop_box.cc:276
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2007
@@ -26757,7 +26756,7 @@ msgid "path"
 msgstr "cesta"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:483
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:477
 #, kde-format
 msgid "Brush Editor"
 msgstr "Editor štetcov"
@@ -29797,12 +29796,12 @@ msgstr "Vybrať predvoľbu štetca"
 
 #: libs/ui/kis_paintop_box.cc:266
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
-#: plugins/dockers/layerdocker/LayerBox.cpp:211
-#: plugins/dockers/layerdocker/LayerBox.cpp:400
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:55
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:59
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:44
+#: plugins/dockers/layerdocker/LayerBox.cpp:210
+#: plugins/dockers/layerdocker/LayerBox.cpp:397
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
 #: plugins/tools/basictools/kis_tool_fill.cc:550
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:456
@@ -29812,7 +29811,7 @@ msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
 msgstr "Nepriehľadnosť:"
 
-#: libs/ui/kis_paintop_box.cc:269
+#: libs/ui/kis_paintop_box.cc:268
 #, fuzzy, kde-format
 #| msgctxt "Brush Option Flow"
 #| msgid "Flow: %1%"
@@ -29825,7 +29824,7 @@ msgstr "Prúd: %1%"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
 #. i18n: ectx: property (title), widget (QGroupBox, gbRotation)
-#: libs/ui/kis_paintop_box.cc:272 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/kis_paintop_box.cc:270 libs/ui/kis_paintop_box.cc:277
 #: plugins/filters/blur/wdg_lens_blur.ui:84
 #: plugins/generators/pattern/wdgpatternoptions.ui:212
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
@@ -29835,7 +29834,7 @@ msgstr "Prúd: %1%"
 msgid "Rotation:"
 msgstr "Otočenie: "
 
-#: libs/ui/kis_paintop_box.cc:273 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/kis_paintop_box.cc:271 libs/ui/kis_paintop_box.cc:278
 #, kde-format
 msgid "Pattern Scale:"
 msgstr "Mierka vzoru:"
@@ -29843,7 +29842,7 @@ msgstr "Mierka vzoru:"
 #. i18n: ectx: property (text), widget (QLabel, opacityLbl)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, opacityLabel)
-#: libs/ui/kis_paintop_box.cc:276
+#: libs/ui/kis_paintop_box.cc:274
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
@@ -29853,24 +29852,24 @@ msgid "Opacity:"
 msgstr "Nepriehľadnosť:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
-#: libs/ui/kis_paintop_box.cc:277
+#: libs/ui/kis_paintop_box.cc:275
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1985
 #, kde-format
 msgid "Flow:"
 msgstr "Prúd:"
 
-#: libs/ui/kis_paintop_box.cc:343
+#: libs/ui/kis_paintop_box.cc:337
 #, kde-format
 msgid "Choose workspace"
 msgstr "Vybrať pracovný priestor"
 
-#: libs/ui/kis_paintop_box.cc:386
+#: libs/ui/kis_paintop_box.cc:380
 #, kde-format
 msgid "Brush composite"
 msgstr "Kompozitný štetec"
 
-#: libs/ui/kis_paintop_box.cc:1365 libs/ui/kis_paintop_box.cc:1387
-#: libs/ui/kis_paintop_box.cc:1401
+#: libs/ui/kis_paintop_box.cc:1359 libs/ui/kis_paintop_box.cc:1381
+#: libs/ui/kis_paintop_box.cc:1395
 #, kde-format
 msgid ""
 "%1\n"
@@ -33249,9 +33248,9 @@ msgstr "Vlastné farby"
 msgid "Transparent"
 msgstr "Priehľadný"
 
-#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:102
+#: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:101
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:163
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:167
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:166
 #, fuzzy, kde-format
 #| msgid "Position: "
 msgctxt "{n} is the number value, % is the percent sign"
@@ -33341,33 +33340,33 @@ msgctxt ""
 msgid "Link colors"
 msgstr "Prepojiť farby"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:227
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:225
 #, kde-format
 msgctxt ""
 "Text that indicates the selected segment in the segment gradient editor"
 msgid "Segment #%1"
 msgstr "Segment #%1"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:258
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:256
 #, kde-format
 msgctxt "Text that indicates the selected stop in the segment gradient editor"
 msgid "Stop #%1"
 msgstr "Zarážka #%1"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:302
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:300
 #, kde-format
 msgctxt ""
 "Text that indicates the selected mid point in the segment gradient editor"
 msgid "Mid-Point #%1"
 msgstr "Stredný bod #%1"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:311
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:309
 #, kde-format
 msgctxt "Text that indicates no handle is selected in the stop gradient editor"
 msgid "No handle selected"
 msgstr "Žiadna vybrané držadlo"
 
-#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:797
+#: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:795
 #, kde-format
 msgctxt "Title for the segment gradient handle editor"
 msgid "Edit Handle"
@@ -34261,12 +34260,12 @@ msgstr "Žiadne označenie"
 msgid "Select a Color Space"
 msgstr "Vybrať farebný priestor"
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:119
+#: libs/ui/widgets/kis_custom_image_widget.cc:117
 #, kde-format
 msgid "&Create"
 msgstr "Vytvoriť"
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:297
+#: libs/ui/widgets/kis_custom_image_widget.cc:295
 #, kde-format
 msgid ""
 "Linear gamma RGB color spaces are not supposed to be used in 8-bit integer "
@@ -34283,7 +34282,7 @@ msgstr ""
 "Stlačte \"Ok\" na vytvorenie 8-bitového celočíselného lineárneho farebného "
 "priestoru RGB alebo \"Zrušiť\" na návrat do dialógu nastavení."
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:538
+#: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel "
@@ -35218,7 +35217,7 @@ msgstr "Hrúbka:"
 msgid "%1:"
 msgstr "%1:"
 
-#: libs/widgets/kis_color_input.cpp:378
+#: libs/widgets/kis_color_input.cpp:373
 #: libs/widgets/KoEditColorSetDialog.cpp:159
 #, kde-format
 msgid "Color name:"
@@ -37458,7 +37457,6 @@ msgstr "Asistent ukladania"
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
-#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:121
 #, kde-format
 msgid "Opacity: "
 msgstr "Nepriehľadnosť:"
@@ -38499,7 +38497,7 @@ msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Stlmiť"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:149
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:150
 #, fuzzy, kde-format
 #| msgid "Volume:"
 msgctxt ""
@@ -38716,12 +38714,12 @@ msgctxt "{n} is the number value, % is the percent sign"
 msgid "Tint: {n}%"
 msgstr "Odtieň: "
 
-#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:51
+#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:50
 #, kde-format
 msgid "Tint color for past frames"
 msgstr "Farba odtieňov pre  minulé snímky"
 
-#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:52
+#: plugins/dockers/animation/KisOnionSkinsDocker.cpp:51
 #, kde-format
 msgid "Tint color for future frames"
 msgstr "Farba odtieňov pre budúce snímky"
@@ -39307,18 +39305,18 @@ msgstr "Histogram"
 msgid "Undo History"
 msgstr "História vrátení späť"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:162
+#: plugins/dockers/layerdocker/LayerBox.cpp:161
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
 #, kde-format
 msgid "Layers"
 msgstr "Vrstvy"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:257
+#: plugins/dockers/layerdocker/LayerBox.cpp:254
 #, kde-format
 msgid "&Show Global Selection Mask"
 msgstr "Zobraziť globálnu masku výberu"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:260
+#: plugins/dockers/layerdocker/LayerBox.cpp:257
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -39326,25 +39324,25 @@ msgid ""
 msgstr ""
 "Zobrazí globálny výber ako zvyčajnú masku výberu v paneli <b>Vrstvy</b>"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:327
+#: plugins/dockers/layerdocker/LayerBox.cpp:324
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "Veľkosti náhľadov"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:355
+#: plugins/dockers/layerdocker/LayerBox.cpp:352
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Stromové odsadenie"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:378
+#: plugins/dockers/layerdocker/LayerBox.cpp:375
 #, fuzzy, kde-format
 #| msgid "Blending Mode"
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Režim miešania"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:380
+#: plugins/dockers/layerdocker/LayerBox.cpp:377
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39359,21 +39357,21 @@ msgstr ""
 "nich zmení.\n"
 "Podrobné: Zobrazenie nepriehľadnosti aj režimu miešania, aj keď sa nezmenia."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:385
+#: plugins/dockers/layerdocker/LayerBox.cpp:382
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Žiadne"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:386
+#: plugins/dockers/layerdocker/LayerBox.cpp:383
 #, fuzzy, kde-format
 #| msgid "Simple"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Jednoduchý"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:387
+#: plugins/dockers/layerdocker/LayerBox.cpp:384
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Layer Docker subtitle style"
 #| msgid "Balanced"
@@ -39381,7 +39379,7 @@ msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Vyvážený"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:388
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Layer Docker subtitle style"
 #| msgid "Detailed"
@@ -39389,7 +39387,7 @@ msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Podrobné"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:402
+#: plugins/dockers/layerdocker/LayerBox.cpp:398
 #, fuzzy, kde-format
 #| msgctxt "@item:tooltip"
 #| msgid "Subtitle text opacity"
@@ -39397,13 +39395,13 @@ msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Nepriehľadnosť textu titulkov"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:420
+#: plugins/dockers/layerdocker/LayerBox.cpp:416
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "Vnorené"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:422
+#: plugins/dockers/layerdocker/LayerBox.cpp:418
 #, fuzzy, kde-format
 #| msgctxt "@item:tooltip"
 #| msgid ""
@@ -39417,35 +39415,35 @@ msgstr ""
 "Ak je povolené, zobrazia sa vedľa názvov vrstiev titulky..\n"
 "Ak je zakázané, zobrazia sa pod názvami vrstiev (ak je dostatok miesta)."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:434
+#: plugins/dockers/layerdocker/LayerBox.cpp:430
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Zlúčiť vybrané vrstvy"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:435
+#: plugins/dockers/layerdocker/LayerBox.cpp:431
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1002
+#: plugins/dockers/layerdocker/LayerBox.cpp:998
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Rýchla maska výberu"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1024
+#: plugins/dockers/layerdocker/LayerBox.cpp:1020
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Zrušiť rýchlu masku výberu"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1234
+#: plugins/dockers/layerdocker/LayerBox.cpp:1230
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Prepnúť zámky a viditeľnosť"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1241
-#: plugins/dockers/layerdocker/LayerBox.cpp:1264
+#: plugins/dockers/layerdocker/LayerBox.cpp:1237
+#: plugins/dockers/layerdocker/LayerBox.cpp:1260
 #, kde-format
 msgid "&Add"
 msgstr "&Pridať"
@@ -45812,10 +45810,10 @@ msgid "&Oilpaint..."
 msgstr "&Olejomaľba..."
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:205
-#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:70
-#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:96
+#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:67
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:92
 #: plugins/paintops/particle/KisParticleOpOptionWidget.cpp:58
-#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:57
+#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:53
 #, kde-format
 msgid "Brush size"
 msgstr "Veľkosť štetca"
@@ -46894,18 +46892,18 @@ msgstr "Otočenie X:"
 msgid "Y-Rotation:"
 msgstr "Otočenie Y:"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:61
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:69
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:91
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:55
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:73
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:85
 #, kde-format
 msgid "X: "
 msgstr "X:"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:74
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:85
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:95
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:57
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:68
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:89
 #, kde-format
 msgid "Y: "
 msgstr "Y:"
@@ -46913,7 +46911,7 @@ msgstr "Y:"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:103
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:97
 #, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -46927,7 +46925,7 @@ msgstr[2] "Každých {n} buniek horizontálne"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:109
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:103
 #, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -46938,25 +46936,25 @@ msgstr[0] "Každá {n} bunka vertikálne"
 msgstr[1] "Každé {n} bunky vertikálne"
 msgstr[2] "Každých {n} buniek vertikálne"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:453
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:447
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
 msgstr "pixely/palec"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:454
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:448
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
 msgstr "pixely/cm"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:457
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:451
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
 msgstr " čiary/palec"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:458
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:452
 #, kde-format
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
@@ -52134,13 +52132,13 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Bristle Brush (the lines will be thinner than on preview)"
 msgstr "Štetinový štetec (čiary budú tenšie ako v náhľade)"
 
-#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:58
+#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:56
 #, kde-format
 msgid "Bristle options"
 msgstr "Možnosti štetín"
 
 #. i18n: ectx: attribute (title), widget (QWidget, inkTab)
-#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:60
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:55
 #: plugins/paintops/hairy/wdghairyeoptions.ui:263
 #, kde-format
 msgid "Ink depletion"
@@ -54283,7 +54281,7 @@ msgstr "Nepriehľadnosť vzdialenosti"
 msgid "Particle Count"
 msgstr "Počet častíc"
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:66
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:64
 #, kde-format
 msgid ""
 "Select how the particles are distributed as a function of the angle to the "
@@ -54292,7 +54290,7 @@ msgstr ""
 "Vyberte, ako sú častice rozložené v závislosti od uhla k stredu oblasti "
 "postreku."
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:69
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:67
 #, kde-format
 msgid ""
 "Set a custom distribution of the particles.\n"
@@ -54308,26 +54306,26 @@ msgstr ""
 "uhlom.\n"
 "Čím vyššia je krivka pri danom uhle, tým viac častíc skončí pod týmto uhlom."
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:74
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:110
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:72
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:108
 #, kde-format
 msgid "Repeat: "
 msgstr "Opakovanie: "
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:75
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:111
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:73
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:109
 #, kde-format
 msgctxt "Times symbol, like in 10x"
 msgid "x"
 msgstr "x"
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:78
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:76
 #, kde-format
 msgid ""
 "Set how many times should the curve repeat from 0 degrees to 360 degrees."
 msgstr "Nastaviť, koľkokrát sa má krivka opakovať od 0 stupňov do 360 stupňov."
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:81
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:79
 #, kde-format
 msgid ""
 "Select how the particles are distributed as a function of the distance from "
@@ -54336,7 +54334,7 @@ msgstr ""
 "Vyberte, ako sú častice rozložené v závislosti od vzdialenosti od stredu "
 "oblasti postreku."
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:84
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:82
 #, kde-format
 msgid ""
 "Activates the old behavior where the particles are more accumulated towards "
@@ -54345,12 +54343,12 @@ msgstr ""
 "Aktivuje staré správanie, pri ktorom sa častice viac hromadia smerom k "
 "stredu oblasti postreku."
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:86
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:84
 #, kde-format
 msgid "Standard deviation: "
 msgstr "Štandardná odchýlka"
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:90
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:88
 #, kde-format
 msgid ""
 "Set the standard deviation for the gaussian distribution.\n"
@@ -54360,12 +54358,12 @@ msgstr ""
 "Nastavenie štandardnej odchýlky pre Gaussovo rozdelenie.\n"
 "Pri nižších hodnotách sa častice sústredia do stredu oblasti postreku."
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:94
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:92
 #, kde-format
 msgid "Clustering amount: "
 msgstr "Množstvo zhlukovania: "
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:98
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:96
 #, kde-format
 msgid ""
 "Set how the particles should spread in the spray area.\n"
@@ -54382,7 +54380,7 @@ msgstr ""
 "oblasti postreku.\n"
 "Hodnoty blízke 0 spôsobia, že sa častice rozšíria rovnomernejšie."
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:105
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:103
 #, kde-format
 msgid ""
 "Set a custom distribution of the particles.\n"
@@ -54401,7 +54399,7 @@ msgstr ""
 "Čím vyššia je krivka v danej vzdialenosti, tým viac častíc skončí v tejto "
 "vzdialenosti."
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:114
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:112
 #, kde-format
 msgid ""
 "Set how many times should the curve repeat from the center to the border of "
@@ -54410,7 +54408,7 @@ msgstr ""
 "Nastaviť, koľkokrát sa má krivka opakovať od stredu po okraj oblasti "
 "postreku."
 
-#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:179
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:177
 #, kde-format
 msgid "Spray Area"
 msgstr "Oblasť postreku"
@@ -54637,7 +54635,7 @@ msgstr "Textúra:"
 msgid "Tangent Normal"
 msgstr "Normálna tangenta"
 
-#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:57
+#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:54
 #, kde-format
 msgid "Tangent Tilt"
 msgstr "Tangenciálny sklon"
@@ -57378,23 +57376,24 @@ msgstr "Kresliť elipsu"
 msgid "Ellipse Tool"
 msgstr "Nástroj elipsa"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:140
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:179
+#: plugins/tools/basictools/kis_tool_fill.cc:139
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:178
 #, kde-format
 msgid "You cannot use this tool with the selected layer type"
 msgstr "Tento nástroj nemôžete použiť s vybraným typom vrstvy"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:251
+#: plugins/tools/basictools/kis_tool_fill.cc:250
 msgctxt "(qtundo-format)"
 msgid "Flood Fill"
 msgstr "Vyplnenie"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:541
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:447
+#: plugins/tools/basictools/kis_tool_fill.cc:542
 #, fuzzy, kde-format
 #| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
 #| msgid "Scale: "
-msgctxt "{n} is the number value, % is the percent sign"
+msgctxt ""
+"The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
+"is the percent sign"
 msgid "Scale: {n}%"
 msgstr "Mierka:"
 
@@ -57405,20 +57404,19 @@ msgstr "Mierka:"
 msgid "Use custom blending options"
 msgstr "Možnosti kódovania"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:562
+#: plugins/tools/basictools/kis_tool_fill.cc:561
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in fill tool options"
 msgid "Threshold: "
 msgstr "Prah:"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:567
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:465
+#: plugins/tools/basictools/kis_tool_fill.cc:568
 #, fuzzy, kde-format
 #| msgctxt "The 'spread' spinbox prefix in fill tool options"
 #| msgid "Spread: "
-msgctxt "{n} is the number value, % is the percent sign"
+msgctxt ""
+"The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
+"percent sign"
 msgid "Spread: {n}%"
 msgstr "Rozprestrenie: "
 
@@ -57506,7 +57504,7 @@ msgid "Fill all regions until a specific boundary color"
 msgstr "Vyplniť všetky oblasti do určitej hraničnej farby"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
 #, kde-format
 msgid "Boundary color"
 msgstr "Hraničná farba"
@@ -58314,8 +58312,17 @@ msgid "Markers, Stroke, Fill"
 msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:121
-#, kde-format
-msgid "Opacity [*varies*]: "
+#, fuzzy, kde-format
+#| msgid "Opacity: "
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Opacity: {n}"
+msgstr "Nepriehľadnosť:"
+
+#: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:122
+#, fuzzy, kde-format
+#| msgid "Opacity [*varies*]: "
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Opacity [*varies*]: {n}"
 msgstr "Nepriehľadnosť [*kolíše*]: "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
@@ -58458,12 +58465,26 @@ msgstr "Akcie referenčných obrázkov"
 msgid "Reference Images Tool"
 msgstr "Nástroj referenčných obrázkov"
 
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
+#, fuzzy, kde-format
+#| msgid "Opacity [*varies*]: "
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Opacity [*varies*]: {n}%"
+msgstr "Nepriehľadnosť [*kolíše*]: "
+
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
 #, fuzzy, kde-format
 #| msgid "Saturation: "
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation: {n}%"
 msgstr "Sýtosť: "
+
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:55
+#, fuzzy, kde-format
+#| msgid "Saturation [*varies*]: "
+msgctxt "{n} is the number value, % is the percent sign"
+msgid "Saturation [*varies*]: {n}%"
+msgstr "Sýtosť [*kolíše*]: "
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
@@ -58719,7 +58740,17 @@ msgctxt "The 'threshold' spinbox prefix in contiguous selection tool options"
 msgid "Threshold: "
 msgstr "Prah:"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:380
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
+#, fuzzy, kde-format
+#| msgctxt "The 'spread' spinbox prefix in fill tool options"
+#| msgid "Spread: "
+msgctxt ""
+"The 'spread' spinbox in contiguous selection tool options; {n} is the number "
+"value, % is the percent sign"
+msgid "Spread: {n}%"
+msgstr "Rozprestrenie: "
+
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:382
 #, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in contiguous selection tool to use "
@@ -58727,19 +58758,19 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Použiť výber ako ohraničenie"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr "Vybrať oblasti podobnej farby ako kliknutá oblasť"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
 #, kde-format
 msgid "Select all regions until a specific boundary color"
 msgstr "Vybrať všetky oblasti do určitej hraničnej farby"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:238
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:249
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:250
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
@@ -58748,8 +58779,8 @@ msgstr ""
 "Nastaviť toleranciu podobnosti farby výberu. Zvyšovanie prahu zvyšuje rozsah "
 "podobných farieb, ktoré sa majú vybrané."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:394
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:253
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
@@ -58758,7 +58789,7 @@ msgstr ""
 "Nastavenie rozsahu nepriehľadnej časti výberu. Znížením rozprestrenia sa "
 "zníži nepriehľadnosť oblastí výberu v závislosti od podobnosti farieb."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
@@ -58767,7 +58798,7 @@ msgstr ""
 "Nastavenie, či sa má obrys aktívneho výberu považovať za hranicu pri "
 "vytváraní nového výberu"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
 #, kde-format
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
@@ -58871,7 +58902,17 @@ msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "Prah:"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:246
+#, fuzzy, kde-format
+#| msgctxt "The 'spread' spinbox prefix in fill tool options"
+#| msgid "Spread: "
+msgctxt ""
+"The 'spread' spinbox in similar color selection tool options; {n} is the "
+"number value, % is the percent sign"
+msgid "Spread: {n}%"
+msgstr "Rozprestrenie: "
+
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:261
 #, kde-format
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
@@ -59178,15 +59219,15 @@ msgstr "Vzorkovať farbu"
 msgid "Line height"
 msgstr "Výška riadka"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1582
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1591
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1589
 #, fuzzy, kde-format
 #| msgid "Normal"
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Normálny"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1595
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1593
 #, fuzzy, kde-format
 #| msgid "100%"
 msgctxt "line height for text"
@@ -59194,7 +59235,7 @@ msgid "100%"
 msgstr "100%"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1609
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
 #, kde-format
 msgid "Letter Spacing"
@@ -60035,28 +60076,48 @@ msgctxt "action"
 msgid "Enclose and Fill Tool"
 msgstr "Nástroj uzavretia a vyplnenia"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:269
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:268
 msgctxt "(qtundo-format)"
 msgid "Enclose and Fill"
 msgstr "Uzavrieť a vyplniť"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:426
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:425
 #, kde-format
 msgctxt "The 'invert' checkbox in enclose and fill tool"
 msgid "Invert"
 msgstr "Invertovať"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:431
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:430
 #, kde-format
 msgctxt "The 'include contour regions' checkbox in enclose and fill tool"
 msgid "Include contour regions"
 msgstr "Zahrnúť obrysové oblasti"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:448
+#, fuzzy, kde-format
+#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
+#| msgid "Scale: "
+msgctxt ""
+"The pattern 'scale' spinbox in enclose and fill tool options; {n} is the "
+"number value, % is the percent sign"
+msgid "Scale: {n}%"
+msgstr "Mierka:"
+
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in enclose and fill tool options"
 msgid "Threshold: "
 msgstr "Prah:"
+
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
+#, fuzzy, kde-format
+#| msgctxt "The 'spread' spinbox prefix in fill tool options"
+#| msgid "Spread: "
+msgctxt ""
+"The 'spread' spinbox in enclose and fill tool options; {n} is the number "
+"value, % is the percent sign"
+msgid "Spread: {n}%"
+msgstr "Rozprestrenie: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
 #, kde-format
@@ -60260,7 +60321,7 @@ msgctxt "{n} is the number value, % is the percent sign"
 msgid "Clean up: {n}%"
 msgstr "Vyčistiť"
 
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:129
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:128
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -61415,9 +61476,6 @@ msgstr "Nástroj referenčných obrázkov"
 #~| msgid "Shear Layer"
 #~ msgid "Shear Layers"
 #~ msgstr "Skosiť vrstvu"
-
-#~ msgid "Saturation [*varies*]: "
-#~ msgstr "Sýtosť [*kolíše*]: "
 
 #~ msgid "Embed tags..."
 #~ msgstr "Vložiť značky..."

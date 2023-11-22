@@ -85,6 +85,20 @@ namespace KisPaintingTweaks {
 
     QColor KRITAGLOBAL_EXPORT blendColors(const QColor &c1, const QColor &c2, qreal r1);
 
+
+    /**
+     * @brief luminosityCoarse
+     * This calculates the luminosity of the given QColor.
+     * It uses a very coarse (10 step) lut to linearize the sRGB trc, and then
+     * uses rec709 values to calculate the luminosity. Because of the effect of
+     * linearization, this is still more precise than one that just calculates
+     * based on coefficients.
+     * @param c the color to calculate the luminosity of.
+     * @param sRGBtrc whether to linearize the sRGB trc.
+     * @return a delinearized luminosity value, quantized to steps of 0.1.
+     */
+    qreal KRITAGLOBAL_EXPORT luminosityCoarse(const QColor &c, bool sRGBtrc = true);
+
     /**
      * \return an approximate difference between \p c1 and \p c2
      *         in a (nonlinear) range [0, 3]

@@ -92,7 +92,7 @@ public:
     void explicitUserStrokeEndRequest();
 
     /// Forwarded to the current KoToolBase
-    QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
 
     /// Forwarded to the current KoToolBase
     void inputMethodEvent(QInputMethodEvent *event);

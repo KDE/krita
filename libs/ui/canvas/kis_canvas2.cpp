@@ -474,11 +474,6 @@ KoShapeManager *KisCanvas2::localShapeManager() const
     return localShapeManager;
 }
 
-void KisCanvas2::updateInputMethodInfo()
-{
-    // TODO call (the protected) QWidget::updateMicroFocus() on the proper canvas widget...
-}
-
 const KisCoordinatesConverter* KisCanvas2::coordinatesConverter() const
 {
     return m_d->coordinatesConverter;

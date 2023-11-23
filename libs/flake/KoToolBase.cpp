@@ -124,7 +124,7 @@ void KoToolBase::explicitUserStrokeEndRequest()
 {
 }
 
-QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const
+QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     Q_D(const KoToolBase);
     if (d->canvas->canvasWidget() == 0)

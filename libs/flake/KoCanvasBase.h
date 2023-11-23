@@ -179,11 +179,6 @@ public:
     }
 
     /**
-     * This method should somehow call QWidget::updateMicroFocus() on the canvas widget.
-     */
-    virtual void updateInputMethodInfo() = 0;
-
-    /**
      * disconnect the given QObject completely and utterly from any and all
      * connections it has to any QObject owned by the canvas. Do this in
      * the setCanvas of every KoCanvasObserver.

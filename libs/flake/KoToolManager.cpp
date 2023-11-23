@@ -544,8 +544,6 @@ void KoToolManager::Private::postSwitchTool()
         canvasData->activateToolActions();
 
         canvasData->activeTool->activate(shapesToOperateOn);
-        KoCanvasBase *canvas = canvasData->canvas->canvas();
-        canvas->updateInputMethodInfo();
     } else {
 
         // Activate the actions for the currently active tool

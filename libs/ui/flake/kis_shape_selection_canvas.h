@@ -43,7 +43,6 @@ public:
     QWidget* canvasWidget() override;
     const QWidget* canvasWidget() const override;
     KoUnit unit() const override;
-    void updateInputMethodInfo() override {}
     void setCursor(const QCursor &) override {}
 private:
     QScopedPointer<KoShapeManager> m_shapeManager;

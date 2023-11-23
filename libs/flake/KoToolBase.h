@@ -176,7 +176,7 @@ public:
      * @param query specifies which property is queried.
      * @param converter the view converter for the current canvas.
      */
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
 
     /**
      * Text entry of complex text, like CJK, can be made more interactive if a tool

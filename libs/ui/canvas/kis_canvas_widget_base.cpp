@@ -231,7 +231,7 @@ KoToolProxy *KisCanvasWidgetBase::toolProxy() const
 
 QVariant KisCanvasWidgetBase::processInputMethodQuery(Qt::InputMethodQuery query) const
 {
-    return m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter);
+    return m_d->toolProxy->inputMethodQuery(query);
 }
 
 void KisCanvasWidgetBase::processInputMethodEvent(QInputMethodEvent *event)

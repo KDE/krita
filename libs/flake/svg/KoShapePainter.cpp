@@ -94,8 +94,6 @@ public:
         return KoUnit(KoUnit::Point);
     }
 
-    void updateInputMethodInfo() override {}
-
     void setCursor(const QCursor &) override {}
 
 private:

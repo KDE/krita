@@ -1094,6 +1094,7 @@ KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocume
     } else {
         shape->setPosition(shapeRect.topLeft());
     }
+    shape->setPaintOrder(KoShape::Stroke, KoShape::Fill);
 
     return shape;
 }

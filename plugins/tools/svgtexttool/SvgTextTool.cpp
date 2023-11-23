@@ -710,7 +710,16 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
     if (m_interactionStrategy) {
         m_interactionStrategy->handleMouseMove(event->point, event->modifiers());
         if (m_dragging == DragMode::Create) {
-            useCursor(m_text_inline_horizontal);
+            SvgCreateTextStrategy *c = dynamic_cast<SvgCreateTextStrategy*>(m_interactionStrategy.get());
+            if (c && c->draggingInlineSize()) {
+                if (this->writingMode() == KoSvgText::HorizontalTB) {
+                    useCursor(m_text_inline_horizontal);
+                } else {
+                    useCursor(m_text_inline_vertical);
+                }
+            } else {
+                useCursor(m_base_cursor);
+            }
         } else if (m_dragging == DragMode::Select && this->selectedShape()) {
             KoSvgTextShape *const selectedShape = this->selectedShape();
             // Todo: replace with something a little less hacky.

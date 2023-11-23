@@ -30,6 +30,9 @@ SvgCreateTextStrategy::SvgCreateTextStrategy(SvgTextTool *tool, const QPointF &c
     , m_dragStart(clicked)
     , m_dragEnd(clicked)
 {
+    const QFontMetrics fontMetrics = QFontMetrics(tool->defaultFont());
+    double lineHeight = (fontMetrics.lineSpacing() / fontMetrics.fontDpi()) * 72.0;
+    m_minSizeInline = {lineHeight, lineHeight};
 }
 
 void SvgCreateTextStrategy::paint(QPainter &painter, const KoViewConverter &converter)
@@ -65,7 +68,7 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
     const KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(tool->writingMode());
 
     bool unwrappedText = m_modifiers.testFlag(Qt::ControlModifier);
-    if (rectangle.width() < lineHeight && rectangle.height() < lineHeight) {
+    if (rectangle.width() < m_minSizeInline.width() && rectangle.height() < m_minSizeInline.height()) {
         unwrappedText = true;
     }
     QString extraProperties;
@@ -135,4 +138,10 @@ void SvgCreateTextStrategy::cancelInteraction()
 void SvgCreateTextStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     m_modifiers = modifiers;
+}
+
+bool SvgCreateTextStrategy::draggingInlineSize()
+{
+    QRectF rectangle = QRectF(m_dragStart, m_dragEnd).normalized();
+    return rectangle.width() >= m_minSizeInline.width() || rectangle.height() >= m_minSizeInline.height();
 }

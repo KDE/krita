@@ -10,6 +10,7 @@
 #include <KoInteractionStrategy.h>
 
 #include <QPointF>
+#include <QSizeF>
 
 class SvgTextTool;
 
@@ -27,9 +28,12 @@ public:
     void cancelInteraction() override;
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
 
+    bool draggingInlineSize();
+
 private:
     QPointF m_dragStart;
     QPointF m_dragEnd;
+    QSizeF m_minSizeInline;
     Qt::KeyboardModifiers m_modifiers;
 };
 

@@ -42,8 +42,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-22 00:40+0000\n"
-"PO-Revision-Date: 2023-11-16 20:19+0100\n"
+"POT-Creation-Date: 2023-11-23 00:40+0000\n"
+"PO-Revision-Date: 2023-11-22 21:35+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -15832,12 +15832,10 @@ msgstr "Penik-opcia ŝovilo 4"
 #. i18n: context: iconText @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2031 krita/kritamenu.action:2033
 #: krita/kritamenu.action:2034
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Brush option slider 1"
+#, kde-format
 msgctxt "action"
 msgid "Brush option slider 5"
-msgstr "Penik-opcia ŝovilo 1"
+msgstr "Penik-opcia ŝovilo 5"
 
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -16378,25 +16376,25 @@ msgstr ""
 "la dokumenton, la tekstobjekto estos konvertita al Krita 5-formato kiu ne "
 "plu kongruos kun Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1009
+#: libs/flake/text/KoSvgTextShape.cpp:1003
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Teksto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1011
-#: libs/flake/text/KoSvgTextShape.cpp:1019
+#: libs/flake/text/KoSvgTextShape.cpp:1005
+#: libs/flake/text/KoSvgTextShape.cpp:1013
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Teksto Formo"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1017
+#: libs/flake/text/KoSvgTextShape.cpp:1011
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Teksto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1031
-#: libs/flake/text/KoSvgTextShape.cpp:1046
+#: libs/flake/text/KoSvgTextShape.cpp:1025
+#: libs/flake/text/KoSvgTextShape.cpp:1040
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -24679,7 +24677,7 @@ msgstr ""
 "<html><head/><body><p>Povas esti uzata por solvi problemojn pri rendimento "
 "aŭ artefaktado kun desegnaj helpantoj.\n"
 "              </p><p>Ŝanĝiĝo de la pixmap-kaŝmemorgrandeco postulas "
-"restartigon.</p></"
+"restartigon.</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:179
@@ -36477,7 +36475,7 @@ msgstr "Defaŭlta:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:592
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:602
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -36564,7 +36562,7 @@ msgctxt "@item:intable Action name in shortcuts configuration"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:167
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:177
 #, kde-format
 msgctxt "%1 is the number of conflicts"
 msgid "Shortcut Conflict"
@@ -36572,12 +36570,12 @@ msgid_plural "Shortcut Conflicts"
 msgstr[0] "Konflikto de Ŝparvojo"
 msgstr[1] "Konfliktoj de Ŝparvojoj"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:171
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:181
 #, kde-format
 msgid "Shortcut '%1' for action '%2'\n"
 msgstr "Ŝparvojo '%1' por ago '%2'\n"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:176
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:186
 #, kde-format
 msgctxt "%1 is the number of ambiguous shortcut clashes (hidden)"
 msgid ""
@@ -36597,18 +36595,18 @@ msgstr[1] ""
 "Ĉu vi volas atribui malplenan ŝparvojon al ĉi tiuj agoj?\n"
 "%3"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:186
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:542
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:196
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:552
 #, kde-format
 msgid "Reassign"
 msgstr "Reasigni"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:195
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:205
 #, kde-format
 msgid "Shortcut conflict"
 msgstr "Konflikto de mallongigo"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:196
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:206
 #, kde-format
 msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
@@ -36617,7 +36615,7 @@ msgstr ""
 "<qt>La klavkombinaĵo '%1' jam estas uzata de la ago <b>%2</b>.<br>Bonvolu "
 "elekti alian.</qt>"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:226
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:236
 #, kde-format
 msgid ""
 "Click on the button, then enter the shortcut like you would in the program.\n"
@@ -36626,12 +36624,12 @@ msgstr ""
 "Alklaku la butonon, tiam enigu la ŝparvojon kiel vi farus en la programo.\n"
 "Ekzemplo por Ctrl+A: tenu la klavon Ctrl kaj premu A."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:536
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:546
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "Konflikto kun Norma Aplika Ŝparvojo"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:537
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:547
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -36642,18 +36640,18 @@ msgstr ""
 "aplikaĵoj uzas.\n"
 "Ĉu vi vere volas uzi ĝin ankaŭ kiel ĉiean ŝparvojon?"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:585
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Enigo"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:639
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:649
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "La klavo, kiun vi ĵus premis, ne estas subtenata de Qt."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:640
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:650
 #, kde-format
 msgid "Unsupported Key"
 msgstr "Nesubtenata Ŝlosilo"
@@ -56951,9 +56949,7 @@ msgid "Flood Fill"
 msgstr "Inunda Plenigo"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:542
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Scale: {n}%"
+#, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
 "is the percent sign"
@@ -56973,9 +56969,7 @@ msgid "Threshold: "
 msgstr "Pentrosojlo: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:568
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Spread: {n}%"
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
 "percent sign"
@@ -57865,19 +57859,16 @@ msgid "Markers, Stroke, Fill"
 msgstr "Markiloj, Streko, Plenigo"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:121
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Opacity: {n}%"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}"
-msgstr "Opakeco: {n}%"
+msgstr "Opakeco: {n}"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:122
-#, fuzzy, kde-format
-#| msgid "Opacity [*varies*]: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}"
-msgstr "Opakeco [*varias*]:"
+msgstr "Opakeco [*varias*]: {n}"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
@@ -58021,11 +58012,10 @@ msgid "Reference Images Tool"
 msgstr "Referenca Bilda Ilo"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
-#, fuzzy, kde-format
-#| msgid "Opacity [*varies*]: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}%"
-msgstr "Opakeco [*varias*]:"
+msgstr "Opakeco [*varias*]: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
 #, kde-format
@@ -58034,12 +58024,10 @@ msgid "Saturation: {n}%"
 msgstr "Saturiĝo: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:55
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Saturation: {n}%"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation [*varies*]: {n}%"
-msgstr "Saturiĝo: {n}%"
+msgstr "Saturiĝo [*varias*]: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
@@ -58296,14 +58284,12 @@ msgid "Threshold: "
 msgstr "Pentrosojlo:"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Spread: {n}%"
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Disvastigo: {n}%"
+msgstr "Disvastiĝo: {n}%"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:382
 #, kde-format
@@ -58458,14 +58444,12 @@ msgid "Threshold: "
 msgstr "Pentrosojlo:"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:246
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Spread: {n}%"
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in similar color selection tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Disvastigo: {n}%"
+msgstr "Disvastiĝo: {n}%"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:261
 #, kde-format
@@ -59642,9 +59626,7 @@ msgid "Include contour regions"
 msgstr "Inkluzivi konturajn regionojn"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:448
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Scale: {n}%"
+#, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in enclose and fill tool options; {n} is the "
 "number value, % is the percent sign"
@@ -59658,14 +59640,12 @@ msgid "Threshold: "
 msgstr "Pentrosojlo:"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Spread: {n}%"
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in enclose and fill tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Disvastigo: {n}%"
+msgstr "Disvastiĝo: {n}%"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
 #, kde-format

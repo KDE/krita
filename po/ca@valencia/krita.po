@@ -30420,7 +30420,7 @@ msgstr "L'operació s'ha interromput."
 #: libs/ui/KisImportExportErrorCode.cpp:38
 #, kde-format
 msgid "A timeout occurred."
-msgstr "S'ha excedit el temps límit."
+msgstr "S'ha excedit el temps."
 
 #: libs/ui/KisImportExportErrorCode.cpp:42
 #, kde-format

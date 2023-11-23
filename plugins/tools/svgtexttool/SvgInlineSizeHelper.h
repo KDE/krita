@@ -120,7 +120,8 @@ struct Q_DECL_HIDDEN InlineSizeInfo {
         // deal with to also handle the different orientations of writing-mode.
         // We default to the "default caret size"  when the textShape (and thus outline) is empty.
         QLineF caret;
-        shape->cursorForPos(0, caret);
+        QColor c;
+        shape->cursorForPos(0, caret, c);
         const QRectF outline = shape->outlineRect().isEmpty()? QRectF(caret.p2(), caret.p1()): shape->outlineRect();
         QTransform editorTransform;
         switch (writingMode) {

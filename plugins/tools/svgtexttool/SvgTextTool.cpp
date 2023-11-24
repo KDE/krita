@@ -63,6 +63,10 @@
 
 using SvgInlineSizeHelper::InlineSizeInfo;
 
+constexpr double INLINE_SIZE_DASHES_PATTERN_A = 4.0; /// Size of the visible part of the inline-size handle dashes.
+constexpr double INLINE_SIZE_DASHES_PATTERN_B = 8.0; /// Size of the hidden part of the inline-size handle dashes.
+constexpr int INLINE_SIZE_DASHES_PATTERN_LENGTH = 3; /// Total amount of trailing dashes on inline-size handles.
+
 
 static bool debugEnabled()
 {
@@ -518,7 +522,10 @@ QRectF SvgTextTool::decorationsRect() const
         const QPointF anchor = shape->absoluteTransformation().map(QPointF());
         rect |= kisGrowRect(QRectF(anchor, anchor), handleRadius());
 
-        if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape)) {
+        qreal pxlToPt = canvas()->viewConverter()->viewToDocumentX(1.0);
+        qreal length = (INLINE_SIZE_DASHES_PATTERN_A + INLINE_SIZE_DASHES_PATTERN_B) * INLINE_SIZE_DASHES_PATTERN_LENGTH;
+
+        if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape, length * pxlToPt)) {
             rect |= kisGrowRect(info->boundingRect(), handleRadius() * 2);
         }
 
@@ -552,7 +559,10 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
             handlePainter.drawPath(path);
         }
 
-        if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape)) {
+
+        qreal pxlToPt = canvas()->viewConverter()->viewToDocumentX(1.0);
+        qreal length = (INLINE_SIZE_DASHES_PATTERN_A + INLINE_SIZE_DASHES_PATTERN_B) * INLINE_SIZE_DASHES_PATTERN_LENGTH;
+        if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape, length*pxlToPt)) {
             handlePainter.setHandleStyle(KisHandleStyle::secondarySelection());
             handlePainter.drawConnectionLine(info->baselineLineLocal());
 
@@ -560,10 +570,9 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
                 handlePainter.setHandleStyle(m_dragging == DragMode::InlineSizeHandle? KisHandleStyle::partiallyHighlightedPrimaryHandles()
                                                                                      : KisHandleStyle::highlightedPrimaryHandles());
             }
-            qreal pxlToPt = canvas()->viewConverter()->viewToDocumentX(1.0);
-            QVector<qreal> dashPattern = {4, 8};
+            QVector<qreal> dashPattern = {INLINE_SIZE_DASHES_PATTERN_A, INLINE_SIZE_DASHES_PATTERN_B};
             handlePainter.drawHandleLine(info->startLineLocal());
-            handlePainter.drawHandleLine(info->startLineDashes(pxlToPt), 1.0, dashPattern);
+            handlePainter.drawHandleLine(info->startLineDashes(), 1.0, dashPattern, INLINE_SIZE_DASHES_PATTERN_A);
 
             handlePainter.setHandleStyle(KisHandleStyle::secondarySelection());
             if (m_highlightItem == HighlightItem::InlineSizeEndHandle) {
@@ -571,7 +580,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
                                                                                      : KisHandleStyle::highlightedPrimaryHandles());
             }
             handlePainter.drawHandleLine(info->endLineLocal());
-            handlePainter.drawHandleLine(info->endLineDashes(pxlToPt), 1.0, dashPattern);
+            handlePainter.drawHandleLine(info->endLineDashes(), 1.0, dashPattern, INLINE_SIZE_DASHES_PATTERN_A);
         }
 
         if (m_highlightItem == HighlightItem::MoveBorder) {

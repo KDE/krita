@@ -176,12 +176,11 @@ private:
         return {QPointF(left, top), QPointF(right, bottom + dashesLength)};
     }
 
-    [[nodiscard]] inline QLineF generateDashLine(const QLineF line, const qreal toPtMultiplier = 1.0, const qreal dashLengthPixels = 4.0) const
+    [[nodiscard]] inline QLineF generateDashLine(const QLineF line, const qreal dashLength = 4.0) const
     {
-        qreal dashL = dashLengthPixels * toPtMultiplier;
         QPointF start = line.p2();
         QLineF dash = line;
-        dash.setLength(line.length() + dashL);
+        dash.setLength(line.length() + dashLength);
         dash.setP1(start);
         return dash;
     }
@@ -232,14 +231,14 @@ public:
         }
     }
 
-    [[nodiscard]] inline QLineF endLineDashes(qreal pixelToPt) const
+    [[nodiscard]] inline QLineF endLineDashes() const
     {
         switch (endLineSide()) {
         case Side::LeftOrTop:
-            return generateDashLine(editorTransform.map(leftLineRaw()), pixelToPt, dashesLength);
+            return generateDashLine(editorTransform.map(leftLineRaw()), dashesLength);
         case Side::RightOrBottom:
         default:
-            return generateDashLine(editorTransform.map(rightLineRaw()), pixelToPt, dashesLength);
+            return generateDashLine(editorTransform.map(rightLineRaw()), dashesLength);
         }
     }
 
@@ -271,14 +270,14 @@ public:
         }
     }
 
-    [[nodiscard]] inline QLineF startLineDashes(qreal pixelToPt) const
+    [[nodiscard]] inline QLineF startLineDashes() const
     {
         switch (endLineSide()) {
         case Side::LeftOrTop:
-            return generateDashLine(editorTransform.map(rightLineRaw()), pixelToPt, dashesLength);
+            return generateDashLine(editorTransform.map(rightLineRaw()), dashesLength);
         case Side::RightOrBottom:
         default:
-            return generateDashLine(editorTransform.map(leftLineRaw()), pixelToPt, dashesLength);
+            return generateDashLine(editorTransform.map(leftLineRaw()), dashesLength);
         }
     }
 

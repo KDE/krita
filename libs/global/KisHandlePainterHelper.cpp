@@ -120,7 +120,7 @@ void KisHandlePainterHelper::drawHandleSmallCircle(const QPointF &center)
     drawHandleCircle(center, 0.7 * m_handleRadius);
 }
 
-void KisHandlePainterHelper::drawHandleLine(const QLineF &line, qreal width, QVector<qreal> dashPattern)
+void KisHandlePainterHelper::drawHandleLine(const QLineF &line, qreal width, QVector<qreal> dashPattern, qreal dashOffset)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_painter);
 
@@ -131,7 +131,7 @@ void KisHandlePainterHelper::drawHandleLine(const QLineF &line, qreal width, QVe
     s.setWidth(width);
     if (!dashPattern.isEmpty()) {
         s.setDashPattern(dashPattern);
-        s.setDashOffset(dashPattern.first());
+        s.setDashOffset(dashOffset);
     }
     s.setCapStyle(Qt::RoundCap);
     s.setJoinStyle(Qt::RoundJoin);

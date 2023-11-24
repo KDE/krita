@@ -66,7 +66,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-17 02:26+0000\n"
-"PO-Revision-Date: 2023-11-17 01:18+0100\n"
+"PO-Revision-Date: 2023-11-23 20:29+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -22642,7 +22642,7 @@ msgstr "(%1, %2), (%3, %4)"
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:166
 #, kde-format
 msgid "*varies*"
-msgstr "*cambia*"
+msgstr "*varía*"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:207
 msgctxt "(qtundo-format)"

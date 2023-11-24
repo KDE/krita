@@ -588,7 +588,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
         } else {
             handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
         }
-        handlePainter.drawHandleCircle(shape->initialTextPosition(), KoToolBase::handleRadius() * 0.75);
+        handlePainter.drawHandleCircle(QPointF(), KoToolBase::handleRadius() * 0.75);
     }
 
     gc.setTransform(converter.documentToView(), true);

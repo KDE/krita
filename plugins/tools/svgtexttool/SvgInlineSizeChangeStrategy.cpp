@@ -115,11 +115,13 @@ void SvgInlineSizeChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
         newPosition += diff;
     }
 
-    bool flip = newInlineSize < -1.0;
+    const bool flip = newInlineSize < -1.0;
     if (newInlineSize >= -1.0 && newInlineSize < 1.0) {
         newInlineSize = 1.0;
+    } else {
+        newInlineSize = qRound(newInlineSize * 100.0) / 100.0;
+
     }
-    newInlineSize = qRound(newInlineSize * 100.0) / 100.0;
 
     KoSvgText::TextAnchor newAnchor = KoSvgText::TextAnchor(m_originalAnchor);
     if (flip) {

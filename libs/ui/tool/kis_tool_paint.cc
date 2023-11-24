@@ -575,7 +575,7 @@ void KisToolPaint::decreaseBrushSize()
     std::vector<int>::reverse_iterator result =
         std::upper_bound(m_standardBrushSizes.rbegin(),
                          m_standardBrushSizes.rend(),
-                         (int)paintopSize,
+                         qRound(paintopSize),
                          std::greater<int>());
 
     int newValue = result != m_standardBrushSizes.rend() ? *result : m_standardBrushSizes.front();

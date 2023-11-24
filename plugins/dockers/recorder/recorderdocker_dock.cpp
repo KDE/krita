@@ -56,6 +56,7 @@ public:
     int quality = 0;
     int compression = 0;
     int resolution = 0;
+    bool realTimeCaptureMode = false;
     bool recordIsolateLayerMode = false;
     bool recordAutomatically = false;
 
@@ -88,6 +89,7 @@ public:
         quality = config.quality();
         compression = config.compression();
         resolution = config.resolution();
+        realTimeCaptureMode = config.realTimeCaptureMode();
         recordIsolateLayerMode = config.recordIsolateLayerMode();
         recordAutomatically = config.recordAutomatically();
 
@@ -137,7 +139,15 @@ public:
     void updateWriterSettings()
     {
         outputDirectory = snapshotDirectory % QDir::separator() % prefix % QDir::separator();
-        writer.setup({ outputDirectory, format, quality, compression, resolution, captureInterval, recordIsolateLayerMode });
+        writer.setup({
+            outputDirectory,
+            format,
+            quality,
+            compression,
+            resolution,
+            captureInterval,
+            recordIsolateLayerMode,
+            realTimeCaptureMode});
     }
 
     QString getPrefix()
@@ -229,9 +239,10 @@ RecorderDockerDock::RecorderDockerDock()
     d->loadSettings();
 
     d->ui->editDirectory->setText(d->snapshotDirectory);
-    d->ui->spinCaptureInterval->setValue(d->captureInterval);
+    d->ui->spinRate->setValue(d->captureInterval);
     d->ui->spinQuality->setValue(d->quality);
     d->ui->comboResolution->setCurrentIndex(d->resolution);
+    d->ui->checkBoxRealTimeCaptureMode->setChecked(d->realTimeCaptureMode);
     d->ui->checkBoxRecordIsolateMode->setChecked(d->recordIsolateLayerMode);
     d->ui->checkBoxAutoRecord->setChecked(d->recordAutomatically);
 
@@ -249,10 +260,11 @@ RecorderDockerDock::RecorderDockerDock()
 
     connect(d->ui->buttonManageRecordings, SIGNAL(clicked()), this, SLOT(onManageRecordingsButtonClicked()));
     connect(d->ui->buttonBrowse, SIGNAL(clicked()), this, SLOT(onSelectRecordFolderButtonClicked()));
-    connect(d->ui->spinCaptureInterval, SIGNAL(valueChanged(double)), this, SLOT(onCaptureIntervalChanged(double)));
+    connect(d->ui->spinRate, SIGNAL(valueChanged(double)), this, SLOT(onCaptureIntervalChanged(double)));
     connect(d->ui->comboFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(onFormatChanged(int)));
     connect(d->ui->spinQuality, SIGNAL(valueChanged(int)), this, SLOT(onQualityChanged(int)));
     connect(d->ui->comboResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(onResolutionChanged(int)));
+    connect(d->ui->checkBoxRealTimeCaptureMode, SIGNAL(toggled(bool)), this, SLOT(onRealTimeCaptureModeToggled(bool)));
     connect(d->ui->checkBoxRecordIsolateMode, SIGNAL(toggled(bool)), this, SLOT(onRecordIsolateLayerModeToggled(bool)));
     connect(d->ui->checkBoxAutoRecord, SIGNAL(toggled(bool)), this, SLOT(onAutoRecordToggled(bool)));
     connect(d->ui->buttonRecordToggle, SIGNAL(toggled(bool)), this, SLOT(onRecordButtonToggled(bool)));
@@ -413,6 +425,13 @@ void RecorderDockerDock::onAutoRecordToggled(bool checked)
     d->loadSettings();
 }
 
+void RecorderDockerDock::onRealTimeCaptureModeToggled(bool checked)
+{
+    d->realTimeCaptureMode = checked;
+    RecorderConfig(false).setRealTimeCaptureMode(checked);
+    d->loadSettings();
+}
+
 void RecorderDockerDock::onCaptureIntervalChanged(double interval)
 {
     d->captureInterval = interval;
@@ -475,7 +494,11 @@ void RecorderDockerDock::onWriterFrameWriteFailed()
 
 void RecorderDockerDock::onLowPerformanceWarning()
 {
-    d->showWarning(i18n("Low performance warning. The recorder is not able to write all the frames in time. Try increasing the capture interval."));
+    if (d->realTimeCaptureMode) {
+        d->showWarning(i18n("Low performance warning. The recorder is not able to write all the frames in time during Real Time Capture mode.\nTry to reduce the frame rate for the ffmpeg export or reduce the scaling filtering in the canvas acceleration settings."));
+    } else {
+        d->showWarning(i18n("Low performance warning. The recorder is not able to write all the frames in time.\nTry to increase the capture interval or reduce the scaling filtering in the canvas acceleration settings."));
+    }
 }
 
 void RecorderDockerDock::onWarningTimeout()

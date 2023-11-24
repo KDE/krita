@@ -32,6 +32,7 @@ private Q_SLOTS:
 
     void onRecordIsolateLayerModeToggled(bool checked);
     void onAutoRecordToggled(bool checked);
+    void onRealTimeCaptureModeToggled(bool checked);
     void onCaptureIntervalChanged(double interval);
     void onQualityChanged(int value);
     void onFormatChanged(int format);

@@ -24,6 +24,7 @@ struct RecorderWriterSettings
     int resolution;
     double captureInterval;
     bool recordIsolateLayerMode;
+    bool realTimeCaptureMode;
 };
 
 class RecorderWriter: public QThread

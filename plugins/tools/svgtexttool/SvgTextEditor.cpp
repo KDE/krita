@@ -247,7 +247,6 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     m_textEditorWidget.setupUi(m_page);
     setCentralWidget(m_page);
 
-    m_textEditorWidget.chkVertical->setVisible(false);
 #ifndef Q_OS_WIN
     KCharSelect *charSelector = new KCharSelect(m_charSelectDialog, 0, KCharSelect::AllGuiElements);
     m_charSelectDialog->setMainWidget(charSelector);

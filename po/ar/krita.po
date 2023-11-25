@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-23 00:40+0000\n"
+"POT-Creation-Date: 2023-11-25 00:40+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -17047,7 +17047,7 @@ msgstr "شكل مسار بسيط"
 msgid "%1 Options"
 msgstr "خيارات %1"
 
-#: libs/flake/KoToolManager.cpp:576
+#: libs/flake/KoToolManager.cpp:574
 #, kde-format
 msgid "Active tool: %1"
 msgstr "الأداة النشطة: %1"
@@ -17061,25 +17061,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1003
+#: libs/flake/text/KoSvgTextShape.cpp:1040
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "نص"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1005
-#: libs/flake/text/KoSvgTextShape.cpp:1013
+#: libs/flake/text/KoSvgTextShape.cpp:1042
+#: libs/flake/text/KoSvgTextShape.cpp:1050
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "شكل SVG نصّيّ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1011
+#: libs/flake/text/KoSvgTextShape.cpp:1048
 #, kde-format
 msgid "SVG Text"
 msgstr "‏SVG نصّيّ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1025
-#: libs/flake/text/KoSvgTextShape.cpp:1040
+#: libs/flake/text/KoSvgTextShape.cpp:1062
+#: libs/flake/text/KoSvgTextShape.cpp:1077
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -37450,7 +37450,7 @@ msgstr "المبدئيّ:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:602
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -37535,7 +37535,7 @@ msgctxt "@item:intable Action name in shortcuts configuration"
 msgid "%1"
 msgstr "‏%1"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:177
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:170
 #, kde-format
 msgctxt "%1 is the number of conflicts"
 msgid "Shortcut Conflict"
@@ -37547,12 +37547,12 @@ msgstr[3] "تضارب الاختصارات"
 msgstr[4] "تضارب الاختصارات"
 msgstr[5] "تضارب الاختصارات"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:181
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:174
 #, kde-format
 msgid "Shortcut '%1' for action '%2'\n"
 msgstr "الاختصار '%1' للإجراء '%2'\n"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:186
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:179
 #, kde-format
 msgctxt "%1 is the number of ambiguous shortcut clashes (hidden)"
 msgid ""
@@ -37588,18 +37588,18 @@ msgstr[5] ""
 "هل تريد اسناد اختصار فارغ إلى هذه الإجراءات؟\n"
 "%3"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:196
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:552
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
 #, kde-format
 msgid "Reassign"
 msgstr "أعِد الإسناد"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:205
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:198
 #, kde-format
 msgid "Shortcut conflict"
 msgstr "تضارب الاختصارات"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:206
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:199
 #, kde-format
 msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
@@ -37608,7 +37608,7 @@ msgstr ""
 "تجميعة المفاتيح ’%1‘ يستخدمها الإجراء <b>%2</b> بالفعل.<br>رجاءً اختر أخرى "
 "مختلفة."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:236
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:229
 #, kde-format
 msgid ""
 "Click on the button, then enter the shortcut like you would in the program.\n"
@@ -37617,12 +37617,12 @@ msgstr ""
 "انقر الزّرّ ثمّ أدخل الاختصار الذي تريد في البرنامج.\n"
 "فمثلًا ل‍ Ctrl+A: أبقِ مفتاح Ctrl مضغوطًا واضغط A."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:546
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "تضارب مع اختصار تطبيق قياسيّ"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:547
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -37633,18 +37633,18 @@ msgstr ""
 "التّطبيقات.\n"
 "أمتأكّد من استخدامه كاختصار عموميّ أيضًا؟"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "الدّخل"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:649
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "المفتاح الذي ضغطته لا تدعمه كيوت."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:650
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
 #, kde-format
 msgid "Unsupported Key"
 msgstr "مفتاح غير مدعوم"
@@ -60390,7 +60390,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "أداة التّحديد بالمتشابهات"
 
-#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:36
+#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
 msgstr ""
@@ -60496,7 +60496,7 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
 #, kde-format
 msgid "Letter Spacing"
 msgstr "تباعد الأحرف"
@@ -60955,7 +60955,7 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:275
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:321
 #, fuzzy, kde-format
 #| msgid "Edit Text"
 msgctxt "@title:window"
@@ -61037,7 +61037,7 @@ msgid "Anchor text to the left."
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:55
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:65
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Anchor at Middle"
@@ -61045,13 +61045,47 @@ msgid "Anchor text to the middle."
 msgstr "اربط بالمنتصف"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:68
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:88
 #, kde-format
 msgid "Anchor text to the right."
 msgstr ""
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:131
+#, kde-format
+msgid "Text flows horizontal, top to bottom."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:157
+#, kde-format
+msgid "Text flows vertical, right to left."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:183
+#, kde-format
+msgid "Text flows vertical, left to right."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:216
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Change writing direction"
+msgid "Left to right text direction."
+msgstr "غيّر اتّجاه الكتابة"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:242
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Edge Detection"
+msgid "Right to left text direction."
+msgstr "اكتشاف الحافّة"
+
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:102
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:286
 #, fuzzy, kde-format
 #| msgid "SVG Source"
 msgid "Edit SVG Source"
@@ -65228,13 +65262,6 @@ msgstr "الصّور المرجع"
 #~ msgctxt "action"
 #~ msgid "Escape in left direction"
 #~ msgstr "غيّر اتّجاه النّصّ"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Change writing direction"
-#~ msgctxt "action"
-#~ msgid "Escape in right direction"
-#~ msgstr "غيّر اتّجاه الكتابة"
 
 #, fuzzy
 #~| msgctxt "action"

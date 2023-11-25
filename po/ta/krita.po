@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-23 00:40+0000\n"
+"POT-Creation-Date: 2023-11-25 00:40+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -16408,7 +16408,7 @@ msgstr "வார்ப்புருவை உருவாக்கு"
 msgid "%1 Options"
 msgstr "தவிர்ப்புகள்"
 
-#: libs/flake/KoToolManager.cpp:576
+#: libs/flake/KoToolManager.cpp:574
 #, fuzzy, kde-format
 msgid "Active tool: %1"
 msgstr "நகர்த்தும் கருவி"
@@ -16422,26 +16422,26 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1003
+#: libs/flake/text/KoSvgTextShape.cpp:1040
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "உரை"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1005
-#: libs/flake/text/KoSvgTextShape.cpp:1013
+#: libs/flake/text/KoSvgTextShape.cpp:1042
+#: libs/flake/text/KoSvgTextShape.cpp:1050
 #, fuzzy, kde-format
 msgid "SVG Text Shape"
 msgstr "வடிவம்:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1011
+#: libs/flake/text/KoSvgTextShape.cpp:1048
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "உரை:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1025
-#: libs/flake/text/KoSvgTextShape.cpp:1040
+#: libs/flake/text/KoSvgTextShape.cpp:1062
+#: libs/flake/text/KoSvgTextShape.cpp:1077
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -35845,7 +35845,7 @@ msgstr "நிகழ்விலுள்ள அடுக்கை மாற்�
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:602
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
 #, fuzzy, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -35926,7 +35926,7 @@ msgctxt "@item:intable Action name in shortcuts configuration"
 msgid "%1"
 msgstr "%"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:177
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:170
 #, fuzzy, kde-format
 msgctxt "%1 is the number of conflicts"
 msgid "Shortcut Conflict"
@@ -35934,12 +35934,12 @@ msgid_plural "Shortcut Conflicts"
 msgstr[0] "பெயர்ச்சி "
 msgstr[1] "பெயர்ச்சி "
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:181
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:174
 #, fuzzy, kde-format
 msgid "Shortcut '%1' for action '%2'\n"
 msgstr "சேமிப்பதை உறுதிசெய்"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:186
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:179
 #, kde-format
 msgctxt "%1 is the number of ambiguous shortcut clashes (hidden)"
 msgid ""
@@ -35953,37 +35953,37 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:196
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:552
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
 #, fuzzy, kde-format
 msgid "Reassign"
 msgstr "காஸ்சியன் தெளிவற்ற நிலை"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:205
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:198
 #, fuzzy, kde-format
 msgid "Shortcut conflict"
 msgstr "பெயர்ச்சி "
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:206
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:199
 #, kde-format
 msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
 "<br>Please select a different one.</qt>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:236
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:229
 #, kde-format
 msgid ""
 "Click on the button, then enter the shortcut like you would in the program.\n"
 "Example for Ctrl+A: hold the Ctrl key and press A."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:546
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:547
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -35991,18 +35991,18 @@ msgid ""
 "Do you really want to use it as a global shortcut as well?"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
 #, fuzzy, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "வெளியே"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:649
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:650
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
 #, kde-format
 msgid "Unsupported Key"
 msgstr ""
@@ -57722,7 +57722,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "தேர்வை அளவுமாற்று"
 
-#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:36
+#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
 msgstr ""
@@ -57823,7 +57823,7 @@ msgstr "100"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
 #, fuzzy, kde-format
 msgid "Letter Spacing"
 msgstr "இடைவெளியாக்கம்:"
@@ -58280,7 +58280,7 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:275
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:321
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -58361,19 +58361,49 @@ msgid "Anchor text to the left."
 msgstr "&விகிதம்:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:55
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:65
 #, fuzzy, kde-format
 msgid "Anchor text to the middle."
 msgstr "&விகிதம்:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:68
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:88
 #, fuzzy, kde-format
 msgid "Anchor text to the right."
 msgstr "&விகிதம்:"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:131
+#, kde-format
+msgid "Text flows horizontal, top to bottom."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:157
+#, kde-format
+msgid "Text flows vertical, right to left."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:183
+#, kde-format
+msgid "Text flows vertical, left to right."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:216
+#, fuzzy, kde-format
+msgid "Left to right text direction."
+msgstr "குறுக்கீடு:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:242
+#, fuzzy, kde-format
+msgid "Right to left text direction."
+msgstr "பிம்பத்  தெளிவுத்திறன்"
+
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:102
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:286
 #, fuzzy, kde-format
 msgid "Edit SVG Source"
 msgstr "சதுரம்"
@@ -62250,11 +62280,6 @@ msgstr "உருவத்திற்கு மறுபெயரிடு"
 
 #, fuzzy
 #~ msgctxt "action"
-#~ msgid "Escape in right direction"
-#~ msgstr "குறுக்கீடு:"
-
-#, fuzzy
-#~ msgctxt "action"
 #~ msgid "Escape in up direction"
 #~ msgstr "எல்லா திசைகளிலும் புடைத்து நிற்கும்படி செய்"
 
@@ -64613,11 +64638,6 @@ msgstr "உருவத்திற்கு மறுபெயரிடு"
 #~ msgctxt "action"
 #~ msgid "Change writing direction"
 #~ msgstr "குறுக்கீடு:"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Change text direction"
-#~ msgstr "பிம்பத்  தெளிவுத்திறன்"
 
 #, fuzzy
 #~ msgctxt "action"

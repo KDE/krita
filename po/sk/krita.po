@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-23 00:40+0000\n"
+"POT-Creation-Date: 2023-11-25 00:40+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -16418,7 +16418,7 @@ msgstr "Jednoduchý tvar cesty"
 msgid "%1 Options"
 msgstr "Voľby %1"
 
-#: libs/flake/KoToolManager.cpp:576
+#: libs/flake/KoToolManager.cpp:574
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Aktívny nástroj: %1"
@@ -16435,25 +16435,25 @@ msgstr ""
 "sa textový objekt prevedie do formátu Krita 5, ktorý už nebude kompatibilný "
 "s Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1003
+#: libs/flake/text/KoSvgTextShape.cpp:1040
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1005
-#: libs/flake/text/KoSvgTextShape.cpp:1013
+#: libs/flake/text/KoSvgTextShape.cpp:1042
+#: libs/flake/text/KoSvgTextShape.cpp:1050
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Tvar textu SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1011
+#: libs/flake/text/KoSvgTextShape.cpp:1048
 #, kde-format
 msgid "SVG Text"
 msgstr "Text SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1025
-#: libs/flake/text/KoSvgTextShape.cpp:1040
+#: libs/flake/text/KoSvgTextShape.cpp:1062
+#: libs/flake/text/KoSvgTextShape.cpp:1077
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -36765,7 +36765,7 @@ msgstr "Predvolené:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:602
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -36853,7 +36853,7 @@ msgctxt "@item:intable Action name in shortcuts configuration"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:177
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:170
 #, kde-format
 msgctxt "%1 is the number of conflicts"
 msgid "Shortcut Conflict"
@@ -36862,12 +36862,12 @@ msgstr[0] "Konflikt skratky"
 msgstr[1] "Konflikt skratiek"
 msgstr[2] "Konflikt skratiek"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:181
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:174
 #, kde-format
 msgid "Shortcut '%1' for action '%2'\n"
 msgstr "Skratka '%1' pre akciu '%2'\n"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:186
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:179
 #, kde-format
 msgctxt "%1 is the number of ambiguous shortcut clashes (hidden)"
 msgid ""
@@ -36891,18 +36891,18 @@ msgstr[2] ""
 "Chcete priradiť prázdnu skratku k týmto akciám?\n"
 "%3"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:196
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:552
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
 #, kde-format
 msgid "Reassign"
 msgstr "Znovu priradiť"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:205
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:198
 #, kde-format
 msgid "Shortcut conflict"
 msgstr "Konflikt skratky"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:206
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:199
 #, kde-format
 msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
@@ -36911,7 +36911,7 @@ msgstr ""
 "<qt>Klávesová kombinácia '%1' je už používaná akciou <b>%2</b>.<br>Prosím "
 "vyberte inú skratku.</qt>"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:236
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:229
 #, kde-format
 msgid ""
 "Click on the button, then enter the shortcut like you would in the program.\n"
@@ -36921,12 +36921,12 @@ msgstr ""
 "programe.\n"
 "Príklad pre Ctrl+A: držte klávesu Ctrl a stlačte A."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:546
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "Konflikt so štandardnou skratkou aplikácie"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:547
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -36937,18 +36937,18 @@ msgstr ""
 "používa viacero aplikácií.\n"
 "Naozaj ju chcete použiť ako globálnu klávesovú skratku?"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Vstup"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:649
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "Práve stlačená klávesa nie je podporovaná v Qt."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:650
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
 #, kde-format
 msgid "Unsupported Key"
 msgstr "Nepodporovaná klávesa"
@@ -59133,7 +59133,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Nástroj výberu podobnej farby"
 
-#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:36
+#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
 msgstr ""
@@ -59236,7 +59236,7 @@ msgstr "100%"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
 #, kde-format
 msgid "Letter Spacing"
 msgstr "Rozstup písmen"
@@ -59695,7 +59695,7 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:275
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -59775,19 +59775,53 @@ msgid "Anchor text to the left."
 msgstr "Ukotviť text vľavo."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:55
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:65
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "Ukotviť text do stredu."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:68
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:88
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "Ukotviť text vpravo."
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:131
+#, kde-format
+msgid "Text flows horizontal, top to bottom."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:157
+#, kde-format
+msgid "Text flows vertical, right to left."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:183
+#, kde-format
+msgid "Text flows vertical, left to right."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:216
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Escape in right direction"
+msgid "Left to right text direction."
+msgstr "Únik v pravom smere"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:242
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Change text direction"
+msgid "Right to left text direction."
+msgstr "Zmeniť smer textu"
+
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:102
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:286
 #, fuzzy, kde-format
 #| msgid "SVG Source"
 msgid "Edit SVG Source"
@@ -64097,10 +64131,6 @@ msgstr "Nástroj referenčných obrázkov"
 #~ msgstr "Únik v ľavom smere"
 
 #~ msgctxt "action"
-#~ msgid "Escape in right direction"
-#~ msgstr "Únik v pravom smere"
-
-#~ msgctxt "action"
 #~ msgid "Escape in up direction"
 #~ msgstr "Únik vo vrchnom smere"
 
@@ -66710,10 +66740,6 @@ msgstr "Nástroj referenčných obrázkov"
 #~ msgctxt "action"
 #~ msgid "Change writing direction"
 #~ msgstr "Zmeniť smer písania"
-
-#~ msgctxt "action"
-#~ msgid "Change text direction"
-#~ msgstr "Zmeniť smer textu"
 
 #~ msgctxt "action"
 #~ msgid "Insert Non-Breaking Space"

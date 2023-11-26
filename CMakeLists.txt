@@ -499,6 +499,16 @@ QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
     HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
     )
     configure_file(config-set-has-border-in-full-screen-default.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-set-has-border-in-full-screen-default.h)
+
+    CHECK_CXX_SOURCE_COMPILES("
+#include <QtPlatformHeaders/QWindowsWindowFunctions>
+int main(int argc, char *argv[]) {
+QWindowsWindowFunctions::requestPossibleKeys(nullptr);
+}
+"
+    HAVE_REQUEST_POSSIBLE_KEYS
+    )
+    configure_file(config-request-possible-keys.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-request-possible-keys.h)
 endif (WIN32)
 
 unset(CMAKE_REQUIRED_INCLUDES)

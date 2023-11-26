@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-17 02:26+0000\n"
-"PO-Revision-Date: 2023-11-16 20:29+0300\n"
+"PO-Revision-Date: 2023-11-26 01:13+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1692,7 +1692,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "Z_Pixel_4x4_rounded.gbr"
 msgid "Z_Pixel 4x4 rounded"
-msgstr "Z_Piksel 4x4 yuvarlanmış"
+msgstr "Z_Piksel 4 x 4 yuvarlanmış"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -49126,7 +49126,7 @@ msgstr ""
 "ultraviyole ışınlara tek satırdan daha hassassa bu fark çıktıda kafes deseni "
 "oluşmasına yol açar; bu seçeneği kullanmak bu problemi en az ayrıntı "
 "kaybıyla çözer.</p><p> Sürdürmek için bu seçenek görseli biraz "
-"bulanıklaştırır; ancak VNG kalite yöntemi ile hatalı 2x2 örgü kalıplarını "
+"bulanıklaştırır; ancak VNG kalite yöntemi ile hatalı 2 x 2 örgü kalıplarını "
 "veya AHD kalite yöntemine sahip labirentleri ortadan kaldırır.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:299

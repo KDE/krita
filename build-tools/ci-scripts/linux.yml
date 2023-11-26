@@ -67,7 +67,7 @@ windows-build:
     - $env:PATH = "c:\Program Files\CMake\bin;c:\tools\llvm-mingw-20220906-ucrt-x86_64\bin;c:\tools\llvm-mingw-20220906-ucrt-x86_64\x86_64-w64-mingw32\bin;$env:PATH"
     - python -u build-tools/ci-scripts/download-deps.py
     - python -u ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Windows/Qt5/Shared
-    - packaging\windows\package-complete.cmd --no-interactive --package-name krita-5.2.x-$CI_COMMIT_SHORT_SHA --src-dir $pwd --deps-install-dir "$pwd\\_install" --krita-install-dir "$pwd\\_install"
+    - python -u build-tools/ci-scripts/build-windows-package.py --skip-debug-package
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
   artifacts:
     name: krita-$CI_COMMIT_REF_SLUG-$CI_COMMIT_REF_NAME

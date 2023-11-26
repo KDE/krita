@@ -65,8 +65,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-25 00:40+0000\n"
-"PO-Revision-Date: 2023-11-23 20:29+0100\n"
+"POT-Creation-Date: 2023-11-26 00:40+0000\n"
+"PO-Revision-Date: 2023-11-26 00:53+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -16742,7 +16742,7 @@ msgstr "predeterminado"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1539
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1538
 #, kde-format
 msgid "Size"
 msgstr "Tamaño"
@@ -19617,7 +19617,7 @@ msgstr "Recursos locales"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1205
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22662,7 +22662,7 @@ msgstr "Propiedades de la capa"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:283
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
@@ -25972,7 +25972,7 @@ msgstr "Color de primer plano"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1555
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1554
 #, kde-format
 msgid "Background Color"
 msgstr "Color de fondo"
@@ -30987,13 +30987,13 @@ msgid "Wor&kspace"
 msgstr "Es&pacio de trabajo"
 
 #: libs/ui/KisMainWindow.cpp:586
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Mostrar la barra de herramientas %1"
 
 #: libs/ui/KisMainWindow.cpp:588
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:322
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Ocultar la barra de herramientas %1"
@@ -59032,89 +59032,89 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "Cambiar la herramienta de texto SVG"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:267
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
 #, kde-format
 msgid "Text Tool"
 msgstr "Herramienta de texto"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:397
 #, kde-format
 msgid "Conversion failed"
 msgstr "La conversión ha fallado"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
 #, kde-format
 msgid "Find Text"
 msgstr "Buscar texto"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:652
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:695
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:694
 #, kde-format
 msgid "Find:"
 msgstr "Buscar:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:691
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:690
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Buscar y sustituir todo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:697
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
 #, kde-format
 msgid "Replace:"
 msgstr "Sustituir:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1205
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Ha modificado el texto. ¿Desea descartar los cambios?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1381
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Texto enriquecido"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1383
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
 #, kde-format
 msgid "SVG Source"
 msgstr "Fuente SVG"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1530
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1529
 #, kde-format
 msgid "Font"
 msgstr "Tipo de letra"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1547
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1546
 #, kde-format
 msgid "Text Color"
 msgstr "Color del texto"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1562
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1561
 #, kde-format
 msgid "Sample a Color"
 msgstr "Tomar muestras de un color"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1576
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1575
 #, kde-format
 msgid "Line height"
 msgstr "Altura de línea"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1589
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1588
 #, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Normal"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1593
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1592
 #, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr "100%"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1606
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
 #, kde-format
 msgid "Letter Spacing"
@@ -59629,12 +59629,6 @@ msgstr "Fuente SVG"
 msgid "SVG"
 msgstr "SVG"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkVertical)
-#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:81
-#, kde-format
-msgid "Vertical Text Layout"
-msgstr "Disposición vertical del texto"
-
 #. i18n: ectx: property (text), widget (QPushButton, btnEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:21
 #, kde-format
@@ -59669,35 +59663,31 @@ msgstr "Anclar el texto a la derecha."
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:131
 #, kde-format
 msgid "Text flows horizontal, top to bottom."
-msgstr ""
+msgstr "El texto fluye horizontalmente, de arriba a abajo."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:157
 #, kde-format
 msgid "Text flows vertical, right to left."
-msgstr ""
+msgstr "El texto fluye verticalmente, de derecha a izquierda."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:183
 #, kde-format
 msgid "Text flows vertical, left to right."
-msgstr ""
+msgstr "El texto fluye verticalmente, de izquierda a derecha."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:216
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Escape in right direction"
+#, kde-format
 msgid "Left to right text direction."
-msgstr "Escapar hacia la derecha"
+msgstr "Dirección del texto de izquierda a derecha."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:242
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Change text direction"
+#, kde-format
 msgid "Right to left text direction."
-msgstr "Cambiar la dirección del texto"
+msgstr "Dirección del texto de derecha a izquierda."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:286
@@ -61270,6 +61260,9 @@ msgstr "Herramienta de ampliación"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Herramienta de imágenes de referencia"
+
+#~ msgid "Vertical Text Layout"
+#~ msgstr "Disposición vertical del texto"
 
 #~ msgid ""
 #~ "<html><head/><body><p>This should be enabled if you see any artifacts "

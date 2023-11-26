@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-25 00:40+0000\n"
-"PO-Revision-Date: 2023-11-22 14:32+0300\n"
+"POT-Creation-Date: 2023-11-26 00:40+0000\n"
+"PO-Revision-Date: 2023-11-26 01:30+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1692,7 +1692,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "Z_Pixel_4x4_rounded.gbr"
 msgid "Z_Pixel 4x4 rounded"
-msgstr "Z_Piksel 4x4 yuvarlanmış"
+msgstr "Z_Piksel 4 × 4 yuvarlanmış"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -6283,7 +6283,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "P_RealPencil10x10.gih"
 msgid "P_Real Pencil 10x10"
-msgstr "P_Gerçek Kurşun Kalem 10 x 10"
+msgstr "P_Gerçek Kurşun Kalem 10 × 10"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/P_RealPencil16x16.gih:1
@@ -6292,7 +6292,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "P_RealPencil16x16.gih"
 msgid "P_Real Pencil 16x16"
-msgstr "P_Gerçek Kurşun Kalem 16 x 16"
+msgstr "P_Gerçek Kurşun Kalem 16 × 16"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured1.gih:1
@@ -16676,7 +16676,7 @@ msgstr "öntanımlı"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1539
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1538
 #, kde-format
 msgid "Size"
 msgstr "Boyut"
@@ -17768,7 +17768,7 @@ msgid ""
 "This image is larger than <b>%1 x %2</b>. Images this size cannot be saved "
 "to this format."
 msgstr ""
-"Bu görsel, <b>%1 x %2</b> boyutundan daha büyük. Bu boyuttaki görseller, bu "
+"Bu görsel, <b>%1 × %2</b> boyutundan daha büyük. Bu boyuttaki görseller, bu "
 "biçimle kaydedilemez."
 
 #: libs/impex/ColorModelCheck.h:31
@@ -19546,7 +19546,7 @@ msgstr "Yerel Özkaynaklar"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1205
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22584,7 +22584,7 @@ msgstr "Katman Özellikleri"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:283
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
@@ -25863,7 +25863,7 @@ msgstr "Ön Plan Rengi"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1555
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1554
 #, kde-format
 msgid "Background Color"
 msgstr "Arka Plan Rengi"
@@ -28934,7 +28934,7 @@ msgstr "Tablet Sınayıcısı"
 #, kde-format
 msgctxt "Screen rect when choosing Wintab/Qt settings"
 msgid "%1x%2 offset: %3,%4"
-msgstr "%1 x %2 ofset: %3, %4"
+msgstr "%1 × %2 ofset: %3, %4"
 
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.cpp:48
 #, kde-format
@@ -30853,13 +30853,13 @@ msgid "Wor&kspace"
 msgstr "&Çalışma Alanı"
 
 #: libs/ui/KisMainWindow.cpp:586
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "%1 Araç Çubuğunu Göster"
 
 #: libs/ui/KisMainWindow.cpp:588
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:322
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "%1 Araç Çubuğunu Gizle"
@@ -32717,7 +32717,7 @@ msgstr "Öntanımlı"
 #: libs/ui/toolbox/KoToolBox.cpp:354
 #, kde-format
 msgid "%1x%2"
-msgstr "%1 x %2"
+msgstr "%1 × %2"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:25
 #, kde-format
@@ -36867,25 +36867,25 @@ msgstr "Simgelerin Altında Yazı"
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:380
 #, kde-format
 msgid "Small (%1x%2)"
-msgstr "Küçük (%1 x %2)"
+msgstr "Küçük (%1 × %2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:361
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:382
 #, kde-format
 msgid "Medium (%1x%2)"
-msgstr "Orta (%1 x %2)"
+msgstr "Orta (%1 × %2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:363
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:384
 #, kde-format
 msgid "Large (%1x%2)"
-msgstr "Geniş (%1 x %2)"
+msgstr "Geniş (%1 × %2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:365
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:386
 #, kde-format
 msgid "Huge (%1x%2)"
-msgstr "Büyük (%1 x %2)"
+msgstr "Büyük (%1 × %2)"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:408
 #, kde-format
@@ -43472,7 +43472,7 @@ msgstr "Lisans:"
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:294
 #, kde-format
 msgid "(256 x 256)"
-msgstr "(256 x 256)"
+msgstr "(256 × 256)"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnRemoveSelected)
 #: plugins/extensions/resourcemanager/pageresourcechooser.ui:74
@@ -47543,25 +47543,25 @@ msgstr "Seyrek Örnekleme:"
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:203
 #, kde-format
 msgid "2x2, 1x1, 1x1 (smallest file)"
-msgstr "2 x 2, 1 x 1, 1 x 1 (en küçük dosya)"
+msgstr "2 × 2, 1 × 1, 1 × 1 (en küçük dosya)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, subsampling)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:208
 #, kde-format
 msgid "2x1, 1x1, 1x1"
-msgstr "2 x 2, 1 x 1, 1 x 1"
+msgstr "2 × 2, 1 × 1, 1 × 1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, subsampling)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:213
 #, kde-format
 msgid "1x2, 1x1, 1x1"
-msgstr "1 x 2, 1 x 1, 1 x 1"
+msgstr "1 × 2, 1 × 1, 1 × 1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, subsampling)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:218
 #, kde-format
 msgid "1x1, 1x1, 1x1 (best quality)"
-msgstr "1 x 1, 1 x 1, 1 x 1 (en iyi kalite)"
+msgstr "1 × 1, 1 × 1, 1 × 1 (en iyi kalite)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, baseLineJPEG)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:228
@@ -47704,21 +47704,21 @@ msgstr "Aşağı örnekleme yok"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "2x2 downsampling"
-msgstr "2 x 2 aşağı örnekleme"
+msgstr "2 × 2 aşağı örnekleme"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:22
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:28
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "4x4 downsampling"
-msgstr "4 x 4 aşağı örnekleme"
+msgstr "4 × 4 aşağı örnekleme"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:23
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "8x8 downsampling"
-msgstr "8 x 8 aşağı örnekleme"
+msgstr "8 × 8 aşağı örnekleme"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
@@ -47804,13 +47804,13 @@ msgstr "Merkez-ilk sırası"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
-msgstr "64 x 64 daha düşük çözünürlük geçişi"
+msgstr "64 × 64 daha düşük çözünürlük geçişi"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512x512 + 64x64 lower resolution passes"
-msgstr "(512 x 512) + (64 x 64) düşük çözünürlük geçişi"
+msgstr "(512 × 512) + (64 × 64) düşük çözünürlük geçişi"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:101
 #, kde-format
@@ -48276,7 +48276,7 @@ msgid ""
 "Determines the order in which 256x256 regions are stored in the codestream "
 "for progressive rendering."
 msgstr ""
-"İlerlemeci kodlama için kod akışında hangi 256 x 256 bölgenin kaydedileceği "
+"İlerlemeci kodlama için kod akışında hangi 256 × 256 bölgenin kaydedileceği "
 "sırayı belirler."
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
@@ -49368,7 +49368,7 @@ msgstr ""
 "ultraviyole ışınlara tek satırdan daha hassassa bu fark çıktıda kafes deseni "
 "oluşmasına yol açar; bu seçeneği kullanmak bu problemi en az ayrıntı "
 "kaybıyla çözer.</p><p> Sürdürmek için bu seçenek görseli biraz "
-"bulanıklaştırır; ancak VNG kalite yöntemi ile hatalı 2x2 örgü kalıplarını "
+"bulanıklaştırır; ancak VNG kalite yöntemi ile hatalı 2 × 2 örgü kalıplarını "
 "veya AHD kalite yöntemine sahip labirentleri ortadan kaldırır.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:299
@@ -58683,89 +58683,89 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "SVG Metni Değiştir Aracı"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:267
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
 #, kde-format
 msgid "Text Tool"
 msgstr "Metin Aracı"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:397
 #, kde-format
 msgid "Conversion failed"
 msgstr "Dönüşüm başarısız"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
 #, kde-format
 msgid "Find Text"
 msgstr "Metin Bul"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:652
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:695
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:694
 #, kde-format
 msgid "Find:"
 msgstr "Bul:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:691
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:690
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Tümünü Bul ve Değiştir"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:697
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
 #, kde-format
 msgid "Replace:"
 msgstr "Değiştir:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1205
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Metin üzerinde değişiklik yaptınız. Değişikliklerden vazgeçilsin mi?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1381
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Zengin Metin"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1383
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
 #, kde-format
 msgid "SVG Source"
 msgstr "SVG Kaynağı"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1530
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1529
 #, kde-format
 msgid "Font"
 msgstr "Yazıtipi"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1547
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1546
 #, kde-format
 msgid "Text Color"
 msgstr "Metin Rengi"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1562
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1561
 #, kde-format
 msgid "Sample a Color"
 msgstr "Renk Örnekle"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1576
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1575
 #, kde-format
 msgid "Line height"
 msgstr "Çizgi yüksekliği"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1589
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1588
 #, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Normal"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1593
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1592
 #, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr "%​100"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1606
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
 #, kde-format
 msgid "Letter Spacing"
@@ -59277,12 +59277,6 @@ msgstr "SVG kaynağı"
 msgid "SVG"
 msgstr "SVG"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkVertical)
-#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:81
-#, kde-format
-msgid "Vertical Text Layout"
-msgstr "Dikey Metin Düzeni"
-
 #. i18n: ectx: property (text), widget (QPushButton, btnEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:21
 #, kde-format
@@ -59317,35 +59311,31 @@ msgstr "Metni sağa sabitleyin."
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:131
 #, kde-format
 msgid "Text flows horizontal, top to bottom."
-msgstr ""
+msgstr "Metin, yukarıdan aşağıya yatay olarak akar."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:157
 #, kde-format
 msgid "Text flows vertical, right to left."
-msgstr ""
+msgstr "Metin, sağdan sola dikey olarak akar."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:183
 #, kde-format
 msgid "Text flows vertical, left to right."
-msgstr ""
+msgstr "Metin, soldan sağa dikey olarak akar."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:216
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Left Edge Detection"
+#, kde-format
 msgid "Left to right text direction."
-msgstr "Sol Kenar Algılama"
+msgstr "Soldan sağa metin yönü."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:242
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Right Edge Detection"
+#, kde-format
 msgid "Right to left text direction."
-msgstr "Sağ Kenar Algılama"
+msgstr "Sağdan sola metin yönü."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:286
@@ -60904,6 +60894,9 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
+
+#~ msgid "Vertical Text Layout"
+#~ msgstr "Dikey Metin Düzeni"
 
 #~ msgid ""
 #~ "<html><head/><body><p>This should be enabled if you see any artifacts "

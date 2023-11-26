@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-25 00:40+0000\n"
+"POT-Creation-Date: 2023-11-26 00:40+0000\n"
 "PO-Revision-Date: 2021-05-15 15:07+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -16863,7 +16863,7 @@ msgstr "Implicit"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1539
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1538
 #, kde-format
 msgid "Size"
 msgstr "Dimensiune"
@@ -19847,7 +19847,7 @@ msgstr "Șterge plan"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1205
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -22846,7 +22846,7 @@ msgstr "Proprietăți plan..."
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:283
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
@@ -26034,7 +26034,7 @@ msgstr "Culoare prim-plan"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1555
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1554
 #, kde-format
 msgid "Background Color"
 msgstr "Culoare fundal"
@@ -30899,13 +30899,13 @@ msgid "Wor&kspace"
 msgstr "&Culegător culoare"
 
 #: libs/ui/KisMainWindow.cpp:586
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Arată stratul-rădăcină"
 
 #: libs/ui/KisMainWindow.cpp:588
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:322
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "&Unelte"
@@ -58471,91 +58471,91 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "Schimbă lista"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:267
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
 #, fuzzy, kde-format
 msgid "Text Tool"
 msgstr "Unealtă de &filtru"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:397
 #, fuzzy, kde-format
 msgid "Conversion failed"
 msgstr "Selecție &continuă"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
 #, fuzzy, kde-format
 msgid "Find Text"
 msgstr "Adaugă text"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:652
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:695
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:694
 #, fuzzy, kde-format
 msgid "Find:"
 msgstr "Caută"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:691
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:690
 #, kde-format
 msgid "Find and Replace all"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:697
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
 #, fuzzy, kde-format
 msgid "Replace:"
 msgstr "Înlocuieşte"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1205
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1381
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, fuzzy, kde-format
 msgid "Rich text"
 msgstr "Cursiv"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1383
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
 #, fuzzy, kde-format
 #| msgid "Source:"
 msgid "SVG Source"
 msgstr "Sursă:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1530
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1529
 #, kde-format
 msgid "Font"
 msgstr "Font"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1547
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1546
 #, fuzzy, kde-format
 msgid "Text Color"
 msgstr "Unealtă de &filtru"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1562
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1561
 #, fuzzy, kde-format
 msgid "Sample a Color"
 msgstr "Unelte de selecție"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1576
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1575
 #, fuzzy, kde-format
 msgid "Line height"
 msgstr "Unelte de desenare"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1589
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1588
 #, fuzzy, kde-format
 #| msgid "Normal"
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Normal"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1593
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1592
 #, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1606
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
 #, fuzzy, kde-format
 #| msgid "Line Spacing"
@@ -59075,12 +59075,6 @@ msgstr "Sursă:"
 #| msgid "HSV"
 msgid "SVG"
 msgstr "HSV"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkVertical)
-#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:81
-#, fuzzy, kde-format
-msgid "Vertical Text Layout"
-msgstr "Formă triunghiulară"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:21
@@ -60698,6 +60692,10 @@ msgstr "Unealtă de măr&ire"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Șterge imaginea"
+
+#, fuzzy
+#~ msgid "Vertical Text Layout"
+#~ msgstr "Formă triunghiulară"
 
 #, fuzzy
 #~ msgctxt "The 'spread' spinbox prefix in contiguous selection tool options"

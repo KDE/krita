@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-25 00:40+0000\n"
-"PO-Revision-Date: 2023-11-19 03:40\n"
+"POT-Creation-Date: 2023-11-26 00:40+0000\n"
+"PO-Revision-Date: 2023-11-25 02:28\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -10532,7 +10532,7 @@ msgstr "当前时间切换到下一个颜色标签相同的关键帧"
 #, kde-format
 msgctxt "action"
 msgid "Previous Unfiltered Keyframe"
-msgstr "上一个未筛选关键帧"
+msgstr "上一个未过滤关键帧"
 
 #. i18n: context: toolTip @ Action (previous_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1950
@@ -10549,7 +10549,7 @@ msgstr "当前时间切换到上一个绘图纸外观可见的关键帧"
 #, kde-format
 msgctxt "action"
 msgid "Next Unfiltered Keyframe"
-msgstr "下一个未筛选关键帧"
+msgstr "下一个未过滤关键帧"
 
 #. i18n: context: toolTip @ Action (next_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1962
@@ -15772,12 +15772,10 @@ msgstr "笔刷数值滑动条 4"
 #. i18n: context: iconText @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2031 krita/kritamenu.action:2033
 #: krita/kritamenu.action:2034
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Brush option slider 1"
+#, kde-format
 msgctxt "action"
 msgid "Brush option slider 5"
-msgstr "笔刷数值滑动条 1"
+msgstr "笔刷数值滑动条 5"
 
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -16635,7 +16633,7 @@ msgstr "默认"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1539
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1538
 #, kde-format
 msgid "Size"
 msgstr "大小"
@@ -19479,7 +19477,7 @@ msgstr "本地资源"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1205
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -20232,7 +20230,7 @@ msgstr "无法创建标签"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Enter search terms to filter by name</p>"
-msgstr "<p>输入搜索条件，即可对预设名称进行筛选</p>"
+msgstr "<p>输入搜索条件，即可对预设名称进行过滤</p>"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lneFilterText)
 #: libs/resourcewidgets/KisTagFilterWidget.cpp:53
@@ -22159,9 +22157,9 @@ msgstr ""
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
-"tysontan@tysontan.com, i@guoyunhe.me, alvin@alvinhc.com, yijyun.pan@kde.org, "
-"tan.sinan@kde.org, jia.min@kde.org, henry.hu@kde.org, pan.xiaoyu@kde.org, "
-"jeff.li@kde.org, liushuyu@aosc.io, hotkey.liu@kde.org, stevenByte@kde.org"
+"tds00@qq.com, i@guoyunhe.me, alvin@alvinhc.com, yijyun.pan@kde.org, tan."
+"sinan@kde.org, jia.min@kde.org, henry.hu@kde.org, pan.xiaoyu@kde.org, jeff."
+"li@kde.org, liushuyu@aosc.io, hotkey.liu@kde.org, stevenByte@kde.org"
 
 #: libs/ui/dialogs/kis_about_application.cpp:79
 #, kde-format
@@ -22482,7 +22480,7 @@ msgstr "图层属性"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:283
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
@@ -25697,7 +25695,7 @@ msgstr "前景色"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1555
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1554
 #, kde-format
 msgid "Background Color"
 msgstr "背景色"
@@ -30613,13 +30611,13 @@ msgid "Wor&kspace"
 msgstr "工作区(&K)"
 
 #: libs/ui/KisMainWindow.cpp:586
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "显示%1工具栏"
 
 #: libs/ui/KisMainWindow.cpp:588
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:322
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "隐藏%1工具栏"
@@ -33677,17 +33675,17 @@ msgstr "剪贴板为空或者不含图像。"
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:42
 #, kde-format
 msgid "Filter by name..."
-msgstr "按名称筛选..."
+msgstr "按名称过滤..."
 
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:59
 #, kde-format
 msgid "Filter by color label..."
-msgstr "按颜色标签筛选..."
+msgstr "按颜色标签过滤..."
 
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:81
 #, kde-format
 msgid "Reset Filters"
-msgstr "重置筛选结果"
+msgstr "重置过滤"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:30
 #, kde-format
@@ -36104,7 +36102,7 @@ msgid ""
 "(e.g. Ctrl+C) by typing them here."
 msgstr ""
 "输入操作名称 (如“复制”) 或者按键/按键组合 (如“Ctrl+C”)，即可对列表中的项目进"
-"行筛选。"
+"行过滤。"
 
 #. i18n: ectx: property (whatsThis), widget (QTreeWidget, list)
 #: libs/widgetutils/xmlgui/KisShortcutsDialog.ui:28
@@ -38005,7 +38003,7 @@ msgstr "绘图纸外观选项"
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:54
 #, kde-format
 msgid "Filter Onion Skins by Frame Color"
-msgstr "按帧的颜色标签筛选显示绘图纸"
+msgstr "按帧的颜色标签过滤显示绘图纸"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnShowHide)
 #. i18n: ectx: property (text), widget (QToolButton, btnAddField)
@@ -48061,7 +48059,7 @@ msgstr "无法加载色彩特性文件：%1 。"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
 #, kde-format
 msgid "Could not filter configuration %1."
-msgstr "无法对配置 %1 进行筛选。"
+msgstr "无法对配置 %1 进行过滤。"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
 #, kde-format
@@ -55594,7 +55592,7 @@ msgstr "设置参考图像文件夹"
 #: plugins/python/photobash_images/photobash_images_docker.ui:71
 #, kde-format
 msgid "Filter images by words..."
-msgstr "按关键字筛选图像..."
+msgstr "按关键字过滤图像..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, fitCanvasCheckBox)
 #: plugins/python/photobash_images/photobash_images_docker.ui:388
@@ -56245,9 +56243,7 @@ msgid "Flood Fill"
 msgstr "浸漫填充"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:542
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Scale: {n}%"
+#, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
 "is the percent sign"
@@ -56267,9 +56263,7 @@ msgid "Threshold: "
 msgstr "色差阈值："
 
 #: plugins/tools/basictools/kis_tool_fill.cc:568
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Spread: {n}%"
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
 "percent sign"
@@ -57137,19 +57131,16 @@ msgid "Markers, Stroke, Fill"
 msgstr "标记，描边，填充"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:121
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Opacity: {n}%"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}"
-msgstr "不透明度：{n}%"
+msgstr "不透明度：{n}"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:122
-#, fuzzy, kde-format
-#| msgid "Opacity [*varies*]: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}"
-msgstr "不透明度 [请先选中对象]："
+msgstr "不透明度 [*变化值*]：{n}"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
@@ -57290,11 +57281,10 @@ msgid "Reference Images Tool"
 msgstr "参考图像工具"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
-#, fuzzy, kde-format
-#| msgid "Opacity [*varies*]: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}%"
-msgstr "不透明度 [请先选中对象]："
+msgstr "不透明度 [*变化值*]：{n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
 #, kde-format
@@ -57303,12 +57293,10 @@ msgid "Saturation: {n}%"
 msgstr "饱和度：{n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:55
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Saturation: {n}%"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation [*varies*]: {n}%"
-msgstr "饱和度：{n}%"
+msgstr "饱和度 [*变化值*]：{n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
@@ -57565,9 +57553,7 @@ msgid "Threshold: "
 msgstr "色差阈值："
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Spread: {n}%"
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
 "value, % is the percent sign"
@@ -57723,9 +57709,7 @@ msgid "Threshold: "
 msgstr "色差阈值："
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:246
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Spread: {n}%"
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in similar color selection tool options; {n} is the "
 "number value, % is the percent sign"
@@ -57968,89 +57952,89 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "SVG 文字工具更改"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:267
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
 #, kde-format
 msgid "Text Tool"
 msgstr "文字工具"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:397
 #, kde-format
 msgid "Conversion failed"
 msgstr "转换失败"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
 #, kde-format
 msgid "Find Text"
 msgstr "查找文字"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:652
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:695
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:694
 #, kde-format
 msgid "Find:"
 msgstr "查找："
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:691
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:690
 #, kde-format
 msgid "Find and Replace all"
 msgstr "查找并替换全部"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:697
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
 #, kde-format
 msgid "Replace:"
 msgstr "替换："
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1205
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "文字已被修改。您想要放弃更改吗？"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1381
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "可视编辑器"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1383
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
 #, kde-format
 msgid "SVG Source"
 msgstr "SVG 源代码"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1530
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1529
 #, kde-format
 msgid "Font"
 msgstr "字体"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1547
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1546
 #, kde-format
 msgid "Text Color"
 msgstr "文字颜色"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1562
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1561
 #, kde-format
 msgid "Sample a Color"
 msgstr "拾取颜色"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1576
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1575
 #, kde-format
 msgid "Line height"
 msgstr "行高"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1589
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1588
 #, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "正常"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1593
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1592
 #, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr "100%"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1606
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
 #, kde-format
 msgid "Letter Spacing"
@@ -58561,12 +58545,6 @@ msgstr "SVG 源代码"
 msgid "SVG"
 msgstr "SVG"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkVertical)
-#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:81
-#, kde-format
-msgid "Vertical Text Layout"
-msgstr "竖排文字版式"
-
 #. i18n: ectx: property (text), widget (QPushButton, btnEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:21
 #, kde-format
@@ -58937,9 +58915,7 @@ msgid "Include contour regions"
 msgstr "包含轮廓区域"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:448
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Scale: {n}%"
+#, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in enclose and fill tool options; {n} is the "
 "number value, % is the percent sign"
@@ -58953,9 +58929,7 @@ msgid "Threshold: "
 msgstr "色差阈值："
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Spread: {n}%"
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in enclose and fill tool options; {n} is the number "
 "value, % is the percent sign"
@@ -60171,3 +60145,6 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
+
+#~ msgid "Vertical Text Layout"
+#~ msgstr "竖排文字版式"

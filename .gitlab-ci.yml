@@ -18,5 +18,19 @@ clang_format:
     - when: manual
       allow_failure: true
 
+workflow:
+  rules:
+    # Prevent branch pipelines if an MR is open on the branch.
+    - if: $CI_COMMIT_BRANCH && $CI_PIPELINE_SOURCE == "push" && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    # Allow merge request pipelines.
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # Build tags and branches too
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH =~ /^krita\//
+
 include:
+  - local: /build-tools/ci-scripts/cppcheck.yml
   - local: /build-tools/ci-scripts/linux.yml
+  - local: /build-tools/ci-scripts/windows.yml

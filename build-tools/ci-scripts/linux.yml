@@ -1,15 +1,3 @@
-workflow:
-  rules:
-    # Prevent branch pipelines if an MR is open on the branch.
-    - if: $CI_COMMIT_BRANCH && $CI_PIPELINE_SOURCE == "push" && $CI_OPEN_MERGE_REQUESTS
-      when: never
-    # Allow merge request pipelines.
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    # Build tags and branches too
-    - if: $CI_COMMIT_TAG
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_BRANCH =~ /^krita\//
-
 linux-build:
   stage: build
   image: invent-registry.kde.org/sysadmin/ci-images/krita-appimage-builder:latest
@@ -46,34 +34,3 @@ linux-build:
       coverage_report:
         coverage_format: cobertura
         path: CoberturaLcovResults.xml
-
-cppcheck:
-  stage: build
-  image: invent-registry.kde.org/sysadmin/ci-images/krita-appimage-builder:latest
-  tags:
-    - Linux
-  interruptible: true
-  before_script:
-    - git clone https://invent.kde.org/sysadmin/ci-utilities
-  script:
-    - python3 -u ci-utilities/run-cppcheck.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME
-  rules:
-    - changes:
-      - "**/*.c"
-      - "**/*.h"
-      - "**/*.cc"
-      - "**/*.hh"
-      - "**/*.cpp"
-      - "**/*.hpp"
-      - "**/*.cxx"
-      - "**/*.hxx"
-      - "**/*.ii"
-      - "**/*.ipp"
-      - "**/*.ixx"
-  artifacts:
-    paths:
-      - "cppcheck_out.xml"
-    expire_in: 1 week
-    when: on_success
-    reports:
-      codequality: cppcheck.json

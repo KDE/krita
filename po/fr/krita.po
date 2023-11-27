@@ -4,6 +4,7 @@
 # traduction de krita.po en Français
 # Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the PACKAGE package.
+# SPDX-FileCopyrightText: 2012, 2023 xavier <xavier.besnard@neuf.fr>
 # Robert Jacolin <rjacolin@ifrance.com>, 2003.
 # Delafond <gerard@delafond.org>, 2003, 2004, 2005.
 # Yann Verley <yann.verley@free.fr>, 2004, 2005.
@@ -21,7 +22,6 @@
 # Stanislas Zeller <uncensored.assault@gmail.com>, 2008.
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2008.
 # Geoffray Levasseur <geoffray.levasseurbrandin@numericable.fr>, 2010, 2011.
-# SPDX-FileCopyrightText: 2012, 2023 xavier <xavier.besnard@neuf.fr>
 # Daniel Durand <durand.d@9online.fr>, 2012, 2013.
 # Sebastien Renard <renard@kde.org>, 2013, 2014, 2015.
 # Vincent PINON <vpinon@kde.org>, 2014, 2016.
@@ -46,7 +46,7 @@
 # Mickael Sibelle <kimael@gmail.com>, 2009.
 # Sebastien Renard <renard@kde.org>, 2014, 2015.
 # edito <prod@d-booker.net>, 2018.
-# Patricia Moncorgé <patricia.moncorge@d-booker.fr>, 2018, 2021.
+# Patricia Moncorgé <patricia.moncorge@d-booker.fr>, 2018, 2021, 2023.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019, 2020.
 # Xavier BESNARD <xavier.besnard@neuf.fr>, 2022, 2023.
 #
@@ -103,15 +103,15 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-26 00:40+0000\n"
-"PO-Revision-Date: 2023-11-15 20:28+0100\n"
-"Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
-"Language-Team: fr\n"
+"PO-Revision-Date: 2023-11-26 10:49+0100\n"
+"Last-Translator: Patricia Moncorgé <patricia.moncorge@d-booker.fr>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.3\n"
+"X-Generator: Lokalize 21.12.3\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -16331,12 +16331,9 @@ msgid "Move shapes"
 msgstr "Déplacer les formes"
 
 #: libs/flake/commands/KoShapePaintOrderCommand.cpp:44
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set point type"
 msgctxt "(qtundo-format)"
 msgid "Set paint order"
-msgstr "Définir le type de point"
+msgstr "Définir la propriété paint-order"
 
 #: libs/flake/commands/KoShapeRenameCommand.cpp:28
 msgctxt "(qtundo-format)"
@@ -23920,8 +23917,8 @@ msgid ""
 "with the menu above"
 msgstr ""
 "Vous pouvez <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
-"decoration: underline;\">activer les nouvelles</a> à partir du site « krita."
-"org » dans diverses langues à partir du menu ci-dessus."
+"decoration: underline;\">activer les nouvelles</a> à partir du site krita."
+"org dans diverses langues à l'aide du menu ci-dessus."
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1605
@@ -23948,12 +23945,12 @@ msgstr ""
 "p, li { white-space : pre-wrap ; }\n"
 "</style></head><body>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\">Krita est un outil en "
-"logiciel libre et géré par une communauté, destiné aux artistes numériques "
-"du monde entier.<br />Les progrès sont rendus possibles grâce au soutien "
-"continu de notre communauté de membres, de <a href=\"https://docs.krita.org/"
-"en/contributors_manual.html\">contributeurs</a>, de sponsors et de <a href="
-"\"https://fund.krita.org/\">fonds de développement </a>.</p></body></html>"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Krita est un outil "
+"communautaire open-source destiné aux artistes numériques du monde entier."
+"<br />Son développement  est possible grâce au soutien continu de notre "
+"communauté de <a href=\"https://docs.krita.org/en/contributors_manual.html"
+"\">contributeurs</a>, de sponsors et des participants au <a href=\"https://"
+"fund.krita.org/\">fonds de développement </a>.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -24831,8 +24828,7 @@ msgstr "Mode de mise à l'échelle :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
-#, fuzzy, kde-format
-#| msgid "Assistant:"
+#, kde-format
 msgid "Assistants Mode:"
 msgstr "Assistant :"
 
@@ -24845,26 +24841,28 @@ msgid ""
 "              </p><p>Changing the pixmap cache size requires a restart.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Peut être utilisé en cas de problème de performanceou "
+"d'artefact avec les assistants de dessin. \n"
+"</p><p>Modifier la taille du cache pixmap requiert un redémarrage.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:179
 #, kde-format
 msgid "Direct (Recommended)"
-msgstr ""
+msgstr "Direct (Recommandé)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:184
-#, fuzzy, kde-format
-#| msgid "Animation Cache"
+#, kde-format
 msgid "Pixmap Cache"
-msgstr "Cache d'animation"
+msgstr "Cache Pixmap"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:189
-#, fuzzy, kde-format
-#| msgid "Use large pixmap cache"
+#, kde-format
 msgid "Large Pixmap Cache"
-msgstr "Utiliser un cache important de pixmap"
+msgstr "Augmenter la taille du cache Pixmap"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:203
@@ -24876,7 +24874,7 @@ msgstr "Moteur de rendu préféré (redémarrage nécessaire) :"
 #: libs/ui/forms/wdgdisplaysettings.ui:220
 #, kde-format
 msgid "Current Renderer:"
-msgstr "Moteur courant de rendu :"
+msgstr "Moteur de rendu actuel :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
 #: libs/ui/forms/wdgdisplaysettings.ui:250
@@ -24888,7 +24886,7 @@ msgstr "Configuration « HDR »"
 #: libs/ui/forms/wdgdisplaysettings.ui:256
 #, kde-format
 msgid "Current Display Format"
-msgstr "Format d'affichage courant"
+msgstr "Format d'affichage actuel"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/forms/wdgdisplaysettings.ui:263
@@ -25267,7 +25265,7 @@ msgstr "Modifier les préréglages"
 #: libs/ui/forms/wdgfilterselector.ui:137
 #, kde-format
 msgid "Get the XML for the current filter configuration."
-msgstr "Obtenir le « XML » pour la configuration courante de filtres."
+msgstr "Obtenir le XML pour la configuration du filtre utilisé."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnXML)
 #: libs/ui/forms/wdgfilterselector.ui:140
@@ -25958,18 +25956,17 @@ msgid ""
 "needed anymore."
 msgstr ""
 "Dans certaines versions de Krita antérieures à 5.0, la taille du texte "
-"pouvait dépendre de la résolution « DPI » de l'écran (ce qui était un "
-"bogue). \n"
+"pouvait dépendre de la résolution de l'écran (ce qui était un bug).\n"
 "Dans la version 5.0 de Krita, ce bogue a été corrigé. Mais il se peut que "
 "les fichiers créés dans les versions antérieures aient un aspect différent.\n"
 "\n"
 "Lors du chargement d'anciens fichiers, Krita essaie d'ajuster la taille de "
-"la police avec la résolution « DPI » de l'écran actuel. \n"
+"la police avec la résolution de l'écran en cours d'utilisation. \n"
 "Si le fichier a été créé sur un écran différent, essayez d'ajuster cette "
 "valeur manuellement.\n"
 "\n"
-"Après avoir enregistré le fichier dans Krita 5.0 au moins une fois, aucune "
-"conversion ne sera plus nécessaire."
+"Une fois le fichier enregistré dans Krita 5.0, aucune conversion ne sera "
+"plus nécessaire."
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1431
@@ -25991,13 +25988,11 @@ msgid ""
 "by entering it in this field."
 msgstr ""
 "Dans certaines versions de Krita antérieures à 4.4.3, la taille du texte "
-"pouvait dépendre de la résolution « DPI » de l'écran (ce qui était un "
-"bug). \n"
+"pouvait dépendre de la résolution de l'écran (ce qui était un bug). \n"
 "Dans Krita 4.4.3, ce bogue a été corrigé, ce qui peut donner un aspect "
 "différent aux fichiers créés dans les versions précédentes. \n"
 "Pour rétablir l'ancien comportement, vous pouvez forcer Krita à utiliser la "
-"résolution « DPI » de l'affichage pour les polices en la saisissant dans ce "
-"champ."
+"résolution de l'affichage pour les polices en la saisissant dans ce champ."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1453
@@ -26061,7 +26056,7 @@ msgstr "Remplir :"
 #: libs/ui/forms/wdggeometryoptions.ui:59
 #, kde-format
 msgid "Not Filled"
-msgstr "Pas rempli"
+msgstr "Pas de remplissage"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #. i18n: ectx: property (text), widget (QRadioButton, solidColorButton)
@@ -26498,7 +26493,7 @@ msgstr "Aucu&n"
 #: libs/ui/forms/wdgmasksource.ui:34
 #, kde-format
 msgid "current &Mask"
-msgstr "&Masque actuel"
+msgstr "&Masque actif"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton)
 #: libs/ui/forms/wdgmasksource.ui:41
@@ -26805,7 +26800,7 @@ msgstr "Éditeur de brosses"
 #: libs/ui/forms/wdgpaintopsettings.ui:130
 #, kde-format
 msgid "Current brush preset"
-msgstr "Préréglage courant de brosse"
+msgstr "Préréglage de brosse actif"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
@@ -27829,7 +27824,7 @@ msgstr "Appui"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:63
 #, kde-format
 msgid "Current Brush"
-msgstr "Brosse actuelle"
+msgstr "Brosse active"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, typeBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:68
@@ -32928,7 +32923,7 @@ msgstr ""
 #, kde-format
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr ""
-"Le moteur de brosses « MyPaint » n'est pas disponible pour cet espace "
+"Le moteur de brosses MyPaint n'est pas disponible pour cet espace "
 "colorimétrique."
 
 #: libs/ui/tool/kis_tool_paint.cc:591
@@ -32946,7 +32941,7 @@ msgid ""
 "layer or mask."
 msgstr ""
 "Cet outil ne peut pas dessiner sur un calque de clonage. Veuillez "
-"sélectionner une couleur ou un calque vectoriel ou un masque."
+"sélectionner un calque vectoriel ou de dessin ou encore un masque."
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:95
 #, kde-format
@@ -33323,13 +33318,13 @@ msgstr "Dupliquer un segment"
 #, kde-format
 msgctxt "Action to delete the selected stop in the segment gradient editor"
 msgid "Delete stop"
-msgstr "Supprimer un arrêt"
+msgstr "Supprimer une étape"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:79
 #, kde-format
 msgctxt "Action to center the selected stop in the segment gradient editor"
 msgid "Center stop"
-msgstr "Centrer l'arrêt"
+msgstr "Centrer l'étape"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:84
 #, kde-format
@@ -33349,7 +33344,7 @@ msgstr "Retourner le dégradé"
 msgctxt ""
 "Button to evenly distribute the segments in the segment gradient editor"
 msgid "Distribute segments evenly"
-msgstr "Distribuer les arrêts de façon homogène"
+msgstr "Distribuer les séquences de manière homogène"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:160
 #, kde-format
@@ -33370,7 +33365,7 @@ msgstr "Segment #%1"
 #, kde-format
 msgctxt "Text that indicates the selected stop in the segment gradient editor"
 msgid "Stop #%1"
-msgstr "Arrêt à #%1"
+msgstr "Étape à #%1"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:300
 #, kde-format
@@ -33402,25 +33397,25 @@ msgstr "Choisir une couleur"
 #, kde-format
 msgctxt "Button to select previous stop in the stop gradient editor"
 msgid "Select previous stop"
-msgstr "Sélectionner l'arrêt précédent"
+msgstr "Sélectionner l'étape précédente"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:40
 #, kde-format
 msgctxt "Button to select next stop in the stop gradient editor"
 msgid "Select next stop"
-msgstr "Sélectionner le prochain arrêt"
+msgstr "Sélectionner l'étape suivante"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:44
 #, kde-format
 msgctxt "Button to edit the selected stop color in the stop gradient editor"
 msgid "Edit stop"
-msgstr "Modifier un arrêt"
+msgstr "Modifier une étape"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:48
 #, kde-format
 msgctxt "Button to delete the selected stop in the stop gradient editor"
 msgid "Delete stop"
-msgstr "Supprimer un arrêt"
+msgstr "Supprimer une étape"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:52
 #, kde-format
@@ -33432,37 +33427,37 @@ msgstr "Retourner le dégradé"
 #, kde-format
 msgctxt "Button to sort the stops by value in the stop gradient editor"
 msgid "Sort stops by value"
-msgstr "Trier les arrêts par valeur"
+msgstr "Trier les étapes par valeur"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:60
 #, kde-format
 msgctxt "Button to sort the stops by hue in the stop gradient editor"
 msgid "Sort stops by hue"
-msgstr "Trier les arrêts par teinte"
+msgstr "Trier les étapes par teinte"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:64
 #, kde-format
 msgctxt "Button to evenly distribute the stops in the stop gradient editor"
 msgid "Distribute stops evenly"
-msgstr "Distribuer les arrêts de façon homogène"
+msgstr "Distribuer les étapes de manière homogène"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:194
 #, kde-format
 msgctxt "Text that indicates the selected stop in the stop gradient editor"
 msgid "Stop #%1"
-msgstr "Arrêt à #%1"
+msgstr "Étape à #%1"
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:232
 #, kde-format
 msgctxt "Text that indicates no stop is selected in the stop gradient editor"
 msgid "No stop selected"
-msgstr "Aucun arrêt n'est sélectionné."
+msgstr "Aucune étape n'est sélectionnée."
 
 #: libs/ui/widgets/gradient/KisStopGradientEditor.cpp:453
 #, kde-format
 msgctxt "Title for the gradient stop editor"
 msgid "Edit Stop"
-msgstr "Modifier un arrêt"
+msgstr "Modifier une étape"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:112
 #: libs/ui/widgets/kis_color_space_selector.cc:66
@@ -34636,7 +34631,7 @@ msgstr "Augmenter ou réduire la sélection par la quantité définie"
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr ""
-"Arrêter l'agrandissement jusqu'au pixel le plus sombre et / ou le plus opaque"
+"Arrêter l'agrandissement jusqu'au pixel le plus sombre et/ou le plus opaque"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
 #, kde-format
@@ -35144,7 +35139,7 @@ msgstr "Réflexion"
 #, kde-format
 msgctxt "Gradient stop color selector label"
 msgid "Stop:"
-msgstr "Arrêt :"
+msgstr "Étape :"
 
 #. i18n: ectx: property (text), widget (KisColorButton, meshStopColorButton)
 #. i18n: ectx: property (text), widget (KisInputLevelsSlider, cutoffSlider)
@@ -36296,7 +36291,7 @@ msgstr "Ré-initialiser les configurations"
 #: libs/widgetutils/config/kstandardaction_p.h:99
 #, kde-format
 msgid "%1 &Handbook"
-msgstr "&Manuel de l'utilisateur %1"
+msgstr "&Manuel %1"
 
 #: libs/widgetutils/config/kstandardaction_p.h:100
 #, kde-format
@@ -37353,8 +37348,8 @@ msgid ""
 "The assistant will have two additional points that describe the area the "
 "assistant works in"
 msgstr ""
-"L'assistant aura deux points supplémentaires décrivant le domaine dans "
-"lequel il travaille"
+"L'assistant aura deux points supplémentaires pour délimiter \n"
+"la zone où il sera actif"
 
 #. i18n: ectx: property (text), widget (QCheckBox, localAssistantCheckbox)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:47
@@ -39883,12 +39878,12 @@ msgstr "Modifier un nuancier ou un groupe de nuanciers"
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:71
 #, kde-format
 msgid "Edit current palette"
-msgstr "Modifier la palette courante"
+msgstr "Modifier la palette en cours"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:72
 #, kde-format
 msgid "Save current palette"
-msgstr "Enregistrer la palette courante"
+msgstr "Enregistrer la palette en cours"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:125
 #, kde-format
@@ -39933,7 +39928,7 @@ msgstr "Ajouter une couleur du premier plan"
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:139
 #, kde-format
 msgid "Lock the current palette."
-msgstr "Verrouiller la palette courante"
+msgstr "Verrouiller la palette en cours"
 
 #: plugins/dockers/presetdocker/presetdocker_dock.cpp:25
 #, kde-format
@@ -57514,7 +57509,7 @@ msgstr "Aimanter la gomme"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
-msgstr "Activer l'aimantage lors de l'utilisation des gommes"
+msgstr "Activer le magnétisme lors de l'utilisation des gommes"
 
 #: plugins/tools/basictools/kis_tool_brush.h:137
 #, kde-format
@@ -57777,7 +57772,7 @@ msgstr "Mode de remplissage"
 #, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
-msgstr "Source de remplissage"
+msgstr "Source du remplissage"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:682
 #, kde-format
@@ -57789,7 +57784,7 @@ msgstr "Référence"
 #, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
-msgstr "Extension du remplissage"
+msgstr "Étendue du remplissage"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:703
 #, kde-format
@@ -58452,35 +58447,40 @@ msgstr "Opérations"
 msgid "Select Shapes Tool"
 msgstr "Sélection du tracé"
 
+# attributs SVG (Krita SVG Extension)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:109
 #, kde-format
 msgid "Fill, Stroke, Markers"
-msgstr ""
+msgstr "Fill, Stroke, Markers"
 
+# attributs SVG
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #, kde-format
 msgid "Fill, Markers, Stroke"
-msgstr ""
+msgstr "Fill, Markers, Stroke"
 
+# attributs SVG
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:111
 #, kde-format
 msgid "Stroke, Fill, Markers"
-msgstr ""
+msgstr "Stroke, Fill, Markers"
 
+# attributs SVG
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:112
 #, kde-format
 msgid "Stroke, Markers, Fill"
-msgstr ""
+msgstr "Stroke, Markers, Fill"
 
+# attribut SVG
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:113
 #, kde-format
 msgid "Markers, Fill, Stroke"
-msgstr ""
+msgstr "Markers, Fill, Stroke"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:114
 #, kde-format
 msgid "Markers, Stroke, Fill"
-msgstr ""
+msgstr "attributs SVG Markers, Stroke, Fill"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:121
 #, fuzzy, kde-format
@@ -59148,7 +59148,7 @@ msgstr "Sélection magnétique"
 #, kde-format
 msgctxt "action"
 msgid "Magnetic Curve Selection Tool"
-msgstr "Outil de sélection magnétique pour les courbes"
+msgstr "Sélection magnétique pour les courbes"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:51
 #, kde-format
@@ -60282,12 +60282,12 @@ msgstr "Brosse dynamique"
 #, kde-format
 msgctxt "action"
 msgid "Enclose and Fill Tool"
-msgstr "Outil d'entourage et de remplissage"
+msgstr "Englober et remplir"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:268
 msgctxt "(qtundo-format)"
 msgid "Enclose and Fill"
-msgstr "Entourer et remplir"
+msgstr "Englober et remplir"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:425
 #, kde-format
@@ -60299,7 +60299,7 @@ msgstr "Inverser"
 #, kde-format
 msgctxt "The 'include contour regions' checkbox in enclose and fill tool"
 msgid "Include contour regions"
-msgstr "Inclure les régions de contour"
+msgstr "Inclure les régions périphériques"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:448
 #, fuzzy, kde-format
@@ -60372,21 +60372,19 @@ msgstr "Lasso"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
 #, kde-format
 msgid "Enable to fill opposite regions instead"
-msgstr "Permet de remplir à la place des régions opposées "
+msgstr "Permet de remplir à la place les régions opposées "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:517
 #, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
-msgstr ""
-"Activer aussi pour le remplissage des formes jouxtant le contour de région "
-"englobante"
+msgstr "Permet de remplir aussi les éléments limitrophes"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:549
 #, kde-format
 msgctxt "The 'enclosing method' section label in enclose and fill tool options"
 msgid "Enclosing method"
-msgstr "Méthode d'entourage"
+msgstr "Méthode d'englobement"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:556
 #, kde-format
@@ -60398,19 +60396,19 @@ msgstr "Référence"
 #, kde-format
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
-msgstr "Régions cibles"
+msgstr "Cible"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:576
 #, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
-msgstr "Source de remplissage"
+msgstr "Source du remplissage"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:590
 #, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
-msgstr "Extension du remplissage"
+msgstr "Étendue du remplissage"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:599
 #, kde-format
@@ -60452,13 +60450,13 @@ msgstr "Tout sauf une couleur spécifique"
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
-msgstr "Tout sauf la transparence"
+msgstr "Tout sauf transparence"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:871
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
-msgstr "Tout, sauf une couleur ou transparence spécifique"
+msgstr "Tout, sauf une couleur spécifique ou transparence"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:874
 #, kde-format
@@ -60470,18 +60468,18 @@ msgstr "Toute région entourée par une couleur spécifique"
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
-msgstr "Toute région entourée par transparence"
+msgstr "Toute région entourée par de la transparence"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:880
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
-msgstr "Toute région entourée d'une couleur ou d'une transparence spécifique"
+msgstr "Toute région entourée d'une couleur spécifique ou de transparence"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
 #, kde-format
 msgid "Enclose and Fill Tool"
-msgstr "Outil d'entourage et de remplissage"
+msgstr "Englober et remplir"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.cpp:49
 msgctxt "(qtundo-format)"

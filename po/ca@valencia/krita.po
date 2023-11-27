@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-26 00:40+0000\n"
-"PO-Revision-Date: 2023-11-22 11:57+0100\n"
+"PO-Revision-Date: 2023-11-25 10:57+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -59596,35 +59596,31 @@ msgstr "Ancora el text a la dreta."
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:131
 #, kde-format
 msgid "Text flows horizontal, top to bottom."
-msgstr ""
+msgstr "El text està en horitzontal, de dalt a baix."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:157
 #, kde-format
 msgid "Text flows vertical, right to left."
-msgstr ""
+msgstr "El text està en vertical, de dreta a esquerra."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:183
 #, kde-format
 msgid "Text flows vertical, left to right."
-msgstr ""
+msgstr "El text està en vertical, d'esquerra a dreta."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:216
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Left Edge Detection"
+#, kde-format
 msgid "Left to right text direction."
-msgstr "Detecció de la vora esquerra"
+msgstr "Direcció del text d'esquerra a dreta."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:242
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Right Edge Detection"
+#, kde-format
 msgid "Right to left text direction."
-msgstr "Detecció de la vora dreta"
+msgstr "Direcció del text de dreta a esquerra."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:286
@@ -61187,6 +61183,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "Vertical Text Layout"
-#~ msgstr "Disposició vertical del text"

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-17 02:26+0000\n"
+"POT-Creation-Date: 2023-11-27 02:25+0000\n"
 "PO-Revision-Date: 2022-10-02 19:59+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -37699,7 +37699,7 @@ msgstr "المبدئيّ:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:592
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -37782,7 +37782,7 @@ msgctxt "@item:intable Action name in shortcuts configuration"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:167
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:170
 #, fuzzy, kde-format
 #| msgid "Shortcut conflict"
 msgctxt "%1 is the number of conflicts"
@@ -37795,14 +37795,14 @@ msgstr[3] "تضارب الاختصارات"
 msgstr[4] "تضارب الاختصارات"
 msgstr[5] "تضارب الاختصارات"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:171
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:174
 #, fuzzy, kde-format
 #| msgctxt "header for an applications shortcut list"
 #| msgid "Shortcuts for %1"
 msgid "Shortcut '%1' for action '%2'\n"
 msgstr "اختصارات %1"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:176
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:179
 #, kde-format
 msgctxt "%1 is the number of ambiguous shortcut clashes (hidden)"
 msgid ""
@@ -37820,18 +37820,18 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:186
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:542
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
 #, kde-format
 msgid "Reassign"
 msgstr "أعِد الإسناد"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:195
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:198
 #, kde-format
 msgid "Shortcut conflict"
 msgstr "تضارب الاختصارات"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:196
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:199
 #, kde-format
 msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
@@ -37840,7 +37840,7 @@ msgstr ""
 "تجميعة المفاتيح ’%1‘ يستخدمها الإجراء <b>%2</b> بالفعل.<br>رجاءً اختر أخرى "
 "مختلفة."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:226
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:229
 #, kde-format
 msgid ""
 "Click on the button, then enter the shortcut like you would in the program.\n"
@@ -37849,12 +37849,12 @@ msgstr ""
 "انقر الزّرّ ثمّ أدخل الاختصار الذي تريد في البرنامج.\n"
 "فمثلًا ل‍ Ctrl+A: أبقِ مفتاح Ctrl مضغوطًا واضغط A."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:536
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "تضارب مع اختصار تطبيق قياسيّ"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:537
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -37865,7 +37865,7 @@ msgstr ""
 "التّطبيقات.\n"
 "أمتأكّد من استخدامه كاختصار عموميّ أيضًا؟"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:585
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
 #, fuzzy, kde-format
 #| msgctxt "Input for shortcut"
 #| msgid "Input"
@@ -37873,12 +37873,12 @@ msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "الدّخل"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:639
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "المفتاح الذي ضغطته لا تدعمه كيوت."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:640
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
 #, kde-format
 msgid "Unsupported Key"
 msgstr "مفتاح غير مدعوم"

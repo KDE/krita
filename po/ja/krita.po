@@ -17300,6 +17300,9 @@ msgid "Change Image Resolution"
 msgstr "画像の解像度を変更"
 
 #: libs/image/kis_image.cc:1033
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "レイヤーをスケール"
@@ -17315,6 +17318,9 @@ msgid "Rotate Mask"
 msgstr "マスクを回転"
 
 #: libs/image/kis_image.cc:1166
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "レイヤーを回転"
@@ -17325,6 +17331,9 @@ msgid "Shear Mask"
 msgstr "マスクを剪断変形"
 
 #: libs/image/kis_image.cc:1250
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "レイヤーを剪断変形"
@@ -28020,7 +28029,8 @@ msgid "Layer Size"
 msgstr "レイヤーサイズ"
 
 #: libs/ui/imagesize/imagesize.cc:119
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resize Layer"
 msgid "Resize Layer"
 msgstr "レイヤーの大きさを変える"
 
@@ -29565,6 +29575,9 @@ msgid "Remove Nodes"
 msgstr "レイヤーを削除"
 
 #: libs/ui/kis_node_manager.cpp:1038
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
 msgstr "レイヤーを反転 X"
@@ -29575,6 +29588,9 @@ msgid "Mirror Mask X"
 msgstr "マスクを反転 X"
 
 #: libs/ui/kis_node_manager.cpp:1051
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
 msgstr "レイヤーを反転 Y"
@@ -43013,12 +43029,17 @@ msgid "Offset Image"
 msgstr "画像をオフセット"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgstr "レイヤーをオフセット"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Offset Layer"
 msgctxt "@title:window"
 msgid "Offset Layer"
 msgstr "レイヤーをオフセット"
@@ -43896,7 +43917,8 @@ msgid "Mirror Image Horizontally"
 msgstr "画像を左右反転"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:144
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Rotate Layer"
 msgid "Rotate Layer"
 msgstr "レイヤーを回転"
 
@@ -44041,7 +44063,8 @@ msgid "Shear Image"
 msgstr "画像を剪断変形"
 
 #: plugins/extensions/shearimage/shearimage.cc:72
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Shear Layer"
 msgid "Shear Layer"
 msgstr "レイヤーを剪断変形"
 
@@ -61029,10 +61052,3 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
-
-#~ msgid ""
-#~ "<html><head/><body><p>This should be enabled if you see any artifacts "
-#~ "while using assistants.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>補助線を使用している際に不自然なノイズが表示される場"
-#~ "合、これを有効にしてください。</p></body></html>"

@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-27 02:25+0000\n"
-"PO-Revision-Date: 2023-11-26 01:13+0300\n"
+"PO-Revision-Date: 2023-11-27 19:16+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -9079,12 +9079,10 @@ msgstr "Fırça Boyutunu Artır"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:845 krita/krita.action:847 krita/krita.action:848
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise"
-msgstr "Nesneyi 90° saat yönünde döndür"
+msgstr "Fırça ucunu saat yönünde döndür"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9093,11 +9091,10 @@ msgstr "Nesneyi 90° saat yönünde döndür"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:857 krita/krita.action:859 krita/krita.action:860
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "Seçimi saat yönünde 90 derece döndür"
+msgstr "Fırça ucunu saat yönünde döndür (kesin)"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
@@ -9106,12 +9103,10 @@ msgstr "Seçimi saat yönünde 90 derece döndür"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:869 krita/krita.action:871 krita/krita.action:872
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Nesneyi 90° saat yönünün tersine döndür"
+msgstr "Fırça ucunu saat yönünün tersine döndür"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9120,11 +9115,10 @@ msgstr "Nesneyi 90° saat yönünün tersine döndür"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:881 krita/krita.action:883 krita/krita.action:884
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Seçimi saat yönünün tersine 90 derece döndür"
+msgstr "Fırça ucunu saat yönünün tersine döndür (kesin)"
 
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
@@ -12180,169 +12174,139 @@ msgstr "Dalgacık Çözündür"
 
 #. i18n: context: text @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3172
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Hori&zontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layer Hori&zontally"
-msgstr "Katmanları Yatay Ola&rak Yansıt"
+msgstr "Katmanı Yatay Yansıt"
 
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3174 krita/krita.action:3175
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Horizontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layer Horizontally"
-msgstr "Katmanları yatay olarak yansıt"
+msgstr "Katmanı yatay olarak yansıt"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3184
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers &Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layer &Vertically"
-msgstr "Katmanları &Dikey Olarak Yansıt"
+msgstr "Katmanı &Dikey Yansıt"
 
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3186 krita/krita.action:3187
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layers Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layer Vertically"
-msgstr "Katmanları dikey olarak yansıt"
+msgstr "Katmanı dikey olarak yansıt"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3196
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Rotate Layers..."
+#, kde-format
 msgctxt "action"
 msgid "&Rotate Layer..."
-msgstr "&Katmanları Döndür..."
+msgstr "&Katmanı Döndür..."
 
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3198 krita/krita.action:3199
-#, fuzzy, kde-format
-#| msgid "Rotate Layer"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layer"
-msgstr "Katmanı Döndür"
+msgstr "Katmanı döndür"
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3208
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate &Layers 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate &Layer 90° to the Right"
-msgstr "Katmanları &Sağa 90° Döndür"
+msgstr "Katmanı &Sağa 90° Döndür"
 
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3210 krita/krita.action:3211
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layers 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layer 90° to the Right"
-msgstr "Katmanları sağa 90° döndür"
+msgstr "Katmanı sağa 90° döndür"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3220
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layers &90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layer &90° to the Left"
-msgstr "Katmanları Sola &90° Döndür"
+msgstr "Katmanı Sola &90° Döndür"
 
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3222 krita/krita.action:3223
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layers 90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layer 90° to the Left"
-msgstr "Katmanları sola 90° döndür"
+msgstr "Katmanı sola 90° döndür"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3232
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layers &180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layer &180°"
-msgstr "Katmanları &180° Döndür"
+msgstr "Katmanı &180° Döndür"
 
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3234 krita/krita.action:3235
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layers 180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layer 180°"
-msgstr "Katmanları 180° döndür"
+msgstr "Katmanı 180° döndür"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3244
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale &Layers to new Size..."
+#, kde-format
 msgctxt "action"
 msgid "Scale &Layer to new Size..."
-msgstr "Katmanları &Yeni Boyuta Ölçekle..."
+msgstr "Katmanı &Yeni Boyuta Ölçekle..."
 
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3246 krita/krita.action:3247
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale Layers to new Size"
+#, kde-format
 msgctxt "action"
 msgid "Scale Layer to new Size"
-msgstr "Katmanları yeni boyuta ölçekle"
+msgstr "Katmanı yeni boyuta ölçekle"
 
 #. i18n: context: text @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3256
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Shear Layers..."
+#, kde-format
 msgctxt "action"
 msgid "&Shear Layer..."
-msgstr "&Katmanları Kırk..."
+msgstr "&Katmanı Kırk..."
 
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3258 krita/krita.action:3259
-#, fuzzy, kde-format
-#| msgid "Shear Layer"
+#, kde-format
 msgctxt "action"
 msgid "Shear Layer"
-msgstr "Katmanı Kırk"
+msgstr "Katmanı kırk"
 
 #. i18n: context: text @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3268
@@ -12482,24 +12446,20 @@ msgstr "Tüm Katmanları Kırk"
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3364
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Offset Layers..."
+#, kde-format
 msgctxt "action"
 msgid "&Offset Layer..."
-msgstr "&Katmanları Ofsetle..."
+msgstr "&Katmanı Ofsetle..."
 
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3366 krita/krita.action:3367
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "action"
 msgid "Offset Layer"
-msgstr "Katmanı Ofsetle"
+msgstr "Katmanı ofsetle"
 
 #. i18n: context: text @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3376
@@ -16307,7 +16267,7 @@ msgstr "Bir basit bir yol şekli"
 #: libs/flake/KoShapeController.cpp:56
 #, kde-format
 msgid "%1 Options"
-msgstr "%1 Seçenekler"
+msgstr "%1 Seçenekleri"
 
 #: libs/flake/KoToolManager.cpp:572
 #, kde-format
@@ -29721,7 +29681,7 @@ msgstr "Tam Ekran Aç/Kapat"
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
-msgstr "%1 &x %2 (%3)"
+msgstr "%1 × %2 &(%3)"
 
 #: libs/ui/kis_statusbar.cc:277
 #, kde-format
@@ -32576,30 +32536,24 @@ msgid "Decrease Brush Size"
 msgstr "Fırça Boyutu Küçült"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgid "Rotate brush tip clockwise"
-msgstr "Nesneyi 90° saat yönünde döndür"
+msgstr "Fırça Ucunu Saat Yönünde Döndür"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "Seçimi saat yönünde 90 derece döndür"
+msgstr "Fırça Ucunu Saat Yönünde Döndür (Kesin)"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Nesneyi 90° saat yönünün tersine döndür"
+msgstr "Fırça Ucunu Saat Yönünün Tersine Döndür"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Seçimi saat yönünün tersine 90 derece döndür"
+msgstr "Fırça Ucunu Saat Yönünün Tersine Döndür (Kesin)"
 
 #: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, kde-format
@@ -36368,7 +36322,7 @@ msgctxt ""
 "a kind of mouse gesture: hold down one mouse button, then press another "
 "button"
 msgid "Hold %1, then push %2"
-msgstr "%1'i tut, sonra %2'yi it"
+msgstr "Önce şunu tut: %1, sonra şunu it: %2"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:50
 #, kde-format
@@ -38085,7 +38039,7 @@ msgstr[1] "%1 Boş Kare Ekle"
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
 msgid_plural "Insert %1 frames"
-msgstr[0] "%1 Kare Ekle"
+msgstr[0] "Kare Ekle"
 msgstr[1] "%1 Kare Ekle"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:188

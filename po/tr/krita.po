@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-26 00:40+0000\n"
-"PO-Revision-Date: 2023-11-26 01:30+0300\n"
+"PO-Revision-Date: 2023-11-27 17:33+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16331,7 +16331,7 @@ msgstr "Bir basit bir yol şekli"
 #: libs/flake/KoShapeController.cpp:56
 #, kde-format
 msgid "%1 Options"
-msgstr "%1 Seçenekler"
+msgstr "%1 Seçenekleri"
 
 #: libs/flake/KoToolManager.cpp:574
 #, kde-format
@@ -29826,7 +29826,7 @@ msgstr "Tam Ekran Aç/Kapat"
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
-msgstr "%1 &x %2 (%3)"
+msgstr "%1 × %2 &(%3)"
 
 #: libs/ui/kis_statusbar.cc:277
 #, kde-format
@@ -36456,7 +36456,7 @@ msgctxt ""
 "a kind of mouse gesture: hold down one mouse button, then press another "
 "button"
 msgid "Hold %1, then push %2"
-msgstr "%1'i tut, sonra %2'yi it"
+msgstr "Önce şunu tut: %1, sonra şunu it: %2"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:50
 #, kde-format
@@ -38230,7 +38230,7 @@ msgstr[1] "%1 Boş Kare Ekle"
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
 msgid_plural "Insert %1 frames"
-msgstr[0] "%1 Kare Ekle"
+msgstr[0] "Kare Ekle"
 msgstr[1] "%1 Kare Ekle"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:188

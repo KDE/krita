@@ -19,7 +19,7 @@ public:
                          int pos,
                          int originalPos,
                          int anchor,
-                         int length,
+                         int length, bool codePointDeletion = false,
                          KUndo2Command *parent = 0);
     ~SvgTextRemoveCommand() override = default;
 
@@ -34,6 +34,8 @@ public:
 private:
     KoSvgTextShape *m_shape;
     int m_pos;
+    int m_index;
+    bool m_codePointDeletion;
     int m_originalPos;
     int m_anchor;
     int m_length;

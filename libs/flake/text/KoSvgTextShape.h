@@ -304,6 +304,8 @@ public:
      */
     bool removeText(int pos, int length);
 
+    bool removeCodePoint(int index);
+
     KoSvgTextProperties propertiesForPos(int pos);
     void setPropertiesAtPos(int pos, KoSvgTextProperties properties);
 

@@ -150,6 +150,9 @@ public:
 
     virtual void removeText(int index, int length) = 0;
 
+    /// Remove a single Unicode codepoint. If the char at index is a high or low surrogate, its closest companion will also be removed.
+    virtual void removeCodePoint(const int index) = 0;
+
     virtual void setTextProperties(KoSvgTextProperties properties) = 0;
 
     /**

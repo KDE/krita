@@ -14,14 +14,21 @@ SvgTextRemoveCommand::SvgTextRemoveCommand(KoSvgTextShape *shape,
                                            int pos, int originalPos,
                                            int anchor,
                                            int length,
+                                           bool codePointDeletion,
                                            KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shape(shape)
     , m_pos(pos)
+    , m_index(m_shape->indexForPos(m_pos))
+    , m_codePointDeletion(codePointDeletion)
     , m_originalPos(originalPos)
     , m_anchor(anchor)
     , m_length(length)
 {
+    if (m_codePointDeletion) {
+        m_index = pos;
+        m_pos = -1;
+    }
     Q_ASSERT(shape);
     setText(kundo2_i18n("Remove Text"));
 }
@@ -29,11 +36,17 @@ SvgTextRemoveCommand::SvgTextRemoveCommand(KoSvgTextShape *shape,
 void SvgTextRemoveCommand::redo()
 {
     QRectF updateRect = m_shape->boundingRect();
-    int oldIndex = m_shape->indexForPos(m_pos);
+    int oldIndex = m_index;
 
     KoSvgTextShapeMarkupConverter converter(m_shape);
     converter.convertToSvg(&m_oldSvg, &m_oldDefs);
-    m_shape->removeText(m_pos, m_length);
+
+    if (m_codePointDeletion) {
+        m_shape->removeCodePoint(m_index);
+    } else {
+        int oldPos = m_pos;
+        m_shape->removeText(oldPos, m_length);
+    }
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
 
     int pos = qMax(0, m_shape->posForIndex(oldIndex, false, false));
@@ -61,11 +74,11 @@ bool SvgTextRemoveCommand::mergeWith(const KUndo2Command *other)
     const SvgTextRemoveCommand *command = dynamic_cast<const SvgTextRemoveCommand*>(other);
 
 
-    if (!command || command->m_shape != m_shape) {
+    if (!command || command->m_shape != m_shape || command->m_codePointDeletion) {
         return false;
     }
-    int oldIndex = m_shape->indexForPos(m_pos);
-    int otherOldIndex = m_shape->indexForPos(command->m_pos);
+    int oldIndex = m_index;
+    int otherOldIndex = command->m_index;
     if (oldIndex - m_length != otherOldIndex) {
         return false;
     }

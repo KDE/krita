@@ -268,6 +268,21 @@ void SvgTextCursor::removeText(SvgTextCursor::MoveMode first, SvgTextCursor::Mov
     }
 }
 
+void SvgTextCursor::removeLastCodePoint()
+{
+    if (d->shape) {
+        SvgTextRemoveCommand *removeCmd;
+        if (hasSelection()) {
+            removeCmd = removeSelectionImpl();
+            addCommandToUndoAdapter(removeCmd);
+        } else {
+            int lastIndex = d->shape->indexForPos(d->pos) - 1;
+            removeCmd = new SvgTextRemoveCommand(d->shape, lastIndex, d->pos, d->anchor, 1, true);
+            addCommandToUndoAdapter(removeCmd);
+        }
+    }
+}
+
 void SvgTextCursor::removeSelection()
 {
     KUndo2Command *removeCmd = removeSelectionImpl();
@@ -783,7 +798,7 @@ void SvgTextCursor::keyPressEvent(QKeyEvent *event)
             event->accept();
             break;
         case Qt::Key_Backspace:
-            removeText(MovePreviousChar, MoveNone);
+            removeLastCodePoint();
             event->accept();
             break;
         case Qt::Key_Return:
@@ -958,7 +973,7 @@ void SvgTextCursor::keyPressEvent(QKeyEvent *event)
         removeText(MoveLineStart, MoveLineEnd);
         event->accept();
     } else if (testSequence == QKeySequence::Backspace) {
-        removeText(MovePreviousChar, MoveNone);
+        removeLastCodePoint();
         event->accept();
     } else if (testSequence == QKeySequence::Delete) {
         removeText(MoveNone, MoveNextChar);

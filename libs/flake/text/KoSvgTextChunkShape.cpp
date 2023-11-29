@@ -492,6 +492,27 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         }
     }
 
+    void removeCodePoint(const int index) override {
+        if (isTextNode()) {
+            int i = index;
+            int length = 1;
+            if (q->s->text.at(i).isSurrogate()) {
+                int k = 0;
+                int v = 0;
+                Q_FOREACH(const int j, q->s->text.toUcs4()) {
+                    v = QChar::requiresSurrogates(j)? 2: 1;
+                    if (k+v > i) {
+                        break;
+                    }
+                    k += v;
+                }
+                i = k;
+                length = v;
+            }
+            q->s->text.remove(i, length);
+        }
+    }
+
     void setTextProperties(KoSvgTextProperties properties) override
     {
         q->s->properties = properties;

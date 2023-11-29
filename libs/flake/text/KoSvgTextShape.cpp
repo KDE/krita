@@ -801,6 +801,23 @@ bool KoSvgTextShape::removeText(int pos, int length)
     return succes;
 }
 
+bool KoSvgTextShape::removeCodePoint(int index)
+{
+    bool succes = false;
+    int currentIndex = 0;
+    KoSvgTextChunkShape *chunkShape = findTextChunkForIndex(this, currentIndex, index, true);
+    if (chunkShape) {
+        int offset =  index - currentIndex;
+        chunkShape->layoutInterface()->removeCodePoint(offset);
+        succes = true;
+    }
+    if (succes) {
+        notifyChanged();
+        shapeChangedPriv(ContentChanged);
+    }
+    return succes;
+}
+
 KoSvgTextProperties KoSvgTextShape::propertiesForPos(int pos)
 {
     KoSvgTextProperties props = textProperties();

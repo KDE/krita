@@ -116,6 +116,8 @@ public:
      */
     void removeText(MoveMode first, MoveMode second);
 
+    void removeLastCodePoint();
+
     /**
      * @brief removeSelection
      * if there's a selection, creates a text-removal command.

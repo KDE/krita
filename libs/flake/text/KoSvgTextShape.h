@@ -298,13 +298,20 @@ public:
 
     /**
      * @brief removeText
-     * @param pos
-     * @param length
-     * @return
+     * Where insert text explicitely uses a cursorposition,
+     * remove text uses a string index. It will modify these values
+     * so that...
+     * - Whole code points are deleted at any time, avoiding
+     *   no dangling surrogates.
+     * - Graphemes don't end with Zero-width-joiners, as that can lead
+     *   to the grapheme merging with the next.
+     * - Variation selectors are deleted along their base.
+     * - regional sequences are deleted in pairs.
+     * @param index - index (not cursorpos!) of the start position.
+     * @param length - total length of text to remove.
+     * @return whether it was successful.
      */
-    bool removeText(int pos, int length);
-
-    bool removeCodePoint(int index);
+    bool removeText(int &index, int &length);
 
     KoSvgTextProperties propertiesForPos(int pos);
     void setPropertiesAtPos(int pos, KoSvgTextProperties properties);

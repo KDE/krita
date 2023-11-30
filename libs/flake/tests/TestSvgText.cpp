@@ -2386,18 +2386,65 @@ void TestSvgText::testTextInsertion()
     ref.insert(19, ref2);
     QVERIFY2(ref == textShape->plainText(), QString("Text shape plain text does not match reference text.").toLatin1());
 }
+
+void TestSvgText::testTextDeletion_data()
+{
+    QTest::addColumn<QString>("text");
+    QTest::addColumn<int>("start");
+    QTest::addColumn<int>("length");
+    QTest::addColumn<int>("start2");
+    QTest::addColumn<int>("length2");
+    QTest::addColumn<QString>("finalText");
+
+    QTest::addRow("basic") << QString("The quick brown fox jumps over the lazy dog.")
+                           << 15 << 10 << 15 << 10
+                           << QString("The quick brown over the lazy dog.");
+    QTest::addRow("backspace-hindi") << QString("क्रिता")
+                           << 5 << 1 << 5 << 1
+                           << QString("क्रित");
+    QTest::addRow("backspace-zwj") << QString("\U0001F469\U0001F3FF\u200D\U0001F692")
+                           << 6 << 1 << 4 << 3
+                           << QString("\U0001F469\U0001F3FF");
+    QTest::addRow("backspace-emoji-vs") << QString("\U0001F469\U0001F3FF\u200D\U0001F692\U0001F469\U0001F3FF")
+                           << 10 << 1 << 7 << 4
+                           << QString("\U0001F469\U0001F3FF\u200D\U0001F692");
+    QTest::addRow("backspace-regular-vs") << QString("Ashi:\u82A6\uFE03")
+                           << 6 << 1 << 5 << 2
+                           << QString("Ashi:");
+    QTest::addRow("backspace-regional") << QString("US:\U0001F1FA\U0001F1F8")
+                           << 6 << 1 << 3 << 4
+                           << QString("US:");
+    QTest::addRow("delete-zwj") << QString("\U0001F469\U0001F3FF\u200D\U0001F692")
+                           << 0 << 1 << 0 << 5
+                           << QString("\U0001F692");
+    QTest::addRow("delete-regular-vs") << QString("\u82A6\uFE03:Ashi")
+                           << 0 << 1 << 0 << 2
+                           << QString(":Ashi");
+    QTest::addRow("delete-regional") << QString("\U0001F1FA\U0001F1F8\U0001F1FA\U0001F1F8:US")
+                           << 0 << 1 << 0 << 4
+                           << QString("\U0001F1FA\U0001F1F8:US");
+}
 /**
  * This tests basic text deletion.
  */
 void TestSvgText::testTextDeletion()
 {
     KoSvgTextShape *textShape = new KoSvgTextShape();
-    QString ref ("The quick brown fox jumps over the lazy dog.");
-    textShape->insertText(0, ref);
+    QFETCH(QString, text);
+    textShape->insertText(0, text);
 
-    ref.remove(15, 10);
-    textShape->removeText(15, 10);
-    QVERIFY2(ref == textShape->plainText(),
+    QFETCH(int, start);
+    QFETCH(int, length);
+
+    QFETCH(QString, finalText);
+    QFETCH(int, start2);
+    QFETCH(int, length2);
+
+    textShape->removeText(start, length);
+
+    QCOMPARE(start2, start);
+    QCOMPARE(length2, length);
+    QVERIFY2(finalText == textShape->plainText(),
              QString("Mismatch between textShape plain text and reference for text-removal.").toLatin1());
 }
 /**
@@ -2425,7 +2472,7 @@ void TestSvgText::testNavigation()
         cursorPos = textShape->posRight(cursorPos);
     }
     cursorPos = textShape->posDown(cursorPos);
-    QVERIFY(cursorPos == 18);
+    QVERIFY(cursorPos == 19);
     QVERIFY(textShape->lineStart(cursorPos) == 10);
     QVERIFY(textShape->lineEnd(cursorPos) == 19);
 

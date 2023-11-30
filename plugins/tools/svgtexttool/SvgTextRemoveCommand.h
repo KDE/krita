@@ -16,10 +16,10 @@ class KRITATOOLSVGTEXT_EXPORT SvgTextRemoveCommand : public KUndo2Command
 {
 public:
     SvgTextRemoveCommand(KoSvgTextShape *shape,
+                         int index,
                          int pos,
-                         int originalPos,
                          int anchor,
-                         int length, bool codePointDeletion = false,
+                         int length,
                          KUndo2Command *parent = 0);
     ~SvgTextRemoveCommand() override = default;
 
@@ -33,9 +33,7 @@ public:
 
 private:
     KoSvgTextShape *m_shape;
-    int m_pos;
     int m_index;
-    bool m_codePointDeletion;
     int m_originalPos;
     int m_anchor;
     int m_length;

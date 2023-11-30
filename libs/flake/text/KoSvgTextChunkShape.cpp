@@ -59,6 +59,7 @@ const QString BIDI_CONTROL_PDI = "\u2069";
 const QString UNICODE_BIDI_ISOLATE_OVERRIDE_LR_START = "\u2068\u202d";
 const QString UNICODE_BIDI_ISOLATE_OVERRIDE_RL_START = "\u2068\u202e";
 const QString UNICODE_BIDI_ISOLATE_OVERRIDE_END = "\u202c\u2069";
+const QChar ZERO_WIDTH_JOINER = 0x200d;
 
 void appendLazy(QVector<qreal> *list, boost::optional<qreal> value, int iteration, bool hasDefault = true, qreal defaultValue = 0.0)
 {
@@ -485,33 +486,96 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
             }
         }
     }
-    void removeText(int start, int length) override
+
+    bool isVariationSelector(uint val) {
+        // Original set of VS
+        if (val == 0xfe00 || (val > 0xfe00 && val <= 0xfe0f)) {
+            return true;
+        }
+        // Extended set VS
+        if (val == 0xe0100 || (val > 0xe0100 && val <= 0xe01ef)) {
+            return true;
+        }
+        // Mongolian VS
+        if (val == 0x180b || (val > 0x180b && val <= 0x180f)) {
+            return true;
+        }
+        // Emoji skin tones
+        if (val == 0x1f3fb || (val > 0x1f3fb && val <= 0x1f3ff)) {
+            return true;
+        }
+        return false;
+    }
+
+    bool regionalIndicator(uint val) {
+        if (val == 0x1f1e6 || (val > 0x1f1e6 && val <= 0x1f1ff)) {
+            return true;
+        }
+        return false;
+    }
+
+    void removeText(int &start, int length) override
     {
         if (isTextNode()) {
-            q->s->text.remove(start, length);
+            int end = start+length;
+            int j = 0;
+            int v = 0;
+            int lastCharZWJ = 0;
+            int lastVS = 0;
+            int vsClusterStart = 0;
+            int regionalIndicatorCount = 0;
+            bool startFound = false;
+            bool addToEnd = true;
+            Q_FOREACH(const uint i, q->s->text.toUcs4()) {
+                v = QChar::requiresSurrogates(i)? 2: 1;
+                int index = (j+v) -1;
+                bool ZWJ = q->s->text.at(index) == ZERO_WIDTH_JOINER;
+                if (isVariationSelector(i)) {
+                    lastVS += v;
+                } else {
+                    lastVS = 0;
+                    vsClusterStart = j;
+                }
+                if (index >= start && !startFound) {
+                    startFound = true;
+                    if (v > 1) {
+                        start = j;
+                    }
+                    if (regionalIndicatorCount > 0 && regionalIndicator(i)) {
+                        start -= regionalIndicatorCount;
+                        regionalIndicatorCount = 0;
+                    }
+                    // Always delete any zero-width-joiners as well.
+                    if (ZWJ && index > start) {
+                        start = -1;
+                    }
+                    if (lastCharZWJ > 0) {
+                        start -= lastCharZWJ;
+                        lastCharZWJ = 0;
+                    }
+                    // remove any clusters too.
+                    if (lastVS > 0) {
+                        start = vsClusterStart;
+                    }
+                }
+
+
+                if (j >= end && addToEnd) {
+                    end = j;
+                    addToEnd =  ZWJ || isVariationSelector(i)
+                            || (regionalIndicatorCount < 3 && regionalIndicator(i));
+                    if (addToEnd) {
+                        end += v;
+                    }
+                }
+                j += v;
+                lastCharZWJ = ZWJ? lastCharZWJ + v: 0;
+                regionalIndicatorCount = regionalIndicator(i)? regionalIndicatorCount + v: 0;
+            }
+            q->s->text.remove(start, end-start);
         }
     }
 
-    void removeCodePoint(const int index) override {
-        if (isTextNode()) {
-            int i = index;
-            int length = 1;
-            if (q->s->text.at(i).isSurrogate()) {
-                int k = 0;
-                int v = 0;
-                Q_FOREACH(const int j, q->s->text.toUcs4()) {
-                    v = QChar::requiresSurrogates(j)? 2: 1;
-                    if (k+v > i) {
-                        break;
-                    }
-                    k += v;
-                }
-                i = k;
-                length = v;
-            }
-            q->s->text.remove(i, length);
-        }
-    }
 
     void setTextProperties(KoSvgTextProperties properties) override
     {

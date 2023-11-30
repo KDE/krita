@@ -11,24 +11,17 @@
 #include "KoSvgTextShape.h"
 #include "KoSvgTextShapeMarkupConverter.h"
 SvgTextRemoveCommand::SvgTextRemoveCommand(KoSvgTextShape *shape,
-                                           int pos, int originalPos,
+                                           int index, int pos,
                                            int anchor,
                                            int length,
-                                           bool codePointDeletion,
                                            KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shape(shape)
-    , m_pos(pos)
-    , m_index(m_shape->indexForPos(m_pos))
-    , m_codePointDeletion(codePointDeletion)
-    , m_originalPos(originalPos)
+    , m_index(index)
+    , m_originalPos(pos)
     , m_anchor(anchor)
     , m_length(length)
 {
-    if (m_codePointDeletion) {
-        m_index = pos;
-        m_pos = -1;
-    }
     Q_ASSERT(shape);
     setText(kundo2_i18n("Remove Text"));
 }
@@ -36,20 +29,15 @@ SvgTextRemoveCommand::SvgTextRemoveCommand(KoSvgTextShape *shape,
 void SvgTextRemoveCommand::redo()
 {
     QRectF updateRect = m_shape->boundingRect();
-    int oldIndex = m_index;
 
     KoSvgTextShapeMarkupConverter converter(m_shape);
     converter.convertToSvg(&m_oldSvg, &m_oldDefs);
 
-    if (m_codePointDeletion) {
-        m_shape->removeCodePoint(m_index);
-    } else {
-        int oldPos = m_pos;
-        m_shape->removeText(oldPos, m_length);
-    }
+    m_shape->removeText(m_index, m_length);
+
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
 
-    int pos = qMax(0, m_shape->posForIndex(oldIndex, false, false));
+    int pos = qMax(0, m_shape->posForIndex(m_index, false, false));
     m_shape->notifyCursorPosChanged(pos, pos);
 }
 
@@ -74,7 +62,7 @@ bool SvgTextRemoveCommand::mergeWith(const KUndo2Command *other)
     const SvgTextRemoveCommand *command = dynamic_cast<const SvgTextRemoveCommand*>(other);
 
 
-    if (!command || command->m_shape != m_shape || command->m_codePointDeletion) {
+    if (!command || command->m_shape != m_shape) {
         return false;
     }
     int oldIndex = m_index;

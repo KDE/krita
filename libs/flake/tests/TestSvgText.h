@@ -90,6 +90,8 @@ private Q_SLOTS:
     void testShapeInsideRender();
 
     void testTextInsertion();
+
+    void testTextDeletion_data();
     void testTextDeletion();
     void testNavigation();
 };

@@ -260,9 +260,10 @@ void SvgTextCursor::removeText(SvgTextCursor::MoveMode first, SvgTextCursor::Mov
 
             int posStart = qMin(posA, posB);
             int posEnd = qMax(posA, posB);
-            int length = d->shape->indexForPos(posEnd) - d->shape->indexForPos(posStart);
+            int indexStart = d->shape->indexForPos(posStart);
+            int length = d->shape->indexForPos(posEnd) - indexStart;
 
-            removeCmd = new SvgTextRemoveCommand(d->shape, posStart, d->pos, d->anchor, length);
+            removeCmd = new SvgTextRemoveCommand(d->shape, indexStart, d->pos, d->anchor, length);
             addCommandToUndoAdapter(removeCmd);
         }
     }
@@ -277,7 +278,7 @@ void SvgTextCursor::removeLastCodePoint()
             addCommandToUndoAdapter(removeCmd);
         } else {
             int lastIndex = d->shape->indexForPos(d->pos) - 1;
-            removeCmd = new SvgTextRemoveCommand(d->shape, lastIndex, d->pos, d->anchor, 1, true);
+            removeCmd = new SvgTextRemoveCommand(d->shape, lastIndex, d->pos, d->anchor, 1);
             addCommandToUndoAdapter(removeCmd);
         }
     }

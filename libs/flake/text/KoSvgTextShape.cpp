@@ -773,45 +773,35 @@ bool KoSvgTextShape::insertText(int pos, QString text)
     return succes;
 }
 
-bool KoSvgTextShape::removeText(int pos, int length)
+bool KoSvgTextShape::removeText(int &index, int &length)
 {
     bool succes = false;
-    if (pos < -1 || d->cursorPos.isEmpty()) {
+    if (index < -1 || d->cursorPos.isEmpty()) {
         return succes;
     }
-    int index = indexForPos(pos);
     int currentLength = length;
+    int endLength = 0;
     while (currentLength > 0) {
         int currentIndex = 0;
         KoSvgTextChunkShape *chunkShape = findTextChunkForIndex(this, currentIndex, index, true);
         if (chunkShape) {
-            int offset =  index - currentIndex;
+            int offset = index > currentIndex? index - currentIndex: 0;
             int size = chunkShape->layoutInterface()->numChars(false);
             chunkShape->layoutInterface()->removeText(offset, currentLength);
-            currentLength -= (size - chunkShape->layoutInterface()->numChars(false));
+            int diff = size - chunkShape->layoutInterface()->numChars(false);
+            currentLength -= diff;
+            endLength += diff;
+
+            if (index >= currentIndex) {
+                index = currentIndex + offset;
+            }
             succes = true;
         } else {
             currentLength = -1;
         }
     }
     if (succes) {
-        notifyChanged();
-        shapeChangedPriv(ContentChanged);
-    }
-    return succes;
-}
-
-bool KoSvgTextShape::removeCodePoint(int index)
-{
-    bool succes = false;
-    int currentIndex = 0;
-    KoSvgTextChunkShape *chunkShape = findTextChunkForIndex(this, currentIndex, index, true);
-    if (chunkShape) {
-        int offset =  index - currentIndex;
-        chunkShape->layoutInterface()->removeCodePoint(offset);
-        succes = true;
-    }
-    if (succes) {
+        length = endLength;
         notifyChanged();
         shapeChangedPriv(ContentChanged);
     }

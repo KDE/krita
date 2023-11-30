@@ -11,13 +11,13 @@
 #include "KoSvgTextShape.h"
 #include "KoSvgTextShapeMarkupConverter.h"
 SvgTextRemoveCommand::SvgTextRemoveCommand(KoSvgTextShape *shape,
-                                           int index, int pos,
+                                           int endIndex, int pos,
                                            int anchor,
                                            int length,
                                            KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shape(shape)
-    , m_index(index)
+    , m_index(endIndex)
     , m_originalPos(pos)
     , m_anchor(anchor)
     , m_length(length)
@@ -33,11 +33,13 @@ void SvgTextRemoveCommand::redo()
     KoSvgTextShapeMarkupConverter converter(m_shape);
     converter.convertToSvg(&m_oldSvg, &m_oldDefs);
 
-    m_shape->removeText(m_index, m_length);
+    int idx = m_index - m_length;
+    m_shape->removeText(idx, m_length);
+    m_index = idx + m_length;
 
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
 
-    int pos = qMax(0, m_shape->posForIndex(m_index, false, false));
+    int pos = qMax(0, m_shape->posForIndex(idx, false, false));
     m_shape->notifyCursorPosChanged(pos, pos);
 }
 
@@ -67,10 +69,14 @@ bool SvgTextRemoveCommand::mergeWith(const KUndo2Command *other)
     }
     int oldIndex = m_index;
     int otherOldIndex = command->m_index;
-    if (oldIndex - m_length != otherOldIndex) {
+
+    if (oldIndex - m_length == otherOldIndex) {
+        m_length += command->m_length;
+        return true;
+    } else if (otherOldIndex - command->m_length == oldIndex - m_length) {
+        return true;
+    } else {
         return false;
     }
-
-    m_length += command->m_length;
     return true;
 }

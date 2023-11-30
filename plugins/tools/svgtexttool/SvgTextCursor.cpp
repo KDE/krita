@@ -260,10 +260,10 @@ void SvgTextCursor::removeText(SvgTextCursor::MoveMode first, SvgTextCursor::Mov
 
             int posStart = qMin(posA, posB);
             int posEnd = qMax(posA, posB);
-            int indexStart = d->shape->indexForPos(posStart);
-            int length = d->shape->indexForPos(posEnd) - indexStart;
+            int indexEnd = d->shape->indexForPos(posEnd);
+            int length = indexEnd - d->shape->indexForPos(posStart);
 
-            removeCmd = new SvgTextRemoveCommand(d->shape, indexStart, d->pos, d->anchor, length);
+            removeCmd = new SvgTextRemoveCommand(d->shape, indexEnd, d->pos, d->anchor, length);
             addCommandToUndoAdapter(removeCmd);
         }
     }
@@ -277,7 +277,7 @@ void SvgTextCursor::removeLastCodePoint()
             removeCmd = removeSelectionImpl();
             addCommandToUndoAdapter(removeCmd);
         } else {
-            int lastIndex = d->shape->indexForPos(d->pos) - 1;
+            int lastIndex = d->shape->indexForPos(d->pos);
             removeCmd = new SvgTextRemoveCommand(d->shape, lastIndex, d->pos, d->anchor, 1);
             addCommandToUndoAdapter(removeCmd);
         }
@@ -295,9 +295,9 @@ SvgTextRemoveCommand *SvgTextCursor::removeSelectionImpl(KUndo2Command *parent)
     SvgTextRemoveCommand *removeCmd = nullptr;
     if (d->shape) {
         if (d->anchor != d->pos) {
-            int start = qMin(d->anchor, d->pos);
-            int length = d->shape->indexForPos(qMax(d->anchor, d->pos)) - d->shape->indexForPos(start);
-            removeCmd = new SvgTextRemoveCommand(d->shape, start, d->pos, d->anchor, length, parent);
+            int end = d->shape->indexForPos(qMax(d->anchor, d->pos));
+            int length = d->shape->indexForPos(qMax(d->anchor, d->pos)) - d->shape->indexForPos(qMin(d->anchor, d->pos));
+            removeCmd = new SvgTextRemoveCommand(d->shape, end, d->pos, d->anchor, length, parent);
         }
     }
     return removeCmd;
@@ -532,7 +532,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
     d->pos = d->shape->posForIndex(index);
     if (event->replacementLength() > 0) {
         SvgTextRemoveCommand *cmd = new SvgTextRemoveCommand(d->shape,
-                                                             d->pos,
+                                                             index + event->replacementLength(),
                                                              originalPos,
                                                              d->anchor,
                                                              event->replacementLength());

@@ -256,7 +256,7 @@ void SvgTextCursorTest::test_text_remove_command()
     QString test = "The quick brown fox jumps over the lazy dog.";
     QString test2 = test;
 
-    SvgTextRemoveCommand *cmd = new SvgTextRemoveCommand(textShape, 10, 10, 10, 5);
+    SvgTextRemoveCommand *cmd = new SvgTextRemoveCommand(textShape, 15, 10, 10, 5);
     test.remove(10, 5);
 
     cmd->redo();

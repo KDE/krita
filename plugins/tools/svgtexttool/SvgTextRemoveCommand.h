@@ -16,7 +16,7 @@ class KRITATOOLSVGTEXT_EXPORT SvgTextRemoveCommand : public KUndo2Command
 {
 public:
     SvgTextRemoveCommand(KoSvgTextShape *shape,
-                         int index,
+                         int endIndex,
                          int pos,
                          int anchor,
                          int length,

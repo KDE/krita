@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-22 00:40+0000\n"
+"POT-Creation-Date: 2023-11-26 00:40+0000\n"
 "PO-Revision-Date: 2023-07-30 21:46+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -16369,7 +16369,7 @@ msgstr "Ein enkel banefigur"
 msgid "%1 Options"
 msgstr "%1-val"
 
-#: libs/flake/KoToolManager.cpp:576
+#: libs/flake/KoToolManager.cpp:574
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Gjeldande verktøy: %1"
@@ -16386,25 +16386,25 @@ msgstr ""
 "dokumentet, vert tekstobjekt gjorde om til Krita 5-formatet, og dei vil "
 "derfor ikkje lenger vera kompatible med Krita 4.x."
 
-#: libs/flake/text/KoSvgTextShape.cpp:1009
+#: libs/flake/text/KoSvgTextShape.cpp:1040
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1011
-#: libs/flake/text/KoSvgTextShape.cpp:1019
+#: libs/flake/text/KoSvgTextShape.cpp:1042
+#: libs/flake/text/KoSvgTextShape.cpp:1050
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG-tekstfigur"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1017
+#: libs/flake/text/KoSvgTextShape.cpp:1048
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-basert tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1031
-#: libs/flake/text/KoSvgTextShape.cpp:1046
+#: libs/flake/text/KoSvgTextShape.cpp:1062
+#: libs/flake/text/KoSvgTextShape.cpp:1077
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16710,7 +16710,7 @@ msgstr "standard"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1539
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1538
 #, kde-format
 msgid "Size"
 msgstr "Storleik"
@@ -19596,7 +19596,7 @@ msgstr "Lokale ressursar"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1205
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22636,7 +22636,7 @@ msgstr "Lageigenskapar"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:283
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
@@ -25909,7 +25909,7 @@ msgstr "Framgrunnsfarge"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1555
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1554
 #, kde-format
 msgid "Background Color"
 msgstr "Bakgrunnsfarge"
@@ -30889,14 +30889,14 @@ msgstr "&Arbeidsflate"
 
 # Namnet på verktøylinja har stor forbokstav, så bør vera hermeteikn her.
 #: libs/ui/KisMainWindow.cpp:586
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Vis «%1»-verktøylinje"
 
 # Namnet på verktøylinja har stor forbokstav, så bør vera hermeteikn her.
 #: libs/ui/KisMainWindow.cpp:588
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:322
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Gøym «%1»-verktøylinje"
@@ -36516,7 +36516,7 @@ msgstr "Standard:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:592
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -36605,7 +36605,7 @@ msgctxt "@item:intable Action name in shortcuts configuration"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:167
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:170
 #, kde-format
 msgctxt "%1 is the number of conflicts"
 msgid "Shortcut Conflict"
@@ -36613,12 +36613,12 @@ msgid_plural "Shortcut Conflicts"
 msgstr[0] "Snøggtastkonflikt"
 msgstr[1] "Snøggtastkonfliktar"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:171
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:174
 #, kde-format
 msgid "Shortcut '%1' for action '%2'\n"
 msgstr "Snøggtast «%1» for handlinga «%2»\n"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:176
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:179
 #, kde-format
 msgctxt "%1 is the number of ambiguous shortcut clashes (hidden)"
 msgid ""
@@ -36638,18 +36638,18 @@ msgstr[1] ""
 "Vil du tilordna ein tom snøggtast til handlingane?\n"
 "%3"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:186
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:542
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
 #, kde-format
 msgid "Reassign"
 msgstr "Tilordna på nytt"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:195
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:198
 #, kde-format
 msgid "Shortcut conflict"
 msgstr "Snøggtastkonflikt"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:196
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:199
 #, kde-format
 msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
@@ -36658,7 +36658,7 @@ msgstr ""
 "<qt>Snøggtasten «%1» er allereie i bruk for handlinga <b>%2</b>. <br/>Vel "
 "ein annan snøggtast.</qt>"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:226
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:229
 #, kde-format
 msgid ""
 "Click on the button, then enter the shortcut like you would in the program.\n"
@@ -36667,12 +36667,12 @@ msgstr ""
 "Trykk på knappen, og skriv så inn snøggtasten du ønskjer å bruka.\n"
 "For eksempel for «Ctrl + A»: Hald inne «Ctrl»-tasten og trykk «A»."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:536
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "Konflikt med standard programsnøggtast"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:537
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -36683,18 +36683,18 @@ msgstr ""
 "program brukar.\n"
 "Er du sikker på at du likevel vil bruka han som ein global snøggtast?"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:585
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Inndata"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:639
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "Tasten du trykte, er ikkje støtta av Qt."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:640
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
 #, kde-format
 msgid "Unsupported Key"
 msgstr "Ustøtta tast"
@@ -58739,7 +58739,7 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Merk liknande fargar"
 
-#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:36
+#: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
 msgstr ""
@@ -58754,90 +58754,90 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "Endra SVG-tekst"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:267
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
 #, kde-format
 msgid "Text Tool"
 msgstr "Tekstverktøy"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:398
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:397
 #, kde-format
 msgid "Conversion failed"
 msgstr "Feil ved konvertering"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
 #, kde-format
 msgid "Find Text"
 msgstr "Finn tekst"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:652
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:695
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:694
 #, kde-format
 msgid "Find:"
 msgstr "Finn:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:691
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:690
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Søk og byt ut alle"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:697
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
 #, kde-format
 msgid "Replace:"
 msgstr "Byt ut"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1205
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Du har endra teksten. Vil du forkasta endringane?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1381
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Rik tekst"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1383
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
 #, kde-format
 msgid "SVG Source"
 msgstr "SVG-kjelde"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1530
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1529
 #, kde-format
 msgid "Font"
 msgstr "Skrift"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1547
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1546
 #, kde-format
 msgid "Text Color"
 msgstr "Tekstfarge"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1562
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1561
 #, kde-format
 msgid "Sample a Color"
 msgstr "Plukk opp ein farge"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1576
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1575
 #, kde-format
 msgid "Line height"
 msgstr "Linjehøgd"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1589
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1588
 #, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1593
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1592
 #, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1607
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1606
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
 #, kde-format
 msgid "Letter Spacing"
 msgstr "Bokstavavstand"
@@ -59289,7 +59289,7 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:275
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -59343,12 +59343,6 @@ msgstr "SVG-kjelde"
 msgid "SVG"
 msgstr "SVG"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkVertical)
-#: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:81
-#, kde-format
-msgid "Vertical Text Layout"
-msgstr "Loddrett tekstretning"
-
 #. i18n: ectx: property (text), widget (QPushButton, btnEdit)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:21
 #, kde-format
@@ -59370,20 +59364,50 @@ msgstr "Venstrejuster teksten"
 
 # Kort verktøytips, som ikkje skal ha avsluttande punktum. Og det med ankring er misvisande; det er snakk om vanleg justering.
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:55
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:65
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "Midtstill teksten"
 
 # Kort verktøytips, som ikkje skal ha avsluttande punktum. Og det med ankring er misvisande; det er snakk om vanleg justering.
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:68
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:88
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "Høgrejuster teksten"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:131
+#, kde-format
+msgid "Text flows horizontal, top to bottom."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:157
+#, kde-format
+msgid "Text flows vertical, right to left."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:183
+#, kde-format
+msgid "Text flows vertical, left to right."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:216
+#, kde-format
+msgid "Left to right text direction."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:242
+#, kde-format
+msgid "Right to left text direction."
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:102
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:286
 #, kde-format
 msgid "Edit SVG Source"
 msgstr ""

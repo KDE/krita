@@ -103,9 +103,9 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-26 00:40+0000\n"
-"PO-Revision-Date: 2023-11-26 10:49+0100\n"
+"PO-Revision-Date: 2023-11-28 17:37+0100\n"
 "Last-Translator: Patricia Moncorgé <patricia.moncorge@d-booker.fr>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15929,12 +15929,10 @@ msgstr "Curseur 4 des options de brosse"
 #. i18n: context: iconText @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2031 krita/kritamenu.action:2033
 #: krita/kritamenu.action:2034
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Brush option slider 1"
+#, kde-format
 msgctxt "action"
 msgid "Brush option slider 5"
-msgstr "Curseur 1 des options de brosse"
+msgstr "Curseur 5 des options de brosse"
 
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -17619,12 +17617,12 @@ msgstr "Inverser la sélection"
 #: libs/image/kis_selection_filters.cpp:930
 msgctxt "(qtundo-format)"
 msgid "Anti-Alias Selection"
-msgstr "Appliquer un anticrénelage à la sélection"
+msgstr "Lisser la sélection"
 
 #: libs/image/kis_selection_filters.cpp:1195
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
-msgstr "Agrandir la sélection jusqu'au pixel le plus sombre"
+msgstr "Agrandir la sélection au pixel le plus sombre"
 
 #: libs/image/kis_switch_time_stroke_strategy.cpp:32
 msgctxt "(qtundo-format)"
@@ -22845,7 +22843,7 @@ msgstr "Lueur extérieure"
 #, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
-msgstr "Étalement :"
+msgstr "Étendue :"
 
 #: libs/ui/dialogs/kis_dlg_missing_color_profile.cpp:18
 #, kde-format
@@ -25086,7 +25084,7 @@ msgstr "Cacher les barres de défilement du tableau"
 #: libs/ui/forms/wdgdisplaysettings.ui:542
 #, kde-format
 msgid "Enable curve anti-aliasing"
-msgstr "Activer l'anticrénelage des courbes"
+msgstr "Activer le lissage des courbes"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHidePopups)
 #: libs/ui/forms/wdgdisplaysettings.ui:549
@@ -25104,7 +25102,7 @@ msgstr "Coloration des canaux"
 #: libs/ui/forms/wdgdisplaysettings.ui:566
 #, kde-format
 msgid "Enable selection outline anti-aliasing"
-msgstr "Activer l'anticrénelage des contours de sélection"
+msgstr "Activer le lissage des contours de sélection"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoving)
 #: libs/ui/forms/wdgdisplaysettings.ui:573
@@ -32036,7 +32034,7 @@ msgstr "Brillance du contour :"
 #: libs/ui/layerstyles/wdgInnerGlow.ui:297 libs/ui/layerstyles/WdgSatin.ui:162
 #, kde-format
 msgid "Anti-aliased"
-msgstr "Anticrénelage"
+msgstr "Lissage"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:272
@@ -32438,7 +32436,7 @@ msgstr "&Distance :"
 #: libs/ui/layerstyles/wdgdropshadow.ui:214
 #, kde-format
 msgid "Sp&read:"
-msgstr "Étalement :"
+msgstr "Étendue :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -34554,7 +34552,7 @@ msgstr "Pas d'aperçu pour ce moteur"
 #, kde-format
 msgctxt "The anti-alias checkbox in fill tool options"
 msgid "Anti-aliasing"
-msgstr "Anticrénelage"
+msgstr "Lissage"
 
 #: libs/ui/widgets/kis_selection_options.cc:184
 #, kde-format
@@ -34566,7 +34564,7 @@ msgstr "Agrandir :"
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in selection tools options"
 msgid "Feather: "
-msgstr "Plume :"
+msgstr "Adoucir :"
 
 #: libs/ui/widgets/kis_selection_options.cc:217
 #, kde-format
@@ -34623,15 +34621,14 @@ msgstr "Lisse les bords de la sélection"
 #: libs/ui/widgets/kis_selection_options.cc:235
 #, kde-format
 msgid "Grow or shrink the selection by the set amount"
-msgstr "Augmenter ou réduire la sélection par la quantité définie"
+msgstr "Agrandir ou réduire la sélection de la quantité définie"
 
 #: libs/ui/widgets/kis_selection_options.cc:237
 #: plugins/tools/basictools/kis_tool_fill.cc:642
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
-msgstr ""
-"Arrêter l'agrandissement jusqu'au pixel le plus sombre et/ou le plus opaque"
+msgstr "Arrêter l'agrandissement au pixel le plus sombre et/ou le plus opaque"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
 #, kde-format
@@ -34926,7 +34923,7 @@ msgstr "Quantité :"
 #: libs/ui/widgets/KisDitherWidget.cpp:45
 #, kde-format
 msgid "Spread:"
-msgstr "Étalement :"
+msgstr "Étendue :"
 
 #. i18n: ectx: property (text), widget (QLabel, thresholdModeLabel)
 #: libs/ui/widgets/KisDitherWidget.ui:39
@@ -43105,7 +43102,7 @@ msgstr "Largeur du bord :"
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
 msgid "Anti-aliasing"
-msgstr "Anticrénelage"
+msgstr "Lissage"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/extensions/modify_selection/wdg_feather_selection.ui:21
@@ -43730,7 +43727,7 @@ msgid ""
 "More than one resource share the same file name '%1'. Please export them in "
 "separate bundles."
 msgstr ""
-"Plus de une ressource partagent le même nom de fichier « %1 ». Veuillez les "
+"Plus d'une ressource partagent le même nom de fichier « %1 ». Veuillez les "
 "exporter dans des paquets séparés."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:331
@@ -52177,7 +52174,7 @@ msgstr "Type de particule"
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:80
 #, kde-format
 msgid "Anti-aliased pixel"
-msgstr "Pixel anti crénelé"
+msgstr "Pixel lissé"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:42
@@ -52302,7 +52299,7 @@ msgstr "Connecter les poils :"
 #: plugins/paintops/hairy/wdgbristleoptions.ui:198
 #, kde-format
 msgid "Anti-aliasing:"
-msgstr "Anticrénelage :"
+msgstr "Lissage :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/paintops/hairy/wdgbristleoptions.ui:205
@@ -52654,7 +52651,7 @@ msgstr "Les bords de la brosse seront adoucis pour éviter le crénelage"
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:112
 #, kde-format
 msgid "Anti-alias"
-msgstr "Anticrénelage"
+msgstr "Lissage"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRatio)
 #. i18n: ectx: property (text), widget (QLabel, aspectLabel)
@@ -57551,14 +57548,12 @@ msgid "Flood Fill"
 msgstr "Pot de peinture"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:542
-#, fuzzy, kde-format
-#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
-#| msgid "Scale: "
+#, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
 "is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Échelle :"
+msgstr "Échelle : {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
@@ -57573,14 +57568,12 @@ msgid "Threshold: "
 msgstr "Seuil : "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:568
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
 "percent sign"
 msgid "Spread: {n}%"
-msgstr "Étalement :"
+msgstr "Étendue : {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:572
 #, kde-format
@@ -57594,13 +57587,13 @@ msgstr "Utiliser la sélection comme limite"
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in fill tool options"
 msgid "Grow: "
-msgstr "Agrandir :"
+msgstr "Dilater/contracter :"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:591
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in fill tool options"
 msgid "Feather: "
-msgstr "Plume :"
+msgstr "Adoucir :"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:617
 #, kde-format
@@ -57611,17 +57604,17 @@ msgstr "Ré-initialiser"
 #: plugins/tools/basictools/kis_tool_fill.cc:620
 #, kde-format
 msgid "Fill the active selection, or the entire canvas"
-msgstr "Remplir une région continue"
+msgstr "Remplir la sélection active ou tout le tableau"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:621
 #, kde-format
 msgid "Fill a contiguous region"
-msgstr "Remplir une région continue"
+msgstr "Remplir une zone contiguë"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:622
 #, kde-format
 msgid "Fill all regions of a similar color"
-msgstr "Remplir toutes les régions avec une couleur similaire"
+msgstr "Remplir toutes les régions d'une couleur similaire"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:627
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
@@ -57658,18 +57651,18 @@ msgstr "Définir un mode personnalisé de mélange pour le remplissage"
 #, kde-format
 msgid "Fill regions similar in color to the clicked region"
 msgstr ""
-"Remplir des régions de couleur similaire à la région sélectionnée par clic"
+"Remplir les zones de couleur similaire à celle où l'utilisateur a cliqué"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:634
 #, kde-format
 msgid "Fill all regions until a specific boundary color"
-msgstr "Remplir des régions jusqu'à une couleur spécifique de bordure"
+msgstr "Remplir toutes les zones jusqu'à une couleur de bordure spécifique."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
 #, kde-format
 msgid "Boundary color"
-msgstr "Couleur de limite"
+msgstr "Couleur de bordure"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:636
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
@@ -57689,9 +57682,9 @@ msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
 "decreases opacity of fill areas depending on color similarity."
 msgstr ""
-"Définir l'étendue de la partie opaque du remplissage. L'étalement "
-"décroissant diminue l'opacité des zones de remplissage en fonction de la "
-"similarité des couleurs."
+"Définir l'étendue de la partie opaque du remplissage. Diminuer l'étalement "
+"réduit l'opacité des zones de remplissage en fonction de la similarité des "
+"couleurs."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:638
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
@@ -57713,7 +57706,7 @@ msgstr "Lisse les bords du remplissage"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
-msgstr "Augmenter ou réduire le remplissage par la quantité définie"
+msgstr "Agrandir ou réduire le remplissage de la quantité définie"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:643
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:534
@@ -57796,7 +57789,7 @@ msgstr "Ajustements"
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
-msgstr "Mode de glisser-remplir"
+msgstr "Mode Glisser-remplir"
 
 #: plugins/tools/basictools/kis_tool_fill.h:234
 #, kde-format
@@ -58477,25 +58470,23 @@ msgstr "Stroke, Markers, Fill"
 msgid "Markers, Fill, Stroke"
 msgstr "Markers, Fill, Stroke"
 
+# attributs SVG Markers, Stroke, Fill
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:114
 #, kde-format
 msgid "Markers, Stroke, Fill"
-msgstr "attributs SVG Markers, Stroke, Fill"
+msgstr "Markers, Stroke, Fill"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:121
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Opacity: {n}%"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}"
 msgstr "Opacité : {n} %"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:122
-#, fuzzy, kde-format
-#| msgid "Opacity [*varies*]: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}"
-msgstr "Opacité [*varie*] : "
+msgstr "Opacité [*varie*] : {n}"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
@@ -58642,11 +58633,10 @@ msgid "Reference Images Tool"
 msgstr "Images de référence"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
-#, fuzzy, kde-format
-#| msgid "Opacity [*varies*]: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}%"
-msgstr "Opacité [*varie*] : "
+msgstr "Opacité [*varie*] : {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
 #, kde-format
@@ -58655,11 +58645,10 @@ msgid "Saturation: {n}%"
 msgstr "Saturation : {n} %"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "Saturation [*varies*]: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation [*varies*]: {n}%"
-msgstr "La saturation [*varie*] : "
+msgstr "Saturation [*varie*] : {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
@@ -58901,13 +58890,13 @@ msgstr "Calligraphie"
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:60
 #, kde-format
 msgid "Contiguous Area Selection"
-msgstr "Sélection de zone de couleur continue"
+msgstr "Sélection d'une zone de couleur contiguë"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:111
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:233
 msgctxt "(qtundo-format)"
 msgid "Select Contiguous Area"
-msgstr "Sélection de zone de couleur continue"
+msgstr "Sélection d'une zone de couleur contiguë"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:370
 #, kde-format
@@ -58916,14 +58905,12 @@ msgid "Threshold: "
 msgstr "Seuil : "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Étalement :"
+msgstr "Étendue : {n}%"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:382
 #, kde-format
@@ -58944,7 +58931,7 @@ msgstr ""
 #, kde-format
 msgid "Select all regions until a specific boundary color"
 msgstr ""
-"Sélectionnez toutes les régions jusqu'à une couleur spécifique de bordure."
+"Sélectionnez toutes les régions jusqu'à une couleur de bordure spécifique."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:238
@@ -58965,9 +58952,9 @@ msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
-"Définir l'étendue de la partie opaque de la sélection. La décroissance de "
-"l'étalement diminue l'opacité des zones de sélection en fonction de la "
-"similarité des couleurs."
+"Définir l'étendue de la partie opaque de la sélection. Réduire l'étalement "
+"diminue l'opacité des zones de sélection en fonction de la similarité des "
+"couleurs."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
 #, kde-format
@@ -58975,7 +58962,7 @@ msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
-"Définir si le contour de la sélection courante doit être traitée comme une "
+"Définir si le contour de la sélection active doit être traitée comme une "
 "limite lors de la réalisation d'une nouvelle sélection"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
@@ -58983,12 +58970,12 @@ msgstr ""
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
 msgid "Selection extent"
-msgstr "Extension de la sélection"
+msgstr "Étendue de la sélection"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:95
 #, kde-format
 msgid "Contiguous Selection Tool"
-msgstr "Sélection d'une zone de couleur continue"
+msgstr "Sélection d'une zone de couleur contiguë"
 
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:37
 #, kde-format
@@ -59083,14 +59070,12 @@ msgid "Threshold: "
 msgstr "Seuil : "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:246
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in similar color selection tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Étalement :"
+msgstr "Étendue : {n}%"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:261
 #, kde-format
@@ -59116,7 +59101,7 @@ msgstr "Sélection par la couleur"
 #, kde-format
 msgctxt "action"
 msgid "Contiguous Selection Tool"
-msgstr "Sélection d'une zone de couleur continue"
+msgstr "Sélection d'une zone de couleur contiguë"
 
 #. i18n: context: text @ Action (KisToolSelectElliptical), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectElliptical), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59433,7 +59418,7 @@ msgstr "Supprimer le texte"
 #, kde-format
 msgctxt "action"
 msgid "SVG Text Tool"
-msgstr "Texte"
+msgstr "Texte SVG"
 
 #. i18n: context: text @ Action (SvgTextTool), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (SvgTextTool), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59963,41 +59948,37 @@ msgstr "Ancrer le texte à droite"
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:131
 #, kde-format
 msgid "Text flows horizontal, top to bottom."
-msgstr ""
+msgstr "Texte horizontal, de haut en bas"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:157
 #, kde-format
 msgid "Text flows vertical, right to left."
-msgstr ""
+msgstr "Texte vertical, de droite à gauche"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:183
 #, kde-format
 msgid "Text flows vertical, left to right."
-msgstr ""
+msgstr "Texte vertical, de gauche à droite"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:216
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Escape in right direction"
+#, kde-format
 msgid "Left to right text direction."
-msgstr "Échappement sur la droite"
+msgstr "Direction du texte de gauche à droite."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:242
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Change text direction"
+#, kde-format
 msgid "Right to left text direction."
-msgstr "Changer la direction du texte"
+msgstr "Direction du texte de droite à gauche"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:286
 #, kde-format
 msgid "Edit SVG Source"
-msgstr "Modifier la source « SVG »"
+msgstr "Éditer la source SVG"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
@@ -60302,14 +60283,12 @@ msgid "Include contour regions"
 msgstr "Inclure les régions périphériques"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:448
-#, fuzzy, kde-format
-#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
-#| msgid "Scale: "
+#, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in enclose and fill tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Échelle :"
+msgstr "Échelle : {n}%"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
 #, kde-format
@@ -60318,14 +60297,12 @@ msgid "Threshold: "
 msgstr "Seuil : "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in enclose and fill tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Étalement :"
+msgstr "Étendue : {n}%"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
 #, kde-format
@@ -60339,19 +60316,19 @@ msgstr "Utiliser la sélection comme limite"
 #, kde-format
 msgctxt "The anti-alias checkbox in enclose and fill tool options"
 msgid "Anti-aliasing"
-msgstr "Anticrénelage"
+msgstr "Lissage"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:478
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in enclose and fill tool options"
 msgid "Grow: "
-msgstr "Agrandir :"
+msgstr "Dilater/contracter :"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:489
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in enclose and fill tool options"
 msgid "Feather: "
-msgstr "Plume :"
+msgstr "Adoucir :"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:507
 #, kde-format
@@ -60891,7 +60868,7 @@ msgstr "Déplacer : fait glisser l'image le long du trait de brosse"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale: grow/shrink image under cursor"
-msgstr "Redimensionner : agrandit/rapetisse l'image sous le pointeur"
+msgstr "Redimensionner : agrandir/réduire l'image sous le pointeur"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:274
 #, kde-format

@@ -383,7 +383,7 @@ private Q_SLOTS:
     /**
      * Hide the dockers
      */
-    void toggleDockersVisibility(bool visible);
+    void toggleDockersVisibility(bool visible, bool onWelcomePage = false);
 
     /**
      * Handle theme changes from theme manager

@@ -1612,7 +1612,7 @@ void KisMainWindow::adjustLayoutForWelcomePage()
     // etc are hidden while the user is here.
     resetAutoSaveSettings();
 
-    toggleDockersVisibility(false);
+    toggleDockersVisibility(false, true);
     if (statusBar()) {
         statusBar()->hide();
     }
@@ -2451,7 +2451,7 @@ QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers() const
 }
 
 
-void KisMainWindow::toggleDockersVisibility(bool visible)
+void KisMainWindow::toggleDockersVisibility(bool visible, bool onWelcomePage)
 {
     if (!visible) {
         d->dockerStateBeforeHiding = saveState();
@@ -2459,7 +2459,7 @@ void KisMainWindow::toggleDockersVisibility(bool visible)
         Q_FOREACH (QObject* widget, children()) {
             if (widget->inherits("QDockWidget")) {
                 QDockWidget* dw = static_cast<QDockWidget*>(widget);
-                if (dw->isVisible() && !dw->property("ShowOnWelcomePage").toBool()) {
+                if (dw->isVisible() && !(onWelcomePage && dw->property("ShowOnWelcomePage").toBool())) {
                     dw->hide();
                 }
             }

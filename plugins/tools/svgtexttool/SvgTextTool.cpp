@@ -17,6 +17,7 @@
 #include "SvgMoveTextCommand.h"
 #include "SvgMoveTextStrategy.h"
 #include "SvgTextChangeCommand.h"
+#include "SvgTextEditor.h"
 #include "SvgTextRemoveCommand.h"
 
 #include <QLabel>
@@ -109,20 +110,11 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
     m_canvasConnections.addConnection(canvas()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotShapeSelectionChanged()));
 
     useCursor(m_base_cursor);
-    auto uploadColorToResourceManager = [this](KoShape *shape) {
-        m_originalColor = canvas()->resourceManager()->foregroundColor();
-        KoShapeFillWrapper wrapper(shape, KoFlake::Fill);
-        KoColor color;
-        color.fromQColor(wrapper.color());
-        canvas()->resourceManager()->setForegroundColor(color);
-    };
 
     if (shapes.size() == 1) {
         KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(*shapes.constBegin());
         if (!textShape) {
             koSelection()->deselectAll();
-        } else {
-            uploadColorToResourceManager(textShape);
         }
     } else if (shapes.size() > 1) {
         KoSvgTextShape *foundTextShape = nullptr;
@@ -137,7 +129,6 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
 
         koSelection()->deselectAll();
         if (foundTextShape) {
-            uploadColorToResourceManager(foundTextShape);
             koSelection()->select(foundTextShape);
         }
     }
@@ -150,9 +141,6 @@ void SvgTextTool::deactivate()
 {
     KoToolBase::deactivate();
     m_canvasConnections.clear();
-    if (m_originalColor) {
-        canvas()->resourceManager()->setForegroundColor(*m_originalColor);
-    }
 
     m_hoveredShapeHighlightRect = QPainterPath();
 

@@ -20,7 +20,6 @@
 
 #include <kis_signal_auto_connection.h>
 
-#include "SvgTextEditor.h"
 #include "SvgTextCursor.h"
 
 #include <memory>
@@ -172,8 +171,6 @@ private:
 
 
     QPainterPath m_hoveredShapeHighlightRect;
-    boost::optional<KoColor> m_originalColor { boost::none };
-
 
     Ui_WdgSvgTextOptionWidget optionUi;
 

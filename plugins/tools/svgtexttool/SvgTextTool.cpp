@@ -110,28 +110,6 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
     m_canvasConnections.addConnection(canvas()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotShapeSelectionChanged()));
 
     useCursor(m_base_cursor);
-
-    if (shapes.size() == 1) {
-        KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(*shapes.constBegin());
-        if (!textShape) {
-            koSelection()->deselectAll();
-        }
-    } else if (shapes.size() > 1) {
-        KoSvgTextShape *foundTextShape = nullptr;
-
-        Q_FOREACH (KoShape *shape, shapes) {
-            KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(shape);
-            if (textShape) {
-                foundTextShape = textShape;
-                break;
-            }
-        }
-
-        koSelection()->deselectAll();
-        if (foundTextShape) {
-            koSelection()->select(foundTextShape);
-        }
-    }
     slotShapeSelectionChanged();
 
     repaintDecorations();
@@ -293,7 +271,6 @@ KoSvgTextShape *SvgTextTool::selectedShape() const
     QList<KoShape*> shapes = koSelection()->selectedEditableShapes();
     if (shapes.isEmpty()) return 0;
 
-    KIS_SAFE_ASSERT_RECOVER_NOOP(shapes.size() == 1);
     KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(shapes.first());
 
     return textShape;
@@ -396,6 +373,30 @@ void SvgTextTool::storeDefaults()
 
 void SvgTextTool::slotShapeSelectionChanged()
 {
+    QList<KoShape *> shapes = koSelection()->selectedShapes();
+    if (shapes.size() == 1) {
+        KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(*shapes.constBegin());
+        if (!textShape) {
+            koSelection()->deselectAll();
+            return;
+        }
+    } else if (shapes.size() > 1) {
+        KoSvgTextShape *foundTextShape = nullptr;
+
+        Q_FOREACH (KoShape *shape, shapes) {
+            KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(shape);
+            if (textShape) {
+                foundTextShape = textShape;
+                break;
+            }
+        }
+
+        koSelection()->deselectAll();
+        if (foundTextShape) {
+            koSelection()->select(foundTextShape);
+        }
+        return;
+    }
     m_textCursor.setShape(selectedShape());
     if (selectedShape()) {
         setTextMode(true);

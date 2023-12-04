@@ -750,8 +750,9 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
 
             if (m_highlightItem == HighlightItem::None) {
                 const QPolygonF textOutline = selectedShape->absoluteTransformation().map(selectedShape->outlineRect());
-                const QRectF moveBorderRegion = kisGrowRect(selectedShape->boundingRect(), sensitivity);
-                if (moveBorderRegion.contains(event->point) && !textOutline.containsPoint(event->point, Qt::OddEvenFill)) {
+                const QPolygonF moveBorderRegion = selectedShape->absoluteTransformation().map(kisGrowRect(selectedShape->outlineRect(),
+                                                                                                           sensitivity*2));
+                if (moveBorderRegion.containsPoint(event->point, Qt::OddEvenFill) && !textOutline.containsPoint(event->point, Qt::OddEvenFill)) {
                     m_highlightItem = HighlightItem::MoveBorder;
                     cursor = Qt::SizeAllCursor;
                 }

@@ -403,7 +403,6 @@ void SvgTextTool::slotShapeSelectionChanged()
         m_textCursor.setShape(shape);
         if (shape) {
             setTextMode(true);
-            selectAll();
         } else {
             setTextMode(false);
         }

@@ -158,8 +158,10 @@ void SvgTextCursor::setShape(KoSvgTextShape *textShape)
     if (d->shape) {
         d->shape->addShapeChangeListener(this);
         updateInputMethodItemTransform();
+        d->pos = d->shape->posForIndex(d->shape->plainText().size());
+    } else {
+        d->pos = 0;
     }
-    d->pos = 0;
     d->anchor = 0;
     updateCursor(true);
     updateSelection();

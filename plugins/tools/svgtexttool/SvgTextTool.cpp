@@ -343,9 +343,9 @@ QString SvgTextTool::generateDefs(const QString &extraProperties)
     QString writingMode = "horizontal-tb";
     QString textOrientation = "text-orientation: upright";
     if (m_defWritingMode->button(1)->isChecked()) {
-        writingMode = "vertical-rl;"+textOrientation;
+        writingMode = "vertical-rl;" + textOrientation;
     } else if (m_defWritingMode->button(2)->isChecked()) {
-        writingMode = "vertical-lr;"+textOrientation;
+        writingMode = "vertical-lr;" + textOrientation;
     } else {
         direction = m_defDirection->button(0)->isChecked()? "ltr" : "rtl";
     }
@@ -552,7 +552,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
 
         qreal pxlToPt = canvas()->viewConverter()->viewToDocumentX(1.0);
         qreal length = (INLINE_SIZE_DASHES_PATTERN_A + INLINE_SIZE_DASHES_PATTERN_B) * INLINE_SIZE_DASHES_PATTERN_LENGTH;
-        if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape, length*pxlToPt)) {
+        if (std::optional<InlineSizeInfo> info = InlineSizeInfo::fromShape(shape, length * pxlToPt)) {
             handlePainter.setHandleStyle(KisHandleStyle::secondarySelection());
             handlePainter.drawConnectionLine(info->baselineLineLocal());
 
@@ -752,7 +752,7 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
             if (m_highlightItem == HighlightItem::None) {
                 const QPolygonF textOutline = selectedShape->absoluteTransformation().map(selectedShape->outlineRect());
                 const QPolygonF moveBorderRegion = selectedShape->absoluteTransformation().map(kisGrowRect(selectedShape->outlineRect(),
-                                                                                                           sensitivity*2));
+                                                                                                           sensitivity * 2));
                 if (moveBorderRegion.containsPoint(event->point, Qt::OddEvenFill) && !textOutline.containsPoint(event->point, Qt::OddEvenFill)) {
                     m_highlightItem = HighlightItem::MoveBorder;
                     cursor = Qt::SizeAllCursor;

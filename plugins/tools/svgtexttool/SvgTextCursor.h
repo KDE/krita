@@ -66,6 +66,12 @@ public:
     ~SvgTextCursor();
 
     /**
+     * @brief Get the current text shape
+     * @return KoSvgTextShape *
+     */
+    KoSvgTextShape *shape() const;
+
+    /**
      * @brief setShape
      * @param textShape KoSvgTextShape to set, is allowed to be a nullptr, the cursor just won't do anything.
      */

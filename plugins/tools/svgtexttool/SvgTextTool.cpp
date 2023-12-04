@@ -398,11 +398,15 @@ void SvgTextTool::slotShapeSelectionChanged()
         }
         return;
     }
-    m_textCursor.setShape(selectedShape());
-    if (selectedShape()) {
-        setTextMode(true);
-    } else {
-        setTextMode(false);
+    KoSvgTextShape *const shape = selectedShape();
+    if (shape != m_textCursor.shape()) {
+        m_textCursor.setShape(shape);
+        if (shape) {
+            setTextMode(true);
+            selectAll();
+        } else {
+            setTextMode(false);
+        }
     }
 }
 

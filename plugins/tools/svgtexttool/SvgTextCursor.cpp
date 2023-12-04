@@ -143,6 +143,11 @@ SvgTextCursor::~SvgTextCursor()
     d->shape = nullptr;
 }
 
+KoSvgTextShape *SvgTextCursor::shape() const
+{
+    return d->shape;
+}
+
 void SvgTextCursor::setShape(KoSvgTextShape *textShape)
 {
     if (d->shape) {

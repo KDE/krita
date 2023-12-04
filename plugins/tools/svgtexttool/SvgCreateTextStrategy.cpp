@@ -85,7 +85,7 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
 
     QPointF origin = rectangle.topLeft();
 
-    if (!unwrappedText) {
+    {
         const Qt::Alignment halign = tool->horizontalAlign();
         const bool isRtl = tool->isRtl();
 
@@ -109,6 +109,9 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
                 origin.setY(rectangle.bottom());
             }
         }
+    }
+    if (!rectangle.contains(origin) && unwrappedText) {
+        origin = writingMode == KoSvgText::HorizontalTB? QPointF(origin.x(), rectangle.bottom()): QPointF(rectangle.center().x(), origin.y());
     }
     params->setProperty("shapeRect", QVariant(rectangle));
     params->setProperty("origin", QVariant(origin));
@@ -143,5 +146,5 @@ void SvgCreateTextStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 bool SvgCreateTextStrategy::draggingInlineSize()
 {
     QRectF rectangle = QRectF(m_dragStart, m_dragEnd).normalized();
-    return rectangle.width() >= m_minSizeInline.width() || rectangle.height() >= m_minSizeInline.height();
+    return (rectangle.width() >= m_minSizeInline.width() || rectangle.height() >= m_minSizeInline.height()) && !m_modifiers.testFlag(Qt::ControlModifier);
 }

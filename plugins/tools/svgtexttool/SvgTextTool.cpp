@@ -341,10 +341,11 @@ QString SvgTextTool::generateDefs(const QString &extraProperties)
 
     QString direction = "ltr";
     QString writingMode = "horizontal-tb";
+    QString textOrientation = "text-orientation: upright";
     if (m_defWritingMode->button(1)->isChecked()) {
-        writingMode = "vertical-rl";
+        writingMode = "vertical-rl;"+textOrientation;
     } else if (m_defWritingMode->button(2)->isChecked()) {
-        writingMode = "vertical-lr";
+        writingMode = "vertical-lr;"+textOrientation;
     } else {
         direction = m_defDirection->button(0)->isChecked()? "ltr" : "rtl";
     }

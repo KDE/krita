@@ -77,7 +77,8 @@ public:
                        << "text-overflow"
                        << "tab-size"
                        << "overflow-wrap"
-                       << "word-wrap";
+                       << "word-wrap"
+                       << "text-orientation";
         // the order of the style attributes is important, don't change without reason !!!
         styleAttributes << "color" << "display" << "visibility";
         styleAttributes << "fill" << "fill-rule" << "fill-opacity";
@@ -330,7 +331,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
                || command == "word-break" || command == "line-break" || command == "hanging-punctuation" || command == "text-align"
                || command == "text-align-all" || command == "text-align-last" || command == "inline-size" || command == "overflow" || command == "text-overflow"
                || command == "tab-size" || command == "overflow-wrap" || command == "word-wrap" || command == "vertical-align"
-               || command ==  "shape-padding" || command ==   "shape-margin") {
+               || command ==  "shape-padding" || command ==   "shape-margin" || command ==   "text-orientation") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "krita:marker-fill-method") {
         gc->autoFillMarkers = params == "auto";

@@ -57,6 +57,7 @@
 #include <QPointer>
 #include <QAction>
 #include <QKeyEvent>
+#include <QTimer>
 #include <KisSignalMapper.h>
 #include <KoResourcePaths.h>
 
@@ -1907,5 +1908,8 @@ void DefaultTool::addTransformActions(QMenu *menu) const {
 void DefaultTool::explicitUserStrokeEndRequest()
 {
     QList<KoShape *> shapes = koSelection()->selectedEditableShapesAndDelegates();
-    KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(shapes));
+    QString tool = KoToolManager::instance()->preferredToolForSelection(shapes);
+    QTimer::singleShot(0, [tool = std::move(tool)]() {
+        KoToolManager::instance()->switchToolRequested(tool);
+    });
 }

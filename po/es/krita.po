@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-26 00:40+0000\n"
+"POT-Creation-Date: 2023-12-04 00:39+0000\n"
 "PO-Revision-Date: 2023-11-26 00:53+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -59575,7 +59575,7 @@ msgstr ""
 "Usar el modo de ajuste CSS `white-space: pre-wrap` de SVG, con `inline-size` "
 "para definir la anchura del texto."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:321
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:286
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

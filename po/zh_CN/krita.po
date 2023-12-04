@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-26 00:40+0000\n"
+"POT-Creation-Date: 2023-12-04 00:39+0000\n"
 "PO-Revision-Date: 2023-11-25 02:28\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -58491,7 +58491,7 @@ msgstr ""
 "使用 SVG 规范的 CSS “white-space: pre-wrap”自动换行模式，以“inline-size”定义"
 "每行文字宽度。"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:321
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:286
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

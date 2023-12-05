@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-27 02:25+0000\n"
-"PO-Revision-Date: 2023-11-28 17:37+0100\n"
+"PO-Revision-Date: 2023-12-03 10:04+0100\n"
 "Last-Translator: Patricia Moncorgé <patricia.moncorge@d-booker.fr>\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr\n"
@@ -22720,7 +22720,7 @@ msgstr "(%1, %2), (%3, %4)"
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:166
 #, kde-format
 msgid "*varies*"
-msgstr "*varie*"
+msgstr "*varie de*"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:207
 msgctxt "(qtundo-format)"
@@ -58132,7 +58132,7 @@ msgstr "Sélection du tracé"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:44
 #, kde-format
 msgid "Opacity [*varies*]: "
-msgstr "Opacité [*varie*] : "
+msgstr "L'opacité [*varie de*] : "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
@@ -58281,7 +58281,7 @@ msgstr "Images de référence"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:51
 #, kde-format
 msgid "Saturation [*varies*]: "
-msgstr "La saturation [*varie*] : "
+msgstr "La saturation [*varie de*] : "
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:61
 #, kde-format

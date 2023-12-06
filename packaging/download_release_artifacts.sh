@@ -6,7 +6,7 @@
 # exit when any command fails
 set -e
 
-KRITA_VERSION=5.2.1
+KRITA_VERSION=5.2.2
 CHANNEL=Stable
 
 if echo $KRITA_VERSION | grep beta > /dev/null; then

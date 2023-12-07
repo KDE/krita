@@ -47,6 +47,9 @@ public Q_SLOTS:
     qreal brushSize() const;
     void setBrushSize(qreal brushSize);
 
+    qreal brushRotation() const;
+    void setBrushRotation(qreal brushRotation);
+
     qreal paintingFlow() const;
     void setPaintingFlow(qreal flow);
 

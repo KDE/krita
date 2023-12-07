@@ -116,6 +116,8 @@ target_include_directories(kritawidgetutils
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/config>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/xmlgui>
+    PRIVATE
+    ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
 )
 
 generate_export_header(kritawidgetutils BASE_NAME kritawidgetutils)

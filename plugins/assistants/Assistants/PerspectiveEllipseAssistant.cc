@@ -413,15 +413,18 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
     }
 
     // draw ellipse and axes
-    if (isAssistantComplete() && isEllipseValid() && (assistantVisible || previewVisible || isEditing)) { // ensure that you only draw the ellipse if it's valid - otherwise it would just show some outdated one
+    if (isEllipseValid() && (assistantVisible || previewVisible || isEditing)) { // ensure that you only draw the ellipse if it's valid - otherwise it would just show some outdated one
          gc.setTransform(initialTransform);
          gc.setTransform(d->simpleEllipse.getTransform().inverted(), true);
 
          QPainterPath path;
-
          path.addEllipse(QPointF(0.0, 0.0), d->simpleEllipse.semiMajor(), d->simpleEllipse.semiMinor());
-         drawPath(gc, path, isSnappingActive());
 
+         if (assistantVisible || isEditing) {
+             drawPath(gc, path, isSnappingActive());
+         } else if (previewVisible && isSnappingActive() && boundingRect().contains(initialTransform.inverted().map(mousePos.toPoint()), false)) {
+             drawPreview(gc, path);
+         }
 
          if (isEditing) {
              QPainterPath axes;

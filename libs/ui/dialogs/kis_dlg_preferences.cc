@@ -1623,6 +1623,8 @@ void PerformanceTab::slotFrameClonesLimitChanged(int value)
 #include <QOpenGLContext>
 #include <QScreen>
 
+namespace {
+
 QString colorSpaceString(KisSurfaceColorSpace cs, int depth)
 {
     const QString csString =
@@ -1650,6 +1652,22 @@ KisConfig::RootSurfaceFormat indexToFormat(int value)
            value == 2 ? KisConfig::BT709_G10 :
            KisConfig::BT709_G22;
 }
+
+int assistantDrawModeToIndex(KisConfig::AssistantsDrawMode mode)
+{
+    return mode == KisConfig::ASSISTANTS_DRAW_MODE_PIXMAP_CACHE ? 1 :
+           mode == KisConfig::ASSISTANTS_DRAW_MODE_LARGE_PIXMAP_CACHE ? 2 :
+           0;
+}
+
+KisConfig::AssistantsDrawMode indexToAssistantDrawMode(int value)
+{
+    return value == 1 ? KisConfig::ASSISTANTS_DRAW_MODE_PIXMAP_CACHE :
+           value == 2 ? KisConfig::ASSISTANTS_DRAW_MODE_LARGE_PIXMAP_CACHE :
+           KisConfig::ASSISTANTS_DRAW_MODE_DIRECT;
+}
+
+} // anonymous namespace
 
 DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     : WdgDisplaySettings(parent, name)
@@ -1723,16 +1741,15 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
-        chkLargePixmapCache->setEnabled(false);
+        cmbAssistantsDrawMode->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     } else {
         grpOpenGL->setEnabled(true);
         grpOpenGL->setChecked(cfg.useOpenGL());
         chkUseTextureBuffer->setEnabled(cfg.useOpenGL());
         chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer());
-        chkLargePixmapCache->setEnabled(cfg.useOpenGL());
-        chkLargePixmapCache->setChecked(
-            cfg.readEntry("needsPixmapCacheWorkaround", KisOpenGL::needsPixmapCacheWorkaround()));
+        cmbAssistantsDrawMode->setEnabled(cfg.useOpenGL());
+        cmbAssistantsDrawMode->setCurrentIndex(assistantDrawModeToIndex(cfg.assistantsDrawMode()));
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
         // Don't show the high quality filtering mode if it's not available
@@ -1879,7 +1896,7 @@ void DisplaySettingsTab::setDefault()
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
-        chkLargePixmapCache->setEnabled(false);
+        cmbAssistantsDrawMode->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     }
     else {
@@ -1887,9 +1904,8 @@ void DisplaySettingsTab::setDefault()
         grpOpenGL->setChecked(cfg.useOpenGL(true));
         chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer(true));
         chkUseTextureBuffer->setEnabled(true);
-        chkLargePixmapCache->setEnabled(true);
-        chkLargePixmapCache->setChecked(
-            cfg.readEntry("needsPixmapCacheWorkaround", KisOpenGL::needsPixmapCacheWorkaround()));
+        cmbAssistantsDrawMode->setEnabled(true);
+        cmbAssistantsDrawMode->setCurrentIndex(assistantDrawModeToIndex(cfg.assistantsDrawMode(true)));
         cmbFilterMode->setEnabled(true);
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode(true));
     }
@@ -1935,7 +1951,7 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
     chkUseTextureBuffer->setEnabled(isChecked);
     cmbFilterMode->setEnabled(isChecked);
-    chkLargePixmapCache->setEnabled(isChecked);
+    cmbAssistantsDrawMode->setEnabled(isChecked);
 }
 
 void DisplaySettingsTab::slotPreferredSurfaceFormatChanged(int index)
@@ -2425,7 +2441,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUseOpenGLTextureBuffer(m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(m_displaySettings->cmbFilterMode->currentIndex());
         cfg.setRootSurfaceFormat(&kritarc, indexToFormat(m_displaySettings->cmbPreferedRootSurfaceFormat->currentIndex()));
-        cfg.writeEntry("needsPixmapCacheWorkaround", m_displaySettings->chkLargePixmapCache->isChecked());
+        cfg.setAssistantsDrawMode(indexToAssistantDrawMode(m_displaySettings->cmbAssistantsDrawMode->currentIndex()));
 
         cfg.setCheckSize(m_displaySettings->intCheckSize->value());
         cfg.setScrollingCheckers(m_displaySettings->chkMoving->isChecked());

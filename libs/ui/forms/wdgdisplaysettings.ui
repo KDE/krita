@@ -61,7 +61,7 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout">
-          <item row="4" column="1">
+          <item row="5" column="1">
            <widget class="QCheckBox" name="chkUseTextureBuffer">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -143,6 +143,54 @@
             </property>
            </widget>
           </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="lblAssistantsDrawMode">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Assistants Mode:</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QComboBox" name="cmbAssistantsDrawMode">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Can be used to troubleshoot performance or artifacting problems with drawing assistants.
+              &lt;/p&gt;&lt;p&gt;Changing the pixmap cache size requires a restart.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Direct (Recommended)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Pixmap Cache</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Large Pixmap Cache</string>
+             </property>
+            </item>
+           </widget>
+          </item>
           <item row="2" column="0">
            <widget class="QLabel" name="lblPreferredRenderer">
             <property name="sizePolicy">
@@ -188,22 +236,6 @@
              </size>
             </property>
            </spacer>
-          </item>
-          <item row="5" column="1">
-           <widget class="QCheckBox" name="chkLargePixmapCache">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This should be enabled if you see any artifacts while using assistants.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="text">
-             <string>Use large pixmap cache</string>
-            </property>
-           </widget>
           </item>
          </layout>
         </widget>

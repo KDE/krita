@@ -145,7 +145,7 @@ cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_libheif
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_seexpr
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_mypaint
-cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_fcitx-qt5
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_fcitx5-qt
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_webp
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_jpegxl
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_xsimd

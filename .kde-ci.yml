@@ -2,14 +2,14 @@
 # SPDX-License-Identifier: CC0-1.0
 
 PostInstallScripts:
-    krita-plugins: python3 build-tools/ci-scripts/build-plugins.py
+    krita-plugins: build-tools/ci-scripts/build-plugins.py
 
 Options:
     use-ccache: True
     use-asan: False
     run-gcovr: False
     per-test-timeout: 4:00
-    cmake-options: '-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=ON -DKRITA_ENABLE_PCH=OFF'
+    cmake-options: '-DHIDE_SAFE_ASSERTS=OFF -DKRITA_ENABLE_PCH=OFF'
     tests-run-in-parallel: True
     ccache-large-cache: True
     run-cppcheck: True

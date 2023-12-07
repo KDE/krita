@@ -305,14 +305,15 @@ void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
 
         m_ui->bnLock->setChecked(colorSet->isLocked());
     }
-    else {
-        m_ui->bnAdd->setEnabled(false);
-        m_ui->bnRename->setEnabled(false);
-        m_ui->bnRemove->setEnabled(false);
-        m_ui->bnEditPalette->setEnabled(false);
-        m_ui->bnSavePalette->setEnabled(false);
-        m_ui->paletteView->setAllowModification(false);
-        m_ui->bnLock->setEnabled(false);
+    bool state = (bool)colorSet;
+    if (state != (bool)m_currentColorSet) {
+        m_ui->bnAdd->setEnabled(state);
+        m_ui->bnRename->setEnabled(state);
+        m_ui->bnRemove->setEnabled(state);
+        m_ui->bnEditPalette->setEnabled(state);
+        m_ui->bnSavePalette->setEnabled(state);
+        m_ui->paletteView->setAllowModification(state);
+        m_ui->bnLock->setEnabled(state);
     }
 
     m_currentColorSet = colorSet;

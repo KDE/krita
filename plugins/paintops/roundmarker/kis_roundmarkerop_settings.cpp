@@ -47,6 +47,16 @@ qreal KisRoundMarkerOpSettings::paintOpSize() const
     return option.diameter;
 }
 
+void KisRoundMarkerOpSettings::setPaintOpAngle(qreal value)
+{
+    Q_UNUSED(value);
+}
+
+qreal KisRoundMarkerOpSettings::paintOpAngle() const
+{
+    return 0.0;
+}
+
 KisOptimizedBrushOutline KisRoundMarkerOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     KisOptimizedBrushOutline path;

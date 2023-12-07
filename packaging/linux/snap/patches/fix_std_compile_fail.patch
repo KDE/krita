@@ -1,0 +1,12 @@
+diff --git a/libs/libkis/Channel.cpp b/libs/libkis/Channel.cpp
+index 92f673d6d6..843251a413 100644
+--- a/libs/libkis/Channel.cpp
++++ b/libs/libkis/Channel.cpp
+@@ -14,6 +14,7 @@
+ #include <KoColorSpace.h>
+ #include <kis_sequential_iterator.h>
+ #include <kis_layer.h>
++#include <cstring>
+
+ #ifdef HAVE_OPENEXR
+ #include <half.h>

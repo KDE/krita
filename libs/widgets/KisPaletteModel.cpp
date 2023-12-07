@@ -302,6 +302,13 @@ void KisPaletteModel::setRowCountForGroup(const QString &groupName, int rowCount
     endResetModel();
 }
 
+void KisPaletteModel::setColumnCount(int colCount)
+{
+    beginResetModel();
+    m_colorSet->setColumnCount(colCount);
+    endResetModel();
+}
+
 void KisPaletteModel::clear()
 {
     beginResetModel();

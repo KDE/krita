@@ -1,0 +1,33 @@
+windows-build:
+  stage: build
+  image: invent-registry.kde.org/sysadmin/ci-images/krita-windows-builder:latest
+  tags:
+    - Windows
+  variables:
+    KDECI_CC_CACHE: "C:\\Gitlab\\Caches\\krita-windows"
+    KDECI_CACHE_PATH: "C:\\Gitlab\\Artifacts\\krita-windows"
+    KDECI_GITLAB_SERVER: https://invent.kde.org/
+    KDECI_PACKAGE_PROJECT: teams/ci-artifacts/windows-qt5.15
+  interruptible: true
+  before_script:
+    - git clone https://invent.kde.org/dkazakov/ci-utilities
+    - git clone https://invent.kde.org/sysadmin/repo-metadata ci-utilities/repo-metadata/
+  script:
+    - git config --global --add safe.directory $CI_PROJECT_DIR
+      # TODO: bake this variable into the docker image
+    - $env:PATH = "c:\Program Files\CMake\bin;c:\tools\llvm-mingw-20220906-ucrt-x86_64\bin;c:\tools\llvm-mingw-20220906-ucrt-x86_64\x86_64-w64-mingw32\bin;$env:PATH"
+    - python -u build-tools/ci-scripts/download-deps.py
+    - python -u ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Windows/Qt5/Shared
+    - python -u build-tools/ci-scripts/build-windows-package.py --skip-debug-package
+  coverage: '/^TOTAL.*\s+(\d+\%)$/'
+  artifacts:
+    name: krita-$CI_COMMIT_REF_SLUG-$CI_COMMIT_REF_NAME
+    expire_in: 1 hour
+    when: always
+    paths:
+      - "krita-*.zip"
+    reports:
+      junit: JUnitTestResults.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: CoberturaLcovResults.xml

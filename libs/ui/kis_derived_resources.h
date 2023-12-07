@@ -91,6 +91,15 @@ public:
     QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
 };
 
+class KisBrushRotationResourceConverter : public KoDerivedResourceConverter, public QObject
+{
+public:
+    KisBrushRotationResourceConverter();
+
+    QVariant fromSource(const QVariant &value) override;
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
+};
+
 class KisPatternSizeResourceConverter : public KoDerivedResourceConverter, public QObject
 {
 public:

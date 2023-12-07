@@ -1,0 +1,30 @@
+cppcheck:
+  stage: build
+  image: invent-registry.kde.org/sysadmin/ci-images/krita-appimage-builder:latest
+  tags:
+    - Linux
+  interruptible: true
+  before_script:
+    - git clone https://invent.kde.org/sysadmin/ci-utilities
+  script:
+    - python3 -u ci-utilities/run-cppcheck.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME
+  rules:
+    - changes:
+      - "**/*.c"
+      - "**/*.h"
+      - "**/*.cc"
+      - "**/*.hh"
+      - "**/*.cpp"
+      - "**/*.hpp"
+      - "**/*.cxx"
+      - "**/*.hxx"
+      - "**/*.ii"
+      - "**/*.ipp"
+      - "**/*.ixx"
+  artifacts:
+    paths:
+      - "cppcheck_out.xml"
+    expire_in: 1 week
+    when: on_success
+    reports:
+      codequality: cppcheck.json

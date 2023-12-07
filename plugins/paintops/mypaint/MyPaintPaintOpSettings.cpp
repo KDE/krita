@@ -10,11 +10,54 @@
 #include <KisOptimizedBrushOutline.h>
 #include <MyPaintStandardOptionData.h>
 
+#include <KisValueCache.h>
+
+
 struct KisMyPaintOpSettings::Private
 {
-    bool cachedProperties{false};
-    qreal paintOpSize;
-    qreal offsetValue;
+    struct Cache
+    {
+        qreal paintOpSize{0.0};
+        qreal paintOpAngle{0.0};  // the original angle value as seen by KisPaintOpSettings interface
+        qreal offsetValue{0.0};
+    };
+
+    struct CacheInitializer {
+        CacheInitializer(KisMyPaintOpSettings *q) : m_q(q) {}
+
+        Cache initialize() {
+            Cache value;
+
+            {
+                MyPaintOffsetByRandomData data;
+                data.read(m_q);
+                value.offsetValue = data.strengthValue;
+            }
+
+            {
+                MyPaintRadiusLogarithmicData data;
+                data.read(m_q);
+                value.paintOpSize = 2 * exp(data.strengthValue);
+            }
+
+            {
+                MyPaintEllipticalDabAngleData data;
+                data.read(m_q);
+                value.paintOpAngle = 180.0 - data.strengthValue;
+            }
+
+            return value;
+        }
+
+        KisMyPaintOpSettings *m_q;
+    };
+
+    Private(KisMyPaintOpSettings *q)
+        : cache(q)
+    {
+    }
+
+    KisValueCache<CacheInitializer> cache;
 };
 
 
@@ -22,7 +65,7 @@ KisMyPaintOpSettings::KisMyPaintOpSettings(KisResourcesInterfaceSP resourcesInte
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
                                                      KisCurrentOutlineFetcher::ROTATION_OPTION,
                                                      resourcesInterface),
-    m_d(new Private)
+    m_d(new Private(this))
 {
 }
 
@@ -40,7 +83,33 @@ void KisMyPaintOpSettings::setPaintOpSize(qreal value)
 
 qreal KisMyPaintOpSettings::paintOpSize() const
 {
-    return 2 * exp(m_d->paintOpSize);
+    return m_d->cache.value().paintOpSize;
+}
+
+void KisMyPaintOpSettings::setPaintOpAngle(qreal value)
+{
+    MyPaintEllipticalDabAngleData data;
+    data.read(this);
+
+    value = normalizeAngleDegrees(value);
+
+    if (value > 180.0) {
+        value -= 180.0;
+    }
+
+    /**
+     * All brushes are rotated in Krita counterclockwise,
+     * so we should invert the value for MyPaint
+     */
+    value = 180.0 - value;
+
+    data.strengthValue = value;
+    data.write(this);
+}
+
+qreal KisMyPaintOpSettings::paintOpAngle() const
+{
+    return m_d->cache.value().paintOpAngle;
 }
 
 void KisMyPaintOpSettings::setPaintOpOpacity(qreal value)
@@ -72,7 +141,7 @@ void KisMyPaintOpSettings::resetSettings(const QStringList &preserveProperties)
 
 void KisMyPaintOpSettings::onPropertyChanged()
 {
-    m_d->cachedProperties = false;
+    m_d->cache.clear();
     KisOutlineGenerationPolicy::onPropertyChanged();
 }
 
@@ -82,23 +151,10 @@ KisOptimizedBrushOutline KisMyPaintOpSettings::brushOutline(const KisPaintInform
 
     if (mode.isVisible) {
         qreal finalScale = 1.0;
-        if (!m_d->cachedProperties) {
-            {
-                MyPaintOffsetByRandomData data;
-                data.read(this);
-                m_d->offsetValue = data.strengthValue;
-            }
-            {
-                MyPaintRadiusLogarithmicData data;
-                data.read(this);
-                m_d->paintOpSize = data.strengthValue;
-            }
-            m_d->cachedProperties = true;
-        }
 
-        const qreal offset = m_d->offsetValue;
+        const qreal offset = m_d->cache.value().offsetValue;
 
-        qreal radius = 0.5 * paintOpSize();
+        qreal radius = 0.5 * m_d->cache.value().paintOpSize;
         radius = radius + 2 * radius * offset;
         radius = qBound(3.5, radius, 500.0);
 

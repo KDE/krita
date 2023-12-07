@@ -2498,6 +2498,21 @@ void KisConfig::setUseLayerSelectionCheckbox(bool value)
     m_cfg.writeEntry("useLayerSelectionCheckbox", value);
 }
 
+KisConfig::AssistantsDrawMode KisConfig::assistantsDrawMode(bool defaultValue) const
+{
+    if (defaultValue) {
+        return ASSISTANTS_DRAW_MODE_DIRECT;
+    }
+
+    return static_cast<AssistantsDrawMode>(
+                m_cfg.readEntry("assistantsDrawMode", static_cast<int>(ASSISTANTS_DRAW_MODE_DIRECT)));
+}
+
+void  KisConfig::setAssistantsDrawMode(AssistantsDrawMode value)
+{
+    m_cfg.writeEntry("assistantsDrawMode", static_cast<int>(value));
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

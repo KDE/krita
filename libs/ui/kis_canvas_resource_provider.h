@@ -115,6 +115,9 @@ public:
     void setSize(qreal size);
     qreal size() const;
 
+    void setBrushRotation(qreal rotation);
+    qreal brushRotation() const;
+
     void setPatternSize(qreal size);
     qreal patternSize() const;
 

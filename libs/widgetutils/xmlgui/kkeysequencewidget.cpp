@@ -25,6 +25,9 @@
 
 #include <kis_icon_utils.h>
 
+#include <QtGui/private/qkeymapper_p.h>
+
+
 uint qHash(const QKeySequence &seq)
 {
     return qHash(seq.toString());
@@ -686,7 +689,27 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
 
         // We now have a valid key press.
         if (keyQt) {
-            if ((keyQt == Qt::Key_Backtab) && (d->modifierKeys & Qt::SHIFT)) {
+            /**
+             * Here is the trap, which is different on every OS. On Widnows Qt
+             * has incomprehensible rules on translating AltGr-related key
+             * sequences into shortcuts. On macOS symbols may confuse Qt when
+             * using Cmd+Shift-based shortcuts. * So we should just ask Qt
+             * itself what it expects to receive as a shortcut :)
+             *
+             * That is exactly what Qt's QKeySequenceEdit does internally.
+             *
+             * TODO: in the future replace the whole widget with QKeySequenceEdit,
+             *       it uses QKeyMapper directly.
+             */
+            const QList<int> vec = QKeyMapper::possibleKeys(e);
+
+            if (!vec.isEmpty() && e->modifiers() != Qt::NoModifier) {
+                /**
+                 * Take the first element, which is usually the shortcut form the latin
+                 * layout of the keyboard
+                 */
+                keyQt = vec.first();
+            } else if ((keyQt == Qt::Key_Backtab) && (d->modifierKeys & Qt::SHIFT)) {
                 keyQt = Qt::Key_Tab | d->modifierKeys;
             } else if (KKeyServer::isShiftAsModifierAllowed(keyQt)) {
                 keyQt |= d->modifierKeys;

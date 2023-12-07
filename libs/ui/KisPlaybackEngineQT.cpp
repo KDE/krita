@@ -61,6 +61,7 @@ PlaybackDriver::PlaybackDriver(QObject *parent)
     , m_fps(24)
     , m_dropFrames(true)
 {
+    m_playbackLoop.setTimerType(Qt::PreciseTimer);
     connect( &m_playbackLoop, SIGNAL(timeout()), this, SIGNAL(throttledShowFrame()) );
 }
 
@@ -151,7 +152,7 @@ struct FrameMeasure {
 
 struct KisPlaybackEngineQT::Private {
 public:
-    Private(KisPlaybackEngineQT* p_self)
+    Private()
         : driver(new PlaybackDriver())
     {
     }
@@ -161,14 +162,11 @@ public:
 
     QScopedPointer<PlaybackDriver> driver;
     FrameMeasure measure;
-
-private:
-    KisPlaybackEngineQT* self;
 };
 
 KisPlaybackEngineQT::KisPlaybackEngineQT(QObject *parent)
     : KisPlaybackEngine(parent)
-    , m_d(new Private(this))
+    , m_d(new Private())
 {
 }
 

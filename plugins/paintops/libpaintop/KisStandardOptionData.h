@@ -15,7 +15,7 @@ struct KisOpacityOptionData : KisCurveOptionData
         : KisCurveOptionData(
               prefix,
               KoID("Opacity", i18n("Opacity")),
-              Checkability::CheckableIfHasPrefix)
+              KisKritaSensorPack::Checkability::NotCheckable)
     {
     }
 };
@@ -26,7 +26,7 @@ struct KisFlowOptionData : KisCurveOptionData
         : KisCurveOptionData(
               prefix,
               KoID("Flow", i18n("Flow")),
-              Checkability::CheckableIfHasPrefix)
+              KisKritaSensorPack::Checkability::NotCheckable)
     {
     }
 };

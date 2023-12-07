@@ -14,6 +14,7 @@
 #endif
 
 #include <cstdint>
+#include <cstring>
 #include <iostream>
 #include <type_traits>
 #include <xsimd_extensions/xsimd.hpp>

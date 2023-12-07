@@ -120,6 +120,11 @@ private Q_SLOTS:
     void decreaseBrushSize();
     void showBrushSize();
 
+    void rotateBrushTipClockwise();
+    void rotateBrushTipClockwisePrecise();
+    void rotateBrushTipCounterClockwise();
+    void rotateBrushTipCounterClockwisePrecise();
+
 protected:
     quint8 m_opacity {OPACITY_OPAQUE_U8};
     bool m_paintOutline {false};

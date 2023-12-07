@@ -33,6 +33,7 @@ struct KisPaintingAssistantsDecoration::Private {
         , outlineVisible(false)
         , snapOnlyOneAssistant(true)
         , snapEraser(false)
+        , useCache(false)
         , firstAssistant(0)
         , aFirstStroke(false)
         , m_handleSize(14)
@@ -42,6 +43,7 @@ struct KisPaintingAssistantsDecoration::Private {
     bool outlineVisible;
     bool snapOnlyOneAssistant;
     bool snapEraser;
+    bool useCache;
     KisPaintingAssistantSP firstAssistant;
     KisPaintingAssistantSP selectedAssistant;
     bool aFirstStroke;
@@ -77,6 +79,8 @@ KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisVie
     setPriority(95);
     d->snapOnlyOneAssistant = true; //turn on by default.
     d->snapEraser = false;
+
+    slotConfigChanged(); // load the initial config
 }
 
 KisPaintingAssistantsDecoration::~KisPaintingAssistantsDecoration()
@@ -91,6 +95,16 @@ void KisPaintingAssistantsDecoration::slotUpdateDecorationVisibility()
     if (visible() != shouldBeVisible) {
         setVisible(shouldBeVisible);
     }
+}
+
+void KisPaintingAssistantsDecoration::slotConfigChanged()
+{
+    KisConfig cfg(true);
+    const KisConfig::AssistantsDrawMode drawMode = cfg.assistantsDrawMode();
+
+    d->useCache =
+        (drawMode == KisConfig::ASSISTANTS_DRAW_MODE_PIXMAP_CACHE) ||
+        (drawMode == KisConfig::ASSISTANTS_DRAW_MODE_LARGE_PIXMAP_CACHE);
 }
 
 void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistantSP assistant)
@@ -328,7 +342,7 @@ void KisPaintingAssistantsDecoration::endStroke()
     }
 }
 
-void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas)
+void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2* canvas)
 {
     if(assistants().isEmpty()) {
         return; // no assistants to worry about, ok to exit
@@ -353,7 +367,7 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
         kritaProxy->supportsPaintingAssistants();
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
-        assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), outlineVisible);
+        assistant->drawAssistant(gc, updateRect, converter, d->useCache, canvas, assistantVisibility(), outlineVisible);
 
         if (isEditingAssistants()) {
             drawHandles(assistant, gc, converter);

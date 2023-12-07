@@ -12,6 +12,7 @@
   <developer_name xml:lang="de">Krita Foundation</developer_name>
   <developer_name xml:lang="el">Ίδρυμα Krita</developer_name>
   <developer_name xml:lang="en-GB">Krita Foundation</developer_name>
+  <developer_name xml:lang="eo">Fondaĵo Krita</developer_name>
   <developer_name xml:lang="es">Fundación Krita</developer_name>
   <developer_name xml:lang="et">Krita sihtasutus</developer_name>
   <developer_name xml:lang="eu">Krita Fundazioa</developer_name>
@@ -50,6 +51,7 @@
   <name xml:lang="de">Krita</name>
   <name xml:lang="el">Krita</name>
   <name xml:lang="en-GB">Krita</name>
+  <name xml:lang="eo">Krita</name>
   <name xml:lang="es">Krita</name>
   <name xml:lang="et">Krita</name>
   <name xml:lang="eu">Krita</name>
@@ -90,6 +92,7 @@
   <summary xml:lang="de">Digitales Malen, kreative Freiheit</summary>
   <summary xml:lang="el">Ψηφιακή ζωγραφική, δημιουργική ελευθερία</summary>
   <summary xml:lang="en-GB">Digital Painting, Creative Freedom</summary>
+  <summary xml:lang="eo">Cifereca Pentrado, Kreiva Libereco</summary>
   <summary xml:lang="es">Pintura digital, libertad creativa</summary>
   <summary xml:lang="et">Digitaalne joonistamine, loominguline vabadus</summary>
   <summary xml:lang="eu">Margolan digitala, sormen askatasuna</summary>
@@ -128,6 +131,7 @@
     <p xml:lang="de">Krita ist ein digitales Designstudio mit umfangreichen Funktionen.</p>
     <p xml:lang="el">Το Krita είναι ένα πλήρες χαρακτηριστικών ψηφιακό ατελιέ.</p>
     <p xml:lang="en-GB">Krita is the full-featured digital art studio.</p>
+    <p xml:lang="eo">Krita estas la plentaŭga cifereca artstudio.</p>
     <p xml:lang="es">Krita es un estudio de arte digital completo</p>
     <p xml:lang="et">Krita on rohkete võimalustega digitaalkunstistuudio.</p>
     <p xml:lang="eu">Krita arte lantegi digital osoa da.</p>
@@ -274,6 +278,7 @@
       <caption xml:lang="de">Krita ist ein digitales Zeichenstudio mit umfangreichen Funktionen</caption>
       <caption xml:lang="el">Το Krita είναι ένα πλήρες χαρακτηριστικών ψηφιακό ατελιέ.</caption>
       <caption xml:lang="en-GB">Krita is a full-featured digital painting studio</caption>
+      <caption xml:lang="eo">Krita estas plentaŭga cifereca pentraĵstudio</caption>
       <caption xml:lang="es">Krita es un completo estudio de dibujo digital</caption>
       <caption xml:lang="et">Krita on rohkete võimalustega digitaalkunstistuudio</caption>
       <caption xml:lang="eu">Krita pintura-digital lantegi osoa bat da</caption>
@@ -309,6 +314,7 @@
       <caption xml:lang="de">Das Startfenster bietet jetzt auch die aktuellsten Neuigkeiten über Krita</caption>
       <caption xml:lang="el">Στο παράθυρο εκκίνησης τώρα διαβάζετε τα τελευταία νέα για το Krita</caption>
       <caption xml:lang="en-GB">The startup window now also gives you the latest news about Krita</caption>
+      <caption xml:lang="eo">La startfenestro nun ankaŭ donas al vi la lastajn novaĵojn pri Krita</caption>
       <caption xml:lang="es">La ventana de bienvenida también le proporciona ahora las últimas noticias sobre Krita</caption>
       <caption xml:lang="et">Käivitusaken jagab nüüd ka Krita värskemaid uudiseid</caption>
       <caption xml:lang="eu">Abioko leihoak orain Krita-ri buruzko albiste berrienak ematen dizkizu</caption>
@@ -343,6 +349,7 @@
       <caption xml:lang="de">Es sind mehr als zehn überaus leistungsfähige Pinsel-Engines enthalten</caption>
       <caption xml:lang="el">Υπάρχουν πάνω από δέκα πανίσχυρες μηχανές πινέλων</caption>
       <caption xml:lang="en-GB">There are over ten immensely powerful brush engines</caption>
+      <caption xml:lang="eo">Estas pli ol dek ege potencaj penikmotoroj</caption>
       <caption xml:lang="es">Existen unos diez inmensamente potentes motores de pinceles</caption>
       <caption xml:lang="et">Üle kümne ääretult võimeka pintslimootori</caption>
       <caption xml:lang="eu">Hamarretik gora isipu motor ikaragarri ahaltsu daude</caption>
@@ -413,6 +420,7 @@
       <caption xml:lang="de">Für Einsteiger in das digitale Malen gibt es ein umfassendes, ständig aktualisiertes Handbuch</caption>
       <caption xml:lang="el">Αν ξεκινάτε τώρα να ζωγραφίζετε ψηφιακά, υπάρχει ένα εκτεταμένο και ενημερωμένο εγχειρίδιο</caption>
       <caption xml:lang="en-GB">If you're new to digital painting, there's an extensive, up-to-date manual</caption>
+      <caption xml:lang="eo">Se vi estas nova al cifereca pentrado, ekzistas ampleksa, ĝisdata manlibro</caption>
       <caption xml:lang="es">Si está empezando con el dibujo digital, dispone de un extenso y actualizado manual</caption>
       <caption xml:lang="et">Kui oled digitaalkunstis alles uustulnuk, on meil välja pakkuda mahukas ajakohane käsiraamat</caption>
       <caption xml:lang="eu">Pintura digitalean berria bazara, gaurkotutako eskuliburu zabal bat dago</caption>
@@ -448,6 +456,7 @@
       <caption xml:lang="de">Krita bietet leistungsstarke Filter</caption>
       <caption xml:lang="el">Το Krita προσφέρει πανίσχυρα φίλτρα</caption>
       <caption xml:lang="en-GB">Krita offers powerful filters</caption>
+      <caption xml:lang="eo">Krita ofertas potencajn filtrilojn</caption>
       <caption xml:lang="es">Krita ofrece potentes filtros</caption>
       <caption xml:lang="eu">Kritak iragazki ahaltsuak eskaintzen ditu</caption>
       <caption xml:lang="fi">Krita tarjoaa tehokkaita suodattimia</caption>
@@ -506,6 +515,7 @@
       <caption xml:lang="de">Besuchen Sie underen YouTube-Kanal.</caption>
       <caption xml:lang="el">Εγγρφείτε στο κανάλι μας στο Youtube!</caption>
       <caption xml:lang="en-GB">Join our Youtube channel!</caption>
+      <caption xml:lang="eo">Aliĝu al nia Youtube-kanalo!</caption>
       <caption xml:lang="es">Únase a nuestro canal de Youtube.</caption>
       <caption xml:lang="eu">Batu Youtubeko gure kanalera!</caption>
       <caption xml:lang="fi">Liity YouTube-kanavallemme!</caption>
@@ -536,6 +546,7 @@
       <caption xml:lang="cs">Nebo aktivní <a href="https://krita-artists.org">Komunita umělců Krita</a></caption>
       <caption xml:lang="el">Ή το ενεργό <a href="https://krita-artists.org">Η κοινότητα των καλλιτεχνών του Krita</a></caption>
       <caption xml:lang="en-GB">Or the active <a href="https://krita-artists.org">Krita Artists community</a></caption>
+      <caption xml:lang="eo">Aŭ la aktiva <a href="https://krita-artists.org">Komunumo de Krita-Artistoj</a></caption>
       <caption xml:lang="es">O al activo <a href="https://krita-artists.org">La comunidad de artistas de Krita</a></caption>
       <caption xml:lang="eu">Edo <a href="https://krita-artists.org">Krita Artisten komunitatea</a> aktiboa</caption>
       <caption xml:lang="fi">Tai aktiivinen <a href="https://krita-artists.org">Krita-taiteilijayhteisö</a></caption>
@@ -570,7 +581,7 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
-    <release date="2023-11-07" version="5.2.1"/>
+    <release date="2023-12-07" version="5.2.2"/>
   </releases>
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>

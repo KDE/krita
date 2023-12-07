@@ -16,6 +16,8 @@ if(UNIX)
         URL https://pypi.io/packages/source/P/PyQt-builder/PyQt-builder-1.13.0.tar.gz
         URL_HASH SHA256=4877580c38ceb5320e129b381d083b0a8601c68166d8b99707f08fa0a1689eef
 
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-restrict-sip-version.patch
+
         CONFIGURE_COMMAND ""
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 

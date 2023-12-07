@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-27 02:25+0000\n"
-"PO-Revision-Date: 2023-08-01 21:30+0800\n"
+"PO-Revision-Date: 2023-12-07 00:36+0800\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
 "Language: zh_TW\n"
@@ -9071,12 +9071,10 @@ msgstr "增大筆刷尺寸"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:845 krita/krita.action:847 krita/krita.action:848
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise"
-msgstr "將物件順時針旋轉 90°"
+msgstr "順時針旋轉筆尖"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9085,11 +9083,10 @@ msgstr "將物件順時針旋轉 90°"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:857 krita/krita.action:859 krita/krita.action:860
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "將選取區域順時針旋轉 90 度"
+msgstr "順時針旋轉筆尖 (精確)"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
@@ -9098,12 +9095,10 @@ msgstr "將選取區域順時針旋轉 90 度"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:869 krita/krita.action:871 krita/krita.action:872
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise"
-msgstr "將物件逆時針旋轉 90°"
+msgstr "逆時針旋轉筆尖"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9112,11 +9107,10 @@ msgstr "將物件逆時針旋轉 90°"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:881 krita/krita.action:883 krita/krita.action:884
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "將選取區域逆時針旋轉 90 度"
+msgstr "逆時針旋轉筆尖 (精確)"
 
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
@@ -12860,9 +12854,7 @@ msgid "File"
 msgstr "檔案"
 
 #: krita/krita5.xmlgui:416
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "編輯"
 
@@ -24505,10 +24497,9 @@ msgstr "檢視縮放演算法："
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
-#, fuzzy, kde-format
-#| msgid "Assistant Tool"
+#, kde-format
 msgid "Assistants Mode:"
-msgstr "輔助尺工具"
+msgstr "輔助尺模式："
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:172
@@ -24519,26 +24510,26 @@ msgid ""
 "              </p><p>Changing the pixmap cache size requires a restart.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>此選項可用作排除輔助尺繪製的效能或顯示問題。</p><p>變更"
+"點陣圖形快取尺寸需要重啟程式。</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:179
 #, kde-format
 msgid "Direct (Recommended)"
-msgstr ""
+msgstr "直接 (建議使用)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:184
-#, fuzzy, kde-format
-#| msgid "Animation Cache"
+#, kde-format
 msgid "Pixmap Cache"
-msgstr "動畫快取"
+msgstr "點陣圖形快取"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:189
-#, fuzzy, kde-format
-#| msgid "Use large pixmap cache"
+#, kde-format
 msgid "Large Pixmap Cache"
-msgstr "使用加大 pixmap 影像快取"
+msgstr "加大尺寸點陣圖形快取"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:203
@@ -28964,6 +28955,7 @@ msgid ""
 "Non-animated layer is merged into the current frame. To merge it into the "
 "whole clip, create at least one frame"
 msgstr ""
+"非動畫圖層已合併到目前影格。如要合併到動畫中所有影格，請先建立最少一張影格。"
 
 #: libs/ui/kis_layer_manager.cc:930
 #, kde-format
@@ -29192,13 +29184,12 @@ msgstr "遮罩圖層"
 #: libs/ui/kis_node_manager.cpp:1590
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
-msgstr ""
+msgstr "無法移動圖層「%1」到上級圖層「%2」之下"
 
 #: libs/ui/kis_node_manager.cpp:1593
-#, fuzzy, kde-format
-#| msgid "Put every layer in its own, separate group layer"
+#, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
-msgstr "將每個圖層放進各自獨立的群組圖層"
+msgstr "無法移動圖層「%1」到根圖層之下"
 
 #: libs/ui/kis_node_manager.cpp:1601
 msgctxt "(qtundo-format)"
@@ -29426,27 +29417,7 @@ msgstr ""
 "</span></b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:215
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><table width=\"100%\" cellpadding="
-#| "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
-#| "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#| "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-#| "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#| "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#| "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#| "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
-#| "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
-#| "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
-#| "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
-#| "p><p><a href=\"https://api.kde.org/appscomplete-api/krita-apidocs/libs/"
-#| "libkis/html/index.html\"><span style=\" text-decoration: underline; color:"
-#| "%1;\">Scripting API</span></a></p><p><a href=\"https://scripting.krita."
-#| "org/lessons/introduction\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Scripting School</span></a></p></td></table></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
 "style=\" color:%1;\"><b>Using Krita</b></span></p><p><a href=\"https://krita."
@@ -29480,11 +29451,11 @@ msgstr ""
 "href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">使用者社群</span></a></p><p><a href=\"https://invent."
 "kde.org/graphics/krita\"><span style=\" text-decoration: underline; color:%1;"
-"\">原始碼</span></a></p><p><a href=\"https://api.kde.org/appscomplete-api/"
-"krita-apidocs/libs/libkis/html/index.html\"><span style=\" text-decoration: "
-"underline; color:%1;\">指令稿 API</span></a></p><p><a href=\"https://"
-"scripting.krita.org/lessons/introduction\"><span style=\" text-decoration: "
-"underline; color:%1;\">指令稿學園</span></a></p></td></table></body></html>"
+"\">原始碼</span></a></p><p><a href=\"https://api.kde.org/krita/html/"
+"classKrita\"><span style=\" text-decoration: underline; color:%1;\">指令稿 "
+"API</span></a></p><p><a href=\"https://scripting.krita.org/lessons/"
+"introduction\"><span style=\" text-decoration: underline; color:%1;\">指令稿"
+"學園</span></a></p></td></table></body></html>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format
@@ -32303,30 +32274,24 @@ msgid "Decrease Brush Size"
 msgstr "減小筆刷尺寸"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgid "Rotate brush tip clockwise"
-msgstr "將物件順時針旋轉 90°"
+msgstr "順時針旋轉筆尖"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "將選取區域順時針旋轉 90 度"
+msgstr "順時針旋轉筆尖 (精確)"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise"
-msgstr "將物件逆時針旋轉 90°"
+msgstr "逆時針旋轉筆尖"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "將選取區域逆時針旋轉 90 度"
+msgstr "逆時針旋轉筆尖 (精確)"
 
 #: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, kde-format
@@ -44965,10 +44930,9 @@ msgstr "視窗大小："
 
 #: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgid "Reset Transparent"
-msgstr "透明"
+msgstr "重設透明像素"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -59728,7 +59692,6 @@ msgstr "參考圖工具"
 #~ "用此選項。</p></body></html>"
 
 #, fuzzy
-#~| msgid "Toolbars"
 #~ msgctxt "action"
 #~ msgid "Lock Toolbars"
 #~ msgstr "工具列"

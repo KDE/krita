@@ -547,7 +547,7 @@ void Document::scaleImage(int w, int h, int xres, int yres, QString strategy)
     KisFilterStrategy *actualStrategy = KisFilterStrategyRegistry::instance()->get(strategy);
     if (!actualStrategy) actualStrategy = KisFilterStrategyRegistry::instance()->get("Bicubic");
 
-    image->scaleImage(rc.size(), xres/72, yres/72, actualStrategy);
+    image->scaleImage(rc.size(), xres / 72.0, yres / 72.0, actualStrategy);
     image->waitForDone();
 }
 

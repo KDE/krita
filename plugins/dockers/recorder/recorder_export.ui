@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>462</width>
+    <width>543</width>
     <height>374</height>
    </rect>
   </property>
@@ -146,7 +146,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <layout class="QHBoxLayout" name="layoutFps" stretch="0,1">
+          <layout class="QHBoxLayout" name="layoutFps" stretch="0,1,0">
            <item>
             <widget class="QSpinBox" name="spinFps">
              <property name="minimumSize">
@@ -166,6 +166,19 @@
              </property>
              <property name="value">
               <number>30</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelRealTimeCaptureNotion">
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="text">
+              <string>Used for Capture Interval calculation</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -237,6 +250,23 @@ For example, to make your timelapse twice faster, the Input FPS should be twice 
            </property>
            <property name="buddy">
             <cstring>spinInputFps</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QPushButton" name="buttonLockFps">
+           <property name="toolTip">
+            <string>Use the same rate for Input FPS and Video FPS</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset theme="lock">
+             <normaloff>.</normaloff>.</iconset>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -1121,6 +1151,7 @@ The preview will show the last frame of the video for the specified duration</st
  <tabstops>
   <tabstop>buttonBrowseDirectory</tabstop>
   <tabstop>spinInputFps</tabstop>
+  <tabstop>buttonLockFps</tabstop>
   <tabstop>spinFps</tabstop>
   <tabstop>checkResize</tabstop>
   <tabstop>spinScaleWidth</tabstop>

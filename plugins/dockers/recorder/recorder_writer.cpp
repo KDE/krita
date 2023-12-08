@@ -6,6 +6,7 @@
 
 #include "recorder_writer.h"
 #include "recorder_const.h"
+#include "recorder_export_settings.h"
 
 #include <kis_canvas2.h>
 #include <kis_image.h>
@@ -19,70 +20,120 @@
 #include <QImage>
 #include <QRegularExpression>
 #include <QApplication>
+#include <QMutexLocker>
+#include <QPointer>
+#include <QTimer>
+#include <QVector>
+#include <QSharedPointer>
+#include <atomic>
 
 namespace
 {
 const QStringList blacklistedTools = { "KritaTransform/KisToolMove", "KisToolTransform", "KritaShape/KisToolLine" };
-const double lowPerformanceWarningThreshold = 1.25;
-const int lowPerformanceWarningMax = 3;
+}
+
+bool ThreadCounter::set(int value)
+{
+    auto oldValue = threads;
+    threads = static_cast<unsigned int>(
+        qBound(1, value, static_cast<int>(ThreadSystemValue::MaxThreadCount))
+    );
+    return oldValue != threads;
+}
+
+void ThreadCounter::setAndNotify(int value)
+{
+    auto oldValue = get();
+    if (set(value)) {
+        // Emit signal to GUI that the value has been changed
+        emit notifyValueChange(oldValue < get());
+    }
+}
+
+unsigned int ThreadCounter::get() const
+{
+    return threads;
+}
+
+bool ThreadCounter::setUsed(int value)
+{
+    QMutexLocker lock(&inUseMutex);
+    return setUsedImpl(value);
+}
+
+void ThreadCounter::setUsedAndNotify(int value)
+{
+    QMutexLocker lock(&inUseMutex);
+    auto oldValue = getUsed();
+    if (setUsedImpl(value)) {
+        // Emit signal to GUI that the value has been changed
+        emit notifyInUseChange(oldValue < getUsed());
+    }
+}
+
+void ThreadCounter::incUsedAndNotify()
+{
+   QMutexLocker lock(&inUseMutex);
+   auto oldValue = getUsed();
+   if (setUsedImpl(inUse + 1)) {
+        // Emit signal to GUI that the value has been changed
+        emit notifyInUseChange(oldValue < getUsed());
+    }
+}
+void ThreadCounter::decUsedAndNotify()
+{
+    QMutexLocker lock(&inUseMutex);
+    if (setUsedImpl(inUse - 1)) {
+        // Emit signal to GUI that the value has been changed
+        emit notifyInUseChange(false);
+    }
+}
+
+unsigned int ThreadCounter::getUsed() const
+{
+    return inUse;
+}
+
+bool ThreadCounter::setUsedImpl(int value)
+{
+    auto oldValue = inUse;
+    inUse = static_cast<unsigned int>(
+        qBound(0, value, static_cast<int>(threads))
+    );
+    return oldValue != inUse;
 }
 
 class RecorderWriter::Private
 {
 public:
+    Private(QPointer<KisCanvas2> c, const RecorderWriterSettings& s, const QDir& d)
+        : canvas(c)
+        , settings(&s)
+        , outputDir(&d)
+    {}
+    Private() = delete;
+    Private(const Private&) = default;
+    Private(Private&&) = delete;
+    Private& operator=(const Private&) = default;
+    Private& operator=(Private&&) = delete;
+
     QPointer<KisCanvas2> canvas;
     QByteArray imageBuffer;
     int imageBufferWidth = 0;
     int imageBufferHeight = 0;
     QImage frame;
     int frameResolution = -1;
-    int partIndex = 0;
-    RecorderWriterSettings settings;
-    QDir outputDir;
-    bool paused = false;
-    int interval = 1;
-    int lowPerformanceWarningCount = 0;
-    volatile bool enabled = false;  // enable recording only for active documents
-    volatile bool imageModified = false;
-    volatile bool skipCapturing = false; // set true on move or transform enabled to prevent tool deactivation
+    int partIndex = 0;                                     // Consecutive file number
+    const RecorderWriterSettings* settings;
+    const QDir* outputDir;
 
     const KoColorSpace *targetCs =
         KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
                                                      Integer8BitsColorDepthID.id(),
                                                      KoColorSpaceRegistry::instance()->p709SRGBProfile());
 
-    int findLastIndex(const QString &directory)
-    {
-        QElapsedTimer timer;
-        timer.start();
-
-        QDirIterator dirIterator(directory);
-        const QString &extension = RecorderFormatInfo::fileExtension(settings.format);
-        const QRegularExpression &snapshotFilePattern = RecorderConst::snapshotFilePatternFor(extension);
-
-        int recordIndex = -1;
-        while (dirIterator.hasNext()) {
-            dirIterator.next();
-
-            const QString &fileName = dirIterator.fileName();
-            const QRegularExpressionMatch &match = snapshotFilePattern.match(fileName);
-            if (match.hasMatch()) {
-                int index = match.captured(1).toInt();
-                if (recordIndex < index)
-                    recordIndex = index;
-            }
-        }
-        dbgTools << "findLastPartNumber for" << directory << ": " << timer.elapsed() << "ms";
-
-        return recordIndex;
-    }
-
-
     void captureImage()
     {
-        if (!canvas)
-            return;
-
         KisImageSP image = canvas->image();
 
         // Create detached paint device that can be converted to target colorspace
@@ -114,7 +165,7 @@ public:
         }
 
         // truncate uneven image width/height making it even for subdivided size too
-        const quint32 bitmask = ~(0xFFFFFFFFu >> (31 - settings.resolution));
+        const quint32 bitmask = ~(0xFFFFFFFFu >> (31 - settings->resolution));
         const quint32 width = image->width() & bitmask;
         const quint32 height = image->height() & bitmask;
         const int bufferSize = device->pixelSize() * width * height;
@@ -123,8 +174,8 @@ public:
         if (resize)
             imageBuffer.resize(bufferSize);
 
-        if (resize || frameResolution != settings.resolution) {
-            const int divider = 1 << settings.resolution;
+        if (resize || frameResolution != settings->resolution) {
+            const int divider = 1 << settings->resolution;
             const int outWidth = width / divider;
             const int outHeight = height / divider;
             uchar *outData = reinterpret_cast<uchar *>(imageBuffer.data());
@@ -204,24 +255,24 @@ public:
 
     bool writeFrame()
     {
-        if (!outputDir.exists() && !outputDir.mkpath(settings.outputDirectory))
+        if (!outputDir->exists() && !outputDir->mkpath(settings->outputDirectory))
             return false;
 
         const QString fileName = QString("%1").arg(partIndex, 7, 10, QLatin1Char('0'));
-        const QString &filePath = QString("%1%2.%3").arg(settings.outputDirectory, fileName,
-                                                         RecorderFormatInfo::fileExtension(settings.format));
+        const QString &filePath = QString("%1%2.%3").arg(settings->outputDirectory, fileName,
+                                                         RecorderFormatInfo::fileExtension(settings->format));
 
         int factor = -1; // default value
-        switch (settings.format) {
+        switch (settings->format) {
             case RecorderFormat::JPEG:
-                factor = settings.quality; // 0...100
+                factor = settings->quality; // 0...100
                 break;
             case RecorderFormat::PNG:
-                factor = qBound(0, 100 - (settings.compression * 10), 100); // 0..10 -> 100..0
+                factor = qBound(0, 100 - (settings->compression * 10), 100); // 0..10 -> 100..0
                 break;
         }
 
-        bool result = frame.save(filePath, RecorderFormatInfo::fileFormat(settings.format).data(), factor);
+        bool result = frame.save(filePath, RecorderFormatInfo::fileFormat(settings->format).data(), factor);
         if (!result)
             QFile(filePath).remove(); // remove corrupted frame
         return result;
@@ -229,19 +280,203 @@ public:
 
 };
 
-RecorderWriter::RecorderWriter()
-    : d(new Private())
-{
-    moveToThread(this);
-}
+RecorderWriter::RecorderWriter(
+    unsigned int i,
+    QPointer<KisCanvas2> c,
+    const RecorderWriterSettings& s,
+    const QDir& d)
+    : d(new Private(c, s, d))
+    , id(i)
+{}
 
 RecorderWriter::~RecorderWriter()
 {
     delete d;
 }
 
-void RecorderWriter::setCanvas(QPointer<KisCanvas2> canvas)
+void  RecorderWriter::onCaptureImage(int writerId, int index)
 {
+    if (static_cast<int>(id) != writerId)
+        return;
+
+    d->captureImage();
+
+    // downscale image buffer
+    for (int res = 0; res < d->settings->resolution; ++res)
+        d->halfSizeImageBuffer();
+
+    d->removeFrameTransparency();
+
+    d->partIndex = index;
+
+    bool isFrameWritten = d->writeFrame();
+
+    emit capturingDone(id, isFrameWritten);
+}
+
+
+struct WriterPoolEl
+{
+    using QThreadPtr = QSharedPointer<QThread>;
+    using RecorderWriterPtr = QSharedPointer<RecorderWriter>;
+
+    WriterPoolEl(
+        QObject* threadParent,
+        unsigned int i,
+        QPointer<KisCanvas2> c,
+        const RecorderWriterSettings& s,
+        const QDir& d
+    )
+        : thread(QThreadPtr::create(threadParent))
+        , writer(RecorderWriterPtr::create(i, c, s, d))
+    {}
+
+    bool    inUse{false};
+    QSharedPointer<QThread> thread;
+    QSharedPointer<RecorderWriter> writer;
+};
+
+using WriterPool = QVector<WriterPoolEl>;
+
+class RecorderWriterManager::Private
+{
+public:
+    Private(RecorderWriterManager* q_ptr, ThreadCounter& rt)
+        : q(q_ptr)
+        , recorderThreads(rt)
+    {}
+
+    RecorderWriterManager* const q;
+    ThreadCounter& recorderThreads;
+    volatile std::atomic_bool enabled = false;                  // enable recording only for active documents
+    volatile std::atomic_bool imageModified = false;
+    volatile std::atomic_bool skipCapturing = false;            // set true on move or transform enabled to prevent tool deactivation
+    int partIndex = 0;                                          // Consecutive file number
+    std::atomic_int freeWriterId = -1;
+    int interval = 1;
+    QPointer<KisCanvas2> canvas;
+    QTimer timer;
+    WriterPool writerPool;
+    RecorderWriterSettings settings{};
+    QDir outputDir;
+
+    int findLastIndex(const QString &directory)
+    {
+        QElapsedTimer dbgTimer;
+        dbgTimer.start();
+
+        QDirIterator dirIterator(directory);
+        const QString &extension = RecorderFormatInfo::fileExtension(settings.format);
+        const QRegularExpression &snapshotFilePattern = RecorderConst::snapshotFilePatternFor(extension);
+
+        int recordIndex = -1;
+        while (dirIterator.hasNext()) {
+            dirIterator.next();
+
+            const QString &fileName = dirIterator.fileName();
+            const QRegularExpressionMatch &match = snapshotFilePattern.match(fileName);
+            if (match.hasMatch()) {
+                int index = match.captured(1).toInt();
+                if (recordIndex < index)
+                    recordIndex = index;
+            }
+        }
+        dbgTools << "findLastPartNumber for" << directory << ": " << dbgTimer.elapsed() << "ms";
+
+        return recordIndex;
+    }
+
+    bool clearWriterPool()
+    {
+        bool result = true;
+        bool alreadyWarn = false;
+        bool alreadyErr = false;
+        for(auto& el: writerPool)
+        {
+            el.thread->quit();
+            el.thread->wait(RecorderConst::waitThreadTimeoutMs);
+            disconnect(q, SIGNAL(startCapturing(int, int)), el.writer.get(), SLOT(onCaptureImage(int, int)));
+            disconnect(el.writer.get(), SIGNAL(capturingDone(int, bool)), q, SLOT(onCapturingDone(int, bool)));
+            if (el.thread->isRunning())
+            {
+                if (!alreadyWarn) {
+                    warnResources << "One of the Recorder WriterPool threads has been blocked and has to be terminated. "
+                                  << "Thread Name: " << el.thread->objectName();
+                    alreadyWarn = true;
+                }
+                el.thread->terminate();
+                if (!el.thread->wait(RecorderConst::waitThreadTimeoutMs))
+                {
+                    if (!alreadyErr) {
+                        errResources << "Something odd has been happen. Krita was unable to stop one of the Recorder WriterPool Threads. "
+                                     << "Thread Name: " << el.thread->objectName();
+                        alreadyErr = true;
+                    }
+                    result = false;
+                }
+            }
+        }
+
+        writerPool.clear();
+        freeWriterId = -1;
+
+        if (!result)
+            emit q->recorderStopWarning();
+
+        return result;
+    }
+
+    void enlargeWriterPool()
+    {
+        writerPool.reserve(recorderThreads.get());
+        while (static_cast<int>(recorderThreads.get()) > writerPool.size()) {
+            auto newWorkerId = writerPool.size();
+            freeWriterId = newWorkerId - 1; // Set the value to the last existing writerEl index ->
+                                            // The next call of searchForFreeWriter() will than automatically find newWorkerId
+
+            writerPool.append(WriterPoolEl(q, newWorkerId, canvas, settings, outputDir));
+
+            auto writerPtr = writerPool[newWorkerId].writer;
+            auto threadPtr = writerPool[newWorkerId].thread;
+            threadPtr->setObjectName(QString("Krita-Recorder-WriterPool#%1").arg(newWorkerId));
+            connect(q, SIGNAL(startCapturing(int, int)), writerPtr.get(), SLOT(onCaptureImage(int, int)));
+            connect(writerPtr.get(), SIGNAL(capturingDone(int, bool)), q, SLOT(onCapturingDone(int, bool)));
+            writerPtr->moveToThread(threadPtr.get());
+            threadPtr->start(QThread::IdlePriority);
+        }
+    }
+
+    void searchForFreeWriter()
+    {
+        auto j = freeWriterId + 1;
+        for(auto i = 0; i < writerPool.size(); i++, j++)
+        {
+            freeWriterId = j % writerPool.size();
+            if (writerPool[freeWriterId].thread->isRunning() && !writerPool[freeWriterId].inUse)
+                return;
+        }
+        freeWriterId = -1;
+    }
+};
+
+RecorderWriterManager::RecorderWriterManager(const RecorderExportSettings &es)
+    : d(new Private(this, recorderThreads))
+    , exporterSettings(es)
+{
+    d->timer.setTimerType(Qt::PreciseTimer);
+}
+
+RecorderWriterManager::~RecorderWriterManager()
+{
+    delete d;
+}
+
+void RecorderWriterManager::setCanvas(QPointer<KisCanvas2> canvas)
+{
+    // Stop current recording if canvas is about to be changed
+    if (d->timer.isActive())
+        stop();
+
     if (d->canvas) {
         disconnect(d->canvas->toolProxy(), SIGNAL(toolChanged(QString)), this, SLOT(onToolChanged(QString)));
         disconnect(d->canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(onImageModified()));
@@ -257,38 +492,58 @@ void RecorderWriter::setCanvas(QPointer<KisCanvas2> canvas)
     }
 }
 
-void RecorderWriter::setup(const RecorderWriterSettings &settings)
+void RecorderWriterManager::setup(const RecorderWriterSettings &settings)
 {
+    // Stop current recording, if setup is called again
+    if (d->timer.isActive())
+        stop();
+
     d->settings = settings;
     d->outputDir.setPath(settings.outputDirectory);
 
     d->partIndex = d->findLastIndex(d->settings.outputDirectory);
 }
 
-bool RecorderWriter::stop()
+void RecorderWriterManager::start()
 {
-    if (!isRunning())
-        return true;
+    if (d->timer.isActive())
+        return;
 
-    quit();
-    if (!wait(RecorderConst::waitThreadTimeoutMs)) {
-        terminate();
-        if (!wait(RecorderConst::waitThreadTimeoutMs)) {
-            qCritical() << "Unable to stop Writer";
-            return false;
-        }
+    if (!d->canvas)
+        return;
+
+    d->enabled = true;
+    d->imageModified = false;
+
+    connect(&d->timer, SIGNAL (timeout()), this, SLOT (onTimer()));
+    if (d->settings.realTimeCaptureMode) {
+        d->interval = static_cast<int>(1000.0/static_cast<double>(exporterSettings.fps));
+    } else {
+        d->interval = static_cast<int>(qMax(d->settings.captureInterval, .1) * 1000.0);
     }
-
-    return true;
+    d->enlargeWriterPool();
+    d->timer.start(d->interval);
+    emit started();
 }
 
-void RecorderWriter::setEnabled(bool enabled)
+bool RecorderWriterManager::stop()
+{
+    if (!d->timer.isActive())
+        return true;
+
+    d->timer.stop();
+    auto result = d->clearWriterPool();
+    recorderThreads.setUsed(0);
+    emit stopped();
+    return result;
+}
+
+void RecorderWriterManager::setEnabled(bool enabled)
 {
     d->enabled = enabled;
 }
 
-
-void RecorderWriter::timerEvent(QTimerEvent */*event*/)
+void RecorderWriterManager::onTimer()
 {
     if (!d->enabled || !d->canvas)
         return;
@@ -299,17 +554,8 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
         return;
 
     if ((!d->settings.recordIsolateLayerMode) &&
-            (d->canvas->image()->isIsolatingLayer() || d->canvas->image()->isIsolatingGroup())) {
-        if (!d->paused) {
-            d->paused = true;
-            emit pausedChanged(d->paused);
-        }
+        (d->canvas->image()->isIsolatingLayer() || d->canvas->image()->isIsolatingGroup())) {
         return;
-    }
-
-    if (d->imageModified == d->paused) {
-        d->paused = !d->imageModified;
-        emit pausedChanged(d->paused);
     }
 
     if (!d->imageModified)
@@ -320,37 +566,34 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
     if (d->skipCapturing)
         return;
 
-    QElapsedTimer elapsedTimer;
-    elapsedTimer.start();
+    d->searchForFreeWriter();
 
-    d->captureImage();
-
-    // downscale image buffer
-    for (int res = 0; res < d->settings.resolution; ++res)
-        d->halfSizeImageBuffer();
-
-    d->removeFrameTransparency();
-
-    ++d->partIndex;
-
-    bool isFrameWritten = d->writeFrame();
-    if (!isFrameWritten) {
-        emit frameWriteFailed();
-        quit();
+    if (d->freeWriterId == -1)
+    {
+        emit lowPerformanceWarning();
+        return;
     }
 
-    qint64 elapsed = elapsedTimer.elapsed();
-    if (static_cast<double>(elapsed) > static_cast<double>(d->interval) * lowPerformanceWarningThreshold) {
-        ++d->lowPerformanceWarningCount;
-        if (d->lowPerformanceWarningCount > lowPerformanceWarningMax) {
-            emit lowPerformanceWarning();
-        }
-    } else if (d->lowPerformanceWarningCount != 0) {
-        d->lowPerformanceWarningCount = 0;
+    d->writerPool[d->freeWriterId].inUse = true;
+    d->writerPool[d->freeWriterId].thread->setPriority(QThread::HighPriority);
+    recorderThreads.incUsedAndNotify();
+    emit startCapturing(d->freeWriterId, ++d->partIndex);
+}
+
+void RecorderWriterManager::onCapturingDone(int workerId, bool success)
+{
+    if (workerId >= d->writerPool.size())
+        return;
+    d->writerPool[workerId].inUse = false;
+    d->writerPool[workerId].thread->setPriority(QThread::IdlePriority);
+    recorderThreads.decUsedAndNotify();
+    if (!success) {
+        stop();
+        emit frameWriteFailed();
     }
 }
 
-void RecorderWriter::onImageModified()
+void RecorderWriterManager::onImageModified()
 {
     if (d->skipCapturing || !d->enabled)
         return;
@@ -359,30 +602,10 @@ void RecorderWriter::onImageModified()
             (d->canvas->image()->isIsolatingLayer() || d->canvas->image()->isIsolatingGroup()))
         return;
 
-    if (!d->imageModified)
-        emit pausedChanged(false);
     d->imageModified = true;
 }
 
-void RecorderWriter::onToolChanged(const QString &toolId)
+void RecorderWriterManager::onToolChanged(const QString &toolId)
 {
     d->skipCapturing = blacklistedTools.contains(toolId);
-}
-
-void RecorderWriter::run()
-{
-    if (!d->canvas)
-        return;
-
-    d->enabled = true;
-    d->paused = true;
-    d->imageModified = false;
-    emit pausedChanged(d->paused);
-
-    d->interval = static_cast<int>(qMax(d->settings.captureInterval, .1) * 1000.);
-    const int timerId = startTimer(d->interval);
-
-    QThread::run();
-
-    killTimer(timerId);
 }

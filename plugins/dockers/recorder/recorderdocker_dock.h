@@ -12,7 +12,9 @@
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 
+
 class KisMainWindow;
+struct RecorderExportSettings;
 
 class RecorderDockerDock : public QDockWidget, public KoCanvasObserverBase
 {
@@ -32,19 +34,25 @@ private Q_SLOTS:
 
     void onRecordIsolateLayerModeToggled(bool checked);
     void onAutoRecordToggled(bool checked);
+    void onRealTimeCaptureModeToggled(bool checked);
     void onCaptureIntervalChanged(double interval);
+    void onVideoFPSChanged(double interval);
     void onQualityChanged(int value);
     void onFormatChanged(int format);
     void onResolutionChanged(int resolution);
+    void onThreadsChanged(int threads);
     void onManageRecordingsButtonClicked();
     void onSelectRecordFolderButtonClicked();
     void onRecordButtonToggled(bool checked);
     void onExportButtonClicked();
 
     void onWriterStarted();
-    void onWriterFinished();
-    void onWriterPausedChanged(bool paused);
+    void onWriterStopped();
+    void onUpdateRecIndicator();
+    void onActiveRecording(bool valueWasIncreased);
+    void onPausedTimeout();
     void onWriterFrameWriteFailed();
+    void onRecorderStopWarning();
     void onLowPerformanceWarning();
     void onWarningTimeout();
 
@@ -53,6 +61,7 @@ private Q_SLOTS:
 private:
     Q_DISABLE_COPY(RecorderDockerDock)
     class Private;
+    RecorderExportSettings *const exportSettings;
     Private *const d;
 };
 

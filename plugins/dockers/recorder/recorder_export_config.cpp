@@ -25,6 +25,7 @@ const QString keyLastFrameSec = "recorder_export/lastframesec";
 const QString keyResize = "recorder_export/resize";
 const QString keySize = "recorder_export/size";
 const QString keyLockRatio = "recorder_export/lockratio";
+const QString keyLockFps = "recorder_export/lockfps";
 const QString keyProfileIndex = "recorder_export/profileIndex";
 const QString keyProfiles = "recorder_export/profiles";
 const QString keyEditedProfiles = "recorder_export/editedprofiles";
@@ -224,6 +225,25 @@ RecorderExportConfig::~RecorderExportConfig()
     delete config;
 }
 
+void RecorderExportConfig::loadConfiguration(RecorderExportSettings *settings, bool loadLockFps) const
+{
+    settings->inputFps = inputFps();
+    settings->fps = fps();
+    settings->resultPreview = resultPreview();
+    settings->firstFrameSec = firstFrameSec();
+    settings->extendResult = extendResult();
+    settings->lastFrameSec = lastFrameSec();
+    settings->resize = resize();
+    settings->size = size();
+    settings->lockRatio = lockRatio();
+    settings->ffmpegPath = ffmpegPath();
+    settings->profiles = profiles();
+    settings->defaultProfiles = defaultProfiles();
+    settings->profileIndex = profileIndex();
+    settings->videoDirectory = videoDirectory();
+    if (loadLockFps)
+        settings->lockFps = lockFps();
+}
 
 int RecorderExportConfig::inputFps() const
 {
@@ -319,6 +339,15 @@ void RecorderExportConfig::setLockRatio(bool value)
     config->writeEntry(keyLockRatio, value);
 }
 
+bool RecorderExportConfig::lockFps() const
+{
+    return config->readEntry(keyLockFps, false);
+}
+
+void RecorderExportConfig::setLockFps(bool value)
+{
+    config->writeEntry(keyLockFps, value);
+}
 
 int RecorderExportConfig::profileIndex() const
 {

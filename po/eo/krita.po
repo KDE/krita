@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-04 00:39+0000\n"
+"POT-Creation-Date: 2023-12-09 00:40+0000\n"
 "PO-Revision-Date: 2023-11-25 08:36+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -16761,8 +16761,8 @@ msgstr "Grandeco"
 #: plugins/dockers/griddocker/grid_config_widget.ui:230
 #: plugins/dockers/griddocker/grid_config_widget.ui:444
 #: plugins/dockers/griddocker/grid_config_widget.ui:489
-#: plugins/dockers/recorder/recorder_export.ui:448
-#: plugins/dockers/recorder/recorder_export.ui:486
+#: plugins/dockers/recorder/recorder_export.ui:478
+#: plugins/dockers/recorder/recorder_export.ui:516
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:472
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:36
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:44
@@ -20310,7 +20310,7 @@ msgstr "Anstataŭigi (anstataŭigi) etikedon"
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:265
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
-#: plugins/dockers/recorder/recorder_export.ui:823
+#: plugins/dockers/recorder/recorder_export.ui:853
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:113
 #: plugins/generators/seexpr/wdgseexpr.ui:179
@@ -21537,7 +21537,7 @@ msgstr "Montrado"
 #. i18n: ectx: property (text), widget (QLabel, labelX)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
 #: libs/ui/kis_paintop_box.cc:320
-#: plugins/dockers/recorder/recorder_export.ui:467
+#: plugins/dockers/recorder/recorder_export.ui:497
 #, kde-format
 msgid "x"
 msgstr "x"
@@ -21975,7 +21975,7 @@ msgstr "Eksporti kiel video"
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
 #: libs/ui/animation/wdg_animationrenderer.ui:198
-#: plugins/dockers/recorder/recorder_export.ui:524
+#: plugins/dockers/recorder/recorder_export.ui:554
 #, kde-format
 msgid "Render as:"
 msgstr "Bildigi kiel:"
@@ -21989,7 +21989,7 @@ msgstr "Elektu la bildigajn opciojn de FFmpeg."
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, labelExportTo)
 #: libs/ui/animation/wdg_animationrenderer.ui:222
-#: plugins/dockers/recorder/recorder_export.ui:374
+#: plugins/dockers/recorder/recorder_export.ui:404
 #, kde-format
 msgid "Video location:"
 msgstr "Loko de video:"
@@ -27366,7 +27366,7 @@ msgstr "Bildo de ilo:"
 #. i18n: ectx: property (toolTip), widget (QLabel, widthLabel)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinScaleWidth)
 #: libs/ui/forms/wdgrectangleconstraints.ui:56
-#: plugins/dockers/recorder/recorder_export.ui:442
+#: plugins/dockers/recorder/recorder_export.ui:472
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:272
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:320
 #, kde-format
@@ -27383,7 +27383,7 @@ msgstr "Larĝo:"
 #. i18n: ectx: property (toolTip), widget (QLabel, heightLabel)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinScaleHeight)
 #: libs/ui/forms/wdgrectangleconstraints.ui:95
-#: plugins/dockers/recorder/recorder_export.ui:480
+#: plugins/dockers/recorder/recorder_export.ui:510
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:222
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:247
 #, kde-format
@@ -27875,7 +27875,7 @@ msgstr "Limigi bildformaton"
 #: libs/ui/imagesize/wdg_canvassize.ui:135
 #: libs/ui/imagesize/wdg_imagesize.ui:342
 #: libs/ui/imagesize/wdg_layersize.ui:142
-#: plugins/dockers/recorder/recorder_export.ui:316
+#: plugins/dockers/recorder/recorder_export.ui:346
 #, kde-format
 msgid "Constrain proportions"
 msgstr "Limigi proporciojn"
@@ -39615,7 +39615,7 @@ msgctxt "action"
 msgid "Export Timelapse..."
 msgstr "Eksporti Timelapse..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:104
+#: plugins/dockers/recorder/recorder_export.cpp:89
 #, kde-format
 msgctxt ""
 "This text is displayed instead of path to external tool in case of external "
@@ -39623,7 +39623,7 @@ msgctxt ""
 msgid "[NOT FOUND]"
 msgstr "[NE TROVITA]"
 
-#: plugins/dockers/recorder/recorder_export.cpp:105
+#: plugins/dockers/recorder/recorder_export.cpp:90
 #, kde-format
 msgid ""
 "FFmpeg executable location couldn't be detected, please install it or select "
@@ -39632,44 +39632,44 @@ msgstr ""
 "La realigebla loko de FFmpeg ne povis esti detektita, bonvolu instali ĝin aŭ "
 "elekti ĝian lokon permane"
 
-#: plugins/dockers/recorder/recorder_export.cpp:169
+#: plugins/dockers/recorder/recorder_export.cpp:173
 #, kde-format
 msgid "Abort encoding the timelapse video?"
 msgstr "Ĉu ĉesi kodi la timelapse-videon?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:241
+#: plugins/dockers/recorder/recorder_export.cpp:245
 #, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting FFmpeg..."
 msgstr "Komencante FFmpeg..."
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:343
+#: plugins/dockers/recorder/recorder_export.cpp:364
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
 #, kde-format
 msgid "Export"
 msgstr "Eksporto"
 
-#: plugins/dockers/recorder/recorder_export.cpp:370
+#: plugins/dockers/recorder/recorder_export.cpp:379
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "Neniuj kadroj por eksporti"
 
-#: plugins/dockers/recorder/recorder_export.cpp:374
+#: plugins/dockers/recorder/recorder_export.cpp:383
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "Registrado de informoj"
 
-#: plugins/dockers/recorder/recorder_export.cpp:377
+#: plugins/dockers/recorder/recorder_export.cpp:386
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "px"
 
-#: plugins/dockers/recorder/recorder_export.cpp:379
+#: plugins/dockers/recorder/recorder_export.cpp:388
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
@@ -39681,37 +39681,37 @@ msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "Neniuj kadroj por foliumi."
 
-#: plugins/dockers/recorder/recorder_export.cpp:522
+#: plugins/dockers/recorder/recorder_export.cpp:543
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "Elekti FFmpeg Plenumeblan Dosieron"
 
-#: plugins/dockers/recorder/recorder_export.cpp:568
+#: plugins/dockers/recorder/recorder_export.cpp:590
 #, kde-format
 msgid "Export Timelapse Video As"
 msgstr "Eksporti Timelapse-Videon Kiel"
 
-#: plugins/dockers/recorder/recorder_export.cpp:584
+#: plugins/dockers/recorder/recorder_export.cpp:606
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "La videodosiero jam ekzistas. Ĉu vi volas anstataŭigi ĝin?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:589
+#: plugins/dockers/recorder/recorder_export.cpp:611
 #, kde-format
 msgid "No frames to export."
 msgstr "Neniuj kadroj por eksporti."
 
-#: plugins/dockers/recorder/recorder_export.cpp:616
+#: plugins/dockers/recorder/recorder_export.cpp:638
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "La timelapse video estas kodita..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:631
+#: plugins/dockers/recorder/recorder_export.cpp:653
 #, kde-format
 msgid "Export failed. FFmpeg message:"
 msgstr "Eksporto malsukcesis. FFmpeg-mesaĝo:"
 
-#: plugins/dockers/recorder/recorder_export.cpp:652
+#: plugins/dockers/recorder/recorder_export.cpp:674
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -39726,7 +39726,7 @@ msgstr ""
 "\n"
 "Ĉu vi volas daŭrigi?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:659
+#: plugins/dockers/recorder/recorder_export.cpp:681
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -39745,9 +39745,15 @@ msgstr "Eksporti Timelapse"
 msgid "Open record directory"
 msgstr "Malfermi registradan dosierujon"
 
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spinCaptureInterval)
+#. i18n: ectx: property (text), widget (QLabel, labelRealTimeCaptureNotion)
+#: plugins/dockers/recorder/recorder_export.ui:178
+#, kde-format
+msgid "Used for Capture Interval calculation"
+msgstr ""
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spinRate)
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinLastFrameSec)
-#: plugins/dockers/recorder/recorder_export.ui:201
+#: plugins/dockers/recorder/recorder_export.ui:214
 #: plugins/dockers/recorder/recorderdocker.ui:183
 #, kde-format
 msgctxt "Contraction of \"second\" for interval"
@@ -39755,7 +39761,7 @@ msgid " sec."
 msgstr "sek."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, labelFpsInput)
-#: plugins/dockers/recorder/recorder_export.ui:230
+#: plugins/dockers/recorder/recorder_export.ui:243
 #, kde-format
 msgid ""
 "The speed of reading the input stream.\n"
@@ -39767,50 +39773,56 @@ msgstr ""
 "duoble pli granda ol la Video FPS."
 
 #. i18n: ectx: property (text), widget (QLabel, labelFpsInput)
-#: plugins/dockers/recorder/recorder_export.ui:233
+#: plugins/dockers/recorder/recorder_export.ui:246
 #, kde-format
 msgctxt "Input FPS of recorded timelapses."
 msgid "Input FPS:"
 msgstr "Eniga FPS:"
 
-#. i18n: ectx: property (text), widget (QLabel, labelFps)
+#. i18n: ectx: property (toolTip), widget (QPushButton, buttonLockFps)
 #: plugins/dockers/recorder/recorder_export.ui:259
+#, kde-format
+msgid "Use the same rate for Input FPS and Video FPS"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelFps)
+#: plugins/dockers/recorder/recorder_export.ui:289
 #, kde-format
 msgid "Video FPS:"
 msgstr "Video FPS:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonEditProfile)
-#: plugins/dockers/recorder/recorder_export.ui:290
+#: plugins/dockers/recorder/recorder_export.ui:320
 #, kde-format
 msgid "Edit video profile"
 msgstr "Redakti videoprofilon"
 
 #. i18n: ectx: property (text), widget (QLineEdit, editFfmpegPath)
-#: plugins/dockers/recorder/recorder_export.ui:303
+#: plugins/dockers/recorder/recorder_export.ui:333
 #, kde-format
 msgid "ffmpeg"
 msgstr "ffmpeg"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, extendResultCheckBox)
-#: plugins/dockers/recorder/recorder_export.ui:348
+#: plugins/dockers/recorder/recorder_export.ui:378
 #, kde-format
 msgid "Extend the last frame in the exported video by the specified duration"
 msgstr "Etendi la lastan kadron en la eksportita video je la specifita daŭro"
 
 #. i18n: ectx: property (text), widget (QCheckBox, extendResultCheckBox)
-#: plugins/dockers/recorder/recorder_export.ui:351
+#: plugins/dockers/recorder/recorder_export.ui:381
 #, kde-format
 msgid "Extend result for:"
 msgstr "Etendi rezulton por:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseExport)
-#: plugins/dockers/recorder/recorder_export.ui:360
+#: plugins/dockers/recorder/recorder_export.ui:390
 #, kde-format
 msgid "Select a file location for the exported timelapse video"
 msgstr "Elekti dosierlokon por la eksportita timelapse video"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, resultPreviewCheckBox)
-#: plugins/dockers/recorder/recorder_export.ui:403
+#: plugins/dockers/recorder/recorder_export.ui:433
 #, kde-format
 msgid ""
 "Prepend a preview to the exported video.\n"
@@ -39820,91 +39832,91 @@ msgstr ""
 "La antaŭrigardo montros la lastan kadron de la video dum la specifita daŭro"
 
 #. i18n: ectx: property (text), widget (QCheckBox, resultPreviewCheckBox)
-#: plugins/dockers/recorder/recorder_export.ui:409
+#: plugins/dockers/recorder/recorder_export.ui:439
 #, kde-format
 msgid "Enable preview for:"
 msgstr "Ebligi antaŭrigardon por:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseFfmpeg)
-#: plugins/dockers/recorder/recorder_export.ui:537
+#: plugins/dockers/recorder/recorder_export.ui:567
 #, kde-format
 msgid "Setup ffmpeg executable location"
 msgstr "Agordi ffmpeg plenumeblan lokon"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinFirstFrameSec)
-#: plugins/dockers/recorder/recorder_export.ui:559
+#: plugins/dockers/recorder/recorder_export.ui:589
 #, kde-format
 msgid " sec."
 msgstr " sek."
 
 #. i18n: ectx: property (text), widget (QLabel, labelFfmpegLocation)
-#: plugins/dockers/recorder/recorder_export.ui:587
+#: plugins/dockers/recorder/recorder_export.ui:617
 #, kde-format
 msgid "FFmpeg:"
 msgstr "FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkResize)
-#: plugins/dockers/recorder/recorder_export.ui:624
+#: plugins/dockers/recorder/recorder_export.ui:654
 #, kde-format
 msgid "Resize:"
 msgstr "Regrandigi:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleVideoDuration)
-#: plugins/dockers/recorder/recorder_export.ui:663
+#: plugins/dockers/recorder/recorder_export.ui:693
 #, kde-format
 msgid "Video duration:"
 msgstr "Daŭro de video:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDone)
-#: plugins/dockers/recorder/recorder_export.ui:913
+#: plugins/dockers/recorder/recorder_export.ui:943
 #, kde-format
 msgctxt "Caption: Video exporting finished"
 msgid "Done!"
 msgstr "Farita!"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonWatchIt)
-#: plugins/dockers/recorder/recorder_export.ui:931
+#: plugins/dockers/recorder/recorder_export.ui:961
 #, kde-format
 msgctxt "Watch the video which is just created"
 msgid "Watch it!"
 msgstr "Rigardu ĝin!"
 
 #. i18n: ectx: property (text), widget (QLabel, labelWritten)
-#: plugins/dockers/recorder/recorder_export.ui:941
+#: plugins/dockers/recorder/recorder_export.ui:971
 #, kde-format
 msgid "The timelapse video has been written to:"
 msgstr "La timelapse video estis skribita al:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonShowInFolder)
-#: plugins/dockers/recorder/recorder_export.ui:959
+#: plugins/dockers/recorder/recorder_export.ui:989
 #, kde-format
 msgctxt "Open the folder when the new created video is placed"
 msgid "Show in folder"
 msgstr "Montri en dosierujo"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRemoveSnapshots)
-#: plugins/dockers/recorder/recorder_export.ui:996
+#: plugins/dockers/recorder/recorder_export.ui:1026
 #, kde-format
 msgctxt "Open the folder when the new created video is placed"
 msgid "Remove recordings"
 msgstr "Forigi registradojn"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRenderTimeTitle)
-#: plugins/dockers/recorder/recorder_export.ui:1026
+#: plugins/dockers/recorder/recorder_export.ui:1056
 #, kde-format
 msgctxt "How long it took to render the video"
 msgid "Render time:"
 msgstr "Redontempo:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRestart)
-#: plugins/dockers/recorder/recorder_export.ui:1053
+#: plugins/dockers/recorder/recorder_export.ui:1083
 #, kde-format
 msgctxt "Button to restart the timelapse video configuring"
 msgid "Restart"
 msgstr "Rekomenci"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonDoneClose)
-#: plugins/dockers/recorder/recorder_export.ui:1060
+#: plugins/dockers/recorder/recorder_export.ui:1090
 #, kde-format
 msgctxt "Close dialog button"
 msgid "Close"
@@ -40057,7 +40069,8 @@ msgstr "Administri registradojn..."
 msgid "Select the recordings directory..."
 msgstr "Elekti la dosierujon de registradoj..."
 
-#. i18n: ectx: property (text), widget (QLabel, labelCaptureRate)
+#. i18n: This value changes for RealtTimeCapture mode switched to on. It can alter the column width of the labels, if this value is the longest of all labels. Please ensure, that at least one other label has more characters than this one (by stuffing space characters after the colon of one label).
+#. i18n: ectx: property (text), widget (QLabel, labelRate)
 #: plugins/dockers/recorder/recorderdocker.ui:155
 #, kde-format
 msgid "Capture interval:"
@@ -40070,11 +40083,13 @@ msgctxt "Compression quality"
 msgid "Quality:"
 msgstr "Kvalito:"
 
+#. i18n: Please do not remove the spaces after the label text. It ensures to fix the column width if the label text of `labelRate` is set to an other value for RealTimeCaptureMode switched on.
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
 #: plugins/dockers/recorder/recorderdocker.ui:225
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resolution:"
 msgctxt "Resolution for recorded frames"
-msgid "Resolution:"
+msgid "Resolution:         "
 msgstr "Rezolucio:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboResolution)
@@ -40102,8 +40117,40 @@ msgctxt "File format for recorded frames (PNG/JPG)"
 msgid "Format:"
 msgstr "Formato:"
 
+#. i18n: ectx: property (toolTip), widget (QSlider, sliderThreads)
+#. i18n: ectx: property (toolTip), widget (QSpinBox, spinThreads)
+#: plugins/dockers/recorder/recorderdocker.ui:304
+#: plugins/dockers/recorder/recorderdocker.ui:326
+#, fuzzy, kde-format
+#| msgid ""
+#| "Please choose the language which should be used for this application:"
+msgid "Number of threads, which should be used for recording"
+msgstr "Bonvolu elekti la lingvon, kiu devus esti uzata por ĉi tiu aplikaĵo:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelThreads)
+#: plugins/dockers/recorder/recorderdocker.ui:335
+#, fuzzy, kde-format
+#| msgid "Spread:"
+msgid "Threads:"
+msgstr "Disvastigi:"
+
+#. i18n: Tooltip for check box
+#. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxRealTimeCaptureMode)
+#: plugins/dockers/recorder/recorderdocker.ui:345
+#, kde-format
+msgid ""
+"Calculate the Capture Interval from the Video FPS export settings.\n"
+"Please handle with care, may cause performance issues."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBoxRealTimeCaptureMode)
+#: plugins/dockers/recorder/recorderdocker.ui:348
+#, kde-format
+msgid "Real Time Capture mode"
+msgstr ""
+
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxRecordIsolateMode)
-#: plugins/dockers/recorder/recorderdocker.ui:305
+#: plugins/dockers/recorder/recorderdocker.ui:356
 #, kde-format
 msgid ""
 "Record frames when Isolate Layer or Isolate Group mode is active.\n"
@@ -40116,7 +40163,7 @@ msgstr ""
 "video."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxRecordIsolateMode)
-#: plugins/dockers/recorder/recorderdocker.ui:308
+#: plugins/dockers/recorder/recorderdocker.ui:359
 #, kde-format
 msgctxt "Record when Isolate Layer mode is active"
 msgid "Record in isolate mode"
@@ -40124,36 +40171,36 @@ msgstr "Registrado en izolita reĝimo"
 
 #. i18n: Tooltip for check box
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxAutoRecord)
-#: plugins/dockers/recorder/recorderdocker.ui:315
+#: plugins/dockers/recorder/recorderdocker.ui:366
 #, kde-format
 msgid "Start recording after creating a new image or opening an existing one."
 msgstr "Komenci registri post kreo de nova bildo aŭ malfermo de ekzistanta."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxAutoRecord)
-#: plugins/dockers/recorder/recorderdocker.ui:318
+#: plugins/dockers/recorder/recorderdocker.ui:369
 #, kde-format
 msgid "Record automatically"
 msgstr "Registradi aŭtomate"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRecordToggle)
-#: plugins/dockers/recorder/recorderdocker.ui:337
+#: plugins/dockers/recorder/recorderdocker.ui:388
 #, kde-format
 msgid "Record"
 msgstr "Registri"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonExport)
-#: plugins/dockers/recorder/recorderdocker.ui:360
+#: plugins/dockers/recorder/recorderdocker.ui:411
 #, kde-format
 msgid "Export..."
 msgstr "Eksporti..."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:109
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:146
 #, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "Kvalito:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:110
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:147
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -40165,13 +40212,13 @@ msgstr ""
 "influas CPU-konsumon.\n"
 "Valoroj pli malaltaj ol 50 ne estas rekomenditaj pro altaj artefaktoj."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:118
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:155
 #, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "Kunpremo:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:119
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:156
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -40185,13 +40232,27 @@ msgstr ""
 "Kupremo agordita al 0 ne estas rekomendita pro alta konsumo de diskspaco.\n"
 "Valoroj super 3 ne estas rekomenditaj pro alta rendimenta efiko."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:152
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:184
+#, fuzzy, kde-format
+#| msgid "Video FPS:"
+msgctxt "Title for label. Video frames per second"
+msgid "Video FPS:"
+msgstr "Video FPS:"
+
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:193
+#, fuzzy, kde-format
+#| msgid "Capture interval:"
+msgctxt "Title for label. Capture rate"
+msgid "Capture interval:"
+msgstr "Intervalo de kapto:"
+
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:234
 #, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "Originala"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:153
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:235
 #, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
@@ -40199,7 +40260,7 @@ msgctxt ""
 msgid "Half"
 msgstr "Duono"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:154
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:236
 #, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
@@ -40207,52 +40268,83 @@ msgctxt ""
 msgid "Quarter"
 msgstr "Kvarono"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:179
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:261
 #, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "Halti"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:180
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:262
 #, kde-format
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "Registri"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:204
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:310
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr "REC"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:205
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:313
 #, kde-format
-msgid "Recorder is active"
-msgstr "Registrilo estas aktiva"
+msgid "Active recording with %1 of %2 available threads"
+msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:205
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:313
 #, kde-format
 msgid "Recorder is paused"
 msgstr "Registrilo estas paŭzita"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:218
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:337
+#, kde-format
+msgid ""
+"Set the number of recording threads.\n"
+"The number of threads exceeds the ideal max number of your hardware setup.\n"
+"Please be aware, that a number greater than %1 probably won't give you any "
+"performance boost."
+msgstr ""
+
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:348
+#, kde-format
+msgid ""
+"Set the number of recording threads.\n"
+"Accordingly to your hardware setup you should record with no more than %1 "
+"threads.\n"
+"You can play around with one ore two more threads, but keep an eye on your "
+"overall system performance."
+msgstr ""
+
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:353
+#, fuzzy, kde-format
+#| msgid "Select the recordings directory..."
+msgid "Set the number of threads using during record."
+msgstr "Elekti la dosierujon de registradoj..."
+
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:361
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Registrilo"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:392
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:440
+#, kde-format
+msgid "Your system is not efficient enough for this feature"
+msgstr ""
+
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:581
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Elekti Dosierujon por Registradoj"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:472
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:702
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:708
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Registrilo"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:473
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:703
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -40261,11 +40353,36 @@ msgstr ""
 "La registrilo estis maldaŭrigita pro malsukceso dum skribado de kadro. "
 "Bonvolu kontroli liberan diskspacon kaj rekomenci la registrilon."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:478
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:709
 #, kde-format
 msgid ""
+"Krita was unable to stop the recorder probably. Please try to restart Krita."
+msgstr ""
+
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:714
+#, fuzzy, kde-format
+#| msgid ""
+#| "Low performance warning. The recorder is not able to write all the frames "
+#| "in time. Try increasing the capture interval."
+msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
-"time. Try increasing the capture interval."
+"time during Real Time Capture mode.\n"
+"Try to reduce the frame rate for the ffmpeg export or reduce the scaling "
+"filtering in the canvas acceleration settings."
+msgstr ""
+"Averto de malalta rendimento. La registrilo ne kapablas skribi ĉiujn kadrojn "
+"ĝustatempe. Provu pliigi la kaptan intervalon."
+
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:716
+#, fuzzy, kde-format
+#| msgid ""
+#| "Low performance warning. The recorder is not able to write all the frames "
+#| "in time. Try increasing the capture interval."
+msgid ""
+"Low performance warning. The recorder is not able to write all the frames in "
+"time.\n"
+"Try to increase the capture interval or reduce the scaling filtering in the "
+"canvas acceleration settings."
 msgstr ""
 "Averto de malalta rendimento. La registrilo ne kapablas skribi ĉiujn kadrojn "
 "ĝustatempe. Provu pliigi la kaptan intervalon."
@@ -60896,6 +61013,13 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
+
+#~ msgctxt "Resolution for recorded frames"
+#~ msgid "Resolution:"
+#~ msgstr "Rezolucio:"
+
+#~ msgid "Recorder is active"
+#~ msgstr "Registrilo estas aktiva"
 
 #~ msgid "Vertical Text Layout"
 #~ msgstr "Vertikala Teksta Aranĝo"

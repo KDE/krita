@@ -543,7 +543,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
     KoSvgTextShape *shape = selectedShape();
     if (shape) {
         KisHandlePainterHelper handlePainter =
-            KoShape::createHandlePainterHelperView(&gc, shape, converter, handleRadius());
+            KoShape::createHandlePainterHelperView(&gc, shape, converter, handleRadius(), decorationThickness());
 
         if (m_dragging != DragMode::InlineSizeHandle && m_dragging != DragMode::Move) {
             handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
@@ -586,7 +586,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
 
     gc.setTransform(converter.documentToView(), true);
     {
-        KisHandlePainterHelper handlePainter(&gc);
+        KisHandlePainterHelper handlePainter(&gc, handleRadius(), decorationThickness());
         if (!m_hoveredShapeHighlightRect.isEmpty()) {
             handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandlesWithSolidOutline());
             QPainterPath path;
@@ -595,7 +595,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
         }
     }
     if (shape) {
-            m_textCursor.paintDecorations(gc, qApp->palette().color(QPalette::Highlight));
+            m_textCursor.paintDecorations(gc, qApp->palette().color(QPalette::Highlight), decorationThickness());
     }
     if (m_interactionStrategy) {
         gc.save();

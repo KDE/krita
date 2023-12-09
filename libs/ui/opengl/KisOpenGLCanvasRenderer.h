@@ -67,7 +67,7 @@ private:
     void renderCanvasGL(const QRect &updateRect);
 
 public:
-    void paintToolOutline(const KisOptimizedBrushOutline &path, const QRect &viewportUpdateRect);
+    void paintToolOutline(const KisOptimizedBrushOutline &path, const QRect &viewportUpdateRect, const int thickness = 1);
 
     void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
     void notifyImageColorSpaceChanged(const KoColorSpace *cs);

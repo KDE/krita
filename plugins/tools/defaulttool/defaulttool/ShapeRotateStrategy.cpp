@@ -87,7 +87,7 @@ void ShapeRotateStrategy::paint(QPainter &painter, const KoViewConverter &conver
     painter.setPen(QPen(Qt::red));
     painter.setBrush(QBrush(Qt::red));
     painter.setRenderHint(QPainter::Antialiasing, true);
-    QRectF circle(0, 0, 5, 5);
+    QRectF circle(0, 0, handleRadius(), handleRadius());
     circle.moveCenter(converter.documentToView(m_rotationCenter));
     painter.drawEllipse(circle);
 }

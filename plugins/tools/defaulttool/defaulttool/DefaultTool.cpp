@@ -824,6 +824,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 
         m_decorator->setSelection(selection);
         m_decorator->setHandleRadius(handleRadius());
+        m_decorator->setDecorationThickness(decorationThickness());
         m_decorator->setShowFillGradientHandles(hasInteractionFactory(EditFillGradientFactoryId));
         m_decorator->setShowStrokeFillGradientHandles(hasInteractionFactory(EditStrokeGradientFactoryId));
         m_decorator->setShowFillMeshGradientHandles(hasInteractionFactory(EditFillMeshGradientFactoryId));

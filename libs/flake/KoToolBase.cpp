@@ -268,11 +268,10 @@ int KoToolBase::handleRadius() const
 {
     Q_D(const KoToolBase);
     if (d->canvas
-            && d->canvas->shapeController()
-            && d->canvas->shapeController()->resourceManager()
+            && d->canvas->resourceManager()
        )
     {
-        return d->canvas->shapeController()->resourceManager()->handleRadius();
+        return d->canvas->resourceManager()->handleRadius();
     }
     else {
         return 3;
@@ -285,6 +284,20 @@ qreal KoToolBase::handleDocRadius() const
     const KoViewConverter * converter = d->canvas->viewConverter();
     const QPointF doc = converter->viewToDocument(QPointF(handleRadius(), handleRadius()));
     return qMax(doc.x(), doc.y());
+}
+
+int KoToolBase::decorationThickness() const
+{
+    Q_D(const KoToolBase);
+    if (d->canvas
+            && d->canvas->resourceManager()
+       )
+    {
+        return d->canvas->resourceManager()->decorationThickness();
+    }
+    else {
+        return 1;
+    }
 }
 
 int KoToolBase::grabSensitivity() const

@@ -631,7 +631,7 @@ void KisToolSelectMagnetic::drawAnchors(QPainter &gc)
 {
     int sides = updateInitialAnchorBounds(m_anchorPoints.first());
     Q_FOREACH (const QPoint pt, m_anchorPoints) {
-        KisHandlePainterHelper helper(&gc, handleRadius());
+        KisHandlePainterHelper helper(&gc, handleRadius(), decorationThickness());
         QRect r(QPoint(0, 0), QSize(sides, sides));
         r.moveCenter(pt);
         if (r.contains(m_lastCursorPos.toPoint())) {

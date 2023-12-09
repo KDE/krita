@@ -59,6 +59,12 @@ public:
     void setHandleRadius(int radius);
 
     /**
+     * set the thickness of decoration lines, used for HiDPI support.
+     * @param thickness -- the new thickness
+     */
+    void setDecorationThickness(int thickness);
+
+    /**
      * Set true if you want to render gradient handles on the canvas.
      * Default value: false
      */
@@ -87,7 +93,7 @@ private:
     KoShapeMeshGradientHandles::Handle m_currentHoveredMeshHandle;
     KoShapeMeshGradientHandles::Handle m_selectedMeshHandle;
     int m_handleRadius {7};
-    int m_lineWidth {2};
+    int m_decorationThickness {1};
     bool m_showFillGradientHandles {false};
     bool m_showStrokeFillGradientHandles {false};
     bool m_showFillMeshGradientHandles {false};

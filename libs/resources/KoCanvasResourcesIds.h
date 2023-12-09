@@ -60,6 +60,8 @@ enum CanvasResourceId {
     EffectiveZoom, ///<-Used only by painting tools for non-displaying purposes
     EffectivePhysicalZoom, ///<-Used by tool for displaying purposes
     BrushRotation,
+    HandleRadius,           ///< The handle radius used for drawing handles of any kind
+    DecorationThickness, ///< The thickness of single px decorations, will be adjusted by HiDPI settings.
 };
 
 }

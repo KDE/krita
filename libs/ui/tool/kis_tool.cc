@@ -591,13 +591,16 @@ void KisTool::paintToolOutline(QPainter* painter, const KisOptimizedBrushOutline
     KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
     if (canvasWidget)  {
         painter->beginNativePainting();
-        canvasWidget->paintToolOutline(path);
+        canvasWidget->paintToolOutline(path, decorationThickness());
         painter->endNativePainting();
     }
     else {
         painter->save();
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-        painter->setPen(QColor(128, 255, 128));
+        QPen p = QColor(128, 255, 128);
+        p.setCosmetic(true);
+        p.setWidth(decorationThickness());
+        painter->setPen(p);
 
         for (auto it = path.begin(); it != path.end(); ++it) {
             painter->drawPolyline(*it);

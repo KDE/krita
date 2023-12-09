@@ -30,10 +30,11 @@ KoPathToolSelection::~KoPathToolSelection()
 
 void KoPathToolSelection::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius)
 {
+    int decorationThickness = m_tool? m_tool->decorationThickness(): 1;
     PathShapePointMap::iterator it(m_shapePointMap.begin());
     for (; it != m_shapePointMap.end(); ++it) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&painter, it.key(), converter, handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, it.key(), converter, handleRadius, decorationThickness);
         helper.setHandleStyle(KisHandleStyle::selectedPrimaryHandles());
 
         Q_FOREACH (KoPathPoint *p, it.value()) {

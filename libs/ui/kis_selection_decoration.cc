@@ -98,14 +98,8 @@ void KisSelectionDecoration::initializePens(QScreen *screen)
 
     int penWidth = qRound(screen->devicePixelRatio());
 
-    if (penWidth > 1) {
-        m_antsPen.setWidth(penWidth);
-        m_outlinePen.setWidth(penWidth);
-    }
-    else {
-        m_antsPen.setCosmetic(true);
-        m_outlinePen.setCosmetic(true);
-    }
+    m_antsPen.setWidth(qMax(penWidth, 1));
+    m_outlinePen.setWidth(qMax(penWidth, 1));
 }
 
 void KisSelectionDecoration::selectionChanged()

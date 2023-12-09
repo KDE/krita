@@ -57,7 +57,7 @@ public: // QOpenGLWidget
     void showEvent(QShowEvent *event) override;
 
 public:
-    void paintToolOutline(const KisOptimizedBrushOutline &path);
+    void paintToolOutline(const KisOptimizedBrushOutline &path, int thickness = 1);
 
 
 public: // Implement kis_abstract_canvas_widget interface

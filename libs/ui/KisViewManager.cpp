@@ -393,6 +393,11 @@ void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourc
         toQShared(new KoActiveCanvasResourceDependencyKoResource<KoAbstractGradient>(
                       KoCanvasResource::CurrentGradient,
                       KoCanvasResource::BackgroundColor)));
+
+    KSharedConfigPtr config =  KSharedConfig::openConfig();
+    KConfigGroup miscGroup = config->group("Misc");
+    const uint handleRadius = miscGroup.readEntry("HandleRadius", 5);
+    resourceManager->setHandleRadius(handleRadius);
 }
 
 KisKActionCollection *KisViewManager::actionCollection() const

@@ -39,14 +39,14 @@ public:
      * Creates the helper, initializes all the internal transformations and
      * *resets* the transformation of the painter.
      */
-    KisHandlePainterHelper(QPainter *_painter, qreal handleRadius = 0.0);
+    KisHandlePainterHelper(QPainter *_painter, qreal handleRadius = 0.0, int decorationThickness = 1);
 
     /**
      * Creates the helper, initializes all the internal transformations and
      * *resets* the transformation of the painter. This override also adjusts the
      * transformation of the painter into the coordinate system of the shape
      */
-    KisHandlePainterHelper(QPainter *_painter, const QTransform &originalPainterTransform, qreal handleRadius);
+    KisHandlePainterHelper(QPainter *_painter, const QTransform &originalPainterTransform, qreal handleRadius, int decorationThickness = 1);
 
     /**
      * Move c-tor. Used to create and return the helper from functions by-value.
@@ -160,6 +160,7 @@ private:
     QTransform m_originalPainterTransform;
     QTransform m_painterTransform;
     qreal m_handleRadius;
+    int m_decorationThickness;
     KisAlgebra2D::DecomposedMatrix m_decomposedMatrix;
     QTransform m_handleTransform;
     QPolygonF m_handlePolygon;

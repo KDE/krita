@@ -34,7 +34,7 @@
 SelectionDecorator::SelectionDecorator(KoCanvasResourceProvider *resourceManager)
     : m_hotPosition(KoFlake::Center)
     , m_handleRadius(7)
-    , m_lineWidth(2)
+    , m_decorationThickness(1)
     , m_showFillGradientHandles(false)
     , m_showStrokeFillGradientHandles(false)
     , m_forceShapeOutlines(false)
@@ -52,7 +52,11 @@ void SelectionDecorator::setSelection(KoSelection *selection)
 void SelectionDecorator::setHandleRadius(int radius)
 {
     m_handleRadius = radius;
-    m_lineWidth = qMax(1, (int)(radius / 2));
+}
+
+void SelectionDecorator::setDecorationThickness(int thickness)
+{
+    m_decorationThickness = thickness;
 }
 
 void SelectionDecorator::setShowFillGradientHandles(bool value)
@@ -92,7 +96,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     Q_FOREACH (KoShape *shape, KoShape::linearizeSubtree(selectedShapes)) {
         if (!haveOnlyOneEditableShape || !m_showStrokeFillGradientHandles) {
             KisHandlePainterHelper helper =
-                KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
+                KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius, m_decorationThickness);
 
             helper.setHandleStyle(KisHandleStyle::secondarySelection());
 

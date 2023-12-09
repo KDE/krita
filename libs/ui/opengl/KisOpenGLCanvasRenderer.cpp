@@ -393,7 +393,7 @@ void KisOpenGLCanvasRenderer::paintCanvasOnly(const QRect &canvasImageDirtyRect,
     }
 }
 
-void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &path, const QRect &viewportUpdateRect)
+void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &path, const QRect &viewportUpdateRect, const int thickness)
 {
     if (!d->solidColorShader->bind()) {
         return;
@@ -463,6 +463,8 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
             d->solidColorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
             d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, verticesBuffer.constData());
         }
+
+        glLineWidth(thickness);
 
         glDrawArrays(GL_LINE_STRIP, 0, verticesCount);
     }

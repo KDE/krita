@@ -57,7 +57,6 @@ public:
 enum DocumentResource {
     UndoStack,              ///< The document-wide undo stack (KUndo2Stack)
     OdfDocument,            ///< OBSOLETE The document this canvas shows
-    HandleRadius,           ///< The handle radius used for drawing handles of any kind
     GrabSensitivity,        ///< The grab sensitivity used for grabbing handles of any kind
     MarkerCollection,       ///< The collection holding all markers
     GlobalShapeController,  ///< The KoShapeController for the document
@@ -188,14 +187,7 @@ enum DocumentResource {
      */
     void clearResource(int key);
 
-        /**
-     * Tools that provide a handle for controlling the content that the tool can edit can
-     * use this property to alter the radius that a circular handle should have on screen.
-     * @param handleSize the radius in pixels.
-     */
-    void setHandleRadius(int handleSize);
-    /// Returns the actual handle radius
-    int handleRadius() const;
+
 
     /**
      * Tools that are used to grab handles or similar with the mouse

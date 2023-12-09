@@ -39,6 +39,7 @@
 #include <QMoveEvent>
 #include <QMdiSubWindow>
 #include <QFileInfo>
+#include <QScreen>
 
 #include <kis_image.h>
 #include <kis_node.h>
@@ -246,6 +247,10 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
 
     d->showFloatingMessage = cfg.showCanvasMessages();
     d->zoomManager.updateScreenResolution(this);
+    if (d->canvas.resourceManager() && d->screenMigrationTracker.currentScreen()) {
+        int penWidth = d->screenMigrationTracker.currentScreen()->devicePixelRatio();
+        d->canvas.resourceManager()->setDecorationThickness(qMax(penWidth, 1));
+    }
 
     connect(document, SIGNAL(sigReadWriteChanged(bool)), this, SLOT(slotUpdateDocumentTitle()));
     connect(document, SIGNAL(sigRecoveredChanged(bool)), this, SLOT(slotUpdateDocumentTitle()));
@@ -1220,6 +1225,11 @@ void KisView::slotScreenOrResolutionChanged()
      * slotMigratedToScreen() when a migration happens
      */
     d->zoomManager.updateScreenResolution(this);
+
+    if (d->canvas.resourceManager() && d->screenMigrationTracker.currentScreen()) {
+        int penWidth = d->screenMigrationTracker.currentScreen()->devicePixelRatio();
+        d->canvas.resourceManager()->setDecorationThickness(qMax(penWidth, 1));
+    }
 }
 
 QScreen* KisView::currentScreen() const

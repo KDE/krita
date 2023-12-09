@@ -39,7 +39,7 @@ void SvgCreateTextStrategy::paint(QPainter &painter, const KoViewConverter &conv
 {
     const QTransform originalPainterTransform = painter.transform();
     painter.setTransform(converter.documentToView(), true);
-    KisHandlePainterHelper handlePainter(&painter, originalPainterTransform, 0.0);
+    KisHandlePainterHelper handlePainter(&painter, originalPainterTransform, 0.0, decorationThickness());
 
     const QPolygonF poly(QRectF(m_dragStart, m_dragEnd));
     handlePainter.setHandleStyle(KisHandleStyle::primarySelection());

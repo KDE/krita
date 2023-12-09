@@ -83,7 +83,7 @@ void KoPencilTool::paint(QPainter &painter, const KoViewConverter &converter)
 
     if (m_hoveredPoint) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&painter, m_hoveredPoint->parent(), converter, handleRadius());
+            KoShape::createHandlePainterHelperView(&painter, m_hoveredPoint->parent(), converter, handleRadius(), decorationThickness());
 
         helper.setHandleStyle(KisHandleStyle::primarySelection());
         m_hoveredPoint->paint(helper, KoPathPoint::Node);

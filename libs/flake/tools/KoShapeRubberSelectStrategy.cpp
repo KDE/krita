@@ -39,7 +39,9 @@ void KoShapeRubberSelectStrategy::paint(QPainter &painter, const KoViewConverter
         crossingColor : coveringColor);
 
     selectColor.setAlphaF(0.8);
-    painter.setPen(QPen(selectColor, 0));
+    QPen select(selectColor, decorationThickness());
+    select.setCosmetic(true);
+    painter.setPen(select);
 
     selectColor.setAlphaF(0.4);
     const QBrush fillBrush(selectColor);

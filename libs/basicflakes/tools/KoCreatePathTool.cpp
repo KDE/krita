@@ -86,7 +86,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
         painter.restore();
 
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&painter, d->shape, converter, d->handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, d->shape, converter, d->handleRadius, d->decorationThickness);
 
         const bool firstPointActive = d->firstPoint == d->activePoint;
 
@@ -111,7 +111,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
     }
 
     if (d->hoveredPoint) {
-        KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, d->hoveredPoint->parent(), converter, d->handleRadius);
+        KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, d->hoveredPoint->parent(), converter, d->handleRadius, d->decorationThickness);
         helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
         d->hoveredPoint->paint(helper, KoPathPoint::Node);
     }
@@ -447,6 +447,7 @@ void KoCreatePathTool::activate(const QSet<KoShape*> &shapes)
 
     // retrieve the actual global handle radius
     d->handleRadius = handleRadius();
+    d->decorationThickness = decorationThickness();
     d->loadAutoSmoothValueFromConfig();
 
     // reset snap guide
@@ -460,13 +461,17 @@ void KoCreatePathTool::deactivate()
     KoToolBase::deactivate();
 }
 
-void KoCreatePathTool::documentResourceChanged(int key, const QVariant & res)
+void KoCreatePathTool::canvasResourceChanged(int key, const QVariant & res)
 {
     Q_D(KoCreatePathTool);
 
     switch (key) {
-    case KoDocumentResourceManager::HandleRadius: {
+    case KoCanvasResource::HandleRadius: {
         d->handleRadius = res.toUInt();
+    }
+    break;
+    case KoCanvasResource::DecorationThickness: {
+        d->decorationThickness = res.toUInt();
     }
     break;
     default:

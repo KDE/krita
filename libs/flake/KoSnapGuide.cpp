@@ -12,6 +12,7 @@
 #include <KoPathPoint.h>
 #include <KoViewConverter.h>
 #include <KoCanvasBase.h>
+#include <KoCanvasResourceProvider.h>
 
 #include <QPainter>
 #include <QPainterPath>
@@ -210,14 +211,18 @@ void KoSnapGuide::paint(QPainter &painter, const KoViewConverter &converter)
 
     QPainterPath decoration = d->currentStrategy->decoration(converter);
 
+    int thickness = d->canvas->resourceManager()? d->canvas->resourceManager()->decorationThickness(): 1;
+
     painter.setBrush(Qt::NoBrush);
 
-    QPen whitePen(Qt::white, 0);
+    QPen whitePen(Qt::white, thickness);
+    whitePen.setCosmetic(true);
     whitePen.setStyle(Qt::SolidLine);
     painter.setPen(whitePen);
     painter.drawPath(decoration);
 
-    QPen redPen(Qt::red, 0);
+    QPen redPen(Qt::red, thickness);
+    redPen.setCosmetic(true);
     redPen.setStyle(Qt::DotLine);
     painter.setPen(redPen);
     painter.drawPath(decoration);

@@ -145,7 +145,7 @@ public:
 
     void deselectText();
 
-    void paintDecorations(QPainter &gc, QColor selectionColor);
+    void paintDecorations(QPainter &gc, QColor selectionColor, int decorationThickness = 1);
 
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     void inputMethodEvent(QInputMethodEvent *event);

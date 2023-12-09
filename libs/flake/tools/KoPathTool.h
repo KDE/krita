@@ -66,7 +66,7 @@ public:
     void notifyPathPointsChanged(KoPathShape *shape);
 
 public Q_SLOTS:
-    void documentResourceChanged(int key, const QVariant & res) override;
+    void canvasResourceChanged(int key, const QVariant & res) override;
 
 Q_SIGNALS:
     void typeChanged(int types);

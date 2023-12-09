@@ -889,8 +889,8 @@ public:
      * the same time. Please note that you shouldn't save/restore additionally. All the work
      * on restoring original painter's transformations is done by the helper.
      */
-    static KisHandlePainterHelper createHandlePainterHelperView(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius = 0.0);
-    static KisHandlePainterHelper createHandlePainterHelperDocument(QPainter *painter, KoShape *shape, qreal handleRadius);
+    static KisHandlePainterHelper createHandlePainterHelperView(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius = 0.0, int decorationThickness = 1);
+    static KisHandlePainterHelper createHandlePainterHelperDocument(QPainter *painter, KoShape *shape, qreal handleRadius, int decorationThickness);
 
     /**
      * @brief Transforms point from shape coordinates to document coordinates

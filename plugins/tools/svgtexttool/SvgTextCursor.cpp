@@ -346,7 +346,7 @@ static QColor bgColorForCaret(QColor c) {
     return KisPaintingTweaks::luminosityCoarse(c) > 0.8? QColor(0, 0, 0, 64) : QColor(255, 255, 255, 64);
 }
 
-void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
+void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor, int decorationThickness)
 {
     if (d->shape) {
         gc.save();
@@ -363,7 +363,7 @@ void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor)
                 pen.setCosmetic(true);
                 QColor c = d->cursorColor.isValid()? d->cursorColor: Qt::black;
                 pen.setColor(bgColorForCaret(c));
-                pen.setWidth(d->cursorWidth + 2);
+                pen.setWidth((d->cursorWidth + 2) * decorationThickness);
                 gc.setPen(pen);
                 gc.drawPath(d->cursorShape);
                 pen.setColor(c);

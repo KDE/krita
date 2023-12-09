@@ -20,6 +20,7 @@ void initDashedStyle(const QColor &baseColor, const QColor &handleFill, KisHandl
 
     QPen handlePen(baseColor);
     handlePen.setWidth(2);
+    handlePen.setCosmetic(true);
     handlePen.setJoinStyle(Qt::RoundJoin);
 
     style->handleIterations << KisHandleStyle::IterationStyle(handlePen, handleFill);
@@ -108,8 +109,11 @@ KisHandleStyle &KisHandleStyle::highlightedPrimaryHandlesWithSolidOutline()
 
     if (!style) {
         style.reset(new KisHandleStyle());
-        style->handleIterations << KisHandleStyle::IterationStyle(highlightOutlineColor, highlightColor);
-        style->lineIterations << KisHandleStyle::IterationStyle(highlightOutlineColor, Qt::NoBrush);
+        QPen h = highlightOutlineColor;
+        h.setCosmetic(true);
+        style->handleIterations << KisHandleStyle::IterationStyle(h, highlightColor);
+        h.setColor(highlightOutlineColor);
+        style->lineIterations << KisHandleStyle::IterationStyle(h, Qt::NoBrush);
     }
 
     return *style;

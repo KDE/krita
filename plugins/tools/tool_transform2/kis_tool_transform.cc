@@ -244,6 +244,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
         m_refRect = newRefRect;
         currentStrategy()->externalConfigChanged();
     }
+    currentStrategy()->setDecorationThickness(decorationThickness());
     currentStrategy()->paint(gc);
 
 

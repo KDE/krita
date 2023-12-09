@@ -342,6 +342,15 @@ public:
       */
     bool isInTextMode() const;
 
+    /**
+     * @brief decorationThickness
+     * The minimum thickness for tool decoration lines,
+     * this is derived from the screen magnification, thus the HiDPI settings.
+     * Note: to use this effectively, also set the pen to isCosmetic(true);
+     * @return the minimum thickness for decoration lines in pixels.
+     */
+    int decorationThickness() const;
+
 public Q_SLOTS:
 
     /**
@@ -485,6 +494,7 @@ protected:
     /// Convenience function to get the current handle radius measured in document
     /// coordinates (points)
     qreal handleDocRadius() const;
+
 
     /// Convenience function to get the current grab sensitivity
     int grabSensitivity() const;

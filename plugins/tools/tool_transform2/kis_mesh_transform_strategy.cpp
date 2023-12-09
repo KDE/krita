@@ -273,7 +273,7 @@ void KisMeshTransformStrategy::paint(QPainter &gc)
     gc.save();
     gc.setTransform(KisTransformUtils::imageToFlakeTransform(m_d->converter), true);
 
-    KisHandlePainterHelper handlePainter(&gc, 0.5 * KisTransformUtils::handleRadius);
+    KisHandlePainterHelper handlePainter(&gc, 0.5 * KisTransformUtils::handleRadius, decorationThickness());
 
     for (auto it = m_d->currentArgs.meshTransform()->beginSegments();
          it != m_d->currentArgs.meshTransform()->endSegments();

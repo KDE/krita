@@ -173,6 +173,7 @@ public:
           activePoint(0),
           firstPoint(0),
           handleRadius(3),
+          decorationThickness(1),
           mouseOverFirstPoint(false),
           pointIsDragged(false),
           finishAfterThisPoint(false),
@@ -188,6 +189,7 @@ public:
     KoPathPoint *activePoint;
     KoPathPoint *firstPoint;
     int handleRadius;
+    int decorationThickness;
     bool mouseOverFirstPoint;
     bool pointIsDragged;
     bool finishAfterThisPoint;

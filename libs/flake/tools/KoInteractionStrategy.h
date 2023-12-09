@@ -82,6 +82,8 @@ protected:
     /// Convenience function to get the global handle radius
     uint handleRadius() const;
 
+    uint decorationThickness() const;
+
     /// Convenience function to get the global grab sensitivity
     uint grabSensitivity() const;
 

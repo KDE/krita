@@ -179,6 +179,28 @@ public:
     KoUnit unitResource(int key) const;
 
     /**
+     * Tools that provide a handle for controlling the content that the tool can edit can
+     * use this property to alter the radius that a circular handle should have on screen.
+     * @param handleSize the radius in pixels.
+     */
+    void setHandleRadius(int handleSize);
+    /// Returns the actual handle radius
+    int handleRadius() const;
+
+    /**
+     * @brief setDecorationThickness
+     * Set the minimum decoration thickness.
+     * @param decorationThickness the minimum decoration thickness in pixels.
+     */
+    void setDecorationThickness(int decorationThickness);
+
+    /**
+     * @brief decorationThickness
+     * @return the minimum decoration thickness in pixels.
+     */
+    int decorationThickness() const;
+
+    /**
      * Returns true if there is a resource set with the requested key.
      * @param key the identifying key for the resource
      * @see KoCanvasResource::CanvasResourceId

@@ -260,7 +260,7 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *e)
     d->updateRect = boost::none;
 }
 
-void KisOpenGLCanvas2::paintToolOutline(const KisOptimizedBrushOutline &path)
+void KisOpenGLCanvas2::paintToolOutline(const KisOptimizedBrushOutline &path, int thickness)
 {
     /**
      * paintToolOutline() is called from drawDecorations(), which has clipping
@@ -272,7 +272,7 @@ void KisOpenGLCanvas2::paintToolOutline(const KisOptimizedBrushOutline &path)
      */
     const QRect updateRect = d->updateRect ? *d->updateRect : QRect();
 
-    d->renderer->paintToolOutline(path, updateRect);
+    d->renderer->paintToolOutline(path, updateRect, thickness);
 }
 
 bool KisOpenGLCanvas2::isBusy() const

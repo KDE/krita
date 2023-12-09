@@ -109,20 +109,6 @@ KUndo2Stack *KoDocumentResourceManager::undoStack() const
     return static_cast<KUndo2Stack*>(resource(UndoStack).value<void*>());
 }
 
-void KoDocumentResourceManager::setHandleRadius(int handleRadius)
-{
-    // do not allow arbitrary small handles
-    if (handleRadius < 5)
-        handleRadius = 5;
-    setResource(HandleRadius, QVariant(handleRadius));
-}
-
-int KoDocumentResourceManager::handleRadius() const
-{
-    if (hasResource(HandleRadius))
-        return intResource(HandleRadius);
-    return 5; // default value (and is used just about everywhere)
-}
 void KoDocumentResourceManager::setGrabSensitivity(int grabSensitivity)
 {
     // do not allow arbitrary small grab sensitivity

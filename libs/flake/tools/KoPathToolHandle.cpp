@@ -16,7 +16,6 @@
 #include "KoParameterChangeStrategy.h"
 #include "KoParameterShape.h"
 #include "KoCanvasBase.h"
-#include "KoDocumentResourceManager.h"
 #include "KoViewConverter.h"
 #include "KoPointerEvent.h"
 #include "KoShapeController.h"
@@ -33,10 +32,6 @@ KoPathToolHandle::~KoPathToolHandle()
 {
 }
 
-uint KoPathToolHandle::handleRadius() const
-{
-    return m_tool->canvas()->shapeController()->resourceManager()->handleRadius();
-}
 
 PointHandle::PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::PointType activePointType)
         : KoPathToolHandle(tool)
@@ -45,7 +40,7 @@ PointHandle::PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint
 {
 }
 
-void PointHandle::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius)
+void PointHandle::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius, int decorationThickness)
 {
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
 
@@ -55,7 +50,7 @@ void PointHandle::paint(QPainter &painter, const KoViewConverter &converter, qre
     }
 
 
-    KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, m_activePoint->parent(), converter, handleRadius);
+    KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, m_activePoint->parent(), converter, handleRadius, decorationThickness);
 
 
     if (allPaintedTypes != m_activePointType) {
@@ -171,9 +166,9 @@ ParameterHandle::ParameterHandle(KoPathTool *tool, KoParameterShape *parameterSh
 {
 }
 
-void ParameterHandle::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius)
+void ParameterHandle::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius, int decorationThickness)
 {
-    KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, m_parameterShape, converter, handleRadius);
+    KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, m_parameterShape, converter, handleRadius, decorationThickness);
     helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
     m_parameterShape->paintHandle(helper, m_handleId);
 }

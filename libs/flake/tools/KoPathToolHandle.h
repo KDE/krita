@@ -30,7 +30,7 @@ class KoPathToolHandle
 public:
     explicit KoPathToolHandle(KoPathTool *tool);
     virtual ~KoPathToolHandle();
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius) = 0;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius, int decorationThickness) = 0;
     virtual QRectF boundingRect() const = 0;
     virtual KoInteractionStrategy * handleMousePress(KoPointerEvent *event) = 0;
     // test if handle is still valid
@@ -39,7 +39,6 @@ public:
     virtual void trySelectHandle() {};
 
 protected:
-    uint handleRadius() const;
     KoPathTool *m_tool;
 };
 
@@ -47,7 +46,7 @@ class PointHandle : public KoPathToolHandle
 {
 public:
     PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::PointType activePointType);
-    void paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius) override;
+    void paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius, int decorationThickness) override;
     QRectF boundingRect() const override;
     KoInteractionStrategy *handleMousePress(KoPointerEvent *event) override;
     bool check(const QList<KoPathShape*> &selectedShapes) override;
@@ -64,7 +63,7 @@ class ParameterHandle : public KoPathToolHandle
 {
 public:
     ParameterHandle(KoPathTool *tool, KoParameterShape *parameterShape, int handleId);
-    void paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius) override;
+    void paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius, int decorationThickness) override;
     QRectF boundingRect() const override;
     KoInteractionStrategy *handleMousePress(KoPointerEvent *event) override;
     bool check(const QList<KoPathShape*> &selectedShapes) override;

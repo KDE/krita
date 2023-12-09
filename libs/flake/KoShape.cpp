@@ -1153,7 +1153,7 @@ bool KoShape::isShapeEditable(bool recursive) const
     return true;
 }
 
-KisHandlePainterHelper KoShape::createHandlePainterHelperView(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius)
+KisHandlePainterHelper KoShape::createHandlePainterHelperView(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius, int decorationThickness)
 {
     const QTransform originalPainterTransform = painter->transform();
 
@@ -1162,10 +1162,10 @@ KisHandlePainterHelper KoShape::createHandlePainterHelperView(QPainter *painter,
                           painter->transform());
 
     // move c-tor
-    return KisHandlePainterHelper(painter, originalPainterTransform, handleRadius);
+    return KisHandlePainterHelper(painter, originalPainterTransform, handleRadius, decorationThickness);
 }
 
-KisHandlePainterHelper KoShape::createHandlePainterHelperDocument(QPainter *painter, KoShape *shape, qreal handleRadius)
+KisHandlePainterHelper KoShape::createHandlePainterHelperDocument(QPainter *painter, KoShape *shape, qreal handleRadius, int decorationThickness)
 {
     const QTransform originalPainterTransform = painter->transform();
 
@@ -1173,7 +1173,7 @@ KisHandlePainterHelper KoShape::createHandlePainterHelperDocument(QPainter *pain
                           painter->transform());
 
     // move c-tor
-    return KisHandlePainterHelper(painter, originalPainterTransform, handleRadius);
+    return KisHandlePainterHelper(painter, originalPainterTransform, handleRadius, decorationThickness);
 }
 
 

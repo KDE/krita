@@ -45,6 +45,9 @@ public:
     virtual void activatePrimaryAction();
     virtual void deactivatePrimaryAction();
 
+    virtual void setDecorationThickness(int thickness);
+    virtual int decorationThickness() const;
+
     virtual bool beginPrimaryAction(KoPointerEvent *event) = 0;
     virtual void continuePrimaryAction(KoPointerEvent *event) = 0;
     virtual bool endPrimaryAction(KoPointerEvent *event) = 0;

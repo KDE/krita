@@ -418,15 +418,18 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
                 d->solidColorShader->location(Uniform::FragmentColor),
                 QVector4D(d->cursorColor.redF(), d->cursorColor.greenF(), d->cursorColor.blueF(), 1.0f));
 
+    GLfloat lineWidthRange[2] = {0.0f, 0.0f};
+    glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, lineWidthRange);
+    glLineWidth(qBound(lineWidthRange[0], GLfloat(thickness), lineWidthRange[1]));
     glEnable(GL_BLEND);
     glBlendFuncSeparate(GL_ONE, GL_SRC_COLOR, GL_ONE, GL_ONE);
     glBlendEquationSeparate(GL_FUNC_SUBTRACT, GL_FUNC_ADD);
+
 
     if (!viewportUpdateRect.isEmpty()) {
         const QRect deviceUpdateRect = widgetToSurface(viewportUpdateRect).toAlignedRect();
         glScissor(deviceUpdateRect.x(), deviceUpdateRect.y(), deviceUpdateRect.width(), deviceUpdateRect.height());
         glEnable(GL_SCISSOR_TEST);
-        glLineWidth(qMax(1, thickness));
     }
 
     // Paint the tool outline

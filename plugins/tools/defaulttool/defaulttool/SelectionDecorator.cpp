@@ -129,7 +129,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     // draw extra rubber line around all the shapes
     if (selectedShapes.size() > 1 || forceBoundingRubberLine) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius, m_decorationThickness);
 
         helper.setHandleStyle(KisHandleStyle::primarySelection());
         helper.drawRubberLine(handleArea);
@@ -139,7 +139,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     // is no need drawing the selection handles
     if (editable) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius, m_decorationThickness);
         helper.setHandleStyle(KisHandleStyle::primarySelection());
 
         QPolygonF outline = handleArea;
@@ -183,7 +183,7 @@ void SelectionDecorator::paintGradientHandles(KoShape *shape, KoFlake::FillVaria
     QVector<KoShapeGradientHandles::Handle> handles = gradientHandles.handles();
 
     KisHandlePainterHelper helper =
-        KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
+        KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius, m_decorationThickness);
 
     const QTransform t = shape->absoluteTransformation().inverted();
 
@@ -215,7 +215,7 @@ void SelectionDecorator::paintMeshGradientHandles(KoShape *shape,
     KoShapeMeshGradientHandles gradientHandles(fillVariant, shape);
 
     KisHandlePainterHelper helper =
-        KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
+        KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius, m_decorationThickness);
     helper.setHandleStyle(KisHandleStyle::secondarySelection());
 
     helper.drawPath(gradientHandles.path());

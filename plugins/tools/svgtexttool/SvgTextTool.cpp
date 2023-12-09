@@ -67,6 +67,7 @@ using SvgInlineSizeHelper::InlineSizeInfo;
 constexpr double INLINE_SIZE_DASHES_PATTERN_A = 4.0; /// Size of the visible part of the inline-size handle dashes.
 constexpr double INLINE_SIZE_DASHES_PATTERN_B = 8.0; /// Size of the hidden part of the inline-size handle dashes.
 constexpr int INLINE_SIZE_DASHES_PATTERN_LENGTH = 3; /// Total amount of trailing dashes on inline-size handles.
+constexpr double INLINE_SIZE_HANDLE_THICKNESS = 1.0; /// Linethickness.
 
 
 static bool debugEnabled()
@@ -565,7 +566,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
             }
             QVector<qreal> dashPattern = {INLINE_SIZE_DASHES_PATTERN_A, INLINE_SIZE_DASHES_PATTERN_B};
             handlePainter.drawHandleLine(info->startLineLocal());
-            handlePainter.drawHandleLine(info->startLineDashes(), decorationThickness(), dashPattern, INLINE_SIZE_DASHES_PATTERN_A);
+            handlePainter.drawHandleLine(info->startLineDashes(), INLINE_SIZE_HANDLE_THICKNESS, dashPattern, INLINE_SIZE_DASHES_PATTERN_A);
 
             handlePainter.setHandleStyle(KisHandleStyle::secondarySelection());
             if (m_highlightItem == HighlightItem::InlineSizeEndHandle) {
@@ -573,7 +574,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
                                                                                      : KisHandleStyle::highlightedPrimaryHandles());
             }
             handlePainter.drawHandleLine(info->endLineLocal());
-            handlePainter.drawHandleLine(info->endLineDashes(), decorationThickness(), dashPattern, INLINE_SIZE_DASHES_PATTERN_A);
+            handlePainter.drawHandleLine(info->endLineDashes(), INLINE_SIZE_HANDLE_THICKNESS, dashPattern, INLINE_SIZE_DASHES_PATTERN_A);
         }
 
         if (m_highlightItem == HighlightItem::MoveBorder) {

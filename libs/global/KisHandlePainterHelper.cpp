@@ -88,7 +88,8 @@ void KisHandlePainterHelper::drawHandleRect(const QPointF &center, qreal radius,
 
     // temporarily set the pen width to 2 to avoid pixel shifting dropping pixels the border
     QPen *tempPen = new QPen(m_painter->pen());
-    tempPen->setWidth(4);
+    tempPen->setCosmetic(true);
+    tempPen->setWidth(4  * m_decorationThickness);
     const QPen customPen = *tempPen;
     m_painter->setPen(customPen);
 
@@ -133,7 +134,7 @@ void KisHandlePainterHelper::drawHandleLine(const QLineF &line, qreal width, QVe
     p.moveTo(m_painterTransform.map(line.p1()));
     p.lineTo(m_painterTransform.map(line.p2()));
     QPainterPathStroker s;
-    s.setWidth(width * m_decorationThickness);
+    s.setWidth(width);
     if (!dashPattern.isEmpty()) {
         s.setDashPattern(dashPattern);
         s.setDashOffset(dashOffset);

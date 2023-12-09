@@ -308,7 +308,7 @@ class comicsExporter():
                         else:
                             cropy = self.configDictionary["cropTop"]
                             croph = page.height() - self.configDictionary["cropBottom"] - cropy
-                        projection.crop(cropx, cropy, cropw, croph)
+                        projection.crop(int(cropx), int(cropy), int(cropw), int(croph))
                         projection.waitForDone()
                         qApp.processEvents()
                         # resize appropriately

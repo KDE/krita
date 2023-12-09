@@ -113,6 +113,8 @@ KisHandleStyle &KisHandleStyle::highlightedPrimaryHandlesWithSolidOutline()
         h.setCosmetic(true);
         style->handleIterations << KisHandleStyle::IterationStyle(h, highlightColor);
         h.setColor(highlightOutlineColor);
+        h.setWidth(2);
+        h.setJoinStyle(Qt::RoundJoin);
         style->lineIterations << KisHandleStyle::IterationStyle(h, Qt::NoBrush);
     }
 

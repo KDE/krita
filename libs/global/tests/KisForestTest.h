@@ -37,6 +37,8 @@ private Q_SLOTS:
     void testReversedChildIteration();
 
     void testConversionsFromEnd();
+
+    void testCopyForest();
 };
 
 #endif // KISFORESTTEST_H

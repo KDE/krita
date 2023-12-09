@@ -869,4 +869,58 @@ void KisForestTest::testConversionsFromEnd()
 #undef HIDE_UB_NOISE
 }
 
+void KisForestTest::testCopyForest()
+{
+    KisForest<int> forest;
+
+    /**
+     * 0 1
+     *   2
+     *   3 5 6
+     *       7
+     *   4
+     *   8 9
+     *     10
+     **/
+
+
+    auto it0 = forest.insert(childBegin(forest), 0);
+
+    auto it1 = forest.insert(childEnd(it0), 1);
+    auto it2 = forest.insert(childEnd(it0), 2);
+    auto it3 = forest.insert(childEnd(it0), 3);
+    auto it4 = forest.insert(childEnd(it0), 4);
+    auto it8 = forest.insert(childEnd(it0), 8);
+
+    auto it5 = forest.insert(childEnd(it3), 5);
+
+    auto it6 = forest.insert(childEnd(it5), 6);
+    auto it7 = forest.insert(childEnd(it5), 7);
+
+    auto it9 = forest.insert(childEnd(it8), 9);
+    auto it10 = forest.insert(childEnd(it8), 10);
+
+    Q_UNUSED(it1);
+    Q_UNUSED(it2);
+    Q_UNUSED(it6);
+    Q_UNUSED(it7);
+    Q_UNUSED(it4);
+    Q_UNUSED(it9);
+    Q_UNUSED(it10);
+
+    QVERIFY(testForestIteration(begin(forest),
+                                end(forest),
+                                {0, 1, 2, 3, 5, 6, 7, 4, 8, 9, 10}));
+
+
+    // TODO: copy forests here
+
+    KisForest<int> clonedForest;
+
+    QVERIFY(testForestIteration(begin(clonedForest),
+                                end(clonedForest),
+                                {0, 1, 2, 3, 5, 6, 7, 4, 8, 9, 10}));
+
+}
+
 SIMPLE_TEST_MAIN(KisForestTest)

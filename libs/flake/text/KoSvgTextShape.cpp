@@ -63,6 +63,12 @@ KoSvgTextShape::~KoSvgTextShape()
 {
 }
 
+const QString &KoSvgTextShape::defaultPlaceholderText()
+{
+    static const QString s_placeholderText = i18nc("Default text for the text shape", "Placeholder Text");
+    return s_placeholderText;
+}
+
 KoShape *KoSvgTextShape::cloneShape() const
 {
     return new KoSvgTextShape(*this);

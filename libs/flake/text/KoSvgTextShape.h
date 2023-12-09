@@ -28,6 +28,8 @@ public:
     KoSvgTextShape(const KoSvgTextShape &rhs);
     ~KoSvgTextShape() override;
 
+    static const QString &defaultPlaceholderText();
+
     enum TextRendering {
         Auto,
         OptimizeSpeed,

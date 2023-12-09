@@ -426,6 +426,7 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
         const QRect deviceUpdateRect = widgetToSurface(viewportUpdateRect).toAlignedRect();
         glScissor(deviceUpdateRect.x(), deviceUpdateRect.y(), deviceUpdateRect.width(), deviceUpdateRect.height());
         glEnable(GL_SCISSOR_TEST);
+        glLineWidth(qMax(1, thickness));
     }
 
     // Paint the tool outline
@@ -464,7 +465,7 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
             d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, verticesBuffer.constData());
         }
 
-        glLineWidth(thickness);
+
 
         glDrawArrays(GL_LINE_STRIP, 0, verticesCount);
     }

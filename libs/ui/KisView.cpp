@@ -248,7 +248,7 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
     d->showFloatingMessage = cfg.showCanvasMessages();
     d->zoomManager.updateScreenResolution(this);
     if (d->canvas.resourceManager() && d->screenMigrationTracker.currentScreen()) {
-        int penWidth = d->screenMigrationTracker.currentScreen()->devicePixelRatio();
+        int penWidth = qRound(d->screenMigrationTracker.currentScreen()->devicePixelRatio());
         d->canvas.resourceManager()->setDecorationThickness(qMax(penWidth, 1));
     }
 

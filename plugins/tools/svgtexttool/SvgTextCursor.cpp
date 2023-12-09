@@ -367,7 +367,7 @@ void SvgTextCursor::paintDecorations(QPainter &gc, QColor selectionColor, int de
                 gc.setPen(pen);
                 gc.drawPath(d->cursorShape);
                 pen.setColor(c);
-                pen.setWidth(d->cursorWidth);
+                pen.setWidth(d->cursorWidth * decorationThickness);
                 gc.setPen(pen);
                 gc.drawPath(d->cursorShape);
 

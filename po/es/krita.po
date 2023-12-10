@@ -65,8 +65,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-09 00:40+0000\n"
-"PO-Revision-Date: 2023-11-26 00:53+0100\n"
+"POT-Creation-Date: 2023-12-10 00:40+0000\n"
+"PO-Revision-Date: 2023-12-09 18:16+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -16417,25 +16417,33 @@ msgstr ""
 "documento, el objeto de texto se convertirá al formato de Krita 5, que ya no "
 "será compatible con Krita 4.x."
 
-#: libs/flake/text/KoSvgTextShape.cpp:1040
+#: libs/flake/text/KoSvgTextShape.cpp:68
+#, fuzzy, kde-format
+#| msgctxt "Default text for the text shape"
+#| msgid "<text>Placeholder Text</text>"
+msgctxt "Default text for the text shape"
+msgid "Placeholder Text"
+msgstr "<text>Texto a introducir</text>"
+
+#: libs/flake/text/KoSvgTextShape.cpp:1046
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1042
-#: libs/flake/text/KoSvgTextShape.cpp:1050
+#: libs/flake/text/KoSvgTextShape.cpp:1048
+#: libs/flake/text/KoSvgTextShape.cpp:1056
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma de texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1048
+#: libs/flake/text/KoSvgTextShape.cpp:1054
 #, kde-format
 msgid "SVG Text"
 msgstr "Texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1062
-#: libs/flake/text/KoSvgTextShape.cpp:1077
+#: libs/flake/text/KoSvgTextShape.cpp:1068
+#: libs/flake/text/KoSvgTextShape.cpp:1083
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -39951,7 +39959,7 @@ msgstr "Abrir directorio de grabación"
 #: plugins/dockers/recorder/recorder_export.ui:178
 #, kde-format
 msgid "Used for Capture Interval calculation"
-msgstr ""
+msgstr "Usado para calcular el intervalo de captura"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spinRate)
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinLastFrameSec)
@@ -39985,7 +39993,7 @@ msgstr "FPS de la entrada:"
 #: plugins/dockers/recorder/recorder_export.ui:259
 #, kde-format
 msgid "Use the same rate for Input FPS and Video FPS"
-msgstr ""
+msgstr "Usar la misma velocidad para los FPS de entrada y los FPS del vídeo"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFps)
 #: plugins/dockers/recorder/recorder_export.ui:289
@@ -40293,11 +40301,10 @@ msgstr "Calidad:"
 #. i18n: Please do not remove the spaces after the label text. It ensures to fix the column width if the label text of `labelRate` is set to an other value for RealTimeCaptureMode switched on.
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
 #: plugins/dockers/recorder/recorderdocker.ui:225
-#, fuzzy, kde-format
-#| msgid "Resolution:"
+#, kde-format
 msgctxt "Resolution for recorded frames"
 msgid "Resolution:         "
-msgstr "Resolución:"
+msgstr "Resolución:         "
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboResolution)
 #: plugins/dockers/recorder/recorderdocker.ui:248
@@ -40328,18 +40335,15 @@ msgstr "Formato:"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinThreads)
 #: plugins/dockers/recorder/recorderdocker.ui:304
 #: plugins/dockers/recorder/recorderdocker.ui:326
-#, fuzzy, kde-format
-#| msgid ""
-#| "Please choose the language which should be used for this application:"
+#, kde-format
 msgid "Number of threads, which should be used for recording"
-msgstr "Por favor, escoja el idioma que se debe usar para esta aplicación:"
+msgstr "Número de hilos que se deben usar para grabar"
 
 #. i18n: ectx: property (text), widget (QLabel, labelThreads)
 #: plugins/dockers/recorder/recorderdocker.ui:335
-#, fuzzy, kde-format
-#| msgid "Spread:"
+#, kde-format
 msgid "Threads:"
-msgstr "Extender:"
+msgstr "Hilos:"
 
 #. i18n: Tooltip for check box
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxRealTimeCaptureMode)
@@ -40349,12 +40353,15 @@ msgid ""
 "Calculate the Capture Interval from the Video FPS export settings.\n"
 "Please handle with care, may cause performance issues."
 msgstr ""
+"Calcular el intervalo de captura a partir de las preferencias de exportación "
+"de los FPS del vídeo.\n"
+"Úselo con cuidado, ya que puede causar problemas de rendimiento."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxRealTimeCaptureMode)
 #: plugins/dockers/recorder/recorderdocker.ui:348
 #, kde-format
 msgid "Real Time Capture mode"
-msgstr ""
+msgstr "Modo de captura en tiempo real"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxRecordIsolateMode)
 #: plugins/dockers/recorder/recorderdocker.ui:356
@@ -40443,15 +40450,13 @@ msgstr ""
 "en el rendimiento."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:184
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "FPS del vídeo:"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:193
-#, fuzzy, kde-format
-#| msgid "Capture interval:"
+#, kde-format
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "Intervalo de captura:"
@@ -40499,7 +40504,7 @@ msgstr "REC"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:313
 #, kde-format
 msgid "Active recording with %1 of %2 available threads"
-msgstr ""
+msgstr "Grabación activa con %1 de %2 hilos disponibles"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:313
 #, kde-format
@@ -40514,22 +40519,37 @@ msgid ""
 "Please be aware, that a number greater than %1 probably won't give you any "
 "performance boost."
 msgstr ""
+"Definir el número de hilos para grabación.\n"
+"El número de hilos excede el número máximo ideal de la configuración de su "
+"hardware.\n"
+"Tenga en cuenta que es probable que un número superior a %1 no proporcione "
+"ningún aumento de rendimiento."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:348
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Set the number of recording threads.\n"
+#| "Accordingly to your hardware setup you should record with no more than %1 "
+#| "threads.\n"
+#| "You can play around with one ore two more threads, but keep an eye on "
+#| "your overall system performance."
 msgid ""
 "Set the number of recording threads.\n"
 "Accordingly to your hardware setup you should record with no more than %1 "
 "threads.\n"
-"You can play around with one ore two more threads, but keep an eye on your "
+"You can play around with one or two more threads, but keep an eye on your "
 "overall system performance."
 msgstr ""
+"Definir el número de hilos para grabación.\n"
+"Según la configuración de su hardware, debería grabar con no más de %1 "
+"hilos.\n"
+"Puede probar con uno o dos hilos más, aunque debería vigilar el rendimiento "
+"general del sistema."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:353
-#, fuzzy, kde-format
-#| msgid "Set the angle of the light source"
+#, kde-format
 msgid "Set the number of threads using during record."
-msgstr "Establecer el ángulo de la fuente de luz"
+msgstr "Definir el número de hilos que se usan durante la grabación."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:361
 #, kde-format
@@ -40540,7 +40560,7 @@ msgstr "Grabadora"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:440
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
-msgstr ""
+msgstr "Su sistema no es lo suficientemente eficiente para esta función"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:581
 #, kde-format
@@ -40568,12 +40588,11 @@ msgstr ""
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
+"Es probable que Krita no haya podido detener la grabadora. Pruebe a "
+"reiniciar Krita."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:714
-#, fuzzy, kde-format
-#| msgid ""
-#| "Low performance warning. The recorder is not able to write all the frames "
-#| "in time. Try increasing the capture interval."
+#, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time during Real Time Capture mode.\n"
@@ -40581,13 +40600,12 @@ msgid ""
 "filtering in the canvas acceleration settings."
 msgstr ""
 "Advertencia de bajo rendimiento. La grabadora no puede escribir todos los "
-"fotogramas a tiempo. Intente aumentar el intervalo de captura."
+"fotogramas a tiempo durante el modo de captura en tiempo real.\n"
+"Pruebe a reducir la velocidad de la exportación de ffmpeg o el filtro de "
+"escalado en las preferencias de aceleración del lienzo."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:716
-#, fuzzy, kde-format
-#| msgid ""
-#| "Low performance warning. The recorder is not able to write all the frames "
-#| "in time. Try increasing the capture interval."
+#, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time.\n"
@@ -40595,7 +40613,9 @@ msgid ""
 "canvas acceleration settings."
 msgstr ""
 "Advertencia de bajo rendimiento. La grabadora no puede escribir todos los "
-"fotogramas a tiempo. Intente aumentar el intervalo de captura."
+"fotogramas a tiempo.\n"
+"Pruebe a aumentar el intervalo de captura o a reducir el filtro de escalado "
+"en las preferencias de aceleración del lienzo."
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
 #, kde-format

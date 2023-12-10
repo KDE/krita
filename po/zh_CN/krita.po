@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-09 00:40+0000\n"
-"PO-Revision-Date: 2023-11-25 02:28\n"
+"POT-Creation-Date: 2023-12-10 00:40+0000\n"
+"PO-Revision-Date: 2023-12-09 09:26\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -16311,25 +16311,33 @@ msgstr ""
 "此图像包含在 Krita 4.x 中创建的矢量文字对象。它们将在保存时转换为 Krita 5 格"
 "式。转换后的文字对象将不再兼容 Krita 4.x。"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1040
+#: libs/flake/text/KoSvgTextShape.cpp:68
+#, fuzzy, kde-format
+#| msgctxt "Default text for the text shape"
+#| msgid "<text>Placeholder Text</text>"
+msgctxt "Default text for the text shape"
+msgid "Placeholder Text"
+msgstr "<text>请替换此段文字为你的文字。</text>"
+
+#: libs/flake/text/KoSvgTextShape.cpp:1046
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1042
-#: libs/flake/text/KoSvgTextShape.cpp:1050
+#: libs/flake/text/KoSvgTextShape.cpp:1048
+#: libs/flake/text/KoSvgTextShape.cpp:1056
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 文字形状"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1048
+#: libs/flake/text/KoSvgTextShape.cpp:1054
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1062
-#: libs/flake/text/KoSvgTextShape.cpp:1077
+#: libs/flake/text/KoSvgTextShape.cpp:1068
+#: libs/flake/text/KoSvgTextShape.cpp:1083
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20491,7 +20499,7 @@ msgstr "导入动画 - 视频"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #, kde-format
 msgid "FFMpeg not found! Please add a path to FFMpeg in the \"Advanced\" tab"
-msgstr "FFmpeg 未找到。请在“高级”选项卡添加 FFmpeg 所在的路径"
+msgstr "FFmpeg 未找到。请在“高级”标签页添加 FFmpeg 所在的路径"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:81
 #, kde-format
@@ -39888,7 +39896,7 @@ msgid ""
 "Set the number of recording threads.\n"
 "Accordingly to your hardware setup you should record with no more than %1 "
 "threads.\n"
-"You can play around with one ore two more threads, but keep an eye on your "
+"You can play around with one or two more threads, but keep an eye on your "
 "overall system performance."
 msgstr ""
 
@@ -58682,7 +58690,7 @@ msgstr "左对齐文字"
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:65
 #, kde-format
 msgid "Anchor text to the middle."
-msgstr "居中文字。"
+msgstr "居中文字"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:88
@@ -58694,35 +58702,31 @@ msgstr "右对齐文字"
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:131
 #, kde-format
 msgid "Text flows horizontal, top to bottom."
-msgstr ""
+msgstr "横排文字 (从上到下换行)"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:157
 #, kde-format
 msgid "Text flows vertical, right to left."
-msgstr ""
+msgstr "竖排文字 (从右到左换行)"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:183
 #, kde-format
 msgid "Text flows vertical, left to right."
-msgstr ""
+msgstr "竖排文字 (从左到右换行)"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:216
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Left Edge Detection"
+#, kde-format
 msgid "Left to right text direction."
-msgstr "左边缘检测"
+msgstr "从左到右书写"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:242
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Right Edge Detection"
+#, kde-format
 msgid "Right to left text direction."
-msgstr "右边缘检测"
+msgstr "从右到左书写"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:286
@@ -60267,6 +60271,3 @@ msgstr "参考图像工具"
 
 #~ msgid "Recorder is active"
 #~ msgstr "录像工具正在截图"
-
-#~ msgid "Vertical Text Layout"
-#~ msgstr "竖排文字版式"

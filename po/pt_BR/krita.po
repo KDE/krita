@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-09 00:40+0000\n"
+"POT-Creation-Date: 2023-12-10 00:40+0000\n"
 "PO-Revision-Date: 2023-11-14 11:43-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -16418,25 +16418,33 @@ msgstr ""
 "o documento, o objeto de texto será convertido para o formato do Krita 5 que "
 "não será mais compatível com o Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1040
+#: libs/flake/text/KoSvgTextShape.cpp:68
+#, fuzzy, kde-format
+#| msgctxt "Default text for the text shape"
+#| msgid "<text>Placeholder Text</text>"
+msgctxt "Default text for the text shape"
+msgid "Placeholder Text"
+msgstr "<text>Texto de substituição</text>"
+
+#: libs/flake/text/KoSvgTextShape.cpp:1046
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1042
-#: libs/flake/text/KoSvgTextShape.cpp:1050
+#: libs/flake/text/KoSvgTextShape.cpp:1048
+#: libs/flake/text/KoSvgTextShape.cpp:1056
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma de texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1048
+#: libs/flake/text/KoSvgTextShape.cpp:1054
 #, kde-format
 msgid "SVG Text"
 msgstr "Texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1062
-#: libs/flake/text/KoSvgTextShape.cpp:1077
+#: libs/flake/text/KoSvgTextShape.cpp:1068
+#: libs/flake/text/KoSvgTextShape.cpp:1083
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -40767,7 +40775,7 @@ msgid ""
 "Set the number of recording threads.\n"
 "Accordingly to your hardware setup you should record with no more than %1 "
 "threads.\n"
-"You can play around with one ore two more threads, but keep an eye on your "
+"You can play around with one or two more threads, but keep an eye on your "
 "overall system performance."
 msgstr ""
 

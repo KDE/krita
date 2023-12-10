@@ -222,8 +222,18 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
 
         const bool enableDithering = cfg->getBool("dithering", true);
 
-        if (image->animationInterface()->hasAnimation()
-            && cfg->getBool("haveAnimation", true)) {
+        const bool isAnimated = [&]() {
+            if (image->animationInterface()->hasAnimation() && cfg->getBool("haveAnimation", true)) {
+                KisLayerUtils::flattenImage(image, nullptr);
+                image->waitForDone();
+
+                const KisNodeSP projection = image->rootLayer()->firstChild();
+                return projection->isAnimated() && projection->hasEditablePaintDevice();
+            }
+            return false;
+        }();
+
+        if (isAnimated) {
             // Flatten the image, projections don't have keyframes.
             KisLayerUtils::flattenImage(image, nullptr);
             image->waitForDone();

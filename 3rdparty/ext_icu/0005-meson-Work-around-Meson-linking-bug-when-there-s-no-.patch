@@ -1,7 +1,7 @@
-From bf65001b903cb38641511b5457d3c58427988b9d Mon Sep 17 00:00:00 2001
+From b27004875781ecd59c631507121a81e87f0d11dd Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Sun, 20 Nov 2022 14:09:06 -0300
-Subject: [PATCH 8/9] meson: Work around Meson linking bug when there's no C
+Subject: [PATCH 5/7] meson: Work around Meson linking bug when there's no C
  object present with MSVC
 
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 8/9] meson: Work around Meson linking bug when there's no C
  1 file changed, 5 insertions(+)
 
 diff --git a/source/data/meson.build b/source/data/meson.build
-index 30238df..0cbb9b7 100644
+index 25dfd91..4a1bba5 100644
 --- a/source/data/meson.build
 +++ b/source/data/meson.build
-@@ -45,6 +45,11 @@ icudata_asm = custom_target(
+@@ -56,6 +56,11 @@ icudata_asm = custom_target(
  
  sources = [icudata_asm]
  
@@ -25,5 +25,5 @@ index 30238df..0cbb9b7 100644
  
  icudata_exports = custom_target(
 -- 
-2.37.1.windows.1
+2.24.1.windows.2
 

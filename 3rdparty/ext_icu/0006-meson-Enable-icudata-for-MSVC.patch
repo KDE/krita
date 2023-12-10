@@ -1,21 +1,21 @@
-From 385f5c8c95a1de06ee1742eae0228d63e1a59dac Mon Sep 17 00:00:00 2001
+From d7ca1a58606094cde49e5615f614acc6c7cd173b Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Mon, 21 Nov 2022 10:30:59 -0300
-Subject: [PATCH 9/9] meson: Enable icudata for MSVC
+Subject: [PATCH 6/7] meson: Enable icudata for MSVC
 
 ---
- source/data/meson.build | 28 +++++++++++++---------------
- 1 file changed, 13 insertions(+), 15 deletions(-)
+ source/data/meson.build | 32 +++++++++++++++-----------------
+ 1 file changed, 15 insertions(+), 17 deletions(-)
 
 diff --git a/source/data/meson.build b/source/data/meson.build
-index 0cbb9b7..9e020d9 100644
+index 4a1bba5..b175771 100644
 --- a/source/data/meson.build
 +++ b/source/data/meson.build
-@@ -68,21 +68,19 @@ if host_machine.system() == 'windows'
-   )
+@@ -74,23 +74,21 @@ if host_machine.system() == 'windows'
+   sources += windows.compile_resources('misc/icudata.rc', include_directories: incdir)
  endif
  
--if cpp.get_id() != 'msvc'
+-if cpp.get_argument_syntax() != 'msvc'
 -  icudata = library(
 -    icudata_name,
 -    sources,
@@ -34,9 +34,13 @@ index 0cbb9b7..9e020d9 100644
 +)
  
 -  icudata_dep = declare_dependency(
+-    link_with: icudata,
+-    include_directories: incdir,
 -    compile_args: usage_args,
 -  )
 +icudata_dep = declare_dependency(
++  link_with: icudata,
++  include_directories: incdir,
 +  compile_args: usage_args,
 +)
  
@@ -47,5 +51,5 @@ index 0cbb9b7..9e020d9 100644
 +  meson.override_dependency('icu-data', icudata_dep)
  endif
 -- 
-2.37.1.windows.1
+2.24.1.windows.2
 

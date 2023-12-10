@@ -328,7 +328,12 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
                         }
                     }
 
-                    const QImage imageOut = dst->convertToQImage(nullptr, 0, 0, bounds.width(), bounds.height())
+                    // Convert to sRGB for non-RGBA color model
+                    const KoColorProfile *imageProfile = (dst->colorSpace()->colorModelId() == RGBAColorModelID)
+                        ? dev->colorSpace()->profile()
+                        : nullptr;
+
+                    const QImage imageOut = dst->convertToQImage(imageProfile, 0, 0, bounds.width(), bounds.height())
                                                 .convertToFormat(QImage::Format_RGBA8888);
 
                     return imageOut;
@@ -439,7 +444,12 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
                     }
                 }
 
-                const QImage imageOut = dst->convertToQImage(nullptr, 0, 0, bounds.width(), bounds.height())
+                // Convert to sRGB for non-RGBA color model
+                const KoColorProfile *imageProfile = (dst->colorSpace()->colorModelId() == RGBAColorModelID)
+                    ? document->savingImage()->projection()->colorSpace()->profile()
+                    : nullptr;
+
+                const QImage imageOut = dst->convertToQImage(imageProfile, 0, 0, bounds.width(), bounds.height())
                                             .convertToFormat(QImage::Format_RGBA8888);
 
                 return imageOut;

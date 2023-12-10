@@ -19,6 +19,7 @@
 #include <KisDocument.h>
 #include <KisImportExportErrorCode.h>
 #include <KoColorModelStandardIds.h>
+#include <KoColorProfile.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoDialog.h>
 #include <kis_group_layer.h>
@@ -68,6 +69,9 @@ KisImportExportErrorCode KisWebPImport::convert(KisDocument *document,
     const uint32_t bg = WebPDemuxGetI(demux, WEBP_FF_BACKGROUND_COLOR);
 
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *imageColorSpace = nullptr;
+
+    bool isRgba = true;
 
     {
         WebPChunkIterator chunk_iter;
@@ -84,13 +88,34 @@ KisImportExportErrorCode KisWebPImport::convert(KisDocument *document,
                         RGBAColorModelID.id(),
                         Integer8BitsColorDepthID.id(),
                         iccProfile);
-                colorSpace = KoColorSpaceRegistry::instance()->colorSpace(
+                imageColorSpace = KoColorSpaceRegistry::instance()->colorSpace(
                     RGBAColorModelID.id(),
                     Integer8BitsColorDepthID.id(),
                     profile);
+
+                // Assign as non-RGBA color space to convert it back later
+                if (!imageColorSpace) {
+                    const QString colId = profile->colorModelID();
+                    const KoColorProfile *cProfile =
+                        KoColorSpaceRegistry::instance()->createColorProfile(
+                            colId,
+                            Integer8BitsColorDepthID.id(),
+                            iccProfile);
+                    imageColorSpace = KoColorSpaceRegistry::instance()->colorSpace(
+                        colId,
+                        Integer8BitsColorDepthID.id(),
+                        cProfile);
+                    if (imageColorSpace) {
+                        isRgba = false;
+                    }
+                }
             }
         }
         WebPDemuxReleaseChunkIterator(&chunk_iter);
+    }
+
+    if (isRgba && imageColorSpace) {
+        colorSpace = imageColorSpace;
     }
 
     const KoColor bgColor(
@@ -304,6 +329,10 @@ KisImportExportErrorCode KisWebPImport::convert(KisDocument *document,
     WebPDemuxDelete(demux);
 
     image->addNode(layer.data(), image->rootLayer().data());
+
+    if (!isRgba) {
+        image->convertImageColorSpace(imageColorSpace, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    }
 
     document->setCurrentImage(image);
 

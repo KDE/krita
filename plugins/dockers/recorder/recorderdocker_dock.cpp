@@ -350,7 +350,7 @@ public:
         } else {
             ui->spinThreads->setPalette(threadsSpinPalette);
             ui->sliderThreads->setPalette(threadsSliderPalette);
-            toolTipText = i18n("Set the number of threads using during record.");
+            toolTipText = i18n("Set the number of threads to be used for recording.");
         }
         ui->spinThreads->setToolTip(toolTipText);
         ui->sliderThreads->setToolTip(toolTipText);

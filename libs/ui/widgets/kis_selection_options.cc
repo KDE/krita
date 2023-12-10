@@ -196,7 +196,8 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     m_d->sliderFeatherSelection->setPrefix(
         i18nc("The 'feather' spinbox prefix in selection tools options",
               "Feather: "));
-    m_d->sliderFeatherSelection->setRange(0, 40);
+    m_d->sliderFeatherSelection->setRange(0, 400);
+    m_d->sliderFeatherSelection->setSoftRange(0, 40);
     m_d->sliderFeatherSelection->setSuffix(i18n(" px"));
 
     m_d->optionButtonStripReference = new KisOptionButtonStrip;

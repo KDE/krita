@@ -487,7 +487,8 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     containerGrow->setOrientation(Qt::Horizontal);
     m_sliderFeather = new KisSliderSpinBox;
     m_sliderFeather->setPrefix(i18nc("The 'feather' spinbox prefix in enclose and fill tool options", "Feather: "));
-    m_sliderFeather->setRange(0, 40);
+    m_sliderFeather->setRange(0, 400);
+    m_sliderFeather->setSoftRange(0, 40);
     m_sliderFeather->setSuffix(i18n(" px"));
 
     KisOptionButtonStrip *optionButtonStripReference = new KisOptionButtonStrip;

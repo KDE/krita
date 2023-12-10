@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-27 02:25+0000\n"
-"PO-Revision-Date: 2023-11-25 02:32\n"
+"PO-Revision-Date: 2023-12-09 09:29\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -20417,7 +20417,7 @@ msgstr "导入动画 - 视频"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #, kde-format
 msgid "FFMpeg not found! Please add a path to FFMpeg in the \"Advanced\" tab"
-msgstr "FFmpeg 未找到。请在“高级”选项卡添加 FFmpeg 所在的路径"
+msgstr "FFmpeg 未找到。请在“高级”标签页添加 FFmpeg 所在的路径"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:81
 #, kde-format
@@ -58071,7 +58071,7 @@ msgstr "左对齐文字"
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:187
 #, kde-format
 msgid "Anchor text to the middle."
-msgstr "居中文字。"
+msgstr "居中文字"
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:196
 #, kde-format

@@ -30,13 +30,11 @@ public:
           canvas(c),
           tree(4, 2),
           q(shapeManager),
-          shapeInterface(shapeManager),
-          updateCompressor(new KisThreadSafeSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE))
+          shapeInterface(shapeManager)
     {
     }
 
     ~Private() {
-        updateCompressor->deleteLater();
         delete selection;
     }
 
@@ -65,7 +63,6 @@ public:
     QMutex shapesMutex;
     QMutex treeMutex;
 
-    KisThreadSafeSignalCompressor *updateCompressor;
     QRectF compressedUpdate;
     QSet<const KoShape*> compressedUpdatedShapes;
 

@@ -37,6 +37,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QTimer>
+#include <QThread>
 #include <FlakeDebug.h>
 
 #include "kis_painting_tweaks.h"
@@ -322,13 +323,7 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &sha
     connect(d->selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
     setShapes(shapes);
 
-    /**
-     * Shape manager uses signal compressors with timers, therefore
-     * it might handle queued signals, therefore it should belong
-     * to the GUI thread.
-     */
-    this->moveToThread(qApp->thread());
-    connect(d->updateCompressor, SIGNAL(timeout()), this, SLOT(forwardCompressedUpdate()));
+    connect(this, SIGNAL(forwardUpdate()), this, SLOT(forwardCompressedUpdate()));
 }
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
@@ -337,9 +332,7 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
     Q_ASSERT(d->canvas); // not optional.
     connect(d->selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
 
-    // see a comment in another constructor
-    this->moveToThread(qApp->thread());
-    connect(d->updateCompressor, SIGNAL(timeout()), this, SLOT(forwardCompressedUpdate()));
+    connect(this, SIGNAL(forwardUpdate()), this, SLOT(forwardCompressedUpdate()));
 }
 
 void KoShapeManager::Private::unlinkFromShapesRecursively(const QList<KoShape*> &shapes)
@@ -708,7 +701,7 @@ void KoShapeManager::update(const QRectF &rect, const KoShape *shape, bool selec
         }
     }
 
-    d->updateCompressor->start();
+    emit(forwardUpdate());
 }
 
 void KoShapeManager::setUpdatesBlocked(bool value)

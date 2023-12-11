@@ -85,18 +85,25 @@ private:
 
 class ReferenceImagesCanvas : public KisShapeLayerCanvasBase
 {
+    Q_OBJECT
 public:
     ReferenceImagesCanvas(const KoColorSpace *cs, KisDefaultBoundsBaseSP defaultBounds, KisReferenceImagesLayer *parent)
         : KisShapeLayerCanvasBase(parent)
         , m_layer(parent)
         , m_fallbackProjection(new KisPaintDevice(parent, cs, defaultBounds))
-    {}
+        , m_compressor(KisThreadSafeSignalCompressor(25, KisSignalCompressor::FIRST_ACTIVE))
+    {
+        connect(&m_compressor, SIGNAL(timeout()), this, SLOT(slotAsyncRepaint()));
+    }
 
     ReferenceImagesCanvas(const ReferenceImagesCanvas &rhs, KisReferenceImagesLayer *parent)
         : KisShapeLayerCanvasBase(rhs, parent)
         , m_layer(parent)
         , m_fallbackProjection(new KisPaintDevice(*rhs.m_fallbackProjection))
-    {}
+        , m_compressor(KisThreadSafeSignalCompressor(25, KisSignalCompressor::FIRST_ACTIVE))
+    {
+        connect(&m_compressor, SIGNAL(timeout()), this, SLOT(slotAsyncRepaint()));
+    }
 
     void updateCanvas(const QRectF &rect) override
     {
@@ -104,8 +111,10 @@ public:
             return;
         }
 
-        QRectF r = viewConverter()->documentToView(rect);
-        m_layer->signalUpdate(r);
+        m_dirtyRect |= rect;
+
+        m_compressor.start();
+        m_hasUpdateInCompressor = true;
     }
 
     void forceRepaint() override
@@ -115,7 +124,7 @@ public:
 
     bool hasPendingUpdates() const override
     {
-        return false;
+        return m_hasUpdateInCompressor;
     }
 
     void rerenderAfterBeingInvisible() override {}
@@ -124,10 +133,20 @@ public:
     KisPaintDeviceSP projection() const override {
         return m_fallbackProjection;
     }
+private Q_SLOTS:
+    void slotAsyncRepaint() {
+        QRectF r = viewConverter()->documentToView(m_dirtyRect);
+        m_layer->signalUpdate(r);
+        m_dirtyRect = QRectF();
+        m_hasUpdateInCompressor = false;
+    }
 
 private:
     KisReferenceImagesLayer *m_layer;
     KisPaintDeviceSP m_fallbackProjection;
+    KisThreadSafeSignalCompressor m_compressor;
+    QRectF m_dirtyRect;
+    volatile bool m_hasUpdateInCompressor = false;
 };
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeControllerBase* shapeController, KisImageWSP image)
@@ -244,3 +263,5 @@ QColor KisReferenceImagesLayer::getPixel(QPointF position) const
 
     return QColor();
 }
+
+#include "KisReferenceImagesLayer.moc"

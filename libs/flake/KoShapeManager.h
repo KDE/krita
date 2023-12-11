@@ -267,6 +267,9 @@ Q_SIGNALS:
     /// emitted when any object changed (moved/rotated etc)
     void contentChanged();
 
+    /// Emitted upon update and used to update the canvas.
+    void forwardUpdate();
+
 private:
     KoCanvasBase *canvas();
 

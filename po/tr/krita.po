@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-10 00:40+0000\n"
-"PO-Revision-Date: 2023-12-09 21:55+0300\n"
+"POT-Creation-Date: 2023-12-11 00:40+0000\n"
+"PO-Revision-Date: 2023-12-10 13:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16178,7 +16178,7 @@ msgstr "Şekilleri Dağıt"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1251
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1252
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Şekilleri Grupla"
@@ -16272,7 +16272,7 @@ msgid "Unclip Shapes"
 msgstr "Şekilleri Kırpmayı Geri Al"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1279
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1280
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Şekillerin Gruplamasını Kaldır"
@@ -16351,32 +16351,30 @@ msgstr ""
 "çıkar."
 
 #: libs/flake/text/KoSvgTextShape.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "Default text for the text shape"
-#| msgid "<text>Placeholder Text</text>"
+#, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
-msgstr "<text>Yer Tutucu Metin</text>"
+msgstr "Yer Tutucu Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1046
+#: libs/flake/text/KoSvgTextShape.cpp:1053
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1048
-#: libs/flake/text/KoSvgTextShape.cpp:1056
+#: libs/flake/text/KoSvgTextShape.cpp:1055
+#: libs/flake/text/KoSvgTextShape.cpp:1063
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Metin Şekli"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1054
+#: libs/flake/text/KoSvgTextShape.cpp:1061
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1068
-#: libs/flake/text/KoSvgTextShape.cpp:1083
+#: libs/flake/text/KoSvgTextShape.cpp:1075
+#: libs/flake/text/KoSvgTextShape.cpp:1090
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16734,7 +16732,7 @@ msgstr "Boyut"
 #: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:303
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:70
 #: libs/ui/widgets/kis_selection_options.cc:186
-#: libs/ui/widgets/kis_selection_options.cc:200
+#: libs/ui/widgets/kis_selection_options.cc:201
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:311
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:540
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:652
@@ -16781,7 +16779,7 @@ msgstr "Boyut"
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
 #: plugins/tools/basictools/kis_tool_brush.cc:388
 #: plugins/tools/basictools/kis_tool_fill.cc:582
-#: plugins/tools/basictools/kis_tool_fill.cc:593
+#: plugins/tools/basictools/kis_tool_fill.cc:594
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:486
@@ -16793,7 +16791,7 @@ msgstr "Boyut"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:275
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:480
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:491
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:492
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
@@ -25888,8 +25886,8 @@ msgstr "Arka Plan Rengi"
 #: plugins/generators/pattern/wdgpatternoptions.ui:21
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:20
 #: plugins/paintops/libpaintop/KisTextureOptionWidget.cpp:27
-#: plugins/tools/basictools/kis_tool_fill.cc:626
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
+#: plugins/tools/basictools/kis_tool_fill.cc:627
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
 #, kde-format
 msgid "Pattern"
 msgstr "Desen"
@@ -25910,7 +25908,7 @@ msgstr "Ana Hat Yok"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbOutline)
 #: libs/ui/forms/wdggeometryoptions.ui:101
 #: plugins/paintops/roundmarker/KisRoundMarkerOpOptionWidget.cpp:49
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:515
 #, kde-format
 msgid "Brush"
 msgstr "Fırça"
@@ -27622,8 +27620,8 @@ msgstr "Çizgi:"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:96
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:224
-#: plugins/tools/basictools/kis_tool_fill.cc:624
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
+#: plugins/tools/basictools/kis_tool_fill.cc:625
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
 #, kde-format
 msgid "Foreground color"
 msgstr "Ön plan rengi"
@@ -27632,8 +27630,8 @@ msgstr "Ön plan rengi"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:101
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:214
-#: plugins/tools/basictools/kis_tool_fill.cc:625
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
+#: plugins/tools/basictools/kis_tool_fill.cc:626
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
 #, kde-format
 msgid "Background color"
 msgstr "Arka plan rengi"
@@ -32585,7 +32583,7 @@ msgstr "Seçim Eylemleri"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1847
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1848
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
 #, kde-format
 msgid "Transform"
@@ -34217,141 +34215,141 @@ msgctxt "The 'feather' spinbox prefix in selection tools options"
 msgid "Feather: "
 msgstr "Yumuşat:"
 
-#: libs/ui/widgets/kis_selection_options.cc:217
+#: libs/ui/widgets/kis_selection_options.cc:218
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pixel Selection"
 msgstr "Piksel Seçimi"
 
-#: libs/ui/widgets/kis_selection_options.cc:219
+#: libs/ui/widgets/kis_selection_options.cc:220
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Vector Selection"
 msgstr "Vektör Seçimi"
 
-#: libs/ui/widgets/kis_selection_options.cc:222
-#: libs/ui/widgets/kis_selection_options.cc:458
+#: libs/ui/widgets/kis_selection_options.cc:223
+#: libs/ui/widgets/kis_selection_options.cc:459
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Replace"
 msgstr "Değiştir"
 
-#: libs/ui/widgets/kis_selection_options.cc:224
-#: libs/ui/widgets/kis_selection_options.cc:473
+#: libs/ui/widgets/kis_selection_options.cc:225
+#: libs/ui/widgets/kis_selection_options.cc:474
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Intersect"
 msgstr "Kesiştir"
 
-#: libs/ui/widgets/kis_selection_options.cc:226
-#: libs/ui/widgets/kis_selection_options.cc:463
+#: libs/ui/widgets/kis_selection_options.cc:227
+#: libs/ui/widgets/kis_selection_options.cc:464
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add"
 msgstr "Ekle"
 
-#: libs/ui/widgets/kis_selection_options.cc:228
-#: libs/ui/widgets/kis_selection_options.cc:468
+#: libs/ui/widgets/kis_selection_options.cc:229
+#: libs/ui/widgets/kis_selection_options.cc:469
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Subtract"
 msgstr "Çıkar"
 
-#: libs/ui/widgets/kis_selection_options.cc:230
-#: libs/ui/widgets/kis_selection_options.cc:478
+#: libs/ui/widgets/kis_selection_options.cc:231
+#: libs/ui/widgets/kis_selection_options.cc:479
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference"
 msgstr "Simetrik Fark"
 
-#: libs/ui/widgets/kis_selection_options.cc:233
+#: libs/ui/widgets/kis_selection_options.cc:234
 #, kde-format
 msgid "Smooths the edges of the selection"
 msgstr "Seçimin kenarlarını yumuşatır"
 
-#: libs/ui/widgets/kis_selection_options.cc:235
+#: libs/ui/widgets/kis_selection_options.cc:236
 #, kde-format
 msgid "Grow or shrink the selection by the set amount"
 msgstr "Seçimi, ayarlı miktar kadar büyüt veya küçült"
 
-#: libs/ui/widgets/kis_selection_options.cc:237
-#: plugins/tools/basictools/kis_tool_fill.cc:642
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
+#: libs/ui/widgets/kis_selection_options.cc:238
+#: plugins/tools/basictools/kis_tool_fill.cc:643
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:534
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr "En karanlık veya en mat piksellerde büyümeyi durdur"
 
-#: libs/ui/widgets/kis_selection_options.cc:239
+#: libs/ui/widgets/kis_selection_options.cc:240
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr "Seçimi, küme miktarı kadar bulanıklaştır"
 
-#: libs/ui/widgets/kis_selection_options.cc:242
+#: libs/ui/widgets/kis_selection_options.cc:243
 #, kde-format
 msgid "Select regions found from the active layer"
 msgstr "Etkin katmanda bulunan bölgeleri seç"
 
-#: libs/ui/widgets/kis_selection_options.cc:244
+#: libs/ui/widgets/kis_selection_options.cc:245
 #, kde-format
 msgid "Select regions found from the merging of all layers"
 msgstr "Tüm katmanların birleştirilmesiyle bulunan bölgeleri seç"
 
-#: libs/ui/widgets/kis_selection_options.cc:246
+#: libs/ui/widgets/kis_selection_options.cc:247
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
 "Belirli renk etiketli katmanların birleştirilmesiyle bulunan bölgeleri seç"
 
-#: libs/ui/widgets/kis_selection_options.cc:254
+#: libs/ui/widgets/kis_selection_options.cc:255
 #, kde-format
 msgctxt "The 'mode' section label in selection tools options"
 msgid "Mode"
 msgstr "Kip"
 
-#: libs/ui/widgets/kis_selection_options.cc:261
+#: libs/ui/widgets/kis_selection_options.cc:262
 #, kde-format
 msgctxt "The 'action' section label in selection tools options"
 msgid "Action"
 msgstr "Eylem"
 
-#: libs/ui/widgets/kis_selection_options.cc:268
+#: libs/ui/widgets/kis_selection_options.cc:269
 #, kde-format
 msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "Başvuru"
 
-#: libs/ui/widgets/kis_selection_options.cc:277
+#: libs/ui/widgets/kis_selection_options.cc:278
 #, kde-format
 msgctxt "The 'adjustments' section label in selection tools options"
 msgid "Adjustments"
 msgstr "Ayarlamalar"
 
-#: libs/ui/widgets/kis_selection_options.cc:459
+#: libs/ui/widgets/kis_selection_options.cc:460
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Replace (%1)"
 msgstr "Değiştir (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:464
+#: libs/ui/widgets/kis_selection_options.cc:465
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add (%1)"
 msgstr "Ekle (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:469
+#: libs/ui/widgets/kis_selection_options.cc:470
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Subtract (%1)"
 msgstr "Çıkar (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:474
+#: libs/ui/widgets/kis_selection_options.cc:475
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Intersect (%1)"
 msgstr "Kesiştir (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:480
+#: libs/ui/widgets/kis_selection_options.cc:481
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference (%1)"
@@ -37105,7 +37103,7 @@ msgstr "Elips yardımcısı"
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:41
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:262
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:70
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:511
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:512
 #, kde-format
 msgid "Ellipse"
 msgstr "Elips"
@@ -38811,7 +38809,7 @@ msgstr "<b>'%1'</b> maskesini silmek istediğinizden emin misiniz?"
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:46
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:267
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:75
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:510
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:511
 #, kde-format
 msgid "Rectangle"
 msgstr "Dikdörtgen"
@@ -40305,13 +40303,7 @@ msgstr ""
 "vermeyeceğini dikkate alın."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:348
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set the number of recording threads.\n"
-#| "Accordingly to your hardware setup you should record with no more than %1 "
-#| "threads.\n"
-#| "You can play around with one ore two more threads, but keep an eye on "
-#| "your overall system performance."
+#, kde-format
 msgid ""
 "Set the number of recording threads.\n"
 "Accordingly to your hardware setup you should record with no more than %1 "
@@ -40325,8 +40317,9 @@ msgstr ""
 "başarımınızı izlediğinizden emin olun."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:353
-#, kde-format
-msgid "Set the number of threads using during record."
+#, fuzzy, kde-format
+#| msgid "Set the number of threads using during record."
+msgid "Set the number of threads to be used for recording."
 msgstr "Kayıt sırasında kullanılan iş parçacıkları sayısını seçin."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:361
@@ -57115,75 +57108,75 @@ msgctxt "The 'feather' spinbox prefix in fill tool options"
 msgid "Feather: "
 msgstr "Yumuşat:"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:617
+#: plugins/tools/basictools/kis_tool_fill.cc:618
 #, kde-format
 msgctxt "The 'reset' button in fill tool options"
 msgid "Reset"
 msgstr "Sıfırla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:620
+#: plugins/tools/basictools/kis_tool_fill.cc:621
 #, kde-format
 msgid "Fill the active selection, or the entire canvas"
 msgstr "Etkin seçimi veya bütün tuvali doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:621
+#: plugins/tools/basictools/kis_tool_fill.cc:622
 #, kde-format
 msgid "Fill a contiguous region"
 msgstr "Komşu bir bölgeyi doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:622
+#: plugins/tools/basictools/kis_tool_fill.cc:623
 #, kde-format
 msgid "Fill all regions of a similar color"
 msgstr "Tüm bölgeleri benzer bir renkle doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:627
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
+#: plugins/tools/basictools/kis_tool_fill.cc:628
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
 #, kde-format
 msgid "Set the scale of the pattern"
 msgstr "Desenin ölçeğini ayarla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:628
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
+#: plugins/tools/basictools/kis_tool_fill.cc:629
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
 #, kde-format
 msgid "Set the rotation of the pattern"
 msgstr "Desenin döndürmesini ayarla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:629
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
+#: plugins/tools/basictools/kis_tool_fill.cc:630
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr "Fırçalarınkiler yerine özel harmanlama seçenekleri ayarla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:630
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
+#: plugins/tools/basictools/kis_tool_fill.cc:631
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
 #, kde-format
 msgid "Set a custom opacity for the fill"
 msgstr "Dolgu için özel bir matlık ayarla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:631
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
+#: plugins/tools/basictools/kis_tool_fill.cc:632
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
 #, kde-format
 msgid "Set a custom blend mode for the fill"
 msgstr "Dolgu için özel bir harmanlama kipi ayarla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:633
+#: plugins/tools/basictools/kis_tool_fill.cc:634
 #, kde-format
 msgid "Fill regions similar in color to the clicked region"
 msgstr "Bölgeleri, tıklanan bölgenin rengine benzer bir renkle doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:634
+#: plugins/tools/basictools/kis_tool_fill.cc:635
 #, kde-format
 msgid "Fill all regions until a specific boundary color"
 msgstr "Tüm bölgeleri belirli bir sınır rengine dek doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:635
+#: plugins/tools/basictools/kis_tool_fill.cc:636
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
 #, kde-format
 msgid "Boundary color"
 msgstr "Sınır rengi"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:636
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
+#: plugins/tools/basictools/kis_tool_fill.cc:637
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the fill. Increasing threshold "
@@ -57192,8 +57185,8 @@ msgstr ""
 "Dolgunun renk benzerliği toleransını ayarlayın. Eşiği artırmak, doldurulacak "
 "benzer renklerin aralığını da artırır."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:637
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
+#: plugins/tools/basictools/kis_tool_fill.cc:638
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
@@ -57202,8 +57195,8 @@ msgstr ""
 "Dolgunun mat kısmının kapsamını ayarlayın. Yaymayı azaltmak, renk "
 "benzerliğine bağlı olarak dolgu alanlarının matlığını azaltır."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:638
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
+#: plugins/tools/basictools/kis_tool_fill.cc:639
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:530
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
@@ -57212,38 +57205,38 @@ msgstr ""
 "Etkin seçimin konturuna, bölgeyi doldururken bir sınır olarak davranılıp "
 "davranılmayacağını ayarla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:640
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
+#: plugins/tools/basictools/kis_tool_fill.cc:641
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
 #, kde-format
 msgid "Smooths the edges of the fill"
 msgstr "Dolgunun kenarlarını pürüzsüzleştirir"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:641
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
+#: plugins/tools/basictools/kis_tool_fill.cc:642
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
 msgstr "Dolguyu, ayarlanan miktar kadar büyüt veya küçült"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:643
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:534
+#: plugins/tools/basictools/kis_tool_fill.cc:644
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
 #, kde-format
 msgid "Blur the fill by the set amount"
 msgstr "Dolguyu, ayarlanan miktar kadar bulanıklaştır"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:645
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:536
+#: plugins/tools/basictools/kis_tool_fill.cc:646
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:537
 #, kde-format
 msgid "Fill regions found from the active layer"
 msgstr "Etkin katmandan bulunan tüm bölgeleri doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:646
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:537
+#: plugins/tools/basictools/kis_tool_fill.cc:647
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:538
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
 msgstr "Tüm katmanların birleştirilmesiyle oluşan bölgeleri doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:647
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:538
+#: plugins/tools/basictools/kis_tool_fill.cc:648
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:539
 #, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
@@ -57251,12 +57244,12 @@ msgstr ""
 "Katmanların belirli renk etiketleriyle birleştirilmesinden bulunan bölgeleri "
 "doldur"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:649
+#: plugins/tools/basictools/kis_tool_fill.cc:650
 #, kde-format
 msgid "Dragging will fill regions of any color"
 msgstr "Sürüklemek, herhangi bir renkli bölgeleri dolduracaktır"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:650
+#: plugins/tools/basictools/kis_tool_fill.cc:651
 #, kde-format
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
@@ -57265,43 +57258,43 @@ msgstr ""
 "Sürükleme, yalnızca ilk bölgeye benzer renkli bölgeleri doldurur (çizgi "
 "resmi doldurmak için kullanışlıdır)"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:652
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:540
+#: plugins/tools/basictools/kis_tool_fill.cc:653
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:541
 #, kde-format
 msgid "Reset the options to their default values"
 msgstr "Seçenekleri öntanımlı değerlerine sıfırla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:661
+#: plugins/tools/basictools/kis_tool_fill.cc:662
 #, kde-format
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
 msgstr "Dolgu kipi"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:668
+#: plugins/tools/basictools/kis_tool_fill.cc:669
 #, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
 msgstr "Dolgu kaynağı"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:682
+#: plugins/tools/basictools/kis_tool_fill.cc:683
 #, kde-format
 msgctxt "The 'reference' section label in fill tool options"
 msgid "Reference"
 msgstr "Başvuru"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:691
+#: plugins/tools/basictools/kis_tool_fill.cc:692
 #, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
 msgstr "Dolgu kapsamı"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:703
+#: plugins/tools/basictools/kis_tool_fill.cc:704
 #, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
 msgstr "Ayarlamalar"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:712
+#: plugins/tools/basictools/kis_tool_fill.cc:713
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
@@ -57851,7 +57844,7 @@ msgstr "X aralığı:"
 msgid "Interval Y:"
 msgstr "Y aralığı:"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:744
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:745
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -57859,22 +57852,22 @@ msgstr ""
 "Sol tıklamak merkez çevresinde döndürürken, sağ tıklamak vurgulanan konumda "
 "döndürür."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:747
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:748
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Seçimi kırkmak için tıklayın ve sürükleyin."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:752
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Seçimi yeniden boyutlandırmak için tıklayın ve sürükleyin."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:788
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Seçimi taşımak için tıklayın ve sürükleyin."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:791
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -57882,69 +57875,69 @@ msgstr ""
 "Seçimi yeniden boyutlandırmak için tıklayın ve sürükleyin. Vurgulanmış konum "
 "için farenin orta düğmesi ile tıklayın."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:860
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:861
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "Bu araç yalnızca vektör katmanlarında çalışır. Büyük olasılıkla taşıma "
 "aracını istiyorsunuz."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1313
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1314
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Nesneyi 90° Saat Yönünde Döndür"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1317
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1318
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Nesneyi 90° Saat Yönünün Tersine Döndür"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1321
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1322
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Nesneyi 180° Döndür"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1325
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1326
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Nesneyi Yatay Yansıt"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1329
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1330
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Nesneyi Dikey Yansıt"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1334
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Nesne Dönüşümlerini Sıfırla"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1407
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1408
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Şekilleri Birleştir"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1421
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1422
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Şekilleri Kesiştir"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1431
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1432
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Şekilleri Çıkar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1476
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1477
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Şekilleri Böl"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1844
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1845
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Vektör Şekli Eylemleri"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1864
 #, kde-format
 msgid "Logical Operations"
 msgstr "Mantıksal İşlemler"
@@ -59824,28 +59817,28 @@ msgctxt "The 'feather' spinbox prefix in enclose and fill tool options"
 msgid "Feather: "
 msgstr "Yumuşat:"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:507
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:508
 #, kde-format
 msgctxt "The 'reset' button in enclose and fill tool options"
 msgid "Reset"
 msgstr "Sıfırla"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:512
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
 #, kde-format
 msgid "Bezier Curve"
 msgstr "Bézier Eğrisi"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
 #, kde-format
 msgid "Lasso"
 msgstr "Kement"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:517
 #, kde-format
 msgid "Enable to fill opposite regions instead"
 msgstr "Bunun yerine karşıt bölgeleri doldurmayı etkinleştir"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:517
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
 #, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
@@ -59853,97 +59846,97 @@ msgstr ""
 "Çevreleyen bölgenin konturuna dokunan şekillerini de doldurmak için "
 "etkinleştir"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:549
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:550
 #, kde-format
 msgctxt "The 'enclosing method' section label in enclose and fill tool options"
 msgid "Enclosing method"
 msgstr "Çevreleme yöntemi"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:556
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:557
 #, kde-format
 msgctxt "The 'reference' section label in enclose and fill tool options"
 msgid "Reference"
 msgstr "Başvuru"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:566
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:567
 #, kde-format
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
 msgstr "Hedef bölgeler"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:576
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:577
 #, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
 msgstr "Dolgu kaynağı"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:590
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:591
 #, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
 msgstr "Dolgu kapsamı"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:599
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:600
 #, kde-format
 msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
 msgstr "Ayarlamalar"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:853
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Tümü"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:856
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr "Belirli bir renk"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:859
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "Saydamlık"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:862
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
 msgstr "Belirli bir renk veya saydamlık"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:865
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
 msgstr "Belirli bir renk dışında tümü"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:868
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
 msgstr "Saydamlık dışında tümü"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:871
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
 msgstr "Belirli bir renk veya saydamlık dışında tümü"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:874
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:875
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
 msgstr "Belirli bir renk tarafından çevrelenmiş herhangi biri"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:877
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:878
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
 msgstr "Saydamlıkla çevrelenmiş herhangi biri"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:880
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:881
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"

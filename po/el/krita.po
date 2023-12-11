@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-10 00:40+0000\n"
+"POT-Creation-Date: 2023-12-11 00:40+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -16662,7 +16662,7 @@ msgstr "Κατανομή σχημάτων"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1251
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1252
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Ομαδοποίηση σχημάτων"
@@ -16760,7 +16760,7 @@ msgid "Unclip Shapes"
 msgstr "Αποδέσμευση σχημάτων"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1279
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1280
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Αναίρεση ομαδοποίησης σχημάτων"
@@ -16841,28 +16841,28 @@ msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1046
+#: libs/flake/text/KoSvgTextShape.cpp:1053
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Κείμενο"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1048
-#: libs/flake/text/KoSvgTextShape.cpp:1056
+#: libs/flake/text/KoSvgTextShape.cpp:1055
+#: libs/flake/text/KoSvgTextShape.cpp:1063
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "Text Shape"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1054
+#: libs/flake/text/KoSvgTextShape.cpp:1061
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " Κείμενο:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1068
-#: libs/flake/text/KoSvgTextShape.cpp:1083
+#: libs/flake/text/KoSvgTextShape.cpp:1075
+#: libs/flake/text/KoSvgTextShape.cpp:1090
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17224,7 +17224,7 @@ msgstr "Μέγεθος"
 #: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:303
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:70
 #: libs/ui/widgets/kis_selection_options.cc:186
-#: libs/ui/widgets/kis_selection_options.cc:200
+#: libs/ui/widgets/kis_selection_options.cc:201
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:311
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:540
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:652
@@ -17271,7 +17271,7 @@ msgstr "Μέγεθος"
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
 #: plugins/tools/basictools/kis_tool_brush.cc:388
 #: plugins/tools/basictools/kis_tool_fill.cc:582
-#: plugins/tools/basictools/kis_tool_fill.cc:593
+#: plugins/tools/basictools/kis_tool_fill.cc:594
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:486
@@ -17283,7 +17283,7 @@ msgstr "Μέγεθος"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:275
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:480
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:491
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:492
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
@@ -26656,8 +26656,8 @@ msgstr "Χρώμα φόντου"
 #: plugins/generators/pattern/wdgpatternoptions.ui:21
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:20
 #: plugins/paintops/libpaintop/KisTextureOptionWidget.cpp:27
-#: plugins/tools/basictools/kis_tool_fill.cc:626
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
+#: plugins/tools/basictools/kis_tool_fill.cc:627
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
 #, kde-format
 msgid "Pattern"
 msgstr "Μοτίβο"
@@ -26679,7 +26679,7 @@ msgstr "Χωρίς περίγραμμα"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbOutline)
 #: libs/ui/forms/wdggeometryoptions.ui:101
 #: plugins/paintops/roundmarker/KisRoundMarkerOpOptionWidget.cpp:49
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:515
 #, kde-format
 msgid "Brush"
 msgstr "Πινέλο"
@@ -28372,8 +28372,8 @@ msgstr "Γραμμή"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:96
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:224
-#: plugins/tools/basictools/kis_tool_fill.cc:624
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
+#: plugins/tools/basictools/kis_tool_fill.cc:625
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
 #, fuzzy, kde-format
 #| msgid "Foreground Color"
 msgid "Foreground color"
@@ -28383,8 +28383,8 @@ msgstr "Χρώμα προσκηνίου"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:101
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:214
-#: plugins/tools/basictools/kis_tool_fill.cc:625
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
+#: plugins/tools/basictools/kis_tool_fill.cc:626
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
 #, kde-format
 msgid "Background color"
 msgstr "Χρώμα φόντου"
@@ -33351,7 +33351,7 @@ msgstr "Διακόσμηση επιλογής"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1847
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1848
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
 #, fuzzy, kde-format
 msgid "Transform"
@@ -34822,151 +34822,151 @@ msgctxt "The 'feather' spinbox prefix in selection tools options"
 msgid "Feather: "
 msgstr "Φτερό..."
 
-#: libs/ui/widgets/kis_selection_options.cc:217
+#: libs/ui/widgets/kis_selection_options.cc:218
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Pixel Selection"
 msgstr "Απόκρυψη επιλογής"
 
-#: libs/ui/widgets/kis_selection_options.cc:219
+#: libs/ui/widgets/kis_selection_options.cc:220
 #, fuzzy, kde-format
 #| msgid "Vector Selection"
 msgctxt "@info:tooltip"
 msgid "Vector Selection"
 msgstr "Επιλογή διανύσματος"
 
-#: libs/ui/widgets/kis_selection_options.cc:222
-#: libs/ui/widgets/kis_selection_options.cc:458
+#: libs/ui/widgets/kis_selection_options.cc:223
+#: libs/ui/widgets/kis_selection_options.cc:459
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Replace"
 msgstr "Αντικατάσταση"
 
-#: libs/ui/widgets/kis_selection_options.cc:224
-#: libs/ui/widgets/kis_selection_options.cc:473
+#: libs/ui/widgets/kis_selection_options.cc:225
+#: libs/ui/widgets/kis_selection_options.cc:474
 #, fuzzy, kde-format
 #| msgid "Intersect"
 msgctxt "@info:tooltip"
 msgid "Intersect"
 msgstr "Τομή"
 
-#: libs/ui/widgets/kis_selection_options.cc:226
-#: libs/ui/widgets/kis_selection_options.cc:463
+#: libs/ui/widgets/kis_selection_options.cc:227
+#: libs/ui/widgets/kis_selection_options.cc:464
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Add"
 msgstr "Προσθήκη"
 
-#: libs/ui/widgets/kis_selection_options.cc:228
-#: libs/ui/widgets/kis_selection_options.cc:468
+#: libs/ui/widgets/kis_selection_options.cc:229
+#: libs/ui/widgets/kis_selection_options.cc:469
 #, fuzzy, kde-format
 #| msgid "Subtract"
 msgctxt "@info:tooltip"
 msgid "Subtract"
 msgstr "Αφαίρεση"
 
-#: libs/ui/widgets/kis_selection_options.cc:230
-#: libs/ui/widgets/kis_selection_options.cc:478
+#: libs/ui/widgets/kis_selection_options.cc:231
+#: libs/ui/widgets/kis_selection_options.cc:479
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference"
 msgstr "Συμμετρία"
 
-#: libs/ui/widgets/kis_selection_options.cc:233
+#: libs/ui/widgets/kis_selection_options.cc:234
 #, fuzzy, kde-format
 #| msgid "Set line width of actual selection"
 msgid "Smooths the edges of the selection"
 msgstr "Ορισμός πλάτους γραμμής πραγματιστικής επιλογής"
 
-#: libs/ui/widgets/kis_selection_options.cc:235
+#: libs/ui/widgets/kis_selection_options.cc:236
 #, fuzzy, kde-format
 #| msgid "Grow/shrink selection: "
 msgid "Grow or shrink the selection by the set amount"
 msgstr "Αύξηση/μείωση επιλογής: "
 
-#: libs/ui/widgets/kis_selection_options.cc:237
-#: plugins/tools/basictools/kis_tool_fill.cc:642
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
+#: libs/ui/widgets/kis_selection_options.cc:238
+#: plugins/tools/basictools/kis_tool_fill.cc:643
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:534
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:239
+#: libs/ui/widgets/kis_selection_options.cc:240
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:242
+#: libs/ui/widgets/kis_selection_options.cc:243
 #, fuzzy, kde-format
 #| msgid "Select the blending mode for the layer."
 msgid "Select regions found from the active layer"
 msgstr "Επιλέξτε τη λειτουργία ανάμειξης για το στρώμα."
 
-#: libs/ui/widgets/kis_selection_options.cc:244
+#: libs/ui/widgets/kis_selection_options.cc:245
 #, fuzzy, kde-format
 msgid "Select regions found from the merging of all layers"
 msgstr "Επιλογή ενός χρώματος από την εικόνα ή το τρέχον στρώμα"
 
-#: libs/ui/widgets/kis_selection_options.cc:246
+#: libs/ui/widgets/kis_selection_options.cc:247
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:254
+#: libs/ui/widgets/kis_selection_options.cc:255
 #, fuzzy, kde-format
 #| msgid "Mode"
 msgctxt "The 'mode' section label in selection tools options"
 msgid "Mode"
 msgstr "Λειτουργία"
 
-#: libs/ui/widgets/kis_selection_options.cc:261
+#: libs/ui/widgets/kis_selection_options.cc:262
 #, fuzzy, kde-format
 msgctxt "The 'action' section label in selection tools options"
 msgid "Action"
 msgstr "Ενέργεια:"
 
-#: libs/ui/widgets/kis_selection_options.cc:268
+#: libs/ui/widgets/kis_selection_options.cc:269
 #, fuzzy, kde-format
 #| msgid "References"
 msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "Παραπομπές"
 
-#: libs/ui/widgets/kis_selection_options.cc:277
+#: libs/ui/widgets/kis_selection_options.cc:278
 #, fuzzy, kde-format
 msgctxt "The 'adjustments' section label in selection tools options"
 msgid "Adjustments"
 msgstr "Προσα&ρμογή HSV..."
 
-#: libs/ui/widgets/kis_selection_options.cc:459
+#: libs/ui/widgets/kis_selection_options.cc:460
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Replace (%1)"
 msgstr "Αντικατάσταση"
 
-#: libs/ui/widgets/kis_selection_options.cc:464
+#: libs/ui/widgets/kis_selection_options.cc:465
 #, fuzzy, kde-format
 #| msgid "Auto"
 msgctxt "@info:tooltip"
 msgid "Add (%1)"
 msgstr "Αυτόματο"
 
-#: libs/ui/widgets/kis_selection_options.cc:469
+#: libs/ui/widgets/kis_selection_options.cc:470
 #, fuzzy, kde-format
 #| msgid "Subtract"
 msgctxt "@info:tooltip"
 msgid "Subtract (%1)"
 msgstr "Αφαίρεση"
 
-#: libs/ui/widgets/kis_selection_options.cc:474
+#: libs/ui/widgets/kis_selection_options.cc:475
 #, fuzzy, kde-format
 #| msgid "Intersect"
 msgctxt "@info:tooltip"
 msgid "Intersect (%1)"
 msgstr "Τομή"
 
-#: libs/ui/widgets/kis_selection_options.cc:480
+#: libs/ui/widgets/kis_selection_options.cc:481
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference (%1)"
@@ -37707,7 +37707,7 @@ msgstr "Βοηθός έλλειψης"
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:41
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:262
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:70
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:511
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:512
 #, kde-format
 msgid "Ellipse"
 msgstr "Έλλειψη"
@@ -39492,7 +39492,7 @@ msgstr ""
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:46
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:267
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:75
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:510
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:511
 #, kde-format
 msgid "Rectangle"
 msgstr "Ορθογώνιο"
@@ -41034,7 +41034,7 @@ msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:353
 #, fuzzy, kde-format
-msgid "Set the number of threads using during record."
+msgid "Set the number of threads to be used for recording."
 msgstr "Επιλογή μιας περιοχής της εικόνας με καμπύλες."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:361
@@ -58364,188 +58364,188 @@ msgctxt "The 'feather' spinbox prefix in fill tool options"
 msgid "Feather: "
 msgstr "Φτερό..."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:617
+#: plugins/tools/basictools/kis_tool_fill.cc:618
 #, fuzzy, kde-format
 #| msgid "Reset"
 msgctxt "The 'reset' button in fill tool options"
 msgid "Reset"
 msgstr "Επαναφορά"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:620
+#: plugins/tools/basictools/kis_tool_fill.cc:621
 #, fuzzy, kde-format
 msgid "Fill the active selection, or the entire canvas"
 msgstr "Αποτυχία δημιουργίας ενέργειας."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:621
+#: plugins/tools/basictools/kis_tool_fill.cc:622
 #, fuzzy, kde-format
 msgid "Fill a contiguous region"
 msgstr "Εισαγωγή ονόματος"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:622
+#: plugins/tools/basictools/kis_tool_fill.cc:623
 #, fuzzy, kde-format
 msgid "Fill all regions of a similar color"
 msgstr "Γέμισμα με χρώμα φόντου"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:627
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
+#: plugins/tools/basictools/kis_tool_fill.cc:628
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
 #, fuzzy, kde-format
 msgid "Set the scale of the pattern"
 msgstr "Επιλέξτε τη λειτουργία ανάμειξης για το στρώμα."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:628
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
+#: plugins/tools/basictools/kis_tool_fill.cc:629
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
 #, fuzzy, kde-format
 msgid "Set the rotation of the pattern"
 msgstr "Επιλέξτε τη λειτουργία ανάμειξης για το στρώμα."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:629
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
+#: plugins/tools/basictools/kis_tool_fill.cc:630
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:630
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
+#: plugins/tools/basictools/kis_tool_fill.cc:631
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
 #, fuzzy, kde-format
 msgid "Set a custom opacity for the fill"
 msgstr "Επιλέξτε τη λειτουργία ανάμειξης για το στρώμα."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:631
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
+#: plugins/tools/basictools/kis_tool_fill.cc:632
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
 #, fuzzy, kde-format
 msgid "Set a custom blend mode for the fill"
 msgstr "Επιλέξτε τη λειτουργία ανάμειξης για το στρώμα."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:633
+#: plugins/tools/basictools/kis_tool_fill.cc:634
 #, kde-format
 msgid "Fill regions similar in color to the clicked region"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:634
+#: plugins/tools/basictools/kis_tool_fill.cc:635
 #, fuzzy, kde-format
 msgid "Fill all regions until a specific boundary color"
 msgstr "Γέμισμα με χρώμα φόντου"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:635
+#: plugins/tools/basictools/kis_tool_fill.cc:636
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
 #, fuzzy, kde-format
 #| msgid "Background color"
 msgid "Boundary color"
 msgstr "Χρώμα φόντου"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:636
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
+#: plugins/tools/basictools/kis_tool_fill.cc:637
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the fill. Increasing threshold "
 "increases the range of similar colors to be filled."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:637
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
+#: plugins/tools/basictools/kis_tool_fill.cc:638
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
 "decreases opacity of fill areas depending on color similarity."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:638
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
+#: plugins/tools/basictools/kis_tool_fill.cc:639
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:530
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when filling the region"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:640
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
+#: plugins/tools/basictools/kis_tool_fill.cc:641
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
 #, kde-format
 msgid "Smooths the edges of the fill"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:641
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
+#: plugins/tools/basictools/kis_tool_fill.cc:642
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:643
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:534
+#: plugins/tools/basictools/kis_tool_fill.cc:644
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
 #, kde-format
 msgid "Blur the fill by the set amount"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:645
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:536
+#: plugins/tools/basictools/kis_tool_fill.cc:646
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:537
 #, fuzzy, kde-format
 msgid "Fill regions found from the active layer"
 msgstr "Γέμισμα με χρώμα φόντου"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:646
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:537
+#: plugins/tools/basictools/kis_tool_fill.cc:647
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:538
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:647
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:538
+#: plugins/tools/basictools/kis_tool_fill.cc:648
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:539
 #, fuzzy, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
 msgstr "Γέμισμα με χρώμα φόντου"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:649
+#: plugins/tools/basictools/kis_tool_fill.cc:650
 #, fuzzy, kde-format
 msgid "Dragging will fill regions of any color"
 msgstr "Γέμισμα με χρώμα φόντου"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:650
+#: plugins/tools/basictools/kis_tool_fill.cc:651
 #, kde-format
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
 "(useful for filling line-art)"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:652
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:540
+#: plugins/tools/basictools/kis_tool_fill.cc:653
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:541
 #, fuzzy, kde-format
 msgid "Reset the options to their default values"
 msgstr "Επαναφορά σε προκαθορισμένο"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:661
+#: plugins/tools/basictools/kis_tool_fill.cc:662
 #, fuzzy, kde-format
 #| msgid "Simple mode"
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
 msgstr "Απλή λειτουργία"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:668
+#: plugins/tools/basictools/kis_tool_fill.cc:669
 #, fuzzy, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
 msgstr "&Πόροι"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:682
+#: plugins/tools/basictools/kis_tool_fill.cc:683
 #, fuzzy, kde-format
 #| msgid "References"
 msgctxt "The 'reference' section label in fill tool options"
 msgid "Reference"
 msgstr "Παραπομπές"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:691
+#: plugins/tools/basictools/kis_tool_fill.cc:692
 #, fuzzy, kde-format
 #| msgid "&Image Selection"
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
 msgstr "&Επιλογή εικόνας"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:703
+#: plugins/tools/basictools/kis_tool_fill.cc:704
 #, fuzzy, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
 msgstr "Προσα&ρμογή HSV..."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:712
+#: plugins/tools/basictools/kis_tool_fill.cc:713
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
@@ -59099,7 +59099,7 @@ msgstr "Βήμα ολοκλήρωσης:"
 msgid "Interval Y:"
 msgstr "Βήμα ολοκλήρωσης:"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:744
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:745
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -59107,22 +59107,22 @@ msgstr ""
 "Αριστερό κλικ για περιστροφή γύρω από το κέντρο, δεξί κλικ γύρω από την "
 "τονισμένη θέση."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:747
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:748
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Κάντε κλικ και σύρετε για τη διάτμηση της επιλογής."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:752
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Κάντε κλικ και σύρετε για την κλιμάκωση της επιλογής."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:788
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Κάντε κλικ και σύρετε για τη μετακίνηση της επιλογής."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:791
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -59130,12 +59130,12 @@ msgstr ""
 "Κάντε κλικ και σύρετε για τη μετακίνηση της επιλογής. Μεσαίο κλικ για τον "
 "ορισμό της τονισμένης θέσης."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:860
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:861
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1313
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1314
 #, fuzzy
 #| msgctxt "rotate image 90 degrees to the left"
 #| msgid "Rotate Image 90° to the Left"
@@ -59143,7 +59143,7 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Περιστροφή εικόνας 90° προς τα αριστερά"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1317
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1318
 #, fuzzy
 #| msgctxt "rotate image 90 degrees to the left"
 #| msgid "Rotate Image 90° to the Left"
@@ -59151,25 +59151,25 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Περιστροφή εικόνας 90° προς τα αριστερά"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1321
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1322
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Περιστροφή στρώματος 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1325
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1326
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Καθρεπτισμός οριζόντια"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1329
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1330
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Καθρεπτισμός κατακόρυφα"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1333
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1334
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Reset Transformations"
@@ -59177,7 +59177,7 @@ msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Μηδενισμός μετασχηματισμών"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1407
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1408
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Unclip Shapes"
@@ -59185,33 +59185,33 @@ msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Αποδέσμευση σχημάτων"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1421
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1422
 #, fuzzy
 #| msgid "Intersect"
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Τομή"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1431
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1432
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Σχήματα flake %1"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1476
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1477
 #, fuzzy
 #| msgid "Spiral Shape"
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Σπειροειδές σχήμα"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1844
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1845
 #, fuzzy, kde-format
 #| msgid "Vector Selection"
 msgid "Vector Shape Actions"
 msgstr "Επιλογή διανύσματος"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1864
 #, fuzzy, kde-format
 msgid "Logical Operations"
 msgstr "Τροποποίηση επιλογών ιχνηλάτησης"
@@ -61150,134 +61150,134 @@ msgctxt "The 'feather' spinbox prefix in enclose and fill tool options"
 msgid "Feather: "
 msgstr "Φτερό..."
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:507
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:508
 #, fuzzy, kde-format
 #| msgid "Reset"
 msgctxt "The 'reset' button in enclose and fill tool options"
 msgid "Reset"
 msgstr "Επαναφορά"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:512
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
 #, fuzzy, kde-format
 msgid "Bezier Curve"
 msgstr "Καμπύλη Bezier"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
 #, kde-format
 msgid "Lasso"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:517
 #, kde-format
 msgid "Enable to fill opposite regions instead"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:517
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
 #, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:549
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:550
 #, fuzzy, kde-format
 #| msgid "Sensing method type:"
 msgctxt "The 'enclosing method' section label in enclose and fill tool options"
 msgid "Enclosing method"
 msgstr "Τύπος μεθόδου αισθητήρων:"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:556
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:557
 #, fuzzy, kde-format
 #| msgid "References"
 msgctxt "The 'reference' section label in enclose and fill tool options"
 msgid "Reference"
 msgstr "Παραπομπές"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:566
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:567
 #, fuzzy, kde-format
 #| msgid "Transparent"
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
 msgstr "Διαφανές"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:576
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:577
 #, fuzzy, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
 msgstr "&Πόροι"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:590
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:591
 #, fuzzy, kde-format
 #| msgid "&Image Selection"
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
 msgstr "&Επιλογή εικόνας"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:599
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:600
 #, fuzzy, kde-format
 msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
 msgstr "Προσα&ρμογή HSV..."
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:853
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
 #, fuzzy, kde-format
 #| msgid "All"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Όλα"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:856
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
 #, fuzzy, kde-format
 #| msgid "Specific Color Selector"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr "Ειδικός επιλογέας χρώματος"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:859
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
 #, fuzzy, kde-format
 #| msgid "Transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "Διαφανές"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:862
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, fuzzy, kde-format
 #| msgid "Specific Color Selector"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
 msgstr "Ειδικός επιλογέας χρώματος"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:865
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
 msgstr "Γέμισμα με χρώμα φόντου"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:868
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
 #, fuzzy, kde-format
 #| msgid "Burning Transparency"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
 msgstr "Φλεγόμενη διαφάνεια"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:871
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:874
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:875
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
 msgstr "Γέμισμα με χρώμα φόντου"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:877
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:878
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
 msgstr "γίνονται αλλαγές χρώματος φόντου"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:880
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:881
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"

@@ -422,6 +422,43 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceUP> &faces,
     const qreal finalRes = qMin(xRes, yRes);
     const qreal scaleToPixel = finalRes / 72;
     Q_FOREACH (const FT_FaceUP &face, faces) {
+
+        // set the charmap, by default Freetype will select a Unicode charmap, but when there's none, it doesn't set any and we need to select one manually.
+        if (!face->charmap) {
+            FT_CharMap map = nullptr;
+            for (int i = 0; i < face->num_charmaps; i++) {
+                FT_CharMap m = face->charmaps[i];
+                if (!m) {
+                    continue;
+                }
+
+                if (!map) {
+                    map = m;
+                    continue;
+                }
+
+                switch (m->encoding) {
+                case FT_ENCODING_UNICODE:
+                    map = m;
+                    break;
+                case FT_ENCODING_APPLE_ROMAN:
+                case FT_ENCODING_ADOBE_LATIN_1:
+                    if (!map || map->encoding != FT_ENCODING_UNICODE) {
+                        map = m;
+                    }
+                    break;
+                case FT_ENCODING_ADOBE_CUSTOM:
+                case FT_ENCODING_MS_SYMBOL:
+                    if (!map || map->encoding != FT_ENCODING_UNICODE || map->encoding != FT_ENCODING_APPLE_ROMAN || map->encoding != FT_ENCODING_ADOBE_LATIN_1) {
+                        map = m;
+                    }
+                default:
+                    break;
+                }
+            }
+            FT_Set_Charmap(face.data(), map);
+        }
+
         if (!FT_IS_SCALABLE(face)) {
             const qreal fontSizePixels = size * ftFontUnit * scaleToPixel;
             qreal sizeDelta = 0;

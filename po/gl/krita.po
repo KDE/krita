@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-11 00:40+0000\n"
-"PO-Revision-Date: 2023-12-10 09:47+0100\n"
+"PO-Revision-Date: 2023-12-11 08:35+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -611,512 +611,487 @@ msgstr "02 Lenzo áspero"
 #, kde-format
 msgctxt "./krita/data/patterns/02b_WoofTissue.png"
 msgid "02b WoofTissue"
-msgstr ""
+msgstr "02b Tecido de trama"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "default"
+#, kde-format
 msgctxt "./krita/data/patterns/03_default-paper.png"
 msgid "03 default-paper"
-msgstr "predeterminado"
+msgstr "03 Papel predeterminado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/04_paper-C-grain.png"
 msgid "04 paper-C-grain"
-msgstr ""
+msgstr "04 Gran de papel C"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/05_paper-torchon.png"
 msgid "05 paper-torchon"
-msgstr ""
+msgstr "05 Pano de papel"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/06_hard-grain.png"
 msgid "06 hard-grain"
-msgstr ""
+msgstr "06 Gran duro"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/08_bump-relief.png"
 msgid "08 bump-relief"
-msgstr ""
+msgstr "08 Relevo de golpes"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/09_drawed_crosshatched.png"
 msgid "09 drawed crosshatched"
-msgstr ""
+msgstr "09 Debuxo en cruz"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/09b_drawed-CrossedLines.png"
 msgid "09b drawed-CrossedLines"
-msgstr ""
+msgstr "09b Debuxo con liñas cruzadas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/10_drawed_dotted.png"
 msgid "10 drawed dotted"
-msgstr ""
+msgstr "10 Debuxo con puntos"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/11_drawed_furry.png"
 msgid "11 drawed furry"
-msgstr ""
+msgstr "11 Debuxo con pelaxe"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/12_drawed_vertical.png"
 msgid "12 drawed vertical"
-msgstr ""
+msgstr "12 Debuxo vertical"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/13_drawed_swirl.png"
 msgid "13 drawed swirl"
-msgstr ""
+msgstr "13 Debuxo con remuíños"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/14_texture-rock.png"
 msgid "14 texture-rock"
-msgstr ""
+msgstr "14 Textura de rocha"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/15_texture-rockB.png"
 msgid "15 texture-rockB"
-msgstr ""
+msgstr "15 Textura de rocha b"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/16_texture-woody.png"
 msgid "16 texture-woody"
-msgstr ""
+msgstr "16 Textura de madeira"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/17_texture-melt.png"
 msgid "17 texture-melt"
-msgstr ""
+msgstr "17 Textura fundida"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Use texture buffer"
+#, kde-format
 msgctxt "./krita/data/patterns/18_texture-bark.png"
 msgid "18 texture-bark"
-msgstr "Usar un búfer de texturas."
+msgstr "18 Textura de cortiza"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/18b_WaveFlex.png"
 msgid "18b WaveFlex"
-msgstr ""
+msgstr "18b Flexión de onda"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/19_texture-crackle.png"
 msgid "19 texture-crackle"
-msgstr ""
+msgstr "19 Textura de crepitación"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/20_texture-vegetal.png"
 msgid "20 texture-vegetal"
-msgstr ""
+msgstr "20 Textura vexetal"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/21_texture-chainmail.png"
 msgid "21 texture-chainmail"
-msgstr ""
+msgstr "21 Textura de cota de malla"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/22_texture-reptile.png"
 msgid "22 texture-reptile"
-msgstr ""
+msgstr "22 Textura de réptil"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/23-dynamic-screentone-A.png"
 msgid "23-dynamic-screentone-A"
-msgstr ""
+msgstr "23 Ton de pantalla dinámico a"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/24-dynamic-screentone-B.png"
 msgid "24-dynamic-screentone-B"
-msgstr ""
+msgstr "24 Ton de pantalla dinámico b"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/25-dynamic-screentone-C.png"
 msgid "25-dynamic-screentone-C"
-msgstr ""
+msgstr "25 Ton de pantalla dinámico c"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/26_brush-marks.png"
 msgid "26 brush-marks"
-msgstr ""
+msgstr "26 Marcas de pincel"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Subtract Shapes"
+#, kde-format
 msgctxt "./krita/data/patterns/Abstract_lines.png"
 msgid "Abstract lines"
-msgstr "Subtraer as formas"
+msgstr "Liñas abstractas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 profile name, check simplescreenrecorder for standard translations"
-#| msgid "baseline"
+#, kde-format
 msgctxt "./krita/data/patterns/Maze_lines.png"
 msgid "Maze lines"
-msgstr "liña de base"
+msgstr "Liñas de labirinto"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "HR RoughPaper"
+#, kde-format
 msgctxt "./krita/data/patterns/Rough_Paper.png"
 msgid "Rough Paper"
-msgstr "HR Papel rugoso"
+msgstr "Papel duro"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Rough_Wall_With_Impasto.png"
 msgid "Rough Wall With Impasto"
-msgstr ""
+msgstr "Parede dura con pasta"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Undefined"
+#, kde-format
 msgctxt "./krita/data/patterns/Sand_fine.png"
 msgid "Sand fine"
-msgstr "Indefinido"
+msgstr "Area fina"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Layer Size"
+#, kde-format
 msgctxt "./krita/data/patterns/Stars_Sized.png"
 msgid "Stars Sized"
-msgstr "Tamaño da capa"
+msgstr "Tamaño de estrelas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/a)_Eraser_Circle.kpp"
 msgid "a) Eraser Circle"
-msgstr ""
+msgstr "a) Círculo de borrar"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/b)_Basic-5_Size_default.kpp"
 msgid "b) Basic-5 Size default"
-msgstr ""
+msgstr "b) Predeterminado de tamaño básico 5"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Lines-Dry.kpp"
 msgid "j) WaterC Basic Lines-Dry"
-msgstr ""
+msgstr "j) Liñas básicas de acuarela, seco"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Lines-Wet-Pattern.kpp"
 msgid "j) WaterC Basic Lines-Wet-Pattern"
-msgstr ""
+msgstr "j) Liñas básicas de acuarela, padrón húmido"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Lines-Wet.kpp"
 msgid "j) WaterC Basic Lines-Wet"
-msgstr ""
+msgstr "j) Liñas básicas de acuarela, húmido"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Round-Fringe_02.kpp"
 msgid "j) WaterC Basic Round-Fringe 02"
-msgstr ""
+msgstr "j) Arredondado básico de acuarela, franxa 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Round-Grain.kpp"
 msgid "j) WaterC Basic Round-Grain"
-msgstr ""
+msgstr "j) Arredondado básico de acuarela, gran"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Round-Grunge.kpp"
 msgid "j) WaterC Basic Round-Grunge"
-msgstr ""
+msgstr "j) Arredondado básico de acuarela, rúa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Flat_Big-Grain_Tilt.kpp"
 msgid "j) WaterC Flat Big-Grain Tilt"
-msgstr ""
+msgstr "j) Grande plano de acuarela, inclinación de gran"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Flat_Decay_Tilt.kpp"
 msgid "j) WaterC Flat Decay Tilt"
-msgstr ""
+msgstr "j) Decaemento plano de acuarela, inclinación"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Special_Blobs.kpp"
 msgid "j) WaterC Special Blobs"
-msgstr ""
+msgstr "j) Burbullas especiais de acuarela"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Special_Splats.kpp"
 msgid "j) WaterC Special Splats"
-msgstr ""
+msgstr "j) Salpicaduras especiais de acuarela"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Spread-Pattern.kpp"
 msgid "j) WaterC Spread-Pattern"
-msgstr ""
+msgstr "j) Propagación de acuarela, padrón"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Spread.kpp"
 msgid "j) WaterC Spread"
-msgstr ""
+msgstr "j) Propagación de acuarela"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Spread_WideArea.kpp"
 msgid "j) WaterC Spread WideArea"
-msgstr ""
+msgstr "j) Propagación de acuarela, zona ampla"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Water-Pattern.kpp"
 msgid "j) WaterC Water-Pattern"
-msgstr ""
+msgstr "j) Auga de acuarela, padrón"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Animation"
+#, kde-format
 msgctxt "./krita/data/workspaces/Animation.kws"
 msgid "Animation"
 msgstr "Animación"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Big Endian"
+#, kde-format
 msgctxt "./krita/data/workspaces/Big_Paint.kws"
 msgid "Big Paint"
-msgstr "Big endian"
+msgstr "Pintura grande"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Paint op:"
+#, kde-format
 msgctxt "./krita/data/workspaces/Big_Paint_2.kws"
 msgid "Big Paint 2"
-msgstr "Operación de pintura:"
+msgstr "Pintura grande 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/workspaces/Big_Vector.kws"
 msgid "Big Vector"
-msgstr ""
+msgstr "Vector grande"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Default"
+#, kde-format
 msgctxt "./krita/data/workspaces/Default.kws"
 msgid "Default"
 msgstr "Predeterminado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Minimal"
+#, kde-format
 msgctxt "./krita/data/workspaces/Minimal.kws"
 msgid "Minimal"
-msgstr "Mínima"
+msgstr "Mínimo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Smallest"
+#, kde-format
 msgctxt "./krita/data/workspaces/Small_Vector.kws"
 msgid "Small Vector"
-msgstr "A máis pequena"
+msgstr "Vector pequeno"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Export directory"
+#, kde-format
 msgctxt "./krita/data/workspaces/Storyboarding.kws"
 msgid "Storyboarding"
-msgstr "Exportar o directorio"
+msgstr "Guionización gráfica"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "MyPaint"
+#, kde-format
 msgctxt "./krita/data/workspaces/VFX_Paint.kws"
 msgid "VFX Paint"
-msgstr "MyPaint"
+msgstr "Pintura de efectos visuais"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/windowlayouts/Cockpit (laptop mode).kwl"
 msgid "Cockpit (laptop mode)"
-msgstr ""
+msgstr "Cabina (modo de portátil)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern editing"
+#, kde-format
 msgctxt "./krita/data/windowlayouts/Dual screen editing.kwl"
 msgid "Dual screen editing"
-msgstr "Edición de padróns"
+msgstr "Edición a dúas pantallas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Atmosphere_With_Accent.kgm"
 msgid "Atmosphere With Accent"
-msgstr ""
+msgstr "Atmosfera con acento"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Atmospheric_Triad.kgm"
 msgid "Atmospheric Triad"
-msgstr ""
+msgstr "Tríade atmosférica"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Comment"
+#, kde-format
 msgctxt "./krita/data/gamutmasks/Complementary.kgm"
 msgid "Complementary"
-msgstr "Comentario"
+msgstr "Complementaria"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Dominant_Hue_With_Accent.kgm"
 msgid "Dominant Hue With Accent"
-msgstr ""
+msgstr "Ton dominante con acento"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Shift: "
+#, kde-format
 msgctxt "./krita/data/gamutmasks/Shifted_Triad.kgm"
 msgid "Shifted Triad"
-msgstr "Maiús: "
+msgstr "Tríade desprazada"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Split Segment"
+#, kde-format
 msgctxt "./krita/data/gamutmasks/Split_Complementary.kgm"
 msgid "Split Complementary"
-msgstr "Separar o segmento"
+msgstr "Complementaria dividida"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/c)_Pencil_1_Sketch_(mypaint).myb"
 msgid "c) Pencil 1 Sketch (mypaint)"
-msgstr ""
+msgstr "c) Lapis 1 de bosquexo (mypaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/c)_Pencil_2b_(mypaint).myb"
 msgid "c) Pencil 2b (mypaint)"
-msgstr ""
+msgstr "c) Lapis 2b (mypaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/d)_Ink_pen_(mypaint).myb"
 msgid "d) Ink pen (mypaint)"
-msgstr ""
+msgstr "d) Lapis de tinta (mypaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/e)_Marker_Medium_(mypaint).myb"
 msgid "e) Marker Medium (mypaint)"
-msgstr ""
+msgstr "e) Marcador medio (mypaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/e)_Marker_Plain_(mypaint).myb"
 msgid "e) Marker Plain (mypaint)"
-msgstr ""
+msgstr "e) Marcados plano (mypaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/i)_Wet_Knife_Plus_(mypaint).myb"
 msgid "i) Wet Knife Plus (mypaint)"
-msgstr ""
+msgstr "i) Coitelo húmido extra (mypaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/i)_Wet_Paint_Plus_(mypaint).myb"
 msgid "i) Wet Paint Plus (mypaint)"
-msgstr ""
+msgstr "i) Pintura húmida extra (mypaint)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/symbols/BalloonSymbols.svg"
 msgid "Word Balloons"
-msgstr ""
+msgstr "Globos de diálogo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/symbols/pepper_carrot_speech_bubbles.svg"
 msgid "Pepper & Carrot Speech Bubbles"
-msgstr ""
+msgstr "Globos de diálogo de Pepper & Carrot"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/symbols/pepper_carrot_speech_bubbles_backup.svg"
 msgid "Pepper & Carrot Speech Bubbles"
-msgstr ""
+msgstr "Globos de diálogo de Pepper & Carrot"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Preset Icon Library"
+#, kde-format
 msgctxt "./krita/data/symbols/preset_icons.svg"
 msgid "Krita Brush Preset Icon Library"
-msgstr "Biblioteca de iconas de predefinicións"
+msgstr "Biblioteca de iconas de predefinicións de pinceis de Krita"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Brushes"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_brush.png"
 msgid "3 brush"
-msgstr "Pinceis"
+msgstr "3 Pincel"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1124,7 +1099,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_dotted-flat."
 "png"
 msgid "3 dotted-flat"
-msgstr ""
+msgstr "3 Plano de puntos"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1132,553 +1107,437 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_flat-brush."
 "png"
 msgid "3 flat-brush"
-msgstr ""
+msgstr "3 Pincel plano"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_rake.png"
 msgid "3 rake"
-msgstr ""
+msgstr "3 Angazo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_splat1.gbr"
-#| msgid "A_splat1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_splat.png"
 msgid "3 splat"
-msgstr "A-pinga1"
+msgstr "3 Salpicadura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Texture"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_texture.png"
 msgid "3 texture"
-msgstr "Textura"
+msgstr "3 Textura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_Angular_church.gbr"
-#| msgid "A_Angular_church"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "A_Angular_church.gbr"
 msgid "A_Angular_church"
-msgstr "A_Angular igrexa"
+msgstr "A — Igrexa angular"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_Angular_church_HR.gbr"
-#| msgid "A_Angular_church_HR"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "A_Angular_church_HR.gbr"
 msgid "A_Angular_church_HR"
-msgstr "A_Angular igrexa HR"
+msgstr "A — Igrexa angular horizontal"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_Braids.gbr"
-#| msgid "A_Braids.gbr"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Braids.gbr"
 msgid "A_Braids.gbr"
-msgstr "A_Trenzas.gbr"
+msgstr "A — Trenzas GBR"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_Braids_b.gbr"
-#| msgid "A_Braids_b"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Braids_b.gbr"
 msgid "A_Braids_b"
-msgstr "A_Trenzas_b"
+msgstr "A — Trenzas b"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_Chain.gbr"
-#| msgid "A_Chain"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Chain.gbr"
 msgid "A_Chain"
-msgstr "A_Cadea"
+msgstr "A — Cadea"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_Nice_sketch.gbr"
-#| msgid "A_Nice Sketch"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Nice_sketch."
 "gbr"
 msgid "A_Nice Sketch"
-msgstr "A_Esbozo Real"
+msgstr "A — Bosquexo bonito"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_Nice_sketch2.gbr"
-#| msgid "A_Nice Sketch2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Nice_sketch2."
 "gbr"
 msgid "A_Nice Sketch2"
-msgstr "A_Esbozo real 2"
+msgstr "A — Bosquexo bonito 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_Rake.gbr"
-#| msgid "A_Rake"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Rake.gbr"
 msgid "A_Rake"
-msgstr "A_Enciño"
+msgstr "A — Angazo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_abstract-textured1.gbr"
-#| msgid "A_abstract-textured1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_abstract-"
 "textured1.gbr"
 msgid "A_abstract-textured1"
-msgstr "A-textura abstracta 1"
+msgstr "A — Abstracción texturizada 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_abstract-textured2.gbr"
-#| msgid "A_abstract-textured2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_abstract-"
 "textured2.gbr"
 msgid "A_abstract-textured2"
-msgstr "A-textura abstracta 2"
+msgstr "A — Abstracción texturizada 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_bokey.gbr"
-#| msgid "A -52 Bokey"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_bokey.gbr"
 msgid "A -52 Bokey"
-msgstr "A -52 Bokey"
+msgstr "A — Bokey 52"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_cloudy.gbr"
-#| msgid "A_cloudy"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_cloudy.gbr"
 msgid "A_cloudy"
-msgstr "A_nubrado"
+msgstr "A — Nubrado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_concrete.gbr"
-#| msgid "A_concrete"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_concrete.gbr"
 msgid "A_concrete"
-msgstr "A_cemento"
+msgstr "A — Cemento"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_crackled.gbr"
-#| msgid "A_crackled"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_crackled.gbr"
 msgid "A_crackled"
-msgstr "A_cerámica"
+msgstr "A — Rachado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_craqules.gbr"
-#| msgid "A_craqules"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_craqules.gbr"
 msgid "A_craqules"
-msgstr "A_craqules"
+msgstr "A — Rachados"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_crayon.gbr"
-#| msgid "A_crayon"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_crayon.gbr"
 msgid "A_crayon"
-msgstr "A_xiz"
+msgstr "A — Cera"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_dirty-spot.gbr"
-#| msgid "A_dirty-spot"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_dirty-spot."
 "gbr"
 msgid "A_dirty-spot"
-msgstr "A_punto sucio"
+msgstr "A — Punto sucio"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_eroded-cercle_2.gbr"
-#| msgid "A_eroded-cercle_2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_eroded-"
 "cercle_2.gbr"
 msgid "A_eroded-cercle_2"
-msgstr "A_círculo erosionado 2"
+msgstr "A — Círculo erosionado 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_lucky_star.gbr"
-#| msgid "A-5 Lucky-star"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_lucky_star."
 "gbr"
 msgid "A-5 Lucky-star"
-msgstr "A-5 Estrela afortunada"
+msgstr "A — Estrela da sorte 5"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_mountain-texture.gbr"
-#| msgid "A_mountain-texture"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_mountain-"
 "texture.gbr"
 msgid "A_mountain-texture"
-msgstr "A_textura-montañosa"
+msgstr "A — Textura de montaña"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_provencal.gbr"
-#| msgid "A_provencal"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_provencal.gbr"
 msgid "A_provencal"
-msgstr "A_provenzal"
+msgstr "A — Provenzal"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_random-vegetal3.gbr"
-#| msgid "A_random-vegetal3"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_random-"
 "vegetal3.gbr"
 msgid "A_random-vegetal3"
-msgstr "A_vario vexetais3"
+msgstr "A — Vexetal básica 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_reptile-skin.gbr"
-#| msgid "A_reptile-skin"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_reptile-skin."
 "gbr"
 msgid "A_reptile-skin"
-msgstr "A_pel de réptil"
+msgstr "A — Pel de réptil"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_smoke.gbr"
-#| msgid "A_smoke"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_smoke.gbr"
 msgid "A_smoke"
-msgstr "A_fume"
+msgstr "A — Fume"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_sparkle1.gbr"
-#| msgid "A -2 Sparkle 1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_sparkle1.gbr"
 msgid "A -2 Sparkle 1"
-msgstr "A -2 Faísca 1"
+msgstr "A — Brillo 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_sparkle2.gbr"
-#| msgid "A -2 Sparkle 2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_sparkle2.gbr"
 msgid "A -2 Sparkle 2"
-msgstr "A -2 Faísca 2"
+msgstr "A — Brillo 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_sparkle3.gbr"
-#| msgid "A -2 Sparkle 3"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_sparkle3.gbr"
 msgid "A -2 Sparkle 3"
-msgstr "A -2 Faísca 3"
+msgstr "A — Brillo 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_splat1.gbr"
-#| msgid "A_splat1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_splat1.gbr"
 msgid "A_splat1"
-msgstr "A-pinga1"
+msgstr "A — Salpicadura 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_starfield2.gbr"
-#| msgid "A_starfield2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_starfield2."
 "gbr"
 msgid "A_starfield2"
-msgstr "A-Campo de estrelas 2"
+msgstr "A — Campo de estrelas 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/C_Cloud_1.gbr"
-#| msgid "C_Cloud_1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/C_Cloud_1.gbr"
 msgid "C_Cloud_1"
-msgstr "C_Nube 1"
+msgstr "C — Nube 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/C_Dirty_Spot.gbr"
-#| msgid "C_Dirty_Spot"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/C_Dirty_Spot."
 "gbr"
 msgid "C_Dirty_Spot"
-msgstr "C_Punto sucio"
+msgstr "C — Punto sucio"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/D_Dust_1.gbr"
-#| msgid "C_Dust_1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/D_Dust_1.gbr"
 msgid "C_Dust_1"
-msgstr "C_Poeira 1"
+msgstr "C — Po 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/D_Normal_dust.gbr"
-#| msgid "D_Normal dust"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/D_Normal_dust."
 "gbr"
 msgid "D_Normal dust"
-msgstr "D_Poeira normal"
+msgstr "D — Po normal"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/F_Furr_fast.gbr"
-#| msgid "F_Furr fast"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/F_Furr_fast.gbr"
 msgid "F_Furr fast"
-msgstr "F_Pelo rápida"
+msgstr "F — Rápido de pelaxe"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/LJF_Foliage_Brush_01.gbr"
-#| msgid "LJF_Foliage_Brush_01"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "LJF_Foliage_Brush_01.gbr"
 msgid "LJF_Foliage_Brush_01"
-msgstr "LJF Pincel de follaxe 01"
+msgstr "Pincel de follaxe de LJF 01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/LJF_Foliage_Brush_02.gbr"
-#| msgid "LJF_Foliage_Brush_02"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "LJF_Foliage_Brush_02.gbr"
 msgid "LJF_Foliage_Brush_02"
-msgstr "LJF Pincel de follaxe 02"
+msgstr "Pincel de follaxe de LJF 02"
 
-# skip-rule: til-palabras-graves
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/L_Coroballs.gbr"
-#| msgid "L_Coroballs"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/L_Coroballs.gbr"
 msgid "L_Coroballs"
-msgstr "L_Bólas de cores"
+msgstr "L — Corobolas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/L_Foliage_1.gbr"
-#| msgid "L_Foliage_1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/L_Foliage_1.gbr"
 msgid "L_Foliage_1"
-msgstr "L_Follaxe 1"
+msgstr "L — Follaxe 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/L_Leaf_2.gbr"
-#| msgid "L_Leaf_2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/L_Leaf_2.gbr"
 msgid "L_Leaf_2"
-msgstr "L_Folla 2"
+msgstr "L — Folla 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/L_Leaf_3.gbr"
-#| msgid "L_Leaf_3"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/L_Leaf_3.gbr"
 msgid "L_Leaf_3"
-msgstr "L_Folla 3"
+msgstr "L — Folla 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/MZ_leaves.gbr"
-#| msgid "MZ_leaves"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/MZ_leaves.gbr"
 msgid "MZ_leaves"
-msgstr "MZ Follas"
+msgstr "MZ — Follas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/M_01.gbr"
-#| msgid "M_01"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_01.gbr"
 msgid "M_01"
-msgstr "M_01"
+msgstr "M — 01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/M_02.gbr"
-#| msgid "M_02"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_02.gbr"
 msgid "M_02"
-msgstr "M_02"
+msgstr "M — 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/M_03.gbr"
-#| msgid "M_03"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_03.gbr"
 msgid "M_03"
-msgstr "M_03"
+msgstr "M — 03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/M_04.gbr"
-#| msgid "M_04"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_04.gbr"
 msgid "M_04"
-msgstr "M_04"
+msgstr "M — 04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/M_05.gbr"
-#| msgid "M_05"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_05.gbr"
 msgid "M_05"
-msgstr "M_05"
+msgstr "M — 05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/M_06.gbr"
-#| msgid "M_06"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_06.gbr"
 msgid "M_06"
-msgstr "M_06"
+msgstr "M — 06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/M_07.gbr"
-#| msgid "M_07"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_07.gbr"
 msgid "M_07"
-msgstr "M_07"
+msgstr "M — 07"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/M_08.gbr"
-#| msgid "M_08"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_08.gbr"
 msgid "M_08"
-msgstr "M_08"
+msgstr "M — 08"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/M_09.gbr"
-#| msgid "M_09"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_09.gbr"
 msgid "M_09"
-msgstr "M_09"
+msgstr "M — 09"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/M_Arrow.gbr"
-#| msgid "M_Arrow"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_Arrow.gbr"
 msgid "M_Arrow"
-msgstr "M_Frecha"
+msgstr "M — Frecha"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/M_Bulb.gbr"
-#| msgid "M_Bulb"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_Bulb.gbr"
 msgid "M_Bulb"
-msgstr "M_Bulbo"
+msgstr "M — Lámpada"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/M_Cage.gbr"
-#| msgid "M_Cage"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_Cage.gbr"
 msgid "M_Cage"
-msgstr "M_Gaiola"
+msgstr "M — Gaiola"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/M_Pipe_1.gbr"
-#| msgid "M_Pipe_1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_Pipe_1.gbr"
 msgid "M_Pipe_1"
-msgstr "M_Tubo 1"
+msgstr "M — Cano 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/M_Pipe_2.gbr"
-#| msgid "M_Pipe_2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_Pipe_2.gbr"
 msgid "M_Pipe_2"
-msgstr "M_Tubo 2"
+msgstr "M — Cano 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/M_Pipe_3.gbr"
-#| msgid "M_Pipe_3"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/M_Pipe_3.gbr"
 msgid "M_Pipe_3"
-msgstr "M_Tubo 3"
+msgstr "M — Cano 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1686,379 +1545,304 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "M_Pipe_whiteflat.png"
 msgid "M Pipe whiteflat"
-msgstr ""
+msgstr "M — Cano branco plano"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/O_Oil_Soft.gbr"
-#| msgid "O_Oil Soft"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/O_Oil_Soft.gbr"
 msgid "O_Oil Soft"
-msgstr "O_Óleo suave"
+msgstr "O — Óleo suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/O_Oils_1.gbr"
-#| msgid "O_Oils 1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/O_Oils_1.gbr"
 msgid "O_Oils 1"
-msgstr "O_Óleo 1"
+msgstr "O — Óleos 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/O_Oils_1_GP.gbr"
-#| msgid "O_Oils 1 GP"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/O_Oils_1_GP.gbr"
 msgid "O_Oils 1 GP"
-msgstr "O_Óleo 1 GP"
+msgstr "O — Óleos 1 GP"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/O_Oils_Softer.gbr"
-#| msgid "O_Oils Softer"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/O_Oils_Softer."
 "gbr"
 msgid "O_Oils Softer"
-msgstr "O_Óleo máis suave"
+msgstr "O — Óleos máis suaves"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/R_Rake1.gbr"
-#| msgid "R_Rake1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/R_Rake1.gbr"
 msgid "R_Rake1"
-msgstr "R_Enciño 1"
+msgstr "R — Angazo 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/R_Rake2.gbr"
-#| msgid "R_Rake2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/R_Rake2.gbr"
 msgid "R_Rake2"
-msgstr "R_Enciño 2"
+msgstr "R — Angazo 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/R_Rake3.gbr"
-#| msgid "R_Rake3"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/R_Rake3.gbr"
 msgid "R_Rake3"
-msgstr "R_Enciño 3"
+msgstr "R — Angazo 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/R_Rake4.gbr"
-#| msgid "R_Rake4"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/R_Rake4.gbr"
 msgid "R_Rake4"
-msgstr "R_Enciño 4"
+msgstr "R — Angazo 4"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/R_Rake_small.gbr"
-#| msgid "R_Rake_small"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/R_Rake_small."
 "gbr"
 msgid "R_Rake_small"
-msgstr "R_Enciño pequeno"
+msgstr "R — Angazo pequeno"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Real_Oil_2.gbr"
-#| msgid "Real_Oil_2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Real_Oil_2.gbr"
 msgid "Real_Oil_2"
 msgstr "Óleo real 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Real_oil_1.gbr"
-#| msgid "Real Oil 1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Real_oil_1.gbr"
 msgid "Real Oil 1"
 msgstr "Óleo real 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/S_Smudge_Cheese.gbr"
-#| msgid "S_Smudge Cheese"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "S_Smudge_Cheese.gbr"
 msgid "S_Smudge Cheese"
-msgstr "S_Borrón de queixo"
+msgstr "S — Mancha de queixo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Sc_Scratches.gbr"
-#| msgid "Sc_Scratches"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Sc_Scratches."
 "gbr"
 msgid "Sc_Scratches"
-msgstr "Sc_Rabuñada"
+msgstr "Sc — Riscos"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Sc_Scratches_2.gbr"
-#| msgid "Sc_Scratches2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Sc_Scratches_2."
 "gbr"
 msgid "Sc_Scratches2"
-msgstr "Sc_Rabuñada2"
+msgstr "Sc — Riscos 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Sc_Scratches_3.gbr"
-#| msgid "Sc_Scratches3"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Sc_Scratches_3."
 "gbr"
 msgid "Sc_Scratches3"
-msgstr "Sc_Rabuñada3"
+msgstr "Sc — Riscos 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/T_Texture_1.gbr"
-#| msgid "T_Texture_1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/T_Texture_1.gbr"
 msgid "T_Texture_1"
-msgstr "T_Textura 1"
+msgstr "T — Textura 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Te_Techno_Angular_Cross.gbr"
-#| msgid "Te_Techno_Angular_Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "Te_Techno_Angular_Cross.gbr"
 msgid "Te_Techno_Angular_Cross"
-msgstr "Te_Techno Cruz angular"
+msgstr "Te — Cruz angular tecnolóxica"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/U_Circle_circuit.gbr"
-#| msgid "U_Circle circuit"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "U_Circle_circuit.gbr"
 msgid "U_Circle circuit"
-msgstr "U_Círculo circuíto"
+msgstr "U — Circuíto en círculo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/U_Circle_shape_1.gbr"
-#| msgid "U Circle shape 1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "U_Circle_shape_1.gbr"
 msgid "U Circle shape 1"
-msgstr "U Círculo forma 1"
+msgstr "U — Forma de círculo 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/U_Circle_shape_2.gbr"
-#| msgid "U Circle shape 2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "U_Circle_shape_2.gbr"
 msgid "U Circle shape 2"
-msgstr "U Círculo forma 2"
+msgstr "U — Forma de círculo 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/U_Circle_shape_3.gbr"
-#| msgid "U Circle shape 3"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "U_Circle_shape_3.gbr"
 msgid "U Circle shape 3"
-msgstr "U Círculo forma 3"
+msgstr "U — Forma de círculo 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/U_Circle_shape_4.gbr"
-#| msgid "U Circle shape 4"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "U_Circle_shape_4.gbr"
 msgid "U Circle shape 4"
-msgstr "U Círculo forma 4"
+msgstr "U — Forma de círculo 4"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/U_Circle_shape_5.gbr"
-#| msgid "U Circle shape 5"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "U_Circle_shape_5.gbr"
 msgid "U Circle shape 5"
-msgstr "U Círculo forma 5"
+msgstr "U — Forma de círculo 5"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/U_Circle_shape_5b.gbr"
-#| msgid "U Circle shape 5b"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "U_Circle_shape_5b.gbr"
 msgid "U Circle shape 5b"
-msgstr "U Forma circular 5b"
+msgstr "U — Forma de círculo 5b"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/U_Circle_shape_5c.gbr"
-#| msgid "U Circle shape 5c"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "U_Circle_shape_5c.gbr"
 msgid "U Circle shape 5c"
-msgstr "U Forma circular 5c"
+msgstr "U — Forma de círculo 5c"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Z_Chain_1.gbr"
-#| msgid "Z_Chain_1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Z_Chain_1.gbr"
 msgid "Z_Chain_1"
-msgstr "Z_Cadea 1"
+msgstr "Z — Cadea 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Z_Pixel_1.gbr"
-#| msgid "Z_Pixel 1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Z_Pixel_1.gbr"
 msgid "Z_Pixel 1"
-msgstr "Z_Píxel 1"
+msgstr "Z — Píxel 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Z_Pixel_4x4_rounded.gbr"
-#| msgid "Z_Pixel 4x4 rounded"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "Z_Pixel_4x4_rounded.gbr"
 msgid "Z_Pixel 4x4 rounded"
-msgstr "Z_Píxel 4x4 arredondado"
+msgstr "Z — 4×4 píxeles arredondados"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Z_Pixel_Cross.gbr"
-#| msgid "Z_Pixel Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Z_Pixel_Cross."
 "gbr"
 msgid "Z_Pixel Cross"
-msgstr "Z_Píxel cruz"
+msgstr "Z — Cruz de píxeles"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Z_Pixel__4_pix__45a.gbr"
-#| msgid "Z_Pixel 4pix _45a"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "Z_Pixel__4_pix__45a.gbr"
 msgid "Z_Pixel 4pix _45a"
-msgstr "Z_Píxel 4pix _45a"
+msgstr "Z — 4 píxeles 45a"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Z_Triangle_shape_1.gbr"
-#| msgid "Z_Triangle_shape_1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "Z_Triangle_shape_1.gbr"
 msgid "Z_Triangle_shape_1"
-msgstr "Z_Triángulo forma 1"
+msgstr "Z — Forma de triángulo 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Z_Triangle_shape_2.gbr"
-#| msgid "Z_Triangle_shape_2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "Z_Triangle_shape_2.gbr"
 msgid "Z_Triangle_shape_2"
-msgstr "Z_Triángulo forma 2"
+msgstr "Z — Forma de triángulo 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/oil_bristle.gbr"
-#| msgid "oil_bristle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/oil_bristle.gbr"
 msgid "oil_bristle"
-msgstr "pelo_de_óleo"
+msgstr "Pelo de óleo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/oil_knife.gbr"
-#| msgid "oil_knife"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/oil_knife.gbr"
 msgid "oil_knife"
-msgstr "coitela_de_óleo"
+msgstr "Coitelo de óleo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/rake_textured_01.gbr"
-#| msgid "Rake_textured_01"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "rake_textured_01.gbr"
 msgid "Rake_textured_01"
-msgstr "Enciño texturizado 01"
+msgstr "Textura de angazo 01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/rake_textured_02.gbr"
-#| msgid "Rake_textured_02"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "rake_textured_02.gbr"
 msgid "Rake_textured_02"
-msgstr "Enciño texturizado 02"
+msgstr "Textura de angazo 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Texture"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/texture-a.png"
 msgid "texture-a"
-msgstr "Textura"
+msgstr "Textura a"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Airbrush"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Airbrush_eraser.kpp"
 msgid "Airbrush eraser"
-msgstr "Pincel de spray"
+msgstr "Pincel de aerosol, borrador"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Airbrush"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Airbrush_linear.kpp"
 msgid "Airbrush linear"
-msgstr "Pincel de spray"
+msgstr "Pincel de aerosol, lineal"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2066,16 +1850,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Airbrush_linear_noisy.kpp"
 msgid "Airbrush linear noisy"
-msgstr ""
+msgstr "Pincel de aerosol, lineal con ruído"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Mouse pressure"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Airbrush_pressure.kpp"
 msgid "Airbrush pressure"
-msgstr "Presión do rato"
+msgstr "Pincel de aerosol, presión"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2083,34 +1866,31 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Basic_circle.kpp"
 msgid "Basic circle"
-msgstr ""
+msgstr "Círculo básico"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Basic_mix.kpp"
 msgid "Basic mix"
-msgstr "Básico"
+msgstr "Mestura básica"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Basic Smoothing"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Basic_mix_soft.kpp"
 msgid "Basic mix soft"
-msgstr "Suavizado básico"
+msgstr "Mestura básica suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Reset to default"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Basic_tip_default.kpp"
 msgid "Basic tip default"
-msgstr "Restaurar os valores predeterminados"
+msgstr "Punta básica predeterminada"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2118,7 +1898,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Basic_tip_gaussian.kpp"
 msgid "Basic tip gaussian"
-msgstr ""
+msgstr "Punta básica de Gauss"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2126,16 +1906,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Basic_tip_soft.kpp"
 msgid "Basic tip soft"
-msgstr ""
+msgstr "Punta básica suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Basic_wet.kpp"
 msgid "Basic wet"
-msgstr "Básico"
+msgstr "Humidade básica"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2143,34 +1922,31 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Basic_wet_soft.kpp"
 msgid "Basic wet soft"
-msgstr ""
+msgstr "Humidade básica suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Lens Blur"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Blender_Blur.kpp"
 msgid "Blender Blur"
-msgstr "Desenfoque Lens"
+msgstr "Desenfoque de mesturador"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Block_basic.kpp"
 msgid "Block basic"
-msgstr "Básico"
+msgstr "Bloque, básico"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Bristle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Block_bristles.kpp"
 msgid "Block bristles"
-msgstr "Pelo"
+msgstr "Bloque, pelos"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2178,7 +1954,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Block_fuzzy.kpp"
 msgid "Block fuzzy"
-msgstr ""
+msgstr "Bloque, borroso"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2186,36 +1962,31 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Block_mix_tilt.kpp"
 msgid "Block mix tilt"
-msgstr ""
+msgstr "Bloque, inclinación de mestura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Flat_textured1.gih"
-#| msgid "Flat_textured1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Block_textured_1.kpp"
 msgid "Block textured 1"
-msgstr "Chan_texturizado1"
+msgstr "Bloque, texturizado 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Rect_textured2.gih"
-#| msgid "Rect_textured2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Block_textured_2.kpp"
 msgid "Block textured 2"
-msgstr "Rectángulo_texturizado2"
+msgstr "Bloque, texturizado 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Book title:"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Block_tilt.kpp"
 msgid "Block tilt"
-msgstr "Título do libro:"
+msgstr "Bloque, inclinación"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2223,25 +1994,23 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Block_wet_tilt.kpp"
 msgid "Block wet tilt"
-msgstr ""
+msgstr "Bloque, inclinación húmida"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Brush Details"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Bristle_Details.kpp"
 msgid "Bristle Details"
-msgstr "Detalles do pincel"
+msgstr "Pelo, detalles"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Bristle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Bristle_Large.kpp"
 msgid "Bristle Large"
-msgstr "Pelo"
+msgstr "Pelo, grande"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2249,61 +2018,55 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Bristle_Special_Blender.kpp"
 msgid "Bristle Special Blender"
-msgstr ""
+msgstr "Pelo, mestura especial"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Bristle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Bristle_Squared.kpp"
 msgid "Bristle Squared"
-msgstr "Pelo"
+msgstr "Pelo, cadrado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Bristle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Bristle_Tapered.kpp"
 msgid "Bristle Tapered"
-msgstr "Pelo"
+msgstr "Pelo, cónico"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Artistic Text"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Bristle_Texture.kpp"
 msgid "Bristle Texture"
-msgstr "Texto artístico"
+msgstr "Pelo, textura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Bristle options"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Bristle_frottis.kpp"
 msgid "Bristle frottis"
-msgstr "Opcións dos pelos do pincel"
+msgstr "Pelo, frega"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Bristle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Bristles_hairy.kpp"
 msgid "Bristles hairy"
-msgstr "Pelo"
+msgstr "Pelo, peludo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Bristle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Bristles_mix.kpp"
 msgid "Bristles mix"
-msgstr "Pelo"
+msgstr "Pelo, mestura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2311,63 +2074,55 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Bristles_textured.kpp"
 msgid "Bristles textured"
-msgstr ""
+msgstr "Pelo, texturizado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Bristle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Bristles_wet.kpp"
 msgid "Bristles wet"
-msgstr "Pelo"
+msgstr "Pelo, húmido"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Brush Name:"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Brush_dotted.kpp"
 msgid "Brush dotted"
-msgstr "Nome do pincel:"
+msgstr "Pincel, puntos"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Flat_textured1.gih"
-#| msgid "Flat_textured1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Brush_textured.kpp"
 msgid "Brush textured"
-msgstr "Chan_texturizado1"
+msgstr "Pincel, texturizado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "clone paintbrush (previously \"Duplicate\")"
-#| msgid "Clone"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Clone_tool.kpp"
 msgid "Clone tool"
-msgstr "Clonación"
+msgstr "Ferramenta de clonación"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Curves opacity"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Curve_curvy.kpp"
 msgid "Curve curvy"
-msgstr "Opacidade das curvas"
+msgstr "Curva, curva"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Curve"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Curve_ink.kpp"
 msgid "Curve ink"
-msgstr "Curva"
+msgstr "Curva, tinta"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2375,61 +2130,55 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Curve_recurvy.kpp"
 msgid "Curve recurvy"
-msgstr ""
+msgstr "Curva, recurvada"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Curves opacity"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Curve_smooth.kpp"
 msgid "Curve smooth"
-msgstr "Opacidade das curvas"
+msgstr "Curva, suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Eraser switch size"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Eraser_circle.kpp"
 msgid "Eraser circle"
-msgstr "Cambio de tamaño do borrador."
+msgstr "Borrador, círculo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Eraser"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Eraser_hard.kpp"
 msgid "Eraser hard"
-msgstr "Borrador"
+msgstr "Borrador, man"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Eraser"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Eraser_soft.kpp"
 msgid "Eraser soft"
-msgstr "Borrador"
+msgstr "Borrador, suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Use global light"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "FX_blur_light.kpp"
 msgid "FX blur light"
-msgstr "Usar iluminación global"
+msgstr "Efecto, desenfoque claro"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Color HSI"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "FX_color_HSY.kpp"
 msgid "FX color HSY"
-msgstr "Cor HSI"
+msgstr "Efecto, HSY de cor"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2437,7 +2186,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "FX_explode.kpp"
 msgid "FX explode"
-msgstr ""
+msgstr "Efecto, explosión"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2445,16 +2194,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "FX_glow_add.kpp"
 msgid "FX glow add"
-msgstr ""
+msgstr "Efecto, engadido de brillo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Overlay"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "FX_overlay.kpp"
 msgid "FX overlay"
-msgstr "Revestimento"
+msgstr "Efecto, capa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2462,25 +2210,23 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "FX_splat_starfield.kpp"
 msgid "FX splat starfield"
-msgstr ""
+msgstr "Efecto, campo de estrelas de salpicadura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Fill background"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Fill_block.kpp"
 msgid "Fill block"
-msgstr "Encher o fondo"
+msgstr "Enchedura, bloque"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Fill Special"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Fill_circle.kpp"
 msgid "Fill circle"
-msgstr "Encher de maneira especial"
+msgstr "Enchedura, círculo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2488,16 +2234,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Grid_square_25.kpp"
 msgid "Grid square 25"
-msgstr ""
+msgstr "Cadrado de grade 25"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Hatching"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Hatch_crispy.kpp"
 msgid "Hatch crispy"
-msgstr "Incubación"
+msgstr "Comporta, crocante"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2505,7 +2250,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Hatch_cross_regular.kpp"
 msgid "Hatch cross regular"
-msgstr ""
+msgstr "Comporta, cruz normal"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2513,43 +2258,39 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Hatch_cross_small.kpp"
 msgid "Hatch cross small"
-msgstr ""
+msgstr "Comporta, cruz pequena"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Hatching"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Hatch_diag_S.kpp"
 msgid "Hatch diag S"
-msgstr "Incubación"
+msgstr "Comporta, diagonal S"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Hatching"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Hatch_diag_fat.kpp"
 msgid "Hatch diag fat"
-msgstr "Incubación"
+msgstr "Comporta, diagonal grosa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Hatching"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Hatch_moire.kpp"
 msgid "Hatch moire"
-msgstr "Incubación"
+msgstr "Comporta, diluído"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Hatching options"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Hatch_noisy.kpp"
 msgid "Hatch noisy"
-msgstr "Opcións de incubación"
+msgstr "Comporta, ruidoso"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2557,16 +2298,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Ink_ballpen.kpp"
 msgid "Ink ballpen"
-msgstr ""
+msgstr "Tinta, bolígrafo de bóla"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Dyna brush"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Ink_brush_25.kpp"
 msgid "Ink brush 25"
-msgstr "Pincel dinámico"
+msgstr "Tinta, pincel 25"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2574,7 +2314,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Ink_circle_05.kpp"
 msgid "Ink circle 05"
-msgstr ""
+msgstr "Tinta, círculo 05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2582,7 +2322,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Ink_circle_10.kpp"
 msgid "Ink circle 10"
-msgstr ""
+msgstr "Tinta, círculo 10"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2590,7 +2330,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Ink_gpen_10.kpp"
 msgid "Ink gpen 10"
-msgstr ""
+msgstr "Tinta, bolígrafo G 10"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2598,7 +2338,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Ink_gpen_25.kpp"
 msgid "Ink gpen 25"
-msgstr ""
+msgstr "Tinta, bolígrafo G 25"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2606,7 +2346,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Ink_tilt_10.kpp"
 msgid "Ink tilt 10"
-msgstr ""
+msgstr "Tinta, inclinación 10"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2614,16 +2354,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Ink_tilt_20.kpp"
 msgid "Ink tilt 20"
-msgstr ""
+msgstr "Tinta, inclinación 20"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Layout"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Layout_block.kpp"
 msgid "Layout block"
-msgstr "Disposición"
+msgstr "Disposición, bloque"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2631,29 +2370,26 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Layout_circle_soft.kpp"
 msgid "Layout circle soft"
-msgstr ""
+msgstr "Disposición, círculo suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Layout"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Layout_oval.kpp"
 msgid "Layout oval"
-msgstr "Disposición"
+msgstr "Disposición, oval"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Layout"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Layout_pen.kpp"
 msgid "Layout pen"
-msgstr "Disposición"
+msgstr "Disposición, bolígrafo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Move Tool"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Move_tool.kpp"
@@ -2661,33 +2397,28 @@ msgid "Move tool"
 msgstr "Ferramenta de mover"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/oil_bristle.gbr"
-#| msgid "oil_bristle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Oils_bristle.kpp"
 msgid "Oils bristle"
-msgstr "pelo_de_óleo"
+msgstr "Óleos, pelo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/oil_knife.gbr"
-#| msgid "oil_knife"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Oils_knife.kpp"
 msgid "Oils knife"
-msgstr "coitela_de_óleo"
+msgstr "Óleos, coitelo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Use texture buffer"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pastel_texture_large.kpp"
 msgid "Pastel texture large"
-msgstr "Usar un búfer de texturas."
+msgstr "Textura de pastel, grande"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2695,73 +2426,63 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pastel_texture_thin.kpp"
 msgid "Pastel texture thin"
-msgstr ""
+msgstr "Textura de pastel, fina"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pencil"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pencil_2B.kpp"
 msgid "Pencil 2B"
-msgstr "Lapis"
+msgstr "Lapis 2B"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pencil"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pencil_HB.kpp"
 msgid "Pencil HB"
-msgstr "Lapis"
+msgstr "Lapis HB"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Penciller"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pencil_texture.kpp"
 msgid "Pencil texture"
-msgstr "Lapiseiro"
+msgstr "Lapis, textura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Pencil Tool"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pencil_tilt.kpp"
 msgid "Pencil tilt"
-msgstr "Ferramenta de lapis"
+msgstr "Lapis, inclinación"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pixel width"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pixelart_dither.kpp"
 msgid "Pixelart dither"
-msgstr "Anchura do píxel"
+msgstr "Arte de píxeles, tramado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Z_Pixel_4x4_rounded.gbr"
-#| msgid "Z_Pixel 4x4 rounded"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pixelart_round.kpp"
 msgid "Pixelart round"
-msgstr "Z_Píxel 4x4 arredondado"
+msgstr "Arte de píxeles, arredondado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/palettes/pixelart-16.gpl"
-#| msgid "PixelArt 16"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pixelart_square.kpp"
 msgid "Pixelart square"
-msgstr "PixelArt 16"
+msgstr "Arte de píxeles, cadrado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2769,16 +2490,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Quick_circle_big.kpp"
 msgid "Quick circle big"
-msgstr ""
+msgstr "Círculo rápido, grande"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Quick search:"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Quick_circle_huge.kpp"
 msgid "Quick circle huge"
-msgstr "Busca rápida:"
+msgstr "Círculo rápido, enorme"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2786,7 +2506,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Quick_circle_layout.kpp"
 msgid "Quick circle layout"
-msgstr ""
+msgstr "Círculo rápido, disposición"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2794,57 +2514,50 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Rake_bristle_dry.kpp"
 msgid "Rake bristle dry"
-msgstr ""
+msgstr "Angazo, pelo seco"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/rake_textured_01.gbr"
-#| msgid "Rake_textured_01"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Rake_texture.kpp"
 msgid "Rake texture"
-msgstr "Enciño texturizado 01"
+msgstr "Angazo, textura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Screen"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Screentones.kpp"
 msgid "Screentones"
-msgstr "Pantalla"
+msgstr "Tons de pantalla"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Screen"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Screentones_eraser.kpp"
 msgid "Screentones eraser"
-msgstr "Pantalla"
+msgstr "Tons de pantalla, borrador"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Shape"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Shape_fill.kpp"
 msgid "Shape fill"
-msgstr "Forma"
+msgstr "Forma, recheo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Smooth"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Shape_smooth.kpp"
 msgid "Shape smooth"
-msgstr "Suave"
+msgstr "Forma, suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Sketch"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/Sketch."
 "kpp"
@@ -2852,58 +2565,52 @@ msgid "Sketch"
 msgstr "Bosquexo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Sketch brush"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_chrome.kpp"
 msgid "Sketch chrome"
-msgstr "Pincel de esbozo"
+msgstr "Bosquexo, croma"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Sketch"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_fur.kpp"
 msgid "Sketch fur"
-msgstr "Bosquexo"
+msgstr "Bosquexo, pelaxe"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Sketch brush"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_ink_big.kpp"
 msgid "Sketch ink big"
-msgstr "Pincel de esbozo"
+msgstr "Bosquexo, tinta grande"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Sketch brush"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_ink_small.kpp"
 msgid "Sketch ink small"
-msgstr "Pincel de esbozo"
+msgstr "Bosquexo, tinta pequena"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Sketch"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_line.kpp"
 msgid "Sketch line"
-msgstr "Bosquexo"
+msgstr "Bosquexo, liña"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Sketch"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_shade.kpp"
 msgid "Sketch shade"
-msgstr "Bosquexo"
+msgstr "Bosquexo, sombra"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2911,7 +2618,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_shade_wash.kpp"
 msgid "Sketch shade wash"
-msgstr ""
+msgstr "Bosquexo, lavado de sombra"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2919,7 +2626,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_speedpaint.kpp"
 msgid "Sketch speedpaint"
-msgstr ""
+msgstr "Bosquexo, pintura rápida"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2927,16 +2634,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_speedpaint_shade.kpp"
 msgid "Sketch speedpaint shade"
-msgstr ""
+msgstr "Bosquexo, sombra de pintura rápida"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Sketch brush"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_wires.kpp"
 msgid "Sketch wires"
-msgstr "Pincel de esbozo"
+msgstr "Bosquexo, cables"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2944,230 +2650,199 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Smudge_block_tilt.kpp"
 msgid "Smudge block tilt"
-msgstr ""
+msgstr "Mancha, inclinación de bloque"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Smudge Rate"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Smudge_rake.kpp"
 msgid "Smudge rake"
-msgstr "Pincel de borrancho"
+msgstr "Mancha, angazo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Smudge Rate"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Smudge_rake_2.kpp"
 msgid "Smudge rake 2"
-msgstr "Pincel de borrancho"
+msgstr "Mancha, angazo 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Smudge Mode"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Smudge_soft.kpp"
 msgid "Smudge soft"
-msgstr "Pincel viscoso"
+msgstr "Mancha, suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Smudge Rate"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Smudge_textured.kpp"
 msgid "Smudge textured"
-msgstr "Pincel de borrancho"
+msgstr "Mancha, texturizado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Smudge Rate"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Smudge_water.kpp"
 msgid "Smudge water"
-msgstr "Pincel de borrancho"
+msgstr "Mancha, auga"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_sparkle1.gbr"
-#| msgid "A -2 Sparkle 1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sparkle_wet.kpp"
 msgid "Sparkle wet"
-msgstr "A -2 Faísca 1"
+msgstr "Brillo, húmido"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_sparkle1.gbr"
-#| msgid "A -2 Sparkle 1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sparkle_wet_soft.kpp"
 msgid "Sparkle wet soft"
-msgstr "A -2 Faísca 1"
+msgstr "Brillo, húmido suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Select a Color"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Special_FuzzyColor.kpp"
 msgid "Special FuzzyColor"
-msgstr "Seleccionar unha cor"
+msgstr "Especial, cor difusa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Special Characters"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Special_dyna_dots.kpp"
 msgid "Special dyna dots"
-msgstr "Caracteres especiais"
+msgstr "Especial, puntos dinámicos"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Special Characters"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Special_particles_crazy.kpp"
 msgid "Special particles crazy"
-msgstr "Caracteres especiais"
+msgstr "Especial, tolemia de partículas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Split Cells"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Splat_mix_cells.kpp"
 msgid "Splat mix cells"
-msgstr "Dividir as celas"
+msgstr "Salpicadura, celas de mestura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Flat_textured1.gih"
-#| msgid "Flat_textured1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Splat_texture.kpp"
 msgid "Splat texture"
-msgstr "Chan_texturizado1"
+msgstr "Salpicadura, textura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Flat_textured2.gih"
-#| msgid "Flat_textured2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Splat_texture_2.kpp"
 msgid "Splat texture 2"
-msgstr "Chan_texturizado2"
+msgstr "Salpicadura, textura 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Split Cells"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Splat_wet_cells.kpp"
 msgid "Splat wet cells"
-msgstr "Dividir as celas"
+msgstr "Salpicadura, celas de auga"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Scattering"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Splatter_thin.kpp"
 msgid "Splatter thin"
-msgstr "Espallado"
+msgstr "Salpicadura fina"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Flat_textured1.gih"
-#| msgid "Flat_textured1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sponge_texture.kpp"
 msgid "Sponge texture"
-msgstr "Chan_texturizado1"
+msgstr "Textura de esponxa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Spray_splat.kpp"
 msgid "Spray splat"
-msgstr "Forma de spray"
+msgstr "Aerosol plano"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Tangent Normal"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_basic.kpp"
 msgid "Tangent normal basic"
-msgstr "Pincel de normal tanxente"
+msgstr "Normal tanxente básica"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Tangent Encoding"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_drawing_angle.kpp"
 msgid "Tangent normal drawing angle"
-msgstr "Codificación da tanxente"
+msgstr "Ángulo de debuxo de normal tanxente"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Tangent Normal"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_hairy.kpp"
 msgid "Tangent normal hairy"
-msgstr "Pincel de normal tanxente"
+msgstr "Normal tanxente peluda"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Tangent Normal"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_pixel.kpp"
 msgid "Tangent normal pixel"
-msgstr "Pincel de normal tanxente"
+msgstr "Normal tanxente de píxeles"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Tangent Normal"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_y_inverted.kpp"
 msgid "Tangent normal y inverted"
-msgstr "Pincel de normal tanxente"
+msgstr "Normal tanxente invertida en Y"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Texture"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Texture_fuzzy.kpp"
 msgid "Texture fuzzy"
-msgstr "Textura"
+msgstr "Textura, difusa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Texture"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Texture_hair.kpp"
 msgid "Texture hair"
-msgstr "Textura"
+msgstr "Textura, pelo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3175,39 +2850,34 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Texture_leaves_fuzzy.kpp"
 msgid "Texture leaves fuzzy"
-msgstr ""
+msgstr "Textura, follas difusas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Text Properties"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Textured_tilt.kpp"
 msgid "Textured tilt"
-msgstr "Propiedades de texto"
+msgstr "Inclinación texturizada"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Subpixel precision"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "ink_precision_03.kpp"
 msgid "ink precision 03"
-msgstr "Precisión en subpíxeles"
+msgstr "Tinta de precisión 03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "pixels"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/pixel1."
 "kpp"
 msgid "pixel1"
-msgstr "píxeles"
+msgstr "píxel 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Animation"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Animation."
 "kws"
@@ -3215,22 +2885,20 @@ msgid "Animation"
 msgstr "Animación"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Big Endian"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Paint."
 "kws"
 msgid "Big Paint"
-msgstr "Big endian"
+msgstr "Pintura grande"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Paint op:"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Paint_2."
 "kws"
 msgid "Big Paint 2"
-msgstr "Operación de pintura:"
+msgstr "Pintura grande 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3238,49 +2906,44 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Vector."
 "kws"
 msgid "Big Vector"
-msgstr ""
+msgstr "Vector grande"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Default"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Default.kws"
 msgid "Default"
 msgstr "Predeterminado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Minimal"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Minimal.kws"
 msgid "Minimal"
-msgstr "Mínima"
+msgstr "Mínimo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Smallest"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
 "Small_Vector.kws"
 msgid "Small Vector"
-msgstr "A máis pequena"
+msgstr "Vector pequeno"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "MyPaint"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/VFX_Paint."
 "kws"
 msgid "VFX Paint"
-msgstr "MyPaint"
+msgstr "Pintura de efectos visuais"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "off canvas"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/01_canvas.png"
 msgid "01 canvas"
-msgstr "fóra do lenzo"
+msgstr "01 Lenzo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3288,7 +2951,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/02_rough-"
 "canvas.png"
 msgid "02 rough-canvas"
-msgstr ""
+msgstr "02 Lenzo áspero"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3296,16 +2959,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/02b_WoofTissue.png"
 msgid "02b WoofTissue"
-msgstr ""
+msgstr "02b Tecido de trama"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "default"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/03_default-"
 "paper.png"
 msgid "03 default-paper"
-msgstr "predeterminado"
+msgstr "03 Papel predeterminado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3313,7 +2975,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/04_paper-C-"
 "grain.png"
 msgid "04 paper-C-grain"
-msgstr ""
+msgstr "04 Gran de papel C"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3321,7 +2983,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/05_paper-"
 "torchon.png"
 msgid "05 paper-torchon"
-msgstr ""
+msgstr "05 Pano de papel"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3329,7 +2991,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/06_hard-grain."
 "png"
 msgid "06 hard-grain"
-msgstr ""
+msgstr "06 Gran duro"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3337,7 +2999,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/07_big-grain."
 "png"
 msgid "07 big-grain"
-msgstr ""
+msgstr "07 Gran grande"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3345,7 +3007,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/08_bump-"
 "relief.png"
 msgid "08 bump-relief"
-msgstr ""
+msgstr "08 Relevo de golpes"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3353,7 +3015,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/09_drawed_crosshatched.png"
 msgid "09 drawed crosshatched"
-msgstr ""
+msgstr "09 Debuxo en cruz"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3361,7 +3023,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/09b_drawed-"
 "CrossedLines.png"
 msgid "09b drawed-CrossedLines"
-msgstr ""
+msgstr "09b Debuxo con liñas cruzadas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3369,7 +3031,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/10_drawed_dotted.png"
 msgid "10 drawed dotted"
-msgstr ""
+msgstr "10 Debuxo con puntos"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3377,7 +3039,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/11_drawed_furry.png"
 msgid "11 drawed furry"
-msgstr ""
+msgstr "11 Debuxo con pelaxe"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3385,7 +3047,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/12_drawed_vertical.png"
 msgid "12 drawed vertical"
-msgstr ""
+msgstr "12 Debuxo vertical"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3393,7 +3055,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/13_drawed_swirl.png"
 msgid "13 drawed swirl"
-msgstr ""
+msgstr "13 Debuxo con remuíños"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3401,7 +3063,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/14_texture-"
 "rock.png"
 msgid "14 texture-rock"
-msgstr ""
+msgstr "14 Textura de rocha"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3409,7 +3071,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/15_texture-"
 "rockB.png"
 msgid "15 texture-rockB"
-msgstr ""
+msgstr "15 Textura de rocha b"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3417,7 +3079,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/16_texture-"
 "woody.png"
 msgid "16 texture-woody"
-msgstr ""
+msgstr "16 Textura de madeira"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3425,16 +3087,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/17_texture-"
 "melt.png"
 msgid "17 texture-melt"
-msgstr ""
+msgstr "17 Textura fundida"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Use texture buffer"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/18_texture-"
 "bark.png"
 msgid "18 texture-bark"
-msgstr "Usar un búfer de texturas."
+msgstr "18 Textura de cortiza"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3442,7 +3103,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/18b_WaveFlex."
 "png"
 msgid "18b WaveFlex"
-msgstr ""
+msgstr "18b Flexión de onda"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3450,7 +3111,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/19_texture-"
 "crackle.png"
 msgid "19 texture-crackle"
-msgstr ""
+msgstr "19 Textura de crepitación"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3458,7 +3119,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/20_texture-"
 "vegetal.png"
 msgid "20 texture-vegetal"
-msgstr ""
+msgstr "20 Textura vexetal"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3466,7 +3127,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/21_texture-"
 "chainmail.png"
 msgid "21 texture-chainmail"
-msgstr ""
+msgstr "21 Textura de cota de malla"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3474,7 +3135,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/22_texture-"
 "reptile.png"
 msgid "22 texture-reptile"
-msgstr ""
+msgstr "22 Textura de réptil"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3482,7 +3143,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/23-dynamic-"
 "screentone-A.png"
 msgid "23-dynamic-screentone-A"
-msgstr ""
+msgstr "23 Ton de pantalla dinámico a"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3490,7 +3151,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/24-dynamic-"
 "screentone-B.png"
 msgid "24-dynamic-screentone-B"
-msgstr ""
+msgstr "24 Ton de pantalla dinámico b"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3498,7 +3159,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/25-dynamic-"
 "screentone-C.png"
 msgid "25-dynamic-screentone-C"
-msgstr ""
+msgstr "25 Ton de pantalla dinámico c"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3506,12 +3167,10 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/26_brush-"
 "marks.png"
 msgid "26 brush-marks"
-msgstr ""
+msgstr "26 Marcas de pincel"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/Canvas_Hard.pat"
-#| msgid "Canvas 01"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Canvas_Hard."
 "pat"
@@ -3519,9 +3178,7 @@ msgid "Canvas 01"
 msgstr "Lenzo 01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/Canvas_covered.pat"
-#| msgid "Canvas Covered"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "Canvas_covered.pat"
@@ -3529,9 +3186,7 @@ msgid "Canvas Covered"
 msgstr "Lenzo cuberto"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/Canvas_small_01.pat"
-#| msgid "Canvas 02"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "Canvas_small_01.pat"
@@ -3539,9 +3194,7 @@ msgid "Canvas 02"
 msgstr "Lenzo 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/Canvas_small_02.pat"
-#| msgid "Canvas 03"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "Canvas_small_02.pat"
@@ -3549,115 +3202,99 @@ msgid "Canvas 03"
 msgstr "Lenzo 03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Cross01.pat"
 msgid "Cross01"
-msgstr "Cruce"
+msgstr "Cruz 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Cross02.pat"
 msgid "Cross02"
-msgstr "Cruce"
+msgstr "Cruz 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Cross03.pat"
 msgid "Cross03"
-msgstr "Cruce"
+msgstr "Cruz 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Cross04.pat"
 msgid "Cross04"
-msgstr "Cruce"
+msgstr "Cruz 4"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Cross05.pat"
 msgid "Cross05"
-msgstr "Cruce"
+msgstr "Cruz 5"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Cross06.pat"
 msgid "Cross06"
-msgstr "Cruce"
+msgstr "Cruz 6"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Cross"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Cross07.pat"
 msgid "Cross07"
-msgstr "Cruce"
+msgstr "Cruz 7"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/Crumpled_Paper.pat"
-#| msgid "Canvas 04"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "Crumpled_Paper.pat"
 msgid "Canvas 04"
-msgstr "Lenzo 04"
+msgstr "Lenzo 4"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Grid01.pat"
 msgid "Grid01"
-msgstr "Grade"
+msgstr "Grade 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Grid02.pat"
 msgid "Grid02"
-msgstr "Grade"
+msgstr "Grade 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Grid03.pat"
 msgid "Grid03"
-msgstr "Grade"
+msgstr "Grade 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Grid04.pat"
 msgid "Grid04"
-msgstr "Grade"
+msgstr "Grade 4"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Grid"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Grid05.pat"
 msgid "Grid05"
-msgstr "Grade"
+msgstr "Grade 5"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/HR_PastelPaper_02.pat"
-#| msgid "HR Pastel Paper 02"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "HR_PastelPaper_02.pat"
@@ -3665,9 +3302,7 @@ msgid "HR Pastel Paper 02"
 msgstr "HR Papel en pasta 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/HR_Wall_Paper.pat"
-#| msgid "HR Wall Paper"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/HR_Wall_Paper."
 "pat"
@@ -3675,221 +3310,203 @@ msgid "HR Wall Paper"
 msgstr "HR Papel de parede"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern01.pat"
 msgid "Pattern01"
-msgstr "Padrón"
+msgstr "Padrón 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern02.pat"
 msgid "Pattern02"
-msgstr "Padrón"
+msgstr "Padrón 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern03.pat"
 msgid "Pattern03"
-msgstr "Padrón"
+msgstr "Padrón 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern04.pat"
 msgid "Pattern04"
-msgstr "Padrón"
+msgstr "Padrón 4"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern05.pat"
 msgid "Pattern05"
-msgstr "Padrón"
+msgstr "Padrón 5"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Pattern06.pat"
 msgid "Pattern06"
-msgstr "Padrón"
+msgstr "Padrón 6"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares01.pat"
 msgid "Squares01"
-msgstr "Cadrado"
+msgstr "Cadrado 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares02.pat"
 msgid "Squares02"
-msgstr "Cadrado"
+msgstr "Cadrado 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares03.pat"
 msgid "Squares03"
-msgstr "Cadrado"
+msgstr "Cadrado 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares04.pat"
 msgid "Squares04"
-msgstr "Cadrado"
+msgstr "Cadrado 4"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares05.pat"
 msgid "Squares05"
-msgstr "Cadrado"
+msgstr "Cadrado 5"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares06.pat"
 msgid "Squares06"
-msgstr "Cadrado"
+msgstr "Cadrado 6"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares07.pat"
 msgid "Squares07"
-msgstr "Cadrado"
+msgstr "Cadrado 7"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares08.pat"
 msgid "Squares08"
-msgstr "Cadrado"
+msgstr "Cadrado 8"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares09.pat"
 msgid "Squares09"
-msgstr "Cadrado"
+msgstr "Cadrado 9"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Square"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Squares10.pat"
 msgid "Squares10"
-msgstr "Cadrado"
+msgstr "Cadrado 10"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Stripes02.pat"
 msgid "Stripes02"
-msgstr ""
+msgstr "Raias 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Stripes03.pat"
 msgid "Stripes03"
-msgstr ""
+msgstr "Raias 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Stripes04.pat"
 msgid "Stripes04"
-msgstr ""
+msgstr "Raias 4"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Stripes05.pat"
 msgid "Stripes05"
-msgstr ""
+msgstr "Raias 5"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Stripes06.pat"
 msgid "Stripes06"
-msgstr ""
+msgstr "Raias 6"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Stripes07.pat"
 msgid "Stripes07"
-msgstr ""
+msgstr "Raias 7"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Stripes08.pat"
 msgid "Stripes08"
-msgstr ""
+msgstr "Raias 8"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Stripes09.pat"
 msgid "Stripes09"
-msgstr ""
+msgstr "Raias 9"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Zigzag01.pat"
 msgid "Zigzag01"
-msgstr ""
+msgstr "Zigzag 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Zigzag02.pat"
 msgid "Zigzag02"
-msgstr ""
+msgstr "Zigzag 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Zigzag03.pat"
 msgid "Zigzag03"
-msgstr ""
+msgstr "Zigzag 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Zigzag04.pat"
 msgid "Zigzag04"
-msgstr ""
+msgstr "Zigzag 4"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/fractal_pattern.pat"
-#| msgid "Fractal Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "fractal_pattern.pat"
@@ -3897,9 +3514,7 @@ msgid "Fractal Pattern"
 msgstr "Padrón fractal"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/generic_paper1.pat"
-#| msgid "Generic Paper 2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "generic_paper1.pat"
@@ -3907,9 +3522,7 @@ msgid "Generic Paper 2"
 msgstr "Papel xenérico 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/generic_paper2.pat"
-#| msgid "Generic Paper 3"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "generic_paper2.pat"
@@ -3917,18 +3530,14 @@ msgid "Generic Paper 3"
 msgstr "Papel xenérico 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/granite.pat"
-#| msgid "Granite 1b"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/granite.pat"
 msgid "Granite 1b"
 msgstr "Granito 1b"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/hexacolBW__2.pat"
-#| msgid "Hexacol BW By Tarkan"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/hexacolBW__2."
 "pat"
@@ -3944,22 +3553,19 @@ msgid "abominable snowman"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/U_Circle_shape_5.gbr"
-#| msgid "U Circle shape 5"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/bokey_circle."
 "gbr"
 msgid "U Circle shape 5"
-msgstr "U Círculo forma 5"
+msgstr "U — Forma de círculo 5"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Bristle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/bristle.png"
 msgid "bristle"
-msgstr "Pelo"
+msgstr "pelo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format

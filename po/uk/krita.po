@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-11 00:40+0000\n"
-"PO-Revision-Date: 2023-12-10 09:42+0200\n"
+"PO-Revision-Date: 2023-12-11 08:51+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -40995,12 +40995,10 @@ msgstr ""
 "стежте за загальною швидкодією системи."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:353
-#, fuzzy, kde-format
-#| msgid "Set the number of threads using during record."
+#, kde-format
 msgid "Set the number of threads to be used for recording."
 msgstr ""
-"Встановити кількість потоків обробки, яку буде використано під час "
-"записування."
+"Встановити кількість потоків обробки, які буде використано для записування."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:361
 #, kde-format

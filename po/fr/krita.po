@@ -14329,7 +14329,8 @@ msgctxt "action"
 msgid "Show Rulers"
 msgstr "Afficher les règles"
 
-# Cela ajoute un petit marqueur à la règle pour montrer où se trouve la souris par rapport à elle.
+# Cela ajoute un petit marqueur à la règle pour montrer où se trouve la souris
+# par rapport à elle.
 #. i18n: context: text @ Action (rulers_track_mouse), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rulers_track_mouse), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rulers_track_mouse), Actions (View), ActionCollection (Menu)
@@ -20132,7 +20133,8 @@ msgstr "dossier de ressources"
 msgid "Display settings"
 msgstr "Configuration de l'affichage"
 
-# Il s'agit de l'infobulle correspondant au bouton d'accès aux différents bundles de brosses disponibles dans la liste des brosses.
+# Il s'agit de l'infobulle correspondant au bouton d'accès aux différents
+# bundles de brosses disponibles dans la liste des brosses.
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:134
 #, kde-format
 msgid "Storage Resources"
@@ -39275,7 +39277,8 @@ msgstr "Espacement Y : "
 msgid "Subdivision:"
 msgstr "Subdivision :"
 
-# style des lignes intermédiaires de la grille, attention peu de place sur l'interface
+# style des lignes intermédiaires de la grille, attention peu de place sur
+# l'interface
 #. i18n: ectx: property (text), widget (QLabel, lblSubdivisionStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:315
 #, kde-format
@@ -39313,7 +39316,8 @@ msgstr "Tirets"
 msgid "Dots"
 msgstr "Points"
 
-# style des lignes principales de la grille, attention peu de place sur l'interface
+# style des lignes principales de la grille, attention peu de place sur
+# l'interface
 #. i18n: ectx: property (text), widget (QLabel, lblMainStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:394
 #, kde-format
@@ -43795,7 +43799,8 @@ msgstr "Activer"
 msgid "Create Resource Bundle"
 msgstr "Créer un pack de ressources"
 
-# Il s'agit de l'infobulle correspondant au bouton d'accès aux différents bundles de brosses disponibles dans la liste des brosses.
+# Il s'agit de l'infobulle correspondant au bouton d'accès aux différents
+# bundles de brosses disponibles dans la liste des brosses.
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseRes)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:130
 #: plugins/extensions/resourcemanager/wdgside.ui:137
@@ -58699,7 +58704,8 @@ msgctxt "(qtundo-format)"
 msgid "Rotate"
 msgstr "Rotation"
 
-# le cisaillement est un type de déformation appliquée à un matériau (voir Wikipédia)
+# le cisaillement est un type de déformation appliquée à un matériau (voir
+# Wikipédia)
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 msgctxt "(qtundo-format)"
 msgid "Shear"

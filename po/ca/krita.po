@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-11 00:40+0000\n"
-"PO-Revision-Date: 2023-12-10 10:55+0100\n"
+"PO-Revision-Date: 2023-12-11 15:22+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -40478,10 +40478,9 @@ msgstr ""
 "sistema."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:353
-#, fuzzy, kde-format
-#| msgid "Set the number of threads using during record."
+#, kde-format
 msgid "Set the number of threads to be used for recording."
-msgstr "Estableix el nombre de fils a usar durant l'enregistrament."
+msgstr "Estableix el nombre de fils a usar per a l'enregistrament."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:361
 #, kde-format

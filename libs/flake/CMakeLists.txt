@@ -12,6 +12,12 @@ add_subdirectory(styles)
 add_subdirectory(tests)
 add_subdirectory(resources/tests)
 
+if(HAVE_XSIMD)
+    ko_compile_for_all_implementations(__per_arch_alpha_applicator_factory_objs KoClipMaskApplicatorFactoryImpl.cpp)
+else()
+    set(__per_arch_alpha_applicator_factory_objs KoClipMaskApplicatorFactoryImpl.cpp)
+endif()
+
 set(kritaflake_SRCS
     KoGradientHelper.cpp
     KoFlake.cpp
@@ -99,9 +105,11 @@ set(kritaflake_SRCS
     KoTextShapeDataBase.cpp
     KoTosContainer.cpp
     KoTosContainerModel.cpp
+    KoClipMaskApplicator.cpp
+    ${__per_arch_alpha_applicator_factory_objs}
+    KoClipMaskPainter.cpp
     KoClipPath.cpp
     KoClipMask.cpp
-    KoClipMaskPainter.cpp
     KoCurveFit.cpp
 
     commands/KoShapeGroupCommand.cpp
@@ -212,6 +220,7 @@ set(kritaflake_SRCS
 
     FlakeDebug.cpp
     tests/MockShapes.cpp
+
 )
 
 if (KSeExpr_FOUND)

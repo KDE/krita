@@ -92,64 +92,16 @@ QPainter *KoClipMaskPainter::maskPainter()
     return &m_d->maskPainter;
 }
 
-using uint_v = typename KoStreamedMath<xsimd::current_arch>::uint_v;
-using float_v = typename KoStreamedMath<xsimd::current_arch>::float_v;
-
-
 void KoClipMaskPainter::renderOnGlobalPainter()
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->maskImage.size() == m_d->shapeImage.size());
 
-
     const int nPixels = m_d->maskImage.height() * m_d->maskImage.width();
-    const int block = nPixels / static_cast<int>(float_v::size);
-    const int block2 = nPixels % static_cast<int>(float_v::size);
-    const int vectorPixelStride = 4 * static_cast<int>(float_v::size);
 
-    const uint_v mask(0xFF);
-    const quint32 colorChannelsMask = 0x00FFFFFF;
-    const float redLum = 0.2125f;
-    const float greenLum = 0.7154f;
-    const float blueLum = 0.0721f;
-
-    quint8 *pixels = m_d->shapeImage.bits();
-    quint8 *maskPixels = m_d->maskImage.bits();
-
-    for (int i = 0; i < block; i++) {
-        auto shapeData = uint_v::load_unaligned(reinterpret_cast<const quint32 *>(pixels));
-        const auto maskData = uint_v::load_unaligned(reinterpret_cast<const quint32 *>(maskPixels));
-
-        const float_v maskAlpha = xsimd::to_float(xsimd::bitwise_cast_compat<int>((maskData >> 24) & mask));
-        const float_v maskRed   = xsimd::to_float(xsimd::bitwise_cast_compat<int>((maskData >> 16) & mask));
-        const float_v maskGreen = xsimd::to_float(xsimd::bitwise_cast_compat<int>((maskData >> 8) & mask));
-        const float_v maskBlue = xsimd::to_float(xsimd::bitwise_cast_compat<int>((maskData) & mask));
-        const float_v maskValue = maskAlpha * ((redLum * maskRed) + (greenLum * maskGreen) + (blueLum * maskBlue));
-
-        const auto pixelAlpha = xsimd::to_float(xsimd::bitwise_cast_compat<int>(shapeData >> 24U)) * maskValue;
-        const uint_v pixelAlpha_i = xsimd::bitwise_cast_compat<unsigned int>(xsimd::nearbyint_as_int(pixelAlpha));
-        shapeData = (shapeData & colorChannelsMask) | (pixelAlpha_i << 24);
-
-        shapeData.store_unaligned(reinterpret_cast<typename uint_v::value_type *>(pixels));
-
-        pixels += vectorPixelStride;
-        maskPixels += vectorPixelStride;
-    }
-
-    const float normCoeff = 1.0f / 255.0f;
-
-    for (int i = 0; i < block2; i++) {
-        const QRgb mask = *maskPixels;
-        const QRgb shape = *pixels;
-
-        const float maskValue = qAlpha(mask) * (redLum* qRed(mask) + greenLum * qGreen(mask) + blueLum * qBlue(mask)) * normCoeff;
-
-        const QRgb alpha = static_cast<QRgb>(qRound(maskValue * (qAlpha(shape) * normCoeff)));
-
-        *pixels = (alpha << 24) | (shape & colorChannelsMask);
-
-        pixels++;
-        maskPixels++;
-    }
+    KoClipMaskApplicatorBase *applicator = KoClipMaskApplicatorFactory::createApplicator();
+    applicator->applyLuminanceMask(m_d->shapeImage.bits(),
+                                  m_d->maskImage.bits(),
+                                  nPixels);
 
     KIS_ASSERT_RECOVER_RETURN(m_d->shapeImage.size() == m_d->alignedGlobalClipRect.size());
     QPainterPath globalClipPath;
@@ -169,4 +121,3 @@ void KoClipMaskPainter::renderOnGlobalPainter()
     m_d->globalPainter->drawImage(m_d->alignedGlobalClipRect.topLeft(), m_d->shapeImage);
     m_d->globalPainter->restore();
 }
-

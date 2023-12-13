@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-11 00:40+0000\n"
+"POT-Creation-Date: 2023-12-13 00:40+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -53550,7 +53550,7 @@ msgctxt "WebP metadata options"
 msgid "Filters:"
 msgstr "Filtrid:"
 
-#: plugins/impex/webp/kis_webp_import.cpp:104
+#: plugins/impex/webp/kis_webp_import.cpp:129
 #, fuzzy, kde-format
 #| msgid "New Image"
 msgid "WebP Image"

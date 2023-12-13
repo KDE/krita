@@ -42,8 +42,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-11 00:40+0000\n"
-"PO-Revision-Date: 2023-12-11 21:13+0100\n"
+"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"PO-Revision-Date: 2023-12-12 23:48+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -16377,12 +16377,10 @@ msgstr ""
 "plu kongruos kun Krita 4.x"
 
 #: libs/flake/text/KoSvgTextShape.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "Default text for the text shape"
-#| msgid "<text>Placeholder Text</text>"
+#, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
-msgstr "<text>Teksto de lokokupilo</text>"
+msgstr "Lokokupila Teksto"
 
 #: libs/flake/text/KoSvgTextShape.cpp:1053
 #, kde-format
@@ -40094,17 +40092,16 @@ msgstr "Kvalito:"
 #. i18n: Please do not remove the spaces after the label text. It ensures to fix the column width if the label text of `labelRate` is set to an other value for RealTimeCaptureMode switched on.
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
 #: plugins/dockers/recorder/recorderdocker.ui:225
-#, fuzzy, kde-format
-#| msgid "Resolution:"
+#, kde-format
 msgctxt "Resolution for recorded frames"
 msgid "Resolution:         "
-msgstr "Rezolucio:"
+msgstr "Distingivo:         "
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboResolution)
 #: plugins/dockers/recorder/recorderdocker.ui:248
 #, kde-format
 msgid "Original"
-msgstr "Originala"
+msgstr "Origina"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboResolution)
 #: plugins/dockers/recorder/recorderdocker.ui:253
@@ -40129,18 +40126,15 @@ msgstr "Formato:"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinThreads)
 #: plugins/dockers/recorder/recorderdocker.ui:304
 #: plugins/dockers/recorder/recorderdocker.ui:326
-#, fuzzy, kde-format
-#| msgid ""
-#| "Please choose the language which should be used for this application:"
+#, kde-format
 msgid "Number of threads, which should be used for recording"
-msgstr "Bonvolu elekti la lingvon, kiu devus esti uzata por ĉi tiu aplikaĵo:"
+msgstr "Nombro da fadenoj, kiuj estu uzataj por registrado"
 
 #. i18n: ectx: property (text), widget (QLabel, labelThreads)
 #: plugins/dockers/recorder/recorderdocker.ui:335
-#, fuzzy, kde-format
-#| msgid "Spread:"
+#, kde-format
 msgid "Threads:"
-msgstr "Disvastigi:"
+msgstr "Fadenoj:"
 
 #. i18n: Tooltip for check box
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxRealTimeCaptureMode)
@@ -40241,15 +40235,13 @@ msgstr ""
 "Valoroj super 3 ne estas rekomenditaj pro alta rendimenta efiko."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:184
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "Video FPS:"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:193
-#, fuzzy, kde-format
-#| msgid "Capture interval:"
+#, kde-format
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "Intervalo de kapto:"
@@ -40258,7 +40250,7 @@ msgstr "Intervalo de kapto:"
 #, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
-msgstr "Originala"
+msgstr "Origina"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:235
 #, kde-format
@@ -40324,10 +40316,9 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:353
-#, fuzzy, kde-format
-#| msgid "Select the recordings directory..."
+#, kde-format
 msgid "Set the number of threads to be used for recording."
-msgstr "Elekti la dosierujon de registradoj..."
+msgstr "Metu la nombron da fadenoj kiuj estu uzataj por registrado."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:361
 #, kde-format
@@ -40368,10 +40359,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:714
-#, fuzzy, kde-format
-#| msgid ""
-#| "Low performance warning. The recorder is not able to write all the frames "
-#| "in time. Try increasing the capture interval."
+#, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time during Real Time Capture mode.\n"
@@ -40379,13 +40367,12 @@ msgid ""
 "filtering in the canvas acceleration settings."
 msgstr ""
 "Averto de malalta rendimento. La registrilo ne kapablas skribi ĉiujn kadrojn "
-"ĝustatempe. Provu pliigi la kaptan intervalon."
+"ĝustatempe dum Realtempa Kaptreĝimo.\n"
+"Provu malpliigi la kadrofrekvencon por la ffmpeg-eksporto aŭ redukti la "
+"skalfiltradon en la kanvas-akcelaj agordoj."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:716
-#, fuzzy, kde-format
-#| msgid ""
-#| "Low performance warning. The recorder is not able to write all the frames "
-#| "in time. Try increasing the capture interval."
+#, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time.\n"
@@ -40393,7 +40380,9 @@ msgid ""
 "canvas acceleration settings."
 msgstr ""
 "Averto de malalta rendimento. La registrilo ne kapablas skribi ĉiujn kadrojn "
-"ĝustatempe. Provu pliigi la kaptan intervalon."
+"ĝustatempe.\n"
+"Provu pliigi la kapt-intervalon aŭ redukti la skalfiltradon en la kanvas-"
+"akcelaj agordoj."
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
 #, kde-format
@@ -51140,7 +51129,7 @@ msgctxt "WebP metadata options"
 msgid "Filters:"
 msgstr "Filtriloj:"
 
-#: plugins/impex/webp/kis_webp_import.cpp:104
+#: plugins/impex/webp/kis_webp_import.cpp:129
 #, kde-format
 msgid "WebP Image"
 msgstr "WebP-bildo"

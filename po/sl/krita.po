@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-11 00:40+0000\n"
-"PO-Revision-Date: 2023-12-10 11:07+0100\n"
+"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"PO-Revision-Date: 2023-12-12 11:57+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -40388,10 +40388,9 @@ msgstr ""
 "zmogljivost/hitrost sistema."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:353
-#, fuzzy, kde-format
-#| msgid "Set the number of threads using during record."
+#, kde-format
 msgid "Set the number of threads to be used for recording."
-msgstr "Določite število iti med snemanjem."
+msgstr "Določite število niti, ki jih želite uporabljati za snemanje."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:361
 #, kde-format
@@ -51225,7 +51224,7 @@ msgctxt "WebP metadata options"
 msgid "Filters:"
 msgstr "Filtri:"
 
-#: plugins/impex/webp/kis_webp_import.cpp:104
+#: plugins/impex/webp/kis_webp_import.cpp:129
 #, kde-format
 msgid "WebP Image"
 msgstr "Slika WebP"

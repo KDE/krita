@@ -773,8 +773,17 @@ void KisShortcutMatcher::prepareReadyShortcuts()
 {
     m_d->candidateShortcuts.clear();
     if (m_d->actionsSuppressed()) return;
+
+    // Allow letting the modifiers to be matched so key_shift + middle mouse move can be matched, but key_v + mouse drag can not.
+    bool containsOnlyModifiers = !m_d->keys.isEmpty();
+    Q_FOREACH(const Qt::Key k, m_d->keys) {
+        if (k != Qt::Key_Shift && k != Qt::Key_Control && k != Qt::Key_Alt && k != Qt::Key_Meta) {
+            containsOnlyModifiers = false;
+            break;
+        }
+    }
     if (m_d->KeyboardActionsSuppressed()
-            && !m_d->keys.isEmpty()
+            && !containsOnlyModifiers && !m_d->keys.isEmpty()
             && m_d->buttons.isEmpty()) {
         return;
     }

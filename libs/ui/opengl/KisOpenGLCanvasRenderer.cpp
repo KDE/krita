@@ -418,9 +418,6 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
                 d->solidColorShader->location(Uniform::FragmentColor),
                 QVector4D(d->cursorColor.redF(), d->cursorColor.greenF(), d->cursorColor.blueF(), 1.0f));
 
-    GLfloat lineWidthRange[2] = {0.0f, 0.0f};
-    glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, lineWidthRange);
-    glLineWidth(qBound(lineWidthRange[0], GLfloat(thickness), lineWidthRange[1]));
     glEnable(GL_BLEND);
     glBlendFuncSeparate(GL_ONE, GL_SRC_COLOR, GL_ONE, GL_ONE);
     glBlendEquationSeparate(GL_FUNC_SUBTRACT, GL_FUNC_ADD);
@@ -440,37 +437,113 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
 
     QVector<QVector3D> verticesBuffer;
 
-    // Convert every disjointed subpath to a polygon and draw that polygon
-    for (auto it = path.begin(); it != path.end(); ++it) {
-        const QPolygonF& polygon = *it;
+    if (thickness > 1) {
 
-        if (KisAlgebra2D::maxDimension(polygon.boundingRect()) < 0.5) {
-            continue;
+        // Because glLineWidth is not supported on all versions of OpenGL (or rather, is limited to 1),
+        // we'll instead generate mitered-triangles.
+        const float halfWidth = thickness * 0.5;
+        const float miterLimit = 5 * thickness;
+
+        for (auto it = path.begin(); it != path.end(); ++it) {
+            const QPolygonF& polygon = *it;
+
+            if (KisAlgebra2D::maxDimension(polygon.boundingRect()) < 0.5) {
+                continue;
+            }
+
+            int triangleCount = 0;
+            verticesBuffer.clear();
+            const bool closed = polygon.isClosed();
+
+            for( int i = 1; i < polygon.count(); i++) {
+                bool adjustFirst = closed? true: i > 1;
+                bool adjustSecond = closed? true: i + 1 < polygon.count();
+
+                QVector3D p1 = QVector3D(polygon.at(i - 1));
+                QVector3D p2 = QVector3D(polygon.at(i));
+                QVector3D normal = p2 - p1;
+                normal = QVector3D(-normal.y(), normal.x(), normal.z()).normalized();
+
+                QVector3D c1 = p1 - (normal * halfWidth);
+                QVector3D c2 = p1 + (normal * halfWidth);
+                QVector3D c3 = p2 - (normal * halfWidth);
+                QVector3D c4 = p2 + (normal * halfWidth);
+
+                // Add miter
+                if (adjustFirst) {
+                    QVector3D pPrev = i >= 2? QVector3D(polygon.at(i-2)): QVector3D(polygon.last());
+                    pPrev = p1 - pPrev;
+                    QVector3D miter = QVector3D(normal + QVector3D(-pPrev.y(), pPrev.x(), pPrev.z()).normalized()).normalized();
+                    float dot = QVector3D::dotProduct(miter, normal);
+                    if (((miter * halfWidth) / dot).length() < miterLimit) {
+                        c1 = p1 + ((miter * -halfWidth) / dot);
+                        c2 = p1 + ((miter * halfWidth) / dot);
+                    }
+                }
+                if (adjustSecond) {
+                    QVector3D pNext = i + 1 < polygon.count()? QVector3D(polygon.at(i+1)): QVector3D(polygon.first());
+                    pNext = pNext - p2;
+                    QVector3D miter = QVector3D(normal + QVector3D(-pNext.y(), pNext.x(), pNext.z()).normalized()).normalized();
+                    float dot = QVector3D::dotProduct(miter, normal);
+                    if (((miter * halfWidth) / dot).length() < miterLimit) {
+                        c3 = p2 + ((miter * -halfWidth) / dot);
+                        c4 = p2 + (miter * halfWidth) / dot;
+                    }
+                }
+
+                verticesBuffer.append(c1);
+                verticesBuffer.append(c3);
+                verticesBuffer.append(c2);
+                verticesBuffer.append(c4);
+                verticesBuffer.append(c2);
+                verticesBuffer.append(c3);
+                triangleCount += 2;
+            }
+
+            if (KisOpenGL::supportsVAO()) {
+                d->lineVertexBuffer.bind();
+                d->lineVertexBuffer.allocate(verticesBuffer.constData(), 3 * verticesBuffer.size() * sizeof(float));
+            }
+            else {
+                d->solidColorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+                d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, verticesBuffer.constData());
+            }
+
+            glDrawArrays(GL_TRIANGLES, 0, triangleCount * 3);
         }
+    } else {
+        // Convert every disjointed subpath to a polygon and draw that polygon
+        for (auto it = path.begin(); it != path.end(); ++it) {
+            const QPolygonF& polygon = *it;
 
-        const int verticesCount = polygon.count();
+            if (KisAlgebra2D::maxDimension(polygon.boundingRect()) < 0.5) {
+                continue;
+            }
 
-        if (verticesBuffer.size() < verticesCount) {
-            verticesBuffer.resize(verticesCount);
+            const int verticesCount = polygon.count();
+
+            if (verticesBuffer.size() < verticesCount) {
+                verticesBuffer.resize(verticesCount);
+            }
+
+            for (int vertIndex = 0; vertIndex < verticesCount; vertIndex++) {
+                QPointF point = polygon.at(vertIndex);
+                verticesBuffer[vertIndex].setX(point.x());
+                verticesBuffer[vertIndex].setY(point.y());
+            }
+            if (KisOpenGL::supportsVAO()) {
+                d->lineVertexBuffer.bind();
+                d->lineVertexBuffer.allocate(verticesBuffer.constData(), 3 * verticesCount * sizeof(float));
+            }
+            else {
+                d->solidColorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+                d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, verticesBuffer.constData());
+            }
+
+
+
+            glDrawArrays(GL_LINE_STRIP, 0, verticesCount);
         }
-
-        for (int vertIndex = 0; vertIndex < verticesCount; vertIndex++) {
-            QPointF point = polygon.at(vertIndex);
-            verticesBuffer[vertIndex].setX(point.x());
-            verticesBuffer[vertIndex].setY(point.y());
-        }
-        if (KisOpenGL::supportsVAO()) {
-            d->lineVertexBuffer.bind();
-            d->lineVertexBuffer.allocate(verticesBuffer.constData(), 3 * verticesCount * sizeof(float));
-        }
-        else {
-            d->solidColorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-            d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, verticesBuffer.constData());
-        }
-
-
-
-        glDrawArrays(GL_LINE_STRIP, 0, verticesCount);
     }
 
     if (KisOpenGL::supportsVAO()) {

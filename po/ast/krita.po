@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-27 02:25+0000\n"
+"POT-Creation-Date: 2023-12-13 02:27+0000\n"
 "PO-Revision-Date: 2016-03-29 00:49+0100\n"
 "Last-Translator: enolp <enolp@softastur.org>\n"
 "Language-Team: Asturian <>\n"
@@ -49648,7 +49648,7 @@ msgctxt "WebP metadata options"
 msgid "Filters:"
 msgstr "Filtr&u"
 
-#: plugins/impex/webp/kis_webp_import.cpp:104
+#: plugins/impex/webp/kis_webp_import.cpp:129
 #, fuzzy, kde-format
 msgid "WebP Image"
 msgstr "&Imaxe"

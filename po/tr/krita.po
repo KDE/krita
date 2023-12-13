@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-27 02:25+0000\n"
+"POT-Creation-Date: 2023-12-13 02:27+0000\n"
 "PO-Revision-Date: 2023-11-27 19:16+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -50714,7 +50714,7 @@ msgctxt "WebP metadata options"
 msgid "Filters:"
 msgstr "Süzgeçler:"
 
-#: plugins/impex/webp/kis_webp_import.cpp:104
+#: plugins/impex/webp/kis_webp_import.cpp:129
 #, kde-format
 msgid "WebP Image"
 msgstr "WebP Görseli"

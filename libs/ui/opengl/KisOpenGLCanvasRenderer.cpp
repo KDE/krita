@@ -441,8 +441,8 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
 
         // Because glLineWidth is not supported on all versions of OpenGL (or rather, is limited to 1),
         // we'll instead generate mitered-triangles.
-        const float halfWidth = thickness * 0.5;
-        const float miterLimit = 5 * thickness;
+        const float halfWidth = (thickness * 0.5) / devicePixelRatioF();
+        const float miterLimit = (5 * thickness) / devicePixelRatioF();
 
         for (auto it = path.begin(); it != path.end(); ++it) {
             const QPolygonF& polygon = *it;

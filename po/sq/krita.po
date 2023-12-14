@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the koffice package.
 #
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
-# Agron Selimaj <linuxmaster@verizon.net>, 2011.
+# SPDX-FileCopyrightText: 2011, 2023 Agron Selimaj <linuxmaster@verizon.net>
 # --- kritafiltereffects
 # Albanian translation for koffice
 # Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
@@ -15,23 +15,22 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-13 00:40+0000\n"
-"PO-Revision-Date: 2011-06-01 01:29-0400\n"
-"Last-Translator: Agron Selimaj <linuxmaster@verizon.net>\n"
-"Language-Team: Albanian <sq@li.org>\n"
+"PO-Revision-Date: 2023-12-13 16:50-0500\n"
+"Last-Translator: Agron Selimaj <as9902613@gmail.com>\n"
+"Language-Team: sq\n"
 "Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2011-04-22 11:56+0000\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Triangle"
+#, kde-format
 msgctxt "./krita/data/brushes/triangle.svg"
 msgid "triangle"
-msgstr "Trekëndësh"
+msgstr "trekëndësh"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -3840,12 +3839,11 @@ msgid "starfield"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Triangle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/triangle.svg"
 msgid "triangle"
-msgstr "Trekëndësh"
+msgstr "trekëndësh"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16833,7 +16831,7 @@ msgstr "Përmasa e Imazhit"
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:134
 #, kde-format
 msgid " px"
-msgstr ""
+msgstr " px"
 
 #. i18n: ectx: property (text), widget (QCheckBox, opacityCBox)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:19
@@ -20630,7 +20628,7 @@ msgstr ""
 #, kde-format
 msgctxt "FPS as a unit following a value, like 60 FPS"
 msgid " FPS"
-msgstr ""
+msgstr " FPS"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:88
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:94
@@ -20638,7 +20636,7 @@ msgstr ""
 #, kde-format
 msgctxt "Second as a unit following a value, like 60 s"
 msgid " s"
-msgstr ""
+msgstr " s"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:100
 #, fuzzy, kde-format
@@ -21077,11 +21075,11 @@ msgid "Reset"
 msgstr "&Përzgjidhni"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "ultrafast"
-msgstr "Përzgjedhje"
+msgstr "ultrashpejt"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:40
 #, fuzzy, kde-format
@@ -21091,11 +21089,11 @@ msgid "superfast"
 msgstr "Përzgjedhje"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:41
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "veryfast"
-msgstr "Përzgjedhje"
+msgstr "shumëshpejt"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:42
 #, fuzzy, kde-format
@@ -21133,11 +21131,11 @@ msgid "slower"
 msgstr "Gërma:"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:47
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "veryslow"
-msgstr "Përzgjedhje"
+msgstr "shumëngadalë"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:48
 #, fuzzy, kde-format
@@ -21287,7 +21285,7 @@ msgstr ""
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "up"
-msgstr ""
+msgstr "lart"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:81
 #, fuzzy, kde-format
@@ -21593,7 +21591,7 @@ msgstr "Patejdukshmëri:"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:318
 #, kde-format
 msgid " cd/m²"
-msgstr ""
+msgstr " cd/m²"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:270
@@ -22900,7 +22898,7 @@ msgstr[1] "Parametrat e Ngjyrave"
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
-msgstr ""
+msgstr " GiB"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1445
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
@@ -22909,12 +22907,12 @@ msgstr ""
 #, kde-format
 msgctxt "suffix for \"seconds\""
 msgid " sec"
-msgstr ""
+msgstr " sek"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1449
 #, kde-format
 msgid " fps"
-msgstr ""
+msgstr " fps"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1678
 #, fuzzy, kde-format
@@ -24432,9 +24430,9 @@ msgstr "Zgjedhës i ngjyrës"
 
 #. i18n: ectx: property (text), widget (QPushButton, patternButton)
 #: libs/ui/forms/wdgcustompattern.ui:141
-#, fuzzy, kde-format
+#, kde-format
 msgid "use as &Pattern"
-msgstr "Ngopja"
+msgstr "përdore si &Mostër"
 
 #. i18n: ectx: property (text), widget (QPushButton, addButton)
 #: libs/ui/forms/wdgcustompattern.ui:148
@@ -25303,7 +25301,7 @@ msgstr "Patejdukshmëri:"
 #, kde-format
 msgctxt "Suffix: “Every x min”"
 msgid " min"
-msgstr ""
+msgstr " min"
 
 #. i18n: ectx: property (prefix), widget (KisIntParseSpinBox, m_autosaveSpinBox)
 #: libs/ui/forms/wdggeneralsettings.ui:880
@@ -26246,7 +26244,7 @@ msgstr "..."
 #: libs/ui/forms/wdgnewimage.ui:449
 #, kde-format
 msgid "untitled-1"
-msgstr ""
+msgstr "pa titull-1"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgnewimage.ui:456
@@ -26602,7 +26600,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:172
 #, kde-format
 msgid " MiB"
-msgstr ""
+msgstr " MiB"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdgperformancesettings.ui:119
@@ -28184,7 +28182,7 @@ msgstr "Shtresat"
 #, kde-format
 msgctxt "Separator in the list of mouse buttons for shortcut"
 msgid " + "
-msgstr ""
+msgstr " + "
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:298
 #, fuzzy, kde-format
@@ -28236,21 +28234,20 @@ msgid "None"
 msgstr "Asnjë"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:358
-#, fuzzy, kde-format
-#| msgid "Pressure"
+#, kde-format
 msgctxt ""
 "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
 "number of buttons in that list."
 msgid "%1 Button"
 msgid_plural "%1 Buttons"
-msgstr[0] "Trysni"
-msgstr[1] "Trysni"
+msgstr[0] "Pulla %1"
+msgstr[1] "Pullat %1"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:370
 #, kde-format
 msgctxt "Separator in the list of keys for shortcut"
 msgid " + "
-msgstr ""
+msgstr " + "
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:375
 #, kde-format
@@ -28319,13 +28316,13 @@ msgstr "Asnjë"
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse buttons in shortcut"
 msgid "%1 + %2"
-msgstr ""
+msgstr "%1 + %2"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:457
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse wheel buttons in shortcut"
 msgid "%1 + %2"
-msgstr ""
+msgstr "%1 + %2"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:471
 #, fuzzy, kde-format
@@ -28658,13 +28655,13 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "%1 (Wintab)"
-msgstr ""
+msgstr "%1 (Wintab)"
 
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.cpp:49
 #, kde-format
 msgctxt "@option:radio"
 msgid "%1 (Qt)"
-msgstr ""
+msgstr "%1 (Qt)"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisScreenSizeChoiceDialog)
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:18
@@ -29537,7 +29534,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
-msgstr ""
+msgstr "%1 &x %2 (%3)"
 
 #: libs/ui/kis_statusbar.cc:277
 #, kde-format
@@ -29609,7 +29606,7 @@ msgstr "Shtresat"
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
-msgstr ""
+msgstr "%1  %2"
 
 #: libs/ui/kis_zoom_manager.cc:319
 #, fuzzy, kde-format
@@ -30606,7 +30603,7 @@ msgstr ""
 #: libs/ui/KisMainWindow.cpp:2663
 #, kde-format
 msgid "%1 %2"
-msgstr ""
+msgstr "%1 %2"
 
 #: libs/ui/KisMainWindow.cpp:2830
 #, kde-format
@@ -31014,7 +31011,7 @@ msgstr "Zgjedhës i ngjyrës"
 #: libs/ui/KisViewManager.cpp:903
 #, kde-format
 msgid "%1 (Copy)"
-msgstr ""
+msgstr "%1 (Kopja)"
 
 #: libs/ui/KisViewManager.cpp:1046 libs/ui/KisViewManager.cpp:1122
 #, kde-format
@@ -32498,9 +32495,9 @@ msgstr "Duke printuar"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:490
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:499
-#, fuzzy, kde-format
+#, kde-format
 msgid "unnamed"
-msgstr "&Filtri:"
+msgstr "i pa emërtuar"
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:40
 #, fuzzy, kde-format
@@ -34605,7 +34602,7 @@ msgstr ""
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
-msgstr ""
+msgstr " – "
 
 #: libs/widgets/KoDialog.cpp:764
 #, fuzzy, kde-format
@@ -35245,7 +35242,7 @@ msgstr "Shtresa e tanishme"
 #: libs/widgetutils/config/kstandardaction_p.h:99
 #, kde-format
 msgid "%1 &Handbook"
-msgstr ""
+msgstr "%1 &Handbook"
 
 #: libs/widgetutils/config/kstandardaction_p.h:100
 #, kde-format
@@ -35397,10 +35394,10 @@ msgid "All supported formats"
 msgstr ""
 
 #: libs/widgetutils/KoGroupButton.cpp:146
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
-msgstr "%"
+msgstr "%1"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:33
 #, kde-format
@@ -35656,10 +35653,10 @@ msgid "Filter"
 msgstr "Filtri:"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1201
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
-msgstr "%"
+msgstr "%1"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1221
 #, kde-format
@@ -35691,10 +35688,10 @@ msgstr "Përzgjedhje"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1331
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1352
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
-msgstr "%"
+msgstr "%1"
 
 #: libs/widgetutils/xmlgui/kgesture.cpp:492
 #, fuzzy, kde-format
@@ -35817,10 +35814,10 @@ msgid "Description"
 msgstr "Përzgjedhje"
 
 #: libs/widgetutils/xmlgui/KisShortcutsEditorItem.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:intable Action name in shortcuts configuration"
 msgid "%1"
-msgstr "%"
+msgstr "%1"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:170
 #, fuzzy, kde-format
@@ -36140,16 +36137,16 @@ msgid "Lock Toolbar Positions"
 msgstr "Ngopja"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:1300
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:intoolbar Text label of toolbar button"
 msgid "%1"
-msgstr "%"
+msgstr "%1"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip Tooltip of toolbar button"
 msgid "%1"
-msgstr "%"
+msgstr "%1"
 
 #: libs/widgetutils/xmlgui/ktoolbarhandler.cpp:92
 #, fuzzy, kde-format
@@ -37198,9 +37195,9 @@ msgstr "Ndriçimi"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1092
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1122
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1136
-#, fuzzy, kde-format
+#, kde-format
 msgid " steps"
-msgstr "Teksti"
+msgstr " hapat"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1078
@@ -38359,7 +38356,7 @@ msgstr ""
 #: plugins/dockers/layerdocker/NodeDelegate.cpp:1299
 #, kde-format
 msgid "%1 %"
-msgstr ""
+msgstr "%1 %"
 
 #: plugins/dockers/layerdocker/NodeToolTip.cpp:46
 #, fuzzy, kde-format
@@ -38998,7 +38995,7 @@ msgstr ""
 #, kde-format
 msgctxt "Contraction of \"second\" for interval"
 msgid " sec."
-msgstr ""
+msgstr " sek."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, labelFpsInput)
 #: plugins/dockers/recorder/recorder_export.ui:243
@@ -39082,7 +39079,7 @@ msgstr ""
 #: plugins/dockers/recorder/recorder_export.ui:589
 #, kde-format
 msgid " sec."
-msgstr ""
+msgstr " sek."
 
 #. i18n: ectx: property (text), widget (QLabel, labelFfmpegLocation)
 #: plugins/dockers/recorder/recorder_export.ui:617
@@ -43903,13 +43900,13 @@ msgstr "Ndriçimi"
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:71
 #, fuzzy, kde-format
 msgid "         Input:"
-msgstr "Dalja"
+msgstr "         Hyrja:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelOut)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "         Output:"
-msgstr "Dalja"
+msgstr "         Dalja:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLogarithmic)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:330
@@ -44417,12 +44414,12 @@ msgid "Index Colors"
 msgstr "Ngjyrat"
 
 #: plugins/filters/indexcolors/kiswdgindexcolors.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "suffix for a spinbox"
 msgid " color"
 msgid_plural " colors"
-msgstr[0] "Ngjyrat"
-msgstr[1] "Ngjyrat"
+msgstr[0] "ngjyra"
+msgstr[1] "ngjyrat"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:33
@@ -45787,28 +45784,28 @@ msgstr[0] "Përzgjedhje"
 msgstr[1] "Përzgjedhje"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:447
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
-msgstr "pikselët"
+msgstr " piksel/inç"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:448
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
-msgstr "pikselët"
+msgstr " piksel/cm"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:451
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
-msgstr ""
+msgstr " reshta/inç"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:452
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
-msgstr "Përzgjedhje"
+msgstr " rreshta/cm"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScreentoneType)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:49
@@ -46302,7 +46299,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
-msgstr ""
+msgstr "%1 (i llojit: \"%2\")"
 
 #: plugins/impex/exr/exr_converter.cc:1328
 #, kde-format
@@ -49582,7 +49579,7 @@ msgstr "Përmasa e Imazhit"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:221
 #, kde-format
 msgid " B"
-msgstr ""
+msgstr " B"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblTargetPSNR)
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseUnitSpinBox, targetPSNR)
@@ -50086,7 +50083,7 @@ msgstr ""
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:111
 #, kde-format
 msgid " (caution, pierced brush!)"
-msgstr ""
+msgstr " (kujdes, furça e shpuar!)"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:112
 #, kde-format
@@ -51393,7 +51390,7 @@ msgstr "The Quick Brown Fox Jumps Over The Lazy Dog"
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:171
 #, kde-format
 msgid "use only one letter at a time"
-msgstr ""
+msgstr "përdor vetëm nga një shkronjë"
 
 #. i18n: ectx: property (text), widget (QCheckBox, pipeModeChbox)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:174
@@ -51753,9 +51750,9 @@ msgid "Angle Offset"
 msgstr "Rastësore"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryFade.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1"
-msgstr "%"
+msgstr "%1"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
 #, kde-format
@@ -51787,7 +51784,7 @@ msgstr "°"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:58
 #, kde-format
 msgid " ms"
-msgstr ""
+msgstr " ms"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:70
 #, kde-format
@@ -53384,7 +53381,7 @@ msgstr "Lartësia:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:43
 msgid " DPI"
-msgstr ""
+msgstr " DPI"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:65
 #, fuzzy
@@ -56268,6 +56265,8 @@ msgid ""
 "%1 %2\n"
 "%3°"
 msgstr ""
+"%1 %2\n"
+"%3°"
 
 #: plugins/tools/basictools/kis_tool_measure.h:102
 #, fuzzy, kde-format
@@ -59437,7 +59436,7 @@ msgstr "Horizonti 1"
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleYBox)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:971
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:987
-#, fuzzy, no-c-format, kde-format
+#, no-c-format, kde-format
 msgid " %"
 msgstr "%"
 

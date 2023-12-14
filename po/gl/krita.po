@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-13 00:40+0000\n"
-"PO-Revision-Date: 2023-12-11 08:35+0100\n"
+"PO-Revision-Date: 2023-12-13 08:52+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -88,7 +88,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.3\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3550,7 +3550,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "abominable_snowman.png"
 msgid "abominable snowman"
-msgstr ""
+msgstr "abominable besta das neves"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3573,7 +3573,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "bristles_chisel_dense.png"
 msgid "bristles chisel dense"
-msgstr ""
+msgstr "pelos, cicel denso"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3581,16 +3581,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "bristles_circle_dense.png"
 msgid "bristles circle dense"
-msgstr ""
+msgstr "pelos, círculo denso"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "bristle length weight"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "bristles_circle_medium.png"
 msgid "bristles circle medium"
-msgstr "Nivel da lonxitude dos pelos."
+msgstr "pelos, círculo mediano"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3598,34 +3597,30 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "bristles_circle_sparse.png"
 msgid "bristles circle sparse"
-msgstr ""
+msgstr "pelos, círculo disperso"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Styles available"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "bristles_circle_variable.svg"
 msgid "bristles circle variable"
-msgstr "Estilos dispoñíbeis"
+msgstr "pelos, círculo variábel"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_sparkle3.gbr"
-#| msgid "A -2 Sparkle 3"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "bristles_grouped.gbr"
 msgid "A -2 Sparkle 3"
-msgstr "A -2 Faísca 3"
+msgstr "A — Brillo 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Chalk"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk.png"
 msgid "chalk"
-msgstr "Xiz"
+msgstr "xiz"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3633,7 +3628,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "chalk_round_hard.png"
 msgid "chalk round hard"
-msgstr ""
+msgstr "xiz, arredondada dura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3641,7 +3636,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk_sparse."
 "png"
 msgid "chalk sparse"
-msgstr ""
+msgstr "xiz, dispersa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3649,34 +3644,30 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "chisel_dense_smear.png"
 msgid "chisel dense smear"
-msgstr ""
+msgstr "cicel, mancha densa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Chisel Hard"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chisel_eroded."
 "png"
 msgid "chisel eroded"
-msgstr "Cicel duro"
+msgstr "cicel, erosionado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/oil_knife.gbr"
-#| msgid "oil_knife"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chisel_knife."
 "gbr"
 msgid "chisel_knife"
-msgstr "coitela_de_óleo"
+msgstr "cicel, coitelo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Chisel Soft"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chisel_soft.png"
 msgid "chisel soft"
-msgstr "Cicel suave"
+msgstr "cicel, suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3684,49 +3675,42 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chisel_streaks."
 "png"
 msgid "chisel streaks"
-msgstr ""
+msgstr "cicel, series"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_craqules.gbr"
-#| msgid "A_craqules"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/crackles.gbr"
 msgid "A_craqules"
-msgstr "A_craqules"
+msgstr "A — Rachados"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/freckles.png"
 msgid "freckles"
-msgstr ""
+msgstr "pecas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "default prefix for the saved gradient"
-#| msgid "gradient"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/gradient.png"
 msgid "gradient"
 msgstr "gradación"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Crosshair"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/hair.png"
 msgid "hair"
-msgstr "Punto de mira"
+msgstr "pelo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/MZ_leaves.gbr"
-#| msgid "MZ_leaves"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/leaves.png"
 msgid "leaves"
-msgstr "MZ Follas"
+msgstr "follas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3734,70 +3718,64 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/leaves-"
 "scattered.svg"
 msgid "leaves-scattered"
-msgstr ""
+msgstr "follas esparexidas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/oil_bristle.gbr"
-#| msgid "oil_bristle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/oil_bristle.png"
 msgid "oil bristle"
-msgstr "pelo_de_óleo"
+msgstr "óleo, pelo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/oil_knife.gbr"
-#| msgid "oil_knife"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/oil_knife.png"
 msgid "oil knife"
-msgstr "coitela_de_óleo"
+msgstr "óleo, coitelo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/plain_rake.png"
 msgid "plain rake"
-msgstr ""
+msgstr "angazo, simple"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rake_dense.png"
 msgid "rake dense"
-msgstr ""
+msgstr "angazo, denso"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rake_dotted.png"
 msgid "rake dotted"
-msgstr ""
+msgstr "angazo, puntos"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rake_flat.png"
 msgid "rake flat"
-msgstr ""
+msgstr "angazo, plano"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rake_sparse.png"
 msgid "rake sparse"
-msgstr "Transparente"
+msgstr "angazo, disperso"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "particles"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "random_particles.png"
 msgid "random particles"
-msgstr "partículas"
+msgstr "partículas aleatorias"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3805,99 +3783,86 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/random-debris."
 "gbr"
 msgid "flat-tip-dirty"
-msgstr ""
+msgstr "punta plana, sucio"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rock.png"
 msgid "rock"
-msgstr ""
+msgstr "rocha"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Scales"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/scales.png"
 msgid "scales"
-msgstr "Escalas"
+msgstr "escalas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Inscriber"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/scribbles.png"
 msgid "scribbles"
-msgstr "Gravador"
+msgstr "garabatos"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Repaint"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/smear_paint.png"
 msgid "smear paint"
-msgstr "Repintar"
+msgstr "mancha de pintura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_smoke.gbr"
-#| msgid "A_smoke"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/smoke.png"
 msgid "smoke"
-msgstr "A_fume"
+msgstr "fume"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_sparkle1.gbr"
-#| msgid "A -2 Sparkle 1"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/sparkle.png"
 msgid "sparkle"
-msgstr "A -2 Faísca 1"
+msgstr "brillo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/spike_blob.png"
 msgid "spike blob"
-msgstr ""
+msgstr "picos, burbulla"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/3_eroded.gih"
-#| msgid "3_eroded"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/spike_eroded."
 "png"
 msgid "spike eroded"
-msgstr "3_eroded"
+msgstr "picos, erosionado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Lines"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/spines.png"
 msgid "spines"
-msgstr "Liñas"
+msgstr "espiñas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/splat_dots.png"
 msgid "splat dots"
-msgstr ""
+msgstr "salpicadura, puntos"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/3_eroded.gih"
-#| msgid "3_eroded"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/square_eroded."
 "png"
 msgid "square eroded"
-msgstr "3_eroded"
+msgstr "cadrado, erosionado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3905,7 +3870,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/square_rough."
 "png"
 msgid "square rough"
-msgstr ""
+msgstr "cadrado, aproximado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3913,31 +3878,28 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "square_rough_lightgrey.png"
 msgid "square rough lightgrey"
-msgstr ""
+msgstr "cadrado, aproximado gris claro"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/A_starfield2.gbr"
-#| msgid "A_starfield2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/starfield.png"
 msgid "starfield"
-msgstr "A-Campo de estrelas 2"
+msgstr "campo de estrelas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Triangle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/triangle.svg"
 msgid "triangle"
-msgstr "Triángulo"
+msgstr "triángulo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/vegetal.gbr"
 msgid "tree flowers speedpainting strokes"
-msgstr ""
+msgstr "trazos de pintura rápida de flores de árbore"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -3946,7 +3908,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "a)_Eraser_Circle.kpp"
 msgid "a) Eraser Circle"
-msgstr ""
+msgstr "a) Borrador circular"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -3955,47 +3917,43 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "a)_Eraser_Small.kpp"
 msgid "a) Eraser Small"
-msgstr ""
+msgstr "a) Borrador pequeno"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgid "Eraser"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "a)_Eraser_Soft.kpp"
 msgid "a) Eraser Soft"
-msgstr "Borrador"
+msgstr "a) Borrador suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgid "Airbrush"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Airbrush_Soft.kpp"
 msgid "b) Airbrush Soft"
-msgstr "Pincel de spray"
+msgstr "b) Pincel aerosol suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-1.kpp"
 msgid "b) Basic-1"
-msgstr "Básico"
+msgstr "b) Básico 1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgid "Line Opacity"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-2_Opacity.kpp"
 msgid "b) Basic-2 Opacity"
-msgstr "Opacidade da liña"
+msgstr "b) Básico 2, opacidade"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4004,7 +3962,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-3_Flow.kpp"
 msgid "b) Basic-3 Flow"
-msgstr ""
+msgstr "b) Básico 3, fluxo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4013,7 +3971,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-4_Flow_Opacity.kpp"
 msgid "b) Basic-4 Flow Opacity"
-msgstr ""
+msgstr "b) Básico 4, fluxo, opacidade"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4022,7 +3980,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-5_Size_default.kpp"
 msgid "b) Basic-5 Size default"
-msgstr ""
+msgstr "b) Básico 5, tamaño, predeterminado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4031,17 +3989,16 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-5_Size_Opacity.kpp"
 msgid "b) Basic-5 Size Opacity"
-msgstr ""
+msgstr "b) Básico 5, tamaño, opacidade"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgid "Brush Details"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-6_Details.kpp"
 msgid "b) Basic-6 Details"
-msgstr "Detalles do pincel"
+msgstr "b) Básico 6, detalles"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4050,17 +4007,16 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "c)_Pencil-1_Hard.kpp"
 msgid "c) Pencil-1 Hard"
-msgstr ""
+msgstr "c) Lapis 1, duro"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgid "Pencil"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "c)_Pencil-2.kpp"
 msgid "c) Pencil-2"
-msgstr "Lapis"
+msgstr "c) Lapis 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4069,7 +4025,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "c)_Pencil-3_Large_4B.kpp"
 msgid "c) Pencil-3 Large 4B"
-msgstr ""
+msgstr "c) Lapis 3, 4B grande"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4078,18 +4034,16 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "c)_Pencil-4_Soft.kpp"
 msgid "c) Pencil-4 Soft"
-msgstr ""
+msgstr "c) Lapis 4, suave"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Pencil Tool"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "c)_Pencil-5_Tilted.kpp"
 msgid "c) Pencil-5 Tilted"
-msgstr "Ferramenta de lapis"
+msgstr "c) Lapis 5, inclinado"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4098,17 +4052,16 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "c)_Pencil-6_Quick_Shade.kpp"
 msgid "c) Pencil-6 Quick Shade"
-msgstr ""
+msgstr "c) Lapis 6, sombra rápida"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgid "Precision:"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-1_Precision.kpp"
 msgid "d) Ink-1 Precision"
-msgstr "Precisión:"
+msgstr "d) Tinta 1, precisión"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4117,7 +4070,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-2_Fineliner.kpp"
 msgid "d) Ink-2 Fineliner"
-msgstr ""
+msgstr "d) Tinta 2, finura"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4126,7 +4079,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-3_Gpen.kpp"
 msgid "d) Ink-3 Gpen"
-msgstr ""
+msgstr "d) Tinta 3, bolígrafo G"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4135,7 +4088,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-4_Pen_Rough.kpp"
 msgid "d) Ink-4 Pen Rough"
-msgstr ""
+msgstr "d) Tinta 4, bolígrafo duro"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4144,7 +4097,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-7_Brush_Rough.kpp"
 msgid "d) Ink-7 Brush Rough"
-msgstr ""
+msgstr "d) Tinta 7, pincel duro"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4153,7 +4106,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-8_Sumi-e.kpp"
 msgid "d) Ink-8 Sumi-e"
-msgstr ""
+msgstr "d) Tinta 8, Sumi-e"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names

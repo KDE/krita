@@ -479,6 +479,7 @@ endif()
 if (Mlt7_FOUND)
     set(kritaui_LIB_SRCS ${kritaui_LIB_SRCS}
         KisPlaybackEngineMLT.cpp
+        KisMLTProducerKrita.cpp
     )
 endif()
 

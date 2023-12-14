@@ -36,6 +36,9 @@
 
 #include "kis_debug.h"
 
+#include "KisMLTProducerKrita.h"
+
+
 const float SCRUB_AUDIO_SECONDS = 0.128f;
 
 struct KisPlaybackEngineMLT::FrameWaitingInterface {
@@ -113,6 +116,9 @@ struct KisPlaybackEngineMLT::Private {
     {
         // Initialize MLT...
         repository.reset(Mlt::Factory::init());
+
+        // Register our backend plugin
+        registerKritaMLTProducer(repository.data());
 
         profile.reset(new Mlt::Profile());
         profile->set_frame_rate(24, 1);

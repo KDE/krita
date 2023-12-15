@@ -471,7 +471,8 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
 
                 // Add miter
                 if (adjustFirst) {
-                    QVector3D pPrev = i >= 2? QVector3D(polygon.at(i-2)): QVector3D(polygon.last());
+                    QVector3D pPrev = i >= 2? QVector3D(polygon.at(i-2))
+                                            : QVector3D(polygon.at(qMax(polygon.count() - 2, 0)));
                     pPrev = p1 - pPrev;
                     QVector3D miter = QVector3D(normal + QVector3D(-pPrev.y(), pPrev.x(), pPrev.z()).normalized()).normalized();
                     float dot = QVector3D::dotProduct(miter, normal);
@@ -481,7 +482,8 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
                     }
                 }
                 if (adjustSecond) {
-                    QVector3D pNext = i + 1 < polygon.count()? QVector3D(polygon.at(i+1)): QVector3D(polygon.first());
+                    QVector3D pNext = i + 1 < polygon.count()? QVector3D(polygon.at(i+1))
+                                                             : QVector3D(polygon.at(qMin(polygon.count(), 1)));
                     pNext = pNext - p2;
                     QVector3D miter = QVector3D(normal + QVector3D(-pNext.y(), pNext.x(), pNext.z()).normalized()).normalized();
                     float dot = QVector3D::dotProduct(miter, normal);

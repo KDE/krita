@@ -168,7 +168,7 @@ struct KisPaintingAssistant::Private {
     const int mainLineWidth {2}; // for "drawPath" etc.
     const int errorLineWidth {2};
 
-
+    int decorationThickness{1};
 
 };
 
@@ -369,7 +369,7 @@ void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path,
     }
 
     painter.save();
-    QPen pen_a(paintingColor, d->mainLineWidth);
+    QPen pen_a(paintingColor, d->mainLineWidth * d->decorationThickness);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
     painter.drawPath(path);
@@ -390,8 +390,7 @@ void KisPaintingAssistant::drawPreview(QPainter& painter, const QPainterPath &pa
 void KisPaintingAssistant::drawError(QPainter &painter, const QPainterPath &path)
 {
     painter.save();
-    qreal size = painter.device() ? d->errorLineWidth*painter.device()->devicePixelRatioF() : d->errorLineWidth;
-    QPen pen_a(QColor(255, 0, 0, 125), size);
+    QPen pen_a(QColor(255, 0, 0, 125), d->errorLineWidth * d->decorationThickness);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
     painter.drawPath(path);
@@ -1108,6 +1107,11 @@ QRectF KisPaintingAssistant::getLocalRect() const
 double KisPaintingAssistant::norm2(const QPointF& p)
 {
     return p.x() * p.x() + p.y() * p.y();
+}
+
+void KisPaintingAssistant::setDecorationThickness(int thickness)
+{
+    d->decorationThickness = thickness;
 }
 
 QList<KisPaintingAssistantSP> KisPaintingAssistant::cloneAssistantList(const QList<KisPaintingAssistantSP> &list)

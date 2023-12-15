@@ -245,6 +245,8 @@ public:
     void drawX(QPainter& painter, const QPointF& pt);
     static double norm2(const QPointF& p);
 
+    void setDecorationThickness(int thickness);
+
 protected:
     explicit KisPaintingAssistant(const KisPaintingAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 

@@ -87,6 +87,9 @@ protected:
      */
     void setPriority(int value);
 
+    // returns the minimum decoration thickness, somewhat equivelant to the display scaling.
+    int decorationThickness() const;
+
 private:
     struct Private;
     Private* const d;

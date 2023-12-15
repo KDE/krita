@@ -46,12 +46,9 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>_view)
     : KisCanvasDecoration("selection", _view),
       m_signalCompressor(50 /*ms*/, KisSignalCompressor::FIRST_ACTIVE),
       m_offset(0),
-      m_mode(Ants),
-      m_migrationTracker(new KisScreenMigrationTracker(_view->mainWindow(), this))
+      m_mode(Ants)
 {
-    connect(m_migrationTracker, &KisScreenMigrationTracker::sigScreenOrResolutionChanged,
-            this, &KisSelectionDecoration::initializePens);
-    initializePens(m_migrationTracker->currentScreen());
+    connect(this->view()->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)), this, SLOT(initializePens()));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
@@ -91,15 +88,13 @@ bool KisSelectionDecoration::selectionIsActive()
             selection->isVisible();
 }
 
-void KisSelectionDecoration::initializePens(QScreen *screen)
+void KisSelectionDecoration::initializePens()
 {
     KisPaintingTweaks::initAntsPen(&m_antsPen, &m_outlinePen,
                                    ANT_LENGTH, ANT_SPACE);
 
-    int penWidth = qRound(screen->devicePixelRatio());
-
-    m_antsPen.setWidth(qMax(penWidth, 1));
-    m_outlinePen.setWidth(qMax(penWidth, 1));
+    m_antsPen.setWidth(decorationThickness());
+    m_outlinePen.setWidth(decorationThickness());
 }
 
 void KisSelectionDecoration::selectionChanged()

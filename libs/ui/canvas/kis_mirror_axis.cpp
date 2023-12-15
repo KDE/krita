@@ -139,7 +139,15 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     }
 
     gc.save();
-    gc.setPen(QPen(QColor(0, 0, 0, 128), 1));
+
+    QPen pen1(QColor(0, 0, 0, 64), 2 * decorationThickness(), Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin);
+    pen1.setCosmetic(true);
+    QPen pen2 = pen1;
+    pen2.setColor(QColor(0, 0, 0, 128));
+    pen2.setStyle(Qt::SolidLine);
+    QPen pen3 = pen2;
+    pen3.setWidth(1 * decorationThickness());
+    gc.setPen(pen3);
     gc.setBrush(Qt::white);
     gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
@@ -172,7 +180,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
             QPointF horizontalHandleCenter = d->horizontalAxis.unitVector().pointAt(horizontalHandlePosition);
             d->horizontalHandle = QRectF(horizontalHandleCenter.x() - halfHandleSize, horizontalHandleCenter.y() - halfHandleSize, d->config.handleSize(), d->config.handleSize());
 
-            gc.setPen(QPen(QColor(0, 0, 0, 64), 2, Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
+            gc.setPen(pen1);
             gc.drawLine(d->horizontalAxis);
 
             // gc.drawEllipse(horizontalIndicator);
@@ -180,7 +188,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 
             // don't draw the handles if we are locking the axis for movement
             if (!d->config.lockHorizontal()) {
-                gc.setPen(QPen(QColor(0, 0, 0, 128), 2));
+                gc.setPen(pen2);
                 gc.drawEllipse(d->horizontalHandle);
                 gc.drawPixmap(d->horizontalHandle.adjusted(5, 5, -5, -5).toRect(), d->horizontalIcon);
             }
@@ -193,7 +201,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     if(d->config.mirrorVertical() && !d->config.hideVerticalDecoration()) {
         if (!d->verticalAxis.isNull()) {
 
-            gc.setPen(QPen(QColor(0, 0, 0, 64), 2, Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
+            gc.setPen(pen1);
             gc.drawLine(d->verticalAxis);
 
 
@@ -206,7 +214,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 
             // don't draw the handles if we are locking the axis for movement
             if (!d->config.lockVertical()) {
-                gc.setPen(QPen(QColor(0, 0, 0, 128), 2));
+                gc.setPen(pen2);
                 gc.drawEllipse(d->verticalHandle);
                 gc.drawPixmap(d->verticalHandle.adjusted(5, 5, -5, -5).toRect(), d->verticalIcon);
             }

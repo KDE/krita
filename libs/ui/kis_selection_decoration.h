@@ -44,7 +44,7 @@ protected:
 private Q_SLOTS:
     void slotStartUpdateSelection();
     void slotConfigChanged();
-    void initializePens(QScreen *screen);
+    void initializePens();
 
 public Q_SLOTS:
     void selectionChanged();
@@ -69,8 +69,6 @@ private:
 
     QColor m_maskColor;
     bool m_antialiasSelectionOutline;
-
-    KisScreenMigrationTracker *m_migrationTracker {nullptr};
 };
 
 #endif

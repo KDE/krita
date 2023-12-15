@@ -109,13 +109,13 @@ KisHandleStyle &KisHandleStyle::highlightedPrimaryHandlesWithSolidOutline()
 
     if (!style) {
         style.reset(new KisHandleStyle());
-        QPen h = highlightOutlineColor;
+        QPen h = QPen(highlightOutlineColor, 2);
         h.setCosmetic(true);
         style->handleIterations << KisHandleStyle::IterationStyle(h, highlightColor);
-        h.setColor(highlightOutlineColor);
-        h.setWidth(2);
-        h.setJoinStyle(Qt::RoundJoin);
-        style->lineIterations << KisHandleStyle::IterationStyle(h, Qt::NoBrush);
+        QPen l = QPen(highlightOutlineColor, 1);
+        l.setCosmetic(true);
+        l.setJoinStyle(Qt::RoundJoin);
+        style->lineIterations << KisHandleStyle::IterationStyle(l, Qt::NoBrush);
     }
 
     return *style;

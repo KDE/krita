@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-13 00:40+0000\n"
-"PO-Revision-Date: 2023-12-11 15:22+0100\n"
+"PO-Revision-Date: 2023-12-13 12:24+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -12195,7 +12195,7 @@ msgstr "Escriu com a alfa"
 #, kde-format
 msgctxt "action"
 msgid "&Save Merged..."
-msgstr "Guar&da el barrejat..."
+msgstr "Guar&da la fusió..."
 
 #. i18n: context: toolTip @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
@@ -12205,7 +12205,7 @@ msgstr "Guar&da el barrejat..."
 #, kde-format
 msgctxt "action"
 msgid "Save Merged"
-msgstr "Guarda el barrejat"
+msgstr "Guarda la fusió"
 
 #. i18n: context: text @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3182
@@ -26382,7 +26382,7 @@ msgstr "Ca&pa actual"
 #: libs/ui/forms/wdgmetadatamergestrategychooser.ui:27
 #, kde-format
 msgid "Merge strategy:"
-msgstr "Estratègia de barreja:"
+msgstr "Estratègia de fusió:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgMissingColorProfile)
 #: libs/ui/forms/wdgMissingColorProfile.ui:20

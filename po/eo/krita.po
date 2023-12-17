@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-13 02:27+0000\n"
-"PO-Revision-Date: 2023-11-25 08:36+0100\n"
+"PO-Revision-Date: 2023-12-12 23:48+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -328,19 +328,19 @@ msgstr "DITH 3232 KURBAJ STRIPOJ"
 #, kde-format
 msgctxt "./krita/data/patterns/fractal_pattern.pat"
 msgid "Fractal Pattern"
-msgstr "Fraktala Ŝablono"
+msgstr "Frakta Skemo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/generic_paper1.pat"
 msgid "Generic Paper 2"
-msgstr "Kutima Papero 2"
+msgstr "Ĝenerala Papero 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/generic_paper2.pat"
 msgid "Generic Paper 3"
-msgstr "Kutima Papero 3"
+msgstr "Ĝenerala Papero 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -376,19 +376,19 @@ msgstr "Krad05"
 #, kde-format
 msgctxt "./krita/data/patterns/hexacolBW__2.pat"
 msgid "Hexacol BW By Tarkan"
-msgstr "Hexacol BW By Tarkan"
+msgstr "Hexacol BW De Tarkan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/HR_PastelPaper_02.pat"
 msgid "HR Pastel Paper 02"
-msgstr "HR Pastel Paper 02"
+msgstr "HR Pastelpapero 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/HR_Wall_Paper.pat"
 msgid "HR Wall Paper"
-msgstr "HR Wall Paper"
+msgstr "HR Murpapero"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -562,13 +562,13 @@ msgstr "Zigzag04"
 #, kde-format
 msgctxt "./krita/data/patterns/01_canvas.png"
 msgid "01 canvas"
-msgstr "01 kanvaso"
+msgstr "01 canvas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/02_rough-canvas.png"
 msgid "02 rough-canvas"
-msgstr "02 malglata-tolo"
+msgstr "02 rough-canvas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -580,97 +580,97 @@ msgstr "02b WoofTissue"
 #, kde-format
 msgctxt "./krita/data/patterns/03_default-paper.png"
 msgid "03 default-paper"
-msgstr "03 defaŭlta-papero"
+msgstr "03 default-paper"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/04_paper-C-grain.png"
 msgid "04 paper-C-grain"
-msgstr "04 papero-C-grajno"
+msgstr "04 paper-C-grain"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/05_paper-torchon.png"
 msgid "05 paper-torchon"
-msgstr "05 papero-torĉo"
+msgstr "05 paper-torchon"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/06_hard-grain.png"
 msgid "06 hard-grain"
-msgstr "06 malmola greno"
+msgstr "06 hard-grain"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/08_bump-relief.png"
 msgid "08 bump-relief"
-msgstr "08 bump-reliefo"
+msgstr "08 bump-relief"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/09_drawed_crosshatched.png"
 msgid "09 drawed crosshatched"
-msgstr "09 desegnitaj kruchakitaj"
+msgstr "09 drawed crosshatched"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/09b_drawed-CrossedLines.png"
 msgid "09b drawed-CrossedLines"
-msgstr "09b desegnitaj-Krucitaj Linioj"
+msgstr "09b drawed-CrossedLines"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/10_drawed_dotted.png"
 msgid "10 drawed dotted"
-msgstr "10 desegnitaj punktitaj"
+msgstr "10 drawed dotted"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/11_drawed_furry.png"
 msgid "11 drawed furry"
-msgstr "11 desegnitaj vilaj"
+msgstr "11 drawed furry"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/12_drawed_vertical.png"
 msgid "12 drawed vertical"
-msgstr "12 desegnitaj vertikalaj"
+msgstr "12 drawed vertical"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/13_drawed_swirl.png"
 msgid "13 drawed swirl"
-msgstr "13 tirita kirlo"
+msgstr "13 drawed swirl"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/14_texture-rock.png"
 msgid "14 texture-rock"
-msgstr "14 teksturo-roko"
+msgstr "14 texture-rock"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/15_texture-rockB.png"
 msgid "15 texture-rockB"
-msgstr "15 teksturo-rokoB"
+msgstr "15 texture-rockB"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/16_texture-woody.png"
 msgid "16 texture-woody"
-msgstr "16 tekstur-lignecaj"
+msgstr "16 texture-woody"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/17_texture-melt.png"
 msgid "17 texture-melt"
-msgstr "17 teksturo-fandi"
+msgstr "17 texture-melt"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/18_texture-bark.png"
 msgid "18 texture-bark"
-msgstr "18 teksturo-ŝelo"
+msgstr "18 texture-bark"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -682,43 +682,43 @@ msgstr "18b WaveFlex"
 #, kde-format
 msgctxt "./krita/data/patterns/19_texture-crackle.png"
 msgid "19 texture-crackle"
-msgstr "19 teksturo-kraketo"
+msgstr "19 texture-crackle"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/20_texture-vegetal.png"
 msgid "20 texture-vegetal"
-msgstr "20 teksturo-vegetala"
+msgstr "20 texture-vegetal"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/21_texture-chainmail.png"
 msgid "21 texture-chainmail"
-msgstr "21 teksturo-ĉenpoŝto"
+msgstr "21 texture-chainmail"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/22_texture-reptile.png"
 msgid "22 texture-reptile"
-msgstr "22 teksturo-reptilo"
+msgstr "22 texture-reptile"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/23-dynamic-screentone-A.png"
 msgid "23-dynamic-screentone-A"
-msgstr "23-dinamika-ekrantono-A"
+msgstr "23-dynamic-screentone-A"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/24-dynamic-screentone-B.png"
 msgid "24-dynamic-screentone-B"
-msgstr "24-dinamika-ekrantono-B"
+msgstr "24-dynamic-screentone-B"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/25-dynamic-screentone-C.png"
 msgid "25-dynamic-screentone-C"
-msgstr "25-dinamika-ekrantono-C"
+msgstr "25-dynamic-screentone-C"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -914,7 +914,7 @@ msgstr "Minimuma"
 #, kde-format
 msgctxt "./krita/data/workspaces/Small_Vector.kws"
 msgid "Small Vector"
-msgstr "Vektoreto"
+msgstr "Malgranda Vektoro"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -926,7 +926,7 @@ msgstr "Skriptbildseriigo"
 #, kde-format
 msgctxt "./krita/data/workspaces/VFX_Paint.kws"
 msgid "VFX Paint"
-msgstr "VFX Paint"
+msgstr "VFX Farbo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1682,7 +1682,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "U_Circle_shape_5.gbr"
 msgid "U Circle shape 5"
-msgstr "U Circle shape 5"
+msgstr "U Cirkla formo 5"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2520,8 +2520,7 @@ msgid "Shape smooth"
 msgstr "Formo glata"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Sketch"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/Sketch."
 "kpp"
@@ -2841,8 +2840,7 @@ msgid "pixel1"
 msgstr "pixel1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Animation"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Animation."
 "kws"
@@ -2850,9 +2848,7 @@ msgid "Animation"
 msgstr "Animacio"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/workspaces/Big_Paint.kws"
-#| msgid "Big Paint"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Paint."
 "kws"
@@ -2860,9 +2856,7 @@ msgid "Big Paint"
 msgstr "Granda Farbo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/workspaces/Big_Paint_2.kws"
-#| msgid "Big Paint 2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Paint_2."
 "kws"
@@ -2870,9 +2864,7 @@ msgid "Big Paint 2"
 msgstr "Granda Farbo 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/workspaces/Big_Vector.kws"
-#| msgid "Big Vector"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Vector."
 "kws"
@@ -2894,46 +2886,38 @@ msgid "Minimal"
 msgstr "Minimuma"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/workspaces/Small_Vector.kws"
-#| msgid "Small Vector"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
 "Small_Vector.kws"
 msgid "Small Vector"
-msgstr "Vektoreto"
+msgstr "Malgranda Vektoro"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/workspaces/VFX_Paint.kws"
-#| msgid "VFX Paint"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/VFX_Paint."
 "kws"
 msgid "VFX Paint"
-msgstr "VFX Paint"
+msgstr "VFX Farbo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/01_canvas.png"
 msgid "01 canvas"
-msgstr "01 kanvaso"
+msgstr "01 canvas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/02_rough-canvas.png"
-#| msgid "02 rough-canvas"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/02_rough-"
 "canvas.png"
 msgid "02 rough-canvas"
-msgstr "02 malglata-tolo"
+msgstr "02 rough-canvas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/02b_WoofTissue.png"
-#| msgid "02b WoofTissue"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/02b_WoofTissue.png"
@@ -2941,44 +2925,36 @@ msgid "02b WoofTissue"
 msgstr "02b WoofTissue"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/03_default-paper.png"
-#| msgid "03 default-paper"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/03_default-"
 "paper.png"
 msgid "03 default-paper"
-msgstr "03 defaŭlta-papero"
+msgstr "03 default-paper"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/04_paper-C-grain.png"
-#| msgid "04 paper-C-grain"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/04_paper-C-"
 "grain.png"
 msgid "04 paper-C-grain"
-msgstr "04 papero-C-grajno"
+msgstr "04 paper-C-grain"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/05_paper-torchon.png"
-#| msgid "05 paper-torchon"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/05_paper-"
 "torchon.png"
 msgid "05 paper-torchon"
-msgstr "05 papero-torĉo"
+msgstr "05 paper-torchon"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/06_hard-grain.png"
-#| msgid "06 hard-grain"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/06_hard-grain."
 "png"
 msgid "06 hard-grain"
-msgstr "06 malmola greno"
+msgstr "06 hard-grain"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2989,129 +2965,103 @@ msgid "07 big-grain"
 msgstr "07 grandgrajno"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/08_bump-relief.png"
-#| msgid "08 bump-relief"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/08_bump-"
 "relief.png"
 msgid "08 bump-relief"
-msgstr "08 bump-reliefo"
+msgstr "08 bump-relief"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/09_drawed_crosshatched.png"
-#| msgid "09 drawed crosshatched"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/09_drawed_crosshatched.png"
 msgid "09 drawed crosshatched"
-msgstr "09 desegnitaj kruchakitaj"
+msgstr "09 drawed crosshatched"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/09b_drawed-CrossedLines.png"
-#| msgid "09b drawed-CrossedLines"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/09b_drawed-"
 "CrossedLines.png"
 msgid "09b drawed-CrossedLines"
-msgstr "09b desegnitaj-Krucitaj Linioj"
+msgstr "09b drawed-CrossedLines"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/10_drawed_dotted.png"
-#| msgid "10 drawed dotted"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/10_drawed_dotted.png"
 msgid "10 drawed dotted"
-msgstr "10 desegnitaj punktitaj"
+msgstr "10 drawed dotted"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/11_drawed_furry.png"
-#| msgid "11 drawed furry"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/11_drawed_furry.png"
 msgid "11 drawed furry"
-msgstr "11 desegnitaj vilaj"
+msgstr "11 drawed furry"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/12_drawed_vertical.png"
-#| msgid "12 drawed vertical"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/12_drawed_vertical.png"
 msgid "12 drawed vertical"
-msgstr "12 desegnitaj vertikalaj"
+msgstr "12 drawed vertical"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/13_drawed_swirl.png"
-#| msgid "13 drawed swirl"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/13_drawed_swirl.png"
 msgid "13 drawed swirl"
-msgstr "13 tirita kirlo"
+msgstr "13 drawed swirl"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/14_texture-rock.png"
-#| msgid "14 texture-rock"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/14_texture-"
 "rock.png"
 msgid "14 texture-rock"
-msgstr "14 teksturo-roko"
+msgstr "14 texture-rock"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/15_texture-rockB.png"
-#| msgid "15 texture-rockB"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/15_texture-"
 "rockB.png"
 msgid "15 texture-rockB"
-msgstr "15 teksturo-rokoB"
+msgstr "15 texture-rockB"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/16_texture-woody.png"
-#| msgid "16 texture-woody"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/16_texture-"
 "woody.png"
 msgid "16 texture-woody"
-msgstr "16 tekstur-lignecaj"
+msgstr "16 texture-woody"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/17_texture-melt.png"
-#| msgid "17 texture-melt"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/17_texture-"
 "melt.png"
 msgid "17 texture-melt"
-msgstr "17 teksturo-fandi"
+msgstr "17 texture-melt"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/18_texture-bark.png"
-#| msgid "18 texture-bark"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/18_texture-"
 "bark.png"
 msgid "18 texture-bark"
-msgstr "18 teksturo-ŝelo"
+msgstr "18 texture-bark"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/18b_WaveFlex.png"
-#| msgid "18b WaveFlex"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/18b_WaveFlex."
 "png"
@@ -3119,79 +3069,63 @@ msgid "18b WaveFlex"
 msgstr "18b WaveFlex"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/19_texture-crackle.png"
-#| msgid "19 texture-crackle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/19_texture-"
 "crackle.png"
 msgid "19 texture-crackle"
-msgstr "19 teksturo-kraketo"
+msgstr "19 texture-crackle"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/20_texture-vegetal.png"
-#| msgid "20 texture-vegetal"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/20_texture-"
 "vegetal.png"
 msgid "20 texture-vegetal"
-msgstr "20 teksturo-vegetala"
+msgstr "20 texture-vegetal"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/21_texture-chainmail.png"
-#| msgid "21 texture-chainmail"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/21_texture-"
 "chainmail.png"
 msgid "21 texture-chainmail"
-msgstr "21 teksturo-ĉenpoŝto"
+msgstr "21 texture-chainmail"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/22_texture-reptile.png"
-#| msgid "22 texture-reptile"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/22_texture-"
 "reptile.png"
 msgid "22 texture-reptile"
-msgstr "22 teksturo-reptilo"
+msgstr "22 texture-reptile"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/23-dynamic-screentone-A.png"
-#| msgid "23-dynamic-screentone-A"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/23-dynamic-"
 "screentone-A.png"
 msgid "23-dynamic-screentone-A"
-msgstr "23-dinamika-ekrantono-A"
+msgstr "23-dynamic-screentone-A"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/24-dynamic-screentone-B.png"
-#| msgid "24-dynamic-screentone-B"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/24-dynamic-"
 "screentone-B.png"
 msgid "24-dynamic-screentone-B"
-msgstr "24-dinamika-ekrantono-B"
+msgstr "24-dynamic-screentone-B"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/25-dynamic-screentone-C.png"
-#| msgid "25-dynamic-screentone-C"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/25-dynamic-"
 "screentone-C.png"
 msgid "25-dynamic-screentone-C"
-msgstr "25-dinamika-ekrantono-C"
+msgstr "25-dynamic-screentone-C"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/26_brush-marks.png"
-#| msgid "26 brush-marks"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/26_brush-"
 "marks.png"
@@ -3280,9 +3214,7 @@ msgid "Cross07"
 msgstr "Kruc07"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/Crumpled_Paper.pat"
-#| msgid "Canvas 04"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "Crumpled_Paper.pat"
@@ -3325,24 +3257,20 @@ msgid "Grid05"
 msgstr "Krad05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/HR_PastelPaper_02.pat"
-#| msgid "HR Pastel Paper 02"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "HR_PastelPaper_02.pat"
 msgid "HR Pastel Paper 02"
-msgstr "HR Pastel Paper 02"
+msgstr "HR Pastelpapero 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/HR_Wall_Paper.pat"
-#| msgid "HR Wall Paper"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/HR_Wall_Paper."
 "pat"
 msgid "HR Wall Paper"
-msgstr "HR Wall Paper"
+msgstr "HR Murpapero"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3541,34 +3469,28 @@ msgid "Zigzag04"
 msgstr "Zigzag04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/fractal_pattern.pat"
-#| msgid "Fractal Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "fractal_pattern.pat"
 msgid "Fractal Pattern"
-msgstr "Fraktala Ŝablono"
+msgstr "Frakta Skemo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/generic_paper1.pat"
-#| msgid "Generic Paper 2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "generic_paper1.pat"
 msgid "Generic Paper 2"
-msgstr "Kutima Papero 2"
+msgstr "Ĝenerala Papero 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/generic_paper2.pat"
-#| msgid "Generic Paper 3"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "generic_paper2.pat"
 msgid "Generic Paper 3"
-msgstr "Kutima Papero 3"
+msgstr "Ĝenerala Papero 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3578,14 +3500,12 @@ msgid "Granite 1b"
 msgstr "Granito 1b"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/hexacolBW__2.pat"
-#| msgid "Hexacol BW By Tarkan"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/hexacolBW__2."
 "pat"
 msgid "Hexacol BW By Tarkan"
-msgstr "Hexacol BW By Tarkan"
+msgstr "Hexacol BW De Tarkan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3601,7 +3521,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/bokey_circle."
 "gbr"
 msgid "U Circle shape 5"
-msgstr "U Circle shape 5"
+msgstr "U Cirkla formo 5"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3651,11 +3571,7 @@ msgid "bristles circle variable"
 msgstr "porkinoj cirklo variablo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_sparkle3."
-#| "gbr"
-#| msgid "A -2 Sparkle 3"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "bristles_grouped.gbr"
@@ -3950,9 +3866,7 @@ msgstr "arbo floroj speedpainting strekoj"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/paintoppresets/a)_Eraser_Circle.kpp"
-#| msgid "a) Eraser Circle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "a)_Eraser_Circle.kpp"
@@ -4024,9 +3938,7 @@ msgstr "b) Baza-4 Fluo Opakeco"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/paintoppresets/b)_Basic-5_Size_default.kpp"
-#| msgid "b) Basic-5 Size default"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-5_Size_default.kpp"
@@ -5010,22 +4922,18 @@ msgstr "z) Stampi Akvon"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/01_canvas.png"
 msgid "01 canvas"
-msgstr "01 kanvaso"
+msgstr "01 canvas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/02_rough-canvas.png"
-#| msgid "02 rough-canvas"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/02_rough-"
 "canvas.png"
 msgid "02 rough-canvas"
-msgstr "02 malglata-tolo"
+msgstr "02 rough-canvas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/02b_WoofTissue.png"
-#| msgid "02b WoofTissue"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
 "patterns/02b_WoofTissue.png"
@@ -5033,169 +4941,135 @@ msgid "02b WoofTissue"
 msgstr "02b WoofTissue"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/03_default-paper.png"
-#| msgid "03 default-paper"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/03_default-"
 "paper.png"
 msgid "03 default-paper"
-msgstr "03 defaŭlta-papero"
+msgstr "03 default-paper"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/04_paper-C-grain.png"
-#| msgid "04 paper-C-grain"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/04_paper-C-"
 "grain.png"
 msgid "04 paper-C-grain"
-msgstr "04 papero-C-grajno"
+msgstr "04 paper-C-grain"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/05_paper-torchon.png"
-#| msgid "05 paper-torchon"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/05_paper-"
 "torchon.png"
 msgid "05 paper-torchon"
-msgstr "05 papero-torĉo"
+msgstr "05 paper-torchon"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/06_hard-grain.png"
-#| msgid "06 hard-grain"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/06_hard-grain."
 "png"
 msgid "06 hard-grain"
-msgstr "06 malmola greno"
+msgstr "06 hard-grain"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/08_bump-relief.png"
-#| msgid "08 bump-relief"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/08_bump-"
 "relief.png"
 msgid "08 bump-relief"
-msgstr "08 bump-reliefo"
+msgstr "08 bump-relief"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/09_drawed_crosshatched.png"
-#| msgid "09 drawed crosshatched"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
 "patterns/09_drawed_crosshatched.png"
 msgid "09 drawed crosshatched"
-msgstr "09 desegnitaj kruchakitaj"
+msgstr "09 drawed crosshatched"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/09b_drawed-CrossedLines.png"
-#| msgid "09b drawed-CrossedLines"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/09b_drawed-"
 "CrossedLines.png"
 msgid "09b drawed-CrossedLines"
-msgstr "09b desegnitaj-Krucitaj Linioj"
+msgstr "09b drawed-CrossedLines"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/10_drawed_dotted.png"
-#| msgid "10 drawed dotted"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
 "patterns/10_drawed_dotted.png"
 msgid "10 drawed dotted"
-msgstr "10 desegnitaj punktitaj"
+msgstr "10 drawed dotted"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/11_drawed_furry.png"
-#| msgid "11 drawed furry"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
 "patterns/11_drawed_furry.png"
 msgid "11 drawed furry"
-msgstr "11 desegnitaj vilaj"
+msgstr "11 drawed furry"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/12_drawed_vertical.png"
-#| msgid "12 drawed vertical"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
 "patterns/12_drawed_vertical.png"
 msgid "12 drawed vertical"
-msgstr "12 desegnitaj vertikalaj"
+msgstr "12 drawed vertical"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/13_drawed_swirl.png"
-#| msgid "13 drawed swirl"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
 "patterns/13_drawed_swirl.png"
 msgid "13 drawed swirl"
-msgstr "13 tirita kirlo"
+msgstr "13 drawed swirl"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/14_texture-rock.png"
-#| msgid "14 texture-rock"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/14_texture-"
 "rock.png"
 msgid "14 texture-rock"
-msgstr "14 teksturo-roko"
+msgstr "14 texture-rock"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/15_texture-rockB.png"
-#| msgid "15 texture-rockB"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/15_texture-"
 "rockB.png"
 msgid "15 texture-rockB"
-msgstr "15 teksturo-rokoB"
+msgstr "15 texture-rockB"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/16_texture-woody.png"
-#| msgid "16 texture-woody"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/16_texture-"
 "woody.png"
 msgid "16 texture-woody"
-msgstr "16 tekstur-lignecaj"
+msgstr "16 texture-woody"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/17_texture-melt.png"
-#| msgid "17 texture-melt"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/17_texture-"
 "melt.png"
 msgid "17 texture-melt"
-msgstr "17 teksturo-fandi"
+msgstr "17 texture-melt"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/18_texture-bark.png"
-#| msgid "18 texture-bark"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/18_texture-"
 "bark.png"
 msgid "18 texture-bark"
-msgstr "18 teksturo-ŝelo"
+msgstr "18 texture-bark"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/18b_WaveFlex.png"
-#| msgid "18b WaveFlex"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/18b_WaveFlex."
 "png"
@@ -5203,79 +5077,63 @@ msgid "18b WaveFlex"
 msgstr "18b WaveFlex"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/19_texture-crackle.png"
-#| msgid "19 texture-crackle"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/19_texture-"
 "crackle.png"
 msgid "19 texture-crackle"
-msgstr "19 teksturo-kraketo"
+msgstr "19 texture-crackle"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/20_texture-vegetal.png"
-#| msgid "20 texture-vegetal"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/20_texture-"
 "vegetal.png"
 msgid "20 texture-vegetal"
-msgstr "20 teksturo-vegetala"
+msgstr "20 texture-vegetal"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/21_texture-chainmail.png"
-#| msgid "21 texture-chainmail"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/21_texture-"
 "chainmail.png"
 msgid "21 texture-chainmail"
-msgstr "21 teksturo-ĉenpoŝto"
+msgstr "21 texture-chainmail"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/22_texture-reptile.png"
-#| msgid "22 texture-reptile"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/22_texture-"
 "reptile.png"
 msgid "22 texture-reptile"
-msgstr "22 teksturo-reptilo"
+msgstr "22 texture-reptile"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/23-dynamic-screentone-A.png"
-#| msgid "23-dynamic-screentone-A"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/23-dynamic-"
 "screentone-A.png"
 msgid "23-dynamic-screentone-A"
-msgstr "23-dinamika-ekrantono-A"
+msgstr "23-dynamic-screentone-A"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/24-dynamic-screentone-B.png"
-#| msgid "24-dynamic-screentone-B"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/24-dynamic-"
 "screentone-B.png"
 msgid "24-dynamic-screentone-B"
-msgstr "24-dinamika-ekrantono-B"
+msgstr "24-dynamic-screentone-B"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/25-dynamic-screentone-C.png"
-#| msgid "25-dynamic-screentone-C"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/25-dynamic-"
 "screentone-C.png"
 msgid "25-dynamic-screentone-C"
-msgstr "25-dinamika-ekrantono-C"
+msgstr "25-dynamic-screentone-C"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/26_brush-marks.png"
-#| msgid "26 brush-marks"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/26_brush-"
 "marks.png"
@@ -5283,9 +5141,7 @@ msgid "26 brush-marks"
 msgstr "26 peniko-markoj"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/Abstract_lines.png"
-#| msgid "Abstract lines"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "Abstract_lines.png"
@@ -5342,9 +5198,7 @@ msgid "Cross07"
 msgstr "Kruc07"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/Crumpled_Paper.pat"
-#| msgid "Canvas 04"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "Crumpled_Paper.pat"
@@ -5352,34 +5206,28 @@ msgid "Canvas 04"
 msgstr "Kanvaso 04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/fractal_pattern.pat"
-#| msgid "Fractal Pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "fractal_pattern.pat"
 msgid "Fractal Pattern"
-msgstr "Fraktala Ŝablono"
+msgstr "Frakta Skemo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/generic_paper1.pat"
-#| msgid "Generic Paper 2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "generic_paper1.pat"
 msgid "Generic Paper 2"
-msgstr "Kutima Papero 2"
+msgstr "Ĝenerala Papero 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/generic_paper2.pat"
-#| msgid "Generic Paper 3"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "generic_paper2.pat"
 msgid "Generic Paper 3"
-msgstr "Kutima Papero 3"
+msgstr "Ĝenerala Papero 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5417,34 +5265,28 @@ msgid "Grid05"
 msgstr "Krad05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/hexacolBW__2.pat"
-#| msgid "Hexacol BW By Tarkan"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/hexacolBW__2."
 "pat"
 msgid "Hexacol BW By Tarkan"
-msgstr "Hexacol BW By Tarkan"
+msgstr "Hexacol BW De Tarkan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/HR_PastelPaper_02.pat"
-#| msgid "HR Pastel Paper 02"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "HR_PastelPaper_02.pat"
 msgid "HR Pastel Paper 02"
-msgstr "HR Pastel Paper 02"
+msgstr "HR Pastelpapero 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/HR_Wall_Paper.pat"
-#| msgid "HR Wall Paper"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/HR_Wall_Paper."
 "pat"
 msgid "HR Wall Paper"
-msgstr "HR Wall Paper"
+msgstr "HR Murpapero"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5496,9 +5338,7 @@ msgid "Pattern06"
 msgstr "Ŝablon06"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/Rough_Paper.png"
-#| msgid "Rough Paper"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Rough_Paper."
 "png"
@@ -5506,9 +5346,7 @@ msgid "Rough Paper"
 msgstr "Malglata Papero"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/Rough_Wall_With_Impasto.png"
-#| msgid "Rough Wall With Impasto"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "Rough_Wall_With_Impasto.png"
@@ -5593,9 +5431,7 @@ msgid "Squares10"
 msgstr "Kvadroj10"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/Stars_Sized.png"
-#| msgid "Stars Sized"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Stars_Sized."
 "png"
@@ -6961,10 +6797,7 @@ msgstr "Kreto Ĉizilo Hazarda"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk_chisel_random_small.gih:1
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_eroded.gih"
-#| msgid "3_eroded"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "chalk_chisel_random_small.gih"
@@ -7153,11 +6986,7 @@ msgstr "Neĝo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/splats_large.gih:1
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/S_splats_02."
-#| "gih"
-#| msgid "S_Splats 2"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/splats_large."
 "gih"
@@ -7843,7 +7672,7 @@ msgstr "Krei bulean intersekciĝon de pluraj objektoj"
 #, kde-format
 msgctxt "action"
 msgid "Subtract"
-msgstr "Subtrahi"
+msgstr "Subtraho"
 
 #. i18n: context: toolTip @ Action (object_subtract), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:282
@@ -8290,7 +8119,7 @@ msgstr "Montru Dosiera Ilobreto"
 #, kde-format
 msgctxt "action"
 msgid "Show color selector"
-msgstr "Montru koloran elektilon"
+msgstr "Montri koloran elektilon"
 
 #. i18n: context: text @ Action (show_mypaint_shade_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_mypaint_shade_selector), Actions (General), ActionCollection (Krita)
@@ -8552,7 +8381,7 @@ msgstr "Ŝanĝu al Elektita Momentfoto"
 #, kde-format
 msgctxt "action"
 msgid "Switch to selected snapshot"
-msgstr "Ŝaltu al elektita momentfoto"
+msgstr "Ŝalti al elektita momentfoto"
 
 #. i18n: context: text @ Action (remove_snapshot), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (remove_snapshot), Actions (General), ActionCollection (Krita)
@@ -9112,7 +8941,7 @@ msgstr "Meti Malfonan kaj Fonan Kolorojn al Nigra kaj Blanka"
 #, kde-format
 msgctxt "action"
 msgid "Set foreground and background colors to black and white"
-msgstr "Meti antaŭajn kaj fonajn kolorojn al nigra kaj blanka"
+msgstr "Agordi antaŭajn kaj fonajn kolorojn al nigra kaj blanka"
 
 #. i18n: context: text @ Action (toggle_fg_bg), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_fg_bg), Actions (Painting), ActionCollection (Krita)
@@ -9129,7 +8958,7 @@ msgstr "Interŝanĝi malfonan kaj fonan koloron"
 #, kde-format
 msgctxt "action"
 msgid "Swap foreground and background colors"
-msgstr "Interŝanĝi malfon- kaj fonkoloron"
+msgstr "Interŝanĝi malfonan kaj fonan kolorojn"
 
 #. i18n: context: text @ Action (toggle_brush_outline), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_brush_outline), Actions (Painting), ActionCollection (Krita)
@@ -9431,7 +9260,7 @@ msgstr "Konverti al Formo"
 #, kde-format
 msgctxt "action"
 msgid "&Show Global Selection Mask"
-msgstr "Montri Ĝeneralan Elekto-Ma&skon"
+msgstr "&Montri Ĉiean Elektan Maskon"
 
 #. i18n: context: toolTip @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:963
@@ -9491,7 +9320,7 @@ msgstr "Filtriloj"
 #, kde-format
 msgctxt "action"
 msgid "&Color to Alpha..."
-msgstr "&Koloro al Alfa..."
+msgstr "&Koloro al Alfo"
 
 #. i18n: context: toolTip @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
@@ -9501,7 +9330,7 @@ msgstr "&Koloro al Alfa..."
 #, kde-format
 msgctxt "action"
 msgid "Color to Alpha"
-msgstr "Koloro al Alfa"
+msgstr "Koloro al Alfo"
 
 #. i18n: context: text @ Action (krita_filter_top edge detections), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:988
@@ -9518,14 +9347,14 @@ msgstr "De&tekto de Supra Rando"
 #, kde-format
 msgctxt "action"
 msgid "Top Edge Detection"
-msgstr "Supra Randa Detekto"
+msgstr "Supra Eĝdetekto"
 
 #. i18n: context: text @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1000
 #, kde-format
 msgctxt "action"
 msgid "&Index Colors..."
-msgstr "&Indeksi Kolorojn..."
+msgstr "&Indeksaj Koloroj..."
 
 #. i18n: context: toolTip @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
@@ -9535,7 +9364,7 @@ msgstr "&Indeksi Kolorojn..."
 #, kde-format
 msgctxt "action"
 msgid "Index Colors"
-msgstr "Indeksi Kolorojn"
+msgstr "Indeksaj Koloroj"
 
 #. i18n: context: text @ Action (krita_filter_emboss horizontal only), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1012
@@ -9576,7 +9405,7 @@ msgstr "Dodge"
 #, kde-format
 msgctxt "action"
 msgid "&Sharpen"
-msgstr "&Akrigi"
+msgstr "&Akutigi"
 
 #. i18n: context: toolTip @ Action (krita_filter_sharpen), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_sharpen), Actions (Filters), ActionCollection (Krita)
@@ -9586,7 +9415,7 @@ msgstr "&Akrigi"
 #, kde-format
 msgctxt "action"
 msgid "Sharpen"
-msgstr "Akrigi"
+msgstr "Akutigi"
 
 #. i18n: context: text @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1048
@@ -9610,7 +9439,7 @@ msgstr "Bruligi"
 #, kde-format
 msgctxt "action"
 msgid "&Mean Removal"
-msgstr "Forigo de &Mezo"
+msgstr "Forigo de &Mezumo"
 
 #. i18n: context: toolTip @ Action (krita_filter_mean removal), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_mean removal), Actions (Filters), ActionCollection (Krita)
@@ -9627,7 +9456,7 @@ msgstr "Meza Forigo"
 #, kde-format
 msgctxt "action"
 msgid "&Gaussian Blur..."
-msgstr "&Gaŭsa Malklariĝo..."
+msgstr "Gaŭsa malklariĝo..."
 
 #. i18n: context: toolTip @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
@@ -9654,7 +9483,7 @@ msgstr "Reliefig&i en Ĉiuj Direktoj"
 #, kde-format
 msgctxt "action"
 msgid "Emboss in All Directions"
-msgstr "Reliefu en Ĉiuj Direktoj"
+msgstr "Reliefigi en Ĉiuj Direktoj"
 
 #. i18n: context: text @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1096
@@ -9712,7 +9541,7 @@ msgstr "Sobel"
 #, kde-format
 msgctxt "action"
 msgid "&Wave..."
-msgstr "&Ondumi..."
+msgstr "&Ondo..."
 
 #. i18n: context: toolTip @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
@@ -9722,14 +9551,14 @@ msgstr "&Ondumi..."
 #, kde-format
 msgctxt "action"
 msgid "Wave"
-msgstr "Ondumi"
+msgstr "Ondo"
 
 #. i18n: context: text @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1144
 #, kde-format
 msgctxt "action"
 msgid "&Motion Blur..."
-msgstr "Malklariĝo de &Movo..."
+msgstr "Movmalklaro..."
 
 #. i18n: context: toolTip @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
@@ -9756,14 +9585,14 @@ msgstr "&Inverti"
 #, kde-format
 msgctxt "action"
 msgid "Invert"
-msgstr "Inverti"
+msgstr "Inversigite"
 
 #. i18n: context: text @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1168
 #, kde-format
 msgctxt "action"
 msgid "&Color Adjustment curves..."
-msgstr "&Kolorĝustigaj kurboj..."
+msgstr "&Kolorĝustigkurboj..."
 
 #. i18n: context: toolTip @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
@@ -9790,7 +9619,7 @@ msgstr "Pi&xeligi..."
 #, kde-format
 msgctxt "action"
 msgid "Pixelize"
-msgstr "Pixelize"
+msgstr "Rastrumerigi"
 
 #. i18n: context: text @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1192
@@ -9831,7 +9660,7 @@ msgstr "Maldekstra Rando Detekto"
 #, kde-format
 msgctxt "action"
 msgid "&Blur..."
-msgstr "M&alklarigi..."
+msgstr "Ne&buligi..."
 
 #. i18n: context: text @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
@@ -9848,14 +9677,14 @@ msgstr "M&alklarigi..."
 #, kde-format
 msgctxt "action"
 msgid "Blur"
-msgstr "Malklarigi"
+msgstr "Nebuligo"
 
 #. i18n: context: text @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1228
 #, kde-format
 msgctxt "action"
 msgid "&Raindrops..."
-msgstr "Pluve&roj..."
+msgstr "&Pluvogutoj..."
 
 #. i18n: context: toolTip @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
@@ -9923,7 +9752,7 @@ msgstr "Kolora Ekvilibro"
 #, kde-format
 msgctxt "action"
 msgid "&Phong Bumpmap..."
-msgstr "&Phong-Bumpmapo..."
+msgstr "&Phong Bumpmap..."
 
 #. i18n: context: toolTip @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
@@ -9967,7 +9796,7 @@ msgstr "Kolora &Transigo..."
 #, kde-format
 msgctxt "action"
 msgid "Color Transfer"
-msgstr "Kolora Transdono"
+msgstr "Kolortransigo"
 
 #. i18n: context: text @ Action (krita_filter_emboss vertical only), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1312
@@ -9984,7 +9813,7 @@ msgstr "Reliefigi Nur &Vertikale"
 #, kde-format
 msgctxt "action"
 msgid "Emboss Vertical Only"
-msgstr "Reliefigi Nur Vertikale"
+msgstr "Emboss Vertikala Nur"
 
 #. i18n: context: text @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1324
@@ -10001,7 +9830,7 @@ msgstr "&Lensmalklariĝo..."
 #, kde-format
 msgctxt "action"
 msgid "Lens Blur"
-msgstr "Malklariĝo de Lenso"
+msgstr "Lenso Blur"
 
 #. i18n: context: text @ Action (krita_filter_minimize), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1336
@@ -10042,7 +9871,7 @@ msgstr "Maksimumigi Kanalon"
 #, kde-format
 msgctxt "action"
 msgid "&Oilpaint..."
-msgstr "&Olefarbi..."
+msgstr "&Oleofarbo..."
 
 #. i18n: context: toolTip @ Action (krita_filter_oilpaint), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_oilpaint), Actions (Filters), ActionCollection (Krita)
@@ -10052,7 +9881,7 @@ msgstr "&Olefarbi..."
 #, kde-format
 msgctxt "action"
 msgid "Oilpaint"
-msgstr "Olefarbi"
+msgstr "Oleofarbo"
 
 #. i18n: context: text @ Action (krita_filter_right edge detections), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1372
@@ -10076,7 +9905,7 @@ msgstr "Detektado de Dekstra Rando"
 #, kde-format
 msgctxt "action"
 msgid "&Auto Contrast"
-msgstr "&Aŭtomata Kontrasto"
+msgstr "&Aŭtokontrasto"
 
 #. i18n: context: toolTip @ Action (krita_filter_autocontrast), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_autocontrast), Actions (Filters), ActionCollection (Krita)
@@ -10086,14 +9915,14 @@ msgstr "&Aŭtomata Kontrasto"
 #, kde-format
 msgctxt "action"
 msgid "Auto Contrast"
-msgstr "Aŭtomata Kontrasto"
+msgstr "Aŭtokontrasto"
 
 #. i18n: context: text @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1396
 #, kde-format
 msgctxt "action"
 msgid "&Round Corners..."
-msgstr "&Rondigi Angulojn..."
+msgstr "&Rondaj Anguloj..."
 
 #. i18n: context: toolTip @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
@@ -10103,14 +9932,14 @@ msgstr "&Rondigi Angulojn..."
 #, kde-format
 msgctxt "action"
 msgid "Round Corners"
-msgstr "Rondigi Angulojn"
+msgstr "Rondaj Anguloj"
 
 #. i18n: context: text @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1408
 #, kde-format
 msgctxt "action"
 msgid "&Unsharp Mask..."
-msgstr "Mala&kra Masko..."
+msgstr "Malak&utigi Maskon..."
 
 #. i18n: context: toolTip @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
@@ -10120,14 +9949,14 @@ msgstr "Mala&kra Masko..."
 #, kde-format
 msgctxt "action"
 msgid "Unsharp Mask"
-msgstr "Malakra Masko"
+msgstr "Malakutigi Maskon"
 
 #. i18n: context: text @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1420
 #, kde-format
 msgctxt "action"
 msgid "&Emboss with Variable Depth..."
-msgstr "R&eliefigi kun Variebla Profundo..."
+msgstr "&Reliefigi kun Variebla Profundo..."
 
 #. i18n: context: toolTip @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
@@ -10137,7 +9966,7 @@ msgstr "R&eliefigi kun Variebla Profundo..."
 #, kde-format
 msgctxt "action"
 msgid "Emboss with Variable Depth"
-msgstr "Reliefigi kun Variebla Profundo"
+msgstr "Reliefo kun Variebla Profundo"
 
 #. i18n: context: text @ Action (krita_filter_emboss horizontal and vertical), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1432
@@ -10195,7 +10024,7 @@ msgstr "Gaŭsa Redukto de Bruo"
 #, kde-format
 msgctxt "action"
 msgid "&Posterize..."
-msgstr "&Transformi afiŝen..."
+msgstr "&Posterigi..."
 
 #. i18n: context: toolTip @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
@@ -11436,7 +11265,7 @@ msgstr "Aldoni novan Klonan Tavolon"
 #, kde-format
 msgctxt "action"
 msgid "Clone Layer"
-msgstr "Klontavolo"
+msgstr "Klona Tavolo"
 
 #. i18n: context: text @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2548
@@ -11457,7 +11286,7 @@ msgstr "Aldoni novan Vektoran Tavolon"
 #, kde-format
 msgctxt "action"
 msgid "Vector Layer"
-msgstr "Vektortavolo"
+msgstr "Vektora Tavolo"
 
 #. i18n: context: text @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2560
@@ -11520,7 +11349,7 @@ msgstr "Aldonu novan Dosieran Tavolon"
 #, kde-format
 msgctxt "action"
 msgid "File Layer"
-msgstr "Dosiertavolo"
+msgstr "Dosiera Tavolo"
 
 #. i18n: context: text @ Action (add_new_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2596
@@ -11541,7 +11370,7 @@ msgstr "Aldoni novan Travideblomaskon"
 #, kde-format
 msgctxt "action"
 msgid "Transparency Mask"
-msgstr "Masko de Travidebleco"
+msgstr "Masko de travidebleco"
 
 #. i18n: context: text @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2608
@@ -12543,7 +12372,7 @@ msgstr "Speguli Ĉiujn Tavolojn &Vertikale"
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Vertically"
-msgstr "Spegulu Ĉiuj Tavoloj Vertikale"
+msgstr "Speguli Ĉiujn Tavolojn Vertikale"
 
 #. i18n: context: text @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3292
@@ -12730,7 +12559,7 @@ msgstr "&Konverti Tavolan Kolorspacon..."
 #, kde-format
 msgctxt "action"
 msgid "Convert Layer Color Space"
-msgstr "Konverti Tavola Kolora Spaco"
+msgstr "Konverti Tavolan Kolorspacon"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3424
@@ -12810,7 +12639,7 @@ msgstr "Tavola Stilo"
 #, kde-format
 msgctxt "action"
 msgid "Move into previous group"
-msgstr "Movu al la antaŭa grupo"
+msgstr "Movi al la antaŭa grupo"
 
 #. i18n: context: text @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
@@ -12822,7 +12651,7 @@ msgstr "Movu al la antaŭa grupo"
 #, kde-format
 msgctxt "action"
 msgid "Move into next group"
-msgstr "Movu al la sekva grupo"
+msgstr "Movi al la sekva grupo"
 
 #. i18n: context: text @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
@@ -12878,7 +12707,7 @@ msgstr "Movu Tavolon aŭ Maskon Suben"
 #, kde-format
 msgctxt "action"
 msgid "&Properties..."
-msgstr "&Propraĵoj..."
+msgstr "&Ecoj..."
 
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
@@ -12888,7 +12717,7 @@ msgstr "&Propraĵoj..."
 #, kde-format
 msgctxt "Layer Properties"
 msgid "Properties"
-msgstr "Trajtoj"
+msgstr "Propraĵoj"
 
 #. i18n: context: text @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3552
@@ -13080,7 +12909,7 @@ msgstr "Redakti"
 #: krita/krita5.xmlgui:421
 #, kde-format
 msgid "Brushes and Stuff"
-msgstr "Penikloj kaj Aĵoj"
+msgstr "Penikoj kaj Aĵoj"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -13115,7 +12944,7 @@ msgstr "Nova"
 #, kde-format
 msgctxt "action"
 msgid "&Open..."
-msgstr "Malferm&o..."
+msgstr "&Malfermi..."
 
 #. i18n: context: toolTip @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:21
@@ -13143,7 +12972,7 @@ msgstr "Malfe&rmi Lastatempajn"
 #, kde-format
 msgctxt "action"
 msgid "Open a document which was recently opened"
-msgstr "Malfermu dokumenton kiu estis lastatempe malfermita"
+msgstr "Malfermi dokumenton kiu estis lastatempe malfermita"
 
 #. i18n: context: iconText @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:34
@@ -13174,7 +13003,7 @@ msgstr "Konservi"
 #, kde-format
 msgctxt "action"
 msgid "Save &As..."
-msgstr "Konserv&ado kiel..."
+msgstr "Konservi &Kiel..."
 
 #. i18n: context: toolTip @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:57
@@ -13318,7 +13147,7 @@ msgstr "Bildigi Animacion al GIF, Bilda Sekvenco aŭ Video"
 #, kde-format
 msgctxt "action"
 msgid "Render Animation"
-msgstr "Bildigi Animacion"
+msgstr "Redoni Animacion"
 
 #. i18n: context: text @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:153
@@ -13417,7 +13246,7 @@ msgstr "&Dokumenta Informo"
 #, kde-format
 msgctxt "action"
 msgid "Document Information"
-msgstr "Dokumentaj Informoj"
+msgstr "Dokumentinformo"
 
 #. i18n: context: text @ Action (file_close_all), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:225
@@ -13458,7 +13287,7 @@ msgstr "Fermi"
 #, kde-format
 msgctxt "action"
 msgid "&Quit"
-msgstr "&Forlasi"
+msgstr "&Eliri"
 
 #. i18n: context: toolTip @ Action (file_quit), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:251
@@ -13496,7 +13325,7 @@ msgstr "Malfari"
 #, kde-format
 msgctxt "action"
 msgid "Undo last action"
-msgstr "Malfaru lastan agon"
+msgstr "Malfari lastan agon"
 
 #. i18n: context: text @ Action (edit_redo), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_redo), Actions (Edit), ActionCollection (Menu)
@@ -13534,7 +13363,7 @@ msgstr "Tranĉi elekton al tondujo"
 #, kde-format
 msgctxt "action"
 msgid "Cut"
-msgstr "Tondi"
+msgstr "Tranĉi"
 
 #. i18n: context: text @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:301
@@ -13745,7 +13574,7 @@ msgstr "Alglui Tavolstilon en la Nunan Nodon"
 #, kde-format
 msgctxt "action"
 msgid "C&lear"
-msgstr "Malp&lenigi"
+msgstr "&Viŝi"
 
 #. i18n: context: toolTip @ Action (clear), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (clear), Actions (Edit), ActionCollection (Menu)
@@ -13755,7 +13584,7 @@ msgstr "Malp&lenigi"
 #, kde-format
 msgctxt "action"
 msgid "Clear"
-msgstr "Malplenigi"
+msgstr "Klara"
 
 #. i18n: context: text @ Action (fill_selection_foreground_color), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:459
@@ -14066,7 +13895,7 @@ msgstr "Tuja Antaŭrigarda Reĝimo"
 #, kde-format
 msgctxt "action"
 msgid "Soft Proofing"
-msgstr "Mola Pruvo"
+msgstr "Mola Pruvado"
 
 #. i18n: context: toolTip @ Action (softProof), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (softProof), Actions (View), ActionCollection (Menu)
@@ -14160,14 +13989,14 @@ msgstr "Zomi al 100%"
 #, kde-format
 msgctxt "action"
 msgid "Zoom &In"
-msgstr "Zom&i"
+msgstr "Zoom &Enen"
 
 #. i18n: context: toolTip @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:776
 #, kde-format
 msgctxt "action"
 msgid "Zoom In"
-msgstr "Zomi"
+msgstr "Enzomi"
 
 #. i18n: context: text @ Action (view_zoom_out), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:786
@@ -14181,7 +14010,7 @@ msgstr "Malz&omi"
 #, kde-format
 msgctxt "action"
 msgid "Zoom Out"
-msgstr "Malzomi"
+msgstr "Elzomi"
 
 #. i18n: context: text @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -14208,7 +14037,7 @@ msgstr "Adapti Kanvason al Vido"
 #, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
-msgstr "Adapti al Vida Larĝo"
+msgstr "Adapti al Vidlarĝeco"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
@@ -14225,7 +14054,7 @@ msgstr "Adapti Kanvason al Vida Larĝo"
 #, kde-format
 msgctxt "action"
 msgid "Fit to View Height"
-msgstr "Adapti al Vida Alteco"
+msgstr "Adapti al Vidalteco"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:820
@@ -14678,7 +14507,7 @@ msgstr "Bildo"
 #, kde-format
 msgctxt "Image Properties"
 msgid "&Properties..."
-msgstr "&Propraĵoj..."
+msgstr "&Ecoj..."
 
 #. i18n: context: toolTip @ Action (image_properties), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (image_properties), Actions (Image), ActionCollection (Menu)
@@ -14688,7 +14517,7 @@ msgstr "&Propraĵoj..."
 #, kde-format
 msgctxt "Image Properties"
 msgid "Properties"
-msgstr "Trajtoj"
+msgstr "Propraĵoj"
 
 #. i18n: context: text @ Action (image_color), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1161
@@ -14726,7 +14555,7 @@ msgstr "&Konverti Bildan Kolorspacon..."
 #, kde-format
 msgctxt "action"
 msgid "Convert Image Color Space"
-msgstr "Konverti Bilda Kolorspaco"
+msgstr "Konverti Bilda Koloraspacon"
 
 #. i18n: context: text @ Action (trim_to_image), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1185
@@ -14879,7 +14708,7 @@ msgstr "&Speguli Bildon Horizontale"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Horizontally"
-msgstr "Speguli Bildon Horizontale"
+msgstr "Spegula Bildo Horizontale"
 
 #. i18n: context: text @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1293
@@ -14896,7 +14725,7 @@ msgstr "Spegula Bildo &Vertikale"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Vertically"
-msgstr "Speguli Bildon Vertikale"
+msgstr "Spegula Bildo Vertikale"
 
 #. i18n: context: text @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1305
@@ -14947,7 +14776,7 @@ msgstr "R&egrandigi Kanvason..."
 #, kde-format
 msgctxt "action"
 msgid "Resize Canvas"
-msgstr "Aligrandigi Kanvason"
+msgstr "Regrandigi Kanvason"
 
 #. i18n: context: text @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1341
@@ -14964,7 +14793,7 @@ msgstr "Bild&a Divido"
 #, kde-format
 msgctxt "action"
 msgid "Image Split"
-msgstr "Bilddivido"
+msgstr "Bildo Split"
 
 #. i18n: context: text @ Action (separate), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1353
@@ -14995,7 +14824,7 @@ msgstr "Elekti"
 #, kde-format
 msgctxt "action"
 msgid "Select &All"
-msgstr "Elekti Ĉi&ajn"
+msgstr "Elekti ĉi&an"
 
 #. i18n: context: toolTip @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
@@ -15120,7 +14949,7 @@ msgstr "&Pluma Elekto..."
 #, kde-format
 msgctxt "action"
 msgid "Feather Selection"
-msgstr "Pluma Elekto"
+msgstr "Plumo Elekto"
 
 #. i18n: context: text @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1465
@@ -15154,7 +14983,7 @@ msgstr "Ska&li..."
 #, kde-format
 msgctxt "action"
 msgid "Scale"
-msgstr "Skali"
+msgstr "Etendite"
 
 #. i18n: context: text @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1489
@@ -15256,7 +15085,7 @@ msgstr "Kreski&gi Elekton..."
 #, kde-format
 msgctxt "action"
 msgid "Grow Selection"
-msgstr "Kreskigi Elekton"
+msgstr "Grandigi Elekton"
 
 #. i18n: context: text @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1561
@@ -15273,7 +15102,7 @@ msgstr "Ŝr&umpi Elekton..."
 #, kde-format
 msgctxt "action"
 msgid "Shrink Selection"
-msgstr "Ŝrumpi Elekton"
+msgstr "Malgrandigi Elekton"
 
 #. i18n: context: text @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1573
@@ -15290,7 +15119,7 @@ msgstr "&Bordera Elekto..."
 #, kde-format
 msgctxt "action"
 msgid "Border Selection"
-msgstr "Lima Elekto"
+msgstr "Randelekto"
 
 #. i18n: context: text @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1585
@@ -15307,14 +15136,14 @@ msgstr "G&latigi"
 #, kde-format
 msgctxt "action"
 msgid "Smooth"
-msgstr "Glatigi"
+msgstr "Ebena"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1598
 #, kde-format
 msgctxt "action"
 msgid "Filter"
-msgstr "Filtri"
+msgstr "Filtrilo"
 
 #. i18n: context: text @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1601
@@ -15400,7 +15229,7 @@ msgstr "Koloroj"
 #, kde-format
 msgctxt "action"
 msgid "Edge Detection"
-msgstr "Randodetekto"
+msgstr "Eĝdetekto"
 
 #. i18n: context: text @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
@@ -15439,7 +15268,7 @@ msgstr "Reliefigi"
 #, kde-format
 msgctxt "action"
 msgid "Map"
-msgstr "Mapo"
+msgstr "Mapigi"
 
 #. i18n: context: text @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
@@ -15500,7 +15329,7 @@ msgstr "Apliki la lastan agon G'Mic-Qt denove"
 #, kde-format
 msgctxt "action"
 msgid "Settings"
-msgstr "Agordoj"
+msgstr "Agordo"
 
 #. i18n: context: text @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1739
@@ -15531,7 +15360,7 @@ msgstr "&Mastrumi Rimedajn Bibliotekojn..."
 #, kde-format
 msgctxt "action"
 msgid "Manage Resource Libraries"
-msgstr "Mastrumi Rimedajn Bibliotekojn"
+msgstr "Administri Rimedajn Bibliotekojn"
 
 #. i18n: context: iconText @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1754
@@ -15572,7 +15401,7 @@ msgstr "Ŝanĝi Aplikaĵan &Lingvon..."
 #, kde-format
 msgctxt "action"
 msgid "Switch Application Language"
-msgstr "Ŝalti Aplikaĵan Lingvon"
+msgstr "Ŝalti Aplikan Lingvon"
 
 #. i18n: context: text @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1785
@@ -15711,7 +15540,7 @@ msgstr "Restarigi Agordojn"
 #, kde-format
 msgctxt "action"
 msgid "Configure S&hortcuts..."
-msgstr "Agordi Ŝpar&vojojn..."
+msgstr "Agordi Ŝ&parvojojn..."
 
 #. i18n: context: toolTip @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
@@ -15759,7 +15588,7 @@ msgstr "Krita Manlibro"
 #, kde-format
 msgctxt "action"
 msgid "&Report Bug..."
-msgstr "&Raporti Eraron..."
+msgstr "&Raporti eraron..."
 
 #. i18n: context: toolTip @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
@@ -15810,14 +15639,14 @@ msgstr "Pri KDE"
 #, kde-format
 msgctxt "action"
 msgid "Brushes and Stuff"
-msgstr "Penikloj kaj Aĵoj"
+msgstr "Penikoj kaj Aĵoj"
 
 #. i18n: context: text @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1941
 #, kde-format
 msgctxt "action"
 msgid "&Gradients"
-msgstr "&Gradientoj"
+msgstr "&Kolortransiroj"
 
 #. i18n: context: toolTip @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -15827,14 +15656,14 @@ msgstr "&Gradientoj"
 #, kde-format
 msgctxt "action"
 msgid "Gradients"
-msgstr "Gradientoj"
+msgstr "Kolortransiroj"
 
 #. i18n: context: text @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1951
 #, kde-format
 msgctxt "action"
 msgid "&Patterns"
-msgstr "Ŝ&ablonoj"
+msgstr "Ŝa&blonoj"
 
 #. i18n: context: toolTip @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -16050,7 +15879,7 @@ msgstr ""
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:547
 #, kde-format
 msgid "Path options"
-msgstr "Dosierujvojaj opcioj"
+msgstr "Opcioj de vojo"
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:549
 #, kde-format
@@ -16202,7 +16031,7 @@ msgstr "Ŝanĝi parametron"
 #: libs/flake/tools/KoPathTool.cpp:310
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
-msgstr "Konverti al Pado"
+msgstr "Konverti al Vojo"
 
 #: libs/flake/commands/KoPathBreakAtPointCommand.cpp:27
 msgctxt "(qtundo-format)"
@@ -16306,7 +16135,7 @@ msgstr "Forigi formon"
 msgctxt "(qtundo-format)"
 msgid "Delete shape"
 msgid_plural "Delete shapes"
-msgstr[0] ""
+msgstr[0] "Forigi formon"
 msgstr[1] "Forigi formojn"
 
 #: libs/flake/commands/KoShapeDistributeCommand.cpp:117
@@ -16728,7 +16557,7 @@ msgstr "..."
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:235
 #, kde-format
 msgid "Convert to Path"
-msgstr "Konverti al Pado"
+msgstr "Konverti al Vojo"
 
 #: libs/global/kis_assert.cpp:83
 #, kde-format
@@ -17068,7 +16897,7 @@ msgstr "Arta"
 #, kde-format
 msgctxt "The category of blur filters, like gaussian blur. Verb."
 msgid "Blur"
-msgstr "Malklarigi"
+msgstr "Nebuligo"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:14
 #, kde-format
@@ -17080,7 +16909,7 @@ msgstr "Koloroj"
 #, kde-format
 msgctxt "The category of edge detection filters. Noun."
 msgid "Edge Detection"
-msgstr "Randodetekto"
+msgstr "Eĝdetekto"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:16
 #, kde-format
@@ -17099,7 +16928,7 @@ msgstr "Plibonigi"
 msgctxt ""
 "The category of mapping filters, like bump map or gradient filter map. Verb."
 msgid "Map"
-msgstr "Mapo"
+msgstr "Mapigi"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:19
 #, kde-format
@@ -17121,7 +16950,7 @@ msgstr "Plenigi Tavolon Redonu"
 #, kde-format
 msgctxt "property of a filter layer, noun"
 msgid "Filter"
-msgstr "Filtri"
+msgstr "Filtrilo"
 
 #: libs/image/kis_asl_layer_style_serializer.cpp:1283
 #, kde-format
@@ -17331,12 +17160,12 @@ msgstr "Tondi Bildon"
 #: libs/image/kis_image.cc:1275
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
-msgstr "Konverti Tavola Kolora Spaco"
+msgstr "Konverti Tavolan Kolorspacon"
 
 #: libs/image/kis_image.cc:1326
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
-msgstr "Konverti Bilda Kolorspaco"
+msgstr "Konverti Bilda Koloraspacon"
 
 #: libs/image/kis_image.cc:1327
 msgctxt "(qtundo-format)"
@@ -17351,7 +17180,7 @@ msgstr "Atribui Profilon al Tavolo"
 #: libs/image/kis_image.cc:1426
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
-msgstr "Atribui Profilon"
+msgstr "Asigni Profilon"
 
 #: libs/image/kis_image.cc:2486
 msgctxt "(qtundo-format)"
@@ -17574,7 +17403,7 @@ msgstr "Nenomita"
 #: libs/image/kis_regenerate_frame_stroke_strategy.cpp:102
 msgctxt "(qtundo-format)"
 msgid "Render Animation"
-msgstr "Bildigi Animacion"
+msgstr "Redoni Animacion"
 
 #: libs/image/kis_selection_filters.cpp:116
 msgctxt "(qtundo-format)"
@@ -17589,22 +17418,22 @@ msgstr "Dilati Elekton"
 #: libs/image/kis_selection_filters.cpp:255
 msgctxt "(qtundo-format)"
 msgid "Border Selection"
-msgstr "Lima Elekto"
+msgstr "Randelekto"
 
 #: libs/image/kis_selection_filters.cpp:499
 msgctxt "(qtundo-format)"
 msgid "Feather Selection"
-msgstr "Pluma Elekto"
+msgstr "Plumo Elekto"
 
 #: libs/image/kis_selection_filters.cpp:550
 msgctxt "(qtundo-format)"
 msgid "Grow Selection"
-msgstr "Kreskigi Elekton"
+msgstr "Grandigi Elekton"
 
 #: libs/image/kis_selection_filters.cpp:679
 msgctxt "(qtundo-format)"
 msgid "Shrink Selection"
-msgstr "Ŝrumpi Elekton"
+msgstr "Malgrandigi Elekton"
 
 #: libs/image/kis_selection_filters.cpp:822
 msgctxt "(qtundo-format)"
@@ -17731,7 +17560,7 @@ msgstr "Ombro"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Filter"
-msgstr "Filtri"
+msgstr "Filtrilo"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:65
 #, kde-format
@@ -17979,7 +17808,7 @@ msgstr ""
 #: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:652
 #, kde-format
 msgid "Clone Layer"
-msgstr "Klontavolo"
+msgstr "Klona Tavolo"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
 #: libs/ui/kis_node_manager.cpp:1514
@@ -17991,13 +17820,13 @@ msgstr "Grupo"
 #: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:972
 #, kde-format
 msgid "File Layer"
-msgstr "Dosiertavolo"
+msgstr "Dosiera Tavolo"
 
 #: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:665
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
-msgstr "Vektortavolo"
+msgstr "Vektora Tavolo"
 
 #: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:687
 #, kde-format
@@ -18033,7 +17862,7 @@ msgstr "Transforma Masko"
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
 msgid "Transparency Mask"
-msgstr "Masko de Travidebleco"
+msgstr "Masko de travidebleco"
 
 #: libs/impex/LayerOpacityCheck.h:109
 #, kde-format
@@ -18423,7 +18252,7 @@ msgstr "Nevalida valoro."
 #: plugins/filters/palettize/palettize.ui:155
 #, kde-format
 msgid "Alpha"
-msgstr "Alfa"
+msgstr "Alfo"
 
 #: libs/pigment/colorspaces/KoAlphaColorSpace.h:35
 #, kde-format
@@ -18770,7 +18599,7 @@ msgstr "Aldono"
 #, kde-format
 msgctxt "Blending mode - Subtract"
 msgid "Subtract"
-msgstr "Subtrahi"
+msgstr "Subtraho"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:47
 #, kde-format
@@ -19671,7 +19500,7 @@ msgstr "Lokaj Rimedoj"
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita"
-msgstr "Krita"
+msgstr "Krito"
 
 #: libs/resources/KisResourceCacheDb.cpp:255
 #, kde-format
@@ -19928,7 +19757,7 @@ msgstr "Penikaj Konsiloj"
 #, kde-format
 msgctxt "resource type"
 msgid "Gradients"
-msgstr "Gradientoj"
+msgstr "Kolortransiroj"
 
 #: libs/resources/KisResourceTypes.cpp:46
 #, kde-format
@@ -20482,7 +20311,7 @@ msgstr "Inundo Pleniga Tavolo"
 #: libs/ui/actions/kis_selection_action_factories.cpp:346
 msgctxt "(qtundo-format)"
 msgid "Cut"
-msgstr "Tondi"
+msgstr "Tranĉi"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:347
 msgctxt "(qtundo-format)"
@@ -20592,7 +20421,7 @@ msgstr ""
 #: libs/ui/KisMainWindow.cpp:2216
 #, kde-format
 msgid "Render Animation"
-msgstr "Bildigi Animacion"
+msgstr "Redoni Animacion"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:95
 #, kde-format
@@ -20745,7 +20574,7 @@ msgstr "Malsukcesis krei labordosierujon, certigu, ke vi havas skribpermeson"
 #, kde-format
 msgctxt "Title for a messagebox"
 msgid "Krita"
-msgstr "Krita"
+msgstr "Krito"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:184
 #, kde-format
@@ -22523,7 +22352,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Filter"
-msgstr "Filtri"
+msgstr "Filtrilo"
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:140
 #, kde-format
@@ -23267,7 +23096,7 @@ msgstr "Canvas Enigo"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
-msgstr "Koloradministrado"
+msgstr "Kolora Administrado"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2111
 #, kde-format
@@ -23702,7 +23531,7 @@ msgstr ""
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21 libs/ui/wdgsplash.ui:309
 #, kde-format
 msgid "Krita"
-msgstr "Krita"
+msgstr "Krito"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbOpenAutosave)
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:37
@@ -23885,7 +23714,7 @@ msgstr "Lasttempaj Bildoj"
 #, kde-format
 msgctxt "Welcome Screen Recent Document List's Clear link Label"
 msgid "Clear"
-msgstr "Malplenigi"
+msgstr "Klara"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
 #: libs/ui/forms/KisWelcomePage.ui:1162
@@ -24492,7 +24321,7 @@ msgstr "Importi profilon"
 #: libs/ui/forms/wdgcolorsettings.ui:243
 #, kde-format
 msgid "Soft Proofing"
-msgstr "Mola Pruvo"
+msgstr "Mola Pruvado"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgcolorsettings.ui:249
@@ -25414,7 +25243,7 @@ msgstr "Subfenestra reĝimo"
 #: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/clearaction.py:21
 #, kde-format
 msgid "Clear"
-msgstr "Malplenigi"
+msgstr "Klara"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdggeneralsettings.ui:483
@@ -26350,7 +26179,7 @@ msgstr "Dimensioj:"
 #: libs/ui/forms/wdglayerproperties.ui:244
 #, kde-format
 msgid "Properties"
-msgstr "Trajtoj"
+msgstr "Propraĵoj"
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, grpActiveChannels)
 #: libs/ui/forms/wdglayerproperties.ui:258
@@ -27924,7 +27753,7 @@ msgstr "Malfermi Tablet Tester..."
 #: libs/ui/imagesize/dlg_canvassize.cc:41
 #, kde-format
 msgid "Resize Canvas"
-msgstr "Aligrandigi Kanvason"
+msgstr "Regrandigi Kanvason"
 
 #: libs/ui/imagesize/dlg_imagesize.cc:41
 #: libs/ui/widgets/kis_custom_image_widget.cc:56
@@ -28598,13 +28427,13 @@ msgstr " + "
 #, kde-format
 msgctxt "Left Mouse Button"
 msgid "Left"
-msgstr "Maldekstra"
+msgstr "Maldekstre"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:307
 #, kde-format
 msgctxt "Right Mouse Button"
 msgid "Right"
-msgstr "Dekstra"
+msgstr "Ĝuste"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:315
 #, kde-format
@@ -28923,12 +28752,12 @@ msgstr "Relativa Diskreta Zoom-Reĝimo"
 #: libs/ui/input/kis_zoom_action.cpp:115
 #, kde-format
 msgid "Zoom In"
-msgstr "Zomi"
+msgstr "Enzomi"
 
 #: libs/ui/input/kis_zoom_action.cpp:116
 #, kde-format
 msgid "Zoom Out"
-msgstr "Malzomi"
+msgstr "Elzomi"
 
 #: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
@@ -28943,12 +28772,12 @@ msgstr "Adapti al Vido"
 #: libs/ui/input/kis_zoom_action.cpp:119
 #, kde-format
 msgid "Fit to View Width"
-msgstr "Adapti al Vida Larĝo"
+msgstr "Adapti al Vidlarĝeco"
 
 #: libs/ui/input/kis_zoom_action.cpp:120
 #, kde-format
 msgid "Fit to View Height"
-msgstr "Adapti al Vida Alteco"
+msgstr "Adapti al Vidalteco"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:37
 #, kde-format
@@ -29129,12 +28958,12 @@ msgstr "Plenigaj Gradientojn"
 #: libs/ui/kis_control_frame.cpp:76
 #, kde-format
 msgid "&Patterns"
-msgstr "Ŝ&ablonoj"
+msgstr "Ŝa&blonoj"
 
 #: libs/ui/kis_control_frame.cpp:83
 #, kde-format
 msgid "&Gradients"
-msgstr "&Gradientoj"
+msgstr "&Kolortransiroj"
 
 #: libs/ui/kis_control_frame.cpp:98
 #, kde-format
@@ -29175,7 +29004,7 @@ msgstr "Propra Ŝablono"
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, kde-format
 msgid "Gradients"
-msgstr "Gradientoj"
+msgstr "Kolortransiroj"
 
 #: libs/ui/kis_custom_pattern.cc:108
 #, kde-format
@@ -29342,7 +29171,7 @@ msgstr[1] "Tavoloj estas ŝlositaj"
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
-msgstr ""
+msgstr "Tavolo estas ŝlosita"
 
 #: libs/ui/kis_layer_manager.cc:881
 #, kde-format
@@ -29424,7 +29253,7 @@ msgstr "Spegula Vido Ĉirkaŭ Kanvaso"
 #: libs/ui/kis_node_manager.cpp:453
 #, kde-format
 msgid "Layer is locked"
-msgstr ""
+msgstr "Tavolo estas ŝlosita"
 
 #: libs/ui/kis_node_manager.cpp:455 libs/ui/kis_node_manager.cpp:480
 #, kde-format
@@ -29708,7 +29537,7 @@ msgstr "Teksturo"
 #, kde-format
 msgctxt "option category"
 msgid "Filter"
-msgstr "Filtri"
+msgstr "Filtrilo"
 
 #: libs/ui/kis_paintop_options_model.cpp:37
 #, kde-format
@@ -31572,7 +31401,7 @@ msgstr "Rekomenco estas bezonata."
 #: libs/ui/KoDocumentInfoDlg.cpp:73
 #, kde-format
 msgid "Document Information"
-msgstr "Dokumentaj Informoj"
+msgstr "Dokumentinformo"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:115
 #, kde-format
@@ -31696,7 +31525,7 @@ msgstr "&Tekniko:"
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:107
 #, kde-format
 msgid "Smooth"
-msgstr "Glatigi"
+msgstr "Ebena"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbTechnique)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:100
@@ -32342,7 +32171,7 @@ msgstr "&Grando:"
 #, kde-format
 msgctxt "@item:inlistbox Layer Style: Source"
 msgid "Center"
-msgstr "Centro"
+msgstr "Centrigita"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSource)
 #: libs/ui/layerstyles/wdgInnerGlow.ui:268
@@ -32502,7 +32331,7 @@ msgstr "Interne"
 #, kde-format
 msgctxt "@item:inlistbox Layer Style: Stroke position"
 msgid "Center"
-msgstr "Centro"
+msgstr "Centrigita"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/layerstyles/WdgStroke.ui:108
@@ -32702,7 +32531,7 @@ msgstr ""
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
-msgstr "Malplenigi"
+msgstr "Klara"
 
 #: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:291
 #, kde-format
@@ -34085,7 +33914,7 @@ msgstr "Restarigi Filtrilojn"
 #, kde-format
 msgctxt "@label:slider"
 msgid "Threshold:"
-msgstr "Pentrosojlo:"
+msgstr "Sojlo:"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:31
 #, kde-format
@@ -34293,7 +34122,7 @@ msgstr "Aldoni"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Subtract"
-msgstr "Subtrahi"
+msgstr "Subtraho"
 
 #: libs/ui/widgets/kis_selection_options.cc:230
 #: libs/ui/widgets/kis_selection_options.cc:478
@@ -34662,7 +34491,7 @@ msgstr "Heleco"
 #, kde-format
 msgctxt "Name of Dither pattern value mode - Alpha"
 msgid "Alpha"
-msgstr "Alfa"
+msgstr "Alfo"
 
 #. i18n: ectx: property (text), widget (QLabel, noiseSeedLabel)
 #: libs/ui/widgets/KisDitherWidget.ui:141
@@ -34707,12 +34536,12 @@ msgstr "Malantaŭa kolorelektilo"
 #: libs/ui/widgets/KoDualColorButton.cpp:429
 #, kde-format
 msgid "Set foreground and background colors to black and white"
-msgstr "Meti antaŭajn kaj fonajn kolorojn al nigra kaj blanka"
+msgstr "Agordi antaŭajn kaj fonajn kolorojn al nigra kaj blanka"
 
 #: libs/ui/widgets/KoDualColorButton.cpp:434
 #, kde-format
 msgid "Swap foreground and background colors"
-msgstr "Interŝanĝi malfon- kaj fonkoloron"
+msgstr "Interŝanĝi malfonan kaj fonan kolorojn"
 
 #: libs/ui/widgets/KoDualColorButton.cpp:437
 #, kde-format
@@ -35561,7 +35390,7 @@ msgstr "&Nova"
 #: libs/widgetutils/config/kstandardaction_p.h:30
 #, kde-format
 msgid "&Open..."
-msgstr "Malferm&o..."
+msgstr "&Malfermi..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:30
 #, kde-format
@@ -35576,7 +35405,7 @@ msgstr "Malfe&rmi Lastatempajn"
 #: libs/widgetutils/config/kstandardaction_p.h:31
 #, kde-format
 msgid "Open a document which was recently opened"
-msgstr "Malfermu dokumenton kiu estis lastatempe malfermita"
+msgstr "Malfermi dokumenton kiu estis lastatempe malfermita"
 
 #: libs/widgetutils/config/kstandardaction_p.h:32
 #, kde-format
@@ -35586,7 +35415,7 @@ msgstr "Konservi dokumenton"
 #: libs/widgetutils/config/kstandardaction_p.h:33
 #, kde-format
 msgid "Save &As..."
-msgstr "Konserv&ado kiel..."
+msgstr "Konservi &Kiel..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:33
 #, kde-format
@@ -35641,7 +35470,7 @@ msgstr "Sendi dokumenton per poŝto"
 #: libs/widgetutils/config/kstandardaction_p.h:39
 #, kde-format
 msgid "&Quit"
-msgstr "&Forlasi"
+msgstr "&Eliri"
 
 #: libs/widgetutils/config/kstandardaction_p.h:39
 #, kde-format
@@ -35656,7 +35485,7 @@ msgstr "&Malfari"
 #: libs/widgetutils/config/kstandardaction_p.h:41
 #, kde-format
 msgid "Undo last action"
-msgstr "Malfaru lastan agon"
+msgstr "Malfari lastan agon"
 
 #: libs/widgetutils/config/kstandardaction_p.h:42
 #, kde-format
@@ -35703,12 +35532,12 @@ msgstr "Alglui enhavon de la tondujo"
 #: libs/widgetutils/config/kstandardaction_p.h:47
 #, kde-format
 msgid "C&lear"
-msgstr "Malp&lenigi"
+msgstr "&Viŝi"
 
 #: libs/widgetutils/config/kstandardaction_p.h:48
 #, kde-format
 msgid "Select &All"
-msgstr "Elekti Ĉi&ajn"
+msgstr "Elekti ĉi&an"
 
 #: libs/widgetutils/config/kstandardaction_p.h:49
 #, kde-format
@@ -35778,7 +35607,7 @@ msgstr "Zomi por alĝustigi paĝan altecon en fenestro"
 #: libs/widgetutils/config/kstandardaction_p.h:59
 #, kde-format
 msgid "Zoom &In"
-msgstr "Zom&i"
+msgstr "Zoom &Enen"
 
 #: libs/widgetutils/config/kstandardaction_p.h:60
 #, kde-format
@@ -35943,7 +35772,7 @@ msgstr "Kon&servi agordojn"
 #: libs/widgetutils/config/kstandardaction_p.h:89
 #, kde-format
 msgid "Configure S&hortcuts..."
-msgstr "Agordi Ŝpar&vojojn..."
+msgstr "Agordi Ŝ&parvojojn..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:90
 #, kde-format
@@ -35983,7 +35812,7 @@ msgstr "Konsileto de la &Tago"
 #: libs/widgetutils/config/kstandardaction_p.h:102
 #, kde-format
 msgid "&Report Bug..."
-msgstr "&Raporti Eraron..."
+msgstr "&Raporti eraron..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:103
 #, kde-format
@@ -36416,7 +36245,7 @@ msgstr "Ha&veblaj agoj:"
 #, kde-format
 msgctxt "Filter as in showing only matching items"
 msgid "Filter"
-msgstr "Filtri"
+msgstr "Filtrilo"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1036
 #, kde-format
@@ -36427,7 +36256,7 @@ msgstr "Mom&entaj agoj:"
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
 #, kde-format
 msgid "Filter"
-msgstr "Filtri"
+msgstr "Filtrilo"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1201
 #, kde-format
@@ -36779,7 +36608,7 @@ msgstr "Importi Ŝparvojojn"
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:136
 #, kde-format
 msgid "Switch Application Language"
-msgstr "Ŝalti Aplikaĵan Lingvon"
+msgstr "Ŝalti Aplikan Lingvon"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:140
 #, kde-format
@@ -36871,13 +36700,13 @@ msgstr "Supre"
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Left"
-msgstr "Maldekstra"
+msgstr "Maldekstre"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:299
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Right"
-msgstr "Dekstra"
+msgstr "Ĝuste"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:300
 #, kde-format
@@ -37648,7 +37477,7 @@ msgstr "Kolorelektilo"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:72
 #, kde-format
 msgid "Show color selector"
-msgstr "Montru koloran elektilon"
+msgstr "Montri koloran elektilon"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:97
@@ -38213,7 +38042,7 @@ msgstr "Forigitaj kadroj ne haveblas en ĉi tiu Krita-instanco"
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
-msgstr[0] ""
+msgstr[0] "Aldoni blankan kadron"
 msgstr[1] "Aldoni %1 blankajn kadrojn"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
@@ -38331,7 +38160,7 @@ msgstr "Aldoni Ŝlosilkadron"
 msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
 msgid_plural "Remove Keyframes"
-msgstr[0] ""
+msgstr[0] "Forigi Ŝlosilkadron"
 msgstr[1] "Forigi Ŝlosilkadrojn"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:304
@@ -38347,7 +38176,7 @@ msgstr[1] "Movi %1 Ŝlosilkadrojn"
 msgctxt "(qtundo-format) Copy one or several keyframes"
 msgid "Copy Keyframe"
 msgid_plural "Copy %1 Keyframes"
-msgstr[0] ""
+msgstr[0] "Kopii Ŝlosilkadron"
 msgstr[1] "Kopii %1 Ŝlosilkadrojn"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:381
@@ -38964,7 +38793,7 @@ msgstr "Tavoloj"
 #: plugins/dockers/layerdocker/LayerBox.cpp:250
 #, kde-format
 msgid "&Show Global Selection Mask"
-msgstr "Montri Ĝeneralan Elekto-Ma&skon"
+msgstr "&Montri Ĉiean Elektan Maskon"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:253
 #, kde-format
@@ -39730,7 +39559,7 @@ msgstr "Malfermi registradan dosierujon"
 #, kde-format
 msgctxt "Contraction of \"second\" for interval"
 msgid " sec."
-msgstr "sek."
+msgstr " sek."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, labelFpsInput)
 #: plugins/dockers/recorder/recorder_export.ui:230
@@ -39813,7 +39642,7 @@ msgstr "Agordi ffmpeg plenumeblan lokon"
 #: plugins/dockers/recorder/recorder_export.ui:559
 #, kde-format
 msgid " sec."
-msgstr "sek."
+msgstr " sek."
 
 #. i18n: ectx: property (text), widget (QLabel, labelFfmpegLocation)
 #: plugins/dockers/recorder/recorder_export.ui:587
@@ -40170,8 +39999,7 @@ msgid "Original"
 msgstr "Originala"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:153
-#, fuzzy, kde-format
-#| msgid "Half"
+#, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
 "frames when recording the canvas"
@@ -40179,8 +40007,7 @@ msgid "Half"
 msgstr "Duono"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:154
-#, fuzzy, kde-format
-#| msgid "Quarter"
+#, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
 "frames when recording the canvas"
@@ -40271,7 +40098,7 @@ msgstr "Krei momentfoton"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Switch to selected snapshot"
-msgstr "Ŝaltu al elektita momentfoto"
+msgstr "Ŝalti al elektita momentfoto"
 
 #: plugins/dockers/snapshotdocker/SnapshotDocker.cpp:75
 #, kde-format
@@ -41538,7 +41365,7 @@ msgstr "Etikedo:"
 #: plugins/extensions/imagesplit/dlg_imagesplit.cpp:34
 #, kde-format
 msgid "Image Split"
-msgstr "Bilddivido"
+msgstr "Bildo Split"
 
 #: plugins/extensions/imagesplit/imagesplit.cpp:74
 #, kde-format
@@ -41613,12 +41440,12 @@ msgstr "Aŭtomatkonservado en Split"
 #: plugins/extensions/layergroupswitcher/layergroupswitcher.cpp:31
 #, kde-format
 msgid "Move into previous group"
-msgstr "Movu al la antaŭa grupo"
+msgstr "Movi al la antaŭa grupo"
 
 #: plugins/extensions/layergroupswitcher/layergroupswitcher.cpp:35
 #, kde-format
 msgid "Move into next group"
-msgstr "Movu al la sekva grupo"
+msgstr "Movi al la sekva grupo"
 
 #: plugins/extensions/layersplit/dlg_layersplit.cpp:30
 #, kde-format
@@ -42632,22 +42459,22 @@ msgstr "Valoro"
 #: plugins/extensions/modify_selection/dlg_border_selection.cc:20
 #, kde-format
 msgid "Border Selection"
-msgstr "Lima Elekto"
+msgstr "Randelekto"
 
 #: plugins/extensions/modify_selection/dlg_feather_selection.cc:20
 #, kde-format
 msgid "Feather Selection"
-msgstr "Pluma Elekto"
+msgstr "Plumo Elekto"
 
 #: plugins/extensions/modify_selection/dlg_grow_selection.cc:20
 #, kde-format
 msgid "Grow Selection"
-msgstr "Kreskigi Elekton"
+msgstr "Grandigi Elekton"
 
 #: plugins/extensions/modify_selection/dlg_shrink_selection.cc:19
 #, kde-format
 msgid "Shrink Selection"
-msgstr "Ŝrumpi Elekton"
+msgstr "Malgrandigi Elekton"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWidth)
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:53
@@ -43120,7 +42947,7 @@ msgstr ""
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:134
 #, kde-format
 msgid "Manage Resource Libraries"
-msgstr "Mastrumi Rimedajn Bibliotekojn"
+msgstr "Administri Rimedajn Bibliotekojn"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:141
 #, kde-format
@@ -43188,8 +43015,7 @@ msgid "Deactivate"
 msgstr "Malaktivigi"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:350
-#, fuzzy, kde-format
-#| msgid "Activate"
+#, kde-format
 msgctxt ""
 "In bundle manager; press button to activate the bundle (add resources from "
 "the bundle to the available resources)"
@@ -43575,12 +43401,12 @@ msgstr "SeExpr-skriptoj"
 #: plugins/extensions/rotateimage/rotateimage.cc:120
 msgctxt "(qtundo-format)"
 msgid "Mirror Image Vertically"
-msgstr "Speguli Bildon Vertikale"
+msgstr "Spegula Bildo Vertikale"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:129
 msgctxt "(qtundo-format)"
 msgid "Mirror Image Horizontally"
-msgstr "Speguli Bildon Horizontale"
+msgstr "Spegula Bildo Horizontale"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:144
 #, kde-format
@@ -43971,17 +43797,17 @@ msgstr "Deklivo:"
 #: plugins/filters/blur/kis_blur_filter.cpp:27
 #, kde-format
 msgid "&Blur..."
-msgstr "M&alklarigi..."
+msgstr "Ne&buligi..."
 
 #: plugins/filters/blur/kis_blur_filter.h:26
 #, kde-format
 msgid "Blur"
-msgstr "Malklarigi"
+msgstr "Nebuligo"
 
 #: plugins/filters/blur/kis_gaussian_blur_filter.cpp:32
 #, kde-format
 msgid "&Gaussian Blur..."
-msgstr "&Gaŭsa Malklariĝo..."
+msgstr "Gaŭsa malklariĝo..."
 
 #: plugins/filters/blur/kis_gaussian_blur_filter.h:28
 #, kde-format
@@ -43996,12 +43822,12 @@ msgstr "&Lensmalklariĝo..."
 #: plugins/filters/blur/kis_lens_blur_filter.h:30
 #, kde-format
 msgid "Lens Blur"
-msgstr "Malklariĝo de Lenso"
+msgstr "Lenso Blur"
 
 #: plugins/filters/blur/kis_motion_blur_filter.cpp:33
 #, kde-format
 msgid "&Motion Blur..."
-msgstr "Malklariĝo de &Movo..."
+msgstr "Movmalklaro..."
 
 #: plugins/filters/blur/kis_motion_blur_filter.h:30
 #, kde-format
@@ -44155,12 +43981,12 @@ msgstr "Forteco:"
 #: plugins/filters/colors/kis_color_to_alpha.cpp:30
 #, kde-format
 msgid "&Color to Alpha..."
-msgstr "&Koloro al Alfa..."
+msgstr "&Koloro al Alfo"
 
 #: plugins/filters/colors/kis_color_to_alpha.h:28
 #, kde-format
 msgid "Color to Alpha"
-msgstr "Koloro al Alfa"
+msgstr "Koloro al Alfo"
 
 #: plugins/filters/colors/kis_minmax_filters.cpp:58
 #, kde-format
@@ -44190,7 +44016,7 @@ msgstr "Minimumigi Kanalon"
 #: plugins/paintops/hairy/wdgbristleoptions.ui:184
 #, kde-format
 msgid "Threshold:"
-msgstr "Pentrosojlo:"
+msgstr "Sojlo:"
 
 #. i18n: ectx: property (text), widget (QLabel, samplerLabel)
 #: plugins/filters/colors/wdgcolortoalphabase.ui:164
@@ -44215,12 +44041,12 @@ msgstr "Transkanala ĝustigo Filtrilo"
 #: plugins/filters/colorsfilters/colorsfilters.cpp:77
 #, kde-format
 msgid "&Auto Contrast"
-msgstr "&Aŭtomata Kontrasto"
+msgstr "&Aŭtokontrasto"
 
 #: plugins/filters/colorsfilters/colorsfilters.h:37
 #, kde-format
 msgid "Auto Contrast"
-msgstr "Aŭtomata Kontrasto"
+msgstr "Aŭtokontrasto"
 
 #: plugins/filters/colorsfilters/kis_color_balance_filter.cpp:16
 #, kde-format
@@ -44326,7 +44152,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
 #, kde-format
 msgid "&Color Adjustment curves..."
-msgstr "&Kolorĝustigaj kurboj..."
+msgstr "&Kolorĝustigkurboj..."
 
 #: plugins/filters/colorsfilters/kis_perchannel_filter.h:54
 #, kde-format
@@ -44583,12 +44409,12 @@ msgstr "XYZ"
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:48
 #, kde-format
 msgid "&Sharpen"
-msgstr "&Akrigi"
+msgstr "&Akutigi"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:62
 #, kde-format
 msgid "&Mean Removal"
-msgstr "Forigo de &Mezo"
+msgstr "Forigo de &Mezumo"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:76
 #: plugins/filters/convolutionfilters/convolutionfilters.h:43
@@ -44600,7 +44426,7 @@ msgstr "Reliefo (Laplaciano)"
 #: plugins/filters/convolutionfilters/convolutionfilters.h:53
 #, kde-format
 msgid "Emboss in All Directions"
-msgstr "Reliefu en Ĉiuj Direktoj"
+msgstr "Reliefigi en Ĉiuj Direktoj"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:106
 #, kde-format
@@ -44611,7 +44437,7 @@ msgstr "Reliefigi Horizontale && Vertikale"
 #: plugins/filters/convolutionfilters/convolutionfilters.h:73
 #, kde-format
 msgid "Emboss Vertical Only"
-msgstr "Reliefigi Nur Vertikale"
+msgstr "Emboss Vertikala Nur"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:136
 #: plugins/filters/convolutionfilters/convolutionfilters.h:83
@@ -44622,12 +44448,12 @@ msgstr "Reliefigi Nur Horizontale"
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:151
 #, kde-format
 msgid "Top Edge Detection"
-msgstr "Supra Randa Detekto"
+msgstr "Supra Eĝdetekto"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.h:22
 #, kde-format
 msgid "Sharpen"
-msgstr "Akrigi"
+msgstr "Akutigi"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.h:33
 #, kde-format
@@ -44662,7 +44488,7 @@ msgstr "&Rando-Detekto..."
 #: plugins/filters/edgedetection/kis_edge_detection_filter.h:31
 #, kde-format
 msgid "Edge Detection"
-msgstr "Randodetekto"
+msgstr "Eĝdetekto"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:22
 #, kde-format
@@ -44741,7 +44567,7 @@ msgstr "Eligo:"
 #: plugins/filters/embossfilter/kis_emboss_filter.cpp:43
 #, kde-format
 msgid "&Emboss with Variable Depth..."
-msgstr "R&eliefigi kun Variebla Profundo..."
+msgstr "&Reliefigi kun Variebla Profundo..."
 
 #: plugins/filters/embossfilter/kis_emboss_filter.cpp:144
 #, kde-format
@@ -44752,12 +44578,12 @@ msgstr "Profundeco"
 #: plugins/filters/embossfilter/kis_emboss_filter.h:27
 #, kde-format
 msgid "Emboss with Variable Depth"
-msgstr "Reliefigi kun Variebla Profundo"
+msgstr "Reliefo kun Variebla Profundo"
 
 #: plugins/filters/example/example.h:33
 #, kde-format
 msgid "Invert"
-msgstr "Inverti"
+msgstr "Inversigite"
 
 #: plugins/filters/fastcolortransfer/fastcolortransfer.cpp:48
 #, kde-format
@@ -44767,7 +44593,7 @@ msgstr "&Kolortransigo..."
 #: plugins/filters/fastcolortransfer/fastcolortransfer.h:35
 #, kde-format
 msgid "Color Transfer"
-msgstr "Kolora Transdono"
+msgstr "Kolortransigo"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: plugins/filters/fastcolortransfer/wdgfastcolortransfer.ui:36
@@ -44982,7 +44808,7 @@ msgstr "Wavelet Noise Reducer"
 #: plugins/filters/indexcolors/indexcolors.cpp:33
 #, kde-format
 msgid "&Index Colors..."
-msgstr "&Indeksi Kolorojn..."
+msgstr "&Indeksaj Koloroj..."
 
 #: plugins/filters/indexcolors/indexcolors.cpp:66
 #, kde-format
@@ -45011,7 +44837,7 @@ msgstr "Ombro"
 #: plugins/filters/indexcolors/indexcolors.h:34
 #, kde-format
 msgid "Index Colors"
-msgstr "Indeksi Kolorojn"
+msgstr "Indeksaj Koloroj"
 
 #: plugins/filters/indexcolors/kiswdgindexcolors.cpp:40
 #, kde-format
@@ -45243,7 +45069,7 @@ msgstr "Normaligi Filtrilon"
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:44
 #, kde-format
 msgid "&Oilpaint..."
-msgstr "&Olefarbi..."
+msgstr "&Oleofarbo..."
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:205
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:67
@@ -45258,12 +45084,12 @@ msgstr "Penikograndeco"
 #, kde-format
 msgctxt "smooth out the painting strokes the filter creates"
 msgid "Smooth"
-msgstr "Glatigi"
+msgstr "Ebena"
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.h:26
 #, kde-format
 msgid "Oilpaint"
-msgstr "Olefarbi"
+msgstr "Oleofarbo"
 
 #. i18n: context: text @ Action (krita_filter_palettize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_palettize), Actions (Filters), ActionCollection (Krita)
@@ -45349,7 +45175,7 @@ msgstr "Phong Bumpmap"
 #: plugins/filters/phongbumpmap/kis_phong_bumpmap_filter.cpp:26
 #, kde-format
 msgid "&Phong Bumpmap..."
-msgstr "&Phong-Bumpmapo..."
+msgstr "&Phong Bumpmap..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, generalSettings)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:64
@@ -45512,12 +45338,12 @@ msgstr "Pixel-alteco"
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.h:27
 #, kde-format
 msgid "Pixelize"
-msgstr "Pixelize"
+msgstr "Rastrumerigi"
 
 #: plugins/filters/posterize/posterize.cpp:43
 #, kde-format
 msgid "&Posterize..."
-msgstr "&Transformi afiŝen..."
+msgstr "&Posterigi..."
 
 #: plugins/filters/posterize/posterize.cpp:81
 #, kde-format
@@ -45533,7 +45359,7 @@ msgstr "Posterigi"
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:46
 #, kde-format
 msgid "&Raindrops..."
-msgstr "Pluve&roj..."
+msgstr "&Pluvogutoj..."
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:381
 #, kde-format
@@ -45580,7 +45406,7 @@ msgstr "Restarigi Travidebla"
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
 msgid "&Round Corners..."
-msgstr "&Rondigi Angulojn..."
+msgstr "&Rondaj Anguloj..."
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:133
 #, kde-format
@@ -45590,7 +45416,7 @@ msgstr "Radiuso"
 #: plugins/filters/roundcorners/kis_round_corners_filter.h:27
 #, kde-format
 msgid "Round Corners"
-msgstr "Rondigi Angulojn"
+msgstr "Rondaj Anguloj"
 
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.cpp:44
 #, kde-format
@@ -45635,13 +45461,13 @@ msgstr "Sojla nive&lo:"
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
 #, kde-format
 msgid "&Unsharp Mask..."
-msgstr "Mala&kra Masko..."
+msgstr "Malak&utigi Maskon..."
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:76
 #: plugins/filters/unsharp/kis_unsharp_filter.h:27
 #, kde-format
 msgid "Unsharp Mask"
-msgstr "Malakra Masko"
+msgstr "Malakutigi Maskon"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/filters/unsharp/wdgunsharp.ui:56
@@ -45659,12 +45485,12 @@ msgstr "Nur Malpezeco:"
 #: plugins/filters/wavefilter/wavefilter.cpp:97
 #, kde-format
 msgid "&Wave..."
-msgstr "&Ondumi..."
+msgstr "&Ondo..."
 
 #: plugins/filters/wavefilter/wavefilter.h:39
 #, kde-format
 msgid "Wave"
-msgstr "Ondumi"
+msgstr "Ondo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:52
@@ -46016,7 +45842,7 @@ msgstr "Radiala"
 #, kde-format
 msgctxt "the gradient will be drawn in a square around a centre"
 msgid "Square"
-msgstr "Kvadrato"
+msgstr "Kvadrataj"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_gradient.cc:256
@@ -46564,7 +46390,7 @@ msgstr "Diamanto"
 #, kde-format
 msgctxt "Screentone Pattern - Square Dots"
 msgid "Square"
-msgstr "Kvadrato"
+msgstr "Kvadrataj"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:36
 #, kde-format
@@ -47748,7 +47574,7 @@ msgstr "Nul"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Left"
-msgstr "Maldekstra"
+msgstr "Maldekstre"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:111
 #, kde-format
@@ -50078,13 +49904,13 @@ msgstr "ICC-dosieroj (*.icc *.icm)"
 #, kde-format
 msgctxt "@label"
 msgid "Color Management"
-msgstr "Koloradministrado"
+msgstr "Kolora Administrado"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:987
 #, kde-format
 msgctxt "@label"
 msgid "Threshold:"
-msgstr "Pentrosojlo:"
+msgstr "Sojlo:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:988
 #, kde-format
@@ -50339,7 +50165,7 @@ msgstr "Kunpremo:"
 #, kde-format
 msgctxt "save the file quickly, but do not compress very well"
 msgid "Fast"
-msgstr "Rapide"
+msgstr "Rapida"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSmall)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:375
@@ -50359,7 +50185,7 @@ msgstr "Pixar Log Kunpremado-Ebloj"
 #, kde-format
 msgctxt "save quickly, but do not compress a lot"
 msgid "Fast"
-msgstr "Rapide"
+msgstr "Rapida"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSmall_2)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:487
@@ -50663,7 +50489,7 @@ msgstr "Prognoza Filtrado por Alpha Plane"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:74
 #, kde-format
 msgid "Fast"
-msgstr "Rapide"
+msgstr "Rapida"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaQuality)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, alphaQuality)
@@ -51451,7 +51277,7 @@ msgstr "Kreado de Formoj:"
 #, kde-format
 msgctxt "Noun for an experiment brush shape smoothness"
 msgid "Smooth"
-msgstr "Glatigi"
+msgstr "Ebena"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPostprocessing)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:93
@@ -51487,7 +51313,7 @@ msgstr "Ĉiea Ŝablono"
 #, kde-format
 msgctxt "type of a brush engine, shown in the list of brush engines"
 msgid "Filter"
-msgstr "Filtri"
+msgstr "Filtrilo"
 
 #: plugins/paintops/gridbrush/grid_paintop_plugin.cpp:27
 #, kde-format
@@ -51974,7 +51800,7 @@ msgstr "Tipo de masko:"
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:101
 #, kde-format
 msgid "Square"
-msgstr "Kvadrato"
+msgstr "Kvadrataj"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, btnAntialiasing)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkInvert)
@@ -53884,7 +53710,7 @@ msgstr "Hazarda grandeco"
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:17
 #, kde-format
 msgid "Settings"
-msgstr "Agordoj"
+msgstr "Agordo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, fixedRotation)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:52
@@ -53962,8 +53788,7 @@ msgstr "Jitter Movado:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:185
-#, fuzzy, kde-format
-#| msgid "Particles"
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the spay particles in the spray "
 "engine"
@@ -53988,8 +53813,7 @@ msgstr "grafo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, densityRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:213
-#, fuzzy, kde-format
-#| msgid "Density"
+#, kde-format
 msgctxt ""
 "Check box to indicate that the user should set the number of particles in "
 "terms of density relative to the spray area in the spray engine"
@@ -53998,8 +53822,7 @@ msgstr "Denseco"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxAngularDistribution)
 #: plugins/paintops/spray/wdgsprayoptions.ui:237
-#, fuzzy, kde-format
-#| msgid "Angular"
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the angular distribution of "
 "particles in the spray engine"
@@ -54026,8 +53849,7 @@ msgstr "Kurbo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxRadialDistribution)
 #: plugins/paintops/spray/wdgsprayoptions.ui:322
-#, fuzzy, kde-format
-#| msgid "Radial"
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the radial distribution of particles "
 "in the spray engine"
@@ -54278,7 +54100,7 @@ msgstr "Direkto/Tilt Miksvaloro"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:19
 msgid "Assign Profile"
-msgstr "Atribui Profilon"
+msgstr "Asigni Profilon"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:20
 msgid "There is no active document."
@@ -55858,7 +55680,7 @@ msgstr "Gradoj:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1839
 #, kde-format
 msgid "Scale"
-msgstr "Skali"
+msgstr "Etendite"
 
 #: plugins/python/documenttools/uidocumenttools.py:104
 msgid "The selected documents has been modified."
@@ -56858,7 +56680,7 @@ msgstr "Uzi proprajn opciojn de miksado"
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in fill tool options"
 msgid "Threshold: "
-msgstr "Pentrosojlo: "
+msgstr "Pentrosojlo:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:561
 #, kde-format
@@ -57216,7 +57038,7 @@ msgstr "Kopii Traduki"
 #: plugins/tools/basictools/kis_tool_multihand.h:91
 #, kde-format
 msgid "Multibrush Tool"
-msgstr "Plurpenika Ilo"
+msgstr "Multpenika Ilo"
 
 #: plugins/tools/basictools/kis_tool_pan.cpp:79
 #, kde-format
@@ -57698,7 +57520,7 @@ msgstr "Logikaj Operacioj"
 #: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
 #, kde-format
 msgid "Select Shapes Tool"
-msgstr "Elekti Ilon por Formoj"
+msgstr "Elekta Ilo por Formoj"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:44
@@ -57845,7 +57667,7 @@ msgstr "Referenca Bildaj Agoj"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:89
 #, kde-format
 msgid "Reference Images Tool"
-msgstr "Referenca Bilda Ilo"
+msgstr "Ilo por Referencbildoj"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:51
 #, kde-format
@@ -58104,7 +57926,7 @@ msgstr "Elekti Apudan Areon"
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in contiguous selection tool options"
 msgid "Threshold: "
-msgstr "Pentrosojlo: "
+msgstr "Pentrosojlo:"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:374
 #, kde-format
@@ -58277,7 +58099,7 @@ msgstr "Elekti Similan Koloron"
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
-msgstr "Pentrosojlo: "
+msgstr "Pentrosojlo:"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:472
 #, kde-format
@@ -58358,7 +58180,7 @@ msgstr "Filtrila Radiuso:"
 #, kde-format
 msgctxt "Threshold in Magnetic Selection's Tool options"
 msgid "Threshold: "
-msgstr "Pentrosojlo: "
+msgstr "Pentrosojlo:"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:749
 #, kde-format
@@ -58428,7 +58250,7 @@ msgstr "Forĵeti Elekton"
 #, kde-format
 msgctxt "The 'path options' section label in magnetic selection's tool options"
 msgid "Path options"
-msgstr "Dosierujvojaj opcioj"
+msgstr "Opcioj de vojo"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
 #, kde-format
@@ -59138,7 +58960,7 @@ msgstr "Stuci"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:69
 #, kde-format
 msgid "Center"
-msgstr "Centro"
+msgstr "Centrigita"
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolGrow)
 #: plugins/tools/tool_crop/kis_tool_crop.cc:119
@@ -59363,7 +59185,7 @@ msgstr "Enfermi kaj Plenigi"
 #, kde-format
 msgctxt "The 'invert' checkbox in enclose and fill tool"
 msgid "Invert"
-msgstr "Inverti"
+msgstr "Inversigite"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:429
 #, kde-format
@@ -59381,7 +59203,7 @@ msgstr ""
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in enclose and fill tool options"
 msgid "Threshold: "
-msgstr "Pentrosojlo: "
+msgstr "Pentrosojlo:"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
 #, kde-format
@@ -60101,7 +59923,7 @@ msgstr "Rotacii"
 #, kde-format
 msgctxt "@option:radio Type of transformation"
 msgid "Scale"
-msgstr "Skali"
+msgstr "Etendite"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeShearRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:663
@@ -60386,7 +60208,7 @@ msgstr "Rektangulo Ilo"
 #, kde-format
 msgctxt "action"
 msgid "Multibrush Tool"
-msgstr "Plurpenika Ilo"
+msgstr "Multpenika Ilo"
 
 #. i18n: context: text @ Action (KritaShape/KisToolLazyBrush), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolLazyBrush), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -60438,7 +60260,7 @@ msgstr "Pan Ilo"
 #, kde-format
 msgctxt "action"
 msgid "Select Shapes Tool"
-msgstr "Elekti Ilon por Formoj"
+msgstr "Elekta Ilo por Formoj"
 
 #. i18n: context: toolTip @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:76
@@ -60604,580 +60426,4 @@ msgstr "Zomi Ilo"
 #, kde-format
 msgctxt "action"
 msgid "Reference Images Tool"
-msgstr "Referenca Bilda Ilo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#~ "Sketch.¦kpp"
-#~ msgid "Sketch"
-#~ msgstr "Skizo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
-#~ "Animation.¦kws"
-#~ msgid "Animation"
-#~ msgstr "Animacio"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
-#~ "Big_Paint.¦kws"
-#~ msgid "Big Paint"
-#~ msgstr "Granda Farbo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
-#~ "Big_Paint_2.¦kws"
-#~ msgid "Big Paint 2"
-#~ msgstr "Granda Farbo 2"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
-#~ "Big_Vector.¦kws"
-#~ msgid "Big Vector"
-#~ msgstr "Granda Vektoro"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
-#~ "¦Small_Vector.kws"
-#~ msgid "Small Vector"
-#~ msgstr "Vektoreto"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
-#~ "VFX_Paint.¦kws"
-#~ msgid "VFX Paint"
-#~ msgstr "VFX Paint"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/02_rough-"
-#~ "¦canvas.png"
-#~ msgid "02 rough-canvas"
-#~ msgstr "02 malglata-tolo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
-#~ "¦patterns/02b_WoofTissue.png"
-#~ msgid "02b WoofTissue"
-#~ msgstr "02b WoofTissue"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/03_default-"
-#~ "¦paper.png"
-#~ msgid "03 default-paper"
-#~ msgstr "03 defaŭlta-papero"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/04_paper-C-"
-#~ "¦grain.png"
-#~ msgid "04 paper-C-grain"
-#~ msgstr "04 papero-C-grajno"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/05_paper-"
-#~ "¦torchon.png"
-#~ msgid "05 paper-torchon"
-#~ msgstr "05 papero-torĉo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/06_hard-"
-#~ "grain.¦png"
-#~ msgid "06 hard-grain"
-#~ msgstr "06 malmola greno"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/08_bump-"
-#~ "¦relief.png"
-#~ msgid "08 bump-relief"
-#~ msgstr "08 bump-reliefo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
-#~ "¦patterns/09_drawed_crosshatched.png"
-#~ msgid "09 drawed crosshatched"
-#~ msgstr "09 desegnitaj kruchakitaj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/09b_drawed-"
-#~ "¦CrossedLines.png"
-#~ msgid "09b drawed-CrossedLines"
-#~ msgstr "09b desegnitaj-Krucitaj Linioj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
-#~ "¦patterns/10_drawed_dotted.png"
-#~ msgid "10 drawed dotted"
-#~ msgstr "10 desegnitaj punktitaj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
-#~ "¦patterns/11_drawed_furry.png"
-#~ msgid "11 drawed furry"
-#~ msgstr "11 desegnitaj vilaj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
-#~ "¦patterns/12_drawed_vertical.png"
-#~ msgid "12 drawed vertical"
-#~ msgstr "12 desegnitaj vertikalaj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
-#~ "¦patterns/13_drawed_swirl.png"
-#~ msgid "13 drawed swirl"
-#~ msgstr "13 tirita kirlo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/14_texture-"
-#~ "¦rock.png"
-#~ msgid "14 texture-rock"
-#~ msgstr "14 teksturo-roko"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/15_texture-"
-#~ "¦rockB.png"
-#~ msgid "15 texture-rockB"
-#~ msgstr "15 teksturo-rokoB"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/16_texture-"
-#~ "¦woody.png"
-#~ msgid "16 texture-woody"
-#~ msgstr "16 tekstur-lignecaj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/17_texture-"
-#~ "¦melt.png"
-#~ msgid "17 texture-melt"
-#~ msgstr "17 teksturo-fandi"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/18_texture-"
-#~ "¦bark.png"
-#~ msgid "18 texture-bark"
-#~ msgstr "18 teksturo-ŝelo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
-#~ "patterns/18b_WaveFlex.¦png"
-#~ msgid "18b WaveFlex"
-#~ msgstr "18b WaveFlex"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/19_texture-"
-#~ "¦crackle.png"
-#~ msgid "19 texture-crackle"
-#~ msgstr "19 teksturo-kraketo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/20_texture-"
-#~ "¦vegetal.png"
-#~ msgid "20 texture-vegetal"
-#~ msgstr "20 teksturo-vegetala"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/21_texture-"
-#~ "¦chainmail.png"
-#~ msgid "21 texture-chainmail"
-#~ msgstr "21 teksturo-ĉenpoŝto"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/22_texture-"
-#~ "¦reptile.png"
-#~ msgid "22 texture-reptile"
-#~ msgstr "22 teksturo-reptilo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/23-dynamic-"
-#~ "¦screentone-A.png"
-#~ msgid "23-dynamic-screentone-A"
-#~ msgstr "23-dinamika-ekrantono-A"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/24-dynamic-"
-#~ "¦screentone-B.png"
-#~ msgid "24-dynamic-screentone-B"
-#~ msgstr "24-dinamika-ekrantono-B"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/25-dynamic-"
-#~ "¦screentone-C.png"
-#~ msgid "25-dynamic-screentone-C"
-#~ msgstr "25-dinamika-ekrantono-C"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/26_brush-"
-#~ "¦marks.png"
-#~ msgid "26 brush-marks"
-#~ msgstr "26 peniko-markoj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-#~ "¦Crumpled_Paper.pat"
-#~ msgid "Canvas 04"
-#~ msgstr "Kanvaso 04"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-#~ "¦HR_PastelPaper_02.pat"
-#~ msgid "HR Pastel Paper 02"
-#~ msgstr "HR Pastel Paper 02"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-#~ "HR_Wall_Paper.¦pat"
-#~ msgid "HR Wall Paper"
-#~ msgstr "HR Wall Paper"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-#~ "¦fractal_pattern.pat"
-#~ msgid "Fractal Pattern"
-#~ msgstr "Fraktala Ŝablono"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-#~ "¦generic_paper1.pat"
-#~ msgid "Generic Paper 2"
-#~ msgstr "Kutima Papero 2"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-#~ "¦generic_paper2.pat"
-#~ msgid "Generic Paper 3"
-#~ msgstr "Kutima Papero 3"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
-#~ "hexacolBW__2.¦pat"
-#~ msgid "Hexacol BW By Tarkan"
-#~ msgstr "Hexacol BW By Tarkan"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-#~ "bokey_circle.¦gbr"
-#~ msgid "U Circle shape 5"
-#~ msgstr "U Circle shape 5"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-#~ "¦bristles_grouped.gbr"
-#~ msgid "A -2 Sparkle 3"
-#~ msgstr "A -2 Scintilo 3"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
-#~ "¦a)_Eraser_Circle.kpp"
-#~ msgid "a) Eraser Circle"
-#~ msgstr "a) Eraser Rondo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
-#~ "¦b)_Basic-5_Size_default.kpp"
-#~ msgid "b) Basic-5 Size default"
-#~ msgstr "b) Baza-5 Grandeco defaŭlta"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/02_rough-"
-#~ "¦canvas.png"
-#~ msgid "02 rough-canvas"
-#~ msgstr "02 malglata-tolo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
-#~ "¦patterns/02b_WoofTissue.png"
-#~ msgid "02b WoofTissue"
-#~ msgstr "02b WoofTissue"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/03_default-"
-#~ "¦paper.png"
-#~ msgid "03 default-paper"
-#~ msgstr "03 defaŭlta-papero"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/04_paper-C-"
-#~ "¦grain.png"
-#~ msgid "04 paper-C-grain"
-#~ msgstr "04 papero-C-grajno"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/05_paper-"
-#~ "¦torchon.png"
-#~ msgid "05 paper-torchon"
-#~ msgstr "05 papero-torĉo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/06_hard-"
-#~ "grain.¦png"
-#~ msgid "06 hard-grain"
-#~ msgstr "06 malmola greno"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/08_bump-"
-#~ "¦relief.png"
-#~ msgid "08 bump-relief"
-#~ msgstr "08 bump-reliefo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
-#~ "¦patterns/09_drawed_crosshatched.png"
-#~ msgid "09 drawed crosshatched"
-#~ msgstr "09 desegnitaj kruchakitaj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/09b_drawed-"
-#~ "¦CrossedLines.png"
-#~ msgid "09b drawed-CrossedLines"
-#~ msgstr "09b desegnitaj-Krucitaj Linioj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
-#~ "¦patterns/10_drawed_dotted.png"
-#~ msgid "10 drawed dotted"
-#~ msgstr "10 desegnitaj punktitaj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
-#~ "¦patterns/11_drawed_furry.png"
-#~ msgid "11 drawed furry"
-#~ msgstr "11 desegnitaj vilaj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
-#~ "¦patterns/12_drawed_vertical.png"
-#~ msgid "12 drawed vertical"
-#~ msgstr "12 desegnitaj vertikalaj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
-#~ "¦patterns/13_drawed_swirl.png"
-#~ msgid "13 drawed swirl"
-#~ msgstr "13 tirita kirlo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/14_texture-"
-#~ "¦rock.png"
-#~ msgid "14 texture-rock"
-#~ msgstr "14 teksturo-roko"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/15_texture-"
-#~ "¦rockB.png"
-#~ msgid "15 texture-rockB"
-#~ msgstr "15 teksturo-rokoB"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/16_texture-"
-#~ "¦woody.png"
-#~ msgid "16 texture-woody"
-#~ msgstr "16 tekstur-lignecaj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/17_texture-"
-#~ "¦melt.png"
-#~ msgid "17 texture-melt"
-#~ msgstr "17 teksturo-fandi"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/18_texture-"
-#~ "¦bark.png"
-#~ msgid "18 texture-bark"
-#~ msgstr "18 teksturo-ŝelo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
-#~ "patterns/18b_WaveFlex.¦png"
-#~ msgid "18b WaveFlex"
-#~ msgstr "18b WaveFlex"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/19_texture-"
-#~ "¦crackle.png"
-#~ msgid "19 texture-crackle"
-#~ msgstr "19 teksturo-kraketo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/20_texture-"
-#~ "¦vegetal.png"
-#~ msgid "20 texture-vegetal"
-#~ msgstr "20 teksturo-vegetala"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/21_texture-"
-#~ "¦chainmail.png"
-#~ msgid "21 texture-chainmail"
-#~ msgstr "21 teksturo-ĉenpoŝto"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/22_texture-"
-#~ "¦reptile.png"
-#~ msgid "22 texture-reptile"
-#~ msgstr "22 teksturo-reptilo"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/23-dynamic-"
-#~ "¦screentone-A.png"
-#~ msgid "23-dynamic-screentone-A"
-#~ msgstr "23-dinamika-ekrantono-A"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/24-dynamic-"
-#~ "¦screentone-B.png"
-#~ msgid "24-dynamic-screentone-B"
-#~ msgstr "24-dinamika-ekrantono-B"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/25-dynamic-"
-#~ "¦screentone-C.png"
-#~ msgid "25-dynamic-screentone-C"
-#~ msgstr "25-dinamika-ekrantono-C"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/26_brush-"
-#~ "¦marks.png"
-#~ msgid "26 brush-marks"
-#~ msgstr "26 peniko-markoj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-#~ "¦Abstract_lines.png"
-#~ msgid "Abstract lines"
-#~ msgstr "Abstraktaj linioj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-#~ "¦Crumpled_Paper.pat"
-#~ msgid "Canvas 04"
-#~ msgstr "Kanvaso 04"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-#~ "¦fractal_pattern.pat"
-#~ msgid "Fractal Pattern"
-#~ msgstr "Fraktala Ŝablono"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-#~ "¦generic_paper1.pat"
-#~ msgid "Generic Paper 2"
-#~ msgstr "Kutima Papero 2"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-#~ "¦generic_paper2.pat"
-#~ msgid "Generic Paper 3"
-#~ msgstr "Kutima Papero 3"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-#~ "hexacolBW__2.¦pat"
-#~ msgid "Hexacol BW By Tarkan"
-#~ msgstr "Hexacol BW By Tarkan"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-#~ "¦HR_PastelPaper_02.pat"
-#~ msgid "HR Pastel Paper 02"
-#~ msgstr "HR Pastel Paper 02"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-#~ "HR_Wall_Paper.¦pat"
-#~ msgid "HR Wall Paper"
-#~ msgstr "HR Wall Paper"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-#~ "Rough_Paper.¦png"
-#~ msgid "Rough Paper"
-#~ msgstr "Malglata Papero"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-#~ "¦Rough_Wall_With_Impasto.png"
-#~ msgid "Rough Wall With Impasto"
-#~ msgstr "Malglata Muro Kun Impasto"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
-#~ "Stars_Sized.¦png"
-#~ msgid "Stars Sized"
-#~ msgstr "Steloj Grandaj"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-#~ "¦chalk_chisel_random_small.gih"
-#~ msgid "3_eroded"
-#~ msgstr "3_eroded"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/random-"
-#~ "vegetal.¦gih"
-#~ msgid "A-4 random vegetal2"
-#~ msgstr "A-4 hazarda vegetalo2"
-
-#~ msgctxt ""
-#~ "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
-#~ "splats_large.¦gih"
-#~ msgid "S_Splats 2"
-#~ msgstr "S_Splats 2"
-
-#~ msgctxt ""
-#~ "Use the resolution two times smaller than the original resolution for the "
-#~ "¦frames when recording the canvas"
-#~ msgid "Half"
-#~ msgstr "Duono"
-
-#~ msgctxt ""
-#~ "Use the resolution four times smaller than the original resolution for "
-#~ "the ¦frames when recording the canvas"
-#~ msgid "Quarter"
-#~ msgstr "Kvarono"
-
-#~ msgctxt ""
-#~ "In bundle manager; press button to deactivate the bundle (remove "
-#~ "resources ¦from the bundle from the available resources)"
-#~ msgid "Deactivate"
-#~ msgstr "Malaktivigi"
-
-#~ msgctxt ""
-#~ "In bundle manager; press button to activate the bundle (add resources "
-#~ "from ¦the bundle to the available resources)"
-#~ msgid "Activate"
-#~ msgstr "Aktivigi"
-
-#~ msgctxt ""
-#~ "Name of the group of options related to the spay particles in the spray "
-#~ "¦engine"
-#~ msgid "Particles"
-#~ msgstr "Partikloj"
-
-#~ msgctxt ""
-#~ "Check box to indicate that the user should set the number of particles in "
-#~ "¦terms of density relative to the spray area in the spray engine"
-#~ msgid "Density"
-#~ msgstr "Denseco"
-
-#~ msgctxt ""
-#~ "Name of the group of options related to the angular distribution of "
-#~ "¦particles in the spray engine"
-#~ msgid "Angular"
-#~ msgstr "Angula"
-
-#~ msgctxt ""
-#~ "Name of the group of options related to the radial distribution of "
-#~ "particles ¦in the spray engine"
-#~ msgid "Radial"
-#~ msgstr "Radiala"
-
-#~ msgctxt ""
-#~ "The 'use selection as boundary' checkbox in contiguous selection tool to "
-#~ "use ¦selection borders as boundary when filling"
-#~ msgid "Use selection as boundary"
-#~ msgstr "Uzi elekton kiel limon"
-
-#~ msgctxt ""
-#~ "The 'use selection as boundary' checkbox in enclose and fill tool to use "
-#~ "¦selection borders as boundary when filling"
-#~ msgid "Use selection as boundary"
-#~ msgstr "Uzi elekton kiel limon"
+msgstr "Ilo por Referencbildoj"

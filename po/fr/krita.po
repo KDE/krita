@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-13 02:27+0000\n"
-"PO-Revision-Date: 2023-12-03 10:04+0100\n"
+"PO-Revision-Date: 2023-12-16 15:33+0100\n"
 "Last-Translator: Patricia Moncorgé <patricia.moncorge@d-booker.fr>\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr\n"
@@ -111,9 +111,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 21.12.3\n"
-"X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
+"X-Environment: kde\n"
+"X-Generator: Lokalize 21.12.3\n"
 "X-Text-Markup: kde4\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -20575,7 +20575,7 @@ msgstr "N / A"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:401
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
-msgstr "Aucun programme binaire valable de « FFMpeg » n'a été fourni..."
+msgstr "Aucun programme binaire valable de « FFmpeg » n'a été fourni..."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:474
 #, kde-format
@@ -20607,7 +20607,7 @@ msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
-"Le programme « FFMpeg » que vous avez fourni semble être sous forme "
+"Le programme « FFmpeg » que vous avez fourni semble être sous forme "
 "compressée. Veuillez tenter de l'extraire tout d'abord de l'archive."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
@@ -20768,7 +20768,7 @@ msgstr "Images : %1"
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "FPS: %1"
-msgstr "images/s : %1"
+msgstr "FPS : %1"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
 #, kde-format
@@ -21058,7 +21058,7 @@ msgstr ""
 "activée et que la version de FFMpeg soit supérieure au moins à 4.2+. Si "
 "votre sortie « GIF » montre des signes de déchirement de l'écran, la version "
 "4.4+ de FFMpeg est fortement recommandée.</span></p><p><span style=\" font-"
-"style:italic ;\">Remarque 2 : Le format GIF ne prend en charge que la "
+"style:italic ;\">Remarque 2 : Le format GIF ne prend en charge que la "
 "transparence à 100 % ou la transparence à 0 %. La transparence partielle est "
 "</span><span style=\" font-style:italic ; text-decoration : underline ;"
 "\">non</span><span style=\" font-style:italic ;\"> prise en charge. Si vous "
@@ -21779,7 +21779,7 @@ msgstr "Importer dans :"
 #: libs/ui/animation/wdg_animationrenderer.ui:171
 #, kde-format
 msgid "FPS:"
-msgstr "images/s :"
+msgstr "FPS :"
 
 #. i18n: ectx: property (text), widget (QLabel, frameSkipLabel)
 #: libs/ui/animation/VideoImportDialog.ui:388
@@ -22177,7 +22177,7 @@ msgstr ""
 #: libs/ui/canvas/kis_canvas_controller.cpp:359
 #, kde-format
 msgid "Instant Preview Mode: %1"
-msgstr "Mode d'aperçu instantané : %1"
+msgstr "Mode d'aperçu instantané : %1"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:366
 #, kde-format
@@ -22602,7 +22602,7 @@ msgstr "Importer des images"
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:166
 #, kde-format
 msgid "Source fps: %1"
-msgstr "« FPS » source : %1"
+msgstr "FPS source : %1"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:78
 #, kde-format
@@ -24826,7 +24826,7 @@ msgstr "Filtrage haute qualité"
 #: libs/ui/forms/wdgdisplaysettings.ui:139
 #, kde-format
 msgid "Scaling Mode:"
-msgstr "Mode de mise à l'échelle :"
+msgstr "Mode de mise à l'échelle :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
@@ -25819,7 +25819,7 @@ msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
 "not report a bug."
 msgstr ""
-"Attention : Si vous activez cette option et que les dialogues génèrent des "
+"Attention : Si vous activez cette option et que les dialogues génèrent des "
 "anomalies, ne faites pas de rapport de bogue."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
@@ -26307,7 +26307,7 @@ msgstr "Nombre d'images entre deux plans"
 #: libs/ui/forms/wdgimportimagesequence.ui:135
 #, kde-format
 msgid "Source FPS:"
-msgstr "« FPS » de la source :"
+msgstr "FPS source :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblName)
 #: libs/ui/forms/wdglayerproperties.ui:28 libs/ui/forms/wdgnewimage.ui:430
@@ -26608,7 +26608,7 @@ msgstr "sans-titre-1"
 #: libs/ui/forms/wdgnewimage.ui:456
 #, kde-format
 msgid "Layers:"
-msgstr "Calques :"
+msgstr "Calques :"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intNumLayers)
 #: libs/ui/forms/wdgnewimage.ui:475
@@ -26634,7 +26634,7 @@ msgstr "Cou&leur d'arrière-plan :"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:719
 #, kde-format
 msgid "Background:"
-msgstr "Arrière-plan :"
+msgstr "Arrière-plan :"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsRaster)
 #: libs/ui/forms/wdgnewimage.ui:551
@@ -26944,7 +26944,7 @@ msgstr "RAM"
 #: libs/ui/forms/wdgperformancesettings.ui:62
 #, kde-format
 msgid "Memory available:"
-msgstr "Mémoire disponible :"
+msgstr "Mémoire disponible :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTotalMemory)
 #: libs/ui/forms/wdgperformancesettings.ui:75
@@ -26964,7 +26964,7 @@ msgstr "Krita n'utilisera pas plus de mémoire que cette limite."
 #: libs/ui/forms/wdgperformancesettings.ui:88
 #, kde-format
 msgid "Memory Limit:"
-msgstr "Limite de mémoire :"
+msgstr "Limite de mémoire :"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intMemoryLimit)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intPoolLimit)
@@ -26980,7 +26980,7 @@ msgstr " MiB"
 #: libs/ui/forms/wdgperformancesettings.ui:119
 #, kde-format
 msgid "Internal Pool:"
-msgstr "Réserve interne :"
+msgstr "Réserve interne :"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, sliderUndoLimit)
@@ -26999,7 +26999,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:150
 #, kde-format
 msgid "Swap Undo After:"
-msgstr "Passer les annulations dans le fichier tampon après :"
+msgstr "Passer les annulations dans le fichier tampon après :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdgperformancesettings.ui:184
@@ -27471,7 +27471,7 @@ msgstr "Afficher le cercle de rotation"
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
 #, kde-format
 msgid "Color adjustment:"
-msgstr "Ajustement de la couleur :"
+msgstr "Ajustement de la couleur :"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:48
@@ -29954,12 +29954,12 @@ msgid ""
 "\n"
 "Swap used:\t %8"
 msgstr ""
-"Mémoire utilisée :\t%1 / %2\n"
-" données de l'image :\t%3 / %4\n"
-" réserve :\t\t%5 / %6\n"
-" données d'annulation :\t%7\n"
+"Mémoire utilisée :\t%1 / %2\n"
+" données de l'image :\t%3 / %4\n"
+" réserve :\t\t%5 / %6\n"
+" données d'annulation :\t%7\n"
 "\n"
-"Espace d'échange utilisé :\t%8"
+"Espace d'échange utilisé :\t%8"
 
 #: libs/ui/kis_statusbar.cc:323
 #, kde-format
@@ -30022,7 +30022,7 @@ msgstr "%1 %2"
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
-msgstr "Zoom : %1 %"
+msgstr "Zoom : %1 %"
 
 #: libs/ui/KisApplication.cpp:327
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
@@ -30874,7 +30874,7 @@ msgstr ""
 #: libs/ui/KisImportExportManager.cpp:596
 #, kde-format
 msgid "Error: cannot save this image as a %1."
-msgstr "Erreur : Impossible d'enregistrer cette image comme %1."
+msgstr "Erreur : Impossible d'enregistrer cette image comme %1."
 
 #: libs/ui/KisImportExportManager.cpp:597
 #: libs/ui/KisImportExportManager.cpp:640
@@ -31086,7 +31086,7 @@ msgid ""
 "Could not finish import animation:\n"
 "%1"
 msgstr ""
-"Impossible de terminer l'importation de l'animation :\n"
+"Impossible de terminer l'importation de l'animation :\n"
 "%1"
 
 #: libs/ui/KisMainWindow.cpp:2175
@@ -31790,7 +31790,7 @@ msgstr "Relief du trait"
 #: libs/ui/layerstyles/wdgInnerGlow.ui:164
 #, kde-format
 msgid "&Technique:"
-msgstr "&Technique :"
+msgstr "&Technique :"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbTechnique)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:95
@@ -31890,7 +31890,7 @@ msgstr "Lissage"
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:272
 #, kde-format
 msgid "H&ighlight Mode:"
-msgstr "Mode de mise en valeur :"
+msgstr "Mode de mise en valeur :"
 
 #. i18n: ectx: property (toolTip), widget (KisCompositeOpComboBox, cmbCompositeOp)
 #. i18n: ectx: property (toolTip), widget (KisLayerStyleCompositeOpComboBox, cmbCompositeOp)
@@ -31951,7 +31951,7 @@ msgstr "Ajuster la transparence du calque"
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:332
 #, kde-format
 msgid "Sh&adow Mode:"
-msgstr "Mode d'ombr&age :"
+msgstr "Mode d'ombr&age :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpBlendingOptions)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
@@ -32000,7 +32000,7 @@ msgstr "Définir l'opacité intérieure pour le calque"
 #: libs/ui/layerstyles/wdgblendingoptions.ui:129
 #, kde-format
 msgid "Channels:"
-msgstr "Canaux :"
+msgstr "Canaux :"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkChannel1_2)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkChannel2_2)
@@ -32191,7 +32191,7 @@ msgstr "Éléments"
 #: libs/ui/layerstyles/wdgInnerGlow.ui:285 libs/ui/layerstyles/WdgSatin.ui:149
 #, kde-format
 msgid "Contour:"
-msgstr "Contour :"
+msgstr "Contour :"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkAntiAliased)
 #: libs/ui/layerstyles/wdgContour.ui:45 libs/ui/layerstyles/wdgdropshadow.ui:75
@@ -32255,7 +32255,7 @@ msgstr "Qualité"
 #: libs/ui/layerstyles/wdgInnerGlow.ui:88
 #, kde-format
 msgid "&Noise:"
-msgstr "&Bruit :"
+msgstr "&Bruit :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label_13)
@@ -32459,7 +32459,7 @@ msgstr "Contour"
 #: libs/ui/layerstyles/wdgInnerGlow.ui:335
 #, kde-format
 msgid "&Jitter:"
-msgstr "&Tremblement :"
+msgstr "&Tremblement :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseGlobalLight)
 #: libs/ui/layerstyles/wdgKisLayerStyleAngleSelector.ui:54
@@ -32560,7 +32560,7 @@ msgstr "Motif"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:78
 #, kde-format
 msgid "Pattern:"
-msgstr "Motif :"
+msgstr "Motif :"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSnapToOrigin)
 #: libs/ui/layerstyles/WdgPatternOverlay.ui:122
@@ -32701,7 +32701,7 @@ msgid ""
 "\n"
 " Krita will disable OpenGL and close now."
 msgstr ""
-"Krita n'a pas pu initialiser l'affichage OpenGL :\n"
+"Krita n'a pas pu initialiser l'affichage OpenGL :\n"
 "\n"
 "%1\n"
 "\n"
@@ -33386,14 +33386,14 @@ msgctxt ""
 "Estimated Gamma indicates how the TRC (Tone Response Curve or Tone "
 "Reproduction Curve) is bent. A Gamma of 1.0 means linear."
 msgid "<b>Estimated Gamma</b>: "
-msgstr "<b>Gamma estimé</b> : "
+msgstr "<b>Gamma estimé</b> : "
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:190
 #, kde-format
 msgctxt ""
 "This is for special Gamma types that LCMS cannot differentiate between"
 msgid "<b>Estimated Gamma</b>: sRGB, L* or rec709 TRC"
-msgstr "<b>Gamma estimé</b> : sRGB, L* ou rec709 TRC"
+msgstr "<b>Gamma estimé</b> : sRGB, L* ou rec709 TRC"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:191
 #, kde-format
@@ -35034,7 +35034,7 @@ msgstr "Bouton "
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2169
 #, kde-format
 msgid "Rows:"
-msgstr "Lignes :"
+msgstr "Lignes :"
 
 #. i18n: ectx: property (text), widget (QLabel, columnsLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblNumColumns)
@@ -35049,7 +35049,7 @@ msgstr "Lignes :"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2159
 #, kde-format
 msgid "Columns:"
-msgstr "Colonnes :"
+msgstr "Colonnes :"
 
 #. i18n: ectx: property (text), widget (QLabel, smoothingTypeLabel)
 #: libs/ui/widgets/KoFillConfigWidget.ui:408
@@ -37244,7 +37244,7 @@ msgstr "Longueur fixe"
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:160
 #, kde-format
 msgid "Global Color:"
-msgstr "Couleur générale :"
+msgstr "Couleur générale :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useCustomAssistantColor)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:209
@@ -37841,7 +37841,7 @@ msgstr "Décalage :"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:42
 #, kde-format
 msgid "Docker:"
-msgstr "Panneau :"
+msgstr "Panneau :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSelector)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_typeshape)
@@ -37968,7 +37968,7 @@ msgstr "Modèle de couleurs :"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:383
 #, kde-format
 msgid "Update Selector When:"
-msgstr "Mettre à jour le sélecteur quand :"
+msgstr "Mettre à jour le sélecteur quand :"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnForeground)
@@ -38189,7 +38189,7 @@ msgstr "Rouge-Vert :"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1129
 #, kde-format
 msgid "Bluer/Yellower: "
-msgstr "Bleu-Jaune :"
+msgstr "Bleu-Jaune :"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:261
@@ -38400,12 +38400,12 @@ msgstr "Activer pour préserver la chronologie du rejeu."
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:532
 #, kde-format
 msgid "Effective FPS:\t%1"
-msgstr "« FPS » actuelles :\t%1"
+msgstr "FPS effectif :\t%1"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:533
 #, kde-format
 msgid "Real FPS:\t%1"
-msgstr "« FPS » réelles :\t%1"
+msgstr "FPS réel :\t%1"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:534
 #, kde-format
@@ -38578,7 +38578,7 @@ msgstr "Rendre les clones uniques"
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:46
 #, kde-format
 msgid "Tint: "
-msgstr "Teinte :"
+msgstr "Teinte :"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:49
 #, kde-format
@@ -39803,7 +39803,7 @@ msgstr "Enregistreur"
 #, kde-format
 msgctxt "action"
 msgid "Record Timelapse"
-msgstr "Enregistrer la vidéo en temps accéléré"
+msgstr "Enregistrer la vidéo en accéléré"
 
 #. i18n: context: iconText @ Action (recorder_export), Actions (Recorder), ActionCollection (Recorder)
 #. i18n: context: toolTip @ Action (recorder_export), Actions (Recorder), ActionCollection (Recorder)
@@ -39817,7 +39817,7 @@ msgstr "Enregistrer la vidéo en temps accéléré"
 #, kde-format
 msgctxt "action"
 msgid "Export Timelapse..."
-msgstr "Exporter la vidéo en temps accéléré"
+msgstr "Exporter la vidéo en accéléré"
 
 #: plugins/dockers/recorder/recorder_export.cpp:104
 #, kde-format
@@ -39839,7 +39839,7 @@ msgstr ""
 #: plugins/dockers/recorder/recorder_export.cpp:169
 #, kde-format
 msgid "Abort encoding the timelapse video?"
-msgstr "Annuler l'encodage de la vidéo en « Temps accéléré » ?"
+msgstr "Annuler l'encodage de la vidéo en accéléré ?"
 
 #: plugins/dockers/recorder/recorder_export.cpp:241
 #, kde-format
@@ -39893,7 +39893,7 @@ msgstr "Sélectionner le fichier exécutable de « FFMpeg »"
 #: plugins/dockers/recorder/recorder_export.cpp:568
 #, kde-format
 msgid "Export Timelapse Video As"
-msgstr "Exporter la vidéo en temps accéléré comme"
+msgstr "Exporter la vidéo en accéléré comme"
 
 #: plugins/dockers/recorder/recorder_export.cpp:584
 #, kde-format
@@ -39908,7 +39908,7 @@ msgstr "Aucune image à exporter"
 #: plugins/dockers/recorder/recorder_export.cpp:616
 #, kde-format
 msgid "The timelapse video is being encoded..."
-msgstr "La vidéo en temps accéléré est en cours d'encodage..."
+msgstr "La vidéo en accéléré est en cours d'encodage..."
 
 #: plugins/dockers/recorder/recorder_export.cpp:631
 #, kde-format
@@ -39942,7 +39942,7 @@ msgstr "Nettoyage..."
 #: plugins/dockers/recorder/recorder_export.ui:18
 #, kde-format
 msgid "Export Timelapse"
-msgstr "Exporter la vidéo en temps accéléré"
+msgstr "Exporter la vidéo en accéléré"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseDirectory)
 #: plugins/dockers/recorder/recorder_export.ui:64
@@ -39968,22 +39968,21 @@ msgid ""
 "twice larger of the Video FPS."
 msgstr ""
 "La vitesse de lecture du flux d'entrée.\n"
-"Par exemple, pour rendre votre vidéo en temps accéléré deux fois plus "
-"rapide, le taux de rafraîchissement des trames d'entrée doit être deux fois "
-"plus important que celui de la vidéo originale."
+"Par exemple, pour rendre votre vidéo en accéléré deux fois plus rapide, le "
+"FPS souhaité doit être deux fois plus grand que celui de la vidéo originale."
 
 #. i18n: ectx: property (text), widget (QLabel, labelFpsInput)
 #: plugins/dockers/recorder/recorder_export.ui:233
 #, kde-format
 msgctxt "Input FPS of recorded timelapses."
 msgid "Input FPS:"
-msgstr "« FPS » en entrée :"
+msgstr "FPS souhaité :"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFps)
 #: plugins/dockers/recorder/recorder_export.ui:259
 #, kde-format
 msgid "Video FPS:"
-msgstr "« FPS » de la vidéo :"
+msgstr "FPS de la vidéo :"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonEditProfile)
 #: plugins/dockers/recorder/recorder_export.ui:290
@@ -40050,7 +40049,7 @@ msgstr " sec."
 #: plugins/dockers/recorder/recorder_export.ui:587
 #, kde-format
 msgid "FFmpeg:"
-msgstr "FFMpeg :"
+msgstr "FFmpeg :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkResize)
 #: plugins/dockers/recorder/recorder_export.ui:624
@@ -40082,7 +40081,7 @@ msgstr "Surveillez le !"
 #: plugins/dockers/recorder/recorder_export.ui:941
 #, kde-format
 msgid "The timelapse video has been written to:"
-msgstr "La vidéo en temps accéléré a été enregistrée dans :"
+msgstr "La vidéo en accéléré a été enregistrée dans :"
 
 # Timeline laissé volontairement en anglais
 #. i18n: ectx: property (text), widget (QPushButton, buttonShowInFolder)
@@ -40214,9 +40213,9 @@ msgid ""
 "though).\n"
 "Do you wish to continue?"
 msgstr ""
-"Les enregistrements sélectionnés seront supprimés et vous ne serez plus "
-"capable d'exporter une vidéo en temps accéléré avec eux (les vidéos en temps "
-"accéléré déjà exportés seront tout de même préservées).\n"
+"Les enregistrements sélectionnés vont être supprimés et vous ne pourrez "
+"plusexporter de vidéo en accéléré avec eux (les vidéos en accéléré déjà "
+"exportées seront tout de même préservées).\n"
 "Voulez-vous vraiment continuer ?"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RecorderSnapshotsManager)
@@ -40272,7 +40271,7 @@ msgstr "Sélectionner le dossier pour les enregistrements..."
 #: plugins/dockers/recorder/recorderdocker.ui:155
 #, kde-format
 msgid "Capture interval:"
-msgstr "Intervalles de capture :"
+msgstr "Intervalle de prises de vue :"
 
 #. i18n: ectx: property (text), widget (QLabel, labelQuality)
 #: plugins/dockers/recorder/recorderdocker.ui:199
@@ -40485,9 +40484,9 @@ msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time. Try increasing the capture interval."
 msgstr ""
-"Alerte de faible performance. L'enregistreur est incapable d'écrire toutes "
-"les trames dans le temps imparti. Veuillez essayer d'augmenter l'intervalle "
-"de capture."
+"Alerte de faible performance. L'enregistreur ne peut pas écrire toutes les "
+"trames dans le temps imparti. Essayez d'augmenter l'intervalle de prises de "
+"vue."
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
 #, kde-format
@@ -41118,7 +41117,7 @@ msgstr "Tâches"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:894
 #, kde-format
 msgid "Max Patches:"
-msgstr "Maximum de correctifs :"
+msgstr "Maximum de correctifs :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
@@ -41148,7 +41147,7 @@ msgstr "L'interaction se termine"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
 #, kde-format
 msgid "Line Count:"
-msgstr "Nombre de lignes :"
+msgstr "Nombre de lignes :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:465
@@ -41196,7 +41195,7 @@ msgstr "Décalage : "
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:157
 #, kde-format
 msgid "Display:"
-msgstr "Affichage :"
+msgstr "Affichage :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbSlider)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
@@ -49781,7 +49780,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:slider"
 msgid "Pass:"
-msgstr "Passes :"
+msgstr "Passes :"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:423
 #, kde-format
@@ -49920,7 +49919,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Highlights:"
-msgstr "Tons vifs :"
+msgstr "Tons vifs :"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:497
 #, kde-format
@@ -50002,7 +50001,7 @@ msgstr "<p>Activer la correction d'exposition après l'interpolation.</p>"
 #, kde-format
 msgctxt "@label:slider"
 msgid "Linear Shift:"
-msgstr "Décalage linéaire :"
+msgstr "Décalage linéaire :"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:530
 #, kde-format
@@ -50018,7 +50017,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:slider"
 msgid "Highlight:"
-msgstr "Tons vifs :"
+msgstr "Tons vifs :"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:538
 #, kde-format
@@ -50150,7 +50149,7 @@ msgstr "Balance des blancs"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Noise reduction:"
-msgstr "Réduction du bruit :"
+msgstr "Réduction du bruit :"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:632
 #, kde-format
@@ -50272,7 +50271,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:slider"
 msgid "Blue-Yellow:"
-msgstr "Bleu-Jaune :"
+msgstr "Bleu-Jaune :"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:691
 #, kde-format
@@ -50294,7 +50293,7 @@ msgstr "Corrections"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Camera Profile:"
-msgstr "Profil de l'appareil photo :"
+msgstr "Profil de l'appareil photo :"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:720
 #, kde-format
@@ -50452,7 +50451,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Luminance:"
-msgstr "Luminance :"
+msgstr "Luminance :"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1002
 #, kde-format
@@ -50467,7 +50466,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Chrominance:"
-msgstr "Chrominance :"
+msgstr "Chrominance :"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1005
 #, kde-format
@@ -54075,7 +54074,7 @@ msgstr "Croquis"
 #: plugins/paintops/sketch/wdgsketchoptions.ui:64
 #, kde-format
 msgid "Offset scale:"
-msgstr "Échelle de décalage :"
+msgstr "Échelle de décalage :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, distanceDensityCHBox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:114

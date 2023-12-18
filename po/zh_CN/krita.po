@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-13 02:27+0000\n"
-"PO-Revision-Date: 2023-12-09 09:29\n"
+"PO-Revision-Date: 2023-12-17 11:32\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -8384,7 +8384,7 @@ msgstr "拾取屏幕颜色"
 #, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color (Sample Real Canvas)"
-msgstr "拾取屏幕颜色 (拾取画布实际颜色)(&S)"
+msgstr "拾取屏幕颜色 (拾取画布实际颜色) (&S)"
 
 #. i18n: context: toolTip @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:303
@@ -9582,7 +9582,7 @@ msgstr "像素化"
 #, kde-format
 msgctxt "action"
 msgid "Emboss (&Laplacian)"
-msgstr "浮雕 (拉普拉斯)(&L)"
+msgstr "浮雕 (拉普拉斯) (&L)"
 
 #. i18n: context: toolTip @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
@@ -12155,7 +12155,7 @@ msgstr "小波分解"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer Hori&zontally"
-msgstr "翻转图层 (水平)(&Z)"
+msgstr "翻转图层 (水平) (&Z)"
 
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
@@ -12172,7 +12172,7 @@ msgstr "翻转图层 (水平)"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer &Vertically"
-msgstr "翻转图层 (垂直)(&V)"
+msgstr "翻转图层 (垂直) (&V)"
 
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
@@ -12206,7 +12206,7 @@ msgstr "旋转图层"
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Layer 90° to the Right"
-msgstr "旋转图层 (向右 90°)(&L)"
+msgstr "旋转图层 (向右 90°) (&L)"
 
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
@@ -12291,7 +12291,7 @@ msgstr "斜切图层"
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Hori&zontally"
-msgstr "翻转所有图层 (水平)(&Z)"
+msgstr "翻转所有图层 (水平) (&Z)"
 
 #. i18n: context: toolTip @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
@@ -12308,7 +12308,7 @@ msgstr "翻转所有图层 (水平)"
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers &Vertically"
-msgstr "翻转所有图层 (垂直)(&V)"
+msgstr "翻转所有图层 (垂直) (&V)"
 
 #. i18n: context: toolTip @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
@@ -12342,7 +12342,7 @@ msgstr "旋转所有图层"
 #, kde-format
 msgctxt "action"
 msgid "Rotate All &Layers 90° to the Right"
-msgstr "旋转所有图层 (向右 90°)(&L)"
+msgstr "旋转所有图层 (向右 90°) (&L)"
 
 #. i18n: context: toolTip @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
@@ -13337,7 +13337,7 @@ msgstr "复制"
 #, kde-format
 msgctxt "action"
 msgid "C&opy (sharp)"
-msgstr "复制(锐利)(&O)"
+msgstr "复制 (锐利) (&O)"
 
 #. i18n: context: toolTip @ Action (copy_sharp), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (copy_sharp), Actions (Edit), ActionCollection (Menu)
@@ -13354,7 +13354,7 @@ msgstr "复制 (锐利)"
 #, kde-format
 msgctxt "action"
 msgid "Cut (&sharp)"
-msgstr "剪切(锐利)(&S)"
+msgstr "剪切 (锐利) (&S)"
 
 #. i18n: context: toolTip @ Action (cut_sharp), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (cut_sharp), Actions (Edit), ActionCollection (Menu)
@@ -14025,7 +14025,7 @@ msgstr "打开/关闭缩放到视图"
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Canvas Right"
-msgstr "旋转画布 (向右)(&C)"
+msgstr "旋转画布 (向右) (&C)"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
@@ -14042,7 +14042,7 @@ msgstr "旋转画布 (向右)"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas &Left"
-msgstr "旋转画布 (向左)(&L)"
+msgstr "旋转画布 (向左) (&L)"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
@@ -14570,7 +14570,7 @@ msgstr "旋转图像"
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Image 90° to the Right"
-msgstr "旋转图像 (向右 90°)(&I)"
+msgstr "旋转图像 (向右 90°) (&I)"
 
 #. i18n: context: toolTip @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
@@ -14638,7 +14638,7 @@ msgstr "斜切图像"
 #, kde-format
 msgctxt "action"
 msgid "&Mirror Image Horizontally"
-msgstr "翻转图像 (水平)(&M)"
+msgstr "翻转图像 (水平) (&M)"
 
 #. i18n: context: toolTip @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
@@ -14655,7 +14655,7 @@ msgstr "翻转图像 (水平)"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image &Vertically"
-msgstr "翻转图像 (垂直)(&V)"
+msgstr "翻转图像 (垂直) (&V)"
 
 #. i18n: context: toolTip @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
@@ -14947,7 +14947,7 @@ msgstr "选择色彩范围"
 #, kde-format
 msgctxt "action"
 msgid "Select &Opaque (Replace)"
-msgstr "选择不透明区域 (替换)(&O)"
+msgstr "选择不透明区域 (替换) (&O)"
 
 #. i18n: context: toolTip @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
@@ -24082,7 +24082,7 @@ msgstr "使用 sRGB 空间 (网络图像的业界通行标准)"
 #: libs/ui/forms/wdgcolorsettings.ui:82
 #, kde-format
 msgid "Assume &monitor profile (like you see it in other applications)"
-msgstr "使用当前显示器空间 (与本机其他应用程序一致)(&M)"
+msgstr "使用当前显示器空间 (与本机其他应用程序一致) (&M)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioPasteAsk)
 #: libs/ui/forms/wdgcolorsettings.ui:89
@@ -25153,7 +25153,7 @@ msgstr "工具选项面板(&K)"
 #: libs/ui/forms/wdggeneralsettings.ui:669
 #, kde-format
 msgid "I&n Toolbar"
-msgstr "工具栏按钮 (点击弹出)(&N)"
+msgstr "工具栏按钮 (点击弹出) (&N)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlowMode)
 #: libs/ui/forms/wdggeneralsettings.ui:682
@@ -25243,7 +25243,7 @@ msgstr "保存"
 #: libs/ui/forms/wdggeneralsettings.ui:861
 #, kde-format
 msgid "Enable Autosaving"
-msgstr "自动保存文件"
+msgstr "自动保存图像"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeneralsettings.ui:870
@@ -39455,7 +39455,7 @@ msgstr "选择录像目录..."
 #: plugins/dockers/recorder/recorderdocker.ui:155
 #, kde-format
 msgid "Capture interval:"
-msgstr "截图间隔时间："
+msgstr "捕获间隔时间："
 
 #. i18n: ectx: property (text), widget (QLabel, labelQuality)
 #: plugins/dockers/recorder/recorderdocker.ui:199

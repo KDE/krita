@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-13 02:27+0000\n"
-"PO-Revision-Date: 2023-12-16 15:31+0100\n"
+"PO-Revision-Date: 2023-12-17 07:02+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -53740,27 +53740,32 @@ msgid ""
 "The higher the curve at a given angle, the more particles will end at that "
 "angle."
 msgstr ""
+"Definir unha distribución personalizada de partículas.\n"
+"O eixe horizontal representa o ángulo de 0 a 360 graos.\n"
+"O eixe vertical representa a probabilidade de que unha partícula remate nese "
+"ángulo.\n"
+"A maior curva nun ángulo, máis partículas rematarán nese ángulo."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:71
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:107
-#, fuzzy, kde-format
-#| msgid "Repeat:"
+#, kde-format
 msgid "Repeat: "
-msgstr "Repetición:"
+msgstr "Repetir: ×"
 
+# Usei un espazo de anchura cero para marcar a cadea como traducida, o «x» de aquí movino como «×» na cadea anterior.
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:72
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:108
-#, fuzzy, kde-format
-#| msgid "x"
+#, kde-format
 msgctxt "Times symbol, like in 10x"
 msgid "x"
-msgstr "x"
+msgstr "​"
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:75
 #, kde-format
 msgid ""
 "Set how many times should the curve repeat from 0 degrees to 360 degrees."
 msgstr ""
+"Definir o número de veces que debería repetirse a curva de 0 a 360 graos."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:78
 #, kde-format
@@ -53768,6 +53773,8 @@ msgid ""
 "Select how the particles are distributed as a function of the distance from "
 "the center of the spray area."
 msgstr ""
+"Seleccionar como se distribúen as partículas como función da distancia do "
+"centro da zona de aerosol."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:81
 #, kde-format
@@ -53775,12 +53782,13 @@ msgid ""
 "Activates the old behavior where the particles are more accumulated towards "
 "the center of the spray area."
 msgstr ""
+"Activa o comportamento anterior no que as partículas se acumulan máis cara o "
+"centro da zona de aerosol."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Standard light A"
+#, kde-format
 msgid "Standard deviation: "
-msgstr "Luz estándar A"
+msgstr "Desviación estándar: "
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:87
 #, kde-format
@@ -53789,12 +53797,14 @@ msgid ""
 "Lower values will make the particles concentrate towards the center of the "
 "spray area."
 msgstr ""
+"Definir a desviación estándar para a distribución de Gauss.\n"
+"Valores menores farán que as partículas se concentren cara o centro da zona "
+"de aerosol."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:91
-#, fuzzy, kde-format
-#| msgid "Deform amount:"
+#, kde-format
 msgid "Clustering amount: "
-msgstr "Forza de deformación:"
+msgstr "Cantidade de agrupamento: "
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:95
 #, kde-format
@@ -53806,6 +53816,13 @@ msgid ""
 "the spray area.\n"
 "Values near 0 will make the particles spread more uniformly."
 msgstr ""
+"Definir como se dispersan as partículas na zona de aerosol.\n"
+"Os valores positivos farán que as partículas se concentren cara o centro da "
+"zona de aerosol.\n"
+"Os valores negativos farán que as partículas se concentren cara o bordo da "
+"zona de aerosol.\n"
+"Os valores preto de 0 farán que as partículas se dispersen de maneira máis "
+"uniforme."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:102
 #, kde-format
@@ -53818,6 +53835,13 @@ msgid ""
 "The higher the curve at a given distance, the more particles will end at "
 "that distance."
 msgstr ""
+"Definir unha distribución personalizada de partículas.\n"
+"O eixe horizontal representa a distancia desde o centro ao bordo da zona de "
+"aerosol.\n"
+"O eixe vertical representa a probabilidade de que unha partícula remate nesa "
+"distancia.\n"
+"Canto maior sexa a curva nunha distancia, máis partículas rematarán nesa "
+"distancia."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:111
 #, kde-format
@@ -53825,6 +53849,8 @@ msgid ""
 "Set how many times should the curve repeat from the center to the border of "
 "the spray area."
 msgstr ""
+"Definir o número de veces que debería repetirse a curva desde o centro ata o "
+"bordo da zona de aerosol."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:176
 #, kde-format
@@ -53837,8 +53863,7 @@ msgid "Shape dynamics"
 msgstr "Dinámica das formas"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgid "Spray Shape"
 msgstr "Forma de spray"
 
@@ -53891,60 +53916,53 @@ msgstr "Nivel do ángulo:"
 msgctxt ""
 "Name of the group of options related to the spay area in the spray engine"
 msgid "Area"
-msgstr ""
+msgstr "Zona"
 
 #. i18n: ectx: property (text), widget (QLabel, diameterLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:48
-#, fuzzy, kde-format
-#| msgid "Diameter:"
+#, kde-format
 msgctxt "Label for the diameter of the spray area in the spray engine"
 msgid "Diameter:"
-msgstr "Diámetro."
+msgstr "Diámetro:"
 
 #. i18n: ectx: property (text), widget (QLabel, aspectLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:67
-#, fuzzy, kde-format
-#| msgid "Aspect ratio:"
+#, kde-format
 msgctxt "Label for the aspect ratio of the spray area in the spray engine"
 msgid "Aspect ratio:"
-msgstr "Proporcións:"
+msgstr "Proporción:"
 
 #. i18n: ectx: property (text), widget (QLabel, rotationLbl)
 #: plugins/paintops/spray/wdgsprayoptions.ui:86
-#, fuzzy, kde-format
-#| msgid "Angle:"
+#, kde-format
 msgctxt "Label for the angle of the spray area in the spray engine"
 msgid "Angle:"
 msgstr "Ángulo:"
 
 #. i18n: ectx: property (text), widget (QLabel, scaleLbl)
 #: plugins/paintops/spray/wdgsprayoptions.ui:125
-#, fuzzy, kde-format
-#| msgid "Scale:"
+#, kde-format
 msgctxt "Label for the scale of the spray area in the spray engine"
 msgid "Scale:"
 msgstr "Escala:"
 
 #. i18n: ectx: property (text), widget (QLabel, spacingLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:138
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgctxt "Label for the spacing of the spray area in the spray engine"
 msgid "Spacing:"
 msgstr "Espazamento:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelJitter)
 #: plugins/paintops/spray/wdgsprayoptions.ui:151
-#, fuzzy, kde-format
-#| msgid "Jitter Movement"
+#, kde-format
 msgctxt "Label for the jitter movement of the spray area in the spray engine"
 msgid "Jitter Movement:"
-msgstr "Movemento de axitación"
+msgstr "Movemento de axitación:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:185
-#, fuzzy, kde-format
-#| msgid "Particles"
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the spay particles in the spray "
 "engine"
@@ -53953,26 +53971,23 @@ msgstr "Partículas"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/spray/wdgsprayoptions.ui:194
-#, fuzzy, kde-format
-#| msgid "Amount:"
+#, kde-format
 msgctxt "Label for the amount of particles in the spray engine"
 msgid "Amount:"
 msgstr "Cantidade:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, countRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:203
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgctxt ""
 "Check box to indicate that the user should set the exact number of particles "
 "in the spray engine"
 msgid "Count"
-msgstr "Valor"
+msgstr "Cantidade"
 
 #. i18n: ectx: property (text), widget (QRadioButton, densityRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:213
-#, fuzzy, kde-format
-#| msgid "Density"
+#, kde-format
 msgctxt ""
 "Check box to indicate that the user should set the number of particles in "
 "terms of density relative to the spray area in the spray engine"
@@ -53981,8 +53996,7 @@ msgstr "Densidade"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxAngularDistribution)
 #: plugins/paintops/spray/wdgsprayoptions.ui:237
-#, fuzzy, kde-format
-#| msgid "Angular"
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the angular distribution of "
 "particles in the spray engine"
@@ -53993,26 +54007,23 @@ msgstr "Angular"
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:262
 #: plugins/paintops/spray/wdgsprayoptions.ui:347
-#, fuzzy, kde-format
-#| msgid "Uniform random"
+#, kde-format
 msgctxt "Uniform distribution in spray engine"
 msgid "Uniform"
-msgstr "Aleatorio uniforme"
+msgstr "Uniforme"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, angularDistCombo)
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:267
 #: plugins/paintops/spray/wdgsprayoptions.ui:362
-#, fuzzy, kde-format
-#| msgid "Curve"
+#, kde-format
 msgctxt "Custom curve based distribution in spray engine"
 msgid "Curve"
 msgstr "Curva"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxRadialDistribution)
 #: plugins/paintops/spray/wdgsprayoptions.ui:322
-#, fuzzy, kde-format
-#| msgid "Radial"
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the radial distribution of particles "
 "in the spray engine"
@@ -54021,21 +54032,17 @@ msgstr "Radial"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:352
-#, fuzzy, kde-format
-#| msgid "Gaussian"
+#, kde-format
 msgctxt "Gaussian distribution in spray engine"
 msgid "Gaussian"
-msgstr "Gausiano"
+msgstr "de Gauss"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:357
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 preset name, check simplescreenrecorder for standard translations"
-#| msgid "faster"
+#, kde-format
 msgctxt "Clustering based distribution in spray engine"
 msgid "Cluster"
-msgstr "máis rápido"
+msgstr "Grupo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, centerBiasedPolarDistanceBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:407
@@ -54045,15 +54052,14 @@ msgctxt ""
 "where particles are biased towards the center of the spray area in the spray "
 "engine"
 msgid "Center-biased spread (legacy)"
-msgstr ""
+msgstr "Dispersión tendente ao centro (obsoleta)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/spray/wdgsprayoptions.ui:432
-#, fuzzy, kde-format
-#| msgid "Distribute"
+#, kde-format
 msgctxt "Label for the distribution of particles in the spray engine"
 msgid "Distribution:"
-msgstr "Distribuír"
+msgstr "Distribución:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, proportionalBox)
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:158
@@ -54205,8 +54211,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionTilt)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:230
-#, fuzzy, kde-format
-#| msgid "Tilt"
+#, kde-format
 msgctxt "Tilt elevation"
 msgid "Tilt"
 msgstr "Inclinación"
@@ -54236,11 +54241,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionRotation)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:253
-#, fuzzy, kde-format
-#| msgid "Rotation"
+#, kde-format
 msgctxt "Pen Rotation"
 msgid "Rotation"
-msgstr "Rotación "
+msgstr "Rotación"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optionMix)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:260
@@ -54285,106 +54289,78 @@ msgstr "Asignar un perfil á imaxe"
 
 #: plugins/python/channels2layers/channels2layers.py:58
 #: plugins/python/channels2layers/channels2layers.py:59
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Clone Layers"
 msgid "Channels to layers"
-msgstr "Cambiar as capas clon"
+msgstr "Canles a capas"
 
 #: plugins/python/channels2layers/channels2layers.py:67
-#, fuzzy
-#| msgid "Colors"
 msgid "RGB Colors"
-msgstr "Cores"
+msgstr "Cores RGB"
 
 #: plugins/python/channels2layers/channels2layers.py:68
-#, fuzzy
-#| msgid "Colors"
 msgid "CMY Colors"
-msgstr "Cores"
+msgstr "Cores CMY"
 
 #: plugins/python/channels2layers/channels2layers.py:69
-#, fuzzy
-#| msgid "Colors"
 msgid "CMYK Colors"
-msgstr "Cores"
+msgstr "Cores CMYK"
 
 #: plugins/python/channels2layers/channels2layers.py:70
-#, fuzzy
-#| msgid "Grayscale"
 msgid "RGB Grayscale levels"
-msgstr "Escala de Grises"
+msgstr "Niveis de escala de grises RGB"
 
 #: plugins/python/channels2layers/channels2layers.py:71
-#, fuzzy
-#| msgid "Grayscale"
 msgid "CMY Grayscale levels"
-msgstr "Escala de Grises"
+msgstr "Niveis de escala de grises CMY"
 
 #: plugins/python/channels2layers/channels2layers.py:72
 msgid "CMYK Grayscale levels"
-msgstr ""
+msgstr "Niveis de escala de grises CMYK"
 
 #: plugins/python/channels2layers/channels2layers.py:77
 msgid "Unchanged"
-msgstr ""
+msgstr "Sen cambios"
 
 #: plugins/python/channels2layers/channels2layers.py:1012
-#, fuzzy
-#| msgid "Processing"
 msgid "Processing layer"
-msgstr "Procesando"
+msgstr "Procesando a capa"
 
 #: plugins/python/channels2layers/channels2layers.py:1042
-#, fuzzy
-#| msgid "Enter group name:"
 msgctxt ""
 "The name for a new group layer; the generated layers will be placed in this "
 "group."
 msgid "New layer group name"
-msgstr "Insira o nome do grupo:"
+msgstr "Nome do novo grupo de capas"
 
 #: plugins/python/channels2layers/channels2layers.py:1047
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
 msgctxt ""
 "Defines how the name for each layer created from the channel is generated."
 msgid "New layers color name"
-msgstr "Converter o espazo de cores da capa"
+msgstr "Nome da nova cor de capas"
 
 #: plugins/python/channels2layers/channels2layers.py:1058
-#, fuzzy
-#| msgid "Show original layer"
 msgid "Original layer"
-msgstr "Mostrar a capa orixinal"
+msgstr "Capa orixinal"
 
 #: plugins/python/channels2layers/channels2layers.py:1117
-#, fuzzy
-#| msgid "Original"
 msgctxt "the original layer"
 msgid "Original"
 msgstr "Orixinal"
 
 #: plugins/python/channels2layers/channels2layers.py:1130
 msgid "<i>Cyan</i>"
-msgstr ""
+msgstr "<i>Cian</i>"
 
 #: plugins/python/channels2layers/channels2layers.py:1142
-#, fuzzy
-#| msgid "Magenta"
 msgid "<i>Magenta</i>"
-msgstr "Maxenta"
+msgstr "<i>Maxenta</i>"
 
 #: plugins/python/channels2layers/channels2layers.py:1154
-#, fuzzy
-#| msgid "Yellow"
 msgid "<i>Yellow</i>"
-msgstr "Amarelo"
+msgstr "<i>Amarelo</i>"
 
 #: plugins/python/channels2layers/channels2layers.py:1166
 msgid "<i>Black</i>"
-msgstr ""
+msgstr "<i>Negro</i>"
 
 #: plugins/python/colorspace/colorspace.py:18
 msgid "Plugin to change color space of selected documents."
@@ -54413,8 +54389,6 @@ msgid "Color profile:"
 msgstr "Perfil de cor:"
 
 #: plugins/python/colorspace/uicolorspace.py:129
-#, fuzzy
-#| msgid "The selected documents has been converted."
 msgid "The selected documents have been converted."
 msgstr "Os documentos seleccionados convertéronse."
 
@@ -55906,10 +55880,8 @@ msgid "Export in batchmode"
 msgstr "Exportar en modo por lotes"
 
 #: plugins/python/exportlayers/uiexportlayers.py:33
-#, fuzzy
-#| msgid "Group Layer"
 msgid "Group as layer"
-msgstr "Capa de grupo"
+msgstr "Grupo como capa"
 
 #: plugins/python/exportlayers/uiexportlayers.py:35
 msgid "Ignore invisible layers"
@@ -55956,8 +55928,6 @@ msgid "Select the initial directory."
 msgstr "Seleccionar o directorio inicial."
 
 #: plugins/python/exportlayers/uiexportlayers.py:142
-#, fuzzy
-#| msgid "All layers has been exported."
 msgid "All layers have been exported."
 msgstr "Exportáronse todas as capas."
 
@@ -55979,8 +55949,6 @@ msgid "Document Tree Model"
 msgstr "Modelo de árbore do documento"
 
 #: plugins/python/filtermanager/uifiltermanager.py:42
-#, fuzzy
-#| msgid "Filters:"
 msgctxt "Python filters"
 msgid "Filters:"
 msgstr "Filtros:"
@@ -56002,8 +55970,6 @@ msgid "Keep original layer"
 msgstr "Manter a capa orixinal"
 
 #: plugins/python/highpass/highpass.py:52
-#, fuzzy
-#| msgid "Filter radius:"
 msgctxt "Filter radius in Highpass filter settings"
 msgid "Filter radius:"
 msgstr "Raio de filtro:"
@@ -56058,19 +56024,14 @@ msgstr "Descrición curta"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, e_comment)
 #: plugins/python/krita_script_starter/bbdkss.ui:99
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>This will appear in the \"comment\" entry in the "
-#| "dialog where a user can enable or disable Krita scripts. </p></body></"
-#| "html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>This will appear in the &quot;comment&quot; entry in "
 "the dialog where a user can enable or disable Krita scripts. </p></body></"
 "html>"
 msgstr ""
 "<html><head/><body><p>Isto aparecerá na entrada de «comentario» no diálogo "
-"onde o usuario pode activar ou desactivar scripts de Krita. </p></body></"
-"html>"
+"onde o usuario pode activar ou desactivar guións de Krita. </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/python/krita_script_starter/bbdkss.ui:112
@@ -56121,20 +56082,16 @@ msgid "Last Documents Docker"
 msgstr "Doca dos últimos documentos"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:41
-#, fuzzy
-#| msgid "Tablet settings"
 msgid "Change settings"
-msgstr "Configuración da tableta"
+msgstr "Cambiar a configuración"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:58
 msgid "Mixer Slider Docker"
-msgstr ""
+msgstr "Doca de control esvaradío mesturador"
 
 #: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:36
-#, fuzzy
-#| msgid "Number of lines it covers:"
 msgid "Number of slider lines: "
-msgstr "Número de liñas que cubre:"
+msgstr "Número de liñas de control esvaradío: "
 
 #: plugins/python/palette_docker/palette_docker.py:37
 msgid "Python Palette Docker"
@@ -56145,8 +56102,6 @@ msgid "Set"
 msgstr "Definir"
 
 #: plugins/python/palette_docker/palette_docker.py:72
-#, fuzzy
-#| msgid "Add Group"
 msgctxt "Group as Color Group in a Palette"
 msgid "Add Group"
 msgstr "Engadir un grupo"
@@ -56191,67 +56146,52 @@ msgid "{input} has been exported to {output}."
 msgstr "{input} exportouse a {output}."
 
 #: plugins/python/photobash_images/photobash_images_docker.py:73
-#, fuzzy
-#| msgctxt "description of a file type"
-#| msgid "Photoshop Image (Large)"
 msgctxt "@title:window"
 msgid "Photobash Images"
-msgstr "Imaxe de Photoshop (grande)"
+msgstr "Imaxes de composición dixital"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:141
 #: plugins/python/photobash_images/photobash_images_docker.py:471
-#, fuzzy
-#| msgctxt "action"
-#| msgid "References Tool"
 msgid "Change References Folder"
-msgstr "Ferramenta de referencias"
+msgstr "Cambiar o cartafol de referencias"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:147
 #: plugins/python/photobash_images/photobash_images_docker.py:219
-#, fuzzy, python-brace-format
-#| msgid "Pattern Size"
+#, python-brace-format
 msgid "Image Scale: {0}%"
-msgstr "Tamaño dos motivos"
+msgstr "Escala da imaxe: {0}%"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:321
-#, fuzzy, python-brace-format
-#| msgid "Page %1"
+#, python-brace-format
 msgid "Page: {0}/{1}"
-msgstr "Páxina %1"
+msgstr "Páxina: {0}/{1}"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:460
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change rectangle"
 msgid "Change Directory for Images"
-msgstr "Cambiar o rectángulo"
+msgstr "Cambiar o cartafol das imaxes"
 
 #. i18n: ectx: property (text), widget (QPushButton, changePathButton)
 #: plugins/python/photobash_images/photobash_images_docker.py:469
 #: plugins/python/photobash_images/photobash_images_docker.ui:96
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "References Tool"
+#, kde-format
 msgid "Set References Folder"
-msgstr "Ferramenta de referencias"
+msgstr "Definir o cartafol de referencias"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, filterTextEdit)
 #: plugins/python/photobash_images/photobash_images_docker.ui:71
-#, fuzzy, kde-format
-#| msgid "Filter Frames by Color"
+#, kde-format
 msgid "Filter images by words..."
-msgstr "Filtrar os fotogramas por cor"
+msgstr "Filtrar as imaxes por palabras…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, fitCanvasCheckBox)
 #: plugins/python/photobash_images/photobash_images_docker.ui:388
-#, fuzzy, kde-format
-#| msgid "Rotate Canvas"
+#, kde-format
 msgid "Scale To Canvas"
-msgstr "Xirar o lenzo"
+msgstr "Escalar ao lenzo."
 
 #: plugins/python/plugin_importer/plugin_downloader.py:70
 msgid "Could not determine download link from URL"
-msgstr ""
+msgstr "Non foi posíbel determinar a ligazón de descarga do URL"
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:4
@@ -56262,21 +56202,17 @@ msgstr "Importador de complementos de Python"
 
 #. i18n: context: text @ Action (plugin_importer_file), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:8
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Import Python Plugin..."
+#, kde-format
 msgctxt "action"
 msgid "Import Python Plugin from File..."
-msgstr "Importar un complemento de Python…"
+msgstr "Importar un complemento de Python dun ficheiro…"
 
 #. i18n: context: text @ Action (plugin_importer_web), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:21
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Import Python Plugin..."
+#, kde-format
 msgctxt "action"
 msgid "Import Python Plugin from Web..."
-msgstr "Importar un complemento de Python…"
+msgstr "Importar un complemento de Python de Internet…"
 
 #: plugins/python/plugin_importer/plugin_importer.py:142
 msgid "Desktop file"
@@ -56287,16 +56223,12 @@ msgid "No plugins found in archive"
 msgstr "Non se atoparon complementos no arquivo"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:32
-#, fuzzy
-#| msgid "Import Python Plugin..."
 msgid "Import Python Plugin from File..."
-msgstr "Importar un complemento de Python…"
+msgstr "Importar un complemento de Python dun ficheiro…"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:37
-#, fuzzy
-#| msgid "Import Python Plugin..."
 msgid "Import Python Plugin from Web..."
-msgstr "Importar un complemento de Python…"
+msgstr "Importar un complemento de Python de Internet…"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:44
 msgid "Overwrite Plugin"
@@ -56312,16 +56244,12 @@ msgid "The following plugins were imported:"
 msgstr "Importáronse os seguintes complementos:"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:63
-#, fuzzy
-#| msgid "Disable vsync (needs restart)"
 msgid "Enable plugins now? (Requires restart)"
-msgstr "Desactivar a sincronización vertical (é necesario reiniciar)."
+msgstr "Quere activar os complementos agora? (require reiniciar)"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:68
-#, fuzzy
-#| msgid "Active Bundles"
 msgid "Activate Plugins?"
-msgstr "Paquetes activos"
+msgstr "Quere activar os complementos?"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:75
 msgid "Error during import:"
@@ -56333,6 +56261,9 @@ msgid ""
 "download link (http://example.com/plugin.zip)</li><li>Github repository "
 "(https://github.com/test/plugin)</li>"
 msgstr ""
+"<p><strong>Inserir o URL de descarga</strong></p><p>Por exemplo:"
+"<ul><li>Ligazón de descarga do zip (http://example.com/plugin.zip)</"
+"li><li>Repositorio de GitHub (https://github.com/test/plugin)</li>"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:102
 #: plugins/python/plugin_importer/plugin_importer_extension.py:116
@@ -56469,8 +56400,6 @@ msgid "Scope"
 msgstr "Ámbito"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
-#, fuzzy
-#| msgid "Value"
 msgctxt "Value in DebuggerTable"
 msgid "Value"
 msgstr "Valor"
@@ -56588,41 +56517,32 @@ msgid "Activate Brush Preset {num}"
 msgstr "Activar a predefinición de pincel {num}"
 
 #: plugins/python/tenbrushes/tenbrushes.py:108
-#, fuzzy
-#| msgid ""
-#| "%1\n"
-#| "selected"
 msgid ""
 "{}\n"
 "selected"
 msgstr ""
-"%1\n"
+"{}\n"
 "seleccionado"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:23
-#, fuzzy
-#| msgid ""
-#| "&Activate previous brush when pressing the shortcut for the second time"
 msgid ""
 "&Activate previous brush preset when pressing the shortcut for the second "
 "time"
-msgstr "&Activar o pincel anterior ao premer o atallo por segunda vez"
+msgstr ""
+"&Activar a predefinición de pincel anterior ao premer o atallo por segunda "
+"vez"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:28
 msgid "&Select freehand brush tool when pressing a shortcut"
-msgstr ""
+msgstr "&Seleccionar a ferramenta de pincel a man alzada ao premer un atallo"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:47
-#, fuzzy
-#| msgid ""
-#| "Select the brush preset, then click on the button you want to use to "
-#| "select the preset"
 msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
 msgstr ""
 "Seleccione a predefinición de pincel e a continuación prema o botón que "
-"quere usar para seleccionar a predefinición"
+"quere usar para seleccionar a predefinición."
 
 #: plugins/python/tenbrushes/uitenbrushes.py:50
 #: plugins/python/tenscripts/uitenscripts.py:46
@@ -56630,6 +56550,8 @@ msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "
 "in Krita's settings."
 msgstr ""
+"Os atallos poden configurarse mediante a interface <i>Atallos de teclado</i> "
+"da configuración de Krita."
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:4
@@ -56744,14 +56666,12 @@ msgid "Freehand Brush Stroke"
 msgstr "Trazo de pincel a man alzada"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:177
-#, fuzzy, kde-format
-#| msgid "Samples"
+#, kde-format
 msgid "Sample count:"
-msgstr "Mostras"
+msgstr "Número de mostras:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:188
-#, fuzzy, kde-format
-#| msgid "Distance:"
+#, kde-format
 msgctxt ""
 "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
 msgid "Distance:"
@@ -56859,37 +56779,31 @@ msgid "Magnetism:"
 msgstr "Magnetismo:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:465
-#, fuzzy, kde-format
-#| msgid "Snap Single:"
+#, kde-format
 msgid "Snap to Single Line"
-msgstr "Axustar a un:"
+msgstr "Axustar a unha liña"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:468
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Make it only snap to a single assistant, prevents snapping mess while "
-#| "using the infinite assistants."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Make it only snap to a single assistant line, prevents snapping mess while "
 "using the infinite assistants."
 msgstr ""
-"Facer que só se axuste a un dos asistentes, evitando un lío de axustes ao "
-"usar unha morea de asistentes."
+"Facer que só se axuste a unha liña dos asistentes, evitando unha desfeita de "
+"axustes ao usar unha morea de asistentes."
 
 #: plugins/tools/basictools/kis_tool_brush.cc:473
 #: plugins/tools/basictools/kis_tool_line.cc:113
-#, fuzzy, kde-format
-#| msgid "Eraser"
+#, kde-format
 msgid "Snap Eraser"
-msgstr "Borrador"
+msgstr "Axustar o borrador"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
-msgstr ""
+msgstr "Activar o axuste ao usar borradores"
 
 #: plugins/tools/basictools/kis_tool_brush.h:137
 #, kde-format
@@ -56903,10 +56817,9 @@ msgstr ""
 "Non é posíbel gardar no ficheiro de paleta %1. Quizais sexa só para lectura."
 
 #: plugins/tools/basictools/kis_tool_colorsampler.h:122
-#, fuzzy, kde-format
-#| msgid "Color Selector Tool"
+#, kde-format
 msgid "Color Sampler Tool"
-msgstr "Ferramenta de selector de cores"
+msgstr "Ferramenta de tomador de mostras de cores"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:63
 msgctxt "(qtundo-format)"
@@ -56930,132 +56843,116 @@ msgid "Flood Fill"
 msgstr "Inundar"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:538
-#, fuzzy, kde-format
-#| msgid "Scale: "
+#, kde-format
 msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
 msgid "Scale: "
-msgstr "Escala:"
+msgstr "Escala: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:543
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:449
-#, fuzzy, kde-format
-#| msgid "Hatching options"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "Opcións de incubación"
+msgstr "Usar opcións de fusión personalizadas"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:558
-#, fuzzy, kde-format
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "The 'threshold' spinbox prefix in fill tool options"
 msgid "Threshold: "
 msgstr "Limiar: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:561
-#, fuzzy, kde-format
-#| msgid "Spread:"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in fill tool options"
 msgid "Spread: "
-msgstr "Esparexemento:"
+msgstr "Esparexemento: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:567
-#, fuzzy, kde-format
-#| msgid "Border selection by"
+#, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in fill tool to use selection "
 "borders as boundary when filling"
 msgid "Use selection as boundary"
-msgstr "Escoller o contorno en"
+msgstr "Usar a selección como límite"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:575
-#, fuzzy, kde-format
-#| msgid "Grow"
+#, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in fill tool options"
 msgid "Grow: "
-msgstr "Aumentar"
+msgstr "Ampliación: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:586
-#, fuzzy, kde-format
-#| msgid "Feather radius:"
+#, kde-format
 msgctxt "The 'feather' spinbox prefix in fill tool options"
 msgid "Feather: "
-msgstr "Raio da selección suave:"
+msgstr "Suavidade: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:612
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "The 'reset' button in fill tool options"
 msgid "Reset"
-msgstr "Restaurar"
+msgstr "Restabelecer"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:615
-#, fuzzy, kde-format
-#| msgid "Failed to save the selection for filter mask %1."
+#, kde-format
 msgid "Fill the active selection, or the entire canvas"
-msgstr "Non se puido gardar a selección para a máscara de filtro %1."
+msgstr "Encher a selección activa, ou todo o lenzo"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
-#, fuzzy, kde-format
-#| msgid "Include translator's comments"
+#, kde-format
 msgid "Fill a contiguous region"
-msgstr "Incluír os comentarios do tradutor"
+msgstr "Encher unha rexión continua"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:617
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgid "Fill all regions of a similar color"
-msgstr "Encher a zona coa cor de fondo."
+msgstr "Encher todas as rexións dunha cor similar"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:622
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set the scale of the pattern"
-msgstr "Definir o método de fusión da capa."
+msgstr "Definir a escala do padrón"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:623
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:517
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set the rotation of the pattern"
-msgstr "Definir a opacidade principal da capa."
+msgstr "Definir a rotación do padrón"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:624
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
+"Definir as opcións de fusión personalizadas en vez de usar as dos pinceis"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr "Definir a opacidade principal da capa."
+msgstr "Definir unha opacidade personalizada para o recheo"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:626
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "Definir o método de fusión da capa."
+msgstr "Definir un modo de fusión personalizado para o recheo"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:628
 #, kde-format
 msgid "Fill regions similar in color to the clicked region"
-msgstr ""
+msgstr "Encher as rexións de cor similar á da rexión premida"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:629
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgid "Fill all regions until a specific boundary color"
-msgstr "Encher a zona coa cor de fondo."
+msgstr "Encher as rexións ata unha cor límite indicada"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:630
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgid "Boundary color"
-msgstr "Cor do fondo"
+msgstr "Cor límite"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:631
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
@@ -57064,6 +56961,8 @@ msgid ""
 "Set the color similarity tolerance of the fill. Increasing threshold "
 "increases the range of similar colors to be filled."
 msgstr ""
+"Definir a tolerancia da similitude da cor do recheo. Aumentar o limiar "
+"aumenta o intervalo de cores similares para encher."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:632
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
@@ -57072,6 +56971,8 @@ msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
 "decreases opacity of fill areas depending on color similarity."
 msgstr ""
+"Definir o alcance da porción opaca do recheo. Reducir a dispersión reduce a "
+"opacidade para encher as zonas segundo a similitude da cor."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:633
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
@@ -57080,38 +56981,38 @@ msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when filling the region"
 msgstr ""
+"Definir se o contorno da selección activa debería tratarse como límite ao "
+"encher a rexión"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
-#, fuzzy, kde-format
-#| msgid "Could not read the beginning of the file."
+#, kde-format
 msgid "Smooths the edges of the fill"
-msgstr "Non foi posíbel ler o inicio do ficheiro."
+msgstr "Suaviza os bordos do recheo"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:636
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
-msgstr ""
+msgstr "Ampliar ou encoller o recheo na cantidade definida"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:638
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
 #, kde-format
 msgid "Blur the fill by the set amount"
-msgstr ""
+msgstr "Desenfocar o recheo na cantidade definida"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:640
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgid "Fill regions found from the active layer"
-msgstr "Encher a zona coa cor de fondo."
+msgstr "Encher as rexións atopadas da capa activa"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:641
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
-msgstr ""
+msgstr "Encher as rexións atopadas da mestura de todas as capas"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:642
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
@@ -57119,12 +57020,13 @@ msgstr ""
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
 msgstr ""
+"Encher as rexións atopadas da mestura das capas coas etiquetas de cor "
+"indicadas"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:644
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgid "Dragging will fill regions of any color"
-msgstr "Encher a zona coa cor de fondo."
+msgstr "Arrastrar encherá as rexións de calquera cor"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:645
 #, kde-format
@@ -57132,56 +57034,50 @@ msgid ""
 "Dragging will fill only regions similar in color to the initial region "
 "(useful for filling line-art)"
 msgstr ""
+"Arrastrar só encherá rexións de cor similar á da rexión inicial (útil para "
+"encher arte de liñas)"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:647
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reset to default value"
+#, kde-format
 msgid "Reset the options to their default values"
-msgstr "Restaurar o valor predeterminado"
+msgstr "Restablecer as opcións cos valores predeterminados"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:656
-#, fuzzy, kde-format
-#| msgid "Simple mode"
+#, kde-format
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
-msgstr "Modo sinxelo"
+msgstr "Modo de enchemento"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:663
-#, fuzzy, kde-format
-#| msgid "Add Resources"
+#, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
-msgstr "Engadir recursos"
+msgstr "Orixe do enchemento"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:677
-#, fuzzy, kde-format
-#| msgid "References"
+#, kde-format
 msgctxt "The 'reference' section label in fill tool options"
 msgid "Reference"
-msgstr "Referencias"
+msgstr "Referencia"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:686
-#, fuzzy, kde-format
-#| msgid "Images extensions:"
+#, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
-msgstr "Extensións de imaxe:"
+msgstr "Alcance do enchemento"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:698
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "HSV Adjustment"
+#, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
-msgstr "Axuste de HSV"
+msgstr "Axustes"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:707
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
-msgstr ""
+msgstr "Modo de encher ao arrastrar"
 
 #: plugins/tools/basictools/kis_tool_fill.h:234
 #, kde-format
@@ -57200,8 +57096,7 @@ msgid "Reverse"
 msgstr "Inverter "
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:287
-#, fuzzy, kde-format
-#| msgid "Dither"
+#, kde-format
 msgctxt "the gradient will be dithered"
 msgid "Dither"
 msgstr "Tramado"
@@ -57232,10 +57127,9 @@ msgid "Show Guideline"
 msgstr "Amosar a liña de guía"
 
 #: plugins/tools/basictools/kis_tool_line.cc:442
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Length: %1 px"
-msgstr "Lonxitude:"
+msgstr "Lonxitude: %1 px"
 
 #: plugins/tools/basictools/kis_tool_line.cc:460
 #, kde-format
@@ -57258,13 +57152,14 @@ msgid "%1°"
 msgstr "%1°"
 
 #: plugins/tools/basictools/kis_tool_measure.cc:177
-#, fuzzy, kde-format
-#| msgid "%1 %2"
+#, kde-format
 msgctxt "%1=distance %2=unit of distance %3=angle in degrees"
 msgid ""
 "%1 %2\n"
 "%3°"
-msgstr "%1 %2"
+msgstr ""
+"%1 %2\n"
+"%3°"
 
 #: plugins/tools/basictools/kis_tool_measure.h:102
 #, kde-format
@@ -57281,7 +57176,7 @@ msgstr "X: %1 px, Y: %2 px"
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
-msgstr ""
+msgstr "A zona seleccionada non ten píxeles"
 
 #: plugins/tools/basictools/kis_tool_move.h:183
 #, kde-format
@@ -57299,8 +57194,7 @@ msgid "Symmetry"
 msgstr "Simetría"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:420
-#, fuzzy, kde-format
-#| msgid "Mirror"
+#, kde-format
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "Reflectir"
@@ -57409,40 +57303,32 @@ msgstr "Tomador de mostras de cor"
 
 #. i18n: ectx: property (text), widget (QLabel, blendLabel)
 #: plugins/tools/basictools/wdgcolorsampler.ui:29
-#, fuzzy, kde-format
-#| msgid "Blend: "
+#, kde-format
 msgctxt "The color rate of sampled color setting slider"
 msgid "Blend: "
 msgstr "Fusionar: "
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, blend)
 #: plugins/tools/basictools/wdgcolorsampler.ui:48
-#, fuzzy, kde-format
-#| msgid ""
-#| "<nobr>Blending controls the percentage of color that is picked</nobr> and "
-#| "mixed with your current brush color. A full blending value picks colors "
-#| "completely, ignoring brush color."
+#, kde-format
 msgid ""
 "<nobr>Blending controls the percentage of color that is sampled</nobr> and "
 "mixed with your current brush color. A full blending value samples colors "
 "completely, ignoring brush color."
 msgstr ""
-"<nobr>A fusión controla a porcentaxe de cor que se selecciona</nobr> e se "
-"mestura coa cor actual do pincel. Un valor completo de fusión selecciona "
-"cores completamente, ignorando a cor do pincel."
+"<nobr>A fusión controla a porcentaxe de cor da que se toma mostras</nobr> e "
+"se mestura coa cor actual do pincel. Un valor completo de fusión toma "
+"mostras de cores completamente, ignorando a cor do pincel."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:75
-#, fuzzy, kde-format
-#| msgid ""
-#| "<nobr>Determines whether the color picker will sample</nobr> colors from "
-#| "all visible layers or only the currently selected layer."
+#, kde-format
 msgid ""
 "<nobr>Determines whether the color sampler will sample</nobr> colors from "
 "all visible layers or only the currently selected layer."
 msgstr ""
-"<nobr>Determina se o selector de cor tomará mostras</nobr> de cores de todas "
-"as capas visíbeis ou só da capa seleccionada actualmente."
+"<nobr>Determina se o tomador de mostras de cor tomará mostras</nobr> de "
+"cores de todas as capas visíbeis ou só da capa seleccionada actualmente."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:82
@@ -57479,8 +57365,7 @@ msgstr "Canle"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, listViewChannels)
 #: plugins/tools/basictools/wdgcolorsampler.ui:126
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "The value number each channel of sampled color listed in a table"
 msgid "Value"
 msgstr "Valor"
@@ -57493,29 +57378,23 @@ msgstr "Raio: "
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, radius)
 #: plugins/tools/basictools/wdgcolorsampler.ui:183
-#, fuzzy, kde-format
-#| msgid ""
-#| "<nobr>Radius controls the color picker's sampling area.</nobr> Pixel "
-#| "colors within this radius are mixed together."
+#, kde-format
 msgid ""
 "<nobr>Radius controls the color sampler's sampling area.</nobr> Pixel colors "
 "within this radius are mixed together."
 msgstr ""
-"<nobr>O raio controla a zona de toma de mostras do selector de cor.</nobr> "
-"As cores de píxeles dentro deste raio mestúranse."
+"<nobr>O raio controla a zona de toma de mostras do tomador de mostras de cor."
+"</nobr> As cores de píxeles dentro deste raio mestúranse."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbPalette)
 #: plugins/tools/basictools/wdgcolorsampler.ui:218
-#, fuzzy, kde-format
-#| msgid ""
-#| "<nobr>Checking this box will add a new color swatch</nobr> to a palette "
-#| "each time you pick a color."
+#, kde-format
 msgid ""
 "<nobr>Checking this box will add a new color swatch</nobr> to a palette each "
 "time you sample a color."
 msgstr ""
 "<nobr>Marcar esta caixa engadirá unha nova mostra de cor</nobr> a unha "
-"paleta cada vez que seleccione unha cor."
+"paleta cada vez que tome unha mostra dunha cor."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbPalette)
 #: plugins/tools/basictools/wdgcolorsampler.ui:221
@@ -57525,16 +57404,13 @@ msgstr "Engadir á paleta:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUpdateCurrentColor)
 #: plugins/tools/basictools/wdgcolorsampler.ui:235
-#, fuzzy, kde-format
-#| msgid ""
-#| "<nobr>Controls whether the color picker updates the</nobr> current "
-#| "foreground or not."
+#, kde-format
 msgid ""
 "<nobr>Controls whether the color sampler updates the</nobr> current "
 "foreground or not."
 msgstr ""
-"<nobr>Controla se o selector de cores actualiza o</nobr> primeiro plano ou "
-"non."
+"<nobr>Controla se o tomador de mostras de cores actualiza o</nobr> primeiro "
+"plano ou non."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
 #: plugins/tools/basictools/wdgcolorsampler.ui:238
@@ -57566,14 +57442,9 @@ msgstr "&Mover a capa actual"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioFirstLayer)
 #: plugins/tools/basictools/wdgmovetool.ui:46
-#, fuzzy, kde-format
-#| msgid ""
-#| "Move the first layer with visible content at the place where you click. "
-#| "This will also select that layer in the layerbox."
+#, kde-format
 msgid "Move the first layer with visible content at the place where you click."
-msgstr ""
-"Move a primeira capa con contido visíbel ao lugar onde faga clic. Isto fai "
-"que se escolla a capa na caixa de capas."
+msgstr "Move a primeira capa con contido visíbel ao lugar onde faga clic."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioFirstLayer)
 #: plugins/tools/basictools/wdgmovetool.ui:49
@@ -57625,8 +57496,7 @@ msgstr "O número de unidades para mover ao premer o atallo de mover."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/basictools/wdgmovetool.ui:150
-#, fuzzy, kde-format
-#| msgid "Amount:"
+#, kde-format
 msgctxt "Amount of shortcut key movement for Move Tool"
 msgid "Amount:"
 msgstr "Cantidade:"
@@ -57695,8 +57565,7 @@ msgstr "Subpinceis:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:87
-#, fuzzy, kde-format
-#| msgid "Radius:"
+#, kde-format
 msgctxt "Label of Radius in Multibrush tool options"
 msgid "Radius:"
 msgstr "Raio:"
@@ -57721,8 +57590,7 @@ msgstr "Vertical"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/basictools/wdgmultihandtool.ui:216
-#, fuzzy, kde-format
-#| msgid "Origin:"
+#, kde-format
 msgctxt "Origin in Multihand Tool"
 msgid "Origin:"
 msgstr "Orixe:"
@@ -57856,13 +57724,7 @@ msgstr "Bloqueo de áncora"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUniformScaling)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:202
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>When \"Scale Styles\" is <span style=\" font-"
-#| "weight:600;\">enabled</span>, the shape's stroke is scaled with the shape "
-#| "itself.</p><p>In the <span style=\" font-weight:600;\">disabled</span> "
-#| "state, only the shape is resized, keeping the stroke width and style "
-#| "unaltered.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>When &quot;Scale Styles&quot; is <span style=\" font-"
 "weight:600;\">enabled</span>, the shape's stroke is scaled with the shape "
@@ -57885,14 +57747,7 @@ msgstr "Cambiar as dimensións dos estilos"
 # skip-rule: trasno-app
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGlobalCoordinates)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:218
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>In \"Global Coordinates\" mode Width and Height "
-#| "fields show the size of the shape's bounding box in image-aligned "
-#| "coordinates, even when the shape is rotated or has any other transform. </"
-#| "p><p>If \"Global Coordinates\" mode is disabled, Width and Height fields "
-#| "show the shape's \"local\" size, before application of any "
-#| "transformations.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>In &quot;Global Coordinates&quot; mode Width and "
 "Height fields show the size of the shape's bounding box in image-aligned "
@@ -57902,10 +57757,10 @@ msgid ""
 "transformations.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>No modo de «Coordenadas globais» os campos de anchura "
-"e altura mostran o tamaño da caixa que contén a forma en coordenadas "
-"aliñadas á imaxe, incluso cando a forma está rotada ou ten calquera outra "
+"e altura amosan o tamaño da caixa que contén a forma en coordenadas aliñadas "
+"á imaxe, incluso cando a forma está rotada ou ten calquera outra "
 "transformación. </p><p>Se o modo de «Coordenadas globais» está desactivado "
-"os campos de anchura e altura mostran o tamaño «local» da forma antes da "
+"os campos de anchura e altura amosan o tamaño «local» da forma antes da "
 "aplicación de calquera transformación.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGlobalCoordinates)
@@ -57964,10 +57819,9 @@ msgid "Select a Reference Image"
 msgstr "Seleccionar unha imaxe de referencia"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:131
-#, fuzzy, kde-format
-#| msgid "Could not load keyframes from %1."
+#, kde-format
 msgid "Could not load reference image from clipboard"
-msgstr "Non se puideron cargar os fotogramas clave de %1."
+msgstr "Non foi posíbel cargar a imaxe de referencia do portapapeis."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
 #, kde-format
@@ -57995,10 +57849,9 @@ msgid "Failed to save reference images."
 msgstr "Non foi posíbel gardar as imaxes de referencia."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:305
-#, fuzzy, kde-format
-#| msgid "Reference Images Tool"
+#, kde-format
 msgid "Reference Image Actions"
-msgstr "Ferramenta de imaxes de referencia"
+msgstr "Accións da imaxe de referencia"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:89
 #, kde-format
@@ -58231,15 +58084,13 @@ msgid "Calligraphy: decrease angle"
 msgstr "Caligrafía: diminuír o ángulo"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:425
-#, fuzzy, kde-format
-#| msgid "Calligraphy"
+#, kde-format
 msgctxt "Object name of Calligraphy"
 msgid "Calligraphy"
 msgstr "Caligrafía"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:426
-#, fuzzy, kde-format
-#| msgid "Calligraphy"
+#, kde-format
 msgctxt "Tool Option title of Calligraphy"
 msgid "Calligraphy"
 msgstr "Caligrafía"
@@ -58261,51 +58112,46 @@ msgid "Select Contiguous Area"
 msgstr "Selecciona unha zona contigua"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:369
-#, fuzzy, kde-format
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "The 'threshold' spinbox prefix in contiguous selection tool options"
 msgid "Threshold: "
 msgstr "Limiar: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:374
-#, fuzzy, kde-format
-#| msgid "Spread:"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in contiguous selection tool options"
 msgid "Spread: "
-msgstr "Esparexemento:"
+msgstr "Esparexemento: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:380
-#, fuzzy, kde-format
-#| msgid "Border selection by"
+#, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in contiguous selection tool to use "
 "selection borders as boundary when filling"
 msgid "Use selection as boundary"
-msgstr "Escoller o contorno en"
+msgstr "Usar a selección como límite"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
-#, fuzzy, kde-format
-#| msgid "Grow"
+#, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
 msgid "Grow: "
-msgstr "Aumentar"
+msgstr "Ampliación: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
-#, fuzzy, kde-format
-#| msgid "Feather radius:"
+#, kde-format
 msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
 msgid "Feather: "
-msgstr "Raio da selección suave:"
+msgstr "Suavidade: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
-msgstr ""
+msgstr "Seleccionar as rexións de cor similar á da rexión premida"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
 #, kde-format
 msgid "Select all regions until a specific boundary color"
-msgstr ""
+msgstr "Seleccionar as rexións ata unha cor límite indicada"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
@@ -58314,6 +58160,8 @@ msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
+"Definir a tolerancia da similitude da cor da selección. Aumentar o limiar "
+"aumenta o intervalo de cores similares para seleccionar."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
 #, kde-format
@@ -58321,6 +58169,8 @@ msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
+"Definir o alcance da porción opaca da selección. Reducir a dispersión reduce "
+"a opacidade para encher as zonas segundo a similitude da selección."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:410
 #, kde-format
@@ -58328,14 +58178,15 @@ msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
+"Definir se o contorno da selección activa debería tratarse como límite ao "
+"marcar unha nova selección"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
-#, fuzzy, kde-format
-#| msgid "Selection Mode"
+#, kde-format
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
 msgid "Selection extent"
-msgstr "Modo de selección"
+msgstr "Alcance da selección"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:95
 #, kde-format
@@ -58359,19 +58210,15 @@ msgid "Elliptical Selection Tool"
 msgstr "Ferramenta de selección elíptica"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:51
-#, fuzzy, kde-format
-#| msgid "Feather Selection"
+#, kde-format
 msgid "Freehand Selection"
-msgstr "Selección suave"
+msgstr "Selección a man alzada"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:63
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:86
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Feather Selection"
 msgctxt "(qtundo-format)"
 msgid "Freehand Selection"
-msgstr "Selección suave"
+msgstr "Selección a man alzada"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
 #, kde-format
@@ -58438,19 +58285,17 @@ msgid "Select Similar Color"
 msgstr "Seleccionar cores semellantes"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:461
-#, fuzzy, kde-format
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "Limiar: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:472
-#, fuzzy, kde-format
-#| msgid "Selection Mode"
+#, kde-format
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
-msgstr "Modo de selección"
+msgstr "Alcance da selección"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:57
 #, kde-format
@@ -58498,12 +58343,10 @@ msgstr "Ferramenta de selección magnética"
 #. i18n: context: iconText @ Action (KisToolSelectMagnetic), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.action:9
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.action:10
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Magnetic Selection Tool"
+#, kde-format
 msgctxt "action"
 msgid "Magnetic Curve Selection Tool"
-msgstr "Ferramenta de selección magnética"
+msgstr "Ferramenta de selección de curva magnética"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:51
 #, kde-format
@@ -58517,46 +58360,40 @@ msgid "Magnetic Selection"
 msgstr "Selección magnética"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:734
-#, fuzzy, kde-format
-#| msgid "Filter Radius: "
+#, kde-format
 msgctxt "Filter radius in Magnetic Select Tool settings"
 msgid "Filter Radius: "
 msgstr "Raio de filtro: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:741
-#, fuzzy, kde-format
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "Threshold in Magnetic Selection's Tool options"
 msgid "Threshold: "
 msgstr "Limiar: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:749
-#, fuzzy, kde-format
-#| msgid "Search Radius: "
+#, kde-format
 msgctxt "Search Radius in Magnetic Selection's Tool options"
 msgid "Search Radius: "
 msgstr "Raio de busca: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:758
-#, fuzzy, kde-format
-#| msgid "Anchor Gap: "
+#, kde-format
 msgctxt "Anchor Gap in Magnetic Selection's Tool options"
 msgid "Anchor Gap: "
 msgstr "Separación de áncora: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:762
-#, fuzzy, kde-format
-#| msgid "Computer"
+#, kde-format
 msgctxt "Complete the selection"
 msgid "Complete"
-msgstr "Informática"
+msgstr "Completar"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:767
-#, fuzzy, kde-format
-#| msgid "Discard All"
+#, kde-format
 msgctxt "Discard the selection"
 msgid "Discard"
-msgstr "Descartalo todo"
+msgstr "Descartar"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:773
 #, kde-format
@@ -58564,48 +58401,43 @@ msgctxt "@info:tooltip"
 msgid ""
 "Radius of the filter for the detecting edges, might take some time to "
 "calculate"
-msgstr ""
+msgstr "Raio do filtro para detectar extremos, pode levar un tempo calculalo"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:777
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Threshold for determining the minimum intensity of the edges"
-msgstr ""
+msgstr "Liminar para determinar a intensidade mínima dos extremos"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:779
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Extra area to be searched"
-msgstr ""
+msgstr "Zona adicional para buscar"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:781
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Gap between 2 anchors in interactive mode"
-msgstr ""
+msgstr "Oco entre 2 áncoras no modo interactivo."
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:783
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Selections"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Complete Selection"
-msgstr "Recortar as seleccións"
+msgstr "Completar a selección."
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:785
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Display Selection"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Discard Selection"
-msgstr "Mostrar a selección"
+msgstr "Descartar a selección."
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:792
-#, fuzzy, kde-format
-#| msgid "Patch Options"
+#, kde-format
 msgctxt "The 'path options' section label in magnetic selection's tool options"
 msgid "Path options"
-msgstr "Opcións das porcións"
+msgstr "Opcións de rutas"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
 #, kde-format
@@ -58621,12 +58453,10 @@ msgstr "Ferramenta de selección magnética"
 #: plugins/tools/selectiontools/KisToolSelectOutline.action:7
 #: plugins/tools/selectiontools/KisToolSelectOutline.action:9
 #: plugins/tools/selectiontools/KisToolSelectOutline.action:10
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Brush Selection Tool"
+#, kde-format
 msgctxt "action"
 msgid "Freehand Selection Tool"
-msgstr "Ferramenta de selección de pincel"
+msgstr "Ferramenta de selección a man alzada"
 
 #. i18n: context: text @ Action (KisToolSelectPath), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolSelectPath), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -58747,10 +58577,9 @@ msgid "Text Color"
 msgstr "Cor do texto"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1468
-#, fuzzy, kde-format
-#| msgid "Select a Color"
+#, kde-format
 msgid "Sample a Color"
-msgstr "Seleccionar unha cor"
+msgstr "Tomar unha mostra dunha cor"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1479
 #, kde-format
@@ -58854,11 +58683,10 @@ msgstr "Cambiar tamaño de letra, tipografía, negriñas, cursivas etc."
 
 #. i18n: context: whatsThis @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:50
-#, fuzzy, kde-format
-#| msgid "Duplicate the currently selected action"
+#, kde-format
 msgctxt "action"
 msgid "Change the attributes of the currently selected characters."
-msgstr "Repetir a acción escollida actualmente"
+msgstr "Cambia os atributos dos caracteres actualmente seleccionados."
 
 #. i18n: context: iconText @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -58881,13 +58709,11 @@ msgstr ""
 
 #. i18n: context: whatsThis @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Insert one or more symbols or characters not found on the keyboard"
+#, kde-format
 msgctxt "action"
 msgid "Insert one or more symbols or characters not found on the keyboard."
 msgstr ""
-"Inserir un ou máis símbolos ou caracteres que non se atopan nos teclados"
+"Inserir un ou máis símbolos ou caracteres que non te atopan no teclado."
 
 #. i18n: context: iconText @ Action (svg_align_justified), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_align_justified), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59112,9 +58938,7 @@ msgstr "Configuración do editor de texto"
 
 #. i18n: context: text @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:243
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Settings..."
+#, kde-format
 msgctxt "Text Editor Settings label"
 msgid "Settings..."
 msgstr "Configuración…"
@@ -59130,11 +58954,10 @@ msgstr "Configuración…"
 #: plugins/tools/svgtexttool/SvgTextTool.action:246
 #: plugins/tools/svgtexttool/SvgTextTool.action:253
 #: plugins/tools/tools.action:74 plugins/tools/tools.action:77
-#, fuzzy, kde-format
-#| msgid "Color Sliders"
+#, kde-format
 msgctxt "action"
 msgid "Color Sampler"
-msgstr "Barras de cores"
+msgstr "Tomador de mostras de cor"
 
 #. i18n: context: iconText @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59145,11 +58968,10 @@ msgstr "Barras de cores"
 #: plugins/tools/svgtexttool/SvgTextTool.action:256
 #: plugins/tools/svgtexttool/SvgTextTool.action:258
 #: plugins/tools/svgtexttool/SvgTextTool.action:263
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "action"
 msgid "Kerning"
-msgstr "Advertencia"
+msgstr "Espazo entre caracteres"
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:141
 #, kde-format
@@ -59280,8 +59102,7 @@ msgstr "Atributo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:168
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "The Value label used by SVG Text Tool"
 msgid "Value"
 msgstr "Valor"
@@ -59333,29 +59154,25 @@ msgstr "Centro"
 #. i18n: ectx: property (text), widget (QCheckBox, boolGrow)
 #: plugins/tools/tool_crop/kis_tool_crop.cc:119
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:155
-#, fuzzy, kde-format
-#| msgid "Grow"
+#, kde-format
 msgctxt "Grow as in crop tool"
 msgid "Grow"
-msgstr "Aumentar"
+msgstr "Ampliación"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:122
-#, fuzzy, kde-format
-#| msgid "Lock the width"
+#, kde-format
 msgid "Lock Width"
 msgstr "Bloquear a anchura"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:125
-#, fuzzy, kde-format
-#| msgid "Lock the height"
+#, kde-format
 msgid "Lock Height"
 msgstr "Bloquear a altura"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:128
-#, fuzzy, kde-format
-#| msgid "Copy Location"
+#, kde-format
 msgid "Lock Ratio"
-msgstr "Copiar a ruta"
+msgstr "Bloquear a proporción"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:253
 #, kde-format
@@ -59363,21 +59180,22 @@ msgid "Crop Tool Actions"
 msgstr "Accións da ferramenta de recortar"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:723
-#, fuzzy, kde-format
-#| msgctxt "floating message in move tool"
-#| msgid "X: %1 px, Y: %2 px"
+#, kde-format
 msgid ""
 "X: %1\n"
 "Y: %2"
-msgstr "X: %1 px, Y: %2 px"
+msgstr ""
+"X: %1\n"
+"Y: %2"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:728
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgid ""
 "Width: %1\n"
 "Height: %2"
-msgstr "Altura das liñas: "
+msgstr ""
+"Anchura: %1\n"
+"Altura: %2"
 
 #: plugins/tools/tool_crop/kis_tool_crop.h:215
 #, kde-format
@@ -59463,17 +59281,15 @@ msgstr "Bloquear as proporcións"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:405
-#, fuzzy, kde-format
-#| msgid "&Canvas"
+#, kde-format
 msgid "Canvas"
-msgstr "&Lenzo"
+msgstr "Lenzo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:415
-#, fuzzy, kde-format
-#| msgid "frame"
+#, kde-format
 msgid "Frame"
-msgstr "marco"
+msgstr "Fotograma"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnCrop)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:423
@@ -59545,229 +59361,200 @@ msgstr "Ferramenta de pincel dinámico"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.action:7
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.action:9
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.action:10
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgctxt "action"
 msgid "Enclose and Fill Tool"
-msgstr "Activar a ferramenta de liñas"
+msgstr "Ferramenta de cerco e recheo"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:267
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Flood Fill"
 msgctxt "(qtundo-format)"
 msgid "Enclose and Fill"
-msgstr "Inundar"
+msgstr "Cerco e recheo"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:424
-#, fuzzy, kde-format
-#| msgid "Invert"
+#, kde-format
 msgctxt "The 'invert' checkbox in enclose and fill tool"
 msgid "Invert"
 msgstr "Inverter"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:429
-#, fuzzy, kde-format
-#| msgid "Include translator's comments"
+#, kde-format
 msgctxt "The 'include contour regions' checkbox in enclose and fill tool"
 msgid "Include contour regions"
-msgstr "Incluír os comentarios do tradutor"
+msgstr "Incluír as rexións de contorno"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:444
-#, fuzzy, kde-format
-#| msgid "Scale: "
+#, kde-format
 msgctxt "The pattern 'scale' spinbox prefix in enclose and fill tool options"
 msgid "Scale: "
-msgstr "Escala:"
+msgstr "Escala: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:457
-#, fuzzy, kde-format
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "The 'threshold' spinbox prefix in enclose and fill tool options"
 msgid "Threshold: "
 msgstr "Limiar: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
-#, fuzzy, kde-format
-#| msgid "Spread:"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
 msgid "Spread: "
-msgstr "Esparexemento:"
+msgstr "Esparexemento: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
-#, fuzzy, kde-format
-#| msgid "Border selection by"
+#, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in enclose and fill tool to use "
 "selection borders as boundary when filling"
 msgid "Use selection as boundary"
-msgstr "Escoller o contorno en"
+msgstr "Usar a selección como límite"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:470
-#, fuzzy, kde-format
-#| msgid "Anti-aliasing"
+#, kde-format
 msgctxt "The anti-alias checkbox in enclose and fill tool options"
 msgid "Anti-aliasing"
 msgstr "Suavizado das curvas"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:473
-#, fuzzy, kde-format
-#| msgid "Grow"
+#, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in enclose and fill tool options"
 msgid "Grow: "
-msgstr "Aumentar"
+msgstr "Ampliación: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:484
-#, fuzzy, kde-format
-#| msgid "Feather radius:"
+#, kde-format
 msgctxt "The 'feather' spinbox prefix in enclose and fill tool options"
 msgid "Feather: "
-msgstr "Raio da selección suave:"
+msgstr "Suavidade: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:502
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "The 'reset' button in enclose and fill tool options"
 msgid "Reset"
-msgstr "Restaurar"
+msgstr "Restabelecer"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:507
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Draw Bezier Curve"
+#, kde-format
 msgid "Bezier Curve"
-msgstr "Debuxar unha curva Bezier"
+msgstr "Curva Bezier"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:508
 #, kde-format
 msgid "Lasso"
-msgstr ""
+msgstr "Lazo"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:511
 #, kde-format
 msgid "Enable to fill opposite regions instead"
-msgstr ""
+msgstr "Activar para encher mellor as rexións opostas"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:512
 #, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
+"Activar para encher tamén formas que tocan o contorno da rexión que fai cerco"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:544
-#, fuzzy, kde-format
-#| msgid "Sens&ing method type:"
+#, kde-format
 msgctxt "The 'enclosing method' section label in enclose and fill tool options"
 msgid "Enclosing method"
-msgstr "Tipo de método de med&ir:"
+msgstr "Método de cercar"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:551
-#, fuzzy, kde-format
-#| msgid "References"
+#, kde-format
 msgctxt "The 'reference' section label in enclose and fill tool options"
 msgid "Reference"
-msgstr "Referencias"
+msgstr "Referencia"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:561
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
-msgstr "Transparente"
+msgstr "Rexións de destino"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:571
-#, fuzzy, kde-format
-#| msgid "Add Resources"
+#, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
-msgstr "Engadir recursos"
+msgstr "Orixe do enchemento"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:585
-#, fuzzy, kde-format
-#| msgid "Images extensions:"
+#, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
-msgstr "Extensións de imaxe:"
+msgstr "Alcance do enchemento"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:594
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "HSV Adjustment"
+#, kde-format
 msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
-msgstr "Axuste de HSV"
+msgstr "Axustes"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:848
-#, fuzzy, kde-format
-#| msgid "All"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
-msgstr "Todas"
+msgstr "Todo"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:851
-#, fuzzy, kde-format
-#| msgid "Specific Color Selector"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
-msgstr "Selector de cores específico"
+msgstr "Cor específica"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
-msgstr "Transparente"
+msgstr "Transparencia"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
-#, fuzzy, kde-format
-#| msgid "Specific Color Selector"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
-msgstr "Selector de cores específico"
+msgstr "Cor específica ou transparencia"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
-msgstr ""
+msgstr "Todo salvo unha cor específica"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
-msgstr ""
+msgstr "Todo salvo transparencia"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
-msgstr ""
+msgstr "Todo salvo unha cor específica ou transparencia"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
-msgstr ""
+msgstr "Calquera rodeada dunha cor específica"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
-#, fuzzy, kde-format
-#| msgid "Foreground to Transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
-msgstr "Primeiro plano a transparente"
+msgstr "Calquera rodeada de transparencia"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:875
-#, fuzzy, kde-format
-#| msgid "Foreground to Transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
-msgstr "Primeiro plano a transparente"
+msgstr "Calquera rodeada dunha cor específica ou transparencia"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Enclose and Fill Tool"
-msgstr "Activar a ferramenta de liñas"
+msgstr "Ferramenta de cerco e recheo"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.cpp:49
 msgctxt "(qtundo-format)"
@@ -59862,8 +59649,7 @@ msgstr "Trazos clave"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTransparent)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:149
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgctxt "The label of the button that assigns a selected color as transparent"
 msgid "Transparent"
 msgstr "Transparente"
@@ -59980,43 +59766,37 @@ msgstr ""
 "trebello de opcións para cambiar manualmente os valores das dimensións."
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:124
-#, fuzzy, kde-format
-#| msgid "Warp"
+#, kde-format
 msgctxt "Warp Transform Tab Label"
 msgid "Warp"
 msgstr "Deformar"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:125
-#, fuzzy, kde-format
-#| msgid "Liquify"
+#, kde-format
 msgctxt "Liquify Transform Tab Label"
 msgid "Liquify"
 msgstr "Licuar"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:126
-#, fuzzy, kde-format
-#| msgid "Brush size"
+#, kde-format
 msgctxt "Mesh Transform Tab Label"
 msgid "Mesh"
-msgstr "Tamaño do pincel"
+msgstr "Malla"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:127
-#, fuzzy, kde-format
-#| msgid "Cage"
+#, kde-format
 msgctxt "Cage Transform Tab Label"
 msgid "Cage"
 msgstr "Gaiola"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:128
-#, fuzzy, kde-format
-#| msgid "Free"
+#, kde-format
 msgctxt "Free Transform Tab Label"
 msgid "Free"
 msgstr "Libre"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:129
-#, fuzzy, kde-format
-#| msgid "Perspective"
+#, kde-format
 msgctxt "Perspective Transform Tab Label"
 msgid "Perspective"
 msgstr "Perspectiva"
@@ -60058,12 +59838,12 @@ msgid "Layer type cannot use the transform tool"
 msgstr "O tipo de capa non pode usar a ferramenta de transformación"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:868
-#, fuzzy, kde-format
-#| msgctxt "floating message in transformation tool"
-#| msgid "Layer type cannot use the transform tool"
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
-msgstr "O tipo de capa non pode usar a ferramenta de transformación"
+msgstr ""
+"O tipo de capa non pode usar a ferramenta de transformación. Usar mellor "
+"unha máscara de transformación."
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:888
 #, kde-format
@@ -60072,6 +59852,8 @@ msgid ""
 "Layer has children with transform masks. Please disable them before doing "
 "transformation."
 msgstr ""
+"A capa ten capas aniñadas con máscaras de transformación. Desactíveas antes "
+"de facer a transformación."
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:902
 #, kde-format
@@ -60256,17 +60038,15 @@ msgstr "Transformar"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:64
-#, fuzzy, kde-format
-#| msgid "Accuracy:"
+#, kde-format
 msgid "Accurate"
-msgstr "Corrección:"
+msgstr "Exacto"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:69
-#, fuzzy, kde-format
-#| msgid "Instant Preview"
+#, kde-format
 msgid "Accurate with Instant Preview"
-msgstr "Vista previa instantánea"
+msgstr "Exacto con vista previa instantánea"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, freeTransformButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:124
@@ -60312,7 +60092,7 @@ msgstr "Licuar"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:252
 #, kde-format
 msgid "Mesh"
-msgstr ""
+msgstr "Malla"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:358
@@ -60396,14 +60176,13 @@ msgstr "&z:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:905
 #, kde-format
 msgid "Z-coordinate of the camera position over the scene"
-msgstr ""
+msgstr "Coordenada Z da posición da cámara sobre a escena"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCameraHeight)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:886
-#, fuzzy, kde-format
-#| msgid "Grid height:"
+#, kde-format
 msgid "Camera height:"
-msgstr "Altura da grade:"
+msgstr "Altura da cámara:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_width)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, scaleXBox)
@@ -60527,10 +60306,9 @@ msgstr "Engad&ir ou editar puntos de ancoraxe"
 
 #. i18n: ectx: property (text), widget (QRadioButton, cageDeformRadio)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1679
-#, fuzzy, kde-format
-#| msgid "Vector Selection"
+#, kde-format
 msgid "Defor&m Selection"
-msgstr "Selección de vectores"
+msgstr "Deformar a selección"
 
 #. i18n: ectx: property (text), widget (QLabel, adjustGranularity)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1711
@@ -60540,16 +60318,14 @@ msgstr "Axustar o nivel de detalle:"
 
 #. i18n: ectx: property (text), widget (QLabel, previewGranularity)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1720
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgctxt "The Granularity value for Cage Transformation Preview"
 msgid "Preview"
-msgstr "Previsualización"
+msgstr "Vista previa"
 
 #. i18n: ectx: property (text), widget (QLabel, realGranularity)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1737
-#, fuzzy, kde-format
-#| msgid "Real"
+#, kde-format
 msgctxt "The Granularity value for Cage Transformation Result"
 msgid "Real"
 msgstr "Real"
@@ -60562,8 +60338,7 @@ msgstr "<html><head/><body><p><br/></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2029
-#, fuzzy, kde-format
-#| msgid "Amount:"
+#, kde-format
 msgctxt "Amount of transformation"
 msgid "Amount:"
 msgstr "Cantidade:"
@@ -60576,31 +60351,27 @@ msgstr "Aditivo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2153
-#, fuzzy, kde-format
-#| msgid "Brush size"
+#, kde-format
 msgid "Mesh size"
-msgstr "Tamaño do pincel"
+msgstr "Tamaño da malla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowControlPoints)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2182
-#, fuzzy, kde-format
-#| msgid "Show Changes"
+#, kde-format
 msgid "Show handles"
-msgstr "Mostrar os cambios"
+msgstr "Amosar as asas"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSymmetricalHandles)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2189
-#, fuzzy, kde-format
-#| msgctxt "the gradient will be drawn as a symmetric cone"
-#| msgid "Conical Symmetric"
+#, kde-format
 msgid "Lock handles symmetrically"
-msgstr "Simetría Cónica"
+msgstr "Bloquear as asas simetricamente"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScaleHandles)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2196
 #, kde-format
 msgid "Scale handles proportionally"
-msgstr ""
+msgstr "Escalar as asas proporcionalmente"
 
 #. i18n: context: text @ Action (KritaShape/KisToolDyna), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolDyna), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -60695,12 +60466,10 @@ msgstr "Ferramenta de selección de formas"
 
 #. i18n: context: toolTip @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:76
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select a color from the image or current layer"
+#, kde-format
 msgctxt "action"
 msgid "Sample a color from the image or current layer"
-msgstr "Seleccionar unha cor da imaxe ou da capa actual"
+msgstr "Tomar unha mostra dunha cor da imaxe ou da capa actual"
 
 #. i18n: context: text @ Action (KritaFill/KisToolFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaFill/KisToolFill), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -60763,8 +60532,7 @@ msgstr "Ferramenta de pincel a man alzada"
 #. i18n: context: text @ Action (KritaFill/KisToolGradient), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaFill/KisToolGradient), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:124 plugins/tools/tools.action:127
-#, fuzzy, kde-format
-#| msgid "Gradient Tool"
+#, kde-format
 msgctxt "action"
 msgid "Gradient Tool"
 msgstr "Ferramenta de gradación"
@@ -60831,8 +60599,7 @@ msgstr "Caligrafía"
 #. i18n: context: iconText @ Action (PathTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:164 plugins/tools/tools.action:166
 #: plugins/tools/tools.action:167
-#, fuzzy, kde-format
-#| msgid "Edit Shapes Tool"
+#, kde-format
 msgctxt "action"
 msgid "Edit Shapes Tool"
 msgstr "Editar a ferramenta de formas"

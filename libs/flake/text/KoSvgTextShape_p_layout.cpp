@@ -97,6 +97,10 @@ static QMap<int, int> logicalToVisualCursorPositions(const QVector<CursorPos> &c
 void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
 {
     clearAssociatedOutlines(q);
+    this->initialTextPosition = QPointF();
+    this->result.clear();
+    this->cursorPos.clear();
+    this->logicalToVisualCursorPos.clear();
 
     // The following is based on the text-layout algorithm in SVG 2.
     KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(q->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
@@ -105,7 +109,6 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     QString lang = q->textProperties().property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
 
     const bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
-    this->initialTextPosition = QPointF();
 
     FT_Int32 loadFlags = 0;
     if (this->textRendering == GeometricPrecision || this->textRendering == Auto) {

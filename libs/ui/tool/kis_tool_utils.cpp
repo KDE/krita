@@ -378,6 +378,7 @@ namespace KisToolUtils {
                     && !(currentShapes.contains(shape) && skipCurrentShapes)
                     && (shapeType.isEmpty() || shapeType == shape->shapeId())) {
                 canvas2->viewManager()->nodeManager()->slotNonUiActivatedNode(shapeLayer);
+                canvas2->shapeManager()->selection()->deselectAll();
                 canvas2->shapeManager()->selection()->select(shape);
             } else {
                 return false;

@@ -773,6 +773,26 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
             } else {
                 cursor = m_ibeam_vertical;
             }
+        } else if (hoveredShape) {
+            if (!hoveredShape->shapesInside().isEmpty()) {
+                QPainterPath paths;
+                Q_FOREACH(KoShape *s, hoveredShape->shapesInside()) {
+                    KoPathShape *path = dynamic_cast<KoPathShape *>(s);
+                    if (path) {
+                        paths.addPath(hoveredShape->absoluteTransformation().map(path->absoluteTransformation().map(path->outline())));
+                    }
+                }
+                if (!paths.isEmpty()) {
+                    m_hoveredShapeHighlightRect = paths;
+                }
+            } else {
+                m_hoveredShapeHighlightRect.addRect(hoveredShape->boundingRect());
+            }
+            if (hoveredShape->writingMode() == KoSvgText::HorizontalTB) {
+                cursor = m_ibeam_horizontal;
+            } else {
+                cursor = m_ibeam_vertical;
+            }
         } else if (!hoverPath.isEmpty() && shapeType == KoSvgTextShape_SHAPEID && m_highlightItem == HighlightItem::None) {
             m_hoveredShapeHighlightRect = hoverPath;
             if (isHorizontal) {

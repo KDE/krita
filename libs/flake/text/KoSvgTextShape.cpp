@@ -849,7 +849,7 @@ QString KoSvgTextShape::plainText()
     return d->plainText;
 }
 
-KoSvgText::WritingMode KoSvgTextShape::writingMode()
+KoSvgText::WritingMode KoSvgTextShape::writingMode() const
 {
     return KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
 }

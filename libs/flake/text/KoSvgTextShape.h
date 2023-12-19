@@ -329,7 +329,7 @@ public:
      * There's a number of places we need to check the writing mode to provide proper controls.
      * @return the writing mode of this text.
      */
-    KoSvgText::WritingMode writingMode();
+    KoSvgText::WritingMode writingMode() const;
 
     /// ShapeChangeListener so we can inform any text cursors that the cursor needs updating.
     struct KRITAFLAKE_EXPORT TextCursorChangeListener : public ShapeChangeListener {

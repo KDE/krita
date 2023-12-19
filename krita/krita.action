@@ -3023,7 +3023,7 @@
     </Action>
     <Action name="convert_to_file_layer">
       <icon>convert-to-fileLayer</icon>
-      <text>to &amp;File Layer...</text>
+      <text>Convert to &amp;File Layer...</text>
       <whatsThis/>
       <toolTip>Saves out the layers into a new image and then references that image.</toolTip>
       <iconText>Convert to File Layer</iconText>

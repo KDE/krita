@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -12185,8 +12185,8 @@ msgstr "कम्पोजिट मोड"
 #: krita/krita.action:3026
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "फिल्टर परत (&F)"
+msgid "Convert to &File Layer..."
+msgstr "से अभी हाल के परत बदलव"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -61112,6 +61112,11 @@ msgstr "सब्बो जूम करव"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "संदर्भ फोटू:"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "फिल्टर परत (&F)"
 
 #, fuzzy
 #~| msgid "Resolution:"

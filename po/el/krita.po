@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -12407,8 +12407,8 @@ msgstr "Σύνθεση"
 #: krita/krita.action:3026
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "Στρώμα &φίλτρου..."
+msgid "Convert to &File Layer..."
+msgstr "Μετατροπή τρέχοντος στρώματος από"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -62380,6 +62380,11 @@ msgstr "Εστίαση όλων"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Εικόνες αναφοράς"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "Στρώμα &φίλτρου..."
 
 #, fuzzy
 #~| msgid "Resolution:"

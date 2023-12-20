@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2023-12-13 10:06-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -11985,10 +11985,12 @@ msgstr "Converter camada em quadros de animação"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3026
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert to File Layer"
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "para &Camada de arquivo..."
+msgid "Convert to &File Layer..."
+msgstr "Converter para Arquivo de Camadas"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -61874,6 +61876,10 @@ msgstr "Ferramenta Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta Imagens de Referência"
+
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "para &Camada de arquivo..."
 
 #~ msgctxt "Resolution for recorded frames"
 #~ msgid "Resolution:"

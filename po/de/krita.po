@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2022-08-28 09:26+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -12690,10 +12690,12 @@ msgstr "Unterebenen in Animationsframes konvertieren"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3026
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert to a file layer"
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "in &Dateiebene ..."
+msgid "Convert to &File Layer..."
+msgstr "In Dateiebene umwandeln"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -62601,6 +62603,10 @@ msgstr "Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referenzbilder"
+
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "in &Dateiebene ..."
 
 #~ msgctxt "Resolution for recorded frames"
 #~ msgid "Resolution:"

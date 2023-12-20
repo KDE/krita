@@ -102,10 +102,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
-"PO-Revision-Date: 2023-12-16 15:33+0100\n"
-"Last-Translator: Patricia Moncorgé <patricia.moncorge@d-booker.fr>\n"
-"Language-Team: French <kde-i18n-doc@kde.org>\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
+"PO-Revision-Date: 2023-12-18 19:08+0100\n"
+"Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
+"Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -113,7 +113,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.08.4\n"
 "X-Text-Markup: kde4\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -12081,10 +12081,12 @@ msgstr "Convertir le calque en trames d'animation"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3026
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert to File Layer"
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "Vers un calque de &fichier..."
+msgid "Convert to &File Layer..."
+msgstr "Convertir en calque de fichier"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -16476,12 +16478,10 @@ msgstr ""
 "et ne sera plus compatible avec Krita 4.x."
 
 #: libs/flake/text/KoSvgTextShape.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "Default text for the text shape"
-#| msgid "<text>Placeholder Text</text>"
+#, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
-msgstr "<text>Texte de balise </text>"
+msgstr "Texte de substitution"
 
 #: libs/flake/text/KoSvgTextShape.cpp:1053
 #, kde-format
@@ -61675,6 +61675,10 @@ msgstr "Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Images de référence"
+
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "Vers un calque de &fichier..."
 
 #~ msgctxt "Resolution for recorded frames"
 #~ msgid "Resolution:"

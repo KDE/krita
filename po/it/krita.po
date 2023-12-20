@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2023-11-28 17:39+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -12016,10 +12016,12 @@ msgstr "Converti il livello in fotogrammi di animazione"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3026
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert to File Layer"
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "in Livello &file..."
+msgid "Convert to &File Layer..."
+msgstr "Converti in Livello ile"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -61369,6 +61371,10 @@ msgstr "Strumento Ingrandimento"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Strumento Immagini di riferimento"
+
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "in Livello &file..."
 
 #~ msgctxt "Resolution for recorded frames"
 #~ msgid "Resolution:"

@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2008-12-27 19:32+0200\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Lavtian <locale@laka.lv>\n"
@@ -12065,8 +12065,8 @@ msgstr "Maisījums:"
 #: krita/krita.action:3026
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "&Filtri Galerija"
+msgid "Convert to &File Layer..."
+msgstr "Pārvērst Pašreizējais Slānis No"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -60189,6 +60189,11 @@ msgstr "Aplaušanas pults T&roksnis."
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Atsauksme:"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "&Filtri Galerija"
 
 #, fuzzy
 #~ msgctxt "Resolution for recorded frames"

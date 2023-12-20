@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2023-06-06 00:31-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -12144,10 +12144,12 @@ msgstr "レイヤーをアニメーションフレームに変換"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3026
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert to File Layer"
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "ファイル参照レイヤーへ(&F)..."
+msgid "Convert to &File Layer..."
+msgstr "ファイル参照レイヤーに変換"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -61754,6 +61756,10 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
+
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "ファイル参照レイヤーへ(&F)..."
 
 #~ msgctxt "Resolution for recorded frames"
 #~ msgid "Resolution:"

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2004-07-06 17:18+0100\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -12075,8 +12075,8 @@ msgstr "Dim cyfansoddiad"
 #: krita/krita.action:3026
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "Hidlenni"
+msgid "Convert to &File Layer..."
+msgstr "Trawsnewid yr haen gyfredol"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -60225,6 +60225,11 @@ msgstr "Erfyn Chwyddo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ailenwi Delwedd"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "Hidlenni"
 
 #, fuzzy
 #~ msgctxt "Resolution for recorded frames"

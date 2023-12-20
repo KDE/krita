@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -12095,8 +12095,8 @@ msgstr "Tiada komposisi"
 #: krita/krita.action:3026
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "Penapis"
+msgid "Convert to &File Layer..."
+msgstr "Tukar Lapisan Semasa Dari"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -60342,6 +60342,11 @@ msgstr "Alat zum "
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ungu Lembut Gangguan"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "Penapis"
 
 #, fuzzy
 #~ msgctxt "Resolution for recorded frames"

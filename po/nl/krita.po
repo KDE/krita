@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2023-12-11 14:45+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -12058,10 +12058,12 @@ msgstr "Laag naar animatieframes converteren"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3026
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert to File Layer"
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "naar &bestandslaag..."
+msgid "Convert to &File Layer..."
+msgstr "Naar een bestandslaag converteren"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -61359,6 +61361,10 @@ msgstr "Zoomen"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referentie-afbeeldingen"
+
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "naar &bestandslaag..."
 
 #~ msgctxt "Resolution for recorded frames"
 #~ msgid "Resolution:"

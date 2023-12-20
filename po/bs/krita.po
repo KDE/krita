@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -12392,9 +12392,11 @@ msgstr "Izvoz kompozicije"
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3026
 #, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert to a Paint Layer"
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "&Datotečni sloj..."
+msgid "Convert to &File Layer..."
+msgstr "Konvertuj u Paint sloj"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -63252,6 +63254,11 @@ msgstr "Uvećaj sve"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referentne slike"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "&Datotečni sloj..."
 
 #, fuzzy
 #~| msgid "Resolution:"

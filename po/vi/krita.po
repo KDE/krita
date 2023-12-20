@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -12048,8 +12048,8 @@ msgstr "Chế độ Tổng hợp"
 #: krita/krita.action:3026
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "Lớp &lặp lại"
+msgid "Convert to &File Layer..."
+msgstr "Chuyển đổi lớp hiện tại từ"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -60615,6 +60615,11 @@ msgstr "Công cụ &Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ảnh tham chiếu:"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "Lớp &lặp lại"
 
 #, fuzzy
 #~| msgid "Resolution:"

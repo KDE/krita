@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -12090,8 +12090,8 @@ msgstr "Kompozitsiyasiz"
 #: krita/krita.action:3026
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "Filterlar &toʻplami"
+msgid "Convert to &File Layer..."
+msgstr "Joriy qatlam"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -60305,6 +60305,11 @@ msgstr "Kattalashtirish vositasi"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Rasmning nomini oʻzgartirish"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "Filterlar &toʻplami"
 
 #, fuzzy
 #~ msgctxt "Resolution for recorded frames"

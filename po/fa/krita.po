@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2011-09-26 14:11+0330\n"
 "Last-Translator: Mohamad Reza Mirdamadi <mohi@ubuntu.ir>\n"
 "Language-Team: Farsi (Persian) <>\n"
@@ -12159,8 +12159,8 @@ msgstr "حالت مرکب"
 #: krita/krita.action:3026
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "گالری &پالایه‌ها‌"
+msgid "Convert to &File Layer..."
+msgstr "تبدیل لایه جاری از"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -60935,6 +60935,11 @@ msgstr "نوفه &تصادفی...‌"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "تصویر مرجع:"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "گالری &پالایه‌ها‌"
 
 #, fuzzy
 #~| msgid "Resolution:"

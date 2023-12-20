@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -12228,8 +12228,8 @@ msgstr "Mód Ilchodach"
 #: krita/krita.action:3026
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "&Maolaigh Sraith"
+msgid "Convert to &File Layer..."
+msgstr "Tiontaigh an Sraith Reatha Ó "
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -61465,6 +61465,11 @@ msgstr "Uirlis Súmála"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Athainmnigh Íomhá"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "&Maolaigh Sraith"
 
 #, fuzzy
 #~| msgid "Resolution:"

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-20 00:40+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -12006,8 +12006,8 @@ msgstr "การเพิ่ม"
 #: krita/krita.action:3026
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "&ขาว"
+msgid "Convert to &File Layer..."
+msgstr "อยู่ใต้เลเยอร์ปัจจุบัน"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -60074,6 +60074,11 @@ msgstr "เครื่องมือ&ย่อ/ขยาย"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "ลบรูปภาพ"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "to &File Layer..."
+#~ msgstr "&ขาว"
 
 #, fuzzy
 #~ msgctxt "Resolution for recorded frames"

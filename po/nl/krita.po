@@ -62,14 +62,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-13 02:27+0000\n"
-"PO-Revision-Date: 2023-11-16 18:35+0100\n"
+"PO-Revision-Date: 2023-12-20 14:00+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
-"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.3\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -17251,12 +17251,12 @@ msgstr "Y verschalen"
 #: libs/image/kis_keyframe_channel.cpp:32
 #, kde-format
 msgid "Shear (X)"
-msgstr "X schuintrekken"
+msgstr "Scheeftrekken (X)"
 
 #: libs/image/kis_keyframe_channel.cpp:33
 #, kde-format
 msgid "Shear (Y)"
-msgstr "Y schuintrekken"
+msgstr "Scheeftrekken (Y)"
 
 #: libs/image/kis_keyframe_channel.cpp:34
 #, kde-format
@@ -43744,13 +43744,13 @@ msgstr "Laag schuintrekken"
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
 #, kde-format
 msgid "Shear angle X:"
-msgstr "Hoek X schuintrekken:"
+msgstr "Hoek X scheeftrekken:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngelY)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:34
 #, kde-format
 msgid "Shear angle Y:"
-msgstr "Hoek Y schuintrekken:"
+msgstr "Hoek Y scheeftrekken:"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:54
 #, kde-format
@@ -57890,7 +57890,7 @@ msgstr "Draaien"
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 msgctxt "(qtundo-format)"
 msgid "Shear"
-msgstr "Schuintrekken"
+msgstr "Scheeftrekken"
 
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:96
 #, kde-format
@@ -60223,7 +60223,7 @@ msgstr "Verschalen"
 #, kde-format
 msgctxt "@option:radio Type of transformation"
 msgid "Shear"
-msgstr "Schuintrekken"
+msgstr "Scheeftrekken"
 
 #. i18n: ectx: property (text), widget (QLabel, tooBigLabelWidget)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:700
@@ -60311,7 +60311,7 @@ msgstr "y:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1143
 #, kde-format
 msgid "Shear"
-msgstr "Schuintrekken"
+msgstr "Scheeftrekken"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearX)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearXBox)

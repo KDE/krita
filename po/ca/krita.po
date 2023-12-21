@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-20 00:40+0000\n"
-"PO-Revision-Date: 2023-12-13 12:24+0100\n"
+"PO-Revision-Date: 2023-12-20 11:38+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -11987,12 +11987,10 @@ msgstr "Converteix la capa en fotogrames d'animació"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3026
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to File Layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &File Layer..."
-msgstr "Converteix a una capa de fitxer"
+msgstr "Converteix a una capa de &fitxer..."
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028

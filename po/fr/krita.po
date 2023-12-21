@@ -13,7 +13,7 @@
 # Mickaël Sibelle <kimael@gmail.com>, 2006, 2008, 2009.
 # Mickael Sibelle <kimael@gmail.com>, 2007, 2008, 2009, 2010.
 # Mickaël Sibelle <sibelle@progiweb.com>, 2008.
-# xavier <ktranslator31@yahoo.fr>, 2012, 2013.
+# Xavier Besnard <xavier.besnard@kde.org>, 2012, 2013.
 # Arnaud R. <kasai@redwolf.fr>, 2013.
 # Sebastien Renard <renard@kde.org>, 2013, 2014.
 # Timothée Giet <animtim@gmail.com>, 2015.
@@ -29,11 +29,11 @@
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2008, 2010.
 # Mickael Sibelle <kimael@gmail.com>, 2010.
 # Raphaël JAKSE <raphael.jakse@gmail.com>, 2012.
-# xavier <xavier.besnard@neuf.fr>, 2012, 2013.
+# Xavier Besnard <xavier.besnard@kde.org>, 2012, 2013.
 # Vincent PINON <vincent.pinon@laposte.net>, 2014, 2015.
 # Sophie ABBAD <abbadsophie@gmail.com>, 2015.
 # Mickael Sibelle <kimael@gmail.com>, 2009, 2010.
-# xavier <xavier.besnard@neuf.fr>, 2013.
+# Xavier Besnard <xavier.besnard@kde.org>, 2013.
 # Sebastien Renard <renard@kde.org>, 2015.
 # Stanislas Zeller <uncensored.assault@gmail.com>, 2008, 2010.
 # Vincent Pinon <vpinon@kde.org>, 2014, 2017.
@@ -42,13 +42,13 @@
 # Joëlle Conavin <jcornavi@kde-france.org>, 2004.
 # Nicolas Ternisien <nicolast@libertysurf.fr>, 2004, 2005.
 # Geoffray Levasseur <geoffray.levasseurbrandin@numericable.fr>, 2010, 2011, 2012.
-# xavier <xavier.besnard@neuf.fr>, 2012, 2013, 2015, 2020, 2021, 2022.
+# Xavier Besnard <xavier.besnard@kde.org>, 2012, 2013, 2015, 2020, 2021, 2022.
 # Mickael Sibelle <kimael@gmail.com>, 2009.
 # Sebastien Renard <renard@kde.org>, 2014, 2015.
 # edito <prod@d-booker.net>, 2018.
 # Patricia Moncorgé <patricia.moncorge@d-booker.fr>, 2018, 2021, 2023.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019, 2020.
-# Xavier BESNARD <xavier.besnard@neuf.fr>, 2022, 2023.
+# Xavier BESNARD <xavier.besnard@kde.org>, 2022, 2023.
 #
 # -- kritalibs
 # translation of kplatomodels.po to français

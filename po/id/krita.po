@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-20 00:40+0000\n"
-"PO-Revision-Date: 2023-11-01 04:18+0700\n"
+"PO-Revision-Date: 2023-12-20 22:25+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
 "Language: id\n"
@@ -6843,7 +6843,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "impressionism_brush.gih"
 msgid "random-stroke"
-msgstr ""
+msgstr "goresan-acak"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/mountains_distant.gih:1
@@ -7704,7 +7704,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Coordinates"
-msgstr ""
+msgstr "Tampilkan Koordinat"
 
 #. i18n: context: toolTip @ Action (movetool-show-coordinates), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/MoveTool.action:28
@@ -8373,7 +8373,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color"
-msgstr ""
+msgstr "&Sampel Warna Layar"
 
 #. i18n: context: toolTip @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -8390,14 +8390,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Sample Screen Color"
-msgstr ""
+msgstr "Sampel Warna Layar"
 
 #. i18n: context: text @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:311
 #, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color (Sample Real Canvas)"
-msgstr ""
+msgstr "&Sampel Warna Layar (Sampel Kanvas Nyata)"
 
 #. i18n: context: toolTip @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:313
@@ -8413,7 +8413,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Sample Screen Color (Sample Real Canvas)"
-msgstr ""
+msgstr "Sampel Warna Layar (Sampel Kanvas Nyata)"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:321
@@ -9201,7 +9201,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fill with Foreground Color (Opacity)"
-msgstr ""
+msgstr "Isi dengan Warna Latar Depan (Opasitas)"
 
 #. i18n: context: text @ Action (fill_selection_background_color_opacity), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (fill_selection_background_color_opacity), Actions (EditFill), ActionCollection (Menu)
@@ -9221,7 +9221,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fill with Background Color (Opacity)"
-msgstr ""
+msgstr "Isi dengan Warna Latar belakang (Opasitas)"
 
 #. i18n: context: text @ Action (fill_selection_pattern_opacity), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (fill_selection_pattern_opacity), Actions (EditFill), ActionCollection (Menu)
@@ -9241,7 +9241,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fill with Pattern (Opacity)"
-msgstr ""
+msgstr "Isi dengan Pola (Opasitas)"
 
 #. i18n: context: text @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:983
@@ -11001,7 +11001,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Clear Cache"
-msgstr ""
+msgstr "Bersihkan Cache"
 
 #. i18n: context: toolTip @ Action (clear_animation_cache), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2353
@@ -11071,7 +11071,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste Keyframes"
-msgstr ""
+msgstr "Tempel Keyframe"
 
 #. i18n: context: toolTip @ Action (paste_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2413
@@ -12610,7 +12610,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "La&yer Style..."
-msgstr ""
+msgstr "Gaya La&pisan..."
 
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
@@ -12752,7 +12752,7 @@ msgstr ""
 #: krita/krita5.xmlgui:68
 #, kde-format
 msgid "Fill Special"
-msgstr ""
+msgstr "Isi Spesial"
 
 #: krita/krita5.xmlgui:83 libs/widgetutils/xmlgui/ui_standards.xmlgui:101
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:28
@@ -12782,14 +12782,14 @@ msgstr ""
 #: plugins/extensions/shearimage/shearimage.xmlgui:4
 #, kde-format
 msgid "&Image"
-msgstr ""
+msgstr "&Gambar"
 
 #: krita/krita5.xmlgui:169 krita/krita5.xmlgui:253 krita/krita5.xmlgui:269
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, kde-format
 msgid "&Rotate"
-msgstr ""
+msgstr "&Rotasikan"
 
 #: krita/krita5.xmlgui:191 plugins/extensions/layersplit/layersplit.xmlgui:4
 #: plugins/extensions/waveletdecompose/waveletdecompose.xmlgui:4
@@ -12864,7 +12864,7 @@ msgstr ""
 #: krita/krita5.xmlgui:341
 #, kde-format
 msgid "Filte&r"
-msgstr ""
+msgstr "Filte&r"
 
 #: krita/krita5.xmlgui:362 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, kde-format
@@ -13384,7 +13384,7 @@ msgstr "Salin"
 #, kde-format
 msgctxt "action"
 msgid "C&opy (sharp)"
-msgstr ""
+msgstr "&Salin (tajam)"
 
 #. i18n: context: toolTip @ Action (copy_sharp), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (copy_sharp), Actions (Edit), ActionCollection (Menu)
@@ -13394,14 +13394,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Copy (sharp)"
-msgstr ""
+msgstr "Salin (tajam)"
 
 #. i18n: context: text @ Action (cut_sharp), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:325
 #, kde-format
 msgctxt "action"
 msgid "Cut (&sharp)"
-msgstr ""
+msgstr "Potong (&tajam)"
 
 #. i18n: context: toolTip @ Action (cut_sharp), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (cut_sharp), Actions (Edit), ActionCollection (Menu)
@@ -13411,14 +13411,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Cut (sharp)"
-msgstr ""
+msgstr "Potong (tajam)"
 
 #. i18n: context: text @ Action (copy_merged), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:337
 #, kde-format
 msgctxt "action"
 msgid "Copy &merged"
-msgstr ""
+msgstr "Salin yang di&gabungkan"
 
 #. i18n: context: toolTip @ Action (copy_merged), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (copy_merged), Actions (Edit), ActionCollection (Menu)
@@ -13428,7 +13428,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Copy merged"
-msgstr ""
+msgstr "Salin yang digabungkan"
 
 #. i18n: context: text @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
@@ -13438,7 +13438,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Copy Layer Style"
-msgstr ""
+msgstr "Salin Gaya Lapisan"
 
 #. i18n: context: toolTip @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:351
@@ -13452,7 +13452,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Paste"
-msgstr ""
+msgstr "&Tempel"
 
 #. i18n: context: toolTip @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:363
@@ -13466,14 +13466,14 @@ msgstr "Tempel konten papan klip"
 #, kde-format
 msgctxt "action"
 msgid "Paste"
-msgstr ""
+msgstr "Tempel"
 
 #. i18n: context: text @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:373
 #, kde-format
 msgctxt "action"
 msgid "Paste at Cursor"
-msgstr ""
+msgstr "Tempel di Kursor"
 
 #. i18n: context: toolTip @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
@@ -13483,7 +13483,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste at cursor"
-msgstr ""
+msgstr "Tempel di kursor"
 
 #. i18n: context: text @ Action (paste_into), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_into), Actions (Edit), ActionCollection (Menu)
@@ -13496,14 +13496,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste into Active Layer"
-msgstr ""
+msgstr "Tempel ke dalam Lapisan Aktif"
 
 #. i18n: context: text @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:397
 #, kde-format
 msgctxt "action"
 msgid "Paste into &New Image"
-msgstr ""
+msgstr "Tempel ke dalam Gambar &Baru"
 
 #. i18n: context: toolTip @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
@@ -13516,7 +13516,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste into New Image"
-msgstr ""
+msgstr "Tempel ke dalam Gambar Baru"
 
 #. i18n: context: text @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
@@ -13526,14 +13526,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste Shape Style"
-msgstr ""
+msgstr "Tempel Gaya Bentuk"
 
 #. i18n: context: text @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:421
 #, kde-format
 msgctxt "action"
 msgid "Paste as R&eference Image"
-msgstr ""
+msgstr "Tempel sebagai Gambar R&eferensi"
 
 #. i18n: context: toolTip @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
@@ -13543,7 +13543,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste as Reference Image"
-msgstr ""
+msgstr "Tempel sebagai Gambar Referensi"
 
 #. i18n: context: text @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
@@ -13553,21 +13553,21 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste Layer Style"
-msgstr ""
+msgstr "Tempel Gaya Lapisan"
 
 #. i18n: context: toolTip @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:435
 #, kde-format
 msgctxt "action"
 msgid "Paste Layer Style into the Current Node"
-msgstr ""
+msgstr "Tempel Gaya Lapisan ke dalam Simpul Saat Ini"
 
 #. i18n: context: text @ Action (clear), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:446
 #, kde-format
 msgctxt "action"
 msgid "C&lear"
-msgstr ""
+msgstr "Ber&sihkan"
 
 #. i18n: context: toolTip @ Action (clear), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (clear), Actions (Edit), ActionCollection (Menu)
@@ -13577,14 +13577,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Clear"
-msgstr ""
+msgstr "Bersihkan"
 
 #. i18n: context: text @ Action (fill_selection_foreground_color), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:459
 #, kde-format
 msgctxt "action"
 msgid "&Fill with Foreground Color"
-msgstr ""
+msgstr "&Isi dengan Warna Latar Depan"
 
 #. i18n: context: toolTip @ Action (fill_selection_foreground_color), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (fill_selection_foreground_color), Actions (Edit), ActionCollection (Menu)
@@ -13594,14 +13594,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fill with Foreground Color"
-msgstr ""
+msgstr "Isi dengan Warna Latar Depan"
 
 #. i18n: context: text @ Action (fill_selection_background_color), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:471
 #, kde-format
 msgctxt "action"
 msgid "Fill &with Background Color"
-msgstr ""
+msgstr "Isi &dengan Warna Latar belakang"
 
 #. i18n: context: toolTip @ Action (fill_selection_background_color), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (fill_selection_background_color), Actions (Edit), ActionCollection (Menu)
@@ -13611,14 +13611,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fill with Background Color"
-msgstr ""
+msgstr "Isi dengan Warna Latar belakang"
 
 #. i18n: context: text @ Action (fill_selection_pattern), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:484
 #, kde-format
 msgctxt "action"
 msgid "F&ill with Pattern"
-msgstr ""
+msgstr "Isi d&engan Pola"
 
 #. i18n: context: toolTip @ Action (fill_selection_pattern), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (fill_selection_pattern), Actions (Edit), ActionCollection (Menu)
@@ -13628,21 +13628,21 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fill with Pattern"
-msgstr ""
+msgstr "Isi dengan Pola"
 
 #. i18n: context: text @ Actions (EditFill), ActionCollection (Menu)
 #: krita/kritamenu.action:495
 #, kde-format
 msgctxt "action"
 msgid "Fill Special"
-msgstr ""
+msgstr "Isi Spesial"
 
 #. i18n: context: text @ Action (stroke_shapes), Actions (EditFill), ActionCollection (Menu)
 #: krita/kritamenu.action:535
 #, kde-format
 msgctxt "action"
 msgid "Stro&ke selected shapes"
-msgstr ""
+msgstr "&Goresan bentuk yang dipilih"
 
 #. i18n: context: toolTip @ Action (stroke_shapes), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (stroke_shapes), Actions (EditFill), ActionCollection (Menu)
@@ -13652,14 +13652,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Stroke selected shapes"
-msgstr ""
+msgstr "Goresan bentuk yang dipilih"
 
 #. i18n: context: text @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
 #: krita/kritamenu.action:547
 #, kde-format
 msgctxt "action"
 msgid "Stroke Selec&tion..."
-msgstr ""
+msgstr "&Pilihan Goresan..."
 
 #. i18n: context: toolTip @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
@@ -13669,7 +13669,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Stroke selection"
-msgstr ""
+msgstr "Pilihan goresan"
 
 #. i18n: context: text @ Action (delete_keyframe), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (delete_keyframe), Actions (EditFill), ActionCollection (Menu)
@@ -13756,7 +13756,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Show Canvas Only"
-msgstr ""
+msgstr "Tampilkan &Kanvas Saja"
 
 #. i18n: context: toolTip @ Action (view_show_canvas_only), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:618
@@ -13770,7 +13770,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Canvas Only"
-msgstr ""
+msgstr "Tampilkan Kanvas Saja"
 
 #. i18n: context: text @ Action (fullscreen), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:628
@@ -13801,7 +13801,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Detach Canvas"
-msgstr ""
+msgstr "Lucutkan Kanvas"
 
 #. i18n: context: toolTip @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:642
@@ -13815,7 +13815,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Wrap Around Mode"
-msgstr ""
+msgstr "Mode &Wraparound"
 
 #. i18n: context: toolTip @ Action (wrap_around_mode), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (wrap_around_mode), Actions (View), ActionCollection (Menu)
@@ -13825,7 +13825,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Mode"
-msgstr ""
+msgstr "Mode Wraparound"
 
 #. i18n: context: text @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
@@ -13838,7 +13838,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Both Directions"
-msgstr ""
+msgstr "Wraparound Arah Keduaduanya"
 
 #. i18n: context: text @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
@@ -13851,7 +13851,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Horizontally"
-msgstr ""
+msgstr "Wraparound Secara Horisontal"
 
 #. i18n: context: text @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
@@ -13864,14 +13864,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Vertically"
-msgstr ""
+msgstr "Wraparound Secara Vertikal"
 
 #. i18n: context: text @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:700
 #, kde-format
 msgctxt "action"
 msgid "&Instant Preview Mode"
-msgstr ""
+msgstr "Mode Pratinjau &Instan"
 
 #. i18n: context: toolTip @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
@@ -13881,14 +13881,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Instant Preview Mode"
-msgstr ""
+msgstr "Mode Pratinjau Instan"
 
 #. i18n: context: text @ Action (softProof), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:712
 #, kde-format
 msgctxt "action"
 msgid "Soft Proofing"
-msgstr ""
+msgstr "Proofing Lembut"
 
 #. i18n: context: toolTip @ Action (softProof), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (softProof), Actions (View), ActionCollection (Menu)
@@ -13898,14 +13898,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Turns on Soft Proofing"
-msgstr ""
+msgstr "Nyalakan Proofing Lembut"
 
 #. i18n: context: text @ Action (gamutCheck), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:722
 #, kde-format
 msgctxt "action"
 msgid "Out of Gamut Warnings"
-msgstr ""
+msgstr "Peringatan Out of Gamut"
 
 #. i18n: context: toolTip @ Action (gamutCheck), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (gamutCheck), Actions (View), ActionCollection (Menu)
@@ -13918,6 +13918,8 @@ msgid ""
 "Turns on warnings for colors out of proofed gamut, needs soft proofing to be "
 "turned on."
 msgstr ""
+"Nyalakan peringatan untuk warna yang nampak gamut yang ter-proof, memerlukan "
+"proofing lembut yang dinyalakan."
 
 #. i18n: context: text @ Action (mirror_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas), Actions (View), ActionCollection (Menu)
@@ -14492,7 +14494,7 @@ msgstr "Gambar"
 #, kde-format
 msgctxt "Image Properties"
 msgid "&Properties..."
-msgstr ""
+msgstr "&Properti..."
 
 #. i18n: context: toolTip @ Action (image_properties), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (image_properties), Actions (Image), ActionCollection (Menu)
@@ -14502,7 +14504,7 @@ msgstr ""
 #, kde-format
 msgctxt "Image Properties"
 msgid "Properties"
-msgstr ""
+msgstr "Properti"
 
 #. i18n: context: text @ Action (image_color), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1161
@@ -14615,7 +14617,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Image 90° to the Right"
-msgstr ""
+msgstr "Rotasikan &Gambar 90° ke Kanan"
 
 #. i18n: context: toolTip @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
@@ -14625,14 +14627,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Right"
-msgstr ""
+msgstr "Rotasikan Gambar 90° ke Kanan"
 
 #. i18n: context: text @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1245
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &90° to the Left"
-msgstr ""
+msgstr "Rotasikan Gambar &90° ke Kiri"
 
 #. i18n: context: toolTip @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
@@ -14642,7 +14644,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Left"
-msgstr ""
+msgstr "Rotasikan Gambar 90° ke Kiri"
 
 #. i18n: context: text @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1257
@@ -16210,7 +16212,7 @@ msgstr "Ubah ukuran bentuk-bentuk"
 #: libs/flake/commands/KoShapeStrokeCommand.cpp:84
 msgctxt "(qtundo-format)"
 msgid "Set stroke"
-msgstr "Atur rusuk"
+msgstr "Atur gores"
 
 #: libs/flake/commands/KoShapeTransparencyCommand.cpp:36
 #: libs/flake/commands/KoShapeTransparencyCommand.cpp:47
@@ -16549,7 +16551,7 @@ msgstr ""
 #: plugins/python/tenscripts/uitenscripts.py:59
 #, kde-format
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #. i18n: ectx: property (text), widget (QPushButton, convertToPath)
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:235
@@ -19360,7 +19362,7 @@ msgstr "Keluar"
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
-msgstr ""
+msgstr "Tidak berjudul"
 
 #: libs/pigment/resources/KoStopGradient.cpp:373
 #, kde-format
@@ -20308,23 +20310,23 @@ msgstr ""
 #: libs/ui/actions/KisPasteActionFactories.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Paste shapes"
-msgstr ""
+msgstr "Tempel bentuk"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:272
 #: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:606
 #, kde-format
 msgid "(pasted)"
-msgstr ""
+msgstr "(tertempel)"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:364
 #, kde-format
 msgid "Pasted"
-msgstr ""
+msgstr "Tertempel"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:419
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
-msgstr ""
+msgstr "Tempel Gaya"
 
 #: libs/ui/actions/KisTransformToolActivationCommand.cpp:16
 msgctxt "(qtundo-format)"
@@ -22488,7 +22490,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Missing Color Profile"
-msgstr ""
+msgstr "Profil Warna Hilang"
 
 #: libs/ui/dialogs/kis_dlg_paste_format.cpp:18
 #, kde-format
@@ -23429,7 +23431,7 @@ msgstr "Gambar Saat Ini"
 #, kde-format
 msgctxt "Welcome Screen Recent Document List's Clear link Label"
 msgid "Clear"
-msgstr ""
+msgstr "Bersihkan"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
 #: libs/ui/forms/KisWelcomePage.ui:1162
@@ -24948,7 +24950,7 @@ msgstr ""
 #: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/clearaction.py:21
 #, kde-format
 msgid "Clear"
-msgstr ""
+msgstr "Bersihkan"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdggeneralsettings.ui:483
@@ -25007,7 +25009,7 @@ msgstr ""
 #: plugins/dockers/logdocker/LogDockerDock.cpp:140
 #, kde-format
 msgid "Tools"
-msgstr ""
+msgstr "Peralatan"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: libs/ui/forms/wdggeneralsettings.ui:656
@@ -25935,7 +25937,7 @@ msgstr ""
 #: libs/ui/forms/wdgMissingColorProfile.ui:20
 #, kde-format
 msgid "Missing Color Profile"
-msgstr ""
+msgstr "Profil Warna Hilang"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQuestion)
 #: libs/ui/forms/wdgMissingColorProfile.ui:32
@@ -25944,6 +25946,8 @@ msgid ""
 "The image data you are trying to paste has no color profile information. How "
 "do you want to interpret this data?"
 msgstr ""
+"Data gambar yang Anda coba tempel tidak memiliki informasi profil warna. Apa "
+"yang Anda inginkan untuk menafsirkan data ini?"
 
 #. i18n: ectx: property (text), widget (QLabel, lblExplanationWeb)
 #: libs/ui/forms/wdgMissingColorProfile.ui:63
@@ -25952,18 +25956,20 @@ msgid ""
 "Use standard colors that are displayed from computer monitors. This is the "
 "most common way that images are stored."
 msgstr ""
+"Gunakan warna standar yang ditampilkan dari monitor komputer. Ini adalah "
+"cara paling umum untuk menyimpan gambar."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsWeb)
 #: libs/ui/forms/wdgMissingColorProfile.ui:79
 #, kde-format
 msgid "As &Web (sRGB)"
-msgstr ""
+msgstr "Sebagai &Web (sRGB)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsMonitor)
 #: libs/ui/forms/wdgMissingColorProfile.ui:89
 #, kde-format
 msgid "As on &Monitor"
-msgstr ""
+msgstr "Sebagai pada &Monitor"
 
 #. i18n: ectx: property (text), widget (QLabel, lblExplanationMonitor)
 #: libs/ui/forms/wdgMissingColorProfile.ui:102
@@ -25972,6 +25978,8 @@ msgid ""
 "If you know a bit about color management and want to use your monitor to "
 "determine the color profile."
 msgstr ""
+"Jika Anda tau sedikit tentang pengelolaan warna dan ingin menggunakan "
+"monitor Anda untuk menentukan profil warna."
 
 #. i18n: ectx: property (text), widget (QCheckBox, dontPrompt)
 #: libs/ui/forms/wdgMissingColorProfile.ui:115
@@ -27134,7 +27142,7 @@ msgstr "Hapus..."
 #, kde-format
 msgctxt "Draws a line around an area"
 msgid "Stroke"
-msgstr "Rusuk"
+msgstr "Gores"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, typeBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:63
@@ -30113,6 +30121,8 @@ msgid ""
 "File %1 is missing in %2 and is broken. Please try to save again in a "
 "different location."
 msgstr ""
+"File %1 telah hilang dalam %2 dan rusak. Silakan coba simpan lagi dalam "
+"lokasi yang berbeda."
 
 #: libs/ui/KisImportExportManager.cpp:321
 #, kde-format
@@ -31743,7 +31753,7 @@ msgstr ""
 #, kde-format
 msgctxt "Layer Style - Stroke"
 msgid "Stroke"
-msgstr "Rusuk"
+msgstr "Gores"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
 #: libs/ui/layerstyles/wdglayerstyles.ui:156
@@ -32011,7 +32021,7 @@ msgstr ""
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
-msgstr ""
+msgstr "Bersihkan"
 
 #: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:291
 #, kde-format
@@ -33122,6 +33132,8 @@ msgid ""
 "This document will be %1 pixels by %2 pixels in %3. The pixel size is %4 "
 "bit. A single paint layer will use %5 of RAM."
 msgstr ""
+"Dokumen ini akan menjadi %1 piksel dengan %2 piksel dalam %3. Ukuran piksel "
+"adalah %4 bit. Sebuah lapisan lukis tunggal akan menggunakan %5 RAM."
 
 #: libs/ui/widgets/kis_filter_selector_widget.cc:157
 #, kde-format
@@ -34543,7 +34555,7 @@ msgstr ""
 #: libs/widgetutils/config/krecentfilesaction.cpp:96
 #, kde-format
 msgid "Clear List"
-msgstr ""
+msgstr "Bersihkan Daftar"
 
 #: libs/widgetutils/config/kstandardaction.cpp:78
 #, kde-format
@@ -34738,7 +34750,7 @@ msgstr "Salin pilihan ke papan-klip"
 #: libs/widgetutils/config/kstandardaction_p.h:46
 #, kde-format
 msgid "&Paste"
-msgstr ""
+msgstr "&Tempel"
 
 #: libs/widgetutils/config/kstandardaction_p.h:45
 #: libs/widgetutils/config/kstandardaction_p.h:46
@@ -34749,7 +34761,7 @@ msgstr "Tempel konten papan klip"
 #: libs/widgetutils/config/kstandardaction_p.h:47
 #, kde-format
 msgid "C&lear"
-msgstr ""
+msgstr "Bers&ihkan"
 
 #: libs/widgetutils/config/kstandardaction_p.h:48
 #, kde-format
@@ -38592,7 +38604,7 @@ msgstr ""
 #: plugins/dockers/presethistory/presethistory_dock.cpp:309
 #, kde-format
 msgid "Clear History"
-msgstr ""
+msgstr "Bersihkan Histori"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:311
 #, kde-format
@@ -40324,7 +40336,7 @@ msgstr ""
 #: plugins/extensions/shearimage/shearimage.xmlgui:7
 #, kde-format
 msgid "La&yer"
-msgstr ""
+msgstr "&Lapisan"
 
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:31
 #, kde-format
@@ -51989,7 +52001,7 @@ msgstr ""
 #, kde-format
 msgctxt "Option Category"
 msgid "Stroke"
-msgstr "Rusuk"
+msgstr "Gores"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:213
 #, kde-format
@@ -52011,7 +52023,7 @@ msgstr ""
 #, kde-format
 msgctxt "The duration of a brush stroke"
 msgid "Stroke"
-msgstr "Rusuk"
+msgstr "Gores"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionDirection)
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:22

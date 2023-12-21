@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-20 00:40+0000\n"
-"PO-Revision-Date: 2023-12-11 14:45+0100\n"
+"PO-Revision-Date: 2023-12-20 13:59+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -12058,12 +12058,10 @@ msgstr "Laag naar animatieframes converteren"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3026
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to File Layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &File Layer..."
-msgstr "Naar een bestandslaag converteren"
+msgstr "Naar &bestandslaag converteren..."
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -17362,12 +17360,12 @@ msgstr "Y verschalen"
 #: libs/image/kis_keyframe_channel.cpp:32
 #, kde-format
 msgid "Shear (X)"
-msgstr "X schuintrekken"
+msgstr "Scheeftrekken (X)"
 
 #: libs/image/kis_keyframe_channel.cpp:33
 #, kde-format
 msgid "Shear (Y)"
-msgstr "Y schuintrekken"
+msgstr "Scheeftrekken (Y)"
 
 #: libs/image/kis_keyframe_channel.cpp:34
 #, kde-format
@@ -44198,13 +44196,13 @@ msgstr[1] "%1 lagen schuintrekken"
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
 #, kde-format
 msgid "Shear angle X:"
-msgstr "Hoek X schuintrekken:"
+msgstr "Hoek X scheeftrekken:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngelY)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:34
 #, kde-format
 msgid "Shear angle Y:"
-msgstr "Hoek Y schuintrekken:"
+msgstr "Hoek Y scheeftrekken:"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:54
 #, kde-format
@@ -58404,7 +58402,7 @@ msgstr "Draaien"
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 msgctxt "(qtundo-format)"
 msgid "Shear"
-msgstr "Schuintrekken"
+msgstr "Scheeftrekken"
 
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:96
 #, kde-format
@@ -60856,7 +60854,7 @@ msgstr "Verschalen"
 #, kde-format
 msgctxt "@option:radio Type of transformation"
 msgid "Shear"
-msgstr "Schuintrekken"
+msgstr "Scheeftrekken"
 
 #. i18n: ectx: property (text), widget (QLabel, tooBigLabelWidget)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:700
@@ -60952,7 +60950,7 @@ msgstr "y:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1143
 #, kde-format
 msgid "Shear"
-msgstr "Schuintrekken"
+msgstr "Scheeftrekken"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearX)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearXBox)

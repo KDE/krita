@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-20 00:40+0000\n"
-"PO-Revision-Date: 2023-12-18 22:29+0300\n"
+"PO-Revision-Date: 2023-12-20 11:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -11961,12 +11961,10 @@ msgstr "Katmanı canlandırma karelerine dönüştür"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3026
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to File Layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &File Layer..."
-msgstr "Dosya Katmana Dönüştür"
+msgstr "&Dosya Katmana Dönüştür..."
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028

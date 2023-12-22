@@ -13,7 +13,7 @@
 # Mickaël Sibelle <kimael@gmail.com>, 2006, 2008, 2009.
 # Mickael Sibelle <kimael@gmail.com>, 2007, 2008, 2009, 2010.
 # Mickaël Sibelle <sibelle@progiweb.com>, 2008.
-# Xavier Besnard <xavier.besnard@kde.org>, 2012, 2013.
+# SPDX-FileCopyrightText: 2012, 2013, 2023 Xavier Besnard <xavier.besnard@kde.org>
 # Arnaud R. <kasai@redwolf.fr>, 2013.
 # Sebastien Renard <renard@kde.org>, 2013, 2014.
 # Timothée Giet <animtim@gmail.com>, 2015.
@@ -103,8 +103,8 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-13 02:27+0000\n"
-"PO-Revision-Date: 2023-12-16 15:33+0100\n"
-"Last-Translator: Patricia Moncorgé <patricia.moncorge@d-booker.fr>\n"
+"PO-Revision-Date: 2023-12-20 09:32+0100\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -22327,7 +22327,7 @@ msgstr "Xavier Besnard, Mickaël Sibelle, Arnaud Reygnaud, Vincent Pinon"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
-"xavier.besnard@neuf.fr, kimael@gmail.com, kasai@redwolf.fr, vpinon@april.org"
+"xavier.besnard@kde.org, kimael@gmail.com, kasai@redwolf.fr, vpinon@april.org"
 
 #: libs/ui/dialogs/kis_about_application.cpp:79
 #, kde-format

@@ -13,7 +13,7 @@
 # Mickaël Sibelle <kimael@gmail.com>, 2006, 2008, 2009.
 # Mickael Sibelle <kimael@gmail.com>, 2007, 2008, 2009, 2010.
 # Mickaël Sibelle <sibelle@progiweb.com>, 2008.
-# Xavier Besnard <xavier.besnard@kde.org>, 2012, 2013.
+# SPDX-FileCopyrightText: 2012, 2013, 2023 Xavier Besnard <xavier.besnard@kde.org>
 # Arnaud R. <kasai@redwolf.fr>, 2013.
 # Sebastien Renard <renard@kde.org>, 2013, 2014.
 # Timothée Giet <animtim@gmail.com>, 2015.
@@ -102,9 +102,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-20 00:40+0000\n"
-"PO-Revision-Date: 2023-12-18 19:08+0100\n"
-"Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
+"POT-Creation-Date: 2023-12-22 00:40+0000\n"
+"PO-Revision-Date: 2023-12-20 09:32+0100\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -22416,7 +22416,7 @@ msgstr "Xavier Besnard, Mickaël Sibelle, Arnaud Reygnaud, Vincent Pinon"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
-"xavier.besnard@neuf.fr, kimael@gmail.com, kasai@redwolf.fr, vpinon@april.org"
+"xavier.besnard@kde.org, kimael@gmail.com, kasai@redwolf.fr, vpinon@april.org"
 
 #: libs/ui/dialogs/kis_about_application.cpp:79
 #, kde-format
@@ -58929,7 +58929,7 @@ msgctxt "invalid profile name"
 msgid "Invalid name."
 msgstr "Nom non valable."
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:228
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:227
 #, kde-format
 msgid ""
 "A profile with that name already exists.\n"
@@ -58938,13 +58938,13 @@ msgstr ""
 "Un profil portant ce nom existe déjà.\n"
 "Voulez-vous le remplacer ?"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:363
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:388
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:362
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:387
 #, kde-format
 msgid "Mouse"
 msgstr "Souris"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:376
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:375
 #, kde-format
 msgid "Graphics Pen"
 msgstr "Stylet graphique"

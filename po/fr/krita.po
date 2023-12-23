@@ -4,7 +4,7 @@
 # traduction de krita.po en Français
 # Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the PACKAGE package.
-# SPDX-FileCopyrightText: 2012, 2023 xavier <xavier.besnard@neuf.fr>
+# SPDX-FileCopyrightText: 2012, 2023 Xavier Besnard <xavier.besnard@kde.org>
 # Robert Jacolin <rjacolin@ifrance.com>, 2003.
 # Delafond <gerard@delafond.org>, 2003, 2004, 2005.
 # Yann Verley <yann.verley@free.fr>, 2004, 2005.
@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-22 00:40+0000\n"
-"PO-Revision-Date: 2023-12-20 09:32+0100\n"
+"PO-Revision-Date: 2023-12-21 08:55+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -12081,12 +12081,10 @@ msgstr "Convertir le calque en trames d'animation"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3026
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to File Layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &File Layer..."
-msgstr "Convertir en calque de fichier"
+msgstr "Convertir en calque de &fichier..."
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028

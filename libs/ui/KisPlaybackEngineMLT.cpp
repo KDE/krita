@@ -348,7 +348,7 @@ void KisPlaybackEngineMLT::setupProducer(boost::optional<QFileInfo> file)
     }
 
     //First, assign to "count" producer.
-    m_d->canvasProducers[activeCanvas()] = QSharedPointer<Mlt::Producer>(new Mlt::Producer(*m_d->profile, "krita", "count"));
+    m_d->canvasProducers[activeCanvas()] = QSharedPointer<Mlt::Producer>(new Mlt::Producer(*m_d->profile, "krita_play_chunk", "count"));
 
     //If we have a file and the file has a valid producer, use that. Otherwise, stick to our "default" producer.
     if (file.has_value()) {
@@ -356,10 +356,10 @@ void KisPlaybackEngineMLT::setupProducer(boost::optional<QFileInfo> file)
 
 #ifdef Q_OS_ANDROID
             new Mlt::Producer(*m_d->profile,
-                              "krita",
+                              "krita_play_chunk",
                               KisAndroidFileProxy::getFileFromContentUri(file->absoluteFilePath()).toUtf8().data()));
 #else
-        new Mlt::Producer(*m_d->profile, "krita", file->absoluteFilePath().toUtf8().data()));
+        new Mlt::Producer(*m_d->profile, "krita_play_chunk", file->absoluteFilePath().toUtf8().data()));
 #endif
         if (producer->is_valid()) {
             m_d->canvasProducers[activeCanvas()] = producer;

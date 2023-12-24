@@ -193,5 +193,5 @@ extern "C" void* producer_krita_init(mlt_profile profile,
 
 void registerKritaMLTProducer(Mlt::Repository *repository)
 {
-    repository->register_service(mlt_service_producer_type, "krita", producer_krita_init);
+    repository->register_service(mlt_service_producer_type, "krita_play_chunk", producer_krita_init);
 }

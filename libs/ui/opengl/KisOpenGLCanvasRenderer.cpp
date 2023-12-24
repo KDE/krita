@@ -441,8 +441,8 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
 
         // Because glLineWidth is not supported on all versions of OpenGL (or rather, is limited to 1),
         // we'll instead generate mitered-triangles.
-        const float halfWidth = (thickness * 0.5) / devicePixelRatioF();
-        const float miterLimit = (5 * thickness) / devicePixelRatioF();
+        const qreal halfWidth = (thickness * 0.5) / devicePixelRatioF();
+        const qreal miterLimit = (5 * thickness) / devicePixelRatioF();
 
         for (auto it = path.begin(); it != path.end(); ++it) {
             const QPolygonF& polygon = *it;
@@ -459,46 +459,58 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
                 bool adjustFirst = closed? true: i > 1;
                 bool adjustSecond = closed? true: i + 1 < polygon.count();
 
-                QVector3D p1 = QVector3D(polygon.at(i - 1));
-                QVector3D p2 = QVector3D(polygon.at(i));
-                QVector3D normal = p2 - p1;
-                normal = QVector3D(-normal.y(), normal.x(), normal.z()).normalized();
+                QPointF p1 = polygon.at(i - 1);
+                QPointF p2 = polygon.at(i);
+                QPointF normal = p2 - p1;
+                normal = KisAlgebra2D::normalize(QPointF(-normal.y(), normal.x()));
 
-                QVector3D c1 = p1 - (normal * halfWidth);
-                QVector3D c2 = p1 + (normal * halfWidth);
-                QVector3D c3 = p2 - (normal * halfWidth);
-                QVector3D c4 = p2 + (normal * halfWidth);
+                QPointF c1 = p1 - (normal * halfWidth);
+                QPointF c2 = p1 + (normal * halfWidth);
+                QPointF c3 = p2 - (normal * halfWidth);
+                QPointF c4 = p2 + (normal * halfWidth);
 
                 // Add miter
                 if (adjustFirst) {
-                    QVector3D pPrev = i >= 2? QVector3D(polygon.at(i-2))
-                                            : QVector3D(polygon.at(qMax(polygon.count() - 2, 0)));
+                    QPointF pPrev = i >= 2 ?
+                        QPointF(polygon.at(i-2)) :
+                        QPointF(polygon.at(qMax(polygon.count() - 2, 0)));
+
                     pPrev = p1 - pPrev;
-                    QVector3D miter = QVector3D(normal + QVector3D(-pPrev.y(), pPrev.x(), pPrev.z()).normalized()).normalized();
-                    float dot = QVector3D::dotProduct(miter, normal);
-                    if (((miter * halfWidth) / dot).length() < miterLimit) {
+
+                    QPointF miter =
+                        KisAlgebra2D::normalize(normal +
+                                                KisAlgebra2D::normalize(
+                                                    QPointF(-pPrev.y(), pPrev.x())));
+
+                    const qreal dot = KisAlgebra2D::dotProduct(miter, normal);
+
+                    if (KisAlgebra2D::norm((miter * halfWidth) / dot) < miterLimit) {
                         c1 = p1 + ((miter * -halfWidth) / dot);
                         c2 = p1 + ((miter * halfWidth) / dot);
                     }
                 }
+
                 if (adjustSecond) {
-                    QVector3D pNext = i + 1 < polygon.count()? QVector3D(polygon.at(i+1))
-                                                             : QVector3D(polygon.at(qMin(polygon.count(), 1)));
+                    QPointF pNext = i + 1 < polygon.count()? QPointF(polygon.at(i+1))
+                                                             : QPointF(polygon.at(qMin(polygon.count(), 1)));
                     pNext = pNext - p2;
-                    QVector3D miter = QVector3D(normal + QVector3D(-pNext.y(), pNext.x(), pNext.z()).normalized()).normalized();
-                    float dot = QVector3D::dotProduct(miter, normal);
-                    if (((miter * halfWidth) / dot).length() < miterLimit) {
+                    QPointF miter =
+                        KisAlgebra2D::normalize(
+                            normal + KisAlgebra2D::normalize(QPointF(-pNext.y(), pNext.x())));
+                    const qreal dot = KisAlgebra2D::dotProduct(miter, normal);
+
+                    if (KisAlgebra2D::norm((miter * halfWidth) / dot) < miterLimit) {
                         c3 = p2 + ((miter * -halfWidth) / dot);
                         c4 = p2 + (miter * halfWidth) / dot;
                     }
                 }
 
-                verticesBuffer.append(c1);
-                verticesBuffer.append(c3);
-                verticesBuffer.append(c2);
-                verticesBuffer.append(c4);
-                verticesBuffer.append(c2);
-                verticesBuffer.append(c3);
+                verticesBuffer.append(QVector3D(c1));
+                verticesBuffer.append(QVector3D(c3));
+                verticesBuffer.append(QVector3D(c2));
+                verticesBuffer.append(QVector3D(c4));
+                verticesBuffer.append(QVector3D(c2));
+                verticesBuffer.append(QVector3D(c3));
                 triangleCount += 2;
             }
 

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-13 02:27+0000\n"
-"PO-Revision-Date: 2023-12-20 22:25+0700\n"
+"PO-Revision-Date: 2023-12-23 21:26+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
 "Language: id\n"
@@ -7525,7 +7525,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate 90° CW"
-msgstr ""
+msgstr "Rotasikan 90° SJJ"
 
 #. i18n: context: toolTip @ Action (object_transform_rotate_90_cw), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:202
@@ -7539,7 +7539,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate 90° CCW"
-msgstr ""
+msgstr "Rotasikan 90° LAJJ"
 
 #. i18n: context: toolTip @ Action (object_transform_rotate_90_ccw), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:212
@@ -7553,7 +7553,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate 180°"
-msgstr ""
+msgstr "Rotasikan 180°"
 
 #. i18n: context: toolTip @ Action (object_transform_rotate_180), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:222
@@ -7581,7 +7581,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror Vertically"
-msgstr "Cerminkan Secara Tegak"
+msgstr "Cerminkan Secara Vertikal"
 
 #. i18n: context: toolTip @ Action (object_transform_mirror_vertically), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:242
@@ -8736,7 +8736,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Horizontal Mirror Tool"
-msgstr ""
+msgstr "Alat Cermin Horizontal"
 
 #. i18n: context: text @ Action (vmirror_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (vmirror_action), Actions (Painting), ActionCollection (Krita)
@@ -8784,7 +8784,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Lock X Line"
-msgstr ""
+msgstr "Gembok Baris X"
 
 #. i18n: context: text @ Action (mirrorY-lock), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorY-lock), Actions (Painting), ActionCollection (Krita)
@@ -8796,7 +8796,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Lock Y Line"
-msgstr ""
+msgstr "Gembok Baris Y"
 
 #. i18n: context: text @ Action (mirrorX-moveToCenter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorX-moveToCenter), Actions (Painting), ActionCollection (Krita)
@@ -9116,14 +9116,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle Snap To Assistants"
-msgstr ""
+msgstr "Jungkitan Jepret Ke Asisten"
 
 #. i18n: context: toolTip @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:895
 #, kde-format
 msgctxt "action"
 msgid "Toggle Snap to Assistants"
-msgstr ""
+msgstr "Jungkitan Jepret ke Asisten"
 
 #. i18n: context: text @ Action (undo_polygon_selection), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (undo_polygon_selection), Actions (Painting), ActionCollection (Krita)
@@ -11760,7 +11760,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Locked Layers"
-msgstr ""
+msgstr "Lapisan Digembok"
 
 #. i18n: context: toolTip @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
@@ -12189,7 +12189,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Rotate Layer..."
-msgstr ""
+msgstr "&Rotasi Lapisan..."
 
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
@@ -12199,14 +12199,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer"
-msgstr ""
+msgstr "Rotasi Lapisan"
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3208
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Layer 90° to the Right"
-msgstr ""
+msgstr "Rotasikan &Lapisan 90° ke Kanan"
 
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
@@ -12216,14 +12216,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer 90° to the Right"
-msgstr ""
+msgstr "Rotasikan Lapisan 90° ke Kanan"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3220
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer &90° to the Left"
-msgstr ""
+msgstr "Rotasikan Lapisan &90° ke Kiri"
 
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
@@ -12233,14 +12233,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer 90° to the Left"
-msgstr ""
+msgstr "Rotasikan Lapisan 90° ke Kiri"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3232
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer &180°"
-msgstr ""
+msgstr "Rotasikan Lapisan &180°"
 
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
@@ -12250,7 +12250,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer 180°"
-msgstr ""
+msgstr "Rotasikan Lapisan 180°"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3244
@@ -12325,7 +12325,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Rotate All Layers..."
-msgstr ""
+msgstr "&Rotasikan Semua Lapisan ..."
 
 #. i18n: context: toolTip @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
@@ -12716,17 +12716,17 @@ msgstr "&Tampilan"
 #: krita/krita5.xmlgui:89
 #, kde-format
 msgid "Wrap Around Mode Direction"
-msgstr ""
+msgstr "Arah Mode Wraparound"
 
 #: krita/krita5.xmlgui:99
 #, kde-format
 msgid "&Zoom, Rotate, and Mirror"
-msgstr ""
+msgstr "&Zum, Rotasi, dan Cermin"
 
 #: krita/krita5.xmlgui:131
 #, kde-format
 msgid "&Snap To"
-msgstr ""
+msgstr "&Jepret Ke"
 
 #: krita/krita5.xmlgui:154
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.xmlgui:4
@@ -12742,13 +12742,13 @@ msgstr "&Gambar"
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, kde-format
 msgid "&Rotate"
-msgstr "&Rotasikan"
+msgstr "&Rotasi"
 
 #: krita/krita5.xmlgui:191 plugins/extensions/layersplit/layersplit.xmlgui:4
 #: plugins/extensions/waveletdecompose/waveletdecompose.xmlgui:4
 #, kde-format
 msgid "&Layer"
-msgstr ""
+msgstr "&Lapisan"
 
 #: krita/krita5.xmlgui:197
 #, kde-format
@@ -12759,7 +12759,7 @@ msgstr "&Baru"
 #: krita/krita5.xmlgui:207
 #, kde-format
 msgid "&Import/Export"
-msgstr ""
+msgstr "&Impor/Ekspor"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
 #: krita/krita5.xmlgui:214
@@ -12771,7 +12771,7 @@ msgstr "Impor"
 #: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1242
 #, kde-format
 msgid "&Convert"
-msgstr ""
+msgstr "&Konversi"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
@@ -12787,22 +12787,22 @@ msgstr "Pili&h"
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
-msgstr ""
+msgstr "&Grup"
 
 #: krita/krita5.xmlgui:247
 #, kde-format
 msgid "&Transform"
-msgstr ""
+msgstr "&ransformasi"
 
 #: krita/krita5.xmlgui:264
 #, kde-format
 msgid "Transform &All Layers"
-msgstr ""
+msgstr "Transformasikan &Semua Lapisan"
 
 #: krita/krita5.xmlgui:279
 #, kde-format
 msgid "S&plit"
-msgstr ""
+msgstr "&Blah"
 
 #: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1249
 #, kde-format
@@ -13885,7 +13885,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror View"
-msgstr ""
+msgstr "Cerminkan Tampilan"
 
 #. i18n: context: text @ Action (mirror_canvas_around_cursor), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas_around_cursor), Actions (View), ActionCollection (Menu)
@@ -13898,7 +13898,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror View Around Cursor"
-msgstr ""
+msgstr "Cerminkan Tampilan Sekeliling Kanvas"
 
 #. i18n: context: text @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
@@ -13911,14 +13911,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr ""
+msgstr "Cerminkan Tampilan Sekeliling Kanvas"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr ""
+msgstr "&Zum ke 100%"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
@@ -13928,28 +13928,28 @@ msgstr ""
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
-msgstr "Zoom ke 100%"
+msgstr "Zum ke 100%"
 
 #. i18n: context: text @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:774
 #, kde-format
 msgctxt "action"
 msgid "Zoom &In"
-msgstr "Zoom Per&besar"
+msgstr "Zum Per&besar"
 
 #. i18n: context: toolTip @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:776
 #, kde-format
 msgctxt "action"
 msgid "Zoom In"
-msgstr "Zoom Perbesar"
+msgstr "Zum Perbesar"
 
 #. i18n: context: text @ Action (view_zoom_out), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:786
 #, kde-format
 msgctxt "action"
 msgid "Zoom &Out"
-msgstr ""
+msgstr "Zum Perke&cil"
 
 #. i18n: context: toolTip @ Action (view_zoom_out), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:788
@@ -13966,14 +13966,14 @@ msgstr "Zoom Perkecil"
 #, kde-format
 msgctxt "action"
 msgid "Fit to View"
-msgstr ""
+msgstr "Paskan ke Tampilan"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:800
 #, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View"
-msgstr ""
+msgstr "Paskan Kanvas ke Tampilan"
 
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
@@ -13983,14 +13983,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
-msgstr ""
+msgstr "Paskan ke Lebar Tampilan"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
 #, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Width"
-msgstr ""
+msgstr "Paskan Kanvas ke Lebar Tampilan"
 
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
@@ -14000,14 +14000,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fit to View Height"
-msgstr ""
+msgstr "Paskan ke Tinggi Tampilan"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:820
 #, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Height"
-msgstr ""
+msgstr "Paskan Kanvas ke Tinggi Tampilan"
 
 #. i18n: context: text @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -14020,14 +14020,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle Fit to View"
-msgstr ""
+msgstr "Jungkitan Paskan ke Tampilan"
 
 #. i18n: context: text @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:838
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Canvas Right"
-msgstr ""
+msgstr "Rotasi &Kanvas Kanan"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
@@ -14037,14 +14037,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas Right"
-msgstr ""
+msgstr "Rotasi Kanvas Kanan"
 
 #. i18n: context: text @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:850
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas &Left"
-msgstr ""
+msgstr "Rotasi Kanvas Ki&ri"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
@@ -14054,7 +14054,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas Left"
-msgstr ""
+msgstr "Rotasi Kanvas Kiri"
 
 #. i18n: context: text @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
@@ -14067,7 +14067,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Reset Canvas Rotation"
-msgstr ""
+msgstr "Atur Ulang Rotasi Kanvas"
 
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
@@ -14077,7 +14077,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Reset Display"
-msgstr ""
+msgstr "Atur Ulang Display"
 
 #. i18n: context: toolTip @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:876
@@ -14094,7 +14094,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "View Print Size"
-msgstr ""
+msgstr "Tampilan Ukuran Cetak"
 
 #. i18n: context: toolTip @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:886
@@ -14108,7 +14108,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show &Rulers"
-msgstr ""
+msgstr "Tampilkan Pengga&ris"
 
 #. i18n: context: whatsThis @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:895
@@ -14141,7 +14141,7 @@ msgstr "Tampilkan Penggaris"
 #, kde-format
 msgctxt "action"
 msgid "Rulers Track Pointer"
-msgstr ""
+msgstr "Pointer Lacak Penggaris"
 
 #. i18n: context: whatsThis @ Action (rulers_track_mouse), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:907
@@ -14177,7 +14177,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Lock Guides"
-msgstr ""
+msgstr "Gembok Panduan"
 
 #. i18n: context: toolTip @ Action (view_lock_guides), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:932
@@ -14194,28 +14194,28 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap to Guides"
-msgstr ""
+msgstr "Jepret ke Panduan"
 
 #. i18n: context: toolTip @ Action (view_snap_to_guides), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:944
 #, kde-format
 msgctxt "action"
 msgid "Snap cursor to guides position"
-msgstr ""
+msgstr "Jepret kursor ke posisi panduan"
 
 #. i18n: context: text @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:954
 #, kde-format
 msgctxt "action"
 msgid "Show Status &Bar"
-msgstr ""
+msgstr "Tampilkan &Bilah Status"
 
 #. i18n: context: toolTip @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:956
 #, kde-format
 msgctxt "action"
 msgid "Show or hide the status bar"
-msgstr ""
+msgstr "Tampilkan atau sembunyikan bilah status"
 
 #. i18n: context: iconText @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:957
@@ -14235,14 +14235,14 @@ msgstr "Tampilkan Bilah Status"
 #, kde-format
 msgctxt "action"
 msgid "Show Pixel Grid"
-msgstr ""
+msgstr "Tampilkan Kisi Piksel"
 
 #. i18n: context: text @ Action (view_grid), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:978
 #, kde-format
 msgctxt "action"
 msgid "Show &Grid"
-msgstr ""
+msgstr "Tampilkan Ki&si"
 
 #. i18n: context: toolTip @ Action (view_grid), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_grid), Actions (View), ActionCollection (Menu)
@@ -14265,7 +14265,7 @@ msgstr "Tampilkan Kisi"
 #, kde-format
 msgctxt "action"
 msgid "Snap To Grid"
-msgstr ""
+msgstr "Jepret Ke Kisi"
 
 #. i18n: context: text @ Action (show_snap_options_popup), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (show_snap_options_popup), Actions (View), ActionCollection (Menu)
@@ -14278,7 +14278,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Snap Options Popup"
-msgstr ""
+msgstr "Tampilkan Sembulan Opsi Jepretan"
 
 #. i18n: context: text @ Action (view_snap_orthogonal), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_orthogonal), Actions (View), ActionCollection (Menu)
@@ -14291,7 +14291,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Orthogonal"
-msgstr ""
+msgstr "Jepret Ortogonal"
 
 #. i18n: context: text @ Action (view_snap_node), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_node), Actions (View), ActionCollection (Menu)
@@ -14304,7 +14304,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Node"
-msgstr ""
+msgstr "Jepret Simpul"
 
 #. i18n: context: text @ Action (view_snap_extension), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_extension), Actions (View), ActionCollection (Menu)
@@ -14317,7 +14317,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Extension"
-msgstr ""
+msgstr "Jepret Ekstensi"
 
 #. i18n: context: text @ Action (view_snap_to_pixel), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_to_pixel), Actions (View), ActionCollection (Menu)
@@ -14330,7 +14330,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Pixel"
-msgstr ""
+msgstr "Jepret Piksel"
 
 #. i18n: context: text @ Action (view_snap_intersection), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_intersection), Actions (View), ActionCollection (Menu)
@@ -14343,7 +14343,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Intersection"
-msgstr ""
+msgstr "Jepret Persimpangan"
 
 #. i18n: context: text @ Action (view_snap_bounding_box), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_bounding_box), Actions (View), ActionCollection (Menu)
@@ -14356,7 +14356,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Bounding Box"
-msgstr ""
+msgstr "Jepret Kotak Pembatas"
 
 #. i18n: context: text @ Action (view_snap_image_bounds), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_image_bounds), Actions (View), ActionCollection (Menu)
@@ -14369,7 +14369,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Image Bounds"
-msgstr ""
+msgstr "Jepret Batas Gambar"
 
 #. i18n: context: text @ Action (view_snap_image_center), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_image_center), Actions (View), ActionCollection (Menu)
@@ -14382,14 +14382,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Image Center"
-msgstr ""
+msgstr "Jepret Tengah Gambar"
 
 #. i18n: context: text @ Action (view_toggle_painting_assistants), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1107
 #, kde-format
 msgctxt "action"
 msgid "S&how Painting Assistants"
-msgstr ""
+msgstr "Ta&mpilkan Asisten Pelukisan"
 
 #. i18n: context: toolTip @ Action (view_toggle_painting_assistants), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggle_painting_assistants), Actions (View), ActionCollection (Menu)
@@ -14399,14 +14399,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Painting Assistants"
-msgstr ""
+msgstr "Tampilkan Asisten Pelukisan"
 
 #. i18n: context: text @ Action (view_toggle_assistant_previews), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1119
 #, kde-format
 msgctxt "action"
 msgid "Show &Assistant Previews"
-msgstr ""
+msgstr "Tampilkan Pratinjau &Asisten"
 
 #. i18n: context: toolTip @ Action (view_toggle_assistant_previews), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggle_assistant_previews), Actions (View), ActionCollection (Menu)
@@ -14416,14 +14416,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Assistant Previews"
-msgstr ""
+msgstr "Tampilkan Pratinjau Asisten"
 
 #. i18n: context: text @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1132
 #, kde-format
 msgctxt "action"
 msgid "S&how Reference Images"
-msgstr ""
+msgstr "Tampilkan Gambar Re&ferensi"
 
 #. i18n: context: toolTip @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
@@ -14433,7 +14433,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Reference Images"
-msgstr ""
+msgstr "Tampilkan Gambar Referensi"
 
 #. i18n: context: text @ Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1146
@@ -14553,7 +14553,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Rotate Image..."
-msgstr ""
+msgstr "&Rotasi Gambar..."
 
 #. i18n: context: toolTip @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
@@ -14563,7 +14563,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image"
-msgstr ""
+msgstr "Rotasi Gambar"
 
 #. i18n: context: text @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1233
@@ -14604,7 +14604,7 @@ msgstr "Rotasikan Gambar 90° ke Kiri"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &180°"
-msgstr ""
+msgstr "Rotasikan Gambar &180°"
 
 #. i18n: context: toolTip @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
@@ -14614,7 +14614,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 180°"
-msgstr ""
+msgstr "Rotasikan Gambar 180°"
 
 #. i18n: context: text @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1269
@@ -14638,7 +14638,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Mirror Image Horizontally"
-msgstr ""
+msgstr "&Cerminkan Gambar Secara Horizontal"
 
 #. i18n: context: toolTip @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
@@ -15729,7 +15729,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror"
-msgstr ""
+msgstr "Cermin"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2041
@@ -15819,7 +15819,7 @@ msgstr ""
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:553
 #, kde-format
 msgid "Activate angle snap"
-msgstr ""
+msgstr "Aktifkan jepretan sudut pandang"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
 #: libs/basicflakes/tools/KoPencilTool.cpp:297
@@ -16093,7 +16093,7 @@ msgstr "Jaga Rasio Aspek"
 #: libs/flake/commands/KoShapeLockCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Lock shapes"
-msgstr "Kuncikan bentuk-bentuk"
+msgstr "Gembok bentuk-bentuk"
 
 #: libs/flake/commands/KoShapeMoveCommand.cpp:24
 #: libs/flake/commands/KoShapeMoveCommand.cpp:36
@@ -16335,19 +16335,19 @@ msgstr ""
 #: libs/widgets/KoZoomController_p.h:28 libs/widgets/KoZoomWidget.cpp:52
 #, kde-format
 msgid "Zoom"
-msgstr ""
+msgstr "Zum"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
 #: libs/flake/tools/KoZoomToolWidget.ui:24
 #, kde-format
 msgid "&Zoom In"
-msgstr ""
+msgstr "&Zum Perbesar"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
 #: libs/flake/tools/KoZoomToolWidget.ui:47
 #, kde-format
 msgid "Zoo&m Out"
-msgstr ""
+msgstr "Zu&m Perkecil"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -16862,7 +16862,7 @@ msgstr "Peta"
 #, kde-format
 msgctxt "The category of filters that do not fit in a category. Noun."
 msgid "Other"
-msgstr ""
+msgstr "Lainnya"
 
 #: libs/image/generator/kis_generator_layer.cpp:202
 #, kde-format
@@ -17059,7 +17059,7 @@ msgstr ""
 #: libs/image/kis_image.cc:1166
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
-msgstr ""
+msgstr "Rotasi Lapisan"
 
 #: libs/image/kis_image.cc:1247
 msgctxt "(qtundo-format)"
@@ -17174,7 +17174,7 @@ msgstr ""
 #: libs/image/kis_layer_properties_icons.cpp:20
 #, kde-format
 msgid "Locked"
-msgstr "Dikunci"
+msgstr "Digembok"
 
 #: libs/image/kis_layer_properties_icons.cpp:21
 #: plugins/python/channels2layers/channels2layers.py:78
@@ -17545,7 +17545,7 @@ msgstr "Tekstur"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Guides"
-msgstr ""
+msgstr "Panduan"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:76
 #, kde-format
@@ -21830,7 +21830,7 @@ msgstr ""
 #, kde-format
 msgctxt "floating message about mirroring"
 msgid "Horizontal mirroring: %1 "
-msgstr ""
+msgstr "Pencerminan horizontal: %1"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
 #: libs/ui/canvas/kis_canvas_controller.cpp:360
@@ -21893,12 +21893,12 @@ msgstr ""
 #: libs/ui/canvas/kis_change_guides_command.cpp:47
 msgctxt "(qtundo-format)"
 msgid "Add Guide"
-msgstr ""
+msgstr "Tambahkan Panduan"
 
 #: libs/ui/canvas/kis_change_guides_command.cpp:49
 msgctxt "(qtundo-format)"
 msgid "Remove Guide"
-msgstr ""
+msgstr "Singkirkan Panduan"
 
 #: libs/ui/canvas/kis_change_guides_command.cpp:52
 #: libs/ui/canvas/kis_change_guides_command.cpp:104
@@ -21921,7 +21921,7 @@ msgstr ""
 #: libs/ui/canvas/kis_guides_manager.cpp:775
 #, kde-format
 msgid "Snap to:"
-msgstr ""
+msgstr "Jepret ke:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
@@ -21930,14 +21930,14 @@ msgstr ""
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:140
 #, kde-format
 msgid "Grid"
-msgstr ""
+msgstr "Kisi"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/canvas/kis_guides_manager.cpp:777
 #: plugins/dockers/griddocker/grid_config_widget.ui:536
 #, kde-format
 msgid "Guides"
-msgstr ""
+msgstr "Panduan"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)
@@ -21971,12 +21971,12 @@ msgstr ""
 #: libs/ui/canvas/kis_guides_manager.cpp:785
 #, kde-format
 msgid "Bounding Box"
-msgstr ""
+msgstr "Kotak Pembatas"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:786
 #, kde-format
 msgid "Image Bounds"
-msgstr ""
+msgstr "Batas Gambar"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:787
 #, kde-format
@@ -24865,7 +24865,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:370
 #, kde-format
 msgid "Zoom Margin Size:"
-msgstr ""
+msgstr "Ukuran Margin Zum:"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intZoomMarginSize)
 #: libs/ui/forms/wdggeneralsettings.ui:380
@@ -25507,7 +25507,7 @@ msgstr ""
 #: libs/ui/forms/wdggeometryoptions.ui:120
 #, kde-format
 msgid "Rotate:"
-msgstr ""
+msgstr "Rotasi:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, ScaleLbl)
@@ -27740,7 +27740,7 @@ msgstr "Normal"
 #: libs/ui/input/kis_change_primary_setting_action.cpp:26
 #, kde-format
 msgid "Snap"
-msgstr ""
+msgstr "Jepret"
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:63
 #, kde-format
@@ -27846,7 +27846,7 @@ msgstr ""
 #: libs/ui/input/kis_rotate_canvas_action.cpp:41
 #, kde-format
 msgid "Rotate Canvas"
-msgstr ""
+msgstr "Rotasi Kanvas"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:42
 #, kde-format
@@ -27857,7 +27857,7 @@ msgstr ""
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Rotate Mode"
-msgstr ""
+msgstr "Mode Rotasi"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:46
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:40
@@ -27868,17 +27868,17 @@ msgstr ""
 #: libs/ui/input/kis_rotate_canvas_action.cpp:47
 #, kde-format
 msgid "Rotate Left"
-msgstr ""
+msgstr "Rotasi Kiri"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:48
 #, kde-format
 msgid "Rotate Right"
-msgstr ""
+msgstr "Rotasi Kanan"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
 msgid "Reset Rotation"
-msgstr ""
+msgstr "Atur Ulang Rotasi"
 
 #: libs/ui/input/kis_select_layer_action.cpp:116
 #, kde-format
@@ -28082,7 +28082,7 @@ msgstr ""
 #: libs/ui/input/kis_shortcut_configuration.cpp:475
 #, kde-format
 msgid "Rotate Gesture"
-msgstr ""
+msgstr "Rotasi Gestur"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:477
 #, kde-format
@@ -28239,7 +28239,7 @@ msgstr ""
 #: libs/ui/input/kis_zoom_action.cpp:111
 #, kde-format
 msgid "Zoom Mode"
-msgstr ""
+msgstr "Mode Zum"
 
 #: libs/ui/input/kis_zoom_action.cpp:112
 #, kde-format
@@ -28259,7 +28259,7 @@ msgstr ""
 #: libs/ui/input/kis_zoom_action.cpp:115
 #, kde-format
 msgid "Zoom In"
-msgstr "Zoom Perbesar"
+msgstr "Zum Perbesar"
 
 #: libs/ui/input/kis_zoom_action.cpp:116
 #, kde-format
@@ -28269,22 +28269,22 @@ msgstr "Zoom Perkecil"
 #: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
-msgstr "Zoom ke 100%"
+msgstr "Zum ke 100%"
 
 #: libs/ui/input/kis_zoom_action.cpp:118
 #, kde-format
 msgid "Fit to View"
-msgstr ""
+msgstr "Paskan ke Tampilan"
 
 #: libs/ui/input/kis_zoom_action.cpp:119
 #, kde-format
 msgid "Fit to View Width"
-msgstr ""
+msgstr "Paskan ke Lebar Tampilan"
 
 #: libs/ui/input/kis_zoom_action.cpp:120
 #, kde-format
 msgid "Fit to View Height"
-msgstr ""
+msgstr "Paskan ke Tinggi Tampilan"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:37
 #, kde-format
@@ -28306,7 +28306,7 @@ msgstr ""
 #: libs/ui/input/KisPopupWidgetAction.cpp:44
 #, kde-format
 msgid "Show Popup Widget"
-msgstr ""
+msgstr "Tampilkan Widget Sembulan"
 
 #: libs/ui/input/KisPopupWidgetAction.cpp:45
 #, kde-format
@@ -28337,7 +28337,7 @@ msgstr ""
 #: libs/ui/input/KisTouchGestureAction.cpp:25
 #, kde-format
 msgid "Reset Display"
-msgstr ""
+msgstr "Atur Ulang Display"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, TabletTest)
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:18
@@ -28659,14 +28659,14 @@ msgstr ""
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
 msgid_plural "Layers are locked"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Lapisan telah digembok"
+msgstr[1] "Lapisan sudah digembok"
 
 #: libs/ui/kis_layer_manager.cc:864
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
-msgstr ""
+msgstr "Lapisan telah digembok"
 
 #: libs/ui/kis_layer_manager.cc:881
 #, kde-format
@@ -28731,27 +28731,27 @@ msgstr ""
 #: libs/ui/kis_mirror_manager.cpp:37
 #, kde-format
 msgid "Mirror View"
-msgstr ""
+msgstr "Cerminkan Tampilan"
 
 #: libs/ui/kis_mirror_manager.cpp:43
 #, kde-format
 msgid "Mirror View Around Cursor"
-msgstr ""
+msgstr "Cerminkan Tampilan Sekeliling Kanvas"
 
 #: libs/ui/kis_mirror_manager.cpp:48
 #, kde-format
 msgid "Mirror View Around Canvas"
-msgstr ""
+msgstr "Cerminkan Tampilan Sekeliling Kanvas"
 
 #: libs/ui/kis_node_manager.cpp:453
 #, kde-format
 msgid "Layer is locked"
-msgstr ""
+msgstr "Lapisan telah digembok"
 
 #: libs/ui/kis_node_manager.cpp:455 libs/ui/kis_node_manager.cpp:480
 #, kde-format
 msgid "Layer \"%1\" is locked"
-msgstr ""
+msgstr "Lapisan \"%1\" telah digembok"
 
 #: libs/ui/kis_node_manager.cpp:508
 msgctxt "(qtundo-format)"
@@ -29063,7 +29063,7 @@ msgstr ""
 #: libs/ui/kis_popup_palette.cpp:198
 #, kde-format
 msgid "Fit Canvas to View"
-msgstr ""
+msgstr "Paskan Kanvas ke Tampilan"
 
 #: libs/ui/kis_popup_palette.cpp:875
 #, kde-format
@@ -29237,7 +29237,7 @@ msgstr ""
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
-msgstr ""
+msgstr "Zum: %1 %"
 
 #: libs/ui/KisApplication.cpp:327
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
@@ -30559,12 +30559,12 @@ msgstr ""
 #: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:678
 #, kde-format
 msgid "Layer is locked and invisible."
-msgstr ""
+msgstr "Lapisan telah digembok dan tak terlihat."
 
 #: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:680
 #, kde-format
 msgid "Layer is locked."
-msgstr ""
+msgstr "Lapisan telah digembok."
 
 #: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:682
 #, kde-format
@@ -31790,7 +31790,7 @@ msgstr ""
 #: libs/ui/tool/kis_tool.cc:701
 #, kde-format
 msgid "Local selection is locked."
-msgstr ""
+msgstr "Seleksi lokal telah digembok."
 
 #: libs/ui/tool/kis_tool_freehand.cc:211
 #, kde-format
@@ -32905,7 +32905,7 @@ msgstr ""
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:57
 #, kde-format
 msgid "Lock"
-msgstr "Kunci"
+msgstr "Gembok"
 
 #: libs/ui/widgets/kis_categorized_list_view.cpp:166
 #, kde-format
@@ -34246,7 +34246,7 @@ msgstr "Tutup Docker"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Lock Docker"
-msgstr "Kuncikan Docker"
+msgstr "Gembok Docker"
 
 #: libs/widgets/KoEditColorSetDialog.cpp:159
 #, kde-format
@@ -34325,12 +34325,12 @@ msgstr "Opsi Alat"
 #: libs/widgets/KoZoomMode.cpp:14
 #, kde-format
 msgid "Fit View"
-msgstr ""
+msgstr "Paskan Tampilan"
 
 #: libs/widgets/KoZoomMode.cpp:15
 #, kde-format
 msgid "Fit View Width"
-msgstr ""
+msgstr "Paskan Lebar Tampilan"
 
 #: libs/widgets/KoZoomMode.cpp:17
 #, kde-format
@@ -34345,7 +34345,7 @@ msgstr "Paskan Lebar Teks"
 #: libs/widgets/KoZoomMode.cpp:29
 #, kde-format
 msgid "Fit View Height"
-msgstr ""
+msgstr "Paskan Tinggi Tampilan"
 
 #: libs/widgets/KoZoomWidget.cpp:124
 #, kde-format
@@ -34648,7 +34648,7 @@ msgstr "&Paskan ke Halaman"
 #: libs/widgetutils/config/kstandardaction_p.h:56
 #, kde-format
 msgid "Zoom to fit page in window"
-msgstr "Zoom ke pas halaman di dalam jendela"
+msgstr "Zum ke pas halaman di dalam jendela"
 
 #: libs/widgetutils/config/kstandardaction_p.h:57
 #, kde-format
@@ -34658,7 +34658,7 @@ msgstr "Paskan ke Lebar Halaman"
 #: libs/widgetutils/config/kstandardaction_p.h:57
 #, kde-format
 msgid "Zoom to fit page width in window"
-msgstr "Zoom ke pas lebar halaman di dalam jendela"
+msgstr "Zum ke pas lebar halaman di dalam jendela"
 
 #: libs/widgetutils/config/kstandardaction_p.h:58
 #, kde-format
@@ -34668,22 +34668,22 @@ msgstr "Paskan ke &Tinggi Halaman"
 #: libs/widgetutils/config/kstandardaction_p.h:58
 #, kde-format
 msgid "Zoom to fit page height in window"
-msgstr "Zoom ke pas tinggi halaman di dalam jendela"
+msgstr "Zum ke pas tinggi halaman di dalam jendela"
 
 #: libs/widgetutils/config/kstandardaction_p.h:59
 #, kde-format
 msgid "Zoom &In"
-msgstr "Zoom Per&besar"
+msgstr "Zum Per&besar"
 
 #: libs/widgetutils/config/kstandardaction_p.h:60
 #, kde-format
 msgid "Zoom &Out"
-msgstr ""
+msgstr "Zum Perke&cil"
 
 #: libs/widgetutils/config/kstandardaction_p.h:61
 #, kde-format
 msgid "&Zoom..."
-msgstr "&Zoom..."
+msgstr "&Zum..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:61
 #, kde-format
@@ -35804,7 +35804,7 @@ msgstr ""
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:385
 #, kde-format
 msgid "Lock Toolbar Positions"
-msgstr "Kunci Posisi Bilah Alat"
+msgstr "Gembok Posisi Bilah Alat"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:1277
 #, kde-format
@@ -36587,7 +36587,7 @@ msgstr ""
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:304
 #, kde-format
 msgid "Zoom Selector Size: "
-msgstr ""
+msgstr "Ukuran Pemilih Zum: "
 
 #. i18n: ectx: property (text), widget (QCheckBox, hidePopupOnClickCheck)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:330
@@ -37669,7 +37669,7 @@ msgstr "Tampilkan kisi"
 #: plugins/dockers/griddocker/grid_config_widget.ui:73
 #, kde-format
 msgid "Snap to grid"
-msgstr ""
+msgstr "Jepret ke kisi"
 
 #. i18n: ectx: property (text), widget (QLabel, cellSpacingLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:142
@@ -37760,36 +37760,36 @@ msgstr ""
 #: plugins/dockers/griddocker/grid_config_widget.ui:546
 #, kde-format
 msgid "Show guides"
-msgstr ""
+msgstr "Tampilkan panduan"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSnapToGuides)
 #: plugins/dockers/griddocker/grid_config_widget.ui:553
 #, kde-format
 msgid "Snap to guides"
-msgstr ""
+msgstr "Jepret ke  panduan"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLockGuides)
 #: plugins/dockers/griddocker/grid_config_widget.ui:560
 #, kde-format
 msgid "Lock guides"
-msgstr ""
+msgstr "Gembok panduan"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRulers)
 #: plugins/dockers/griddocker/grid_config_widget.ui:567
 #, kde-format
 msgid "Show rulers"
-msgstr ""
+msgstr "Tampilkan penggaris"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGuidesStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:584
 #, kde-format
 msgid "Guides:"
-msgstr ""
+msgstr "Panduan:"
 
 #: plugins/dockers/griddocker/griddocker_dock.cpp:32
 #, kde-format
 msgid "Grid and Guides"
-msgstr ""
+msgstr "Kisi dan Panduan"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
 msgctxt "(qtundo-format)"
@@ -38341,7 +38341,7 @@ msgstr ""
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:139
 #, kde-format
 msgid "Lock the current palette."
-msgstr ""
+msgstr "Gembok palet saat ini."
 
 #: plugins/dockers/presetdocker/presetdocker_dock.cpp:25
 #, kde-format
@@ -38778,7 +38778,7 @@ msgstr "Ukuran"
 #, kde-format
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
-msgstr ""
+msgstr "Terakhir Dimodifikasi"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:203
 #, kde-format
@@ -42333,7 +42333,7 @@ msgstr ""
 #: plugins/extensions/rotateimage/rotateimage.cc:144
 #, kde-format
 msgid "Rotate Layer"
-msgstr ""
+msgstr "Rotasi Lapisan"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -50982,7 +50982,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:21
 #, kde-format
 msgid "Locked pattern"
-msgstr ""
+msgstr "Pola digembok"
 
 #: plugins/paintops/libpaintop/KisColorSourceOptionWidget.cpp:29
 #, kde-format
@@ -51034,7 +51034,7 @@ msgstr ""
 #, kde-format
 msgctxt "Lock Drawing angle at start of each stroke"
 msgid "Lock"
-msgstr "Kunci"
+msgstr "Gembok"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:57
 #, kde-format
@@ -51201,12 +51201,12 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisMirrorOptionData.h:34
 #, kde-format
 msgid "Mirror"
-msgstr ""
+msgstr "Cermin"
 
 #: plugins/paintops/libpaintop/KisMirrorOptionWidget.cpp:44
 #, kde-format
 msgid "Horizontally"
-msgstr "Mendatar"
+msgstr "Secara horizontal"
 
 #: plugins/paintops/libpaintop/KisMirrorOptionWidget.cpp:45
 #, kde-format
@@ -51663,7 +51663,7 @@ msgstr ""
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:86
 #, kde-format
 msgid "Snap To Pixel"
-msgstr ""
+msgstr "Jepret Ke Piksel"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:96
 #, kde-format
@@ -53987,7 +53987,7 @@ msgstr ""
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1861
 #, kde-format
 msgid "Rotate"
-msgstr ""
+msgstr "Rotasi"
 
 #: plugins/python/documenttools/tools/rotatetool/rotatetool.py:24
 msgid "Negative degrees will rotate the image to the left"
@@ -54883,7 +54883,7 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_line.cc:110
 #, kde-format
 msgid "Snap to Assistants"
-msgstr ""
+msgstr "Jepret ke Asisten"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:451
 #, kde-format
@@ -54903,7 +54903,7 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_brush.cc:465
 #, kde-format
 msgid "Snap to Single Line"
-msgstr ""
+msgstr "Jepret ke Baris Tunggal"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:468
 #, kde-format
@@ -54917,7 +54917,7 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_line.cc:113
 #, kde-format
 msgid "Snap Eraser"
-msgstr ""
+msgstr "Jepret Penghapus"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:476
 #, kde-format
@@ -54991,7 +54991,7 @@ msgctxt ""
 "The 'use selection as boundary' checkbox in fill tool to use selection "
 "borders as boundary when filling"
 msgid "Use selection as boundary"
-msgstr ""
+msgstr "Gunakan seleksi sebagai batasan"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:575
 #, kde-format
@@ -55070,7 +55070,7 @@ msgstr ""
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
 #, kde-format
 msgid "Boundary color"
-msgstr ""
+msgstr "Warna batasan"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:631
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
@@ -55301,7 +55301,7 @@ msgstr ""
 #, kde-format
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
-msgstr ""
+msgstr "Cermin"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:421
 #, kde-format
@@ -55864,7 +55864,7 @@ msgstr "Tekan ALT untuk merotasikan di 45 derajat langkah."
 #: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
 msgctxt "(qtundo-format)"
 msgid "Rotate"
-msgstr ""
+msgstr "Rotasi"
 
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 msgctxt "(qtundo-format)"
@@ -57222,17 +57222,17 @@ msgstr "Tumbuh"
 #: plugins/tools/tool_crop/kis_tool_crop.cc:122
 #, kde-format
 msgid "Lock Width"
-msgstr ""
+msgstr "Gembok Lebar"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:125
 #, kde-format
 msgid "Lock Height"
-msgstr ""
+msgstr "Gembok Tinggi"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:128
 #, kde-format
 msgid "Lock Ratio"
-msgstr ""
+msgstr "Gembok Rasio"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:253
 #, kde-format
@@ -57314,25 +57314,25 @@ msgstr ""
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:152
 #, kde-format
 msgid "Allow growing the image by dragging outside bounds of the image"
-msgstr ""
+msgstr "Izinkan memperbesar gambar dengan menyeret ke luar batas gambar"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, lockWidthButton)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:333
 #, kde-format
 msgid "Lock the width"
-msgstr ""
+msgstr "Gembok lebar"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, lockHeightButton)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:346
 #, kde-format
 msgid "Lock the height"
-msgstr ""
+msgstr "Gembok tinggi"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, lockRatioButton)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:359
 #, kde-format
 msgid "Lock the aspect ratio"
-msgstr ""
+msgstr "Gembok rasio aspek"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:405
@@ -57687,7 +57687,7 @@ msgstr ""
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:53
 #, kde-format
 msgid "Limit to layer bounds"
-msgstr ""
+msgstr "Batasi hingga batas lapisan"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:119
@@ -57845,17 +57845,17 @@ msgstr ""
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:133
 #, kde-format
 msgid "Mirror Vertical"
-msgstr ""
+msgstr "Cerminkan Vertikal"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
 #, kde-format
 msgid "Rotate 90 degrees Clockwise"
-msgstr ""
+msgstr "Rotasikan 90 derajat Searah Jarum Jam"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:135
 #, kde-format
 msgid "Rotate 90 degrees CounterClockwise"
-msgstr ""
+msgstr "Rotasikan 90 derajat Lawan Arah Jarum Jam"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:137
 #, kde-format
@@ -58020,7 +58020,7 @@ msgstr ""
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1618
 #, kde-format
 msgid "Lock Points"
-msgstr ""
+msgstr "Gembok Poin"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:680
 #, kde-format
@@ -58140,7 +58140,7 @@ msgstr "Posisi"
 #, kde-format
 msgctxt "@option:radio Type of transformation"
 msgid "Rotate"
-msgstr ""
+msgstr "Rotasi"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeScaleRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:653

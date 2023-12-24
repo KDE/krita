@@ -438,9 +438,10 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
     QVector<QVector3D> verticesBuffer;
 
     if (thickness > 1) {
-
-        // Because glLineWidth is not supported on all versions of OpenGL (or rather, is limited to 1),
+        // Because glLineWidth is not supported on all versions of OpenGL (or rather,
+        // is limited to 1, as returned by GL_ALIASED_LINE_WIDTH_RANGE),
         // we'll instead generate mitered-triangles.
+
         const qreal halfWidth = (thickness * 0.5) / devicePixelRatioF();
         const qreal miterLimit = (5 * thickness) / devicePixelRatioF();
 

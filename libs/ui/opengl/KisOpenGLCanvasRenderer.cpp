@@ -447,7 +447,7 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
         for (auto it = path.begin(); it != path.end(); ++it) {
             const QPolygonF& polygon = *it;
 
-            if (KisAlgebra2D::maxDimension(polygon.boundingRect()) < 0.5) {
+            if (KisAlgebra2D::maxDimension(polygon.boundingRect()) < 0.5 * thickness) {
                 continue;
             }
 

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-13 02:27+0000\n"
-"PO-Revision-Date: 2023-12-23 21:26+0700\n"
+"PO-Revision-Date: 2023-12-24 18:50+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
 "Language: id\n"
@@ -7303,14 +7303,14 @@ msgstr "Bawa ke &Depan"
 #, kde-format
 msgctxt "action"
 msgid "Vertically Center"
-msgstr "Tengahkan Secara Tegak"
+msgstr "Tengahkan Secara Vertikal"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
 #, kde-format
 msgctxt "action"
 msgid "Group"
-msgstr ""
+msgstr "Kelompok"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7323,7 +7323,7 @@ msgstr ""
 #, kde-format
 msgctxt "Group in the context of Vector Interaction Tool"
 msgid "Group"
-msgstr ""
+msgstr "Kelompok"
 
 #. i18n: context: iconText @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7374,7 +7374,7 @@ msgstr "Sejajarkan Atas"
 #, kde-format
 msgctxt "action"
 msgid "Horizontally Center"
-msgstr "Tengahkan Secara Mendatar"
+msgstr "Tengahkan Secara Horizontal"
 
 #. i18n: context: iconText @ Action (object_order_lower), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_lower), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7567,7 +7567,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror Horizontally"
-msgstr "Cerminkan Secara Mendatar"
+msgstr "Cerminkan Secara Horizontal"
 
 #. i18n: context: toolTip @ Action (object_transform_mirror_horizontally), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:232
@@ -9202,7 +9202,7 @@ msgstr "Isi dengan Pola (Opasitas)"
 #, kde-format
 msgctxt "action"
 msgid "Convert &to Shape"
-msgstr ""
+msgstr "Konversikan ke Bentuk"
 
 #. i18n: context: toolTip @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
@@ -9998,7 +9998,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Wavelet Noise Reducer..."
-msgstr ""
+msgstr "Pereduksi &Renyek Wavelet..."
 
 #. i18n: context: toolTip @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
@@ -10008,7 +10008,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Noise Reducer"
-msgstr ""
+msgstr "Pereduksi Renyek Wavelet"
 
 #. i18n: context: text @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1492
@@ -11011,14 +11011,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Cut Keyframes"
-msgstr ""
+msgstr "Pindahkan Keyframes"
 
 #. i18n: context: toolTip @ Action (cut_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2367
 #, kde-format
 msgctxt "action"
 msgid "Cut frames to clipboard"
-msgstr ""
+msgstr "Pindahkan frame ke papan klip"
 
 #. i18n: context: text @ Action (paste_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2377
@@ -11053,14 +11053,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Cut Columns"
-msgstr ""
+msgstr "Pindahkan Kolom"
 
 #. i18n: context: toolTip @ Action (cut_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2403
 #, kde-format
 msgctxt "action"
 msgid "Cut columns to clipboard"
-msgstr ""
+msgstr "Pindahkan kolom ke papan klip"
 
 #. i18n: context: text @ Action (paste_columns_from_clipboard), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2413
@@ -11200,7 +11200,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Add &Clone Layer"
-msgstr ""
+msgstr "Tambahkan Lapisan &Klona"
 
 #. i18n: context: toolTip @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2538
@@ -11535,7 +11535,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Add &Paint Layer"
-msgstr ""
+msgstr "Tambahkan Lapisan &Lukis"
 
 #. i18n: context: toolTip @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2742
@@ -11556,7 +11556,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&New Layer From Visible"
-msgstr ""
+msgstr "Lapisan &Baru Dari yang Terlihat"
 
 #. i18n: context: toolTip @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
@@ -11573,7 +11573,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Duplicate Layer or Mask"
-msgstr ""
+msgstr "&Duplikatkan Lapisan atau Mask"
 
 #. i18n: context: toolTip @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
@@ -11583,14 +11583,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Duplicate Layer or Mask"
-msgstr ""
+msgstr "Duplikatkan Lapisan atau Mask"
 
 #. i18n: context: text @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2776
 #, kde-format
 msgctxt "action"
 msgid "&Cut Selection to New Layer"
-msgstr ""
+msgstr "&Pindahkan Seleksi ke Lapisan Baru"
 
 #. i18n: context: toolTip @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
@@ -11600,14 +11600,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Cut Selection to New Layer"
-msgstr ""
+msgstr "Pindahkan Seleksi ke Lapisan Baru"
 
 #. i18n: context: text @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2788
 #, kde-format
 msgctxt "action"
 msgid "Copy &Selection to New Layer"
-msgstr ""
+msgstr "Salin &Seleksi ke Lapisan Baru"
 
 #. i18n: context: toolTip @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
@@ -11617,14 +11617,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Copy Selection to New Layer"
-msgstr ""
+msgstr "Salin Seleksi ke Lapisan Baru"
 
 #. i18n: context: text @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2800
 #, kde-format
 msgctxt "action"
 msgid "Copy Layer"
-msgstr ""
+msgstr "Salin Lapisan"
 
 #. i18n: context: toolTip @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
@@ -11634,14 +11634,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Copy layer to clipboard"
-msgstr ""
+msgstr "Salin lapisan ke papan klip"
 
 #. i18n: context: text @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2812
 #, kde-format
 msgctxt "action"
 msgid "Cut Layer"
-msgstr ""
+msgstr "Pindahkan Lapisan"
 
 #. i18n: context: toolTip @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
@@ -11651,7 +11651,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Cut layer to clipboard"
-msgstr ""
+msgstr "Pindahkan lapisan ke papan klip"
 
 #. i18n: context: text @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2824
@@ -11678,7 +11678,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Quick Group"
-msgstr ""
+msgstr "Kelompok Cepat"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2838
@@ -11695,7 +11695,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Quick Ungroup"
-msgstr ""
+msgstr "Nonkelompok Cepat"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2850
@@ -11712,7 +11712,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Quick Clipping Group"
-msgstr ""
+msgstr "Kelompok Pengeklipan Cepat"
 
 #. i18n: context: toolTip @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2862
@@ -11726,7 +11726,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "All Layers"
-msgstr ""
+msgstr "Semua Lapisan"
 
 #. i18n: context: toolTip @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
@@ -11743,7 +11743,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Visible Layers"
-msgstr ""
+msgstr "Lapisan yang Terlihat"
 
 #. i18n: context: toolTip @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
@@ -11760,7 +11760,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Locked Layers"
-msgstr "Lapisan Digembok"
+msgstr "Lapisan yang Digembok"
 
 #. i18n: context: toolTip @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
@@ -11777,7 +11777,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Invisible Layers"
-msgstr ""
+msgstr "Lapisan yang Tidak Terlihat"
 
 #. i18n: context: toolTip @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
@@ -11794,7 +11794,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Unlocked Layers"
-msgstr ""
+msgstr "Lapisan yang Dibuka Gembok"
 
 #. i18n: context: toolTip @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
@@ -11811,7 +11811,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Save Layer/Mask..."
-msgstr "&Simpan Layer/Mask..."
+msgstr "&Simpan Lapisan/Mask..."
 
 #. i18n: context: toolTip @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
@@ -11828,7 +11828,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG..."
-msgstr ""
+msgstr "Simpan Lapisan Vektor sebagai SVG..."
 
 #. i18n: context: toolTip @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
@@ -11838,14 +11838,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG"
-msgstr ""
+msgstr "Simpan Lapisan Vektor sebagai SVG"
 
 #. i18n: context: text @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2956
 #, kde-format
 msgctxt "action"
 msgid "Save &Group Layers..."
-msgstr ""
+msgstr "Simpan &Kelompok Lapisan..."
 
 #. i18n: context: toolTip @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
@@ -11862,7 +11862,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert group to &animated layer"
-msgstr ""
+msgstr "Konversikan kelompok ke lapisan ber&animasi"
 
 #. i18n: context: toolTip @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
@@ -11879,7 +11879,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert to &animated layer"
-msgstr ""
+msgstr "Konversikan ke lapisan ber&animasi"
 
 #. i18n: context: toolTip @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
@@ -11889,14 +11889,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert layer into animation frames"
-msgstr ""
+msgstr "Konversikan lapisan ke dalam frame animasi"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2992
 #, kde-format
 msgctxt "action"
 msgid "to &File Layer..."
-msgstr ""
+msgstr "ke Lapisan &File..."
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2994
@@ -11910,14 +11910,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert to File Layer"
-msgstr ""
+msgstr "Konversikan ke Lapisan File"
 
 #. i18n: context: text @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3004
 #, kde-format
 msgctxt "action"
 msgid "I&mport Layer..."
-msgstr ""
+msgstr "I&mpor Lapisan..."
 
 #. i18n: context: toolTip @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
@@ -11927,14 +11927,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Import Layer"
-msgstr ""
+msgstr "Impor Lapisan"
 
 #. i18n: context: text @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3016
 #, kde-format
 msgctxt "action"
 msgid "&as Paint Layer..."
-msgstr ""
+msgstr "&sebagai Lapisan Lukis..."
 
 #. i18n: context: toolTip @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
@@ -11944,14 +11944,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "as Paint Layer"
-msgstr ""
+msgstr "sebagai Lapisan Lukis"
 
 #. i18n: context: text @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
 #, kde-format
 msgctxt "action"
 msgid "as &Transparency Mask..."
-msgstr ""
+msgstr "sebagai Mask &Transparansi..."
 
 #. i18n: context: toolTip @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
@@ -11961,14 +11961,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "as Transparency Mask"
-msgstr ""
+msgstr "sebagai Mask Transparansi"
 
 #. i18n: context: text @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3040
 #, kde-format
 msgctxt "action"
 msgid "as &Filter Mask..."
-msgstr ""
+msgstr "sebagai Mask &Filter..."
 
 #. i18n: context: toolTip @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
@@ -11978,14 +11978,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "as Filter Mask"
-msgstr ""
+msgstr "sebagai Mask &Filter"
 
 #. i18n: context: text @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3052
 #, kde-format
 msgctxt "action"
 msgid "as &Selection Mask..."
-msgstr ""
+msgstr "sebagai Mask &Seleksi..."
 
 #. i18n: context: toolTip @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
@@ -11995,14 +11995,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "as Selection Mask"
-msgstr ""
+msgstr "sebagai Mask &Seleksi"
 
 #. i18n: context: text @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3064
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Paint Layer"
-msgstr ""
+msgstr "Konversikan ke Lapisan &Lukis"
 
 #. i18n: context: toolTip @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
@@ -12019,7 +12019,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Transparency Mask"
-msgstr ""
+msgstr "Konversikan ke Mask &Transparansi"
 
 #. i18n: context: toolTip @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
@@ -12036,7 +12036,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Filter Mask..."
-msgstr ""
+msgstr "Konversikan ke Mask &Filter..."
 
 #. i18n: context: toolTip @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
@@ -12053,7 +12053,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Selection Mask"
-msgstr ""
+msgstr "Konversikan ke Mask &Seleksi"
 
 #. i18n: context: toolTip @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
@@ -12070,7 +12070,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Alpha into Mask"
-msgstr ""
+msgstr "&Alfakan ke dalam Mask"
 
 #. i18n: context: toolTip @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
@@ -12080,14 +12080,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Alpha into Mask"
-msgstr ""
+msgstr "Alfakan ke dalam Mask"
 
 #. i18n: context: text @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3124
 #, kde-format
 msgctxt "action"
 msgid "&Write as Alpha"
-msgstr ""
+msgstr "&Tulis sebagai Alfa"
 
 #. i18n: context: toolTip @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
@@ -12104,7 +12104,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Save Merged..."
-msgstr ""
+msgstr "&Simpan yang Digabungkan..."
 
 #. i18n: context: toolTip @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
@@ -12114,14 +12114,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Save Merged"
-msgstr ""
+msgstr "Simpan yang Digabungkan"
 
 #. i18n: context: text @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3148
 #, kde-format
 msgctxt "action"
 msgid "Split Layer..."
-msgstr ""
+msgstr "Belah Lapisan..."
 
 #. i18n: context: toolTip @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
@@ -12131,14 +12131,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Split Layer"
-msgstr ""
+msgstr "Belah Lapisan"
 
 #. i18n: context: text @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3160
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose ..."
-msgstr ""
+msgstr "Dekomposisi Wavelet ..."
 
 #. i18n: context: toolTip @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
@@ -12148,14 +12148,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose"
-msgstr ""
+msgstr "Dekomposisi Wavelet"
 
 #. i18n: context: text @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3172
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer Hori&zontally"
-msgstr ""
+msgstr "Cerminkan Lapisan Secara Hori&zontal"
 
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
@@ -12165,14 +12165,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer Horizontally"
-msgstr ""
+msgstr "Cerminkan Lapisan Secara Horizontal"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3184
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer &Vertically"
-msgstr ""
+msgstr "Cerminkan Lapisan Secara &Vertikal"
 
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
@@ -12182,7 +12182,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layer Vertically"
-msgstr ""
+msgstr "Cerminkan Lapisan Secara Vertikal"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3196
@@ -12291,7 +12291,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Hori&zontally"
-msgstr ""
+msgstr "Cerminkan Semua Lapisan Secara Hori&zontal"
 
 #. i18n: context: toolTip @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
@@ -12301,14 +12301,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Horizontally"
-msgstr ""
+msgstr "Cerminkan Semua Lapisan Secara Horizontal"
 
 #. i18n: context: text @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3280
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers &Vertically"
-msgstr ""
+msgstr "Cerminkan Semua Lapisan Secara &Vertikal"
 
 #. i18n: context: toolTip @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
@@ -12318,7 +12318,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Vertically"
-msgstr ""
+msgstr "Cerminkan Semua Lapisan Secara Vertikal"
 
 #. i18n: context: text @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3292
@@ -12335,14 +12335,14 @@ msgstr "&Rotasikan Semua Lapisan ..."
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers"
-msgstr ""
+msgstr "Rotasikan Semua Lapisan"
 
 #. i18n: context: text @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3304
 #, kde-format
 msgctxt "action"
 msgid "Rotate All &Layers 90° to the Right"
-msgstr ""
+msgstr "Rotasikan Semua &Lapisan 90° ke Kanan"
 
 #. i18n: context: toolTip @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
@@ -12352,14 +12352,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Right"
-msgstr ""
+msgstr "Rotasikan Semua Lapisan 90° ke Kanan"
 
 #. i18n: context: text @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3316
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &90° to the Left"
-msgstr ""
+msgstr "Rotasikan Semua Lapisan &90° ke Kiri"
 
 #. i18n: context: toolTip @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
@@ -12369,14 +12369,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Left"
-msgstr ""
+msgstr "Rotasikan Semua Lapisan 90° ke Kiri"
 
 #. i18n: context: text @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3328
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &180°"
-msgstr ""
+msgstr "Rotasikan Semua Lapisan &180°"
 
 #. i18n: context: toolTip @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
@@ -12386,14 +12386,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 180°"
-msgstr ""
+msgstr "Rotasikan Semua Lapisan 180°"
 
 #. i18n: context: text @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3340
 #, kde-format
 msgctxt "action"
 msgid "Scale All &Layers to new Size..."
-msgstr ""
+msgstr "Skalakan Semua &Lapisan ke Ukuran yang baru..."
 
 #. i18n: context: toolTip @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
@@ -12403,14 +12403,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Scale All Layers to new Size"
-msgstr ""
+msgstr "Skalakan Semua Lapisan ke Ukuran yang baru"
 
 #. i18n: context: text @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3352
 #, kde-format
 msgctxt "action"
 msgid "&Shear All Layers..."
-msgstr ""
+msgstr "&Cukur Semua Lapisan..."
 
 #. i18n: context: toolTip @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
@@ -12420,7 +12420,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Shear All Layers"
-msgstr ""
+msgstr "Cukur Semua Lapisan"
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3364
@@ -12444,7 +12444,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Clones &Array..."
-msgstr ""
+msgstr "Klon &Array..."
 
 #. i18n: context: toolTip @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
@@ -12454,14 +12454,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Clones Array"
-msgstr ""
+msgstr "Klon Array"
 
 #. i18n: context: text @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3388
 #, kde-format
 msgctxt "action"
 msgid "&Edit metadata..."
-msgstr ""
+msgstr "&Edit metadata..."
 
 #. i18n: context: toolTip @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
@@ -12471,7 +12471,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Edit metadata"
-msgstr ""
+msgstr "Edit metadata"
 
 #. i18n: context: text @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3400
@@ -12495,7 +12495,7 @@ msgstr "Histogram"
 #, kde-format
 msgctxt "action"
 msgid "&Convert Layer Color Space..."
-msgstr ""
+msgstr "&Konversikan Ruang Warna Lapisan..."
 
 #. i18n: context: toolTip @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
@@ -12505,14 +12505,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert Layer Color Space"
-msgstr ""
+msgstr "Konversikan Ruang Warna Lapisan"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3424
 #, kde-format
 msgctxt "action"
 msgid "&Merge with Layer Below"
-msgstr ""
+msgstr "&Gabungkan dengan Lapisan di Bawah"
 
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
@@ -12522,14 +12522,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Merge with Layer Below"
-msgstr ""
+msgstr "Gabungkan dengan Lapisan di Bawah"
 
 #. i18n: context: text @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3436
 #, kde-format
 msgctxt "action"
 msgid "&Flatten Layer"
-msgstr ""
+msgstr "&Ratakan Lapisan"
 
 #. i18n: context: toolTip @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
@@ -12539,14 +12539,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Flatten Layer"
-msgstr ""
+msgstr "Ratakan Lapisan"
 
 #. i18n: context: text @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3448
 #, kde-format
 msgctxt "action"
 msgid "Flatten ima&ge"
-msgstr ""
+msgstr "Ratakan Gamb&ar"
 
 #. i18n: context: toolTip @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
@@ -12556,7 +12556,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Flatten image"
-msgstr ""
+msgstr "Ratakan Gambar"
 
 #. i18n: context: text @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3460
@@ -12787,12 +12787,12 @@ msgstr "Pili&h"
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
-msgstr "&Grup"
+msgstr "&Kelompok"
 
 #: krita/krita5.xmlgui:247
 #, kde-format
 msgid "&Transform"
-msgstr "&ransformasi"
+msgstr "&Transformasi"
 
 #: krita/krita5.xmlgui:264
 #, kde-format
@@ -12802,12 +12802,12 @@ msgstr "Transformasikan &Semua Lapisan"
 #: krita/krita5.xmlgui:279
 #, kde-format
 msgid "S&plit"
-msgstr "&Blah"
+msgstr "Be&lah"
 
 #: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1249
 #, kde-format
 msgid "S&plit Alpha"
-msgstr ""
+msgstr "B&elah Alfa"
 
 #: krita/krita5.xmlgui:326
 #, kde-format
@@ -13302,7 +13302,7 @@ msgstr "Pin&dah"
 #, kde-format
 msgctxt "action"
 msgid "Cut selection to clipboard"
-msgstr "Pindah pilihan ke papan-klip"
+msgstr "Pindahkan seleksi ke papan klip"
 
 #. i18n: context: iconText @ Action (edit_cut), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:292
@@ -13323,7 +13323,7 @@ msgstr "&Salin"
 #, kde-format
 msgctxt "action"
 msgid "Copy selection to clipboard"
-msgstr "Salin pilihan ke papan-klip"
+msgstr "Salin seleksi ke papan klip"
 
 #. i18n: context: iconText @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:304
@@ -13354,7 +13354,7 @@ msgstr "Salin (tajam)"
 #, kde-format
 msgctxt "action"
 msgid "Cut (&sharp)"
-msgstr "Potong (&tajam)"
+msgstr "Pindahkan (&tajam)"
 
 #. i18n: context: toolTip @ Action (cut_sharp), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (cut_sharp), Actions (Edit), ActionCollection (Menu)
@@ -13364,7 +13364,7 @@ msgstr "Potong (&tajam)"
 #, kde-format
 msgctxt "action"
 msgid "Cut (sharp)"
-msgstr "Potong (tajam)"
+msgstr "Pindahkan (tajam)"
 
 #. i18n: context: text @ Action (copy_merged), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:337
@@ -13398,7 +13398,7 @@ msgstr "Salin Gaya Lapisan"
 #, kde-format
 msgctxt "action"
 msgid "Copy Layer Style from the Current Node"
-msgstr ""
+msgstr "Salin Gaya Lapisan dari Simpul Saat Ini"
 
 #. i18n: context: text @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:361
@@ -13804,7 +13804,7 @@ msgstr "Wraparound Arah Keduaduanya"
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Horizontally"
-msgstr "Wraparound Secara Horisontal"
+msgstr "Wraparound Secara Horizontal"
 
 #. i18n: context: text @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
@@ -14464,7 +14464,7 @@ msgstr "Properti"
 #, kde-format
 msgctxt "action"
 msgid "&Image Background Color and Transparency..."
-msgstr ""
+msgstr "Transparansi dan Warna Latar Belakang &Gambar..."
 
 #. i18n: context: toolTip @ Action (image_color), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1163
@@ -14478,14 +14478,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Image Background Color and Transparency"
-msgstr ""
+msgstr "Transparansi dan Warna Latar Belakang Gambar"
 
 #. i18n: context: text @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1173
 #, kde-format
 msgctxt "action"
 msgid "&Convert Image Color Space..."
-msgstr ""
+msgstr "&Konversikan Ruang Warna Gambar..."
 
 #. i18n: context: toolTip @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
@@ -14495,14 +14495,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert Image Color Space"
-msgstr ""
+msgstr "Konversikan Ruang Warna Gambar"
 
 #. i18n: context: text @ Action (trim_to_image), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1185
 #, kde-format
 msgctxt "action"
 msgid "&Trim to Image Size"
-msgstr ""
+msgstr "&Pangkas ke Ukuran Gambar"
 
 #. i18n: context: toolTip @ Action (trim_to_image), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (trim_to_image), Actions (Image), ActionCollection (Menu)
@@ -14512,14 +14512,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Trim to Image Size"
-msgstr ""
+msgstr "Pangkas ke Ukuran Gambar"
 
 #. i18n: context: text @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1197
 #, kde-format
 msgctxt "action"
 msgid "Trim to Current &Layer"
-msgstr ""
+msgstr "Pangkas ke &Lapisan Saat Ini"
 
 #. i18n: context: toolTip @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
@@ -14529,14 +14529,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Trim to Current Layer"
-msgstr ""
+msgstr "Pangkas ke Lapisan Saat Ini"
 
 #. i18n: context: text @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1209
 #, kde-format
 msgctxt "action"
 msgid "Trim to S&election"
-msgstr ""
+msgstr "Pangkas ke S&eleksi"
 
 #. i18n: context: toolTip @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
@@ -14546,7 +14546,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Trim to Selection"
-msgstr ""
+msgstr "Pangkas ke Seleksi"
 
 #. i18n: context: text @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1221
@@ -14621,7 +14621,7 @@ msgstr "Rotasikan Gambar 180°"
 #, kde-format
 msgctxt "action"
 msgid "&Shear Image..."
-msgstr ""
+msgstr "&Cukur Gambar..."
 
 #. i18n: context: toolTip @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
@@ -14631,7 +14631,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Shear Image"
-msgstr ""
+msgstr "Cukur Gambar"
 
 #. i18n: context: text @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1281
@@ -14648,14 +14648,14 @@ msgstr "&Cerminkan Gambar Secara Horizontal"
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Horizontally"
-msgstr ""
+msgstr "Cerminkan Gambar Secara Horizontal"
 
 #. i18n: context: text @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1293
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image &Vertically"
-msgstr ""
+msgstr "Cerminkan Gambar Secara &Vertikal"
 
 #. i18n: context: toolTip @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirrorImageVertical), Actions (Image), ActionCollection (Menu)
@@ -14665,14 +14665,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror Image Vertically"
-msgstr ""
+msgstr "Cerminkan Gambar Secara Vertikal"
 
 #. i18n: context: text @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1305
 #, kde-format
 msgctxt "action"
 msgid "Scale Image To &New Size..."
-msgstr ""
+msgstr "Skalakan Gambar Ke Ukuran &Baru..."
 
 #. i18n: context: toolTip @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
@@ -14682,14 +14682,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Scale Image To New Size"
-msgstr ""
+msgstr "Skalakan Gambar Ke Ukuran Baru"
 
 #. i18n: context: text @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1317
 #, kde-format
 msgctxt "action"
 msgid "&Offset Image..."
-msgstr ""
+msgstr "&Ofset Gambar..."
 
 #. i18n: context: toolTip @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
@@ -14699,14 +14699,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Offset Image"
-msgstr ""
+msgstr "Ofset Gambar"
 
 #. i18n: context: text @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1329
 #, kde-format
 msgctxt "action"
 msgid "R&esize Canvas..."
-msgstr ""
+msgstr "&Ubah Ukuran Kanvas..."
 
 #. i18n: context: toolTip @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
@@ -14716,14 +14716,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Resize Canvas"
-msgstr ""
+msgstr "Ubah Ukuran Kanvas"
 
 #. i18n: context: text @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1341
 #, kde-format
 msgctxt "action"
 msgid "Im&age Split "
-msgstr ""
+msgstr "Be&lah Gambar "
 
 #. i18n: context: toolTip @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
@@ -14733,14 +14733,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Image Split"
-msgstr ""
+msgstr "Belah Gambar"
 
 #. i18n: context: text @ Action (separate), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1353
 #, kde-format
 msgctxt "action"
 msgid "Separate Ima&ge..."
-msgstr ""
+msgstr "Gam&bar Terpisah..."
 
 #. i18n: context: toolTip @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
@@ -14750,7 +14750,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Separate Image"
-msgstr ""
+msgstr "Gambar Terpisah"
 
 #. i18n: context: text @ Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1366
@@ -14764,7 +14764,7 @@ msgstr "Pilih"
 #, kde-format
 msgctxt "action"
 msgid "Select &All"
-msgstr ""
+msgstr "Pilih &Semua"
 
 #. i18n: context: toolTip @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
@@ -14815,7 +14815,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Vector Selection"
-msgstr ""
+msgstr "Kon&versikan ke Seleksi Vektor"
 
 #. i18n: context: toolTip @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
@@ -14832,7 +14832,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Raster Selection"
-msgstr ""
+msgstr "Kon&versikan ke Seleksi Raster"
 
 #. i18n: context: toolTip @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
@@ -17034,7 +17034,7 @@ msgstr ""
 #: libs/image/kis_image.cc:985
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
-msgstr ""
+msgstr "Skala Gambar"
 
 #: libs/image/kis_image.cc:986
 msgctxt "(qtundo-format)"
@@ -17074,17 +17074,17 @@ msgstr ""
 #: libs/image/kis_image.cc:1257
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
-msgstr ""
+msgstr "Cukur Gambar"
 
 #: libs/image/kis_image.cc:1275
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
-msgstr ""
+msgstr "Konversikan Ruang Warna Lapisan"
 
 #: libs/image/kis_image.cc:1326
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
-msgstr ""
+msgstr "Konversikan Ruang Warna Gambar"
 
 #: libs/image/kis_image.cc:1327
 msgctxt "(qtundo-format)"
@@ -17289,17 +17289,17 @@ msgstr ""
 #: libs/image/kis_layer_utils.cpp:1993
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
-msgstr ""
+msgstr "Ratakan Lapisan"
 
 #: libs/image/kis_layer_utils.cpp:2006
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
-msgstr ""
+msgstr "Ratakan Gambar"
 
 #: libs/image/kis_layer_utils.cpp:2230
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
-msgstr ""
+msgstr "Belah Alfa ke dalam sebuah Mask"
 
 #: libs/image/kis_layer_utils.cpp:2256
 msgctxt "(qtundo-format)"
@@ -17437,7 +17437,7 @@ msgstr "Latar belakang"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Group"
-msgstr ""
+msgstr "Kelompok"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:58
 #, kde-format
@@ -17557,7 +17557,7 @@ msgstr ""
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Clone"
-msgstr ""
+msgstr "Klon"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:78
 #, kde-format
@@ -17713,7 +17713,7 @@ msgstr ""
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
-msgstr ""
+msgstr "Kelompok"
 
 #: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:972
 #, kde-format
@@ -20590,7 +20590,7 @@ msgstr ""
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
-msgstr ""
+msgstr "Memuat data video... %1 frame diperiksa."
 
 #: libs/ui/animation/KisVideoSaver.cpp:52
 #, kde-format
@@ -27267,7 +27267,7 @@ msgstr ""
 #: libs/ui/imagesize/dlg_canvassize.cc:41
 #, kde-format
 msgid "Resize Canvas"
-msgstr ""
+msgstr "Ubah Ukuran Kanvas"
 
 #: libs/ui/imagesize/dlg_imagesize.cc:41
 #: libs/ui/widgets/kis_custom_image_widget.cc:56
@@ -28576,7 +28576,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
-msgstr ""
+msgstr "Gabungkan dengan Lapisan di Bawah"
 
 #: libs/ui/kis_layer_manager.cc:211
 #, kde-format
@@ -28645,7 +28645,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
-msgstr ""
+msgstr "Ratakan Gambar"
 
 #: libs/ui/kis_layer_manager.cc:764
 #, kde-format
@@ -28681,7 +28681,7 @@ msgstr ""
 #: libs/ui/kis_layer_manager.cc:930
 #, kde-format
 msgid "Convert Invisible Groups"
-msgstr ""
+msgstr "Konversikan Kelompok Tak Terlihat"
 
 #: libs/ui/kis_layer_manager.cc:933
 #, kde-format
@@ -28801,7 +28801,7 @@ msgstr ""
 #: libs/ui/kis_node_manager.cpp:1038
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
-msgstr ""
+msgstr "Cerminkan Lapisan X"
 
 #: libs/ui/kis_node_manager.cpp:1040
 msgctxt "(qtundo-format)"
@@ -28811,7 +28811,7 @@ msgstr ""
 #: libs/ui/kis_node_manager.cpp:1051
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
-msgstr ""
+msgstr "Cerminkan Lapisan Y"
 
 #: libs/ui/kis_node_manager.cpp:1053
 msgctxt "(qtundo-format)"
@@ -28821,12 +28821,12 @@ msgstr ""
 #: libs/ui/kis_node_manager.cpp:1061
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers X"
-msgstr ""
+msgstr "Cerminkan Semua Lapisan X"
 
 #: libs/ui/kis_node_manager.cpp:1068
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Y"
-msgstr ""
+msgstr "Cerminkan Semua Lapisan Y"
 
 #: libs/ui/kis_node_manager.cpp:1189
 #, kde-format
@@ -28876,17 +28876,17 @@ msgstr ""
 #: libs/ui/kis_node_manager.cpp:1462
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
-msgstr ""
+msgstr "Pindahkan Simpul"
 
 #: libs/ui/kis_node_manager.cpp:1544
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
-msgstr ""
+msgstr "Kelompok Cepat"
 
 #: libs/ui/kis_node_manager.cpp:1555
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
-msgstr ""
+msgstr "Kelompok Pengeklipan Cepat"
 
 #: libs/ui/kis_node_manager.cpp:1562
 #, kde-format
@@ -28913,7 +28913,7 @@ msgstr ""
 #: libs/ui/kis_node_manager.cpp:1601
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
-msgstr ""
+msgstr "Nonkelompok Cepat"
 
 #: libs/ui/kis_node_model.cpp:552
 #, kde-format
@@ -29118,7 +29118,7 @@ msgstr ""
 #, kde-format
 msgctxt "splash image credit"
 msgid "Artwork by: %1"
-msgstr ""
+msgstr "Karya seni oleh: %1"
 
 #: libs/ui/kis_splash_screen.cpp:175
 #, kde-format
@@ -29336,17 +29336,17 @@ msgstr ""
 #: libs/ui/KisApplication.cpp:465
 #, kde-format
 msgid "Loading plugins..."
-msgstr ""
+msgstr "Memuat plugin..."
 
 #: libs/ui/KisApplication.cpp:471
 #, kde-format
 msgid "Loading resources..."
-msgstr ""
+msgstr "Memuat sumber daya..."
 
 #: libs/ui/KisApplication.cpp:480
 #, kde-format
 msgid "Loading Main Window..."
-msgstr ""
+msgstr "Memuat Jendela Utama..."
 
 #: libs/ui/KisApplication.cpp:512
 #, kde-format
@@ -30051,7 +30051,7 @@ msgstr ""
 #: libs/ui/KisImportExportUtils.cpp:48
 #, kde-format
 msgid "Convert image color space on import"
-msgstr ""
+msgstr "Konversikan ruang warna gambar saat impor"
 
 #: libs/ui/KisImportExportUtils.cpp:51
 #, kde-format
@@ -30373,7 +30373,7 @@ msgstr ""
 #, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"
-msgstr ""
+msgstr "Kelompok Baru %1"
 
 #: libs/ui/KisPart.cpp:578
 #, kde-format
@@ -30442,7 +30442,7 @@ msgstr "Nama:"
 #, kde-format
 msgctxt "Group as in Template Group"
 msgid "Group:"
-msgstr ""
+msgstr "Kelompok:"
 
 #: libs/ui/KisTemplateCreateDia.cpp:120
 #, kde-format
@@ -30523,7 +30523,7 @@ msgstr "Apakah kamu sungguh ingin menghapus kelompok itu?"
 #, kde-format
 msgctxt "@title:window"
 msgid "Remove Group"
-msgstr ""
+msgstr "Hapus Kelompok"
 
 #: libs/ui/KisTemplateCreateDia.cpp:437
 #, kde-format
@@ -34571,7 +34571,7 @@ msgstr "Pin&dah"
 #: libs/widgetutils/config/kstandardaction_p.h:43
 #, kde-format
 msgid "Cut selection to clipboard"
-msgstr "Potong pilihan ke papan-klip"
+msgstr "Pindahkan seleksi ke papan klip"
 
 #: libs/widgetutils/config/kstandardaction_p.h:44
 #, kde-format
@@ -34581,7 +34581,7 @@ msgstr "&Salin"
 #: libs/widgetutils/config/kstandardaction_p.h:44
 #, kde-format
 msgid "Copy selection to clipboard"
-msgstr "Salin pilihan ke papan-klip"
+msgstr "Salin seleksi ke papan klip"
 
 #: libs/widgetutils/config/kstandardaction_p.h:45
 #: libs/widgetutils/config/kstandardaction_p.h:46
@@ -36735,7 +36735,7 @@ msgstr ""
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:97
 #, kde-format
 msgid "&Vertical"
-msgstr "&Tegak"
+msgstr "&Vertikal"
 
 #. i18n: ectx: property (text), widget (QRadioButton, lastUsedColorsAlignHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, commonColorsAlignHorizontal)
@@ -36745,7 +36745,7 @@ msgstr "&Tegak"
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:85
 #, kde-format
 msgid "Hori&zontal"
-msgstr ""
+msgstr "Hori&zontal"
 
 #. i18n: ectx: property (text), widget (QCheckBox, lastUsedColorsAllowScrolling)
 #. i18n: ectx: property (text), widget (QCheckBox, commonColorsAllowScrolling)
@@ -37959,7 +37959,7 @@ msgstr ""
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:213
 #, kde-format
 msgid "Duplicate layer or mask"
-msgstr ""
+msgstr "Duplikatkan Lapisan atau Mask"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLower)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:238
@@ -39611,7 +39611,7 @@ msgstr "Orientasi:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:789
 #, kde-format
 msgid "hori&zontal"
-msgstr ""
+msgstr "hori&zontal"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryVertical)
@@ -39621,7 +39621,7 @@ msgstr ""
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:799
 #, kde-format
 msgid "&vertical"
-msgstr ""
+msgstr "&vertikal"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -40010,7 +40010,7 @@ msgstr "&Lapisan"
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:31
 #, kde-format
 msgid "Create Clones Array"
-msgstr ""
+msgstr "Buat Klon-klon Array"
 
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:219
 #, kde-format
@@ -40025,7 +40025,7 @@ msgstr ""
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:239
 #, kde-format
 msgid "Clone %1, %2"
-msgstr ""
+msgstr "Klon %1, %2"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgRotateImage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgClonesArray)
@@ -40327,7 +40327,7 @@ msgstr "Tag:"
 #: plugins/extensions/imagesplit/dlg_imagesplit.cpp:34
 #, kde-format
 msgid "Image Split"
-msgstr ""
+msgstr "Belah Gambar"
 
 #: plugins/extensions/imagesplit/imagesplit.cpp:74
 #, kde-format
@@ -40357,7 +40357,7 @@ msgstr ""
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:26
 #, kde-format
 msgid "Horizontal Lines"
-msgstr ""
+msgstr "Garis Horizontal"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGuidesHorizontal)
 #. i18n: ectx: property (text), widget (QCheckBox, chkGuidesVertical)
@@ -40371,7 +40371,7 @@ msgstr ""
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:50
 #, kde-format
 msgid "Vertical Lines"
-msgstr "Garis Menegak"
+msgstr "Garis Vertikal"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:74
@@ -40411,7 +40411,7 @@ msgstr ""
 #: plugins/extensions/layersplit/dlg_layersplit.cpp:30
 #, kde-format
 msgid "Split Layer"
-msgstr ""
+msgstr "Belah Lapisan"
 
 #: plugins/extensions/layersplit/layersplit.cpp:109
 #, kde-format
@@ -40426,7 +40426,7 @@ msgstr ""
 #: plugins/extensions/layersplit/layersplit.cpp:194
 msgctxt "(qtundo-format)"
 msgid "Split Layer"
-msgstr ""
+msgstr "Belah Lapisan"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCreateGroupLayer)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:29
@@ -41475,13 +41475,13 @@ msgstr ""
 #: plugins/extensions/offsetimage/offsetimage.cpp:56
 msgctxt "(qtundo-format)"
 msgid "Offset Image"
-msgstr ""
+msgstr "Ofset Gambar"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:57
 #, kde-format
 msgctxt "@title:window"
 msgid "Offset Image"
-msgstr ""
+msgstr "Ofset Gambar"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
 msgctxt "(qtundo-format)"
@@ -42323,12 +42323,12 @@ msgstr ""
 #: plugins/extensions/rotateimage/rotateimage.cc:120
 msgctxt "(qtundo-format)"
 msgid "Mirror Image Vertically"
-msgstr ""
+msgstr "Cerminkan Gambar Secara Vertikal"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:129
 msgctxt "(qtundo-format)"
 msgid "Mirror Image Horizontally"
-msgstr ""
+msgstr "Cerminkan Gambar Secara Horizontal"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:144
 #, kde-format
@@ -42382,12 +42382,12 @@ msgstr "&Kustom:"
 #: plugins/extensions/separate_channels/kis_separate_channels_plugin.cc:75
 #, kde-format
 msgid "Separate Image"
-msgstr ""
+msgstr "Gambar Terpisah"
 
 #: plugins/extensions/separate_channels/kis_channel_separator.cc:197
 msgctxt "(qtundo-format)"
 msgid "Separate Image"
-msgstr ""
+msgstr "Gam&bar Terpisah"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/extensions/separate_channels/wdg_separations.ui:23
@@ -42469,7 +42469,7 @@ msgstr ""
 #: plugins/extensions/shearimage/wdg_shearimage.ui:18
 #, kde-format
 msgid "Shear Image"
-msgstr ""
+msgstr "Cukur Gambar"
 
 #: plugins/extensions/shearimage/shearimage.cc:72
 #, kde-format
@@ -42645,30 +42645,30 @@ msgstr ""
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, kde-format
 msgid "WaveletDecompose"
-msgstr ""
+msgstr "DekomposisiWavelet"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgWaveletDecompose)
 #: plugins/extensions/waveletdecompose/waveletdecompose.cpp:65
 #: plugins/extensions/waveletdecompose/wdg_waveletdecompose.ui:18
 #, kde-format
 msgid "Wavelet Decompose"
-msgstr ""
+msgstr "Dekomposisi Wavelet"
 
 #: plugins/extensions/waveletdecompose/waveletdecompose.cpp:112
 msgctxt "(qtundo-format)"
 msgid "Wavelet decompose"
-msgstr ""
+msgstr "Dekomposisi wavelet"
 
 #: plugins/extensions/waveletdecompose/waveletdecompose.cpp:119
 #, kde-format
 msgid "Wavelet decompose"
-msgstr ""
+msgstr "Dekomposisi wavelet"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWaveletScales)
 #: plugins/extensions/waveletdecompose/wdg_waveletdecompose.ui:24
 #, kde-format
 msgid "Wavelet scales:"
-msgstr ""
+msgstr "Skala wavelet:"
 
 #. i18n: context: text @ Action (krita_filter_asc-cdl), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_asc-cdl), Actions (Filters), ActionCollection (Krita)
@@ -43710,12 +43710,12 @@ msgstr ""
 #: plugins/filters/imageenhancement/kis_wavelet_noise_reduction.cpp:26
 #, kde-format
 msgid "&Wavelet Noise Reducer..."
-msgstr ""
+msgstr "Pereduksi &Renyek Wavelet..."
 
 #: plugins/filters/imageenhancement/kis_wavelet_noise_reduction.h:37
 #, kde-format
 msgid "Wavelet Noise Reducer"
-msgstr ""
+msgstr "Pereduksi Renyek Wavelet"
 
 #: plugins/filters/indexcolors/indexcolors.cpp:33
 #, kde-format
@@ -47391,7 +47391,7 @@ msgstr ""
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save merged image."
-msgstr ""
+msgstr "Tidak bisa menyimpan gambar yang digabungkan."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:738
 #, kde-format
@@ -48258,7 +48258,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Wavelets"
-msgstr ""
+msgstr "Wavelet"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:634
 #, kde-format
@@ -49519,7 +49519,7 @@ msgstr "Piksel"
 #, kde-format
 msgctxt "clone paintbrush (previously \"Duplicate\")"
 msgid "Clone"
-msgstr ""
+msgstr "Klon"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbHealing)
 #: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings.cpp:196
@@ -49909,7 +49909,7 @@ msgstr ""
 #: plugins/paintops/gridbrush/wdggridoptions.ui:160
 #, kde-format
 msgid "Vertical offset:"
-msgstr ""
+msgstr "Ofset vertikal:"
 
 #: plugins/paintops/hairy/hairy_paintop_plugin.cpp:30
 #, kde-format
@@ -50340,13 +50340,13 @@ msgstr ""
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:238
 #, kde-format
 msgid "Horizontal:"
-msgstr "Mendatar:"
+msgstr "Horizontal:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblVerticalFade)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:254
 #, kde-format
 msgid "Vertical:"
-msgstr "Tegak:"
+msgstr "Vertikal:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSoftness)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:288
@@ -50749,7 +50749,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:261
 #, kde-format
 msgid "Vertical Offset:"
-msgstr "Ofset Tegak:"
+msgstr "Ofset Vertikal:"
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
@@ -51211,7 +51211,7 @@ msgstr "Secara horizontal"
 #: plugins/paintops/libpaintop/KisMirrorOptionWidget.cpp:45
 #, kde-format
 msgid "Vertically"
-msgstr "Menegak"
+msgstr "Secara Vertikal"
 
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:29
 #, kde-format
@@ -53361,11 +53361,11 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:282
 msgid "Add Page"
-msgstr ""
+msgstr "Tambahkan Halaman"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:284
 msgid "Add Page from Template"
-msgstr ""
+msgstr "Tambahkan Halaman dari Template"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:286
 msgid "Add Existing Pages"
@@ -53432,7 +53432,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:379
 msgid "Loading Pages..."
-msgstr ""
+msgstr "Memuat Halaman..."
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
@@ -55655,7 +55655,7 @@ msgstr "Radius:"
 #: plugins/tools/basictools/wdgmultihandtool.ui:103
 #, kde-format
 msgid "Horizontal"
-msgstr ""
+msgstr "Horizontal"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showAxesCheckbox)
 #: plugins/tools/basictools/wdgmultihandtool.ui:116
@@ -55667,7 +55667,7 @@ msgstr ""
 #: plugins/tools/basictools/wdgmultihandtool.ui:139
 #, kde-format
 msgid "Vertical"
-msgstr ""
+msgstr "Vertikal"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/basictools/wdgmultihandtool.ui:216
@@ -58212,7 +58212,7 @@ msgstr ""
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:968
 #, kde-format
 msgid "Horizontal Scale"
-msgstr ""
+msgstr "Skala Horizontal"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, scaleYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_height)
@@ -58220,7 +58220,7 @@ msgstr ""
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1006
 #, kde-format
 msgid "Vertical Scale"
-msgstr ""
+msgstr "Skala Vertikal"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (text), widget (QLabel, label_shearX)

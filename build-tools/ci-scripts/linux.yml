@@ -22,7 +22,7 @@ linux-build:
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
   artifacts:
     name: krita-$CI_COMMIT_REF_SLUG
-    expire_in: 1 hour
+    expire_in: 10 days
     when: always
     paths:
       - "**/failed_test_shot_*.png" # deprecated use appium_artifact_ instead

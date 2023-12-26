@@ -43,8 +43,9 @@ void KoPathPointMoveStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
     if (! selection)
         return;
 
-    KoPathPointMoveCommand cmd(selection->selectedPointsData(), move - m_move);
-    cmd.redo();
+    KoPathPointMoveCommand *cmd = new KoPathPointMoveCommand(selection->selectedPointsData(), move - m_move);
+
+    tool()->canvas()->addCommand(cmd);
     m_move = move;
 }
 
@@ -55,16 +56,5 @@ void KoPathPointMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
 KUndo2Command* KoPathPointMoveStrategy::createCommand()
 {
-    KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
-    if (! selection)
-        return 0;
-
-    KUndo2Command *cmd = 0;
-    if (!m_move.isNull()) {
-        // as the point is already at the new position we need to undo the change
-        KoPathPointMoveCommand revert(selection->selectedPointsData(), -m_move);
-        revert.redo();
-        cmd = new KoPathPointMoveCommand(selection->selectedPointsData(), m_move);
-    }
-    return cmd;
+    return nullptr;
 }

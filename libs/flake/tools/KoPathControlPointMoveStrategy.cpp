@@ -38,8 +38,8 @@ void KoPathControlPointMoveStrategy::handleMouseMove(const QPointF &mouseLocatio
 
     m_move += move;
 
-    KoPathControlPointMoveCommand cmd(m_pointData, move, m_pointType);
-    cmd.redo();
+    KoPathControlPointMoveCommand *cmd = new KoPathControlPointMoveCommand(m_pointData, move, m_pointType);
+    tool()->canvas()->addCommand(cmd);
 }
 
 void KoPathControlPointMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
@@ -49,10 +49,5 @@ void KoPathControlPointMoveStrategy::finishInteraction(Qt::KeyboardModifiers mod
 
 KUndo2Command* KoPathControlPointMoveStrategy::createCommand()
 {
-    KUndo2Command *cmd = 0;
-    if (!m_move.isNull()) {
-        cmd = new KoPathControlPointMoveCommand(m_pointData, m_move, m_pointType);
-        cmd->undo();
-    }
-    return cmd;
+    return nullptr;
 }

@@ -10,8 +10,6 @@
 #include "kritaflake_export.h"
 
 #include <QScopedPointer>
-#include <KoClipMaskApplicator.h>
-#include <KoClipMaskApplicatorFactoryImpl.h>
 
 class QPainter;
 class QRectF;
@@ -31,12 +29,6 @@ public:
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
-};
-
-struct KoClipMaskApplicatorFactory {
-    static KoClipMaskApplicatorBase* createApplicator() {
-        return createOptimizedClass<KoClipMaskApplicatorFactoryImpl>();
-    }
 };
 
 #endif // KOCLIPMASKPAINTER_H

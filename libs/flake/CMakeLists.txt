@@ -5,6 +5,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/flake/tools
     ${CMAKE_SOURCE_DIR}/libs/flake/svg
     ${CMAKE_SOURCE_DIR}/libs/flake/text
+    ${CMAKE_SOURCE_DIR}/libs/flake/xsimd
     ${CMAKE_BINARY_DIR}/libs/flake
 )
 
@@ -13,9 +14,9 @@ add_subdirectory(tests)
 add_subdirectory(resources/tests)
 
 if(HAVE_XSIMD)
-    ko_compile_for_all_implementations(__per_arch_alpha_applicator_factory_objs KoClipMaskApplicatorFactoryImpl.cpp)
+    ko_compile_for_all_implementations(__per_arch_alpha_applicator_factory_objs xsimd/KoClipMaskApplicatorFactoryImpl.cpp)
 else()
-    set(__per_arch_alpha_applicator_factory_objs KoClipMaskApplicatorFactoryImpl.cpp)
+    set(__per_arch_alpha_applicator_factory_objs xsimd/KoClipMaskApplicatorFactoryImpl.cpp)
 endif()
 
 set(kritaflake_SRCS
@@ -105,7 +106,8 @@ set(kritaflake_SRCS
     KoTextShapeDataBase.cpp
     KoTosContainer.cpp
     KoTosContainerModel.cpp
-    KoClipMaskApplicator.cpp
+    KoClipMaskApplicatorBase.cpp
+    xsimd/KoClipMaskApplicator.cpp
     ${__per_arch_alpha_applicator_factory_objs}
     KoClipMaskPainter.cpp
     KoClipPath.cpp

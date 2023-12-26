@@ -10,8 +10,16 @@
 #include <QPainterPath>
 #include <QRectF>
 #include <KoStreamedMath.h>
+#include <KoClipMaskApplicatorBase.h>
+#include <xsimd/KoClipMaskApplicatorFactoryImpl.h>
 
 #include "kis_assert.h"
+
+struct KoClipMaskApplicatorFactory {
+    static KoClipMaskApplicatorBase* createApplicator() {
+        return createOptimizedClass<KoClipMaskApplicatorFactoryImpl>();
+    }
+};
 
 struct Q_DECL_HIDDEN KoClipMaskPainter::Private
 {

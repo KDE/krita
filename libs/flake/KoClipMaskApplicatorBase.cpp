@@ -3,7 +3,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include "KoClipMaskApplicator.h"
+#include "KoClipMaskApplicatorBase.h"
 
 void KoClipMaskApplicatorBase::fallbackLuminanceMask(quint8 *pixels, quint8 *maskPixels, const int nPixels) const{
     const quint32 colorChannelsMask = 0x00FFFFFF;

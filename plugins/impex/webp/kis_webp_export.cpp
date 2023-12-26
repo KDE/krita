@@ -229,7 +229,7 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
             image->waitForDone();
 
             const KisNodeSP projection = image->rootLayer()->firstChild();
-            if (projection->isAnimated()) return ImportExportCodes::InternalError;
+            if (!projection->isAnimated()) return ImportExportCodes::InternalError;
 
             const KisRasterKeyframeChannel *frames =
                 projection->paintDevice()->keyframeChannel();

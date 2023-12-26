@@ -21,7 +21,7 @@ void KoClipMaskApplicatorBase::fallbackLuminanceMask(quint8 *pixels, quint8 *mas
 
         const float maskValue = qAlpha(mask) * (redLum * qRed(mask) + greenLum * qGreen(mask) + blueLum * qBlue(mask)) * normCoeff;
 
-        const QRgb alpha = static_cast<QRgb>(qRound(maskValue * (qAlpha(shape) * normCoeff)));
+        const quint8 alpha = OptiRound<xsimd::generic, quint8>::roundScalar(maskValue * float(qAlpha(shape) * normCoeff));
 
         *sP = (alpha << 24) | (shape & colorChannelsMask);
 

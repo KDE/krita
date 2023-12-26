@@ -27,6 +27,7 @@ public:
     void renderOnGlobalPainter();
 
 private:
+
     struct Private;
     const QScopedPointer<Private> m_d;
 };

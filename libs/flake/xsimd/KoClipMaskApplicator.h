@@ -33,6 +33,7 @@ struct KoClipMaskApplicator<_impl,
     const float redLum = 0.2125f;
     const float greenLum = 0.7154f;
     const float blueLum = 0.0721f;
+    const float normCoeff = 1.0f / 255.0f;
 
     virtual void applyLuminanceMask(quint8 *pixels,
                                     quint8 *maskPixels,
@@ -50,9 +51,9 @@ struct KoClipMaskApplicator<_impl,
             const float_v maskRed   = xsimd::to_float(xsimd::bitwise_cast_compat<int>((maskData >> 16) & mask));
             const float_v maskGreen = xsimd::to_float(xsimd::bitwise_cast_compat<int>((maskData >> 8) & mask));
             const float_v maskBlue  = xsimd::to_float(xsimd::bitwise_cast_compat<int>((maskData) & mask));
-            const float_v maskValue = maskAlpha * ((redLum * maskRed) + (greenLum * maskGreen) + (blueLum * maskBlue));
+            const float_v maskValue = maskAlpha * ((redLum * maskRed) + (greenLum * maskGreen) + (blueLum * maskBlue)) * normCoeff;
 
-            const float_v pixelAlpha = xsimd::to_float(xsimd::bitwise_cast_compat<int>(shapeData >> 24U)) * maskValue;
+            const float_v pixelAlpha = xsimd::to_float(xsimd::bitwise_cast_compat<int>(shapeData >> 24U)) * normCoeff * maskValue;
             const uint_v pixelAlpha_i = xsimd::bitwise_cast_compat<unsigned int>(xsimd::nearbyint_as_int(pixelAlpha));
             shapeData = (shapeData & colorChannelsMask) | (pixelAlpha_i << 24);
 

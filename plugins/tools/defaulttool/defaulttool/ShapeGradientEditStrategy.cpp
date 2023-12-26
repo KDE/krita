@@ -26,9 +26,11 @@ struct ShapeGradientEditStrategy::Private
         : start(_start),
           gradientHandles(fillVariant, shape)
     {
+        previous = start;
     }
 
     QPointF start;
+    QPointF previous;
     QPointF initialOffset;
     KoShapeGradientHandles gradientHandles;
     KoShapeGradientHandles::Handle::Type handleType {KoShapeGradientHandles::Handle::Type::None};
@@ -64,15 +66,18 @@ ShapeGradientEditStrategy::~ShapeGradientEditStrategy()
 
 void ShapeGradientEditStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {
-    if (m_d->intermediateCommand) {
-        m_d->intermediateCommand->undo();
-        m_d->intermediateCommand.reset();
-    }
-
     const QPointF snappedPosition = tool()->canvas()->snapGuide()->snap(mouseLocation, m_d->initialOffset, modifiers);
-    const QPointF diff = snappedPosition- m_d->start;
-    m_d->intermediateCommand.reset(m_d->gradientHandles.moveGradientHandle(m_d->handleType, diff));
-    m_d->intermediateCommand->redo();
+    const QPointF diff = snappedPosition - m_d->previous;
+    m_d->previous = snappedPosition;
+    KUndo2Command *cmd = m_d->gradientHandles.moveGradientHandle(m_d->handleType, diff);
+    cmd->redo();
+    if (cmd) {
+        if (m_d->intermediateCommand) {
+            m_d->intermediateCommand->mergeWith(cmd);
+        } else {
+            m_d->intermediateCommand.reset(cmd);
+        }
+    }
 }
 
 KUndo2Command *ShapeGradientEditStrategy::createCommand()

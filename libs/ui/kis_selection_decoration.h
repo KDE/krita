@@ -44,6 +44,7 @@ protected:
 private Q_SLOTS:
     void slotStartUpdateSelection();
     void slotConfigChanged();
+    void slotCanvasResourcesChanged(int key, const QVariant &v);
     void initializePens();
 
 public Q_SLOTS:

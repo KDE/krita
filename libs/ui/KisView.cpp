@@ -190,6 +190,7 @@ public:
                 m_connected = false;
             }
         }
+
     private:
         QWidget * m_widget = 0;
         int m_stretch;
@@ -246,11 +247,7 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
     d->paintingAssistantsDecoration->setVisible(true);
 
     d->showFloatingMessage = cfg.showCanvasMessages();
-    d->zoomManager.updateScreenResolution(this);
-    if (d->canvas.resourceManager() && d->screenMigrationTracker.currentScreen()) {
-        int penWidth = qRound(d->screenMigrationTracker.currentScreen()->devicePixelRatio());
-        d->canvas.resourceManager()->setDecorationThickness(qMax(penWidth, 1));
-    }
+    slotScreenOrResolutionChanged();
 
     connect(document, SIGNAL(sigReadWriteChanged(bool)), this, SLOT(slotUpdateDocumentTitle()));
     connect(document, SIGNAL(sigRecoveredChanged(bool)), this, SLOT(slotUpdateDocumentTitle()));
@@ -1227,7 +1224,7 @@ void KisView::slotScreenOrResolutionChanged()
     d->zoomManager.updateScreenResolution(this);
 
     if (d->canvas.resourceManager() && d->screenMigrationTracker.currentScreen()) {
-        int penWidth = d->screenMigrationTracker.currentScreen()->devicePixelRatio();
+        int penWidth = qRound(d->screenMigrationTracker.currentScreen()->devicePixelRatio());
         d->canvas.resourceManager()->setDecorationThickness(qMax(penWidth, 1));
     }
 }

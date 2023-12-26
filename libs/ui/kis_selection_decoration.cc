@@ -48,7 +48,8 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>_view)
       m_offset(0),
       m_mode(Ants)
 {
-    connect(this->view()->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)), this, SLOT(initializePens()));
+    initializePens();
+    connect(this->view()->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)), this, SLOT(slotCanvasResourcesChanged(int, const QVariant&)));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
@@ -159,6 +160,14 @@ void KisSelectionDecoration::slotConfigChanged()
     m_opacity = imageConfig.selectionOutlineOpacity();
     m_maskColor = imageConfig.selectionOverlayMaskColor();
     m_antialiasSelectionOutline = cfg.antialiasSelectionOutline();
+}
+
+void KisSelectionDecoration::slotCanvasResourcesChanged(int key, const QVariant &v)
+{
+    Q_UNUSED(v);
+    if (key == KoCanvasResource::DecorationThickness) {
+        initializePens();
+    }
 }
 
 void KisSelectionDecoration::antsAttackEvent()

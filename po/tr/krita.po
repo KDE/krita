@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-13 02:27+0000\n"
-"PO-Revision-Date: 2023-12-18 22:29+0300\n"
+"PO-Revision-Date: 2023-12-25 13:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.01.80\n"
+"X-Generator: Lokalize 24.01.85\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1865,7 +1865,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Blender_Blur.kpp"
 msgid "Blender Blur"
-msgstr "Harmanlayıcı Bulanıklaştırma"
+msgstr "Harmanlayıcı Bulanık"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1953,7 +1953,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Bristle_Special_Blender.kpp"
 msgid "Bristle Special Blender"
-msgstr "Kıl Özel Harman"
+msgstr "Kıl Özel Harmanlayıcı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2265,7 +2265,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Ink_gpen_10.kpp"
 msgid "Ink gpen 10"
-msgstr "Mürekkep kurşun kalem 10"
+msgstr "Mürekkep ince divit 10"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2273,7 +2273,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Ink_gpen_25.kpp"
 msgid "Ink gpen 25"
-msgstr "Mürekkep kurşun kalem 25"
+msgstr "Mürekkep ince divit 25"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4005,7 +4005,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-2_Fineliner.kpp"
 msgid "d) Ink-2 Fineliner"
-msgstr "d) Mürekkep 2 Keçeli Kalem"
+msgstr "d) Mürekkep 2 Pilot Kalem"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4014,7 +4014,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-3_Gpen.kpp"
 msgid "d) Ink-3 Gpen"
-msgstr "d) Mürekkep 3 Kurşun Kalem"
+msgstr "d) Mürekkep 3 İnce Divit"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4023,7 +4023,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-4_Pen_Rough.kpp"
 msgid "d) Ink-4 Pen Rough"
-msgstr "d) Mürekkep 4 Kaba Kalem"
+msgstr "d) Mürekkep 4 Kalın Divit"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4050,7 +4050,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "e)_Marker_Chisel_Smooth.kpp"
 msgid "e) Marker Chisel Smooth"
-msgstr "e) Pürüzsüz Keski İmleri"
+msgstr "e) İmleyici Pürüzsüz Keski"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4059,7 +4059,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "e)_Marker_Details.kpp"
 msgid "e) Marker Details"
-msgstr "e) Ayrıntılı İmleyici"
+msgstr "e) İmleyici Ayrıntılar"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4068,7 +4068,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "e)_Marker_Dry.kpp"
 msgid "e) Marker Dry"
-msgstr "e) Kuru İmleyici"
+msgstr "e) İmleyici Kuru"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4302,7 +4302,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "j)_Watercolor_Fringe.kpp"
 msgid "j) Watercolor Fringe"
-msgstr "j) Püsküllü Sulu Boya"
+msgstr "j) Suluboya Püskül"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4311,7 +4311,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "j)_Watercolor_Texture.kpp"
 msgid "j) Watercolor Texture"
-msgstr "j) Doku Sulu Boya"
+msgstr "j) Suluboya Doku"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4320,7 +4320,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "j)_Waterpaint_Hard_Edges.kpp"
 msgid "j) Waterpaint Hard Edges"
-msgstr "j) Sert Kenarlı Sulu Boya"
+msgstr "j) Suluboya Sert Kenarlar"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4329,7 +4329,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "j)_Waterpaint_Soft_Edges.kpp"
 msgid "j) Waterpaint Soft Edges"
-msgstr "j) Yumuşak Kenarlı Sulu Boya"
+msgstr "j) Suluboya Yumuşak Kenarlar"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4338,7 +4338,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "k)_Blender_Basic.kpp"
 msgid "k) Blender Basic"
-msgstr "k) Temel Harman"
+msgstr "k) Harmanlayıcı Temel"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4347,7 +4347,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "k)_Blender_Blur.kpp"
 msgid "k) Blender Blur"
-msgstr "k) Bulanık Harman"
+msgstr "k) Harmanlayıcı Bulanık"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4356,7 +4356,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "k)_Blender_Knife_Edge.kpp"
 msgid "k) Blender Knife Edge"
-msgstr "k) Bıçak Ucu Harman"
+msgstr "k) Harmanlayıcı Bıçak Kenarı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4365,7 +4365,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "k)_Blender_Pixelize.kpp"
 msgid "k) Blender Pixelize"
-msgstr "k) Piksel Harman"
+msgstr "k) Harmanlayıcı Pikselleştir"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4374,7 +4374,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "k)_Blender_Rake.kpp"
 msgid "k) Blender Rake"
-msgstr "k) Tırmık Harman"
+msgstr "k) Harmanlayıcı Tırmık"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4383,7 +4383,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "k)_Blender_Smear.kpp"
 msgid "k) Blender Smear"
-msgstr "k) Bulaşma Harman"
+msgstr "k) Harmanlayıcı Bulaşım"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4392,7 +4392,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "k)_Blender_Textured_Soft.kpp"
 msgid "k) Blender Textured Soft"
-msgstr "k) Yumuşak Dokulu Harman"
+msgstr "k) Harmanlayıcı Yumuşak Dokulu"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -6988,7 +6988,7 @@ msgstr "Durgun Su"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/watercolor.gih"
 msgid "Watercolor"
-msgstr "Sulu Boya"
+msgstr "Suluboya"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/gradients/BG-Krita2.ggr:2
@@ -16072,7 +16072,7 @@ msgstr "Bölütleri Satırlara Değiştir"
 #: libs/flake/commands/KoPathShapeMarkerCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Set marker"
-msgstr "İmleyici ayarla"
+msgstr "İmleyici Koy"
 
 #: libs/flake/commands/KoShapeAlignCommand.cpp:71
 msgctxt "(qtundo-format)"
@@ -18825,7 +18825,7 @@ msgstr "Açık Tonla (IFS Yanılsama)"
 #, kde-format
 msgctxt "Blending mode - Fog Lighten (IFS Illusions)"
 msgid "Fog Lighten (IFS Illusions)"
-msgstr "Sis Açıklaştır (IFS Yanılsama)"
+msgstr "Sis Aydınlat (IFS Yanılsama)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:92
 #, kde-format

@@ -95,6 +95,8 @@ void KisSignalCompressor::start()
     const bool isFirstStart = !m_timer->isActive();
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(!isFirstStart || !m_signalsPending);
+    m_sanityIsStarting++;
+
 
     switch (m_mode) {
     case POSTPONE:
@@ -140,6 +142,8 @@ void KisSignalCompressor::start()
     case UNDEFINED:
         ; // Should never happen, but do nothing
     };
+
+    m_sanityIsStarting--;
 
     KIS_SAFE_ASSERT_RECOVER(m_timer->isActive()) {
         m_timer->start();
@@ -203,6 +207,7 @@ bool KisSignalCompressor::tryEmitSignalSafely()
 
 void KisSignalCompressor::slotTimerExpired()
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_sanityIsStarting);
     KIS_ASSERT_RECOVER_NOOP(m_mode != UNDEFINED);
     if (!tryEmitOnTick(true)) {
         const int calmDownInterval = 5 * m_timeout;

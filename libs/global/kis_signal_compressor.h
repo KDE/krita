@@ -99,6 +99,7 @@ private:
     int m_isEmitting = 0;
     int m_timeout = 0;
     std::function<bool()> m_idleCallback;
+    int m_sanityIsStarting = 0;
 };
 
 #endif /* __KIS_SIGNAL_COMPRESSOR_H */

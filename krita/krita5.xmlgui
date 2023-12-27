@@ -196,7 +196,19 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Menu name="LayerNew">
         <text context="New layer">&amp;New</text>
         <Action name="add_new_paint_layer"/>
+        <Action name="add_new_group_layer"/>
         <Action name="add_new_clone_layer"/>
+        <Action name="add_new_shape_layer"/>
+        <Action name="add_new_adjustment_layer"/>
+        <Action name="add_new_fill_layer"/>
+        <Action name="add_new_file_layer"/>
+        <Separator/>
+        <Action name="add_new_transparency_mask"/>
+        <Action name="add_new_filter_mask"/>
+        <Action name="add_new_colorize_mask"/>
+        <Action name="add_new_transform_mask"/>
+        <Action name="add_new_selection_mask"/>
+        <Separator/>
         <Action name="new_from_visible"/>
         <Action name="duplicatelayer"/>
         <Separator/>

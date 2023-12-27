@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-22 00:40+0000\n"
+"POT-Creation-Date: 2023-12-27 00:40+0000\n"
 "PO-Revision-Date: 2023-10-12 18:19+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -16943,18 +16943,18 @@ msgstr ""
 "WinTab-ajuria ei voida ladata. Jos sinulla on piirtopöytä, varmista, että "
 "sen ajuri on asennettu oikein."
 
-#: libs/basicflakes/tools/KoCreatePathTool.cpp:547
+#: libs/basicflakes/tools/KoCreatePathTool.cpp:552
 #, fuzzy, kde-format
 #| msgid "Patch Options"
 msgid "Path options"
 msgstr "Läikkien asetukset"
 
-#: libs/basicflakes/tools/KoCreatePathTool.cpp:549
+#: libs/basicflakes/tools/KoCreatePathTool.cpp:554
 #, kde-format
 msgid "Autosmooth curve"
 msgstr "Pehmennä käyrä automaattisesti"
 
-#: libs/basicflakes/tools/KoCreatePathTool.cpp:553
+#: libs/basicflakes/tools/KoCreatePathTool.cpp:558
 #, fuzzy, kde-format
 #| msgid "Activate angle snap:"
 msgid "Activate angle snap"
@@ -17237,7 +17237,7 @@ msgstr "Jaa muotoja"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1252
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1253
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr ""
@@ -17350,7 +17350,7 @@ msgstr ""
 "muotojen rajauksen poisto"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1280
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1281
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Poista muotojen ryhmitys"
@@ -20760,7 +20760,7 @@ msgstr "Ulos"
 #: libs/pigment/resources/KoColorSet.cpp:1472
 #: libs/pigment/resources/KoColorSet.cpp:1721
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1181
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -20831,8 +20831,8 @@ msgstr "Ladataan resursseja…"
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:748
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
+#: libs/ui/KisView.cpp:1184 libs/ui/KisWelcomePageWidget.cpp:748
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -21741,7 +21741,7 @@ msgstr ""
 "kaikkien valinta"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:238
-#: libs/ui/KisView.cpp:792
+#: libs/ui/KisView.cpp:794
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr ""
@@ -21818,7 +21818,7 @@ msgstr ""
 "muotojen liittäminen"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:272
-#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:608
 #, kde-format
 msgid "(pasted)"
 msgstr "(liitetty)"
@@ -23646,14 +23646,14 @@ msgid "Edit Guides"
 msgstr "Muokkaa apuviivoja"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:543
-#: libs/ui/canvas/kis_mirror_axis.cpp:318
+#: libs/ui/canvas/kis_mirror_axis.cpp:326
 #, fuzzy, kde-format
 #| msgid "%1 px"
 msgid "Y: %1 px"
 msgstr "%1 px"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:548
-#: libs/ui/canvas/kis_mirror_axis.cpp:302
+#: libs/ui/canvas/kis_mirror_axis.cpp:310
 #, fuzzy, kde-format
 #| msgid "%1 px"
 msgid "X: %1 px"
@@ -30668,7 +30668,7 @@ msgstr ""
 "Vaihda suodinta\n"
 "suotimen vaihto"
 
-#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:698
+#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:700
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open %2.\n"
@@ -33130,28 +33130,28 @@ msgstr "Ei kuvaa."
 msgid "Use This Template"
 msgstr "Käytä tätä pohjaa"
 
-#: libs/ui/KisView.cpp:767
+#: libs/ui/KisView.cpp:769
 #, fuzzy, kde-format
 #| msgid "You cannot use this tool with the selected layer type"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Tätä työkalua ei voi käyttää valitun tason tyypin kanssa"
 
-#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:678
+#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Taso on lukittu ja näkymätön."
 
-#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:680
+#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:683
 #, kde-format
 msgid "Layer is locked."
 msgstr "Taso on lukittu."
 
-#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:682
+#: libs/ui/KisView.cpp:781 libs/ui/tool/kis_tool.cc:685
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Taso on näkymätön."
 
-#: libs/ui/KisView.cpp:1183
+#: libs/ui/KisView.cpp:1185
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -33159,88 +33159,88 @@ msgid ""
 msgstr ""
 "<p>Tiedostoa <b>”%1”</b> on muutettu.</p><p>Haluatko tallentaa muutokset?</p>"
 
-#: libs/ui/KisView.cpp:1252
+#: libs/ui/KisView.cpp:1259
 #, fuzzy, kde-format
 #| msgid "(write protected)"
 msgid "Write Protected"
 msgstr "(kirjoitussuojattu)"
 
-#: libs/ui/KisView.cpp:1256
+#: libs/ui/KisView.cpp:1263
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Recover Files"
 msgid "Recovered"
 msgstr "Tiedostojen palautus"
 
-#: libs/ui/KisView.cpp:1410
+#: libs/ui/KisView.cpp:1417
 #, fuzzy, kde-format
 #| msgid "Soft Proofing turned on."
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Näyttövedostus päällä."
 
-#: libs/ui/KisView.cpp:1415
+#: libs/ui/KisView.cpp:1422
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Näyttövedostus päällä."
 
-#: libs/ui/KisView.cpp:1417
+#: libs/ui/KisView.cpp:1424
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Näyttövedostus pois päältä."
 
-#: libs/ui/KisView.cpp:1429
+#: libs/ui/KisView.cpp:1436
 #, fuzzy, kde-format
 #| msgid "Gamut Warnings turned on."
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Toistoalavaroitus päällä."
 
-#: libs/ui/KisView.cpp:1435
+#: libs/ui/KisView.cpp:1442
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Toistoalavaroitus päällä."
 
-#: libs/ui/KisView.cpp:1437
+#: libs/ui/KisView.cpp:1444
 #, fuzzy, kde-format
 #| msgid "Soft Proofing turned off."
 msgid "But Soft Proofing is still off."
 msgstr "Näyttövedostus pois päältä."
 
-#: libs/ui/KisView.cpp:1440
+#: libs/ui/KisView.cpp:1447
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Toistoalavaroitus pois päältä."
 
-#: libs/ui/KisViewManager.cpp:773
+#: libs/ui/KisViewManager.cpp:778
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Aktiivinen tekijäprofiili"
 
-#: libs/ui/KisViewManager.cpp:903
+#: libs/ui/KisViewManager.cpp:908
 #, fuzzy, kde-format
 #| msgctxt "@option:radio"
 #| msgid "%1 (Qt)"
 msgid "%1 (Copy)"
 msgstr "%1 (Qt)"
 
-#: libs/ui/KisViewManager.cpp:1046 libs/ui/KisViewManager.cpp:1122
+#: libs/ui/KisViewManager.cpp:1051 libs/ui/KisViewManager.cpp:1127
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Vaihtoehtoiset nimet lopussa: yritä tallentaa itse suuremmalle numerolle"
 
-#: libs/ui/KisViewManager.cpp:1046
+#: libs/ui/KisViewManager.cpp:1051
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Ei voitu tallentaa täydentävää versiota"
 
-#: libs/ui/KisViewManager.cpp:1122
+#: libs/ui/KisViewManager.cpp:1127
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Ei voitu tallentaa täydentävää varmuuskopiota"
 
-#: libs/ui/KisViewManager.cpp:1321
+#: libs/ui/KisViewManager.cpp:1326
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -33249,14 +33249,14 @@ msgstr ""
 "Siirrytään vain kangas -tilaan.\n"
 "Palaa takaisin painamalla %1."
 
-#: libs/ui/KisViewManager.cpp:1363
+#: libs/ui/KisViewManager.cpp:1368
 #, fuzzy, kde-format
 #| msgid "Open Resource Folder"
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Avaa resurssikansio"
 
-#: libs/ui/KisViewManager.cpp:1367
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -33271,19 +33271,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1382
+#: libs/ui/KisViewManager.cpp:1387
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1383
+#: libs/ui/KisViewManager.cpp:1388
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1496 libs/ui/KisViewManager.cpp:1514
+#: libs/ui/KisViewManager.cpp:1501 libs/ui/KisViewManager.cpp:1519
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -34397,7 +34397,7 @@ msgstr "Täytä koko valinta"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1848
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1849
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
 #, fuzzy, kde-format
 msgid "Transform"
@@ -34408,17 +34408,17 @@ msgstr "Muunna"
 msgid "No options"
 msgstr "Ei valintoja"
 
-#: libs/ui/tool/kis_tool.cc:684
+#: libs/ui/tool/kis_tool.cc:687
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr ""
 
-#: libs/ui/tool/kis_tool.cc:686
+#: libs/ui/tool/kis_tool.cc:689
 #, kde-format
 msgid "Group not editable."
 msgstr "Ryhmää ei voi muokata."
 
-#: libs/ui/tool/kis_tool.cc:701
+#: libs/ui/tool/kis_tool.cc:704
 #, kde-format
 msgid "Local selection is locked."
 msgstr "Paikallinen valinta on lukittu."
@@ -60142,37 +60142,37 @@ msgstr ""
 "Napsauta ja vedä koon muuttamis -valinta. Hiiren keskimmäisen painikkeen "
 "napsautus asettaa korostetun sijainnin."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:861
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:862
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1314
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1315
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Kierrä kohdetta 90° myötäpäivään"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1318
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1319
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Kierrä kohdetta 90° vastapäivään"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1322
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1323
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Kierrä kohdetta 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1326
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1327
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Peilaa kohde vaakasuunnassa"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1330
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1331
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Peilaa kohde pystysuunnassa"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1334
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1335
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Reset Transformations"
@@ -60182,32 +60182,32 @@ msgstr ""
 "Nollaa muodonmuutokset\n"
 "muodonmuutosten nollaus"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1408
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1409
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Yhdistä kuviot"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1422
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1423
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Leikkaa kuviot"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1432
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1433
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Erota kuviot"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1477
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1478
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Jaa kuviot"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1845
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1846
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Vektorikuviotoiminnot"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1864
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1865
 #, kde-format
 msgid "Logical Operations"
 msgstr "Loogiset operaatiot"
@@ -61632,7 +61632,7 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:286
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -61850,7 +61850,7 @@ msgstr "Lukitse suhde"
 msgid "Crop Tool Actions"
 msgstr "Rajaustyökalun toiminnot"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:723
+#: plugins/tools/tool_crop/kis_tool_crop.cc:724
 #, kde-format
 msgid ""
 "X: %1\n"
@@ -61859,7 +61859,7 @@ msgstr ""
 "X: %1\n"
 "Y: %2"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:728
+#: plugins/tools/tool_crop/kis_tool_crop.cc:729
 #, kde-format
 msgid ""
 "Width: %1\n"
@@ -62512,28 +62512,28 @@ msgstr "Kierrä 90° vastapäivään"
 msgid "Apply"
 msgstr "Käytä"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:377
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:378
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Transform Tool"
 msgid "Transform Tool Actions"
 msgstr "Muunnostyökalu"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:864
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Aktivoi viivatyökalu"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:871
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "Aktivoi viivatyökalu"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:891
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -62541,20 +62541,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:905
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1027
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Tyhjää tasoa ei voi muuntaa"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1014
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

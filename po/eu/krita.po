@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-22 00:40+0000\n"
+"POT-Creation-Date: 2023-12-27 00:40+0000\n"
 "PO-Revision-Date: 2023-08-26 10:02+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -16068,18 +16068,18 @@ msgstr ""
 "Ezin da WinTab gidaria zamatu. Marrazteko tableta bat baduzu, ziurtatu "
 "tabletaren gidaria behar bezala instalatuta dagoela."
 
-#: libs/basicflakes/tools/KoCreatePathTool.cpp:547
+#: libs/basicflakes/tools/KoCreatePathTool.cpp:552
 #, fuzzy, kde-format
 #| msgid "Patch Options"
 msgid "Path options"
 msgstr "Adabaki-aukerak"
 
-#: libs/basicflakes/tools/KoCreatePathTool.cpp:549
+#: libs/basicflakes/tools/KoCreatePathTool.cpp:554
 #, kde-format
 msgid "Autosmooth curve"
 msgstr "Kurba automatikoki leundu"
 
-#: libs/basicflakes/tools/KoCreatePathTool.cpp:553
+#: libs/basicflakes/tools/KoCreatePathTool.cpp:558
 #, fuzzy, kde-format
 #| msgid "Activate angle snap:"
 msgid "Activate angle snap"
@@ -16341,7 +16341,7 @@ msgstr "Banatu formak"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1252
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1253
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Taldekatu formak"
@@ -16438,7 +16438,7 @@ msgid "Unclip Shapes"
 msgstr "Askatu formak"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1280
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1281
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Formak talde-banandu"
@@ -19623,7 +19623,7 @@ msgstr "Urrundu"
 #: libs/pigment/resources/KoColorSet.cpp:1472
 #: libs/pigment/resources/KoColorSet.cpp:1721
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1181
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19693,8 +19693,8 @@ msgstr "Baliabide lokalak"
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:748
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
+#: libs/ui/KisView.cpp:1184 libs/ui/KisWelcomePageWidget.cpp:748
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -20556,7 +20556,7 @@ msgid "Select All"
 msgstr "Hautatu dena"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:238
-#: libs/ui/KisView.cpp:792
+#: libs/ui/KisView.cpp:794
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Uholde-betegarriko geruza"
@@ -20618,7 +20618,7 @@ msgid "Paste shapes"
 msgstr "Itsatsi formak"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:272
-#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:608
 #, kde-format
 msgid "(pasted)"
 msgstr "(itsatsita)"
@@ -22353,13 +22353,13 @@ msgid "Edit Guides"
 msgstr "Editatu gidariak"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:543
-#: libs/ui/canvas/kis_mirror_axis.cpp:318
+#: libs/ui/canvas/kis_mirror_axis.cpp:326
 #, kde-format
 msgid "Y: %1 px"
 msgstr "Y: %1 px"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:548
-#: libs/ui/canvas/kis_mirror_axis.cpp:302
+#: libs/ui/canvas/kis_mirror_axis.cpp:310
 #, kde-format
 msgid "X: %1 px"
 msgstr "X: %1 px"
@@ -29223,7 +29223,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Aldatu fitxategi-geruza"
 
-#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:698
+#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:700
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -31596,109 +31596,109 @@ msgstr "Ez dago irudirik erabilgarri."
 msgid "Use This Template"
 msgstr "Erabili txantiloi hau"
 
-#: libs/ui/KisView.cpp:767
+#: libs/ui/KisView.cpp:769
 #, fuzzy, kde-format
 #| msgid "You cannot use this tool with the selected layer type"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Ezin duzu erabili tresna hau hautatutako geruza motarekin"
 
-#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:678
+#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Geruza blokeatuta eta ikusezin dago."
 
-#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:680
+#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:683
 #, kde-format
 msgid "Layer is locked."
 msgstr "Geruza blokeatuta dago."
 
-#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:682
+#: libs/ui/KisView.cpp:781 libs/ui/tool/kis_tool.cc:685
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Geruza ikusezin dago."
 
-#: libs/ui/KisView.cpp:1183
+#: libs/ui/KisView.cpp:1185
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p><b>'%1'</b> dokumentua aldatu egin da.</p><p>Gorde nahi duzu?</p>"
 
-#: libs/ui/KisView.cpp:1252
+#: libs/ui/KisView.cpp:1259
 #, kde-format
 msgid "Write Protected"
 msgstr "Idazketaren aurka babestuta"
 
-#: libs/ui/KisView.cpp:1256
+#: libs/ui/KisView.cpp:1263
 #, kde-format
 msgid "Recovered"
 msgstr "Berreskuratuta"
 
-#: libs/ui/KisView.cpp:1410
+#: libs/ui/KisView.cpp:1417
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Software bidezko zuzenketa ez dabil koma-higikorreko moduan."
 
-#: libs/ui/KisView.cpp:1415
+#: libs/ui/KisView.cpp:1422
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Software bidezko zuzenketa piztuta."
 
-#: libs/ui/KisView.cpp:1417
+#: libs/ui/KisView.cpp:1424
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Software bidezko zuzenketa itzalita."
 
-#: libs/ui/KisView.cpp:1429
+#: libs/ui/KisView.cpp:1436
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Gama-abisuak ez dira ibiltzen koma higikorrarekin."
 
-#: libs/ui/KisView.cpp:1435
+#: libs/ui/KisView.cpp:1442
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Gama-abisuak piztu dira."
 
-#: libs/ui/KisView.cpp:1437
+#: libs/ui/KisView.cpp:1444
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Baina software bidezko zuzenketa oraindik itzalita dago."
 
-#: libs/ui/KisView.cpp:1440
+#: libs/ui/KisView.cpp:1447
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Gama-abisuak itzali dira."
 
-#: libs/ui/KisViewManager.cpp:773
+#: libs/ui/KisViewManager.cpp:778
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Uneko egilearen profila"
 
-#: libs/ui/KisViewManager.cpp:903
+#: libs/ui/KisViewManager.cpp:908
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (kopia)"
 
-#: libs/ui/KisViewManager.cpp:1046 libs/ui/KisViewManager.cpp:1122
+#: libs/ui/KisViewManager.cpp:1051 libs/ui/KisViewManager.cpp:1127
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Ordezko izenak agortu dira, saia zaitez, eskuz, zenbaki handiago batekin "
 "gordetzen"
 
-#: libs/ui/KisViewManager.cpp:1046
+#: libs/ui/KisViewManager.cpp:1051
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Ezin izan da gorde bertsio inkrementala"
 
-#: libs/ui/KisViewManager.cpp:1122
+#: libs/ui/KisViewManager.cpp:1127
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Ezin izan da gorde babes-kopia inkrementala"
 
-#: libs/ui/KisViewManager.cpp:1321
+#: libs/ui/KisViewManager.cpp:1326
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31707,13 +31707,13 @@ msgstr ""
 "Oihala-bakarrik modura aldatzen.\n"
 "Sakatu %1, itzultzeko."
 
-#: libs/ui/KisViewManager.cpp:1363
+#: libs/ui/KisViewManager.cpp:1368
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Ireki baliabideen karpeta"
 
-#: libs/ui/KisViewManager.cpp:1367
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31728,19 +31728,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1382
+#: libs/ui/KisViewManager.cpp:1387
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1383
+#: libs/ui/KisViewManager.cpp:1388
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Ireki aplikazioaren kokaleku &pribatu batean"
 
-#: libs/ui/KisViewManager.cpp:1496 libs/ui/KisViewManager.cpp:1514
+#: libs/ui/KisViewManager.cpp:1501 libs/ui/KisViewManager.cpp:1519
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -32834,7 +32834,7 @@ msgstr "Hautapen-ekintzak"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1848
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1849
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
 #, kde-format
 msgid "Transform"
@@ -32845,17 +32845,17 @@ msgstr "Eraldatu"
 msgid "No options"
 msgstr "Aukerarik ez"
 
-#: libs/ui/tool/kis_tool.cc:684
+#: libs/ui/tool/kis_tool.cc:687
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr "Geruza Garbitzeko moduan bakarrik margotu daiteke."
 
-#: libs/ui/tool/kis_tool.cc:686
+#: libs/ui/tool/kis_tool.cc:689
 #, kde-format
 msgid "Group not editable."
 msgstr "Taldea ezin da editatu."
 
-#: libs/ui/tool/kis_tool.cc:701
+#: libs/ui/tool/kis_tool.cc:704
 #, kde-format
 msgid "Local selection is locked."
 msgstr "Hautapen lokala blokeatuta dago."
@@ -57831,69 +57831,69 @@ msgstr ""
 "Egin klik eta arrastatu hautapenaren neurria aldatzeko. Erdiko klik "
 "nabarmendutako kokapena ezartzeko."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:861
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:862
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "Tresna hau, bakarrik, bektore-geruzekin dabil. Ziur aski mugitzeko tresna "
 "nahi duzu."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1314
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1315
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Biratu irudia 90° erloju-orratzen noranzkoan"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1318
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1319
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Biratu objektua 90° erloju-orratzen aurkako noranzkoan"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1322
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1323
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Biratu objektua 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1326
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1327
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Ispilatu objektua horizontalki"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1330
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1331
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Ispilatu objektua bertikalki"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1334
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1335
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Berrezarri objektuen eraldaketak"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1408
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1409
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Elkartu formak"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1422
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1423
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Ebaki formak"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1432
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1433
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Kendu formak"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1477
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1478
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Zatitu formak"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1845
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1846
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Bektore-formen ekintzak"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1864
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1865
 #, kde-format
 msgid "Logical Operations"
 msgstr "Eragiketa logikoak"
@@ -59317,7 +59317,7 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:286
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -59537,7 +59537,7 @@ msgstr "Giltzatu proportzioa"
 msgid "Crop Tool Actions"
 msgstr "Mozteko tresnaren ekintzak"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:723
+#: plugins/tools/tool_crop/kis_tool_crop.cc:724
 #, kde-format
 msgid ""
 "X: %1\n"
@@ -59546,7 +59546,7 @@ msgstr ""
 "X: %1\n"
 "Y: %2"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:728
+#: plugins/tools/tool_crop/kis_tool_crop.cc:729
 #, kde-format
 msgid ""
 "Width: %1\n"
@@ -60187,18 +60187,18 @@ msgstr "Biratu 90° erlojuaren aurkako noranzkoan"
 msgid "Apply"
 msgstr "Ezarri"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:377
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:378
 #, kde-format
 msgid "Transform Tool Actions"
 msgstr "Eraldatze-tresnaren ekintzak"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:864
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Geruza motak ezin du eraldatze-tresna erabili"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:871
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -60206,7 +60206,7 @@ msgstr ""
 "Geruza motak ezin du erabili eraldatze-tresna. Horren ordez erabili "
 "eraldatze-maskara."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:891
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60216,20 +60216,20 @@ msgstr ""
 "Geruzak eraldatzeko maskarak dituzten haurrak ditu. Mesedez, ezgaitu itzazu "
 "eraldatu aurretik."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:905
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Hautapenak ez dira erabiltzen eraldatze maskarak editatzean"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1027
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Ezin eraldatu hutsik dauden geruzak "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1014
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

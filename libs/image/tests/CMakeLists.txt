@@ -144,6 +144,16 @@ krita_add_broken_unit_test(
     NAME_PREFIX "libs-image-"
     )
 
+include_directories(
+        ${CMAKE_BINARY_DIR}/libs/image/
+        ${CMAKE_SOURCE_DIR}/libs/image/
+        ${CMAKE_SOURCE_DIR}/libs/ui/tool/
+        ${CMAKE_SOURCE_DIR}/libs/image/brushengine
+        ${CMAKE_SOURCE_DIR}/libs/image/tiles3
+        ${CMAKE_SOURCE_DIR}/libs/image/tiles3/swap
+        ${CMAKE_SOURCE_DIR}/sdk/tests
+        ${CMAKE_BINARY_DIR}/libs/ui/
+)
 
 kis_add_test(
         TEST_NAME kis_ellipse_test

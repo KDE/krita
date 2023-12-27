@@ -1480,27 +1480,26 @@ Q_DECL_PURE_FUNCTION static inline QVector<QPair<long double,long double>> makeP
 }
 
 void KisPainter::paintEllipse(qreal a_, qreal b_, qreal angle, QPointF offset) {
-
-    // Normalization, to a [-1/4*Pi, 1/4*Pi) range.
-    // The axis a will always be closer to the x-axis after normalization
-    while (angle >= M_PI - M_PI_4) {
-        angle -= M_PI;
-    }
-    while (angle < -M_PI_4) {
-        angle += M_PI;
-    }
+    // Normalization the rotation angle to a [-1/4*Pi, 1/4*Pi) range.
+    // And make axis A the one closer to the x-axis
+    // M_PI_4 is Pi divided by four.
+    // >> First make the rotation angle to a [-1/4*Pi, 3/4*Pi) range
+    angle += M_PI_4;
+    angle = fmod(fmod(angle, M_PI) + M_PI, M_PI);
+    angle -= M_PI_4;
 
     if (-M_PI_4 <= angle && angle < M_PI_4) {
 
     } else if (M_PI_4 <= angle && angle < M_PI - M_PI_4) {
-        auto tmp = a_;
-        a_ = b_;
-        b_ = tmp;
+        // >> If the rotation angle is not in the target range,
+        // >> We can swap the axes
+        std::swap(a_,b_);
         angle -= M_PI_2;
     }
-
+    // >> Here subtract one from axes lengths, since it's definition is a little different in the drawing code.
     long double axisA = (long double) a_ - 1.0L;
     long double axisB = (long double) b_ - 1.0L;
+    // End of normalization
 
     long double semiAxisA = axisA / 2.0L;
     long double semiAxisB = axisB / 2.0L;
